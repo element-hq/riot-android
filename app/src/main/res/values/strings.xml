@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- titles -->
+    <string name="app_name">Matrix Console</string>
+    <string name="title_activity_home">Matrix Home</string>
+    <string name="title_activity_room">Matrix Room</string>
+    <string name="title_activity_public_rooms">Public Rooms</string>
+    <string name="title_activity_room_info">Room info</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_member_details">Member Details</string>
+    <string name="title_activity_invite_user">Invite Users</string>
+
+    <!-- button names -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="stay">Stay</string>
+    <string name="leave">Leave</string>
+    <string name="send">Send</string>
+    <string name="resend">Resend</string>
+    <string name="redact">Redact</string>
+    <string name="share">Share</string>
+    <string name="forward">Forward</string>
+    <string name="message_details">Message details</string>
+    <string name="view">View</string>
+    <string name="set_power_level">Power level</string>
+    <string name="chat">Chat</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="more">More</string>
+    <string name="chat_with">Chat with </string>
+    <string name="delete">Delete</string>
+
+    <!-- actions -->
+    <string name="action_settings">Settings</string>
+    <string name="action_members">Members list</string>
+    <string name="action_public_rooms">Public Rooms</string>
+    <string name="action_my_rooms">My Rooms</string>
+    <string name="action_add_account">Add account</string>
+    <string name="action_remove_account">remove account</string>
+    <string name="action_leave">Leave Room</string>
+    <string name="action_delete">Delete Room</string>
+    <string name="action_invite">Invite</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_logout">Logout</string>
+    <string name="send_bug_report">Send bug report</string>
+    <string name="action_create_room">Create...</string>
+    <string name="action_room_info">Room info</string>
+    <string name="action_search_room">Search room</string>
+    <string name="action_search_contact">Search contact</string>
+    <string name="action_mark_all_as_read">Mark all as read</string>
+    <string name="action_quick_reply">Quick reply</string>
+    <string name="action_open">Open</string>
+    <string name="action_close">Close</string>
+    <string name="action_invite_by_name">Invite from identifier</string>
+    <string name="action_invite_by_list">Invite from other rooms</string>
+    <string name="action_home">Home</string>
+    <string name="action_drawer">Extras</string>
+
+    <string name="send_files_in">Send into</string>
+    <string name="save_files_in">Save into</string>
+    <string name="file_is_saved">%1$s is saved.</string>
+
+    <string name="downloads">Downloads</string>
+    <string name="gallery">Gallery</string>
+    <string name="sd_scard">SD card</string>
+    <string name="other">Other</string>
+
+    <string name="my_rooms">My rooms</string>
+    <string name="create_room">Create room</string>
+    <string name="join_room">Join room</string>
+    <string name="create">Create:</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="matrix_login">Matrix Login</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create account</string>
+    <string name="hs_url">Home Server URL</string>
+
+    <string name="create_room_set_alias">Set room alias</string>
+    <string name="create_room_alias_hint">room-alias</string>
+    <string name="create_room_set_name">Set room name</string>
+    <string name="create_room_name_hint">My room</string>
+    <string name="join_room_title">Join Room</string>
+    <string name="join_room_hint">(e.g. #foo:example.org)</string>
+
+    <string name="membership_invite">Invited</string>
+    <string name="membership_join">Joined</string>
+    <string name="membership_leave">Left</string>
+    <string name="membership_kick">Kicked</string>
+    <string name="membership_ban">Banned</string>
+
+    <plurals name="num_members">
+        <item quantity="one">%1$s user</item>
+        <item quantity="other">%1$s users</item>
+    </plurals>
+
+    <string name="invite">Invite</string>
+    <string name="kick">Kick</string>
+    <string name="ban">Ban</string>
+    <string name="unban">Un-ban</string>
+
+    <string name="message_changes_successful">Changes successfully made</string>
+    <string name="message_unsaved_changes">There are unsaved changes. Leaving will discard them.</string>
+
+    <string name="option_send_files">Send files</string>
+    <string name="option_take_photo">Take photo</string>
+    <string name="option_attach_video">Attach video</string>
+
+    <!-- Login Screen -->
+    <string name="login_error_already_logged_in">Already logged in</string>
+    <string name="login_error_must_start_http">URL must start with http[s]://</string>
+    <string name="login_error_network_error">Unable to login: Network error</string>
+    <string name="login_error_unable_login">Unable to login</string>
+    <string name="login_error_invalid_credentials">Enter valid credentials</string>
+    <string name="login_error_invalid_home_server">Enter valid URL</string>
+
+    <!-- members list Screen -->
+    <string name="members_list">Members List</string>
+
+    <!-- accounts list Screen -->
+    <string name="choose_account">Choose account</string>
+
+    <!-- image size selection -->
+    <string name="compression_options">What size should this be sent as?</string>
+    <string name="compression_opt_list_original">Original</string>
+    <string name="compression_opt_list_large">Large</string>
+    <string name="compression_opt_list_medium">Medium</string>
+    <string name="compression_opt_list_small">Small</string>
+
+    <!-- invitation members list Screen -->
+    <string name="members_one_to_one">One to one room members</string>
+    <string name="members_small_room_members">Small room members</string>
+    <string name="members_large_room_members">Large room members</string>
+
+    <!-- room creation dialog Screen -->
+    <string name="room_creation_room_name">Name</string>
+    <string name="room_creation_room_name_hint">(e.g lunchGroup)</string>
+    <string name="room_creation_room_alias">Alias</string>
+    <string name="room_creation_room_alias_hint">(e.g. #foo:matrix.org)"</string>
+    <string name="room_creation_participants">With</string>
+    <string name="room_creation_participants_hint">(e.g. @me:hs;...)</string>
+    <string name="room_creation_create_room">Create room</string>
+    <string name="room_creation_public">Public</string>
+    <string name="room_creation_private">Private</string>
+
+    <!-- contacts list screen -->
+    <string name="contacts">Contacts</string>
+    <string name="invite_this_user_to_use_matrix">Invite this user to use matrix with</string>
+    <string name="invitation_message">I\'d like to chat with you with matrix. Please, visit the website http://matrix.org to have more information.</string>
+
+    <!-- Settings screen -->
+
+    <string name="settings_webclient_push">To configure global notification settings (like rules), go find a webclient and hit Settings > Notifications.</string>
+
+    <string name="settings_title_profile">Profile information</string>
+    <string name="settings_title_gcm">Google cloud messaging (GCM)</string>
+    <string name="settings_title_config">Configuration</string>
+    <string name="settings_title_notifications">Notifications</string>
+    <string name="settings_title_rooms">Rooms</string>
+    <string name="settings_title_commands">Commands</string>
+    <string name="settings_config_console_version">matrixConsole version: %s</string>
+    <string name="settings_config_sdk_version">SDK version: %s</string>
+    <string name="settings_config_build_number">Build: %s</string>
+
+    <string name="settings_display_all_events">Display all events</string>
+    <string name="settings_hide_redactions">Hide redactions</string>
+    <string name="settings_hide_unsupported_events">Hide unsupported events</string>
+    <string name="settings_sort_by_last_seen">Sort members by last seen time</string>
+    <string name="settings_display_left_members">Display left members</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_display_public_rooms">Display public rooms with recents</string>
+
+    <!-- gcm section -->
+    <string name="settings_use_gcm">Use GCM</string>
+    <string name="settings_gcm_app_id">GCM pusher application ID</string>
+    <string name="settings_gcm_sender_id">GCM sender ID</string>
+    <string name="settings_gcm_pusher_url">GCM pusher url</string>
+    <string name="settings_gcm_pusher_profile_tag">GCM pusher profile tag</string>
+
+    <string name="settings_config_home_server">Home server: %s</string>
+    <string name="settings_config_identity_server">Identity server: %s</string>
+    <string name="settings_config_user_id">User ID: %s</string>
+    <string name="settings_config_access_token">Access token: %s</string>
+    <string name="settings_command_commands">The following commands are available in the room chat:\r\n\r\n /nick &#60;display_name&#62;&#58; change your display name\r\n /me &#60;action&#62;&#58; send the action you are doing. /me will be replaced by your display name\r\n /join &#60;room_alias&#62;&#58; join a room\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; kick the user\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; ban the user\r\n /unban &#60;user_id&#62;&#58; unban the user\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; set user power level\r\n /deop &#60;user_id&#62;&#58; reset user power level to the room default value</string>
+    <string name="settings_failed_to_upload_avatar">Failed to upload avatar</string>
+
+    <string name="settings_display_name_hint">Enter a display name</string>
+    <string name="settings_update_profile">Update profile</string>
+
+    <!-- Settings keys -->
+    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
+    <string name="settings_key_hide_redactions">settings_key_hide_redactions</string>
+    <string name="settings_key_hide_unsupported_events">settings_key_hide_unsupported_events</string>
+    <string name="settings_key_sort_by_last_seen">settings_key_sort_by_last_seen</string>
+    <string name="settings_key_display_left_members">settings_key_display_left_members</string>
+    <string name="settings_key_display_public_rooms_recents">settings_key_display_public_rooms_recents</string>
+    <string name="settings_key_use_gcm">settings_key_use_gcm</string>
+
+    <string name="logo">Logo</string>
+    <string name="user_says_body">%1$s says %2$s</string>
+
+</resources>

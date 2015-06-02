@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.matrixandroidsdk.activity.HomeActivity" >
+
+    <item android:id="@+id/ic_action_search_contact"
+          android:title="@string/action_search_contact"
+          android:icon="@drawable/ic_material_search"
+          app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/ic_action_search_room"
+        android:title="@string/action_search_room"
+        android:icon="@drawable/ic_material_find_in_page"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/ic_action_mark_all_as_read"
+        android:title="@string/action_mark_all_as_read"
+        android:icon="@drawable/ic_material_done_all"
+        app:showAsAction="ifRoom" />
+</menu>

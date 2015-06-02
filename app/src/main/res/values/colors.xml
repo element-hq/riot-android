@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="room_background">#f4f4f4</color>
+
+    <color name="presence_online">#38af00</color>
+    <color name="presence_unavailable">#fc0</color>
+    <color name="presence_offline">#E53333</color>
+
+    <color name="member_list_last_seen_text">#aaa</color>
+
+    <color name="chat_gray_text">#FFAAAAAA</color>
+    <color name="chat_encoding_background">#AAAAAAAA</color>
+    <color name="room_summary_unread_background">#ede</color>
+    <color name="room_summary_highlight_background">#FF88BBFF</color>
+    <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
+
+</resources>
