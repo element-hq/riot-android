@@ -69,9 +69,9 @@ public class LoginActivity extends MXCActionBarActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = ((EditText)findViewById(R.id.editText_username)).getText().toString();
+                String username = ((EditText)findViewById(R.id.editText_username)).getText().toString().trim();
                 String password = ((EditText)findViewById(R.id.editText_password)).getText().toString();
-                String hs = ((EditText)findViewById(R.id.editText_hs)).getText().toString();
+                String hs = ((EditText)findViewById(R.id.editText_hs)).getText().toString().trim();
                 onLoginClick(hs, username, password);
             }
         });

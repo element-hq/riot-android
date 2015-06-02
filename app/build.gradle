@@ -49,14 +49,27 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    repositories {
+        flatDir {
+            dir 'libs'
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':sdk')
     compile 'com.android.support:appcompat-v7:21.0.+'
     compile 'com.android.support:cardview-v7:21.0.+'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.google.android.gms:play-services:3.1.+'
+
+
+    compile 'com.squareup.retrofit:retrofit:1.6.1'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+
+    compile(name: 'sdk-debug', ext: 'aar')
 }
 
