@@ -10,11 +10,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.matrix.matrixandroidsdk"
+        applicationId "org.matrix.console"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
-        versionName "0.3.1"
+        versionName "0.1.0"
     }
 
     signingConfigs {
@@ -40,9 +40,9 @@ android {
 
     productFlavors {
         alpha {
-            applicationId "org.matrix.androidsdk.alpha"
+            applicationId "org.matrix.console.alpha"
             versionCode 4
-            versionName "0.3.2-alpha"
+            versionName "0.1.0"
         }
     }
 
@@ -69,7 +69,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
-
     compile(name: 'matrix-sdk', ext: 'aar')
 }
 

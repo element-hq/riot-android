@@ -1,1 +1,1 @@
-include ':app', ':console'
+include ':console'
