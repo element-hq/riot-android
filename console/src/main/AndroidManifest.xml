@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.matrix.console"
+    android:versionName="0.3.1">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <!-- Google Cloud Messaging -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission
+        android:name="${applicationId}.permission.C2D_MESSAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:name="org.matrix.console.ConsoleApplication"
+        android:icon="@drawable/ic_launcher"
+        android:logo="@drawable/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="org.matrix.console.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.AccountCreationActivity"
+            android:label="@string/create_account" >
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.HomeActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.RoomActivity"
+            android:label="@string/title_activity_room"
+            android:parentActivityName="org.matrix.console.activity.HomeActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.matrix.console.activity.HomeActivity"/>
+
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.RoomInfoActivity"
+            android:label="@string/title_activity_room_info"
+            android:parentActivityName="org.matrix.console.activity.RoomActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.matrix.console.activity.RoomActivity"/>
+
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName="org.matrix.console.activity.HomeActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.matrix.console.activity.HomeActivity"/>
+
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.MemberDetailsActivity"
+            android:label="@string/title_activity_member_details"
+            android:parentActivityName="org.matrix.console.activity.RoomActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.matrix.console.activity.RoomActivity"/>
+        </activity>
+        <activity
+            android:name="org.matrix.console.activity.LockScreenActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name="org.matrix.console.activity.ImageWebViewActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <receiver
+            android:name="org.matrix.console.gcm.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="org.matrix.matrixandroidsdk.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="org.matrix.console.gcm.GcmIntentService" />
+
+        <service android:name="org.matrix.console.services.EventStreamService" />
+
+        <provider
+            android:authorities="org.matrix.console.ConsoleApplication.provider"
+            android:name="org.matrix.console.db.ConsoleContentProvider"
+            android:exported="true" />
+
+    </application>
+
+</manifest>
