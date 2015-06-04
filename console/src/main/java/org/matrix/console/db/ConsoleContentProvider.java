@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 
 public class ConsoleContentProvider extends ContentProvider {
 
-    public static String AUTHORITIES = "org.matrix.matrixandroidsdk.ConsoleApplication.provider";
+    public static String AUTHORITIES = "org.matrix.console.ConsoleApplication.provider";
 
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {

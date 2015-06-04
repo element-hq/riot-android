@@ -49,8 +49,8 @@ import java.lang.reflect.Method;
  * extends ActionBarActivity to manage the rageshake
  */
 public class MXCActionBarActivity extends ActionBarActivity {
-    public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "org.matrix.androidsdk.ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
-    public static final String EXTRA_MATRIX_ID = "org.matrix.matrixandroidsdk.MXCActionBarActivity.EXTRA_MATRIX_ID";
+    public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "org.matrix.console.ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
+    public static final String EXTRA_MATRIX_ID = "org.matrix.console.MXCActionBarActivity.EXTRA_MATRIX_ID";
 
     /**
      * Return the used MXSession from an intent.

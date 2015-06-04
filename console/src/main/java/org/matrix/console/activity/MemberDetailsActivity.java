@@ -45,8 +45,8 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
     private static final String LOG_TAG = "MemberDetailsActivity";
 
-    public static final String EXTRA_ROOM_ID = "org.matrix.matrixandroidsdk.MemberDetailsActivity.EXTRA_ROOM_ID";
-    public static final String EXTRA_MEMBER_ID = "org.matrix.matrixandroidsdk.MemberDetailsActivity.EXTRA_MEMBER_ID";
+    public static final String EXTRA_ROOM_ID = "org.matrix.console.MemberDetailsActivity.EXTRA_ROOM_ID";
+    public static final String EXTRA_MEMBER_ID = "org.matrix.console.MemberDetailsActivity.EXTRA_MEMBER_ID";
 
     // info
     private Room mRoom;

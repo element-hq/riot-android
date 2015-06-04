@@ -57,6 +57,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             viewImageIntent.putExtra(ImageWebViewActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
             viewImageIntent.putExtra(ImageWebViewActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
             viewImageIntent.putExtra(ImageWebViewActivity.KEY_IMAGE_ROTATION, rotationAngle);
+            viewImageIntent.putExtra(ImageWebViewActivity.KEY_IMAGE_ORIENTATION, imageMessage.info.orientation);
             if (null != imageMessage.getMimeType()) {
                 viewImageIntent.putExtra(ImageWebViewActivity.KEY_HIGHRES_MIME_TYPE, imageMessage.getMimeType());
             }

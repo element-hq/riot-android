@@ -30,7 +30,7 @@ import org.matrix.console.R;
  */
 public class MessageDetailsFragment extends DialogFragment {
     private static final String LOG_TAG = "MessageDetailsFragment";
-    public static final String ARG_TEXT = "org.matrix.matrixandroidsdk.fragments.MessageDetailsFragment.ARG_TEXT";
+    public static final String ARG_TEXT = "org.matrix.console.fragments.MessageDetailsFragment.ARG_TEXT";
 
     private String mBody = "";
 

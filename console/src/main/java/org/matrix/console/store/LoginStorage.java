@@ -30,17 +30,17 @@ import java.util.Arrays;
  * Stores login credentials in SharedPreferences.
  */
 public class LoginStorage {
-    public static final String PREFS_LOGIN = "org.matrix.matrixandroidsdk.store.LoginStorage";
+    public static final String PREFS_LOGIN = "org.matrix.console.store.LoginStorage";
 
     // one account
-    public static final String PREFS_KEY_USERNAME = "org.matrix.matrixandroidsdk.store.LoginStorage.PREFS_KEY_USERNAME";
-    public static final String PREFS_KEY_HOME_SERVER = "org.matrix.matrixandroidsdk.store.LoginStorage.PREFS_KEY_HOME_SERVER";
-    public static final String PREFS_KEY_ACCESS_TOKEN = "org.matrix.matrixandroidsdk.store.LoginStorage.PREFS_KEY_ACCESS_TOKEN";
+    public static final String PREFS_KEY_USERNAME = "org.matrix.console.store.LoginStorage.PREFS_KEY_USERNAME";
+    public static final String PREFS_KEY_HOME_SERVER = "org.matrix.console.store.LoginStorage.PREFS_KEY_HOME_SERVER";
+    public static final String PREFS_KEY_ACCESS_TOKEN = "org.matrix.console.store.LoginStorage.PREFS_KEY_ACCESS_TOKEN";
 
     // multi accounts
-    public static final String PREFS_KEY_USERNAMES = "org.matrix.matrixandroidsdk.store.LoginStorage.PREFS_KEY_USERNAMES";
-    public static final String PREFS_KEY_HOME_SERVERS = "org.matrix.matrixandroidsdk.store.LoginStorage.PREFS_KEY_HOME_SERVERS";
-    public static final String PREFS_KEY_ACCESS_TOKENS = "org.matrix.matrixandroidsdk.store.LoginStorage.PREFS_KEY_ACCESS_TOKENS";
+    public static final String PREFS_KEY_USERNAMES = "org.matrix.console.store.LoginStorage.PREFS_KEY_USERNAMES";
+    public static final String PREFS_KEY_HOME_SERVERS = "org.matrix.console.store.LoginStorage.PREFS_KEY_HOME_SERVERS";
+    public static final String PREFS_KEY_ACCESS_TOKENS = "org.matrix.console.store.LoginStorage.PREFS_KEY_ACCESS_TOKENS";
 
     private Context mContext;
     private Gson mGson;

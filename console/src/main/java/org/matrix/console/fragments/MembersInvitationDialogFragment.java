@@ -47,7 +47,7 @@ import java.util.Comparator;
 public class MembersInvitationDialogFragment extends DialogFragment {
     private static final String LOG_TAG = "MembersInvitationDialogFragment";
 
-    public static final String ARG_ROOM_ID = "org.matrix.matrixandroidsdk.fragments.MembersInvitationDialogFragment.ARG_ROOM_ID";
+    public static final String ARG_ROOM_ID = "org.matrix.console.fragments.MembersInvitationDialogFragment.ARG_ROOM_ID";
 
     private ListView mListView;
     private MembersInvitationAdapter mAdapter;

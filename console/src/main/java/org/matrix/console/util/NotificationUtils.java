@@ -18,12 +18,12 @@ import org.matrix.console.activity.RoomActivity;
  */
 public class NotificationUtils {
 
-    public static final String QUICK_LAUNCH_ACTION = "org.matrix.matrixandroidsdk.services.EventStreamService.QUICK_LAUNCH_ACTION";
-    public static final String TAP_TO_VIEW_ACTION = "org.matrix.matrixandroidsdk.services.EventStreamService.TAP_TO_VIEW_ACTION";
-    public static final String CAR_VOICE_REPLY_KEY = "org.matrix.matrixandroidsdk.services.EventStreamService.CAR_VOICE_REPLY_KEY" ;
-    public static final String ACTION_MESSAGE_HEARD = "org.matrix.matrixandroidsdk.ACTION_MESSAGE_HEARD";
-    public static final String ACTION_MESSAGE_REPLY = "org.matrix.matrixandroidsdk.ACTION_MESSAGE_REPLY";
-    public static final String EXTRA_ROOM_ID = "org.matrix.matrixandroidsdk.EXTRA_ROOM_ID";
+    public static final String QUICK_LAUNCH_ACTION = "org.matrix.console.services.EventStreamService.QUICK_LAUNCH_ACTION";
+    public static final String TAP_TO_VIEW_ACTION = "org.matrix.console.services.EventStreamService.TAP_TO_VIEW_ACTION";
+    public static final String CAR_VOICE_REPLY_KEY = "org.matrix.console.services.EventStreamService.CAR_VOICE_REPLY_KEY" ;
+    public static final String ACTION_MESSAGE_HEARD = "org.matrix.console.ACTION_MESSAGE_HEARD";
+    public static final String ACTION_MESSAGE_REPLY = "org.matrix.console.ACTION_MESSAGE_REPLY";
+    public static final String EXTRA_ROOM_ID = "org.matrix.console.EXTRA_ROOM_ID";
 
     public static Notification buildMessageNotification(
             Context context, String from, String matrixId, Boolean displayMatrixId, String body, String roomId, String roomName,

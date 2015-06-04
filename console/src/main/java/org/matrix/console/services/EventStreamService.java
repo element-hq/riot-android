@@ -60,8 +60,8 @@ public class EventStreamService extends Service {
         RESUME
     }
 
-    public static final String EXTRA_STREAM_ACTION = "org.matrix.matrixandroidsdk.services.EventStreamService.EXTRA_STREAM_ACTION";
-    public static final String EXTRA_MATRIX_IDS = "org.matrix.matrixandroidsdk.services.EventStreamService.EXTRA_MATRIX_IDS";
+    public static final String EXTRA_STREAM_ACTION = "org.matrix.console.services.EventStreamService.EXTRA_STREAM_ACTION";
+    public static final String EXTRA_MATRIX_IDS = "org.matrix.console.services.EventStreamService.EXTRA_MATRIX_IDS";
 
     private static final String LOG_TAG = "EventStreamService";
     private static final int NOTIFICATION_ID = 42;

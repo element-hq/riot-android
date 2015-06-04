@@ -56,7 +56,7 @@ import java.util.HashMap;
 public class RoomMembersDialogFragment extends DialogFragment {
     private static final String LOG_TAG = "RoomMembersDialogFragment";
 
-    public static final String ARG_ROOM_ID = "org.matrix.matrixandroidsdk.fragments.RoomMembersDialogFragment.ARG_ROOM_ID";
+    public static final String ARG_ROOM_ID = "org.matrix.console.fragments.RoomMembersDialogFragment.ARG_ROOM_ID";
 
     public static RoomMembersDialogFragment newInstance(MXSession session, String roomId) {
         RoomMembersDialogFragment f= new RoomMembersDialogFragment();

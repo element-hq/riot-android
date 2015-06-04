@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.HandlerThread;
@@ -97,13 +98,13 @@ import java.util.TimerTask;
  */
 public class RoomActivity extends MXCActionBarActivity {
 
-    public static final String EXTRA_ROOM_ID = "org.matrix.matrixandroidsdk.RoomActivity.EXTRA_ROOM_ID";
+    public static final String EXTRA_ROOM_ID = "org.matrix.console.RoomActivity.EXTRA_ROOM_ID";
 
-    private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "org.matrix.androidsdk.RoomActivity.TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
-    private static final String TAG_FRAGMENT_MEMBERS_DIALOG = "org.matrix.androidsdk.RoomActivity.TAG_FRAGMENT_MEMBERS_DIALOG";
-    private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "org.matrix.androidsdk.RoomActivity.TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
-    private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "org.matrix.androidsdk.RoomActivity.TAG_FRAGMENT_ATTACHMENTS_DIALOG";
-    private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "org.matrix.androidsdk.RoomActivity.TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
+    private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "org.matrix.console.RoomActivity.TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
+    private static final String TAG_FRAGMENT_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_MEMBERS_DIALOG";
+    private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
+    private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ATTACHMENTS_DIALOG";
+    private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
 
 
     private static final String LOG_TAG = "RoomActivity";
@@ -470,10 +471,7 @@ public class RoomActivity extends MXCActionBarActivity {
                                                             // try to apply exif rotation
                                                             if (0 != rotationAngle) {
                                                                 // rotate the image content
-                                                                if (ImageUtils.rotateImage(RoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache)) {
-                                                                    // and the media thumbnail
-                                                                    ImageUtils.rotateImage(RoomActivity.this, mPendingThumbnailUrl, rotationAngle, mMediasCache);
-                                                                }
+                                                                ImageUtils.rotateImage(RoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
                                                             }
                                                         }
                                                     }
@@ -673,7 +671,7 @@ public class RoomActivity extends MXCActionBarActivity {
         boolean hasPreviewedMedia = (null != mPendingThumbnailUrl);
 
         if (hasPreviewedMedia) {
-            mMediasCache.loadBitmap(mImagePreviewView, mPendingThumbnailUrl, 0, mPendingMimeType);
+            mMediasCache.loadBitmap(mImagePreviewView, mPendingThumbnailUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, mPendingMimeType);
         }
 
         mImagePreviewLayout.setVisibility(hasPreviewedMedia ? View.VISIBLE : View.GONE);
@@ -1101,6 +1099,8 @@ public class RoomActivity extends MXCActionBarActivity {
                                     thumbnailBitmap.recycle();
                                 }
 
+
+
                                 //
                                 if (("image/jpg".equals(mimeType) || "image/jpeg".equals(mimeType)) && (null != mediaUrl)) {
 
@@ -1109,10 +1109,11 @@ public class RoomActivity extends MXCActionBarActivity {
                                     final int rotationAngle = ImageUtils.getRotationAngleForBitmap(RoomActivity.this, imageUri);
 
                                     if (0 != rotationAngle) {
-                                        if (ImageUtils.rotateImage(RoomActivity.this, mediaUrl, rotationAngle, mMediasCache)) {
-                                            // check if there is an exif to apply
-                                            ImageUtils.rotateImage(RoomActivity.this, thumbnailURL, rotationAngle, mMediasCache);
-                                        }
+                                        // always apply the rotation to the image
+                                        ImageUtils.rotateImage(RoomActivity.this, thumbnailURL, rotationAngle, mMediasCache);
+
+                                        // the high res media orientation should be not be done on uploading
+                                        //ImageUtils.rotateImage(RoomActivity.this, mediaUrl, rotationAngle, mMediasCache))
                                     }
                                 }
 

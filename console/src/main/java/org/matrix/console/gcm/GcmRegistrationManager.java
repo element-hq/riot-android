@@ -30,14 +30,14 @@ import java.util.ArrayList;
 public final class GcmRegistrationManager {
     private static String LOG_TAG = "GcmRegistrationManager";
 
-    public static final String PREFS_GCM = "org.matrix.matrixandroidsdk.gcm.GcmRegistrationManager";
+    public static final String PREFS_GCM = "org.matrix.console.gcm.GcmRegistrationManager";
     public static final String PREFS_KEY_REG_ID_PREFIX = "REG_ID-";
 
-    public static final String PREFS_PUSHER_APP_ID_KEY = "org.matrix.matrixandroidsdk.gcm.GcmRegistrationManager.pusherAppId";
-    public static final String PREFS_SENDER_ID_KEY = "org.matrix.matrixandroidsdk.gcm.GcmRegistrationManager.senderId";
-    public static final String PREFS_PUSHER_URL_KEY = "org.matrix.matrixandroidsdk.gcm.GcmRegistrationManager.pusherUrl";
-    public static final String PREFS_PUSHER_FILE_TAG_KEY = "org.matrix.matrixandroidsdk.gcm.GcmRegistrationManager.pusherFileTag";
-    public static final String PREFS_APP_VERSION = "org.matrix.matrixandroidsdk.gcm.GcmRegistrationManager.appVersion";
+    public static final String PREFS_PUSHER_APP_ID_KEY = "org.matrix.console.gcm.GcmRegistrationManager.pusherAppId";
+    public static final String PREFS_SENDER_ID_KEY = "org.matrix.console.gcm.GcmRegistrationManager.senderId";
+    public static final String PREFS_PUSHER_URL_KEY = "org.matrix.console.gcm.GcmRegistrationManager.pusherUrl";
+    public static final String PREFS_PUSHER_FILE_TAG_KEY = "org.matrix.console.gcm.GcmRegistrationManager.pusherFileTag";
+    public static final String PREFS_APP_VERSION = "org.matrix.console.gcm.GcmRegistrationManager.appVersion";
 
     // TODO: Make this configurable at build time
     private static String DEFAULT_SENDER_ID = "0";

@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,18 +45,20 @@ import org.matrix.console.R;
 public class ImageWebViewActivity extends Activity {
     private static final String LOG_TAG = "ImageWebViewActivity";
 
-    public static final String KEY_HIGHRES_IMAGE_URI = "org.matrix.matrixandroidsdk.activity.ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI";
-    public static final String KEY_THUMBNAIL_WIDTH = "org.matrix.matrixandroidsdk.activity.ImageWebViewActivity.KEY_THUMBNAIL_WIDTH";
-    public static final String KEY_THUMBNAIL_HEIGHT = "org.matrix.matrixandroidsdk.activity.ImageWebViewActivity.KEY_THUMBNAIL_HEIGHT";
-    public static final String KEY_HIGHRES_MIME_TYPE = "org.matrix.matrixandroidsdk.activity.ImageWebViewActivity.KEY_HIGHRES_MIME_TYPE";
-    public static final String KEY_IMAGE_ROTATION = "org.matrix.matrixandroidsdk.activity.ImageWebViewActivity.KEY_IMAGE_ROTATION";
+    public static final String KEY_HIGHRES_IMAGE_URI = "org.matrix.console.activity.ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI";
+    public static final String KEY_THUMBNAIL_WIDTH = "org.matrix.console.activity.ImageWebViewActivity.KEY_THUMBNAIL_WIDTH";
+    public static final String KEY_THUMBNAIL_HEIGHT = "org.matrix.console.activity.ImageWebViewActivity.KEY_THUMBNAIL_HEIGHT";
+    public static final String KEY_HIGHRES_MIME_TYPE = "org.matrix.console.activity.ImageWebViewActivity.KEY_HIGHRES_MIME_TYPE";
+    public static final String KEY_IMAGE_ROTATION = "org.matrix.console.activity.ImageWebViewActivity.KEY_IMAGE_ROTATION";
+    public static final String KEY_IMAGE_ORIENTATION = "org.matrix.console.activity.ImageWebViewActivity.KEY_IMAGE_ORIENTATION";
+
     private WebView mWebView;
 
     private int mRotationAngle = 0;
+    private int mOrientation = ExifInterface.ORIENTATION_UNDEFINED;
     private String mThumbnailUri = null;
     private String mHighResUri = null;
     private String mHighResMimeType = null;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class ImageWebViewActivity extends Activity {
 
         mHighResUri = intent.getStringExtra(KEY_HIGHRES_IMAGE_URI);
         mRotationAngle = intent.getIntExtra(KEY_IMAGE_ROTATION, 0);
+        mOrientation = intent.getIntExtra(KEY_IMAGE_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
         mHighResMimeType = intent.getStringExtra(KEY_HIGHRES_MIME_TYPE);
 
         if (mHighResUri == null) {
@@ -172,7 +176,7 @@ public class ImageWebViewActivity extends Activity {
             final String loadingUri = mHighResUri;
             mThumbnailUri = mHighResUri = "file://" + mediaFile.getPath();
 
-            final String downloadId = mediasCache.loadBitmap(this, loadingUri, mRotationAngle, mHighResMimeType);
+            final String downloadId = mediasCache.loadBitmap(this, loadingUri, mRotationAngle, mOrientation, mHighResMimeType);
 
             if (null != downloadId) {
                 pieFractionView.setFraction(mediasCache.progressValueForDownloadId(downloadId));

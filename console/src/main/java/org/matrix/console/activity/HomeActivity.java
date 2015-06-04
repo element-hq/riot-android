@@ -77,14 +77,14 @@ public class HomeActivity extends MXCActionBarActivity {
 
     private static final String PUBLIC_ROOMS_LIST = "PUBLIC_ROOMS_LIST";
 
-    private static final String TAG_FRAGMENT_CONTACTS_LIST = "org.matrix.androidsdk.HomeActivity.TAG_FRAGMENT_CONTACTS_LIST";
-    private static final String TAG_FRAGMENT_CREATE_ROOM_DIALOG = "org.matrix.androidsdk.HomeActivity.TAG_FRAGMENT_CREATE_ROOM_DIALOG";
+    private static final String TAG_FRAGMENT_CONTACTS_LIST = "org.matrix.console.HomeActivity.TAG_FRAGMENT_CONTACTS_LIST";
+    private static final String TAG_FRAGMENT_CREATE_ROOM_DIALOG = "org.matrix.console.HomeActivity.TAG_FRAGMENT_CREATE_ROOM_DIALOG";
 
-    private static final String TAG_FRAGMENT_ROOM_OPTIONS = "org.matrix.androidsdk.HomeActivity.TAG_FRAGMENT_ROOM_OPTIONS";
+    private static final String TAG_FRAGMENT_ROOM_OPTIONS = "org.matrix.console.HomeActivity.TAG_FRAGMENT_ROOM_OPTIONS";
 
-    public static final String EXTRA_JUMP_TO_ROOM_ID = "org.matrix.matrixandroidsdk.HomeActivity.EXTRA_JUMP_TO_ROOM_ID";
-    public static final String EXTRA_JUMP_MATRIX_ID = "org.matrix.matrixandroidsdk.HomeActivity.EXTRA_JUMP_MATRIX_ID";
-    public static final String EXTRA_ROOM_INTENT = "org.matrix.matrixandroidsdk.HomeActivity.EXTRA_ROOM_INTENT";
+    public static final String EXTRA_JUMP_TO_ROOM_ID = "org.matrix.console.HomeActivity.EXTRA_JUMP_TO_ROOM_ID";
+    public static final String EXTRA_JUMP_MATRIX_ID = "org.matrix.console.HomeActivity.EXTRA_JUMP_MATRIX_ID";
+    public static final String EXTRA_ROOM_INTENT = "org.matrix.console.HomeActivity.EXTRA_ROOM_INTENT";
 
     private List<PublicRoom> mPublicRooms = null;
 
