@@ -670,6 +670,7 @@ public class RoomActivity extends MXCActionBarActivity {
         boolean hasText = mEditText.getText().length() > 0;
         boolean hasPreviewedMedia = (null != mPendingThumbnailUrl);
 
+        
         if (hasPreviewedMedia) {
             mMediasCache.loadBitmap(mImagePreviewView, mPendingThumbnailUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, mPendingMimeType);
         }
