@@ -254,17 +254,6 @@ public class SettingsActivity extends MXCActionBarActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        final EditText senderIDEditText = (EditText)findViewById(R.id.editText_gcm_sender_id);
-        senderIDEditText.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-                gcmRegistrationManager.setSenderId(senderIDEditText.getText().toString());
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
         final EditText pusherUrlEditText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
         pusherUrlEditText.addTextChangedListener(new TextWatcher() {
 
@@ -363,12 +352,6 @@ public class SettingsActivity extends MXCActionBarActivity {
         EditText editText = (EditText)findViewById(R.id.editText_gcm_app_id);
         editText.setVisibility(debugMode ? View.VISIBLE : View.GONE);
         editText.setText(gcmRegistrationManager.pusherAppId());
-
-        textView  = (TextView)findViewById(R.id.textView_gcm_sender_id);
-        textView.setVisibility(debugMode ? View.VISIBLE : View.GONE);
-        editText = (EditText)findViewById(R.id.editText_gcm_sender_id);
-        editText.setVisibility(debugMode ? View.VISIBLE : View.GONE);
-        editText.setText(gcmRegistrationManager.senderId());
 
         editText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
         editText.setText(gcmRegistrationManager.pusherUrl());

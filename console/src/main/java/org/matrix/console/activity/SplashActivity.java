@@ -134,7 +134,7 @@ public class SplashActivity extends MXCActionBarActivity {
         mPusherRegistrationComplete = mGcmRegistrationManager.isGCMRegistred();
 
         if (!mPusherRegistrationComplete) {
-            mGcmRegistrationManager.registerPusher(new GcmRegistrationManager.GcmRegistrationIdListener() {
+            mGcmRegistrationManager.registerPusher(getApplicationContext(), new GcmRegistrationManager.GcmRegistrationIdListener() {
                 @Override
                 public void onPusherRegistered() {
                     mPusherRegistrationComplete = true;

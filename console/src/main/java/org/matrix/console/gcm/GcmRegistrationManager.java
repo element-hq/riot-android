@@ -1,5 +1,6 @@
 package org.matrix.console.gcm;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -13,6 +14,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -66,7 +68,6 @@ public final class GcmRegistrationManager {
 
     // theses both entries can be updated from the settings page in debug mode
     private String mPusherAppId = null;
-    private String mSenderId = null;
     private String mPusherUrl = null;
     private String mPusherFileTag = null;
 
@@ -86,7 +87,7 @@ public final class GcmRegistrationManager {
     private Context mContext;
     private RegistrationState mRegistrationState = RegistrationState.UNREGISTRATED;
 
-    private String mRegistrationId = null;
+    private String mPushKey = null;
 
     public GcmRegistrationManager(Context appContext) {
         mContext = appContext.getApplicationContext();
@@ -107,7 +108,6 @@ public final class GcmRegistrationManager {
      * reset the Registration
      */
     public void reset() {
-        // TODO warn server that the sessions must not anymore receive notifications
         unregisterSessions(null);
 
         // remove the customized keys
@@ -132,17 +132,6 @@ public final class GcmRegistrationManager {
     public void setPusherAppId(String pusherAppId) {
         if (!TextUtils.isEmpty(pusherAppId) && !pusherAppId.equals(mPusherAppId)) {
             mPusherAppId = pusherAppId;
-            SaveGCMData();
-        }
-    }
-
-    public String senderId() {
-        return mSenderId;
-    }
-
-    public void setSenderId(String senderId) {
-        if (!TextUtils.isEmpty(senderId) && !senderId.equals(mSenderId)) {
-            mSenderId = senderId;
             SaveGCMData();
         }
     }
@@ -188,10 +177,20 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * Force to retrieve the
+     * @param appContext
+     * @param registrationListener
+     */
+    public void refreshPushToken(final Context appContext, final GcmRegistrationIdListener registrationListener) {
+
+    }
+
+
+    /**
      * Register to the GCM.
      * @param registrationListener the events listener.
      */
-    public void registerPusher(final GcmRegistrationIdListener registrationListener) {
+    public void registerPusher(final Context appContext, final GcmRegistrationIdListener registrationListener) {
         // already registred
         if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
             if (null != registrationListener) {
@@ -208,28 +207,28 @@ public final class GcmRegistrationManager {
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... voids) {
-                    String registrationId = null;
+                    String pushKey = null;
 
                     if (checkPlayServices()) {
-                        registrationId = getRegistrationId();
+                        pushKey = getPushKey(appContext);
 
-                        if (registrationId != null) {
-                            mRegistrationId = registrationId;
+                        if (pushKey != null) {
+                            mPushKey = pushKey;
                         }
                     }
-                    return registrationId;
+                    return mPushKey;
                 }
 
                 @Override
-                protected void onPostExecute(String registrationId) {
+                protected void onPostExecute(String pushKey) {
 
-                    if (registrationId != null) {
+                    if (pushKey != null) {
                         mRegistrationState = RegistrationState.GCM_REGISTRED;
                     } else {
                         mRegistrationState = RegistrationState.UNREGISTRATED;
                     }
 
-                    setStoredRegistrationId(registrationId);
+                    setStoredPushKey(pushKey);
 
                     // register the sessions to the 3rd party server
                     if (useGCM()) {
@@ -239,7 +238,7 @@ public final class GcmRegistrationManager {
                     // warn the listener
                     if (null != registrationListener) {
                         try {
-                            if (registrationId != null) {
+                            if (pushKey != null) {
                                 registrationListener.onPusherRegistered();
                             } else {
                                 registrationListener.onPusherRegistrationFailed();
@@ -268,31 +267,32 @@ public final class GcmRegistrationManager {
         return mRegistrationState == RegistrationState.SERVER_REGISTERED;
     }
 
-
-    private String getRegistrationId() {
-        String registrationId = getStoredRegistrationId();
+    private String getPushKey(Context appContext) {
+        String pushKey = getStoredPushKey();
 
         // Check if app was updated; if so, it must clear the registration ID
         // since the existing registration ID is not guaranteed to work with
         // the new app version.
         if (isNewAppVersion()) {
-            registrationId = null;
-            setStoredRegistrationId(null);
+            pushKey = null;
+            setStoredPushKey(null);
         }
 
-        if (registrationId == null) {
+        if (pushKey == null) {
             try {
-                // and callback if not.
-                GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(mContext);
-                registrationId = gcm.register(mSenderId);
+                InstanceID instanceID = InstanceID.getInstance(appContext);
+                pushKey = instanceID.getToken(appContext.getString(R.string.gcm_defaultSenderId),
+                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                // [END get_token]
+                Log.i(LOG_TAG, "GCM Registration Token: " + pushKey);
+
                 //setStoredRegistrationId(registrationId);
             } catch (IOException e) {
-                registrationId = null;
+                pushKey = null;
             }
         }
-        return registrationId;
+        return pushKey;
     }
-
 
     /**
      * Register the session to the 3rd-party app server
@@ -301,7 +301,7 @@ public final class GcmRegistrationManager {
      */
     public void registerSession(final MXSession session, final GcmSessionRegistration listener) {
         session.getPushersRestClient()
-                .addHttpPusher(mRegistrationId, mPusherAppId, mPusherFileTag + "_" + session.getMyUser().userId,
+                .addHttpPusher(mPushKey, mPusherAppId, mPusherFileTag + "_" + session.getMyUser().userId,
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
                         mPusherUrl, new ApiCallback<Void>() {
                             @Override
@@ -417,14 +417,49 @@ public final class GcmRegistrationManager {
      * @param session
      */
     public void unregisterSession(final MXSession session, final GcmSessionRegistration listener) {
-        // TODO warn server that the sessions must not anymore receive notifications
+        session.getPushersRestClient()
+                .removeHttpPusher(mPushKey, mPusherAppId, mPusherFileTag + "_" + session.getMyUser().userId,
+                        mPusherLang, mPusherAppName, mBasePusherDeviceName,
+                        mPusherUrl, new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                Log.d(LOG_TAG, "unregisterSession succeeded");
 
-        if (null != listener) {
-            try {
-                listener.onSessionUnregistrationFailed();
-            } catch (Exception e) {
-            }
-        }
+                                if (null != listener) {
+                                    try {
+                                        listener.onSessionUnregistred();
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }
+
+                            private void onError() {
+                                if (null != listener) {
+                                    try {
+                                        listener.onSessionUnregistrationFailed();
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                Log.e(LOG_TAG, "unregisterSession onNetworkError " + e.getMessage());
+                                onError();
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                Log.e(LOG_TAG, "unregisterSession onMatrixError " + e.errcode);
+                                onError();
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                Log.e(LOG_TAG, "unregisterSession onUnexpectedError " + e.getMessage());
+                                onError();
+                            }
+                        });
     }
 
     /**
@@ -441,14 +476,7 @@ public final class GcmRegistrationManager {
             }
         } else {
             mRegistrationState = RegistrationState.GCM_REGISTRED;
-
-            try {
-                listener.onSessionUnregistred();
-            } catch (Exception e) {
-            }
-
-            // TODO wait after a server API update
-            //unregisterSessions(new ArrayList<MXSession>(Matrix.getInstance(mContext).getSessions()), 0, listener);
+            unregisterSessions(new ArrayList<MXSession>(Matrix.getInstance(mContext).getSessions()), 0, listener);
         }
     }
 
@@ -501,15 +529,15 @@ public final class GcmRegistrationManager {
     /**
      * @return the GCM registration stored for this version of the app or null if none is stored.
      */
-    private String getStoredRegistrationId() {
-        return getSharedPreferences().getString(getRegistrationIdKey(), null);
+    private String getStoredPushKey() {
+        return getSharedPreferences().getString(getPushKeyKey(), null);
     }
 
     /**
      * @return true if the current application version is not the same the expected one.
      */
     private Boolean isNewAppVersion() {
-        try {
+        /*try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
             int currentVersion = pInfo.versionCode;
 
@@ -524,25 +552,25 @@ public final class GcmRegistrationManager {
             return false;
         } catch (Exception e) {
 
-        }
+        }*/
 
         return true;
     }
 
     /**
      * Set the GCM registration for the currently-running version of this app.
-     * @param registrationId
+     * @param pushKey
      */
-    private void setStoredRegistrationId(String registrationId) {
-        String key = getRegistrationIdKey();
+    private void setStoredPushKey(String pushKey) {
+        String key = getPushKeyKey();
         if (key == null) {
             Log.e(LOG_TAG, "Failed to store registration ID");
             return;
         }
 
-        Log.d(LOG_TAG, "Saving registrationId " + registrationId + " under key " + key);
+        Log.d(LOG_TAG, "Saving push key " + pushKey + " under key " + key);
         getSharedPreferences().edit()
-                .putString(key, registrationId)
+                .putString(key, pushKey)
                 .commit();
     }
 
@@ -550,7 +578,7 @@ public final class GcmRegistrationManager {
         return mContext.getSharedPreferences(PREFS_GCM, Context.MODE_PRIVATE);
     }
 
-    private String getRegistrationIdKey() {
+    private String getPushKeyKey() {
         try {
             PackageInfo packageInfo = mContext.getPackageManager()
                     .getPackageInfo(mContext.getPackageName(), 0);
@@ -569,7 +597,6 @@ public final class GcmRegistrationManager {
             SharedPreferences.Editor editor = preferences.edit();
 
             editor.putString(PREFS_PUSHER_APP_ID_KEY, mPusherAppId);
-            editor.putString(PREFS_SENDER_ID_KEY, mSenderId);
             editor.putString(PREFS_PUSHER_URL_KEY, mPusherUrl);
             editor.putString(PREFS_PUSHER_FILE_TAG_KEY, mPusherFileTag);
 
@@ -588,9 +615,6 @@ public final class GcmRegistrationManager {
 
             String pusherAppId = preferences.getString(PREFS_PUSHER_APP_ID_KEY, null);
             mPusherAppId = TextUtils.isEmpty(pusherAppId) ? DEFAULT_PUSHER_APP_ID : pusherAppId;
-
-            String senderId = preferences.getString(PREFS_SENDER_ID_KEY, null);
-            mSenderId = TextUtils.isEmpty(senderId) ? DEFAULT_SENDER_ID : senderId;
 
             String pusherUrl = preferences.getString(PREFS_PUSHER_URL_KEY, null);
             mPusherUrl = TextUtils.isEmpty(pusherUrl) ? DEFAULT_PUSHER_URL : pusherUrl;

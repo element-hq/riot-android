@@ -19,6 +19,7 @@ package org.matrix.console.activity;
 import java.io.File;
 import java.io.FileInputStream;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -264,6 +265,7 @@ public class ImageWebViewActivity extends Activity {
         mWebView.requestLayout();
     }
 
+    @SuppressLint("NewApi")
     private Point getDisplaySize() {
         Point size = new Point();
         WindowManager w = getWindowManager();

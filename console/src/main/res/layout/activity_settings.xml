@@ -6,7 +6,7 @@
     <LinearLayout
         android:id="@+id/settings_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
@@ -73,20 +73,6 @@
 
             <EditText
                 android:id="@+id/editText_gcm_app_id"
-                style="@style/Base.TextAppearance.AppCompat.Caption"
-                android:singleLine="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/textView_gcm_sender_id"
-                style="@style/Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle"
-                android:text = "@string/settings_gcm_sender_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/editText_gcm_sender_id"
                 style="@style/Base.TextAppearance.AppCompat.Caption"
                 android:singleLine="true"
                 android:layout_width="match_parent"
