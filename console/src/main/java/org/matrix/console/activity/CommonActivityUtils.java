@@ -30,6 +30,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.console.ConsoleApplication;
 import org.matrix.console.Matrix;
 import org.matrix.console.MyPresenceManager;
 import org.matrix.console.R;
@@ -63,6 +65,7 @@ import java.util.Comparator;
  * Contains useful functions which are called in multiple activities.
  */
 public class CommonActivityUtils {
+    private static final String LOG_TAG = "CommonActivityUtils";
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
 
@@ -119,29 +122,44 @@ public class CommonActivityUtils {
     public static void disconnect(Activity activity) {
         stopEventStream(activity);
 
-        // Clear session
-        Matrix.getInstance(activity).clearSessions(activity, false);
-
         activity.finish();
     }
 
-    public static void stopEventStream(Activity context) {
+    public static void stopEventStream(Context context) {
+        Context appContext = context.getApplicationContext();
+
         // kill active connections
-        Intent killStreamService = new Intent(context, EventStreamService.class);
+        Intent killStreamService = new Intent(appContext, EventStreamService.class);
         killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.STOP.ordinal());
-        context.startService(killStreamService);
+        appContext.startService(killStreamService);
     }
 
-    public static void pauseEventStream(Activity activity) {
-        Intent streamService = new Intent(activity, EventStreamService.class);
+    public static void pauseEventStream(Context context) {
+        Context appContext = context.getApplicationContext();
+
+        Intent streamService = new Intent(appContext, EventStreamService.class);
         streamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.PAUSE.ordinal());
-        activity.startService(streamService);
+        appContext.startService(streamService);
     }
 
-    public static void resumeEventStream(Activity activity) {
-        Intent streamService = new Intent(activity, EventStreamService.class);
+    public static void resumeEventStream(Context context) {
+        Context appContext = context.getApplicationContext();
+
+        Intent streamService = new Intent(appContext, EventStreamService.class);
         streamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.RESUME.ordinal());
-        activity.startService(streamService);
+        appContext.startService(streamService);
+    }
+
+    public static void catchupEventStream(Context context) {
+        Context appContext = context.getApplicationContext();
+
+        Log.e(LOG_TAG, "catchupEventStream");
+
+        if (ConsoleApplication.isAppInBackground()) {
+            Intent streamService = new Intent(appContext, EventStreamService.class);
+            streamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.CATCHUP.ordinal());
+            appContext.startService(streamService);
+        }
     }
 
     public interface OnSubmitListener {

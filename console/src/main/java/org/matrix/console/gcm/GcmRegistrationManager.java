@@ -159,24 +159,6 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    public boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                Log.e(LOG_TAG, "checkPlayServices isUserRecoverableError " +  GooglePlayServicesUtil.getErrorString(resultCode));
-            } else {
-                Log.e(LOG_TAG, "This device is not supported.");
-            }
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Force to retrieve the
      * @param appContext
      * @param registrationListener
@@ -209,13 +191,12 @@ public final class GcmRegistrationManager {
                 protected String doInBackground(Void... voids) {
                     String pushKey = null;
 
-                    if (checkPlayServices()) {
-                        pushKey = getPushKey(appContext);
+                    pushKey = getPushKey(appContext);
 
-                        if (pushKey != null) {
-                            mPushKey = pushKey;
-                        }
+                    if (pushKey != null) {
+                        mPushKey = pushKey;
                     }
+
                     return mPushKey;
                 }
 

@@ -26,7 +26,7 @@ import com.google.android.gms.iid.InstanceIDListenerService;
 
 public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
 
-    private static final String TAG = "MatrixInstanceIDLS";
+    private static final String LOG_TAG = "MatrixInstanceIDLS";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -36,6 +36,9 @@ public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
+
+        Log.e(LOG_TAG, "onTokenRefresh");
+
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
         //Intent intent = new Intent(this, MatrixRegistrationIntentService.class);
         //startService(intent);

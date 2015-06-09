@@ -57,7 +57,8 @@ public class EventStreamService extends Service {
         STOP,
         START,
         PAUSE,
-        RESUME
+        RESUME,
+        CATCHUP
     }
 
     public static final String EXTRA_STREAM_ACTION = "org.matrix.console.services.EventStreamService.EXTRA_STREAM_ACTION";
@@ -259,6 +260,9 @@ public class EventStreamService extends Service {
             case PAUSE:
                 pause();
                 break;
+            case CATCHUP:
+                catchup();
+                break;
             default:
                 break;
         }
@@ -286,7 +290,7 @@ public class EventStreamService extends Service {
             Log.w(LOG_TAG, "Already started.");
             return;
         }
-        else if (mState == StreamAction.PAUSE) {
+        else if ((mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP)) {
             Log.i(LOG_TAG, "Resuming active stream.");
             resume();
             return;
@@ -349,6 +353,21 @@ public class EventStreamService extends Service {
         mState = StreamAction.PAUSE;
     }
 
+    private void catchup() {
+        stopForeground(true);
+
+        if (mSessions != null) {
+            for(MXSession session : mSessions) {
+                session.catchupEventStream();
+            }
+        }
+        if (shouldRunInForeground()) {
+            startWithNotification();
+        }
+
+        mState = StreamAction.CATCHUP;
+    }
+
     private void resume() {
         if (mSessions != null) {
             for(MXSession session : mSessions) {
@@ -358,6 +377,8 @@ public class EventStreamService extends Service {
         if (shouldRunInForeground()) {
             startWithNotification();
         }
+
+        mState = StreamAction.START;
     }
 
     private void startWithNotification() {
@@ -392,7 +413,6 @@ public class EventStreamService extends Service {
     }
 
     private boolean shouldRunInForeground() {
-        // TODO: Make configurable in settings, false by default if GCM registration succeeded.
         return true;
     }
 }

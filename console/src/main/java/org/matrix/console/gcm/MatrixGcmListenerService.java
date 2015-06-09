@@ -16,23 +16,16 @@
 
 package org.matrix.console.gcm;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import org.matrix.console.activity.HomeActivity;
+import org.matrix.console.activity.CommonActivityUtils;
 
 public class MatrixGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = "MyGcmListenerService";
+    private static final String LOG_TAG = "GcmListenerService";
 
     /**
      * Called when message is received.
@@ -44,31 +37,14 @@ public class MatrixGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
 
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
+        Log.e(LOG_TAG, "Receive a notification ");
 
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
-        sendNotification(message);
-    }
-    // [END receive_message]
+        for (String key : data.keySet()) {
+            Log.e(LOG_TAG, " >>> " + key + " : " + data.get(key));
+        }
 
-    /**
-     * Create and show a simple notification containing the received GCM message.
-     *
-     * @param message GCM message received.
-     */
-    private void sendNotification(String message) {
-
+        Log.e(LOG_TAG, "catchup ");
+        CommonActivityUtils.catchupEventStream(this);
     }
 }

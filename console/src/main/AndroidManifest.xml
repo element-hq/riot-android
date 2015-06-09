@@ -106,8 +106,6 @@
             android:name="org.matrix.console.activity.ImageWebViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
-
-        <!-- [START gcm_receiver] -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -119,10 +117,7 @@
                 <category android:name="org.matrix.console.gcm" />
             </intent-filter>
         </receiver>
-        <!-- [END gcm_receiver] -->
 
-
-        <!-- [START gcm_listener] -->
         <service
             android:name="org.matrix.console.gcm.MatrixGcmListenerService"
             android:exported="false" >
@@ -130,9 +125,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <!-- [END gcm_listener] -->
 
-        <!-- [START instanceId_listener] -->
         <service
             android:name="org.matrix.console.gcm.MatrixInstanceIDListenerService"
             android:exported="false">
@@ -140,7 +133,6 @@
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
-        <!-- [END instanceId_listener] -->
 
         <service android:name="org.matrix.console.services.EventStreamService" />
 

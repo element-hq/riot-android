@@ -18,6 +18,7 @@ package org.matrix.console;
 import android.app.Activity;
 import android.app.Application;
 
+import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.contacts.ContactsManager;
 import org.matrix.console.contacts.PIDsRetriever;
 
@@ -50,6 +51,7 @@ public class ConsoleApplication extends Application {
         this.mActivityTransitionTimerTask = new TimerTask() {
             public void run() {
                 ConsoleApplication.this.isInBackground = true;
+                CommonActivityUtils.pauseEventStream(ConsoleApplication.this);
                 PIDsRetriever.getIntance().onAppBackgrounded();
             }
         };
@@ -67,6 +69,7 @@ public class ConsoleApplication extends Application {
         }
 
         if (isInBackground) {
+            CommonActivityUtils.resumeEventStream(ConsoleApplication.this);
             // get the contact update at application launch
             ContactsManager.refreshLocalContactsSnapshot(this);
         }
