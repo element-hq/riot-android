@@ -51,7 +51,6 @@ import java.util.List;
  * A foreground service in charge of controlling whether the event stream is running or not.
  */
 public class EventStreamService extends Service {
-
     public enum StreamAction {
         UNKNOWN,
         STOP,
@@ -287,11 +286,11 @@ public class EventStreamService extends Service {
 
     private void start() {
         if (mState == StreamAction.START) {
-            Log.w(LOG_TAG, "Already started.");
+            Log.e(LOG_TAG, "Already started.");
             return;
         }
         else if ((mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP)) {
-            Log.i(LOG_TAG, "Resuming active stream.");
+            Log.e(LOG_TAG, "Resuming active stream.");
             resume();
             return;
         }
@@ -300,7 +299,6 @@ public class EventStreamService extends Service {
             Log.e(LOG_TAG, "No valid MXSession.");
             return;
         }
-
         mActiveEventStreamService = this;
 
         for(MXSession session : mSessions) {
@@ -343,14 +341,20 @@ public class EventStreamService extends Service {
     }
 
     private void pause() {
-        stopForeground(true);
+        if ((mState == StreamAction.START) || (mState == StreamAction.RESUME)) {
+            Log.d(LOG_TAG, "onStartCommand pause");
 
-        if (mSessions != null) {
-            for(MXSession session : mSessions) {
-                session.pauseEventStream();
+            stopForeground(true);
+
+            if (mSessions != null) {
+                for(MXSession session : mSessions) {
+                    session.pauseEventStream();
+                }
+                mState = StreamAction.PAUSE;
             }
+        } else {
+            Log.e(LOG_TAG, "onStartCommand invalid state pause " + mState);
         }
-        mState = StreamAction.PAUSE;
     }
 
     private void catchup() {
@@ -360,7 +364,10 @@ public class EventStreamService extends Service {
             for(MXSession session : mSessions) {
                 session.catchupEventStream();
             }
+        } else {
+            Log.e(LOG_TAG, "catchup no session");
         }
+
         if (shouldRunInForeground()) {
             startWithNotification();
         }

@@ -16,16 +16,27 @@
 
 package org.matrix.console.gcm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.listeners.IMXEventListener;
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.console.ErrorListener;
+import org.matrix.console.Matrix;
 import org.matrix.console.activity.CommonActivityUtils;
+import org.matrix.console.services.EventStreamService;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MatrixGcmListenerService extends GcmListenerService {
 
     private static final String LOG_TAG = "GcmListenerService";
+    private Boolean mCheckLaunched = false;
 
     /**
      * Called when message is received.
@@ -34,17 +45,45 @@ public class MatrixGcmListenerService extends GcmListenerService {
      * @param data Data bundle containing message data as key/value pairs.
      *             For Set of keys use data.keySet().
      */
-    // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-
-        Log.e(LOG_TAG, "Receive a notification ");
+        Log.d(LOG_TAG, " onMessageReceived ");
 
         for (String key : data.keySet()) {
             Log.e(LOG_TAG, " >>> " + key + " : " + data.get(key));
         }
+        // check if the application has been launched once
+        // the first GCM event could have been triggered whereas the application is not yet launched.
+        // so it is required to create the sessions and to start/resume event stream
+        if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
+            ArrayList<String> matrixIds = new ArrayList<String>();
+            Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
 
-        Log.e(LOG_TAG, "catchup ");
+            Log.d(LOG_TAG, " onMessageReceived getSessions " + sessions.size());
+
+            for(MXSession session : sessions) {
+                Boolean isSessionReady = session.getDataHandler().getStore().isReady();
+
+                if (!isSessionReady) {
+                    session.getDataHandler().getStore().open();
+                }
+
+                // session to activate
+                matrixIds.add(session.getCredentials().userId);
+            }
+
+            if (EventStreamService.getInstance() == null) {
+                Log.d(LOG_TAG, " The application is not yet launched");
+                // Start the event stream service
+                Intent intent = new Intent(this, EventStreamService.class);
+                intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
+                intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
+                startService(intent);
+            }
+
+            mCheckLaunched = true;
+        }
+        
         CommonActivityUtils.catchupEventStream(this);
     }
 }

@@ -121,44 +121,37 @@ public class CommonActivityUtils {
 
     public static void disconnect(Activity activity) {
         stopEventStream(activity);
-
         activity.finish();
     }
 
-    public static void stopEventStream(Context context) {
+    private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
         // kill active connections
         Intent killStreamService = new Intent(appContext, EventStreamService.class);
-        killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.STOP.ordinal());
+        killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
         appContext.startService(killStreamService);
     }
 
-    public static void pauseEventStream(Context context) {
-        Context appContext = context.getApplicationContext();
+    public static void stopEventStream(Context context) {
+        Log.d(LOG_TAG, "stopEventStream");
+        sendEventStreamAction(context, EventStreamService.StreamAction.STOP);
+    }
 
-        Intent streamService = new Intent(appContext, EventStreamService.class);
-        streamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.PAUSE.ordinal());
-        appContext.startService(streamService);
+    public static void pauseEventStream(Context context) {
+        Log.d(LOG_TAG, "pauseEventStream");
+        sendEventStreamAction(context, EventStreamService.StreamAction.PAUSE);
     }
 
     public static void resumeEventStream(Context context) {
-        Context appContext = context.getApplicationContext();
-
-        Intent streamService = new Intent(appContext, EventStreamService.class);
-        streamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.RESUME.ordinal());
-        appContext.startService(streamService);
+        Log.d(LOG_TAG, "resumeEventStream");
+        sendEventStreamAction(context, EventStreamService.StreamAction.RESUME);
     }
 
     public static void catchupEventStream(Context context) {
-        Context appContext = context.getApplicationContext();
-
-        Log.e(LOG_TAG, "catchupEventStream");
-
         if (ConsoleApplication.isAppInBackground()) {
-            Intent streamService = new Intent(appContext, EventStreamService.class);
-            streamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.CATCHUP.ordinal());
-            appContext.startService(streamService);
+            Log.d(LOG_TAG, "catchupEventStream");
+            sendEventStreamAction(context, EventStreamService.StreamAction.CATCHUP);
         }
     }
 
