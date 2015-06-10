@@ -61,6 +61,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Contains useful functions which are called in multiple activities.
  */
@@ -152,6 +154,24 @@ public class CommonActivityUtils {
         if (ConsoleApplication.isAppInBackground()) {
             Log.d(LOG_TAG, "catchupEventStream");
             sendEventStreamAction(context, EventStreamService.StreamAction.CATCHUP);
+        }
+    }
+
+    public static void updateUnreadMessagesBadge(Context context) {
+        int unreadCount = 0;
+        Collection<MXSession> sessions = Matrix.getMXSessions(context);
+
+        for(MXSession session : sessions) {
+            Collection<RoomSummary> summaries = session.getDataHandler().getStore().getSummaries();
+
+            for(RoomSummary summary : summaries) {
+                unreadCount += summary.getUnreadMessagesCount();
+            }
+        }
+
+        try {
+            ShortcutBadger.setBadge(context, unreadCount);
+        } catch (Exception e) {
         }
     }
 

@@ -68,6 +68,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -220,6 +222,8 @@ public class HomeActivity extends MXCActionBarActivity {
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
 
+                    CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
+
                 } else if (mAdapter.isPublicsGroupIndex(groupPosition)) {
                     // should offer to select which account to use
                     roomId = mAdapter.getPublicRoomAt(childPosition).roomId;
@@ -273,6 +277,7 @@ public class HomeActivity extends MXCActionBarActivity {
                                                 room.leave(new SimpleApiCallback<Void>(HomeActivity.this) {
                                                     @Override
                                                     public void onSuccess(Void info) {
+                                                        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
                                                     }
                                                 });
                                             }
@@ -475,6 +480,8 @@ public class HomeActivity extends MXCActionBarActivity {
                             mMyRoomList.expandGroup(mAdapter.mPublicsGroupIndex);
                         }
 
+                        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
+
                         // load the public load in background
                         // done onResume
                         //refreshPublicRoomsList();
@@ -559,8 +566,6 @@ public class HomeActivity extends MXCActionBarActivity {
 
                             // If we're not currently viewing this room or not sent by myself, increment the unread count
                             if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId))  && !event.userId.equals(matrixId)) {
-                                mAdapter.incrementUnreadCount(section, event.roomId);
-
                                 if (null != summary) {
                                     summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, HomeActivity.this, event));
                                 }
@@ -696,6 +701,8 @@ public class HomeActivity extends MXCActionBarActivity {
                 }
             });
         }
+
+        CommonActivityUtils.updateUnreadMessagesBadge(this);
     }
 
     @Override
@@ -932,6 +939,7 @@ public class HomeActivity extends MXCActionBarActivity {
         }
 
         mAdapter.notifyDataSetChanged();
+        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
     }
 
     /**
@@ -1066,6 +1074,8 @@ public class HomeActivity extends MXCActionBarActivity {
                                 // all the groups must be displayed during a search
                                 mAdapter.setDisplayAllGroups(mSearchRoomEditText.getVisibility() == View.VISIBLE);
                                 expandAllGroups();
+
+                                CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
                             }
                         });
                     }

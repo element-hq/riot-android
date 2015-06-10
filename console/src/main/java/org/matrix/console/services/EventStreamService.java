@@ -30,15 +30,18 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.console.ConsoleApplication;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
 import org.matrix.console.ViewedRoomTracker;
+import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.activity.HomeActivity;
 import org.matrix.console.util.NotificationUtils;
 
@@ -106,6 +109,55 @@ public class EventStreamService extends Service {
     }
 
     private MXEventListener mListener = new MXEventListener() {
+
+        // White list of displayable events
+        private boolean isDisplayableEvent(Event event) {
+            return Event.EVENT_TYPE_MESSAGE.equals(event.type)
+                    || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
+                    || Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(event.type)
+                    || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
+                    || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
+                    || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type);
+        }
+
+
+        @Override
+        public void onLiveEvent(Event event, RoomState roomState) {
+            if ((event.roomId != null) && isDisplayableEvent(event)) {
+                ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
+                String viewedRoomId = rTracker.getViewedRoomId();
+                String fromMatrixId = rTracker.getMatrixId();
+
+                Matrix matrix = Matrix.getInstance(EventStreamService.this);
+                RoomSummary summary = null;
+
+                // sanity check
+                if (null != matrix) {
+                    MXSession session = matrix.getSession(event.getMatrixId());
+
+                    // sanity check
+                    if (null != session) {
+                        summary = session.getDataHandler().getStore().getSummary(event.roomId);
+                    }
+                }
+
+                // existing summary ?
+                if (null != summary) {
+                    Boolean isUnreadCountUpdated = true;
+
+                    // If we're not currently viewing this room or not sent by myself, increment the unread count
+                    if (ConsoleApplication.isAppInBackground() || (!event.roomId.equals(viewedRoomId) || !event.getMatrixId().equals(fromMatrixId)) && !event.userId.equals(event.getMatrixId())) {
+                        summary.incrementUnreadMessagesCount();
+                    } else {
+                        isUnreadCountUpdated = summary.resetUnreadMessagesCount();
+                    }
+
+                    if (isUnreadCountUpdated) {
+                        CommonActivityUtils.updateUnreadMessagesBadge(EventStreamService.this);
+                    }
+                }
+            }
+        }
 
         @Override
         public void onBingEvent(Event event, RoomState roomState, BingRule bingRule) {
