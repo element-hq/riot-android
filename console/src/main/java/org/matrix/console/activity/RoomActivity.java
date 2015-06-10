@@ -52,6 +52,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
@@ -721,6 +722,18 @@ public class RoomActivity extends MXCActionBarActivity {
         MyPresenceManager.getInstance(this, mSession).advertiseOnline();
 
         EventStreamService.cancelNotificationsForRoomId(mRoom.getRoomId());
+
+        // reset the unread messages counter
+        // the room activity can be launched from a notification
+        // so it is required to reset the unread messages counter to have valid global counter
+        RoomSummary summary = mSession.getDataHandler().getStore().getSummary(mRoom.getRoomId());
+
+        if (null != summary) {
+            if (summary.resetUnreadMessagesCount()) {
+                CommonActivityUtils.updateUnreadMessagesBadge(RoomActivity.this);
+                mSession.getDataHandler().getStore().flushSummary(summary);
+            }
+        }
 
         String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
