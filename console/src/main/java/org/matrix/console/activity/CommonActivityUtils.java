@@ -95,6 +95,11 @@ public class CommonActivityUtils {
     public static void logout(Activity activity) {
         stopEventStream(activity);
 
+        try {
+            ShortcutBadger.setBadge(activity, 0);
+        } catch (Exception e) {
+        }
+
         // warn that the user logs out
         Collection<MXSession> sessions = Matrix.getMXSessions(activity);
         for(MXSession session : sessions) {
@@ -154,6 +159,41 @@ public class CommonActivityUtils {
         if (ConsoleApplication.isAppInBackground()) {
             Log.d(LOG_TAG, "catchupEventStream");
             sendEventStreamAction(context, EventStreamService.StreamAction.CATCHUP);
+        }
+    }
+
+    public static void onGcmUpdate(Context context) {
+        Log.d(LOG_TAG, "onGcmUpdate");
+        sendEventStreamAction(context, EventStreamService.StreamAction.GCM_STATUS_UPDATE);
+    }
+
+    public static void startEventStreamService(Context context) {
+        // the events stream service is launched
+        // either the application has never be launched
+        // or the service has been killed on low memory
+        if (EventStreamService.getInstance() == null) {
+            ArrayList<String> matrixIds = new ArrayList<String>();
+            Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
+
+            if ((null != sessions) && (sessions.size() > 0)) {
+                Log.d(LOG_TAG, "restart EventStreamService");
+
+                for (MXSession session : sessions) {
+                    Boolean isSessionReady = session.getDataHandler().getStore().isReady();
+
+                    if (!isSessionReady) {
+                        session.getDataHandler().getStore().open();
+                    }
+
+                    // session to activate
+                    matrixIds.add(session.getCredentials().userId);
+                }
+
+                Intent intent = new Intent(context, EventStreamService.class);
+                intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
+                intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
+                context.startService(intent);
+            }
         }
     }
 

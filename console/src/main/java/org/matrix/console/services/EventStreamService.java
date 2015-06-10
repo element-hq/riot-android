@@ -36,7 +36,6 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.console.ConsoleApplication;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
@@ -49,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
  */
@@ -60,7 +58,8 @@ public class EventStreamService extends Service {
         START,
         PAUSE,
         RESUME,
-        CATCHUP
+        CATCHUP,
+        GCM_STATUS_UPDATE
     }
 
     public static final String EXTRA_STREAM_ACTION = "org.matrix.console.services.EventStreamService.EXTRA_STREAM_ACTION";
@@ -75,6 +74,8 @@ public class EventStreamService extends Service {
     private StreamAction mState = StreamAction.UNKNOWN;
 
     private String mNotificationRoomId = null;
+
+    private Boolean mIsForegound = false;
 
     private static EventStreamService mActiveEventStreamService = null;
 
@@ -314,6 +315,8 @@ public class EventStreamService extends Service {
             case CATCHUP:
                 catchup();
                 break;
+            case GCM_STATUS_UPDATE:
+                gcmStatusUpdate();
             default:
                 break;
         }
@@ -369,16 +372,17 @@ public class EventStreamService extends Service {
                         startEventStream(fSession, store);
                     }
                 });
-            }
-
-            if (shouldRunInForeground()) {
-                startWithNotification();
-            }
+            };
         }
+
+        updateListenerNotification();
     }
 
     private void stop() {
-        stopForeground(true);
+        if (mIsForegound) {
+            stopForeground(true);
+        }
+
         if (mSessions != null) {
             for(MXSession session : mSessions) {
                 session.stopEventStream();
@@ -396,8 +400,6 @@ public class EventStreamService extends Service {
         if ((mState == StreamAction.START) || (mState == StreamAction.RESUME)) {
             Log.d(LOG_TAG, "onStartCommand pause");
 
-            stopForeground(true);
-
             if (mSessions != null) {
                 for(MXSession session : mSessions) {
                     session.pauseEventStream();
@@ -410,18 +412,12 @@ public class EventStreamService extends Service {
     }
 
     private void catchup() {
-        stopForeground(true);
-
         if (mSessions != null) {
             for(MXSession session : mSessions) {
                 session.catchupEventStream();
             }
         } else {
             Log.e(LOG_TAG, "catchup no session");
-        }
-
-        if (shouldRunInForeground()) {
-            startWithNotification();
         }
 
         mState = StreamAction.CATCHUP;
@@ -433,25 +429,34 @@ public class EventStreamService extends Service {
                 session.resumeEventStream();
             }
         }
-        if (shouldRunInForeground()) {
-            startWithNotification();
-        }
 
         mState = StreamAction.START;
     }
 
-    private void startWithNotification() {
-        // not yet started
-        if (mState != StreamAction.START) {
+    private void gcmStatusUpdate() {
+        if (mIsForegound) {
+            stopForeground(true);
+            mIsForegound = false;
+        }
+
+        updateListenerNotification();
+    }
+
+    private void updateListenerNotification() {
+        if (!Matrix.getInstance(this).getSharedGcmRegistrationManager().useGCM()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
-            mState = StreamAction.START;
+            mIsForegound = true;
+        } else {
+            NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.cancel(NOTIFICATION_ID);
+            mIsForegound = false;
         }
     }
 
     private Notification buildNotification() {
         Notification notification = new Notification(
-                (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) ? R.drawable.ic_menu_small_matrix : R.drawable.ic_menu_small_matrix_transparent ,
+                (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) ? R.drawable.ic_menu_small_matrix : R.drawable.ic_menu_small_matrix_transparent,
                 "Matrix",
                 System.currentTimeMillis()
         );
@@ -459,7 +464,7 @@ public class EventStreamService extends Service {
         // go to the home screen if this is clicked.
         Intent i = new Intent(this, HomeActivity.class);
 
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
@@ -469,9 +474,5 @@ public class EventStreamService extends Service {
                 pi);
         notification.flags |= Notification.FLAG_NO_CLEAR;
         return notification;
-    }
-
-    private boolean shouldRunInForeground() {
-        return true;
     }
 }

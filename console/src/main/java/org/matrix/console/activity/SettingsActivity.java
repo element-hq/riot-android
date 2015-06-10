@@ -219,7 +219,7 @@ public class SettingsActivity extends MXCActionBarActivity {
         // room settings
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        listenBoxUpdate(preferences, R.id.checkbox_useGcm, getString(R.string.settings_key_use_gcm), false);
+        listenBoxUpdate(preferences, R.id.checkbox_useGcm, getString(R.string.settings_key_use_google_cloud_messaging), true);
         listenBoxUpdate(preferences, R.id.checkbox_displayAllEvents, getString(R.string.settings_key_display_all_events), false);
         listenBoxUpdate(preferences, R.id.checkbox_hideUnsupportedEvenst, getString(R.string.settings_key_hide_unsupported_events), true);
         listenBoxUpdate(preferences, R.id.checkbox_sortByLastSeen, getString(R.string.settings_key_sort_by_last_seen), true);
@@ -241,18 +241,6 @@ public class SettingsActivity extends MXCActionBarActivity {
         final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
         refreshGCMEntries();
-
-        final EditText appIDEditText = (EditText)findViewById(R.id.editText_gcm_app_id);
-        appIDEditText.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-                gcmRegistrationManager.setPusherAppId(appIDEditText.getText().toString());
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
 
         final EditText pusherUrlEditText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
         pusherUrlEditText.addTextChangedListener(new TextWatcher() {
@@ -294,7 +282,7 @@ public class SettingsActivity extends MXCActionBarActivity {
                             final View gcmLayout = findViewById(R.id.gcm_layout);
 
                             gcmLayout.setEnabled(false);
-                            gcmLayout.setAlpha(0.5f);
+                            gcmLayout.setAlpha(0.25f);
 
                             GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(SettingsActivity.this).getSharedGcmRegistrationManager();
 
@@ -304,6 +292,8 @@ public class SettingsActivity extends MXCActionBarActivity {
                                     gcmLayout.setEnabled(true);
                                     gcmLayout.setAlpha(1.0f);
                                     refreshGCMEntries();
+
+                                    CommonActivityUtils.onGcmUpdate(SettingsActivity.this);
                                 }
 
                                 @Override
@@ -347,13 +337,7 @@ public class SettingsActivity extends MXCActionBarActivity {
         final CheckBox gcmBox = (CheckBox) findViewById(R.id.checkbox_useGcm);
         gcmBox.setChecked(gcmRegistrationManager.useGCM() && gcmRegistrationManager.is3rdPartyServerRegistred());
 
-        TextView textView  = (TextView)findViewById(R.id.textView_gcm_app_id);
-        textView.setVisibility(debugMode ? View.VISIBLE : View.GONE);
-        EditText editText = (EditText)findViewById(R.id.editText_gcm_app_id);
-        editText.setVisibility(debugMode ? View.VISIBLE : View.GONE);
-        editText.setText(gcmRegistrationManager.pusherAppId());
-
-        editText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
+        EditText editText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
         editText.setText(gcmRegistrationManager.pusherUrl());
 
         editText = (EditText)findViewById(R.id.editText_gcm_pusher_profile_tag);

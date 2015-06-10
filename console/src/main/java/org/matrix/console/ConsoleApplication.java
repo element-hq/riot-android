@@ -17,11 +17,15 @@
 package org.matrix.console;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
+import android.util.Log;
 
 import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.contacts.ContactsManager;
 import org.matrix.console.contacts.PIDsRetriever;
+import org.matrix.console.services.EventStreamService;
 
+import java.io.Console;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,7 +55,11 @@ public class ConsoleApplication extends Application {
         this.mActivityTransitionTimerTask = new TimerTask() {
             public void run() {
                 ConsoleApplication.this.isInBackground = true;
-                CommonActivityUtils.pauseEventStream(ConsoleApplication.this);
+
+                // supend the events thread if the client uses GCM
+                if (Matrix.getInstance(ConsoleApplication.this).getSharedGcmRegistrationManager().useGCM()) {
+                    CommonActivityUtils.pauseEventStream(ConsoleApplication.this);
+                }
                 PIDsRetriever.getIntance().onAppBackgrounded();
             }
         };
@@ -69,7 +77,18 @@ public class ConsoleApplication extends Application {
         }
 
         if (isInBackground) {
-            CommonActivityUtils.resumeEventStream(ConsoleApplication.this);
+
+            // resume the events thread if the client uses GCM
+            if (Matrix.getInstance(ConsoleApplication.this).getSharedGcmRegistrationManager().useGCM()) {
+
+                // the event stream service has been killed
+                if (null == EventStreamService.getInstance()) {
+                    CommonActivityUtils.startEventStreamService(ConsoleApplication.this);
+                } else {
+                    CommonActivityUtils.resumeEventStream(ConsoleApplication.this);
+                }
+            }
+
             // get the contact update at application launch
             ContactsManager.refreshLocalContactsSnapshot(this);
         }

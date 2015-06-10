@@ -23,9 +23,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.listeners.IMXEventListener;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.console.ErrorListener;
 import org.matrix.console.Matrix;
 import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.services.EventStreamService;
@@ -56,31 +53,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
         // the first GCM event could have been triggered whereas the application is not yet launched.
         // so it is required to create the sessions and to start/resume event stream
         if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
-            ArrayList<String> matrixIds = new ArrayList<String>();
-            Collection<MXSession> sessions = Matrix.getInstance(getApplicationContext()).getSessions();
-
-            Log.d(LOG_TAG, " onMessageReceived getSessions " + sessions.size());
-
-            for(MXSession session : sessions) {
-                Boolean isSessionReady = session.getDataHandler().getStore().isReady();
-
-                if (!isSessionReady) {
-                    session.getDataHandler().getStore().open();
-                }
-
-                // session to activate
-                matrixIds.add(session.getCredentials().userId);
-            }
-
-            if (EventStreamService.getInstance() == null) {
-                Log.d(LOG_TAG, " The application is not yet launched");
-                // Start the event stream service
-                Intent intent = new Intent(this, EventStreamService.class);
-                intent.putExtra(EventStreamService.EXTRA_MATRIX_IDS, matrixIds.toArray(new String[matrixIds.size()]));
-                intent.putExtra(EventStreamService.EXTRA_STREAM_ACTION, EventStreamService.StreamAction.START.ordinal());
-                startService(intent);
-            }
-
+            CommonActivityUtils.startEventStreamService(this);
             mCheckLaunched = true;
         }
         

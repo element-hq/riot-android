@@ -43,8 +43,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
         // refresh the bing rules when the application is debackgrounded
         if (((ConsoleApplication)getApplication()).wasInBackground) {
             Matrix.getInstance(this).refreshPushRules();
-            //see http://developer.android.com/google/gcm/client.html
-            Matrix.getInstance(this).getSharedGcmRegistrationManager().checkPlayServices();
         }
 
         ((ConsoleApplication)getApplication()).stopActivityTransitionTimer();

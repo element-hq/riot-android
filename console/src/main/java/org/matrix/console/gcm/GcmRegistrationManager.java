@@ -39,10 +39,8 @@ public final class GcmRegistrationManager {
     public static final String PREFS_SENDER_ID_KEY = "org.matrix.console.gcm.GcmRegistrationManager.senderId";
     public static final String PREFS_PUSHER_URL_KEY = "org.matrix.console.gcm.GcmRegistrationManager.pusherUrl";
     public static final String PREFS_PUSHER_FILE_TAG_KEY = "org.matrix.console.gcm.GcmRegistrationManager.pusherFileTag";
-    public static final String PREFS_APP_VERSION = "org.matrix.console.gcm.GcmRegistrationManager.appVersion";
 
     // TODO: Make this configurable at build time
-    private static String DEFAULT_SENDER_ID = "0";
     private static String DEFAULT_PUSHER_APP_ID = "org.matrix.console.android";
     private static String DEFAULT_PUSHER_URL = "http://matrix.org/_matrix/push/v1/notify";
     private static String DEFAULT_PUSHER_FILE_TAG = "mobile";
@@ -122,20 +120,6 @@ public final class GcmRegistrationManager {
         loadGcmData();
     }
 
-    /*
-        getters & setters
-     */
-    public String pusherAppId() {
-        return mPusherAppId;
-    }
-
-    public void setPusherAppId(String pusherAppId) {
-        if (!TextUtils.isEmpty(pusherAppId) && !pusherAppId.equals(mPusherAppId)) {
-            mPusherAppId = pusherAppId;
-            SaveGCMData();
-        }
-    }
-
     public String pusherUrl() {
         return mPusherUrl;
     }
@@ -164,9 +148,10 @@ public final class GcmRegistrationManager {
      * @param registrationListener
      */
     public void refreshPushToken(final Context appContext, final GcmRegistrationIdListener registrationListener) {
-
+        setStoredPushKey(null);
+        mRegistrationState = RegistrationState.UNREGISTRATED;
+        registerPusher(appContext, registrationListener);
     }
-
 
     /**
      * Register to the GCM.
@@ -202,18 +187,21 @@ public final class GcmRegistrationManager {
 
                 @Override
                 protected void onPostExecute(String pushKey) {
-
+                    // succeed to retrieve the push key
                     if (pushKey != null) {
                         mRegistrationState = RegistrationState.GCM_REGISTRED;
+
+                        setStoredPushKey(pushKey);
+
+                        // register the sessions to the 3rd party server
+                        if (useGCM()) {
+                            registerSessions(null);
+                        }
                     } else {
+                        // fail to retrieve the push key
+                        // assume that a full registration is required.
+                        setStoredPushKey(null);
                         mRegistrationState = RegistrationState.UNREGISTRATED;
-                    }
-
-                    setStoredPushKey(pushKey);
-
-                    // register the sessions to the 3rd party server
-                    if (useGCM()) {
-                        registerSessions(null);
                     }
 
                     // warn the listener
@@ -237,7 +225,7 @@ public final class GcmRegistrationManager {
      */
     public Boolean useGCM() {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return preferences.getBoolean(mContext.getString(R.string.settings_key_use_gcm), false);
+        return preferences.getBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), true);
     }
 
     public Boolean isGCMRegistred() {
@@ -250,14 +238,6 @@ public final class GcmRegistrationManager {
 
     private String getPushKey(Context appContext) {
         String pushKey = getStoredPushKey();
-
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing registration ID is not guaranteed to work with
-        // the new app version.
-        if (isNewAppVersion()) {
-            pushKey = null;
-            setStoredPushKey(null);
-        }
 
         if (pushKey == null) {
             try {
@@ -366,10 +346,10 @@ public final class GcmRegistrationManager {
 
         MXSession session = sessions.get(index);
 
-        registerSession(session , new GcmSessionRegistration() {
+        registerSession(session, new GcmSessionRegistration() {
             @Override
             public void onSessionRegistred() {
-                registerSessions(sessions, index+1, listener);
+                registerSessions(sessions, index + 1, listener);
             }
 
             @Override
@@ -512,30 +492,6 @@ public final class GcmRegistrationManager {
      */
     private String getStoredPushKey() {
         return getSharedPreferences().getString(getPushKeyKey(), null);
-    }
-
-    /**
-     * @return true if the current application version is not the same the expected one.
-     */
-    private Boolean isNewAppVersion() {
-        /*try {
-            PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-            int currentVersion = pInfo.versionCode;
-
-            int registeredVersion = getSharedPreferences().getInt(PREFS_APP_VERSION, Integer.MIN_VALUE);
-
-            if (registeredVersion != currentVersion) {
-                Log.d(LOG_TAG, "App version changed.");
-                getSharedPreferences().edit().putInt(PREFS_APP_VERSION, currentVersion).commit();
-                return true;
-            }
-
-            return false;
-        } catch (Exception e) {
-
-        }*/
-
-        return true;
     }
 
     /**

@@ -65,20 +65,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView_gcm_app_id"
-                style="@style/Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle"
-                android:text ="@string/settings_gcm_app_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/editText_gcm_app_id"
-                style="@style/Base.TextAppearance.AppCompat.Caption"
-                android:singleLine="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
                 android:id="@+id/textView_gcm_pusher_url"
                 style="@style/Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle"
                 android:text = "@string/settings_gcm_pusher_url"

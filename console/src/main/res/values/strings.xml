@@ -195,7 +195,7 @@
     <string name="settings_key_sort_by_last_seen">settings_key_sort_by_last_seen</string>
     <string name="settings_key_display_left_members">settings_key_display_left_members</string>
     <string name="settings_key_display_public_rooms_recents">settings_key_display_public_rooms_recents</string>
-    <string name="settings_key_use_gcm">settings_key_use_gcm</string>
+    <string name="settings_key_use_google_cloud_messaging">settings_key_use_google_cloud_messaging</string>
 
     <string name="logo">Logo</string>
     <string name="user_says_body">%1$s says %2$s</string>

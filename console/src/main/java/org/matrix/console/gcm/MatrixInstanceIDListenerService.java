@@ -24,6 +24,8 @@ import android.util.Log;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
+import org.matrix.console.Matrix;
+
 public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
 
     private static final String LOG_TAG = "MatrixInstanceIDLS";
@@ -33,15 +35,9 @@ public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
      * the previous token had been compromised. This call is initiated by the
      * InstanceID provider.
      */
-    // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-
-        Log.e(LOG_TAG, "onTokenRefresh");
-
-        // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        //Intent intent = new Intent(this, MatrixRegistrationIntentService.class);
-        //startService(intent);
+        Log.d(LOG_TAG, "onTokenRefresh");
+        Matrix.getInstance(this).getSharedGcmRegistrationManager().refreshPushToken(this, null);
     }
-    // [END refresh_token]
 }
