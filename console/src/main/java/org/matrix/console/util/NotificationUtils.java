@@ -13,6 +13,8 @@ import org.matrix.console.R;
 import org.matrix.console.activity.LockScreenActivity;
 import org.matrix.console.activity.RoomActivity;
 
+import java.util.Random;
+
 /**
  * Util class for creating notifications.
  */
@@ -66,7 +68,12 @@ public class NotificationUtils {
                     .addParentStack(RoomActivity.class)
                     .addNextIntent(roomIntent);
 
-            builder.setContentIntent(stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            // android 4.3 issue
+            // use a generator for the private requestCode.
+            // When using 0, the intent is not created/launched when the user taps on the notification.
+            //
+            builder.setContentIntent(stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT));
         }
 
         // display the message with more than 1 lines when the device supports it
