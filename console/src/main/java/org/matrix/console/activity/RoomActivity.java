@@ -1112,8 +1112,6 @@ public class RoomActivity extends MXCActionBarActivity {
                                     thumbnailBitmap.recycle();
                                 }
 
-
-
                                 //
                                 if (("image/jpg".equals(mimeType) || "image/jpeg".equals(mimeType)) && (null != mediaUrl)) {
 
