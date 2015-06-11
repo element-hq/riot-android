@@ -14,12 +14,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Room name"/>
+            android:textSize="15sp"
+            android:text="@string/room_info_room_name"/>
 
         <EditText
             android:id="@+id/editText_name"
+            android:textSize="15sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:hint="@string/room_info_room_name_hint"
             android:layout_weight="2"/>
 
     </LinearLayout>
@@ -31,35 +34,17 @@
 
         <TextView
             android:layout_width="0dp"
+            android:textSize="15sp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Room topic"/>
+            android:text="@string/room_info_room_topic"/>
 
         <EditText
             android:id="@+id/editText_topic"
+            android:textSize="15sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:hint="@string/room_info_room_topic_hint"
             android:layout_weight="2"/>
-
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Room aliases"/>
-
-        <TextView
-            android:id="@+id/textView_aliases"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"/>
-
-    </LinearLayout>
-
 </LinearLayout>

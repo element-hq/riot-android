@@ -71,9 +71,12 @@ import org.matrix.console.MyPresenceManager;
 import org.matrix.console.R;
 import org.matrix.console.ViewedRoomTracker;
 import org.matrix.console.adapters.ImageCompressionDescription;
+import org.matrix.console.fragments.AccountsSelectionDialogFragment;
 import org.matrix.console.fragments.ConsoleMessageListFragment;
 import org.matrix.console.fragments.ImageSizeSelectionDialogFragment;
 import org.matrix.console.fragments.MembersInvitationDialogFragment;
+import org.matrix.console.fragments.RoomCreationDialogFragment;
+import org.matrix.console.fragments.RoomInfoUpdateDialogFragment;
 import org.matrix.console.fragments.RoomMembersDialogFragment;
 import org.matrix.console.services.EventStreamService;
 import org.matrix.console.util.NotificationUtils;
@@ -106,6 +109,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
+    private static final String TAG_FRAGMENT_ROOM_INFO = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ROOM_INFO";
 
 
     private static final String LOG_TAG = "RoomActivity";
@@ -809,10 +813,17 @@ public class RoomActivity extends MXCActionBarActivity {
             fragment = RoomMembersDialogFragment.newInstance(mSession, mRoom.getRoomId());
             fragment.show(fm, TAG_FRAGMENT_MEMBERS_DIALOG);
         } else if (id ==  R.id.ic_action_room_info) {
-            Intent startRoomInfoIntent = new Intent(RoomActivity.this, RoomInfoActivity.class);
-            startRoomInfoIntent.putExtra(EXTRA_ROOM_ID, mRoom.getRoomId());
-            startRoomInfoIntent.putExtra(EXTRA_MATRIX_ID, mMyUserId);
-            startActivity(startRoomInfoIntent);
+
+            FragmentManager fm = getSupportFragmentManager();
+
+            RoomInfoUpdateDialogFragment roomInfoFragment = (RoomInfoUpdateDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOM_INFO);
+            if (roomInfoFragment != null) {
+                roomInfoFragment.dismissAllowingStateLoss();
+            }
+
+            roomInfoFragment = RoomInfoUpdateDialogFragment.newInstance(mMyUserId, mRoom.getRoomId());
+            roomInfoFragment.show(fm, TAG_FRAGMENT_ROOM_INFO);
+
         } else if (id ==  R.id.ic_action_leave) {
             mRoom.leave(new SimpleApiCallback<Void>(RoomActivity.this) {
             });

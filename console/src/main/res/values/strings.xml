@@ -144,6 +144,12 @@
     <string name="room_creation_public">Public</string>
     <string name="room_creation_private">Private</string>
 
+    <!-- room info dialog Screen -->
+    <string name="room_info_room_name">Room name</string>
+    <string name="room_info_room_name_hint">Enter a room name</string>
+    <string name="room_info_room_topic">Room topic</string>
+    <string name="room_info_room_topic_hint">Enter a room topic</string>
+
     <!-- contacts list screen -->
     <string name="contacts">Contacts</string>
     <string name="invite_this_user_to_use_matrix">Invite this user to use matrix with</string>

@@ -1105,8 +1105,6 @@ public class HomeActivity extends MXCActionBarActivity {
                                 // all the groups must be displayed during a search
                                 mAdapter.setDisplayAllGroups(mSearchRoomEditText.getVisibility() == View.VISIBLE);
                                 expandAllGroups();
-
-                                refreshSlidingList();
                             }
                         });
                     }
