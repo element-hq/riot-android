@@ -222,8 +222,6 @@ public class HomeActivity extends MXCActionBarActivity {
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
 
-                    CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
-
                 } else if (mAdapter.isPublicsGroupIndex(groupPosition)) {
                     // should offer to select which account to use
                     roomId = mAdapter.getPublicRoomAt(childPosition).roomId;
@@ -277,7 +275,6 @@ public class HomeActivity extends MXCActionBarActivity {
                                                 room.leave(new SimpleApiCallback<Void>(HomeActivity.this) {
                                                     @Override
                                                     public void onSuccess(Void info) {
-                                                        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
                                                     }
                                                 });
                                             }
@@ -479,8 +476,6 @@ public class HomeActivity extends MXCActionBarActivity {
                         if (mAdapter.mPublicsGroupIndex >= 0) {
                             mMyRoomList.expandGroup(mAdapter.mPublicsGroupIndex);
                         }
-
-                        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
 
                         // load the public load in background
                         // done onResume
@@ -701,8 +696,6 @@ public class HomeActivity extends MXCActionBarActivity {
                 }
             });
         }
-
-        CommonActivityUtils.updateUnreadMessagesBadge(this);
     }
 
     @Override
@@ -939,7 +932,6 @@ public class HomeActivity extends MXCActionBarActivity {
         }
 
         mAdapter.notifyDataSetChanged();
-        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
     }
 
     /**
@@ -1074,8 +1066,6 @@ public class HomeActivity extends MXCActionBarActivity {
                                 // all the groups must be displayed during a search
                                 mAdapter.setDisplayAllGroups(mSearchRoomEditText.getVisibility() == View.VISIBLE);
                                 expandAllGroups();
-
-                                CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
                             }
                         });
                     }

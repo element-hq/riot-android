@@ -730,7 +730,6 @@ public class RoomActivity extends MXCActionBarActivity {
 
         if (null != summary) {
             if (summary.resetUnreadMessagesCount()) {
-                CommonActivityUtils.updateUnreadMessagesBadge(RoomActivity.this);
                 mSession.getDataHandler().getStore().flushSummary(summary);
             }
         }

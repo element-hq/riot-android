@@ -197,20 +197,9 @@ public class CommonActivityUtils {
         }
     }
 
-    public static void updateUnreadMessagesBadge(Context context) {
-        int unreadCount = 0;
-        Collection<MXSession> sessions = Matrix.getMXSessions(context);
-
-        for(MXSession session : sessions) {
-            Collection<RoomSummary> summaries = session.getDataHandler().getStore().getSummaries();
-
-            for(RoomSummary summary : summaries) {
-                unreadCount += summary.getUnreadMessagesCount();
-            }
-        }
-
+    public static void updateUnreadMessagesBadge(Context context, int badgeValue) {
         try {
-            ShortcutBadger.setBadge(context, unreadCount);
+            ShortcutBadger.setBadge(context, badgeValue);
         } catch (Exception e) {
         }
     }
