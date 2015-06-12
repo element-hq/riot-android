@@ -71,11 +71,9 @@ import org.matrix.console.MyPresenceManager;
 import org.matrix.console.R;
 import org.matrix.console.ViewedRoomTracker;
 import org.matrix.console.adapters.ImageCompressionDescription;
-import org.matrix.console.fragments.AccountsSelectionDialogFragment;
 import org.matrix.console.fragments.ConsoleMessageListFragment;
 import org.matrix.console.fragments.ImageSizeSelectionDialogFragment;
 import org.matrix.console.fragments.MembersInvitationDialogFragment;
-import org.matrix.console.fragments.RoomCreationDialogFragment;
 import org.matrix.console.fragments.RoomInfoUpdateDialogFragment;
 import org.matrix.console.fragments.RoomMembersDialogFragment;
 import org.matrix.console.services.EventStreamService;
@@ -118,6 +116,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final String PENDING_THUMBNAIL_URL = "PENDING_THUMBNAIL_URL";
     private static final String PENDING_MEDIA_URL = "PENDING_MEDIA_URL";
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
+    private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
 
@@ -167,6 +166,9 @@ public class RoomActivity extends MXCActionBarActivity {
     private Timer mTypingTimer = null;
     private TimerTask mTypingTimerTask;
     private long  mLastTypingDate = 0;
+
+    // scroll to a dedicated index
+    private int mScrollToIndex = -1;
 
     private Boolean mIgnoreTextUpdate = false;
 
@@ -666,6 +668,19 @@ public class RoomActivity extends MXCActionBarActivity {
         if (null != mPendingMimeType) {
             savedInstanceState.putString(PENDING_MIMETYPE, mPendingMimeType);
         }
+
+        savedInstanceState.putInt(FIRST_VISIBLE_ROW, mConsoleMessageListFragment.mMessageListView.getFirstVisiblePosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.containsKey(FIRST_VISIBLE_ROW)) {
+            // the scroll will be done in resume.
+            // the listView will be refreshed so the offset might be lost.
+            mScrollToIndex = savedInstanceState.getInt(FIRST_VISIBLE_ROW);
+        }
     }
 
     /**
@@ -675,7 +690,7 @@ public class RoomActivity extends MXCActionBarActivity {
         boolean hasText = mEditText.getText().length() > 0;
         boolean hasPreviewedMedia = (null != mPendingThumbnailUrl);
 
-        
+
         if (hasPreviewedMedia) {
             mMediasCache.loadBitmap(mImagePreviewView, mPendingThumbnailUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, mPendingMimeType);
         }
@@ -684,7 +699,7 @@ public class RoomActivity extends MXCActionBarActivity {
         mEditText.setVisibility(hasPreviewedMedia ? View.INVISIBLE : View.VISIBLE);
 
         mSendButton.setVisibility((hasText || hasPreviewedMedia) ? View.VISIBLE : View.INVISIBLE);
-        mAttachmentButton.setVisibility((hasText || hasPreviewedMedia)  ? View.INVISIBLE : View.VISIBLE);
+        mAttachmentButton.setVisibility((hasText || hasPreviewedMedia) ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -751,6 +766,18 @@ public class RoomActivity extends MXCActionBarActivity {
 
         // refresh the UI : the timezone could have been updated
         mConsoleMessageListFragment.refresh();
+
+        // the device has been rotated
+        // so try to keep the same top/left item;
+        if (mScrollToIndex > 0) {
+            mConsoleMessageListFragment.mMessageListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mConsoleMessageListFragment.mMessageListView.setSelection(mScrollToIndex);
+                    mScrollToIndex = -1;
+                }
+            });
+        }
     }
 
     @Override
