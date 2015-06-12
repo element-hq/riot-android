@@ -119,6 +119,18 @@ public class SplashActivity extends MXCActionBarActivity {
             }
         }
 
+        // when the events stream has been disconnected by the user
+        // they must be awoken even if they are initialized
+        if (Matrix.getInstance(this).mHasBeenDisconnected) {
+            matrixIds = new ArrayList<String>();
+
+            for(MXSession session : mSessions) {
+                matrixIds.add(session.getCredentials().userId);
+            }
+
+            Matrix.getInstance(this).mHasBeenDisconnected = false;
+        }
+
         if (EventStreamService.getInstance() == null) {
             // Start the event stream service
             Intent intent = new Intent(this, EventStreamService.class);

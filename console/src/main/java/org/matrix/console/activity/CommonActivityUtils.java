@@ -129,6 +129,7 @@ public class CommonActivityUtils {
     public static void disconnect(Activity activity) {
         stopEventStream(activity);
         activity.finish();
+        Matrix.getInstance(activity).mHasBeenDisconnected = true;
     }
 
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
