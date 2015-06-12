@@ -22,7 +22,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.matrix.androidsdk.MXSession;
@@ -38,7 +40,6 @@ import org.matrix.console.util.UIUtils;
  * A dialog fragment to update the roominfo
  */
 public class RoomInfoUpdateDialogFragment extends DialogFragment {
-    private static final String LOG_TAG = "RoomInfoUpdateDialogFragment";
 
     public static final String EXTRA_MATRIX_ID = "org.matrix.console.fragments.RoomInfoUpdateDialogFragment.EXTRA_MATRIX_ID";
     public static final String EXTRA_ROOM_ID = "org.matrix.console.fragments.RoomInfoUpdateDialogFragment.EXTRA_ROOM_ID";
@@ -56,6 +57,8 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
     private String mRoomId = null;
     private Room mRoom = null;
 
+    private EditText mEditTextName;
+    private EditText mEditTextTopic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,42 +77,118 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
         }
     }
 
+    private void saveRoomInfo() {
+        // Save things
+        RoomState roomState = mRoom.getLiveState();
+        String nameFromForm = mEditTextName.getText().toString();
+        String topicFromForm = mEditTextTopic.getText().toString();
+
+        ApiCallback<Void> changeCallback = UIUtils.buildOnChangeCallback(null);
+
+        if (UIUtils.hasFieldChanged(roomState.name, nameFromForm)) {
+            mRoom.updateName(nameFromForm, changeCallback);
+        }
+
+        if (UIUtils.hasFieldChanged(roomState.topic, topicFromForm)) {
+            mRoom.updateTopic(topicFromForm, changeCallback);
+        }
+    }
+
+    private void manageOkButton(final Button okButton) {
+        // Save things
+        RoomState roomState = mRoom.getLiveState();
+        String nameFromForm = mEditTextName.getText().toString();
+        String topicFromForm = mEditTextTopic.getText().toString();
+
+        okButton.setEnabled(UIUtils.hasFieldChanged(roomState.name, nameFromForm) || UIUtils.hasFieldChanged(roomState.topic, topicFromForm));
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        final Activity activity = getActivity();
-
-        final View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_activity_room_info, null);
+        final View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_room_info, null);
         builder.setView(view);
         builder.setTitle(getString(R.string.action_room_info));
 
-        final EditText editTextName =  (EditText)view.findViewById(R.id.editText_name);
-        final EditText editTextTopic = (EditText)view.findViewById(R.id.editText_topic);
+        mEditTextName =  (EditText)view.findViewById(R.id.editText_name);
+        mEditTextTopic = (EditText)view.findViewById(R.id.editText_topic);
 
-        editTextName.setText(mRoom.getLiveState().name);
-        editTextTopic.setText(mRoom.getLiveState().topic);
+        mEditTextName.setText(mRoom.getLiveState().name);
+        mEditTextTopic.setText(mRoom.getLiveState().topic);
 
-        builder.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        // Save things
-                        RoomState roomState = mRoom.getLiveState();
-                        String nameFromForm = editTextName.getText().toString();
-                        String topicFromForm = editTextTopic.getText().toString();
+        final Button okButton = (Button) view.findViewById(R.id.room_info_ok);
+        final Button cancelButton = (Button) view.findViewById(R.id.room_info_cancel);
 
-                        ApiCallback<Void> changeCallback = UIUtils.buildOnChangeCallback(activity);
 
-                        if (UIUtils.hasFieldChanged(roomState.name, nameFromForm)) {
-                            mRoom.updateName(nameFromForm, changeCallback);
-                        }
+        mEditTextName.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(android.text.Editable s) {
+                manageOkButton(okButton);
+            }
 
-                        if (UIUtils.hasFieldChanged(roomState.topic, topicFromForm)) {
-                            mRoom.updateTopic(topicFromForm, changeCallback);
-                        }
-                    }
-                });
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        mEditTextTopic.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(android.text.Editable s) {
+                manageOkButton(okButton);
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveRoomInfo();
+                RoomInfoUpdateDialogFragment.this.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RoomState roomState = mRoom.getLiveState();
+                String nameFromForm = mEditTextName.getText().toString();
+                String topicFromForm = mEditTextTopic.getText().toString();
+
+                // something has been updated ?
+                if (UIUtils.hasFieldChanged(roomState.name, nameFromForm) || UIUtils.hasFieldChanged(roomState.topic, topicFromForm)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(
+                            R.string.room_info_room_discard_changes)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.room_info_room_discard,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,
+                                                            int id) {
+                                            RoomInfoUpdateDialogFragment.this.dismiss();
+                                        }
+                                    })
+                            .setNegativeButton(R.string.save,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,
+                                                            int id) {
+                                            saveRoomInfo();
+                                            RoomInfoUpdateDialogFragment.this.dismiss();
+                                        }
+                                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
+                    RoomInfoUpdateDialogFragment.this.dismiss();
+                }
+            }
+        });
 
         return builder.create();
     }

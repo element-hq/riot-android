@@ -47,4 +47,30 @@
             android:hint="@string/room_info_room_topic_hint"
             android:layout_weight="2"/>
     </LinearLayout>
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/room_info_cancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/room_info_ok"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@android:string/ok" />
+
+    </LinearLayout>
+
 </LinearLayout>

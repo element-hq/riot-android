@@ -38,22 +38,26 @@ public class UIUtils {
         return new SimpleApiCallback<Void>(activity) {
             @Override
             public void onSuccess(Void info) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(activity, R.string.message_changes_successful, Toast.LENGTH_LONG).show();
-                    }
-                });
+                if (null != activity) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, R.string.message_changes_successful, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
 
             @Override
             public void onMatrixError(final MatrixError e) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
-                    }
-                });
+                if (null != activity) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, e.error, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         };
     }

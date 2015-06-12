@@ -149,6 +149,8 @@
     <string name="room_info_room_name_hint">Enter a room name</string>
     <string name="room_info_room_topic">Room topic</string>
     <string name="room_info_room_topic_hint">Enter a room topic</string>
+    <string name="room_info_room_discard_changes">Discard changes ?</string>
+    <string name="room_info_room_discard">Discard</string>
 
     <!-- contacts list screen -->
     <string name="contacts">Contacts</string>
