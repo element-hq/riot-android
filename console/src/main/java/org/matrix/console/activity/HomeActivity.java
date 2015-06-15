@@ -68,6 +68,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,6 +103,8 @@ public class HomeActivity extends MXCActionBarActivity {
     private String mAutomaticallyOpenedRoomId = null;
     private String mAutomaticallyOpenedMatrixId = null;
     private Intent mOpenedRoomIntent = null;
+
+    private boolean refreshOnChunkEnd = false;
 
     // sliding menu
     private final Integer[] mSlideMenuTitleIds = new Integer[]{
@@ -508,6 +512,21 @@ public class HomeActivity extends MXCActionBarActivity {
             }
 
             @Override
+            public void onLiveEventsChunkProcessed() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mIsPaused && refreshOnChunkEnd) {
+                            mAdapter.sortSummaries();
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                        refreshOnChunkEnd = false;
+                    }
+                });
+            }
+
+            @Override
             public void onLiveEvent(final Event event, final RoomState roomState) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -567,10 +586,7 @@ public class HomeActivity extends MXCActionBarActivity {
                                 }
                             }
 
-                            if (!mIsPaused) {
-                                mAdapter.sortSummaries();
-                                mAdapter.notifyDataSetChanged();
-                            }
+                            refreshOnChunkEnd = true;
                         }
                     }
                 });
@@ -770,21 +786,21 @@ public class HomeActivity extends MXCActionBarActivity {
                     toggleSearchButton();
                 } else if (id == R.drawable.ic_material_group_add) {
                     createRoom();
-                } else if (id ==  R.drawable.ic_material_group) {
+                } else if (id == R.drawable.ic_material_group) {
                     joinRoomByName();
-                } else if (id ==  R.drawable.ic_material_done_all) {
+                } else if (id == R.drawable.ic_material_done_all) {
                     markAllMessagesAsRead();
-                } else if (id ==  R.drawable.ic_material_settings) {
+                } else if (id == R.drawable.ic_material_settings) {
                     HomeActivity.this.startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
-                } else if (id ==  R.drawable.ic_material_clear) {
+                } else if (id == R.drawable.ic_material_clear) {
                     CommonActivityUtils.disconnect(HomeActivity.this);
-                } else if (id ==  R.drawable.ic_material_bug_report) {
+                } else if (id == R.drawable.ic_material_bug_report) {
                     RageShake.getInstance().sendBugReport();
-                } else if (id ==  R.drawable.ic_material_exit_to_app) {
+                } else if (id == R.drawable.ic_material_exit_to_app) {
                     CommonActivityUtils.logout(HomeActivity.this);
-                } else if (id ==  R.drawable.ic_material_person_add) {
+                } else if (id == R.drawable.ic_material_person_add) {
                     HomeActivity.this.addAccount();
-                } else if (id ==  R.drawable.ic_material_remove_circle_outline) {
+                } else if (id == R.drawable.ic_material_remove_circle_outline) {
                     HomeActivity.this.removeAccount();
                 }
             }
