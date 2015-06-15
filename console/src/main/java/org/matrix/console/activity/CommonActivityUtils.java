@@ -39,6 +39,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -120,6 +121,8 @@ public class CommonActivityUtils {
         // reset the contacts
         PIDsRetriever.getIntance().reset();
         ContactsManager.reset();
+
+        MXMediasCache.clearThumbnailsCache(activity);
 
         // go to login page
         activity.startActivity(new Intent(activity, LoginActivity.class));
