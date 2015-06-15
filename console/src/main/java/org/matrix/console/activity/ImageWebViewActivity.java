@@ -61,59 +61,18 @@ public class ImageWebViewActivity extends Activity {
     private String mHighResUri = null;
     private String mHighResMimeType = null;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_web_view);
-
-        mWebView = (WebView)findViewById(R.id.image_webview);
-        
-        final Intent intent = getIntent();
-        if (intent == null) {
-            Log.e(LOG_TAG, "Need an intent to view.");
-            finish();
-            return;
-        }
-
-        mHighResUri = intent.getStringExtra(KEY_HIGHRES_IMAGE_URI);
-        mRotationAngle = intent.getIntExtra(KEY_IMAGE_ROTATION, 0);
-        mOrientation = intent.getIntExtra(KEY_IMAGE_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-        mHighResMimeType = intent.getStringExtra(KEY_HIGHRES_MIME_TYPE);
-
-        if (mHighResUri == null) {
-            Log.e(LOG_TAG, "No Image URI");
-            finish();
-            return;
-        }
-
-        int thumbnailWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
-        int thumbnailHeight = intent.getIntExtra(KEY_THUMBNAIL_HEIGHT, 0);
-
-        if ((thumbnailWidth <= 0) || (thumbnailHeight <= 0)) {
-            Log.e(LOG_TAG, "Invalid thumbnail size");
-            finish();
-            return;
-        }
-
+    private String computeCss(String mediaUrl, int thumbnailWidth, int thumbnailHeight, int rotationAngle) {
         String css = "body { background-color: #000; height: 100%; width: 100%; margin: 0px; padding: 0px; }" +
                 ".wrap { position: absolute; left: 0px; right: 0px; width: 100%; height: 100%; " +
                 "display: -webkit-box; -webkit-box-pack: center; -webkit-box-align: center; " +
                 "display: box; box-pack: center; box-align: center; } ";
 
-        final MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
-        File mediaFile = mediasCache.mediaCacheFile(mHighResUri, mHighResMimeType);
-
-        // is the high picture already downloaded ?
-        if (null != mediaFile) {
-            mThumbnailUri = mHighResUri = "file://" + mediaFile.getPath();
-        }
+        mRotationAngle = rotationAngle;
 
         // the rotation angle must be retrieved from the exif metadata
-        if (mRotationAngle == Integer.MAX_VALUE) {
-            if (null != mThumbnailUri) {
-                mRotationAngle = ImageUtils.getRotationAngleForBitmap(this, Uri.parse(mThumbnailUri));
-            } else {
-                mRotationAngle = 0;
+        if (rotationAngle == Integer.MAX_VALUE) {
+            if (null != mediaUrl) {
+                mRotationAngle = ImageUtils.getRotationAngleForBitmap(this, Uri.parse(mediaUrl));
             }
         }
 
@@ -155,7 +114,52 @@ public class ImageWebViewActivity extends Activity {
             css += "#thumbnail { " + cssRotation + " } ";
         }
 
-        final String fcss= css;
+        return css;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image_web_view);
+
+        mWebView = (WebView)findViewById(R.id.image_webview);
+        
+        final Intent intent = getIntent();
+        if (intent == null) {
+            Log.e(LOG_TAG, "Need an intent to view.");
+            finish();
+            return;
+        }
+
+        mHighResUri = intent.getStringExtra(KEY_HIGHRES_IMAGE_URI);
+        final int rotationAngle = mRotationAngle = intent.getIntExtra(KEY_IMAGE_ROTATION, 0);
+        mOrientation = intent.getIntExtra(KEY_IMAGE_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        mHighResMimeType = intent.getStringExtra(KEY_HIGHRES_MIME_TYPE);
+
+        if (mHighResUri == null) {
+            Log.e(LOG_TAG, "No Image URI");
+            finish();
+            return;
+        }
+
+        final int thumbnailWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
+        final int thumbnailHeight = intent.getIntExtra(KEY_THUMBNAIL_HEIGHT, 0);
+
+        if ((thumbnailWidth <= 0) || (thumbnailHeight <= 0)) {
+            Log.e(LOG_TAG, "Invalid thumbnail size");
+            finish();
+            return;
+        }
+
+        final MXMediasCache mediasCache = Matrix.getInstance(this).getMediasCache();
+        File mediaFile = mediasCache.mediaCacheFile(mHighResUri, mHighResMimeType);
+
+        // is the high picture already downloaded ?
+        if (null != mediaFile) {
+            mThumbnailUri = mHighResUri = "file://" + mediaFile.getPath();
+        }
+
+        String css = computeCss(mThumbnailUri, thumbnailWidth, thumbnailHeight, rotationAngle);
         final String viewportContent = "width=640";
 
         final PieFractionView pieFractionView = (PieFractionView)findViewById(R.id.download_zoomed_image_piechart);
@@ -210,7 +214,7 @@ public class ImageWebViewActivity extends Activity {
                                         CommonActivityUtils.saveImageIntoGallery(ImageWebViewActivity.this, mediaFile);
 
                                         // refresh the UI
-                                        loadImage(mediaUri, viewportContent, fcss);
+                                        loadImage(mediaUri, viewportContent, computeCss(mHighResUri, thumbnailWidth, thumbnailHeight, rotationAngle));
                                     }
                                 });
                             }
