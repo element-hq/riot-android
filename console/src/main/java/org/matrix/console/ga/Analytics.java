@@ -47,7 +47,7 @@ public class Analytics {
 
         mTracker = mAnalytics.newTracker(trackerId);
         mTracker.enableExceptionReporting(true);
-        mTracker.enableAdvertisingIdCollection(true);
+        //mTracker.enableAdvertisingIdCollection(true);
         mTracker.enableAutoActivityTracking(true);
 
         // overwrite the exception parser to be more useful.
