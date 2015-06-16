@@ -22,6 +22,8 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 
+import org.matrix.console.ga.Analytics;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -88,8 +90,9 @@ public class ContactsManager {
      * @param context the context.
      * @return a list of contacts.
      */
-    public static void refreshLocalContactsSnapshot (Context context)
-    {
+    public static void refreshLocalContactsSnapshot (Context context) {
+        long startTime = System.currentTimeMillis();
+
         ContentResolver cr = context.getContentResolver();
         HashMap<String, Contact> dict = new HashMap<String, Contact>();
 
@@ -183,6 +186,8 @@ public class ContactsManager {
         }
 
         mContactsList = dict.values();
+
+        Analytics.sendEvent("Contacts", "Refresh", mContactsList.size() + " Contacts", System.currentTimeMillis() - startTime);
 
         if (null != mListeners) {
             for(ContactsManagerListener listener : mListeners) {

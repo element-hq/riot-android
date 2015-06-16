@@ -25,6 +25,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.console.ErrorListener;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
+import org.matrix.console.ga.Analytics;
 import org.matrix.console.gcm.GcmRegistrationManager;
 import org.matrix.console.services.EventStreamService;
 
@@ -78,6 +79,8 @@ public class SplashActivity extends MXCActionBarActivity {
 
         ArrayList<String> matrixIds = new ArrayList<String>();
 
+        final long startTime = System.currentTimeMillis();
+
         for(MXSession session : mSessions) {
             final MXSession fSession = session;
             session.getDataHandler().getStore().open();
@@ -100,6 +103,8 @@ public class SplashActivity extends MXCActionBarActivity {
                         mListeners.remove(fSession);
                         noMoreListener = mInitialSyncComplete = (mListeners.size() == 0);
                     }
+
+                    Analytics.sendEvent("Account", "Loading", fSession.getDataHandler().getStore().getRooms().size() + " rooms", System.currentTimeMillis() - startTime);
 
                     if (noMoreListener) {
                         finishIfReady();

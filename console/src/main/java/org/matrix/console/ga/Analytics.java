@@ -73,9 +73,21 @@ public class Analytics {
         return sw.getBuffer().toString();
     }
 
-    public static void sendEvent(String category, String Action, String label) {
-        mTracker.send(new HitBuilders.EventBuilder(category, Action)
-                .setLabel(label)
-                .build());
+    public static void sendEvent(String category, String action, String label) {
+        sendEvent(category, action, label, Long.MAX_VALUE);
+    }
+
+    public static void sendEvent(String category, String action, String label, long value) {
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder(category, action);
+
+        if (null != label) {
+            eventBuilder.setLabel(label);
+        }
+
+        if (Long.MAX_VALUE != value) {
+            eventBuilder.setValue(value);
+        }
+
+        mTracker.send(eventBuilder.build());
     }
 }
