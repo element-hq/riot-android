@@ -37,6 +37,35 @@
 
         <TextView
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:textSize="15sp"
+            android:text="@string/room_creation_room_name"
+            />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:layout_width="0dp"
+            android:lines="1"
+            android:maxLines="1"
+            android:textSize="15sp"
+            android:hint="@string/room_creation_room_name_hint"
+            android:id="@+id/editText_roomName"/>
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="0.05"
             android:textSize="15sp"

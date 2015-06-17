@@ -87,34 +87,30 @@ public class RoomCreationDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog,
                                         int whichButton) {
 
-                        CheckBox publicCheckbox = (CheckBox)view.findViewById(R.id.checkbox_room_creation);
+
+                        CheckBox publicCheckbox = (CheckBox) view.findViewById(R.id.checkbox_room_creation);
                         final String roomVisibility = publicCheckbox.isChecked() ? RoomState.VISIBILITY_PUBLIC : RoomState.VISIBILITY_PRIVATE;
 
-                        EditText roomAliasEdittext = (EditText)view.findViewById(R.id.editText_roomAlias);
-                        String roomAlias = roomAliasEdittext.getText().toString().trim();
+                        EditText roomAliasEdittext = (EditText) view.findViewById(R.id.editText_roomAlias);
+                        String roomAlias = roomAliasEdittext.getText().toString();
 
-                        // check the syntax
-                        if (!TextUtils.isEmpty(roomAlias)) {
+                        if (null != roomAlias) {
                             roomAlias = roomAlias.trim();
-
-                            if (!TextUtils.isEmpty(roomAlias)) {
-                                // add the missing #
-                                if (!roomAlias.startsWith("#")) {
-                                    roomAlias = "#" + roomAlias;
-                                }
-
-                                if (roomAlias.indexOf(":") < 0) {
-                                    roomAlias += ":" + homeServerSuffix;
-                                }
-                            }
                         }
 
-                        EditText participantsEdittext = (EditText)view.findViewById(R.id.editText_participants);
+                        EditText roomNameEdittext = (EditText) view.findViewById(R.id.editText_roomName);
+                        String roomName = roomNameEdittext.getText().toString();
+
+                        if (null != roomName) {
+                            roomName = roomName.trim();
+                        }
+
+                        EditText participantsEdittext = (EditText) view.findViewById(R.id.editText_participants);
 
                         // get the members list
                         final ArrayList<String> userIDsList = CommonActivityUtils.parseUserIDsList(participantsEdittext.getText().toString(), homeServerSuffix);
 
-                        mSession.createRoom(null, null, roomVisibility, roomAlias, new SimpleApiCallback<String>(getActivity()) {
+                        mSession.createRoom(roomName, null, roomVisibility, roomAlias, new SimpleApiCallback<String>(getActivity()) {
                             @Override
                             public void onSuccess(String roomId) {
                                 CommonActivityUtils.goToRoomPage(mSession, roomId, activity, null);
