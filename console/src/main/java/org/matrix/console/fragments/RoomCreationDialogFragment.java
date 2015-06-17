@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -74,6 +75,13 @@ public class RoomCreationDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle(getString(R.string.room_creation_create_room));
 
+        // get the user suffix
+        final String userID = mSession.getCredentials().userId;
+        final String homeServerSuffix = userID.substring(userID.indexOf(":"), userID.length());
+
+        TextView homeServerText = (TextView) view.findViewById(R.id.textView_homeServer);
+        homeServerText.setText(homeServerSuffix);
+
         builder.setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
@@ -82,15 +90,8 @@ public class RoomCreationDialogFragment extends DialogFragment {
                         CheckBox publicCheckbox = (CheckBox)view.findViewById(R.id.checkbox_room_creation);
                         final String roomVisibility = publicCheckbox.isChecked() ? RoomState.VISIBILITY_PUBLIC : RoomState.VISIBILITY_PRIVATE;
 
-                        EditText roomNameEdittext = (EditText)view.findViewById(R.id.editText_roomName);
-                        String roomName = roomNameEdittext.getText().toString();
-
                         EditText roomAliasEdittext = (EditText)view.findViewById(R.id.editText_roomAlias);
-                        String roomAlias = roomAliasEdittext.getText().toString();
-
-                        // get the user suffix
-                        String userID = mSession.getCredentials().userId;
-                        String homeServerSuffix = userID.substring(userID.indexOf(":"), userID.length());
+                        String roomAlias = roomAliasEdittext.getText().toString().trim();
 
                         // check the syntax
                         if (!TextUtils.isEmpty(roomAlias)) {
@@ -113,7 +114,7 @@ public class RoomCreationDialogFragment extends DialogFragment {
                         // get the members list
                         final ArrayList<String> userIDsList = CommonActivityUtils.parseUserIDsList(participantsEdittext.getText().toString(), homeServerSuffix);
 
-                        mSession.createRoom(roomName, null, roomVisibility, roomAlias, new SimpleApiCallback<String>(getActivity()) {
+                        mSession.createRoom(null, null, roomVisibility, roomAlias, new SimpleApiCallback<String>(getActivity()) {
                             @Override
                             public void onSuccess(String roomId) {
                                 CommonActivityUtils.goToRoomPage(mSession, roomId, activity, null);
