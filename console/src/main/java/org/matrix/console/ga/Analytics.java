@@ -43,7 +43,7 @@ public class Analytics {
      */
     public static GoogleAnalytics initialiseGoogleAnalytics(Context context, String trackerId, final ExceptionParser callback) {
         mAnalytics = GoogleAnalytics.getInstance(context);
-        mAnalytics.setLocalDispatchPeriod(180);
+        mAnalytics.setLocalDispatchPeriod(1800);
 
         mTracker = mAnalytics.newTracker(trackerId);
         mTracker.enableExceptionReporting(true);
@@ -78,16 +78,19 @@ public class Analytics {
     }
 
     public static void sendEvent(String category, String action, String label, long value) {
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder(category, action);
+        // add sanity check, GA could have been disabled.
+        if (null != mTracker) {
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder(category, action);
 
-        if (null != label) {
-            eventBuilder.setLabel(label);
+            if (null != label) {
+                eventBuilder.setLabel(label);
+            }
+
+            if (Long.MAX_VALUE != value) {
+                eventBuilder.setValue(value);
+            }
+
+            mTracker.send(eventBuilder.build());
         }
-
-        if (Long.MAX_VALUE != value) {
-            eventBuilder.setValue(value);
-        }
-
-        mTracker.send(eventBuilder.build());
     }
 }
