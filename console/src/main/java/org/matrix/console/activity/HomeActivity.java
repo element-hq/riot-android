@@ -68,12 +68,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 
 /**
@@ -81,6 +77,9 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * new rooms.
  */
 public class HomeActivity extends MXCActionBarActivity {
+
+    private static final String LOG_TAG = "HomeActivity";
+
     private ExpandableListView mMyRoomList = null;
 
     private static final String PUBLIC_ROOMS_LIST = "PUBLIC_ROOMS_LIST";
@@ -200,6 +199,20 @@ public class HomeActivity extends MXCActionBarActivity {
 
         mMyRoomList.setAdapter(mAdapter);
         Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
+
+        // check if  there is some valid session
+        // the home activity could be relaunched after an application crash
+        // so, reload the sessions before displaying the hidtory
+        if (sessions.size() == 0) {
+            Log.e(LOG_TAG, "Weird : onCreate : no session");
+
+            if (null != Matrix.getInstance(this).getDefaultSession()) {
+                Log.e(LOG_TAG, "No loaded session : reload them");
+                startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                HomeActivity.this.finish();
+                return;
+            }
+        }
 
         for(MXSession session : sessions) {
             addSessionListener(session);
@@ -346,6 +359,11 @@ public class HomeActivity extends MXCActionBarActivity {
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
     public ArrayList<Integer> getExpandedGroupsList() {
         ArrayList<Integer> expList = new ArrayList<Integer>();
 
@@ -459,6 +477,9 @@ public class HomeActivity extends MXCActionBarActivity {
                         mInitialSyncComplete = true;
 
                         Collection<RoomSummary> summaries = session.getDataHandler().getStore().getSummaries();
+
+                        Log.e(LOG_TAG, ">>> onInitialSyncComplete : summaries " + summaries.size());
+
 
                         for (RoomSummary summary : summaries) {
                             addSummary(summary);
