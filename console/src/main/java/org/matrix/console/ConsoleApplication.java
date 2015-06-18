@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -164,8 +165,11 @@ public class ConsoleApplication extends Application {
                 @Override
                 public String getDescription(String threadName, Throwable throwable) {
                     StringBuilder b = new StringBuilder();
-                    b.append((BuildConfig.DEBUG ? "DEBUG"  : "RELEASE") + " : " + VERSION_BUILD);
-                    b.append(" ").append(VERSION_STRING).append(" Thread: ");
+                    b.append((BuildConfig.DEBUG ? "DEBUG"  : "RELEASE") + "\n");
+                    b.append("Build : " +  VERSION_BUILD + "\n");
+                    b.append("Version : " + VERSION_STRING + "\n");
+                    b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME  + ")\n");
+                    b.append("Thread: ");
                     b.append(threadName);
 
                     Activity a = ConsoleApplication.getCurrentActivity();
