@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -454,8 +455,8 @@ public class CommonActivityUtils {
     public static void sendFilesTo(final Activity fromActivity, final Intent intent) {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
             sendFilesTo(fromActivity, intent,Matrix.getMXSession(fromActivity, null));
-        } else {
-            FragmentManager fm = ((MXCActionBarActivity)fromActivity).getSupportFragmentManager();
+        } else if (fromActivity instanceof FragmentActivity){
+            FragmentManager fm = ((FragmentActivity)fromActivity).getSupportFragmentManager();
 
             AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
             if (fragment != null) {

@@ -24,11 +24,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -38,13 +41,17 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.view.PieFractionView;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
+import org.matrix.console.db.ConsoleContentProvider;
 
-public class ImageWebViewActivity extends Activity {
+public class ImageWebViewActivity extends FragmentActivity {
     private static final String LOG_TAG = "ImageWebViewActivity";
+
+    private static final String TAG_FRAGMENT_IMAGE_OPTIONS = "org.matrix.console.activity.ImageWebViewActivity.TAG_FRAGMENT_IMAGE_OPTIONS";
 
     public static final String KEY_HIGHRES_IMAGE_URI = "org.matrix.console.activity.ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI";
     public static final String KEY_THUMBNAIL_WIDTH = "org.matrix.console.activity.ImageWebViewActivity.KEY_THUMBNAIL_WIDTH";
@@ -123,7 +130,7 @@ public class ImageWebViewActivity extends Activity {
         setContentView(R.layout.activity_image_web_view);
 
         mWebView = (WebView)findViewById(R.id.image_webview);
-        
+
         final Intent intent = getIntent();
         if (intent == null) {
             Log.e(LOG_TAG, "Need an intent to view.");
@@ -230,6 +237,65 @@ public class ImageWebViewActivity extends Activity {
         mWebView.getSettings().setBuiltInZoomControls(true);
 
         loadImage(Uri.parse(mHighResUri), viewportContent, css);
+
+        mWebView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+
+
+                final String highResMediaURI  = intent.getStringExtra(KEY_HIGHRES_IMAGE_URI);
+                final MXMediasCache mediasCache = Matrix.getInstance(ImageWebViewActivity.this).getMediasCache();
+                final File mediaFile = mediasCache.mediaCacheFile(highResMediaURI, mHighResMimeType);
+
+                if (null != mediaFile) {
+                    FragmentManager fm = ImageWebViewActivity.this.getSupportFragmentManager();
+                    IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_IMAGE_OPTIONS);
+
+                    if (fragment != null) {
+                        fragment.dismissAllowingStateLoss();
+                    }
+
+                    final Integer[] icons = {R.drawable.ic_material_share, R.drawable.ic_material_forward};
+                    final Integer[] textIds = {R.string.share, R.string.forward};
+
+                    fragment = IconAndTextDialogFragment.newInstance(icons, textIds, Color.WHITE);
+                    fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                            final Integer selectedVal = textIds[position];
+
+                            ImageWebViewActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+
+                                    sendIntent.setType(mHighResMimeType);
+
+                                    try {
+                                        sendIntent.putExtra(Intent.EXTRA_STREAM, ConsoleContentProvider.absolutePathToUri(ImageWebViewActivity.this, mediaFile.getAbsolutePath()));
+                                    } catch (Exception e) {
+                                    }
+
+                                    if (selectedVal == R.string.forward) {
+                                        CommonActivityUtils.sendFilesTo(ImageWebViewActivity.this, sendIntent);
+                                    } else {
+                                        startActivity(sendIntent);
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    fragment.show(fm, TAG_FRAGMENT_IMAGE_OPTIONS);
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
     }
     
     @Override

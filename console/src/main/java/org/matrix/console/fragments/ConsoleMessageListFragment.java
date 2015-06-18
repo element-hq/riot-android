@@ -198,7 +198,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
                         if (null != mediaFile) {
                             try {
-                                mediaUri = Uri.parse("content://" + ConsoleContentProvider.AUTHORITIES + "/" + mediaFile.getName());
+                                mediaUri = ConsoleContentProvider.absolutePathToUri(getActivity(), mediaFile.getAbsolutePath());
                                 supportShare = true;
                             } catch (Exception e) {
                             }

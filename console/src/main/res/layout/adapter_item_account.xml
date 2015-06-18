@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/room_background"
     android:paddingBottom="5dp">
 
     <FrameLayout
@@ -29,6 +30,7 @@
             android:layout_gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="An account name"
+            android:textColor="#000"
             android:id="@+id/accountAdapter_name"
             />
 
@@ -38,6 +40,7 @@
             android:layout_gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="a matrix Id"
+            android:textColor="#000"
             android:id="@+id/accountAdapte_userId"
             />
     </LinearLayout>
