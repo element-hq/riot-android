@@ -241,9 +241,6 @@ public class ImageWebViewActivity extends FragmentActivity {
         mWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-
-
                 final String highResMediaURI  = intent.getStringExtra(KEY_HIGHRES_IMAGE_URI);
                 final MXMediasCache mediasCache = Matrix.getInstance(ImageWebViewActivity.this).getMediasCache();
                 final File mediaFile = mediasCache.mediaCacheFile(highResMediaURI, mHighResMimeType);

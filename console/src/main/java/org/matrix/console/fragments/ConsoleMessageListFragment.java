@@ -53,7 +53,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsoleMessageListFragment extends MatrixMessageListFragment {
+public class ConsoleMessageListFragment extends MatrixMessageListFragment implements ConsoleMessagesAdapter.MessageLongClickListener {
 
     public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         ConsoleMessageListFragment f = new ConsoleMessageListFragment();
@@ -79,7 +79,10 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     public MessagesAdapter createMessagesAdapter() {
         // use the defaults message layouts
         // can set any adapters
-        return new ConsoleMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        ConsoleMessagesAdapter adapter = new ConsoleMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        adapter.setMessageLongClickListener(this);
+
+        return adapter;
     }
 
     /**
@@ -383,5 +386,10 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                     }
                 });
         builderSingle.show();
+    }
+
+    @Override
+    public void onMessageLongClick(int position, Message message) {
+        onItemClick(position);
     }
 }
