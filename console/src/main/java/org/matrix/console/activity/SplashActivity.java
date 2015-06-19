@@ -25,6 +25,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.console.ErrorListener;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
+import org.matrix.console.ga.Analytics;
 import org.matrix.console.gcm.GcmRegistrationManager;
 import org.matrix.console.services.EventStreamService;
 
@@ -78,6 +79,8 @@ public class SplashActivity extends MXCActionBarActivity {
 
         ArrayList<String> matrixIds = new ArrayList<String>();
 
+        final long startTime = System.currentTimeMillis();
+
         for(MXSession session : mSessions) {
             final MXSession fSession = session;
             session.getDataHandler().getStore().open();
@@ -101,6 +104,8 @@ public class SplashActivity extends MXCActionBarActivity {
                         noMoreListener = mInitialSyncComplete = (mListeners.size() == 0);
                     }
 
+                    Analytics.sendEvent("Account", "Loading", fSession.getDataHandler().getStore().getRooms().size() + " rooms", System.currentTimeMillis() - startTime);
+
                     if (noMoreListener) {
                         finishIfReady();
                     }
@@ -117,6 +122,18 @@ public class SplashActivity extends MXCActionBarActivity {
                 // session to activate
                 matrixIds.add(session.getCredentials().userId);
             }
+        }
+
+        // when the events stream has been disconnected by the user
+        // they must be awoken even if they are initialized
+        if (Matrix.getInstance(this).mHasBeenDisconnected) {
+            matrixIds = new ArrayList<String>();
+
+            for(MXSession session : mSessions) {
+                matrixIds.add(session.getCredentials().userId);
+            }
+
+            Matrix.getInstance(this).mHasBeenDisconnected = false;
         }
 
         if (EventStreamService.getInstance() == null) {

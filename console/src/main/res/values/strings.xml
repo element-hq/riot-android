@@ -137,12 +137,20 @@
     <string name="room_creation_room_name">Name</string>
     <string name="room_creation_room_name_hint">(e.g lunchGroup)</string>
     <string name="room_creation_room_alias">Alias</string>
-    <string name="room_creation_room_alias_hint">(e.g. #foo:matrix.org)"</string>
+    <string name="room_creation_room_alias_hint">"Room Alias (optional)</string>
     <string name="room_creation_participants">With</string>
     <string name="room_creation_participants_hint">(e.g. @me:hs;...)</string>
     <string name="room_creation_create_room">Create room</string>
-    <string name="room_creation_public">Public</string>
+    <string name="room_creation_public">Public Room</string>
     <string name="room_creation_private">Private</string>
+
+    <!-- room info dialog Screen -->
+    <string name="room_info_room_name">Room name</string>
+    <string name="room_info_room_name_hint">Enter a room name</string>
+    <string name="room_info_room_topic">Room topic</string>
+    <string name="room_info_room_topic_hint">Enter a room topic</string>
+    <string name="room_info_room_discard_changes">Discard changes ?</string>
+    <string name="room_info_room_discard">Discard</string>
 
     <!-- contacts list screen -->
     <string name="contacts">Contacts</string>

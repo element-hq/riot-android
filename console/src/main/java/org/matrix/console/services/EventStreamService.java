@@ -76,6 +76,9 @@ public class EventStreamService extends Service {
     private String mNotificationRoomId = null;
 
     private Boolean mIsForegound = false;
+    private int mUnreadMessagesCounter = 0;
+
+    private Notification mLatestNotification = null;
 
     private static EventStreamService mActiveEventStreamService = null;
 
@@ -144,17 +147,11 @@ public class EventStreamService extends Service {
 
                 // existing summary ?
                 if (null != summary) {
-                    Boolean isUnreadCountUpdated = true;
-
                     // If we're not currently viewing this room or not sent by myself, increment the unread count
                     if (ConsoleApplication.isAppInBackground() || (!event.roomId.equals(viewedRoomId) || !event.getMatrixId().equals(fromMatrixId)) && !event.userId.equals(event.getMatrixId())) {
                         summary.incrementUnreadMessagesCount();
                     } else {
-                        isUnreadCountUpdated = summary.resetUnreadMessagesCount();
-                    }
-
-                    if (isUnreadCountUpdated) {
-                        CommonActivityUtils.updateUnreadMessagesBadge(EventStreamService.this);
+                        summary.resetUnreadMessagesCount();
                     }
                 }
             }
@@ -219,20 +216,34 @@ public class EventStreamService extends Service {
 
             mNotificationRoomId = roomId;
 
-            Notification n = NotificationUtils.buildMessageNotification(
+            mLatestNotification = NotificationUtils.buildMessageNotification(
                     EventStreamService.this,
                     member.getName(), session.getCredentials().userId, Matrix.getMXSessions(getApplicationContext()).size() > 1, body, event.roomId, roomName, bingRule.shouldPlaySound());
-            NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.cancelAll();
 
-            nm.notify(MSG_NOTIFICATION_ID, n);
-
-            // turn the screen on for 3 seconds
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MXEventListener");
-            wl.acquire(3000);
-            wl.release();
+            if (ConsoleApplication.isAppInBackground()) {
+                CommonActivityUtils.updateUnreadMessagesBadge(getApplicationContext(), ++mUnreadMessagesCounter);
+            }
         }
+
+        @Override
+        public void onLiveEventsChunkProcessed() {
+            if (null != mLatestNotification) {
+                NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                nm.cancelAll();
+
+                nm.notify(MSG_NOTIFICATION_ID, mLatestNotification);
+
+                // turn the screen on for 3 seconds
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MXEventListener");
+                wl.acquire(3000);
+                wl.release();
+
+                mLatestNotification = null;
+            }
+
+        }
+
 
         @Override
         public void onResendingEvent(Event event) {
@@ -340,6 +351,12 @@ public class EventStreamService extends Service {
     }
 
     private void start() {
+        // reset the badbge counter when resuming the application
+        if (0 != mUnreadMessagesCounter) {
+            mUnreadMessagesCounter = 0;
+            CommonActivityUtils.updateUnreadMessagesBadge(this, mUnreadMessagesCounter);
+        }
+
         if (mState == StreamAction.START) {
             Log.e(LOG_TAG, "Already started.");
             return;

@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,6 +40,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -121,6 +123,8 @@ public class CommonActivityUtils {
         PIDsRetriever.getIntance().reset();
         ContactsManager.reset();
 
+        MXMediasCache.clearThumbnailsCache(activity);
+
         // go to login page
         activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.finish();
@@ -129,6 +133,7 @@ public class CommonActivityUtils {
     public static void disconnect(Activity activity) {
         stopEventStream(activity);
         activity.finish();
+        Matrix.getInstance(activity).mHasBeenDisconnected = true;
     }
 
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
@@ -197,20 +202,9 @@ public class CommonActivityUtils {
         }
     }
 
-    public static void updateUnreadMessagesBadge(Context context) {
-        int unreadCount = 0;
-        Collection<MXSession> sessions = Matrix.getMXSessions(context);
-
-        for(MXSession session : sessions) {
-            Collection<RoomSummary> summaries = session.getDataHandler().getStore().getSummaries();
-
-            for(RoomSummary summary : summaries) {
-                unreadCount += summary.getUnreadMessagesCount();
-            }
-        }
-
+    public static void updateUnreadMessagesBadge(Context context, int badgeValue) {
         try {
-            ShortcutBadger.setBadge(context, unreadCount);
+            ShortcutBadger.setBadge(context, badgeValue);
         } catch (Exception e) {
         }
     }
@@ -461,8 +455,8 @@ public class CommonActivityUtils {
     public static void sendFilesTo(final Activity fromActivity, final Intent intent) {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
             sendFilesTo(fromActivity, intent,Matrix.getMXSession(fromActivity, null));
-        } else {
-            FragmentManager fm = ((MXCActionBarActivity)fromActivity).getSupportFragmentManager();
+        } else if (fromActivity instanceof FragmentActivity){
+            FragmentManager fm = ((FragmentActivity)fromActivity).getSupportFragmentManager();
 
             AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
             if (fragment != null) {

@@ -24,6 +24,7 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
+import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.console.ConsoleApplication;
 import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.activity.ImageWebViewActivity;
@@ -36,8 +37,18 @@ import java.io.File;
  */
 public class ConsoleMessagesAdapter extends MessagesAdapter {
 
+    public static interface MessageLongClickListener {
+        public void onMessageLongClick(int position, Message message);
+    }
+
+    private MessageLongClickListener mLongClickListener = null;
+
     public ConsoleMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context, mediasCache);
+    }
+
+    public void setMessageLongClickListener(MessageLongClickListener listener) {
+        mLongClickListener = listener;
     }
 
     @Override
@@ -50,7 +61,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void onImageClick(ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
+    public void onImageClick(int position, ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
         if (null != imageMessage.url) {
             Intent viewImageIntent = new Intent(mContext, ImageWebViewActivity.class);
             viewImageIntent.putExtra(ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI, imageMessage.url);
@@ -66,7 +77,17 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void onFileDownloaded(FileMessage fileMessage) {
+    public boolean onImageLongClick(int position, ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
+        if (null != mLongClickListener) {
+            mLongClickListener.onMessageLongClick(position, imageMessage);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onFileDownloaded(int position, FileMessage fileMessage) {
         // save into the downloads
         File mediaFile = mMediasCache.mediaCacheFile(fileMessage.url, fileMessage.getMimeType());
 
@@ -76,7 +97,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     }
 
     @Override
-    public void onFileClick(FileMessage fileMessage) {
+         public void onFileClick(int position, FileMessage fileMessage) {
         if (null != fileMessage.url) {
             File mediaFile =  mMediasCache.mediaCacheFile(fileMessage.url, fileMessage.getMimeType());
 
@@ -86,6 +107,16 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
                 CommonActivityUtils.openMedia(ConsoleApplication.getCurrentActivity(), savedMediaPath, fileMessage.getMimeType());
             }
         }
+    }
+
+    @Override
+    public boolean onFileLongClick(int position, FileMessage fileMessage) {
+        if (null != mLongClickListener) {
+            mLongClickListener.onMessageLongClick(position, fileMessage);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

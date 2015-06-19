@@ -16,19 +16,13 @@
 
 package org.matrix.console.gcm;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import org.matrix.androidsdk.MXSession;
 import org.matrix.console.Matrix;
 import org.matrix.console.activity.CommonActivityUtils;
-import org.matrix.console.services.EventStreamService;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class MatrixGcmListenerService extends GcmListenerService {
 

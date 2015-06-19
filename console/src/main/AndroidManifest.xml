@@ -38,6 +38,25 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
+
+        <!-- google analytics -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background dispatching on non-Google Play devices -->
+        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <!-- activities list starts here -->
         <activity
             android:name="org.matrix.console.activity.LoginActivity"
             android:screenOrientation="portrait"
@@ -72,16 +91,7 @@
                 android:value="org.matrix.console.activity.HomeActivity"/>
 
         </activity>
-        <activity
-            android:name="org.matrix.console.activity.RoomInfoActivity"
-            android:label="@string/title_activity_room_info"
-            android:parentActivityName="org.matrix.console.activity.RoomActivity">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.matrix.console.activity.RoomActivity"/>
-
-        </activity>
         <activity
             android:name="org.matrix.console.activity.SettingsActivity"
             android:label="@string/title_activity_settings"

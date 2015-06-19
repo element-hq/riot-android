@@ -57,18 +57,19 @@ import org.matrix.console.MyPresenceManager;
 import org.matrix.console.R;
 import org.matrix.console.ViewedRoomTracker;
 import org.matrix.console.adapters.ConsoleRoomSummaryAdapter;
+import org.matrix.console.adapters.DrawerAdapter;
 import org.matrix.console.fragments.AccountsSelectionDialogFragment;
 import org.matrix.console.fragments.ContactsListDialogFragment;
 import org.matrix.console.fragments.RoomCreationDialogFragment;
+import org.matrix.console.gcm.GcmRegistrationManager;
 import org.matrix.console.util.RageShake;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 
 /**
@@ -76,6 +77,9 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * new rooms.
  */
 public class HomeActivity extends MXCActionBarActivity {
+
+    private static final String LOG_TAG = "HomeActivity";
+
     private ExpandableListView mMyRoomList = null;
 
     private static final String PUBLIC_ROOMS_LIST = "PUBLIC_ROOMS_LIST";
@@ -98,6 +102,8 @@ public class HomeActivity extends MXCActionBarActivity {
     private String mAutomaticallyOpenedRoomId = null;
     private String mAutomaticallyOpenedMatrixId = null;
     private Intent mOpenedRoomIntent = null;
+
+    private boolean refreshOnChunkEnd = false;
 
     // sliding menu
     private final Integer[] mSlideMenuTitleIds = new Integer[]{
@@ -149,8 +155,6 @@ public class HomeActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        addSlidingMenu(mSlideMenuResourceIds, mSlideMenuTitleIds, true);
-
         mMyRoomList = (ExpandableListView) findViewById(R.id.listView_myRooms);
         // the chevron is managed in the header view
         mMyRoomList.setGroupIndicator(null);
@@ -196,6 +200,20 @@ public class HomeActivity extends MXCActionBarActivity {
         mMyRoomList.setAdapter(mAdapter);
         Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
 
+        // check if  there is some valid session
+        // the home activity could be relaunched after an application crash
+        // so, reload the sessions before displaying the hidtory
+        if (sessions.size() == 0) {
+            Log.e(LOG_TAG, "Weird : onCreate : no session");
+
+            if (null != Matrix.getInstance(this).getDefaultSession()) {
+                Log.e(LOG_TAG, "No loaded session : reload them");
+                startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                HomeActivity.this.finish();
+                return;
+            }
+        }
+
         for(MXSession session : sessions) {
             addSessionListener(session);
         }
@@ -221,8 +239,6 @@ public class HomeActivity extends MXCActionBarActivity {
                     if (mAdapter.resetUnreadCount(groupPosition, roomId)) {
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
-
-                    CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
 
                 } else if (mAdapter.isPublicsGroupIndex(groupPosition)) {
                     // should offer to select which account to use
@@ -277,7 +293,6 @@ public class HomeActivity extends MXCActionBarActivity {
                                                 room.leave(new SimpleApiCallback<Void>(HomeActivity.this) {
                                                     @Override
                                                     public void onSuccess(Void info) {
-                                                        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
                                                     }
                                                 });
                                             }
@@ -342,6 +357,11 @@ public class HomeActivity extends MXCActionBarActivity {
 
             savedInstanceState.putSerializable(PUBLIC_ROOMS_LIST, hash);
         }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     public ArrayList<Integer> getExpandedGroupsList() {
@@ -458,6 +478,9 @@ public class HomeActivity extends MXCActionBarActivity {
 
                         Collection<RoomSummary> summaries = session.getDataHandler().getStore().getSummaries();
 
+                        Log.e(LOG_TAG, ">>> onInitialSyncComplete : summaries " + summaries.size());
+
+
                         for (RoomSummary summary : summaries) {
                             addSummary(summary);
                         }
@@ -479,8 +502,6 @@ public class HomeActivity extends MXCActionBarActivity {
                         if (mAdapter.mPublicsGroupIndex >= 0) {
                             mMyRoomList.expandGroup(mAdapter.mPublicsGroupIndex);
                         }
-
-                        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
 
                         // load the public load in background
                         // done onResume
@@ -507,6 +528,21 @@ public class HomeActivity extends MXCActionBarActivity {
                     public void run() {
                         mAdapter.sortSummaries();
                         mAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void onLiveEventsChunkProcessed() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mIsPaused && refreshOnChunkEnd) {
+                            mAdapter.sortSummaries();
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                        refreshOnChunkEnd = false;
                     }
                 });
             }
@@ -571,10 +607,7 @@ public class HomeActivity extends MXCActionBarActivity {
                                 }
                             }
 
-                            if (!mIsPaused) {
-                                mAdapter.sortSummaries();
-                                mAdapter.notifyDataSetChanged();
-                            }
+                            refreshOnChunkEnd = true;
                         }
                     }
                 });
@@ -669,6 +702,42 @@ public class HomeActivity extends MXCActionBarActivity {
         mIsPaused = true;
     }
 
+    private void refreshSlidingList() {
+        // adjust the sliding menu entries
+        ArrayList<Integer> slideMenuTitleIds = new ArrayList<Integer>(Arrays.asList(mSlideMenuTitleIds));
+        ArrayList<Integer> slideMenuResourceIds = new ArrayList<Integer>(Arrays.asList(mSlideMenuResourceIds));
+
+        Matrix matrix = Matrix.getInstance(this);
+
+        // only one account, do not offer to remove it
+        if (matrix.getSessions().size() == 1) {
+
+            int pos = slideMenuTitleIds.indexOf(R.string.action_remove_account);
+
+            if (pos >= 0) {
+                slideMenuTitleIds.remove(pos);
+                slideMenuResourceIds.remove(pos);
+            }
+        }
+
+        GcmRegistrationManager gcmManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+
+        // hide the disconnect when GCM is enabled.
+        if ((null != gcmManager) && gcmManager.useGCM()) {
+            int pos = slideMenuTitleIds.indexOf(R.string.action_disconnect);
+
+            if (pos >= 0) {
+                slideMenuTitleIds.remove(pos);
+                slideMenuResourceIds.remove(pos);
+            }
+        }
+
+        // apply the updated sliding list
+        Integer[] slideMenuTitleIds2 = new Integer[slideMenuTitleIds.size()];
+        Integer[] slideMenuResourceIds2 = new Integer[slideMenuTitleIds.size()];
+        addSlidingMenu(slideMenuResourceIds.toArray(slideMenuResourceIds2), slideMenuTitleIds.toArray(slideMenuTitleIds2), true);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -702,7 +771,7 @@ public class HomeActivity extends MXCActionBarActivity {
             });
         }
 
-        CommonActivityUtils.updateUnreadMessagesBadge(this);
+        refreshSlidingList();
     }
 
     @Override
@@ -727,33 +796,33 @@ public class HomeActivity extends MXCActionBarActivity {
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
 
-        final int id = (position == 0) ? R.string.action_settings : mSlideMenuTitleIds[position - 1];
+        final int id =  ((DrawerAdapter.Entry)(mDrawerList.getAdapter().getItem(position))).mIconResourceId;
 
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (id == R.string.action_search_contact) {
+                if (id == R.drawable.ic_material_search) {
                     toggleSearchContacts();
-                } else if (id == R.string.action_search_room) {
+                } else if (id == R.drawable.ic_material_find_in_page) {
                     toggleSearchButton();
-                } else if (id == R.string.create_room) {
+                } else if (id == R.drawable.ic_material_group_add) {
                     createRoom();
-                } else if (id ==  R.string.join_room) {
+                } else if (id == R.drawable.ic_material_group) {
                     joinRoomByName();
-                } else if (id ==  R.string.action_mark_all_as_read) {
+                } else if (id == R.drawable.ic_material_done_all) {
                     markAllMessagesAsRead();
-                } else if (id ==  R.string.action_settings) {
+                } else if (id == R.drawable.ic_material_settings) {
                     HomeActivity.this.startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
-                } else if (id ==  R.string.action_disconnect) {
+                } else if (id == R.drawable.ic_material_clear) {
                     CommonActivityUtils.disconnect(HomeActivity.this);
-                } else if (id ==  R.string.send_bug_report) {
+                } else if (id == R.drawable.ic_material_bug_report) {
                     RageShake.getInstance().sendBugReport();
-                } else if (id ==  R.string.action_logout) {
+                } else if (id == R.drawable.ic_material_exit_to_app) {
                     CommonActivityUtils.logout(HomeActivity.this);
-                } else if (id ==  R.string.action_add_account) {
+                } else if (id == R.drawable.ic_material_person_add) {
                     HomeActivity.this.addAccount();
-                } else if (id ==  R.string.action_remove_account) {
-                        HomeActivity.this.removeAccount();
+                } else if (id == R.drawable.ic_material_remove_circle_outline) {
+                    HomeActivity.this.removeAccount();
                 }
             }
         });
@@ -939,7 +1008,6 @@ public class HomeActivity extends MXCActionBarActivity {
         }
 
         mAdapter.notifyDataSetChanged();
-        CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
     }
 
     /**
@@ -1074,8 +1142,6 @@ public class HomeActivity extends MXCActionBarActivity {
                                 // all the groups must be displayed during a search
                                 mAdapter.setDisplayAllGroups(mSearchRoomEditText.getVisibility() == View.VISIBLE);
                                 expandAllGroups();
-
-                                CommonActivityUtils.updateUnreadMessagesBadge(HomeActivity.this);
                             }
                         });
                     }

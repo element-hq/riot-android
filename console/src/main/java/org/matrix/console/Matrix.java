@@ -33,6 +33,8 @@ public class Matrix {
     private GcmRegistrationManager mGcmRegistrationManager;
     private Context mAppContext;
 
+    public boolean mHasBeenDisconnected = false;
+
     protected Matrix(Context appContext) {
         mAppContext = appContext.getApplicationContext();
         mLoginStorage = new LoginStorage(mAppContext);

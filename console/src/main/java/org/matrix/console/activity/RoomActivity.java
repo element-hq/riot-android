@@ -63,6 +63,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.console.ErrorListener;
@@ -74,6 +75,7 @@ import org.matrix.console.adapters.ImageCompressionDescription;
 import org.matrix.console.fragments.ConsoleMessageListFragment;
 import org.matrix.console.fragments.ImageSizeSelectionDialogFragment;
 import org.matrix.console.fragments.MembersInvitationDialogFragment;
+import org.matrix.console.fragments.RoomInfoUpdateDialogFragment;
 import org.matrix.console.fragments.RoomMembersDialogFragment;
 import org.matrix.console.services.EventStreamService;
 import org.matrix.console.util.NotificationUtils;
@@ -106,6 +108,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
+    private static final String TAG_FRAGMENT_ROOM_INFO = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ROOM_INFO";
 
 
     private static final String LOG_TAG = "RoomActivity";
@@ -114,6 +117,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final String PENDING_THUMBNAIL_URL = "PENDING_THUMBNAIL_URL";
     private static final String PENDING_MEDIA_URL = "PENDING_MEDIA_URL";
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
+    private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
 
@@ -164,6 +168,9 @@ public class RoomActivity extends MXCActionBarActivity {
     private TimerTask mTypingTimerTask;
     private long  mLastTypingDate = 0;
 
+    // scroll to a dedicated index
+    private int mScrollToIndex = -1;
+
     private Boolean mIgnoreTextUpdate = false;
 
     private MXEventListener mEventListener = new MXEventListener() {
@@ -178,6 +185,20 @@ public class RoomActivity extends MXCActionBarActivity {
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                         setTitle(mRoom.getName(mMyUserId));
+
+                        // check if the user does not leave the room with another client
+                        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && mMyUserId.equals(event.stateKey)) {
+                            RoomMember myMember = mRoom.getMember(mMyUserId);
+
+                            if ((null != myMember) && (RoomMember.MEMBERSHIP_LEAVE.equals(myMember.membership))) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RoomActivity.this.finish();
+                                    }
+                                });
+                            }
+                        }
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
                         Log.e(LOG_TAG, "Updating room topic.");
@@ -662,6 +683,19 @@ public class RoomActivity extends MXCActionBarActivity {
         if (null != mPendingMimeType) {
             savedInstanceState.putString(PENDING_MIMETYPE, mPendingMimeType);
         }
+
+        savedInstanceState.putInt(FIRST_VISIBLE_ROW, mConsoleMessageListFragment.mMessageListView.getFirstVisiblePosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.containsKey(FIRST_VISIBLE_ROW)) {
+            // the scroll will be done in resume.
+            // the listView will be refreshed so the offset might be lost.
+            mScrollToIndex = savedInstanceState.getInt(FIRST_VISIBLE_ROW);
+        }
     }
 
     /**
@@ -671,7 +705,7 @@ public class RoomActivity extends MXCActionBarActivity {
         boolean hasText = mEditText.getText().length() > 0;
         boolean hasPreviewedMedia = (null != mPendingThumbnailUrl);
 
-        
+
         if (hasPreviewedMedia) {
             mMediasCache.loadBitmap(mImagePreviewView, mPendingThumbnailUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, mPendingMimeType);
         }
@@ -680,7 +714,7 @@ public class RoomActivity extends MXCActionBarActivity {
         mEditText.setVisibility(hasPreviewedMedia ? View.INVISIBLE : View.VISIBLE);
 
         mSendButton.setVisibility((hasText || hasPreviewedMedia) ? View.VISIBLE : View.INVISIBLE);
-        mAttachmentButton.setVisibility((hasText || hasPreviewedMedia)  ? View.INVISIBLE : View.VISIBLE);
+        mAttachmentButton.setVisibility((hasText || hasPreviewedMedia) ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -730,7 +764,6 @@ public class RoomActivity extends MXCActionBarActivity {
 
         if (null != summary) {
             if (summary.resetUnreadMessagesCount()) {
-                CommonActivityUtils.updateUnreadMessagesBadge(RoomActivity.this);
                 mSession.getDataHandler().getStore().flushSummary(summary);
             }
         }
@@ -748,6 +781,18 @@ public class RoomActivity extends MXCActionBarActivity {
 
         // refresh the UI : the timezone could have been updated
         mConsoleMessageListFragment.refresh();
+
+        // the device has been rotated
+        // so try to keep the same top/left item;
+        if (mScrollToIndex > 0) {
+            mConsoleMessageListFragment.mMessageListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mConsoleMessageListFragment.mMessageListView.setSelection(mScrollToIndex);
+                    mScrollToIndex = -1;
+                }
+            });
+        }
     }
 
     @Override
@@ -810,10 +855,17 @@ public class RoomActivity extends MXCActionBarActivity {
             fragment = RoomMembersDialogFragment.newInstance(mSession, mRoom.getRoomId());
             fragment.show(fm, TAG_FRAGMENT_MEMBERS_DIALOG);
         } else if (id ==  R.id.ic_action_room_info) {
-            Intent startRoomInfoIntent = new Intent(RoomActivity.this, RoomInfoActivity.class);
-            startRoomInfoIntent.putExtra(EXTRA_ROOM_ID, mRoom.getRoomId());
-            startRoomInfoIntent.putExtra(EXTRA_MATRIX_ID, mMyUserId);
-            startActivity(startRoomInfoIntent);
+
+            FragmentManager fm = getSupportFragmentManager();
+
+            RoomInfoUpdateDialogFragment roomInfoFragment = (RoomInfoUpdateDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOM_INFO);
+            if (roomInfoFragment != null) {
+                roomInfoFragment.dismissAllowingStateLoss();
+            }
+
+            roomInfoFragment = RoomInfoUpdateDialogFragment.newInstance(mMyUserId, mRoom.getRoomId());
+            roomInfoFragment.show(fm, TAG_FRAGMENT_ROOM_INFO);
+
         } else if (id ==  R.id.ic_action_leave) {
             mRoom.leave(new SimpleApiCallback<Void>(RoomActivity.this) {
             });
@@ -1112,8 +1164,6 @@ public class RoomActivity extends MXCActionBarActivity {
                                 if (null != thumbnailBitmap) {
                                     thumbnailBitmap.recycle();
                                 }
-
-
 
                                 //
                                 if (("image/jpg".equals(mimeType) || "image/jpeg".equals(mimeType)) && (null != mediaUrl)) {

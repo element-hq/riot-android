@@ -8,5 +8,7 @@
     style="@style/Base.TextAppearance.AppCompat.Subhead"
     android:gravity="center_vertical"
     android:paddingLeft="20dp"
+    android:background="@color/room_background"
+    android:textColor="#000"
     android:ellipsize="marquee"
     />

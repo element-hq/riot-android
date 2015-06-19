@@ -18,6 +18,7 @@ package org.matrix.console.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -29,6 +30,23 @@ import java.io.FileNotFoundException;
 public class ConsoleContentProvider extends ContentProvider {
 
     public static String AUTHORITIES = "org.matrix.console.ConsoleApplication.provider";
+
+
+    /**
+     * Convert an absolute file path to a Content path
+     * @param context the application context
+     * @param path the absolute path to convert.
+     * @return the content URI.
+     */
+    public static Uri absolutePathToUri(Context context, String path) {
+        String basePath = context.getFilesDir().getAbsolutePath();
+
+        if ((null != path) && path.startsWith(basePath)) {
+            return Uri.parse("content://" + ConsoleContentProvider.AUTHORITIES + path.substring(basePath.length()));
+        }
+
+        return null;
+    }
 
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
