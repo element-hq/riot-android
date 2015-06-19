@@ -101,8 +101,20 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.matrix.console.activity.HomeActivity"/>
-
         </activity>
+
+        <activity
+            android:name="org.matrix.console.activity.NotificationSettingsActivity"
+            android:label="@string/title_activity_notification_settings"
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName="org.matrix.console.activity.SettingsActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.matrix.console.activity.SettingsActivity"/>
+        </activity>
+
+
         <activity
             android:name="org.matrix.console.activity.MemberDetailsActivity"
             android:label="@string/title_activity_member_details"

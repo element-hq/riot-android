@@ -11,6 +11,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
+        <!-- profile section -->
         <TextView
             android:id="@+id/settings_profile_information_header"
             android:layout_marginTop="10dp"
@@ -19,6 +20,7 @@
             style="@style/Base.TextAppearance.AppCompat.Title"
             android:text="@string/settings_title_profile"/>
 
+        <!-- notifications section -->
         <TextView
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -93,6 +95,15 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/button_notifications_rule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Button"
+            android:text="@string/settings_title_notifications_rules" />
+
+
+        <!-- rooms section -->
 
         <TextView
             android:layout_marginTop="10dp"
@@ -194,6 +205,8 @@
             style="@style/Base.TextAppearance.AppCompat.Button"
             android:text="@string/clear_cache" />
 
+        <!-- configuration section -->
+
         <TextView
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -226,6 +239,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <!-- command section -->
 
         <TextView
             android:layout_marginTop="10dp"

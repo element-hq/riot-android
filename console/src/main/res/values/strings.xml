@@ -8,6 +8,7 @@
     <string name="title_activity_public_rooms">Public Rooms</string>
     <string name="title_activity_room_info">Room info</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_notification_settings">Notification Settings</string>
     <string name="title_activity_member_details">Member Details</string>
     <string name="title_activity_invite_user">Invite Users</string>
 
@@ -165,6 +166,7 @@
     <string name="settings_title_gcm">Google cloud messaging (GCM)</string>
     <string name="settings_title_config">Configuration</string>
     <string name="settings_title_notifications">Notifications</string>
+    <string name="settings_title_notifications_rules">Notifications Rules</string>
     <string name="settings_title_rooms">Rooms</string>
     <string name="settings_title_commands">Commands</string>
     <string name="settings_config_console_version">matrixConsole version: %s</string>
@@ -178,6 +180,36 @@
     <string name="settings_display_left_members">Display left members</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_display_public_rooms">Display public rooms with recents</string>
+
+    <!-- Notification settings screen -->
+    <string name="notification_settings_title">Notification Settings</string>
+    <string name="notification_settings_disable_all">Disable all notifications</string>
+    <string name="notification_settings_enable_notifications">Enable notifications</string>
+    <string name="notification_settings_enable_notifications_warning">All notifications are currently disabled for all devices.</string>
+    <string name="notification_settings_global_notification_settings">Global Notification Settings</string>
+    <string name="notification_settings_global_info">Notification settings are saved to your user account and are shared between all clients which support them (including desktop notifications).\n\nRules are applied in order; the first rule which matches defines the outcome for the message.\nSo: Per-word notifications are more important than per-room notifications which are more important than per-sender notifications.\nFor multiple rules of the same kind, the first one in the list that matches takes priority.</string>
+    <string name="notification_settings_per_word_notifications">Per-word notifications</string>
+    <string name="notification_settings_per_word_info">Words match case insensitively, and may include a * wildcard. So:\nfoo matches the string foo surrounded by word delimiters (e.g. punctuation and whitespace or start/end of line).\nfoo* matches any such word that begins foo.\n*foo* matches any such word which includes the 3 letters foo.</string>
+    <string name="notification_settings_always_notify">Always notify</string>
+    <string name="notification_settings_never_notify">Never notify</string>
+    <string name="notification_settings_word_to_match">word to match</string>
+    <string name="notification_settings_sound">sound</string>
+    <string name="notification_settings_highlight">highlight</string>
+    <string name="notification_settings_per_room_notifications">Per-room notifications</string>
+    <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
+    <string name="notification_settings_sender_hint">\@user:domain.com</string>
+
+    <string name="notification_settings_other_alerts">Other Alerts</string>
+    <string name="notification_settings_contain_my_user_name">Notify me with sound about messages that contain my user name</string>
+    <string name="notification_settings_contain_my_display_name">Notify me with sound about messages that contain my display name</string>
+    <string name="notification_settings_just_sent_to_me">Notify me with sound about messages sent just to me</string>
+    <string name="notification_settings_invite_to_a_new_room">Notify me when I am invited to a new room</string>
+    <string name="notification_settings_people_join_leave_rooms">Notify me when people join or leave rooms</string>
+    <string name="notification_settings_receive_a_call">Notify me when I receive a call</string>
+    <string name="notification_settings_suppress_from_bots">Suppress notifications from bots</string>
+
+    <string name="notification_settings_by_default">By default...</string>
+    <string name="notification_settings_notify_all_other">Notify for all other messages/rooms</string>
 
     <!-- gcm section -->
     <string name="settings_use_gcm">Use GCM</string>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/settings_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/notif_settings_disable_all_layout"
+            android:background="#F00"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/notif_settings_disable_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_settings_disable_all"
+                style="@style/Base.TextAppearance.AppCompat.Body2" />
+
+            <TextView
+                android:id="@+id/notification_settings_disable_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:text="@string/notification_settings_enable_notifications_warning"/>
+
+        </LinearLayout>
+
+        <!-- information part -->
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Caption"
+            android:text="@string/notification_settings_global_info"/>
+
+
+        <!-- per word section -->
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="@string/notification_settings_per_word_notifications"/>
+
+        <TextView
+            android:text = "@string/notification_settings_per_word_info"
+            style="@style/Base.TextAppearance.AppCompat.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/per_word_notifications_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        </LinearLayout>
+
+        <!-- per room section -->
+
+        <TextView
+            android:text = "@string/notification_settings_per_room_notifications"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/per_rooms_notifications_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        </LinearLayout>
+
+        <!-- per sender section -->
+
+        <TextView
+            android:text = "@string/notification_settings_per_sender_notifications"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/per_sender_notifications_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        </LinearLayout>
+
+        <!-- other alerts section -->
+
+        <TextView
+            android:text = "@string/notification_settings_other_alerts"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/contain_my_user_name_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_contain_my_user_name"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/contain_my_display_name_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_contain_my_display_name"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/just_sent_to_me_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_just_sent_to_me"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/invite_to_new_room_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_invite_to_a_new_room"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/people_leave_join_room_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_people_join_leave_rooms"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/receive_a_call_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_receive_a_call"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/suppress_from_bots_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_suppress_from_bots"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- by default section -->
+
+        <TextView
+            android:text = "@string/notification_settings_by_default"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/notify_all_others_imageview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/notification_pause"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text = "@string/notification_settings_notify_all_other"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

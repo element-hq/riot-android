@@ -228,7 +228,7 @@ public class SettingsActivity extends MXCActionBarActivity {
 
         final Button clearCacheButton = (Button) findViewById(R.id.button_clear_cache);
 
-        clearCacheButton.setText(getString(R.string.clear_cache)  + " (" + computeApplicationCacheSize() + ")");
+        clearCacheButton.setText(getString(R.string.clear_cache) + " (" + computeApplicationCacheSize() + ")");
 
         clearCacheButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,6 +237,17 @@ public class SettingsActivity extends MXCActionBarActivity {
             }
         });
 
+        final Button notificationsRuleButton = (Button) findViewById(R.id.button_notifications_rule);
+
+        notificationsRuleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // already to the home activity
+                // so just need to open the room activity
+                Intent intent = new Intent(SettingsActivity.this, NotificationSettingsActivity.class);
+                SettingsActivity.this.startActivity(intent);
+            }
+        });
 
         final GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
