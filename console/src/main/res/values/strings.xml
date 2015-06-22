@@ -193,11 +193,13 @@
     <string name="notification_settings_always_notify">Always notify</string>
     <string name="notification_settings_never_notify">Never notify</string>
     <string name="notification_settings_word_to_match">word to match</string>
-    <string name="notification_settings_sound">sound</string>
-    <string name="notification_settings_highlight">highlight</string>
+    <string name="notification_settings_sound">Sound</string>
+    <string name="notification_settings_highlight">Highlight</string>
     <string name="notification_settings_per_room_notifications">Per-room notifications</string>
     <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
     <string name="notification_settings_sender_hint">\@user:domain.com</string>
+
+    <string name="notification_settings_add">Add</string>
 
     <string name="notification_settings_other_alerts">Other Alerts</string>
     <string name="notification_settings_contain_my_user_name">Notify me with sound about messages that contain my user name</string>
