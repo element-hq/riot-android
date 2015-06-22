@@ -41,8 +41,8 @@ android {
 
     productFlavors {
         alpha {
-            applicationId "org.matrix.console.alpha"
-            versionCode 4
+            applicationId "org.matrix.androidsdk.alpha"
+            versionCode 5
             versionName "0.4.0"
         }
     }
