@@ -725,6 +725,11 @@ public class RoomActivity extends MXCActionBarActivity {
             mRoom.removeEventListener(mEventListener);
         }
 
+        if (null != mConsoleMessageListFragment) {
+            mConsoleMessageListFragment.onDestroy();
+        }
+
+
         super.onDestroy();
     }
 
