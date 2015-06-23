@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/notification_new_pattern"
+            android:hint="@string/notification_settings_word_to_match"
+            android:layout_weight="0.7"
+            android:layout_width="0dp"
+            android:textSize="@dimen/abc_text_size_caption_material"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/notification_add_rule"
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_caption_material"
+            android:text="@string/notification_settings_add" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/abc_text_size_caption_material"
+            android:text="@string/notification_settings_always_notify"/>
+
+        <CheckBox
+            android:id="@+id/always_notify_check"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:checked="true" />
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/abc_text_size_caption_material"
+            android:text="@string/notification_settings_sound"/>
+
+        <CheckBox
+            android:id="@+id/with_sound_check"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:checked="false" />
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/abc_text_size_caption_material"
+            android:text="@string/notification_settings_highlight"/>
+
+        <CheckBox
+            android:id="@+id/with_sound_highlight"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:checked="false" />
+
+    </LinearLayout>
+
+</LinearLayout>

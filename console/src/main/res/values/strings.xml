@@ -166,7 +166,7 @@
     <string name="settings_title_gcm">Google cloud messaging (GCM)</string>
     <string name="settings_title_config">Configuration</string>
     <string name="settings_title_notifications">Notifications</string>
-    <string name="settings_title_notifications_rules">Notifications Rules</string>
+    <string name="settings_title_notifications_rules">Update Notifications Rules</string>
     <string name="settings_title_rooms">Rooms</string>
     <string name="settings_title_commands">Commands</string>
     <string name="settings_config_console_version">matrixConsole version: %s</string>
@@ -195,9 +195,12 @@
     <string name="notification_settings_word_to_match">word to match</string>
     <string name="notification_settings_sound">Sound</string>
     <string name="notification_settings_highlight">Highlight</string>
+    <string name="notification_settings_custom_sound">Custom sound</string>
     <string name="notification_settings_per_room_notifications">Per-room notifications</string>
     <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
     <string name="notification_settings_sender_hint">\@user:domain.com</string>
+    <string name="notification_settings_room">Room : </string>
+
 
     <string name="notification_settings_add">Add</string>
 

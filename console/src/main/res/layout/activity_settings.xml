@@ -29,12 +29,14 @@
             style="@style/Base.TextAppearance.AppCompat.Title"
             android:text="@string/settings_title_notifications"/>
 
-        <TextView
-            android:text = "@string/settings_webclient_push"
-            style="@style/Base.TextAppearance.AppCompat.Caption"
+        <Button
+            android:id="@+id/button_notifications_rule"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Button"
+            android:text="@string/settings_title_notifications_rules" />
 
+        <!-- GCM section -->
         <TextView
             android:id="@+id/settings_gcm_header"
             android:layout_marginTop="10dp"
@@ -94,14 +96,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/button_notifications_rule"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Button"
-            android:text="@string/settings_title_notifications_rules" />
-
 
         <!-- rooms section -->
 

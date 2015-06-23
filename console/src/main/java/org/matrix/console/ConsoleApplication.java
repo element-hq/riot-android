@@ -113,7 +113,6 @@ public class ConsoleApplication extends Application {
         }
 
         if (isInBackground) {
-
             // resume the events thread if the client uses GCM
             if (Matrix.getInstance(ConsoleApplication.this).getSharedGcmRegistrationManager().useGCM()) {
 
