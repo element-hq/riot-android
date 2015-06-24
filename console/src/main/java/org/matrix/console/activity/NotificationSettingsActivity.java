@@ -15,9 +15,11 @@
  */
 package org.matrix.console.activity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,11 +28,14 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
 import org.matrix.console.adapters.NotificationsRulesAdapter;
@@ -39,7 +44,9 @@ import java.util.HashMap;
 
 public class NotificationSettingsActivity extends MXCActionBarActivity {
 
-    private static final String LOG_TAG = "NotificationSettingsActivity";
+    private static final String LOG_TAG = "NotificationSettings";
+    public static final String EXTRA_MATRIX_ID = "org.matrix.console.NotificationSettingsActivity.EXTRA_MATRIX_ID";
+
     private Button mDisableAllButton = null;
     private TextView mDisableAllTextView = null;
 
@@ -65,14 +72,60 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
     private LinearLayout mAllSettingsLayout = null;
 
     private MXSession mxSession = null;
+    private BingRulesManager mBingRulesManager = null;
+    private BingRuleSet mBingRuleSet = null;
 
+    private HashMap<String, ImageView> mRuleImageViewByRuleId = new HashMap<String, ImageView>();
+    private HashMap<ImageView, String> mRuleIdByImageView = new HashMap<ImageView, String>();
 
-    private HashMap<String, ImageView> mRuleImageByRuleId = new HashMap<String, ImageView>();
-
-    MXEventListener mListener = new MXEventListener() {
+    MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingRulesUpdate() {
-            refresh();
+            fullRefresh();
+        }
+    };
+
+    NotificationsRulesAdapter.NotificationClickListener mOnRulesClicklistener = new NotificationsRulesAdapter.NotificationClickListener() {
+        public void onAddWordRule(String word, Boolean alwaysNotify, Boolean playSound, Boolean highlight) {
+        }
+
+        public void onAddRoomRule(Room room, Boolean alwaysNotify, Boolean playSound, Boolean highlight) {
+        }
+
+        public void onAddSenderRule(String sender, Boolean alwaysNotify, Boolean playSound, Boolean highlight){
+        }
+
+        public void onToggleRule(BingRule rule) {
+            allowUserUpdate(false);
+            mBingRulesManager.toogleRule(rule, mOnBingRuleUpdateListener);
+        }
+
+        public void onRemoveRule(BingRule rule) {
+
+        }
+    };
+
+    BingRulesManager.onBingRuleUpdateListener mOnBingRuleUpdateListener = new BingRulesManager.onBingRuleUpdateListener() {
+        public void onBingRuleUpdateSuccess() {
+            allowUserUpdate(true);
+            refreshUI();
+        }
+
+        public void onBingRuleUpdateFailure(String errorMessage) {
+            allowUserUpdate(true);
+            Toast.makeText(NotificationSettingsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    };
+
+    View.OnClickListener mOnImageClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String ruleId = mRuleIdByImageView.get(v);
+
+            if (null != ruleId) {
+                allowUserUpdate(false);
+                mBingRulesManager.toogleRule(mBingRuleSet.findDefaultRule(ruleId), mOnBingRuleUpdateListener);
+            }
         }
     };
 
@@ -81,10 +134,32 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_settings);
 
-        // TODO manage multi sessions
-        mxSession = Matrix.getInstance(this).getDefaultSession();
+        Intent intent = getIntent();
+        if (!intent.hasExtra(EXTRA_MATRIX_ID)) {
+            Log.e(LOG_TAG, "No matrix ID");
+            finish();
+            return;
+        }
+
+        mxSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
+
+        if (null == mxSession) {
+            Log.e(LOG_TAG, "No Valid session");
+            finish();
+            return;
+        }
+
+        mBingRulesManager = mxSession.getDataHandler().getBingRulesManager();
 
         mDisableAllButton = (Button)findViewById(R.id.notif_settings_disable_all_button);
+        mDisableAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allowUserUpdate(false);
+                mBingRulesManager.toogleRule(mBingRuleSet.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL), mOnBingRuleUpdateListener);
+            }
+        });
+
         mDisableAllTextView = (TextView)findViewById(R.id.notification_settings_disable_text);
 
         mPerWordList = (ListView)findViewById(R.id.listView_perWord);
@@ -113,16 +188,31 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
         mEnableLayout = (LinearLayout)findViewById(R.id.notif_settings_disable_all_layout);
 
         // define imageView <-> rule ID map
-        mRuleImageByRuleId.put(BingRule.RULE_ID_CONTAIN_USER_NAME, mContainUserNameImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_CONTAIN_DISPLAY_NAME, mContainMyDisplayNameImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_ONE_TO_ONE_ROOM, mJustSendToMeImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_INVITE_ME, mInviteToNewRoomImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_PEOPLE_JOIN_LEAVE, mPeopleJoinLeaveImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_CALL, mReceiveACallImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS, mSuppressFromBotsImageView);
-        mRuleImageByRuleId.put(BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, mNotifyAllOthersImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_CONTAIN_USER_NAME, mContainUserNameImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_CONTAIN_DISPLAY_NAME, mContainMyDisplayNameImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_ONE_TO_ONE_ROOM, mJustSendToMeImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_INVITE_ME, mInviteToNewRoomImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_PEOPLE_JOIN_LEAVE, mPeopleJoinLeaveImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_CALL, mReceiveACallImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS, mSuppressFromBotsImageView);
+        mRuleImageViewByRuleId.put(BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, mNotifyAllOthersImageView);
 
-        refresh();
+        for(String key : mRuleImageViewByRuleId.keySet()) {
+            ImageView imageView = mRuleImageViewByRuleId.get(key);
+
+            imageView.setOnClickListener(mOnImageClickListener);
+            mRuleIdByImageView.put(imageView, key);
+        }
+
+        fullRefresh();
+    }
+
+    private void allowUserUpdate(Boolean status) {
+        mEnableLayout.setEnabled(status);
+        mAllSettingsLayout.setEnabled(status);
+
+        mEnableLayout.setAlpha(status ? 1.0f : 0.5f);
+        mAllSettingsLayout.setAlpha(status ? 1.0f : 0.5f);
     }
 
     private void updateImageView(ImageView imageView, boolean enabled) {
@@ -148,16 +238,19 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
         listView.requestLayout();
     }
 
-    private void refresh() {
+
+    private void fullRefresh() {
+        mBingRuleSet = mxSession.getDataHandler().pushRules();
+        refreshUI();
+    }
+
+    private void refreshUI() {
         mPerWordAdapter.clear();
         mPerRoomAdapter.clear();
         mPerSenderAdapter.clear();
 
-        BingRuleSet bingRuleSet = mxSession.getDataHandler().pushRules();
-
-        if (null != bingRuleSet) {
-
-            BingRule disableAll = bingRuleSet.findRule(BingRule.RULE_ID_DISABLE_ALL);
+        if (null != mBingRuleSet) {
+            BingRule disableAll = mBingRuleSet.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL);
 
             if ((null != disableAll) && disableAll.isEnabled) {
                 mDisableAllButton.setText(getString(R.string.notification_settings_enable_notifications));
@@ -173,29 +266,33 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
             }
 
             // per word
-            if (null != bingRuleSet.content) {
-                mPerWordAdapter.addAll(bingRuleSet.getContent());
+            if (null != mBingRuleSet.content) {
+                mPerWordAdapter.addAll(mBingRuleSet.getContentRules());
             }
             // dummy bing rule to add a new one
             mPerWordAdapter.addAll(new BingRule(false));
+            mPerWordAdapter.setListener(mOnRulesClicklistener);
 
             // per room
-            if (null != bingRuleSet.content) {
-                mPerRoomAdapter.addAll(bingRuleSet.getRoom());
+            if (null != mBingRuleSet.content) {
+                mPerRoomAdapter.addAll(mBingRuleSet.getRoomRules());
+                mPerRoomAdapter.setRooms(mxSession.getDataHandler().getStore().getRooms(), mxSession.getMyUser().userId);
             }
             // dummy bing rule to add a new one
             mPerRoomAdapter.addAll(new BingRule(false));
+            mPerRoomAdapter.setListener(mOnRulesClicklistener);
 
             // per sender
-            if (null != bingRuleSet.content) {
-                mPerSenderAdapter.addAll(bingRuleSet.getSender());
+            if (null != mBingRuleSet.content) {
+                mPerSenderAdapter.addAll(mBingRuleSet.getSenderRules());
             }
             // dummy bing rule to add a new one
             mPerSenderAdapter.addAll(new BingRule(false));
+            mPerSenderAdapter.setListener(mOnRulesClicklistener);
 
-            for(String ruleId : mRuleImageByRuleId.keySet()) {
-                BingRule rule = bingRuleSet.findRule(ruleId);
-                updateImageView(mRuleImageByRuleId.get(ruleId),(null == rule) || (rule.isEnabled));
+            for(String ruleId : mRuleImageViewByRuleId.keySet()) {
+                BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
+                updateImageView(mRuleImageViewByRuleId.get(ruleId), (null == rule) || (rule.isEnabled));
             }
         }
 
@@ -213,11 +310,11 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mxSession.getDataHandler().removeListener(mListener);
+        mxSession.getDataHandler().removeListener(mEventsListener);
     }
     @Override
     protected void onResume() {
         super.onResume();
-        mxSession.getDataHandler().addListener(mListener);
+        mxSession.getDataHandler().addListener(mEventsListener);
     }
 }

@@ -200,7 +200,7 @@
     <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
     <string name="notification_settings_sender_hint">\@user:domain.com</string>
     <string name="notification_settings_room">Room : </string>
-
+    <string name="notification_settings_select_room">Select a room</string>
 
     <string name="notification_settings_add">Add</string>
 

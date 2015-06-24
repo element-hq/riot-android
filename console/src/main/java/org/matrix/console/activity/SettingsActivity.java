@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -48,6 +49,7 @@ import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.console.Matrix;
 import org.matrix.console.MyPresenceManager;
 import org.matrix.console.R;
+import org.matrix.console.fragments.AccountsSelectionDialogFragment;
 import org.matrix.console.gcm.GcmRegistrationManager;
 import org.matrix.console.util.ResourceUtils;
 import org.matrix.console.util.UIUtils;
@@ -103,6 +105,34 @@ public class SettingsActivity extends MXCActionBarActivity {
         return android.text.format.Formatter.formatFileSize(SettingsActivity.this, size);
     }
 
+    private void launchNotificationsActivity() {
+        // one session
+        if (Matrix.getMXSessions(this).size() == 1) {
+            Intent intent = new Intent(SettingsActivity.this, NotificationSettingsActivity.class);
+            intent.putExtra(NotificationSettingsActivity.EXTRA_MATRIX_ID, Matrix.getInstance(this).getDefaultSession().getMyUser().userId);
+            SettingsActivity.this.startActivity(intent);
+        } else {
+            // select the current session
+            FragmentManager fm = getSupportFragmentManager();
+
+            AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+            }
+
+            fragment = AccountsSelectionDialogFragment.newInstance(Matrix.getMXSessions(getApplicationContext()));
+            fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
+                @Override
+                public void onSelected(final MXSession session) {
+                    Intent intent = new Intent(SettingsActivity.this, NotificationSettingsActivity.class);
+                    intent.putExtra(NotificationSettingsActivity.EXTRA_MATRIX_ID, session.getMyUser().userId);
+                    SettingsActivity.this.startActivity(intent);
+                }
+            });
+
+            fragment.show(fm, TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,10 +272,7 @@ public class SettingsActivity extends MXCActionBarActivity {
         notificationsRuleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // already to the home activity
-                // so just need to open the room activity
-                Intent intent = new Intent(SettingsActivity.this, NotificationSettingsActivity.class);
-                SettingsActivity.this.startActivity(intent);
+                launchNotificationsActivity();
             }
         });
 

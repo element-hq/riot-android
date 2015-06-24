@@ -9,6 +9,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <Spinner
+            android:id="@+id/notification_room_spinner"
+            android:textSize="@dimen/abc_text_size_caption_material"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:visibility="gone"
+            android:spinnerMode="dropdown"
+            android:layout_height="wrap_content"/>
+
         <EditText
             android:id="@+id/notification_new_pattern"
             android:hint="@string/notification_settings_word_to_match"
@@ -66,7 +75,7 @@
             android:text="@string/notification_settings_highlight"/>
 
         <CheckBox
-            android:id="@+id/with_sound_highlight"
+            android:id="@+id/with_highlight_check"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:checked="false" />
