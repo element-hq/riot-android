@@ -231,6 +231,11 @@ public class Matrix {
             }
         }
 
+        // remove the trailing /
+        if (credentials.homeServer.endsWith("/")) {
+            credentials.homeServer = credentials.homeServer.substring(0, credentials.homeServer.length()-1);
+        }
+
         IMXStore store;
 
         if (true ) {
