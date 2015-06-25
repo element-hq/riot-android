@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.ContentRule;
@@ -141,10 +143,6 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
             final CheckBox withSoundCheckBox = (CheckBox)convertView.findViewById(R.id.with_sound_check);
             final CheckBox withHighlightCheckBox = (CheckBox)convertView.findViewById(R.id.with_highlight_check);
 
-            if (null == newText) {
-                int i = 0;
-            }
-
             if (mNotificationType == PER_ROOM_NOTIFICATION) {
                 roomsSpinner.setVisibility(View.VISIBLE);
                 newText.setVisibility(View.GONE);
@@ -156,10 +154,37 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
                 spinnerArrayAdapter.clear();
 
                 if (null != mRoomsList) {
+                    ArrayList<Room> roomsList = new ArrayList<Room>();
+                    ArrayList<String> existingRoomIds = new ArrayList<String>();
+
+                    if (this.getCount() > 1) {
+                        // check if duplicated
+                        for(int index = 0; index < (getCount()-1); index ++) {
+                            BingRule bingrule = NotificationsRulesAdapter.this.getItem(index);
+                            existingRoomIds.add(bingrule.ruleId);
+                        }
+                    }
+
+                    // list the rooms
+                    // does not list the notified ones
                     ArrayList<String> namesList = new ArrayList<String>();
                     for (Room room : mRoomsList) {
-                        namesList.add(room.getName(mMyUserId));
+                        if (existingRoomIds.indexOf(room.getRoomId()) < 0) {
+                            String name = room.getName(mMyUserId);
+
+                            if (TextUtils.isEmpty(name)) {
+                                name = room.getRoomId();
+                            }
+
+                            namesList.add(name);
+                            roomsList.add(room);
+                        }
                     }
+
+                    if (roomsList.size() != mRoomsList.size()) {
+                        mRoomsList = roomsList;
+                    }
+
                     spinnerArrayAdapter.addAll(namesList);
                 }
 
@@ -167,11 +192,45 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
                 spinnerArrayAdapter.notifyDataSetChanged();
 
             } else {
+                addButton.setEnabled(false);
+                addButton.setAlpha(0.5f);
+
                 newText.setText("");
                 newText.setVisibility(View.VISIBLE);
                 roomsSpinner.setVisibility(View.GONE);
 
                 newText.setHint((mNotificationType == PER_WORD_NOTIFICATION) ? mContext.getString(R.string.notification_settings_word_to_match) : mContext.getString(R.string.notification_settings_sender_hint));
+
+                newText.addTextChangedListener(new TextWatcher() {
+                    public void afterTextChanged(android.text.Editable s) {
+                        String text = newText.getText().toString();
+
+                        Boolean enable = true;
+
+                        if (TextUtils.isEmpty(text)) {
+                            enable = false;
+                        } else if (NotificationsRulesAdapter.this.getCount() > 1) {
+                            // check if duplicated
+                            for (int index = 0; index < (NotificationsRulesAdapter.this.getCount() - 1); index++) {
+                                BingRule bingrule = NotificationsRulesAdapter.this.getItem(index);
+
+                                if (bingrule.ruleId.equals(text)) {
+                                    enable = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        addButton.setEnabled(enable);
+                        addButton.setAlpha(enable ? 1.0f : 0.5f);
+                    }
+
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+                });
             }
 
             alwaysNotifyCheckBox.setChecked(true);

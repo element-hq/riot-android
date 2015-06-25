@@ -35,6 +35,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
+import org.matrix.androidsdk.rest.model.bingrules.ContentRule;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
@@ -87,22 +88,28 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
 
     NotificationsRulesAdapter.NotificationClickListener mOnRulesClicklistener = new NotificationsRulesAdapter.NotificationClickListener() {
         public void onAddWordRule(String word, Boolean alwaysNotify, Boolean playSound, Boolean highlight) {
+            allowUserUpdate(false);
+            mBingRulesManager.addRule(new ContentRule(BingRule.KIND_CONTENT, word, alwaysNotify, highlight, playSound), mOnBingRuleUpdateListener);
         }
 
         public void onAddRoomRule(Room room, Boolean alwaysNotify, Boolean playSound, Boolean highlight) {
+            allowUserUpdate(false);
+            mBingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, room.getRoomId(), alwaysNotify, highlight, playSound), mOnBingRuleUpdateListener);
         }
 
         public void onAddSenderRule(String sender, Boolean alwaysNotify, Boolean playSound, Boolean highlight){
+            allowUserUpdate(false);
+            mBingRulesManager.addRule(new BingRule(BingRule.KIND_SENDER, sender, alwaysNotify, highlight, playSound), mOnBingRuleUpdateListener);
         }
 
         public void onToggleRule(BingRule rule) {
             allowUserUpdate(false);
-            mBingRulesManager.toogleRule(rule, mOnBingRuleUpdateListener);
+            mBingRulesManager.toggleRule(rule, mOnBingRuleUpdateListener);
         }
 
         public void onRemoveRule(BingRule rule) {
             allowUserUpdate(false);
-            mBingRulesManager.deleteRule(mBingRuleSet, rule, mOnBingRuleUpdateListener);
+            mBingRulesManager.deleteRule(rule, mOnBingRuleUpdateListener);
 
         }
     };
@@ -126,7 +133,7 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
 
             if (null != ruleId) {
                 allowUserUpdate(false);
-                mBingRulesManager.toogleRule(mBingRuleSet.findDefaultRule(ruleId), mOnBingRuleUpdateListener);
+                mBingRulesManager.toggleRule(mBingRuleSet.findDefaultRule(ruleId), mOnBingRuleUpdateListener);
             }
         }
     };
@@ -158,7 +165,7 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
             @Override
             public void onClick(View v) {
                 allowUserUpdate(false);
-                mBingRulesManager.toogleRule(mBingRuleSet.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL), mOnBingRuleUpdateListener);
+                mBingRulesManager.toggleRule(mBingRuleSet.findDefaultRule(BingRule.RULE_ID_DISABLE_ALL), mOnBingRuleUpdateListener);
             }
         });
 
