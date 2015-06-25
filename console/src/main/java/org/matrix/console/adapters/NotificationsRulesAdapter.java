@@ -130,7 +130,7 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if ((position+1) == this.getCount()) {
-            if (convertView == null) {
+            if ((convertView == null) || (null == convertView.findViewById(R.id.notification_room_spinner))) {
                 convertView = mLayoutInflater.inflate(mNewRuleLayoutResourceId, parent, false);
             }
 
@@ -140,6 +140,10 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
             final CheckBox alwaysNotifyCheckBox = (CheckBox)convertView.findViewById(R.id.always_notify_check);
             final CheckBox withSoundCheckBox = (CheckBox)convertView.findViewById(R.id.with_sound_check);
             final CheckBox withHighlightCheckBox = (CheckBox)convertView.findViewById(R.id.with_highlight_check);
+
+            if (null == newText) {
+                int i = 0;
+            }
 
             if (mNotificationType == PER_ROOM_NOTIFICATION) {
                 roomsSpinner.setVisibility(View.VISIBLE);
@@ -163,7 +167,7 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
                 spinnerArrayAdapter.notifyDataSetChanged();
 
             } else {
-                newText.setText(null);
+                newText.setText("");
                 newText.setVisibility(View.VISIBLE);
                 roomsSpinner.setVisibility(View.GONE);
 
@@ -198,8 +202,7 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
                 }
             });
         } else {
-
-            if (convertView == null) {
+            if ((convertView == null) || (null == convertView.findViewById(R.id.play_pause_imageview))) {
                 convertView = mLayoutInflater.inflate(mExistingRuleLayoutResourceId, parent, false);
             }
             // pattern text

@@ -101,6 +101,8 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
         }
 
         public void onRemoveRule(BingRule rule) {
+            allowUserUpdate(false);
+            mBingRulesManager.deleteRule(mBingRuleSet, rule, mOnBingRuleUpdateListener);
 
         }
     };
