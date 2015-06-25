@@ -112,6 +112,11 @@ public class AccountCreationActivity extends Activity {
                             final String accessToken =  parameters.get("accessToken");
                             String action =  parameters.get("action");
 
+                            // remove the trailing /
+                            if (mHomeServer.endsWith("/")) {
+                                mHomeServer = mHomeServer.substring(0, mHomeServer.length()-1);
+                            }
+
                             // check the action
                             if (action.equals("onRegistered")) {
                                 AccountCreationActivity.this.runOnUiThread(new Runnable() {
