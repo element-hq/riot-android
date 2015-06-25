@@ -35,6 +35,7 @@ public class AccountCreationActivity extends Activity {
     public static String EXTRA_HOME_SERVER_ID = "org.matrix.console.activity.EXTRA_HOME_SERVER_ID";
 
     WebView mWebView = null;
+    String mHomeServer = null;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -58,18 +59,18 @@ public class AccountCreationActivity extends Activity {
 
         Intent intent = getIntent();
 
-        String homeServer = "https://matrix.org/";
+        mHomeServer = "https://matrix.org/";
 
         if (intent.hasExtra(EXTRA_HOME_SERVER_ID)) {
-            homeServer = intent.getStringExtra(EXTRA_HOME_SERVER_ID);
+            mHomeServer = intent.getStringExtra(EXTRA_HOME_SERVER_ID);
         }
 
         // check the trailing slash
-        if (!homeServer.endsWith("/")) {
-            homeServer += "/";
+        if (!mHomeServer.endsWith("/")) {
+            mHomeServer += "/";
         }
 
-        mWebView.loadUrl(homeServer + "_matrix/static/client/register/");
+        mWebView.loadUrl(mHomeServer + "_matrix/static/client/register/");
 
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
@@ -107,7 +108,6 @@ public class AccountCreationActivity extends Activity {
                     if (null != parameters) {
                         // check the required paramaters
                         if (parameters.containsKey("homeServer") && parameters.containsKey("userId") && parameters.containsKey("accessToken") && parameters.containsKey("action")) {
-                            final String homeServer = parameters.get("homeServer");
                             final String userId =  parameters.get("userId");
                             final String accessToken =  parameters.get("accessToken");
                             String action =  parameters.get("action");
@@ -118,7 +118,7 @@ public class AccountCreationActivity extends Activity {
                                     @Override
                                     public void run() {
                                         Intent returnIntent = new Intent();
-                                        returnIntent.putExtra("homeServer", homeServer);
+                                        returnIntent.putExtra("homeServer", mHomeServer);
                                         returnIntent.putExtra("userId", userId);
                                         returnIntent.putExtra("accessToken", accessToken);
                                         setResult(RESULT_OK, returnIntent);
