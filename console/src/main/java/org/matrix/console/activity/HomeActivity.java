@@ -140,14 +140,37 @@ public class HomeActivity extends MXCActionBarActivity {
     private EditText mSearchRoomEditText;
 
     private void refreshPublicRoomsList() {
-        // use any session to get the public rooms list
-        Matrix.getInstance(getApplicationContext()).getSession(null).getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(this) {
-            @Override
-            public void onSuccess(List<PublicRoom> publicRooms) {
-                mAdapter.setPublicRoomsList(publicRooms);
-                mPublicRooms = publicRooms;
-            }
-        });
+        refreshPublicRoomsList(new ArrayList<MXSession>(Matrix.getInstance(getApplicationContext()).getSessions()), new ArrayList<String>(), 0, new ArrayList<PublicRoom>());
+    }
+
+    private void refreshPublicRoomsList(final ArrayList<MXSession> sessions, final ArrayList<String> checkedHomeServers, final int index, final ArrayList<PublicRoom> mergedPublicRooms) {
+        // sanity checks
+        if ((null == sessions) || (index >= sessions.size())) {
+            mAdapter.setPublicRoomsList(mergedPublicRooms);
+            mPublicRooms = mergedPublicRooms;
+            return;
+        }
+
+        final MXSession session = sessions.get(index);
+        final String homeServer = session.getCredentials().homeServer;
+
+        // the home server has already been checked ?
+        if (checkedHomeServers.indexOf(homeServer) >= 0) {
+            // jump to the next session
+            refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, mergedPublicRooms);
+        } else {
+            // use any session to get the public rooms list
+            session.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(this) {
+                @Override
+                public void onSuccess(List<PublicRoom> publicRooms) {
+                    checkedHomeServers.add(homeServer);
+                    mergedPublicRooms.addAll(publicRooms);
+
+                    // jump to the next session
+                    refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, mergedPublicRooms);
+                }
+            });
+        }
     }
 
     @Override
