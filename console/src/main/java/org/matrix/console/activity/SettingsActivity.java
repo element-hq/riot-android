@@ -17,14 +17,19 @@ package org.matrix.console.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -56,6 +61,7 @@ import org.matrix.console.util.UIUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class SettingsActivity extends MXCActionBarActivity {
 
@@ -425,24 +431,58 @@ public class SettingsActivity extends MXCActionBarActivity {
 
         // refresh the cache size
         Button clearCacheButton = (Button) findViewById(R.id.button_clear_cache);
-        clearCacheButton.setText(getString(R.string.clear_cache)  + " (" + computeApplicationCacheSize() + ")");
+        clearCacheButton.setText(getString(R.string.clear_cache) + " (" + computeApplicationCacheSize() + ")");
 
         refreshGCMEntries();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
-                mTmpThumbnailUriBySession.put(mUpdatingSession, data.getData());
 
-                final LinearLayout linearLayout = mLinearLayoutBySession.get(mUpdatingSession);
-                ImageView avatarView = (ImageView) linearLayout.findViewById(R.id.imageView_avatar);
-                avatarView.setImageURI(data.getData());
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTmpThumbnailUriBySession.put(mUpdatingSession, data.getData());
 
-                final Button saveButton = (Button) linearLayout.findViewById(R.id.button_save);
-                saveButton.setEnabled(true); // Enable the save button if it wasn't already
+                        final LinearLayout linearLayout = mLinearLayoutBySession.get(mUpdatingSession);
+                        ImageView avatarView = (ImageView) linearLayout.findViewById(R.id.imageView_avatar);
+
+                        Uri imageUri = data.getData();
+
+                        // try to get the gallery thumbnail to save memory
+                        Bitmap thumbnailBitmap = null;
+
+                        try {
+                            ContentResolver resolver = getContentResolver();
+
+                            List uriPath = imageUri.getPathSegments();
+                            long imageId = -1;
+                            String lastSegment = (String) uriPath.get(uriPath.size() - 1);
+
+                            // > Kitkat
+                            if (lastSegment.startsWith("image:")) {
+                                lastSegment = lastSegment.substring("image:".length());
+                            }
+
+                            imageId = Long.parseLong(lastSegment);
+                            thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
+                        }
+
+                        if (null != thumbnailBitmap) {
+                            avatarView.setImageBitmap(thumbnailBitmap);
+                        } else {
+                            avatarView.setImageURI(imageUri);
+                        }
+
+                        final Button saveButton = (Button) linearLayout.findViewById(R.id.button_save);
+                        saveButton.setEnabled(true); // Enable the save button if it wasn't already
+                    }
+                });
             }
 
             mUpdatingSession = null;
