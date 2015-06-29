@@ -82,7 +82,7 @@ public class HomeActivity extends MXCActionBarActivity {
 
     private ExpandableListView mMyRoomList = null;
 
-    private static final String PUBLIC_ROOMS_LIST = "PUBLIC_ROOMS_LIST";
+    private static final String PUBLIC_ROOMS_LIST_LIST = "PUBLIC_ROOMS_LIST_LIST";
 
     private static final String TAG_FRAGMENT_CONTACTS_LIST = "org.matrix.console.HomeActivity.TAG_FRAGMENT_CONTACTS_LIST";
     private static final String TAG_FRAGMENT_CREATE_ROOM_DIALOG = "org.matrix.console.HomeActivity.TAG_FRAGMENT_CREATE_ROOM_DIALOG";
@@ -93,7 +93,8 @@ public class HomeActivity extends MXCActionBarActivity {
     public static final String EXTRA_JUMP_MATRIX_ID = "org.matrix.console.HomeActivity.EXTRA_JUMP_MATRIX_ID";
     public static final String EXTRA_ROOM_INTENT = "org.matrix.console.HomeActivity.EXTRA_ROOM_INTENT";
 
-    private List<PublicRoom> mPublicRooms = null;
+    private ArrayList<String> mHomeServerNames = null;
+    private ArrayList<List<PublicRoom>> mPublicRoomsListList = null;
 
     private boolean mIsPaused = false;
 
@@ -140,14 +141,15 @@ public class HomeActivity extends MXCActionBarActivity {
     private EditText mSearchRoomEditText;
 
     private void refreshPublicRoomsList() {
-        refreshPublicRoomsList(new ArrayList<MXSession>(Matrix.getInstance(getApplicationContext()).getSessions()), new ArrayList<String>(), 0, new ArrayList<PublicRoom>());
+        refreshPublicRoomsList(new ArrayList<MXSession>(Matrix.getInstance(getApplicationContext()).getSessions()), new ArrayList<String>(), 0, new ArrayList<List<PublicRoom>>());
     }
 
-    private void refreshPublicRoomsList(final ArrayList<MXSession> sessions, final ArrayList<String> checkedHomeServers, final int index, final ArrayList<PublicRoom> mergedPublicRooms) {
+    private void refreshPublicRoomsList(final ArrayList<MXSession> sessions, final ArrayList<String> checkedHomeServers, final int index, final ArrayList<List<PublicRoom>> publicRoomsListList) {
         // sanity checks
         if ((null == sessions) || (index >= sessions.size())) {
-            mAdapter.setPublicRoomsList(mergedPublicRooms);
-            mPublicRooms = mergedPublicRooms;
+            mAdapter.setPublicRoomsList(publicRoomsListList, checkedHomeServers);
+            mPublicRoomsListList = publicRoomsListList;
+            mHomeServerNames = checkedHomeServers;
             return;
         }
 
@@ -157,19 +159,62 @@ public class HomeActivity extends MXCActionBarActivity {
         // the home server has already been checked ?
         if (checkedHomeServers.indexOf(homeServer) >= 0) {
             // jump to the next session
-            refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, mergedPublicRooms);
+            refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
         } else {
             // use any session to get the public rooms list
             session.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(this) {
                 @Override
                 public void onSuccess(List<PublicRoom> publicRooms) {
                     checkedHomeServers.add(homeServer);
-                    mergedPublicRooms.addAll(publicRooms);
+                    publicRoomsListList.add(publicRooms);
 
                     // jump to the next session
-                    refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, mergedPublicRooms);
+                    refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
                 }
             });
+        }
+    }
+
+
+    private void joinPublicRoom(final String homeServerURL, final PublicRoom publicRoom) {
+
+        Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
+        ArrayList<MXSession> matchedSessions = new ArrayList<MXSession>();
+
+        for(MXSession session : sessions) {
+            if (session.getCredentials().homeServer.equals(homeServerURL)) {
+                matchedSessions.add(session);
+            }
+        }
+
+        if (matchedSessions.size() == 1) {
+            CommonActivityUtils.goToRoomPage(matchedSessions.get(0), publicRoom.roomId, HomeActivity.this, null);
+        } else if (matchedSessions.size() > 1) {
+
+            FragmentManager fm = getSupportFragmentManager();
+
+            AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+            }
+
+            fragment = AccountsSelectionDialogFragment.newInstance(matchedSessions);
+
+            fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
+                @Override
+                public void onSelected(final MXSession session) {
+
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CommonActivityUtils.goToRoomPage(session, publicRoom.roomId, HomeActivity.this, null);
+                        }
+                    });
+                }
+            });
+
+            fragment.show(fm, TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+
         }
     }
 
@@ -184,12 +229,13 @@ public class HomeActivity extends MXCActionBarActivity {
         mAdapter = new ConsoleRoomSummaryAdapter(this, Matrix.getMXSessions(this), R.layout.adapter_item_my_rooms, R.layout.adapter_room_section_header);
 
         if (null != savedInstanceState) {
-            if (savedInstanceState.containsKey(PUBLIC_ROOMS_LIST)) {
-                Serializable map = savedInstanceState.getSerializable(PUBLIC_ROOMS_LIST);
+            if (savedInstanceState.containsKey(PUBLIC_ROOMS_LIST_LIST)) {
+                Serializable map = savedInstanceState.getSerializable(PUBLIC_ROOMS_LIST_LIST);
 
                 if (null != map) {
-                    HashMap<String, PublicRoom> hash = (HashMap<String, PublicRoom>) map;
-                    mPublicRooms = new ArrayList<PublicRoom>(hash.values());
+                    HashMap<String, List<PublicRoom>> hash = (HashMap<String, List<PublicRoom>>) map;
+                    mPublicRoomsListList = new ArrayList<List<PublicRoom>>(hash.values());
+                    mHomeServerNames = new ArrayList<>(hash.keySet());
                 }
             }
         }
@@ -245,10 +291,11 @@ public class HomeActivity extends MXCActionBarActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                String roomId = null;
-                MXSession session = null;
 
                 if (mAdapter.isRecentsGroupIndex(groupPosition)) {
+                    String roomId = null;
+                    MXSession session = null;
+
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     session = Matrix.getInstance(HomeActivity.this).getSession(roomSummary.getMatrixId());
 
@@ -263,14 +310,14 @@ public class HomeActivity extends MXCActionBarActivity {
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
 
+                    if (null != roomId){
+                        CommonActivityUtils.goToRoomPage(session, roomId, HomeActivity.this, null);
+                    }
+
                 } else if (mAdapter.isPublicsGroupIndex(groupPosition)) {
-                    // should offer to select which account to use
-                    roomId = mAdapter.getPublicRoomAt(childPosition).roomId;
+                    joinPublicRoom(mAdapter.getHomeServerURLAt(groupPosition), mAdapter.getPublicRoomAt(groupPosition, childPosition));
                 }
 
-                if (null != roomId){
-                    CommonActivityUtils.goToRoomPage(session, roomId, HomeActivity.this, null);
-                }
                 return true;
             }
         });
@@ -371,14 +418,14 @@ public class HomeActivity extends MXCActionBarActivity {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
 
-        if (null != mPublicRooms) {
-            HashMap<String, PublicRoom> hash = new HashMap<String, PublicRoom>();
+        if (null != mPublicRoomsListList) {
+            HashMap<String, List<PublicRoom>> hash = new HashMap<String, List<PublicRoom>>();
 
-            for(PublicRoom publicRoom : mPublicRooms) {
-                hash.put(publicRoom.roomId, publicRoom);
+            for(int index = 0; index < mHomeServerNames.size(); index++) {
+                hash.put(mHomeServerNames.get(index), mPublicRoomsListList.get(index));
             }
 
-            savedInstanceState.putSerializable(PUBLIC_ROOMS_LIST, hash);
+            savedInstanceState.putSerializable(PUBLIC_ROOMS_LIST_LIST, hash);
         }
     }
 
@@ -418,22 +465,18 @@ public class HomeActivity extends MXCActionBarActivity {
     }
 
     private void expandAllGroups() {
-        for(int section = 0; section < Matrix.getMXSessions(this).size(); section++) {
-            mMyRoomList.expandGroup(section);
-        }
+        final int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
 
-        if (mAdapter.mPublicsGroupIndex >= 0) {
-            mMyRoomList.expandGroup(mAdapter.mPublicsGroupIndex);
+        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            mMyRoomList.expandGroup(groupIndex);
         }
     }
 
     private void collapseAllGroups() {
-        for(int section = 0; section < Matrix.getMXSessions(this).size(); section++) {
-            mMyRoomList.collapseGroup(section);
-        }
+        final int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
 
-        if (mAdapter.mPublicsGroupIndex >= 0) {
-            mMyRoomList.collapseGroup(mAdapter.mPublicsGroupIndex);
+        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            mMyRoomList.collapseGroup(groupIndex);
         }
     }
 
@@ -453,13 +496,7 @@ public class HomeActivity extends MXCActionBarActivity {
 
             mSearchRoomEditText.setVisibility(View.GONE);
 
-            for(int section = 0; section < Matrix.getMXSessions(this).size(); section++) {
-                mMyRoomList.expandGroup(section);
-            }
-
-            if (mAdapter.mPublicsGroupIndex >= 0) {
-                mMyRoomList.expandGroup(mAdapter.mPublicsGroupIndex);
-            }
+            expandAllGroups();
 
             // force to hide the keyboard
             mSearchRoomEditText.postDelayed(new Runnable() {
@@ -514,17 +551,11 @@ public class HomeActivity extends MXCActionBarActivity {
                         mAdapter.highlightRoom("#matrix-dev:matrix.org");
                         mAdapter.highlightRoom("#matrix-fr:matrix.org");
 
-                        mAdapter.setPublicRoomsList(mPublicRooms);
+                        mAdapter.setPublicRoomsList(mPublicRoomsListList, mHomeServerNames);
                         mAdapter.sortSummaries();
                         mAdapter.notifyDataSetChanged();
 
-                        for(int section = 0; section < Matrix.getMXSessions(HomeActivity.this).size(); section++) {
-                            mMyRoomList.expandGroup(section);
-                        }
-
-                        if (mAdapter.mPublicsGroupIndex >= 0) {
-                            mMyRoomList.expandGroup(mAdapter.mPublicsGroupIndex);
-                        }
+                        expandAllGroups();
 
                         // load the public load in background
                         // done onResume

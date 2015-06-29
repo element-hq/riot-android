@@ -89,8 +89,14 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
         }
     }
 
-    public String publicRoomsTitle() {
-        return mContext.getResources().getString(R.string.action_public_rooms);
+    public String publicRoomsTitle(int section) {
+        String title = mContext.getResources().getString(R.string.action_public_rooms);
+
+        if ((null != mPublicRoomsHomeServerLists) && (mPublicRoomsHomeServerLists.size() > 1)) {
+            title += "\n" + mPublicRoomsHomeServerLists.get(section - mSessions.size());
+        }
+
+        return title;
     }
 
     @Override
