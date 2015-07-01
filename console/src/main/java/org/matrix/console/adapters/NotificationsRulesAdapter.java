@@ -238,6 +238,29 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
             withSoundCheckBox.setChecked(false);
             withHighlightCheckBox.setChecked(false);
 
+            alwaysNotifyCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (alwaysNotifyCheckBox.isChecked()) {
+                        withSoundCheckBox.setAlpha(1.0f);
+                        withSoundCheckBox.setEnabled(true);
+
+                        withHighlightCheckBox.setAlpha(1.0f);
+                        withHighlightCheckBox.setEnabled(true);
+
+                    } else {
+                        withSoundCheckBox.setChecked(false);
+                        withHighlightCheckBox.setChecked(false);
+
+                        withSoundCheckBox.setAlpha(0.5f);
+                        withSoundCheckBox.setEnabled(false);
+
+                        withHighlightCheckBox.setAlpha(0.5f);
+                        withHighlightCheckBox.setEnabled(false);
+                    }
+                }
+            });
+
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
