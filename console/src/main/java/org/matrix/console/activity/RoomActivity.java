@@ -222,6 +222,16 @@ public class RoomActivity extends MXCActionBarActivity {
                 }
             });
         }
+
+        @Override
+        public void onBingRulesUpdate() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mConsoleMessageListFragment.onBingRulesUpdate();
+                }
+            });
+        }
     };
 
     /**

@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -109,7 +110,7 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
             settings += mContext.getString(R.string.notification_settings_never_notify);
         }
 
-        if (rule.shouldPlaySound()) {
+        if (rule.isDefaultNotificationSound(rule.notificationSound())) {
             settings += ", " + mContext.getString(R.string.notification_settings_custom_sound);
         }
 
@@ -138,7 +139,7 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
 
             final Spinner roomsSpinner = (Spinner)convertView.findViewById(R.id.notification_room_spinner);
             final EditText newText =  (EditText)convertView.findViewById(R.id.notification_new_pattern);
-            final Button addButton = (Button)convertView.findViewById(R.id.notification_add_rule);
+            final ImageButton addButton = (ImageButton)convertView.findViewById(R.id.notification_add_rule);
             final CheckBox alwaysNotifyCheckBox = (CheckBox)convertView.findViewById(R.id.always_notify_check);
             final CheckBox withSoundCheckBox = (CheckBox)convertView.findViewById(R.id.with_sound_check);
             final CheckBox withHighlightCheckBox = (CheckBox)convertView.findViewById(R.id.with_highlight_check);

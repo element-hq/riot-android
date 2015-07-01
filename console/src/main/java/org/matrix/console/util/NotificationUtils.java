@@ -33,7 +33,9 @@ public class NotificationUtils {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
 
-        builder.setContentTitle(from);
+        if (null != from) {
+            builder.setContentTitle(from);
+        }
         builder.setContentText(body);
         builder.setAutoCancel(true);
 
