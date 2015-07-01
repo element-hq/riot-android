@@ -177,10 +177,16 @@ public class EventStreamService extends Service {
                 }
             }
 
+            Boolean isInvitationEvent = false;
             String body;
 
             if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                 body = EventDisplay.getMembershipNotice(getApplicationContext(), event, roomState);
+
+                try {
+                    isInvitationEvent = "invite".equals(event.content.getAsJsonPrimitive("membership").getAsString());
+                } catch (Exception e) {}
+
             } else {
                 body = event.content.getAsJsonPrimitive("body").getAsString();
             }
@@ -202,11 +208,19 @@ public class EventStreamService extends Service {
                 return;
             }
 
-            RoomMember member = room.getMember(senderID);
+            String from = "";
 
-            // invalid member
-            if (null == member) {
-                return;
+            // when the event is an invitation one
+            // don't check if the sender ID is known because the members list are not yet downloaded
+            if (!isInvitationEvent) {
+                RoomMember member = room.getMember(senderID);
+
+                // invalid member
+                if (null == member) {
+                    return;
+                }
+
+                from = member.getName();
             }
 
             String roomName = null;
@@ -218,7 +232,7 @@ public class EventStreamService extends Service {
 
             mLatestNotification = NotificationUtils.buildMessageNotification(
                     EventStreamService.this,
-                    member.getName(), session.getCredentials().userId, Matrix.getMXSessions(getApplicationContext()).size() > 1, body, event.roomId, roomName, bingRule.shouldPlaySound());
+                    from, session.getCredentials().userId, Matrix.getMXSessions(getApplicationContext()).size() > 1, body, event.roomId, roomName, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
 
             if (ConsoleApplication.isAppInBackground()) {
                 CommonActivityUtils.updateUnreadMessagesBadge(getApplicationContext(), ++mUnreadMessagesCounter);

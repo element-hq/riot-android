@@ -6,33 +6,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal">
 
         <Spinner
             android:id="@+id/notification_room_spinner"
             android:textSize="@dimen/abc_text_size_caption_material"
             android:layout_width="0dp"
-            android:layout_weight="0.7"
+            android:layout_weight="0.85"
             android:visibility="gone"
             android:spinnerMode="dropdown"
+            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/notification_new_pattern"
             android:hint="@string/notification_settings_word_to_match"
-            android:layout_weight="0.7"
+            android:layout_weight="0.85"
             android:layout_width="0dp"
             android:textSize="@dimen/abc_text_size_caption_material"
+            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content" />
 
-        <Button
+        <ImageButton
             android:id="@+id/notification_add_rule"
-            android:layout_weight="0.3"
+            android:layout_weight="0.15"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/abc_text_size_caption_material"
-            android:text="@string/notification_settings_add" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/notification_add"
+            />
 
     </LinearLayout>
 
