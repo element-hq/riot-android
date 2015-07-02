@@ -136,6 +136,10 @@
             android:name="org.matrix.console.activity.ImageWebViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+        <activity
+            android:name="org.matrix.console.activity.ImageSliderActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
