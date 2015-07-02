@@ -37,7 +37,7 @@ public class Contact {
         }
     }
 
-    public String mContactId;
+    public String mContactId = "";
     public String mDisplayName;
     private String mUpperCaseDisplayName = "";
     private String mLowerCaseDisplayName = "";
@@ -47,6 +47,14 @@ public class Contact {
     public ArrayList<String>mPhoneNumbers = new ArrayList<String>();
     public ArrayList<String>mEmails = new ArrayList<String>();
     private HashMap<String, MXID> mMXIDsByElement = null;
+
+    public Contact(String contactId) {
+        if (null != contactId) {
+            mContactId = contactId;
+        } else {
+            mContactId = "" + System.currentTimeMillis();
+        }
+    }
 
     /**
      * Check if some matrix IDs are linked to emails

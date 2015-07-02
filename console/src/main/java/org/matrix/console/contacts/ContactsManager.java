@@ -112,23 +112,21 @@ public class ContactsManager {
                 String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
                 String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
 
-                Contact contact = dict.get(contactId);
-
-                if (null == contact) {
-                    contact = new Contact();
-                    dict.put(contactId, contact);
-                }
-
-                if (null != displayName) {
-                    contact.mDisplayName = displayName;
-                }
-
-                if (null != thumbnailUri) {
-                    contact.mThumbnailUri = thumbnailUri;
-                }
-
                 if (null != contactId) {
-                    contact.mContactId = contactId;
+                    Contact contact = dict.get(contactId);
+
+                    if (null == contact) {
+                        contact = new Contact(contactId);
+                        dict.put(contactId, contact);
+                    }
+
+                    if (null != displayName) {
+                        contact.mDisplayName = displayName;
+                    }
+
+                    if (null != thumbnailUri) {
+                        contact.mThumbnailUri = thumbnailUri;
+                    }
                 }
             }
             namesCur.close();
@@ -148,13 +146,15 @@ public class ContactsManager {
                 if (!TextUtils.isEmpty(phone)) {
                     String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
 
-                    Contact contact = dict.get(contactId);
-                    if (null == contact) {
-                        contact = new Contact();
-                        dict.put(contactId, contact);
-                    }
+                    if (null != contactId) {
+                        Contact contact = dict.get(contactId);
+                        if (null == contact) {
+                            contact = new Contact(contactId);
+                            dict.put(contactId, contact);
+                        }
 
-                    contact.mPhoneNumbers.add(phone);
+                        contact.mPhoneNumbers.add(phone);
+                    }
                 }
             }
             phonesCur.close();
@@ -173,13 +173,15 @@ public class ContactsManager {
                 if (!TextUtils.isEmpty(email)) {
                     String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
 
-                    Contact contact = dict.get(contactId);
-                    if (null == contact) {
-                        contact = new Contact();
-                        dict.put(contactId, contact);
-                    }
+                    if (null != contactId) {
+                        Contact contact = dict.get(contactId);
+                        if (null == contact) {
+                            contact = new Contact(contactId);
+                            dict.put(contactId, contact);
+                        }
 
-                    contact.mEmails.add(email);
+                        contact.mEmails.add(email);
+                    }
                 }
             }
             emailsCur.close();
