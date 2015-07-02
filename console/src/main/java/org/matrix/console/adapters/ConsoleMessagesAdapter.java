@@ -18,19 +18,27 @@ package org.matrix.console.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.ArrayAdapter;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.console.ConsoleApplication;
 import org.matrix.console.activity.CommonActivityUtils;
+import org.matrix.console.activity.ImageSliderActivity;
 import org.matrix.console.activity.ImageWebViewActivity;
 import org.matrix.console.activity.MemberDetailsActivity;
+import org.matrix.console.util.SlidableImageInfo;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * An adapter which can display room information.
@@ -60,19 +68,67 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         mContext.startActivity(startRoomInfoIntent);
     }
 
+    /**
+     * @return the imageMessages list
+     */
+    private ArrayList<SlidableImageInfo> listImageMessages() {
+        ArrayList<SlidableImageInfo> res = new ArrayList<SlidableImageInfo>();
+
+        for(int position = 0; position < getCount(); position++) {
+            MessageRow row = this.getItem(position);
+            Message message = JsonUtils.toMessage(row.getEvent().content);
+
+            if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
+                ImageMessage imageMessage = (ImageMessage)message;
+
+                SlidableImageInfo info = new SlidableImageInfo();
+
+                info.mImageUrl = imageMessage.url;
+                info.mRotationAngle = ((null != imageMessage.info) && (imageMessage.info.rotation != null)) ? imageMessage.info.rotation : Integer.MAX_VALUE;
+                info.mOrientation = imageMessage.info.orientation;
+                info.mMimeType = imageMessage.getMimeType();
+                info.midentifier = row.getEvent().eventId;
+                res.add(info);
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Returns the imageMessages position in listImageMessages.
+     * @param listImageMessages the messages list.
+     * @param imageMessage the imageMessage
+     * @return the imageMessage position. -1 if not found.
+     */
+    private int getImageMessagePosition(ArrayList<SlidableImageInfo> listImageMessages, ImageMessage imageMessage) {
+
+        for(int index = 0; index < listImageMessages.size(); index++) {
+            if (listImageMessages.get(index).mImageUrl.equals(imageMessage.url)) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
     @Override
     public void onImageClick(int position, ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
         if (null != imageMessage.url) {
-            Intent viewImageIntent = new Intent(mContext, ImageWebViewActivity.class);
-            viewImageIntent.putExtra(ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI, imageMessage.url);
-            viewImageIntent.putExtra(ImageWebViewActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
-            viewImageIntent.putExtra(ImageWebViewActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
-            viewImageIntent.putExtra(ImageWebViewActivity.KEY_IMAGE_ROTATION, rotationAngle);
-            viewImageIntent.putExtra(ImageWebViewActivity.KEY_IMAGE_ORIENTATION, imageMessage.info.orientation);
-            if (null != imageMessage.getMimeType()) {
-                viewImageIntent.putExtra(ImageWebViewActivity.KEY_HIGHRES_MIME_TYPE, imageMessage.getMimeType());
+
+            ArrayList<SlidableImageInfo> listImageMessages = listImageMessages();
+            int listPosition = getImageMessagePosition(listImageMessages, imageMessage);
+
+            if (listPosition >= 0) {
+                Intent viewImageIntent = new Intent(mContext, ImageSliderActivity.class);
+
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST, listImageMessages);
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST_INDEX, listPosition);
+
+                mContext.startActivity(viewImageIntent);
             }
-            mContext.startActivity(viewImageIntent);
         }
     }
 
