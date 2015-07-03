@@ -117,6 +117,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final String PENDING_THUMBNAIL_URL = "PENDING_THUMBNAIL_URL";
     private static final String PENDING_MEDIA_URL = "PENDING_MEDIA_URL";
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
+    private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
@@ -160,6 +161,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
     private String mPendingMimeType;
+    private String mPendingFilename;
 
     private String mLatestTakePictureCameraUri; // has to be String not Uri because of Serializable
 
@@ -326,6 +328,7 @@ public class RoomActivity extends MXCActionBarActivity {
         mPendingThumbnailUrl = null;
         mPendingMediaUrl = null;
         mPendingMimeType = null;
+        mPendingFilename = null;
 
         if (null != savedInstanceState) {
             if (savedInstanceState.containsKey(PENDING_THUMBNAIL_URL)) {
@@ -338,6 +341,10 @@ public class RoomActivity extends MXCActionBarActivity {
 
             if (savedInstanceState.containsKey(PENDING_MIMETYPE)) {
                 mPendingMimeType = savedInstanceState.getString(PENDING_MIMETYPE);
+            }
+
+            if (savedInstanceState.containsKey(PENDING_FILENAME)) {
+                mPendingFilename = savedInstanceState.getString(PENDING_FILENAME);
             }
         }
 
@@ -512,10 +519,11 @@ public class RoomActivity extends MXCActionBarActivity {
                                                 }
 
                                                 //
-                                                mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, null, mPendingMimeType);
+                                                mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
                                                 mPendingThumbnailUrl = null;
                                                 mPendingMediaUrl = null;
                                                 mPendingMimeType = null;
+                                                mPendingFilename = null;
                                                 manageSendMoreButtons();
                                             }
                                         });
@@ -532,10 +540,11 @@ public class RoomActivity extends MXCActionBarActivity {
                     }
 
                     if (sendMedia) {
-                        mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, null, mPendingMimeType);
+                        mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
                         mPendingThumbnailUrl = null;
                         mPendingMediaUrl = null;
                         mPendingMimeType = null;
+                        mPendingFilename = null;
                         manageSendMoreButtons();
                     }
                 } else {
@@ -654,6 +663,7 @@ public class RoomActivity extends MXCActionBarActivity {
                 mPendingThumbnailUrl = null;
                 mPendingMediaUrl = null;
                 mPendingMimeType = null;
+                mPendingFilename = null;
                 manageSendMoreButtons();
             }
         });
@@ -692,6 +702,10 @@ public class RoomActivity extends MXCActionBarActivity {
 
         if (null != mPendingMimeType) {
             savedInstanceState.putString(PENDING_MIMETYPE, mPendingMimeType);
+        }
+
+        if (null != mPendingFilename) {
+            savedInstanceState.putString(PENDING_FILENAME, mPendingFilename);
         }
 
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mConsoleMessageListFragment.mMessageListView.getFirstVisiblePosition());
@@ -1055,6 +1069,28 @@ public class RoomActivity extends MXCActionBarActivity {
 
                         for (Uri anUri : mediaUris) {
                             final Uri mediaUri = anUri;
+                            String filename = null;
+
+                            if (mediaUri.toString().startsWith("content://")) {
+                                Cursor cursor = null;
+                                try {
+                                    cursor = RoomActivity.this.getContentResolver().query(mediaUri, null, null, null, null);
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "cursor.getString " + e.getMessage());
+                                } finally {
+                                    cursor.close();
+                                }
+
+                                if (TextUtils.isEmpty(filename)) {
+                                    List uriPath = mediaUri.getPathSegments();
+                                    filename = (String) uriPath.get(uriPath.size() - 1);
+                                }
+                            }
+
+                            final String fFilename = filename;
 
                             ResourceUtils.Resource resource = ResourceUtils.openResource(RoomActivity.this, mediaUri);
                             if (resource == null) {
@@ -1212,12 +1248,13 @@ public class RoomActivity extends MXCActionBarActivity {
                                                 mPendingThumbnailUrl = fThumbnailURL;
                                                 mPendingMediaUrl = fMediaUrl;
                                                 mPendingMimeType = fMimeType;
+                                                mPendingFilename = fFilename;
 
                                                 mConsoleMessageListFragment.scrollToBottom();
 
                                                 manageSendMoreButtons();
                                             } else {
-                                                mConsoleMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, null, fMimeType);
+                                                mConsoleMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, fFilename, fMimeType);
                                             }
                                         }
                                     });
@@ -1226,38 +1263,8 @@ public class RoomActivity extends MXCActionBarActivity {
 
                             // default behaviour
                             if ((!isManaged) && (null != mediaUrl)) {
-                                String filename = "A file";
-
-                                try {
-                                    ContentResolver resolver = getContentResolver();
-                                    List uriPath = mediaUri.getPathSegments();
-                                    filename = "";
-
-                                    if (mediaUri.toString().startsWith("content://")) {
-                                        Cursor cursor = null;
-                                        try {
-                                            cursor = RoomActivity.this.getContentResolver().query(mediaUri, null, null, null, null);
-                                            if (cursor != null && cursor.moveToFirst()) {
-                                                filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                                            }
-                                        } catch (Exception e) {
-                                            Log.e(LOG_TAG, "cursor.getString " + e.getMessage());
-                                        } finally {
-                                            cursor.close();
-                                        }
-
-                                        if (filename.length() == 0) {
-                                            filename = (String) uriPath.get(uriPath.size() - 1);
-                                        }
-                                    }
-
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, "sendMedias 1 " + e.getMessage());
-                                }
-
                                 final String fMediaUrl = mediaUrl;
                                 final String fMimeType = mimeType;
-                                final String fFilename = filename;
 
                                 RoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
