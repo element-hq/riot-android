@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An adapter which can display m.room.member content.
+ * An images slider
  */
 public class ImagesSliderAdapter extends PagerAdapter {
 
