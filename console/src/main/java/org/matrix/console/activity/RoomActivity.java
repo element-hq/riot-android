@@ -512,7 +512,7 @@ public class RoomActivity extends MXCActionBarActivity {
                                                 }
 
                                                 //
-                                                mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingMimeType);
+                                                mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, null, mPendingMimeType);
                                                 mPendingThumbnailUrl = null;
                                                 mPendingMediaUrl = null;
                                                 mPendingMimeType = null;
@@ -532,7 +532,7 @@ public class RoomActivity extends MXCActionBarActivity {
                     }
 
                     if (sendMedia) {
-                        mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingMimeType);
+                        mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, null, mPendingMimeType);
                         mPendingThumbnailUrl = null;
                         mPendingMediaUrl = null;
                         mPendingMimeType = null;
@@ -1217,7 +1217,7 @@ public class RoomActivity extends MXCActionBarActivity {
 
                                                 manageSendMoreButtons();
                                             } else {
-                                                mConsoleMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, fMimeType);
+                                                mConsoleMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, null, fMimeType);
                                             }
                                         }
                                     });
