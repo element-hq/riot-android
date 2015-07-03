@@ -131,7 +131,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
                                     Uri mediaUri = Uri.parse(newHighResUri);
 
                                     // save in the gallery
-                                    CommonActivityUtils.saveImageIntoGallery(ImagesSliderAdapter.this.context, mediaFile);
+                                    //CommonActivityUtils.saveImageIntoGallery(ImagesSliderAdapter.this.context, mediaFile);
 
                                     // refresh the UI
                                     loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, newHighResUri, ImagesSliderAdapter.this.mMaxImageWidth, ImagesSliderAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
