@@ -32,6 +32,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import com.google.android.gms.analytics.ExceptionReporter;
+
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.view.PieFractionView;
 import org.matrix.console.Matrix;
@@ -43,6 +45,7 @@ import org.matrix.console.util.SlidableImageInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +137,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
                                     //CommonActivityUtils.saveImageIntoGallery(ImagesSliderAdapter.this.context, mediaFile);
 
                                     // refresh the UI
-                                    loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, newHighResUri, ImagesSliderAdapter.this.mMaxImageWidth, ImagesSliderAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
+                                    loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, ImagesSliderAdapter.this.mMaxImageWidth, ImagesSliderAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
                                 }
                             });
                         }
@@ -191,7 +194,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
         String mediaUri = "file://" + mediaFile.getPath();
 
-        String css = computeCss(null, mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
+        String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
         final String viewportContent = "width=640";
 
         webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -226,17 +229,27 @@ public class ImagesSliderAdapter extends PagerAdapter {
         webView.requestLayout();
     }
 
-    private String computeCss(String mediaUrl, String highResUri, int thumbnailWidth, int thumbnailHeight, int rotationAngle) {
+    private String computeCss(String mediaUrl, int thumbnailWidth, int thumbnailHeight, int rotationAngle) {
         String css = "body { background-color: #000; height: 100%; width: 100%; margin: 0px; padding: 0px; }" +
                 ".wrap { position: absolute; left: 0px; right: 0px; width: 100%; height: 100%; " +
                 "display: -webkit-box; -webkit-box-pack: center; -webkit-box-align: center; " +
                 "display: box; box-pack: center; box-align: center; } ";
 
+        Uri mediaUri = null;
+
+        try {
+            mediaUri = Uri.parse(mediaUrl);
+        } catch (Exception e) {
+        }
+
+        if (null == mediaUri) {
+            return css;
+        }
 
         // the rotation angle must be retrieved from the exif metadata
         if (rotationAngle == Integer.MAX_VALUE) {
             if (null != mediaUrl) {
-                rotationAngle = ImageUtils.getRotationAngleForBitmap(this.context, Uri.parse(mediaUrl));
+                rotationAngle = ImageUtils.getRotationAngleForBitmap(this.context, mediaUri);
             }
         }
 
@@ -246,9 +259,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
             int imageHeight = thumbnailHeight;
 
             try {
-                Uri uri = Uri.parse(highResUri);
-
-                FileInputStream imageStream = new FileInputStream(new File(uri.getPath()));
+                FileInputStream imageStream = new FileInputStream(new File(mediaUri.getPath()));
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -271,7 +282,6 @@ public class ImagesSliderAdapter extends PagerAdapter {
             }
 
             String cssRotation = calcCssRotation(rotationAngle, imageWidth, imageHeight);
-
 
             css += "#image { " + cssRotation + " } ";
             css += "#thumbnail { " + cssRotation + " } ";
@@ -306,7 +316,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)    {
             w.getDefaultDisplay().getSize(size);
-        }else{
+        } else {
             Display d = w.getDefaultDisplay();
             size.x = d.getWidth();
             size.y = d.getHeight();
