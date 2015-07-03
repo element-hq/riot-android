@@ -25,13 +25,13 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
+
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.view.PieFractionView;
 import org.matrix.console.Matrix;
@@ -43,6 +43,7 @@ import org.matrix.console.util.SlidableImageInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +55,8 @@ public class ImagesSliderAdapter extends PagerAdapter {
     List<SlidableImageInfo> mListImageMessages = null;
     int mMaxImageWidth;
     int mMaxImageHeight;
+    int mLastPrimaryItem = -1;
+    ArrayList<Integer> mHighResMediaIndex = new ArrayList<Integer>();
 
     private LayoutInflater mLayoutInflater;
 
@@ -71,13 +74,88 @@ public class ImagesSliderAdapter extends PagerAdapter {
     }
 
     @Override
+    public void setPrimaryItem(ViewGroup container, final int position, Object object) {
+        if (mLastPrimaryItem != position) {
+            mLastPrimaryItem = position;
+            //
+            if (mHighResMediaIndex.indexOf(position) < 0) {
+                final View view = (View)object;
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                       downloadHighResPict(view, position);
+                    }
+                });
+            }
+        }
+    }
+
+    private void downloadHighResPict(final View view, final int position) {
+        final WebView webView = (WebView)view.findViewById(R.id.image_webview);
+        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.download_zoomed_image_piechart);
+        final MXMediasCache mediasCache = Matrix.getInstance(this.context).getMediasCache();
+        final SlidableImageInfo imageInfo = mListImageMessages.get(position);
+        final String viewportContent = "width=640";
+        final String loadingUri = imageInfo.mImageUrl;
+        final String downloadId = mediasCache.loadBitmap(this.context, loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType);
+
+        if (null != downloadId) {
+            pieFractionView.setVisibility(View.VISIBLE);
+
+            pieFractionView.setFraction(mediasCache.progressValueForDownloadId(downloadId));
+
+            mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                @Override
+                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                    if (aDownloadId.equals(downloadId)) {
+                        pieFractionView.setFraction(percentageProgress);
+                    }
+                }
+
+                @Override
+                public void onDownloadComplete(String aDownloadId) {
+                    if (aDownloadId.equals(downloadId)) {
+                        pieFractionView.setVisibility(View.GONE);
+
+                        final File mediaFile = mediasCache.mediaCacheFile(loadingUri, imageInfo.mMimeType);
+
+                        if (null != mediaFile) {
+                            mHighResMediaIndex.add(position);
+
+                            Uri uri = Uri.fromFile(mediaFile);
+                            final String newHighResUri = uri.toString();
+
+                            webView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Uri mediaUri = Uri.parse(newHighResUri);
+
+                                    // save in the gallery
+                                    CommonActivityUtils.saveImageIntoGallery(ImagesSliderAdapter.this.context, mediaFile);
+
+                                    // refresh the UI
+                                    loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, newHighResUri, ImagesSliderAdapter.this.mMaxImageWidth, ImagesSliderAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         View view  = mLayoutInflater.inflate(R.layout.activity_image_web_view, null, false);
+
+        // hide the pie chart
+        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.download_zoomed_image_piechart);
+        pieFractionView.setVisibility(View.GONE);
 
         final WebView webView = (WebView)view.findViewById(R.id.image_webview);
 
@@ -87,86 +165,34 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
         final SlidableImageInfo imageInfo = mListImageMessages.get(position);
 
-        String highResUri = imageInfo.mImageUrl;
-        String thumbnailUri = null;
+        String mediaUrl = imageInfo.mImageUrl;
         final int rotationAngle = imageInfo.mRotationAngle;
         final String mimeType = imageInfo.mMimeType;
 
         final MXMediasCache mediasCache = Matrix.getInstance(this.context).getMediasCache();
-        File mediaFile = mediasCache.mediaCacheFile(highResUri, mimeType);
+        File mediaFile = mediasCache.mediaCacheFile(mediaUrl, mimeType);
 
         // is the high picture already downloaded ?
         if (null != mediaFile) {
-            thumbnailUri = highResUri = "file://" + mediaFile.getPath();
-        }
-
-        String css = computeCss(thumbnailUri, highResUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
-        final String viewportContent = "width=640";
-
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.download_zoomed_image_piechart);
-
-        // is the high picture already downloaded ?
-        if (null != mediaFile) {
-            pieFractionView.setVisibility(View.GONE);
+            if (mHighResMediaIndex.indexOf(position) < 0) {
+                mHighResMediaIndex.add(position);
+            }
         } else {
-            thumbnailUri = null;
-
             // try to retrieve the thumbnail
-            mediaFile = mediasCache.mediaCacheFile(highResUri, mMaxImageWidth, mMaxImageHeight, null);
-
-            // the thumbnail is not yet downloaded
-            if (null == mediaFile) {
-                // display nothing
-                ((ViewPager) container).addView(view, 0);
-                return view;
-            }
-
-            final String loadingUri = highResUri;
-            thumbnailUri = highResUri = "file://" + mediaFile.getPath();
-
-            final String downloadId = mediasCache.loadBitmap(this.context, loadingUri, rotationAngle, imageInfo.mOrientation, mimeType);
-            final String fhighResUri = highResUri;
-
-            if (null != downloadId) {
-                pieFractionView.setFraction(mediasCache.progressValueForDownloadId(downloadId));
-
-                mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
-                        if (aDownloadId.equals(downloadId)) {
-                            pieFractionView.setFraction(percentageProgress);
-                        }
-                    }
-
-                    @Override
-                    public void onDownloadComplete(String aDownloadId) {
-                        if (aDownloadId.equals(downloadId)) {
-                            pieFractionView.setVisibility(View.GONE);
-
-                            final File mediaFile = mediasCache.mediaCacheFile(loadingUri, mimeType);
-
-                            if (null != mediaFile) {
-                                Uri uri = Uri.fromFile(mediaFile);
-                                final String newHighResUri = uri.toString();
-
-                                webView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Uri mediaUri = Uri.parse(newHighResUri);
-
-                                        // save in the gallery
-                                        CommonActivityUtils.saveImageIntoGallery(ImagesSliderAdapter.this.context, mediaFile);
-
-                                        // refresh the UI
-                                        loadImage(webView,  mediaUri, viewportContent, computeCss(newHighResUri,newHighResUri, ImagesSliderAdapter.this.mMaxImageWidth, ImagesSliderAdapter.this.mMaxImageHeight, rotationAngle));
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            }
+            mediaFile = mediasCache.mediaCacheFile(mediaUrl, mMaxImageWidth, mMaxImageHeight, null);
         }
+
+        // the thumbnail is not yet downloaded
+        if (null == mediaFile) {
+            // display nothing
+            container.addView(view, 0);
+            return view;
+        }
+
+        String mediaUri = "file://" + mediaFile.getPath();
+
+        String css = computeCss(null, mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
+        final String viewportContent = "width=640";
 
         webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -174,9 +200,9 @@ public class ImagesSliderAdapter extends PagerAdapter {
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setBuiltInZoomControls(true);
 
-        loadImage(webView, Uri.parse(highResUri), viewportContent, css);
+        loadImage(webView, Uri.parse(mediaUri), viewportContent, css);
 
-        ((ViewPager)container).addView(view, 0);
+        container.addView(view, 0);
         return view;
     }
 
@@ -291,6 +317,6 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView((View) object);
+        container.removeView((View) object);
     }
 }

@@ -18,6 +18,7 @@ package org.matrix.console.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.widget.ArrayAdapter;
 
 import org.matrix.androidsdk.MXSession;
@@ -84,8 +85,8 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
                 SlidableImageInfo info = new SlidableImageInfo();
 
                 info.mImageUrl = imageMessage.url;
-                info.mRotationAngle = ((null != imageMessage.info) && (imageMessage.info.rotation != null)) ? imageMessage.info.rotation : Integer.MAX_VALUE;
-                info.mOrientation = imageMessage.info.orientation;
+                info.mRotationAngle = imageMessage.getRotation();
+                info.mOrientation = imageMessage.getOrientation();
                 info.mMimeType = imageMessage.getMimeType();
                 info.midentifier = row.getEvent().eventId;
                 res.add(info);
