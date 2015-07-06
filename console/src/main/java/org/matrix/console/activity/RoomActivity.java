@@ -1324,8 +1324,8 @@ public class RoomActivity extends MXCActionBarActivity {
             } else if (null != data.getData()) {
                 uris.add(data.getData());
             }
-        } else {
-            uris.add( mLatestTakePictureCameraUri == null ? null : Uri.parse(mLatestTakePictureCameraUri));
+        } else if (null != mLatestTakePictureCameraUri) {
+            uris.add(Uri.parse(mLatestTakePictureCameraUri));
             mLatestTakePictureCameraUri = null;
         }
 
@@ -1333,14 +1333,20 @@ public class RoomActivity extends MXCActionBarActivity {
         if (0 == uris.size()) {
             Bundle bundle = data.getExtras();
 
-            if (bundle.containsKey(Intent.EXTRA_STREAM)) {
-                Object streamUri = bundle.get(Intent.EXTRA_STREAM);
+            // sanity checks
+            if (null != bundle) {
+                if (bundle.containsKey(Intent.EXTRA_STREAM)) {
+                    Object streamUri = bundle.get(Intent.EXTRA_STREAM);
 
-                if (streamUri instanceof Uri) {
-                    uris.add((Uri)streamUri);
+                    if (streamUri instanceof Uri) {
+                        uris.add((Uri) streamUri);
+                    }
+                } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
+                    this.sendMessage(bundle.getString(Intent.EXTRA_TEXT));
                 }
-            } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
-                this.sendMessage(bundle.getString(Intent.EXTRA_TEXT));
+            } else {
+                uris.add( mLatestTakePictureCameraUri == null ? null : Uri.parse(mLatestTakePictureCameraUri));
+                mLatestTakePictureCameraUri = null;
             }
         }
 
