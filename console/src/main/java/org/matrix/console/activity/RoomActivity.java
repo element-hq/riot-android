@@ -1088,6 +1088,16 @@ public class RoomActivity extends MXCActionBarActivity {
                                     List uriPath = mediaUri.getPathSegments();
                                     filename = (String) uriPath.get(uriPath.size() - 1);
                                 }
+                            } else if (mediaUri.toString().startsWith("file://")) {
+								// try to retrieve the filename from the file url.
+                                try {
+                                    filename = anUri.getLastPathSegment();
+                                } catch (Exception e) {
+                                }
+
+                                if (TextUtils.isEmpty(filename)) {
+                                    filename = null;
+                                }
                             }
 
                             final String fFilename = filename;
