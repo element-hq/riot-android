@@ -76,7 +76,7 @@ public class ContactsListAdapter extends ArrayAdapter<Contact> implements Sectio
 
         // Member name
         TextView textView = (TextView) convertView.findViewById(R.id.contact_name);
-        textView.setText(contact.mDisplayName);
+        textView.setText(contact.getDisplayName());
 
         // matrix info
         ImageView matrixIcon = (ImageView) convertView.findViewById(R.id.imageView_matrix_user);
@@ -136,8 +136,8 @@ public class ContactsListAdapter extends ArrayAdapter<Contact> implements Sectio
 
         // list the contacts by display name
         for (Contact contact : collection){
-            if (!TextUtils.isEmpty(contact.mDisplayName)) {
-                mMapIndex.put(contact.mDisplayName.substring(0, 1).toUpperCase(), index);
+            if (!TextUtils.isEmpty(contact.getDisplayName())) {
+                mMapIndex.put(contact.getDisplayName().substring(0, 1).toUpperCase(), index);
                 index++;
             }
         }

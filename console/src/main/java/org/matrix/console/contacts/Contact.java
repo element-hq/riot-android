@@ -38,7 +38,7 @@ public class Contact {
     }
 
     public String mContactId = "";
-    public String mDisplayName;
+    private String mDisplayName;
     private String mUpperCaseDisplayName = "";
     private String mLowerCaseDisplayName = "";
     public String mThumbnailUri;
@@ -142,6 +142,32 @@ public class Contact {
         } else {
             return null;
         }
+    }
+
+    public void setDisplayName(String displayName) {
+        mDisplayName = displayName;
+    }
+
+    public String getDisplayName() {
+        String res = mDisplayName;
+
+        if (TextUtils.isEmpty(res)) {
+            for(String email : mEmails) {
+                if (!TextUtils.isEmpty(email)) {
+                    return email;
+                }
+            }
+        }
+
+        if (TextUtils.isEmpty(res)) {
+            for(String pn : mPhoneNumbers) {
+                if (!TextUtils.isEmpty(pn)) {
+                    return pn;
+                }
+            }
+        }
+
+        return res;
     }
 }
 

@@ -121,7 +121,7 @@ public class ContactsManager {
                     }
 
                     if (null != displayName) {
-                        contact.mDisplayName = displayName;
+                        contact.setDisplayName(displayName);
                     }
 
                     if (null != thumbnailUri) {

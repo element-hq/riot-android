@@ -92,8 +92,8 @@ public class ContactsListDialogFragment extends DialogFragment implements PIDsRe
     private Comparator<Contact> alphaComparator = new Comparator<Contact>() {
         @Override
         public int compare(Contact contact1, Contact contact2) {
-            String displayname1 = (contact1.mDisplayName == null)? contact1.mContactId : contact1.mDisplayName;
-            String displayname2 = (contact2.mDisplayName == null)? contact2.mContactId : contact2.mDisplayName;
+            String displayname1 = (contact1.getDisplayName() == null)? contact1.mContactId : contact1.getDisplayName();
+            String displayname2 = (contact2.getDisplayName() == null)? contact2.mContactId : contact2.getDisplayName();
 
             return String.CASE_INSENSITIVE_ORDER.compare(displayname1, displayname2);
         }
