@@ -394,6 +394,11 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRoom.removeEventListener(mEventListener);
+
+        // add sanity check
+        if ((null != mRoom) && (null != mEventListener)) {
+            mRoom.removeEventListener(mEventListener);
+            mEventListener = null;
+        }
     }
 }
