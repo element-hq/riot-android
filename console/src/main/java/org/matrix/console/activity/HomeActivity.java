@@ -687,7 +687,9 @@ public class HomeActivity extends MXCActionBarActivity {
                 Room room = session.getDataHandler().getStore().getRoom(summary.getRoomId());
 
                 if (null != room) {
-                    for (RoomMember member : room.getMembers()) {
+                    Collection <RoomMember> members = room.getMembers();
+
+                    for (RoomMember member : members) {
                         if (membership.equals(member.membership) && selfUserId.equals(member.getUserId())) {
                             return true;
                         }

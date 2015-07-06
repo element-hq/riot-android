@@ -170,8 +170,9 @@ public class MembersInvitationDialogFragment extends DialogFragment {
         // remove the current room members
         ArrayList<String> idsToIgnore = new ArrayList<String>();
         Room room = store.getRoom(mRoomId);
+        Collection<RoomMember> currentMembers = room.getMembers();
 
-        for(RoomMember member : room.getMembers()) {
+        for(RoomMember member : currentMembers) {
             idsToIgnore.add(member.getUserId());
         }
 
@@ -190,9 +191,9 @@ public class MembersInvitationDialogFragment extends DialogFragment {
         for(RoomSummary summary : summaries) {
             // not the current summary
             if (!summary.getRoomId().equals(mRoomId)) {
-                Collection<RoomMember> members = room.getMembers();
+                Collection<RoomMember> otherRoomMembers = room.getMembers();
 
-                for (RoomMember member : members) {
+                for (RoomMember member : otherRoomMembers) {
                     String userID = member.getUserId();
 
                     // accepted User ID or still active users
@@ -201,7 +202,7 @@ public class MembersInvitationDialogFragment extends DialogFragment {
                         int posTenMembers = ids_MaxTenMembers.indexOf(userID);
                         int posBigRooms = ids_BigRooms.indexOf(userID);
 
-                        if (members.size() <= 2) {
+                        if (otherRoomMembers.size() <= 2) {
                             if (posBigRooms >= 0) {
                                 members_BigRooms.remove(posBigRooms);
                                 ids_BigRooms.remove(posBigRooms);
@@ -216,7 +217,7 @@ public class MembersInvitationDialogFragment extends DialogFragment {
                                 members_OneToOne.add(member);
                                 ids_OneToOne.add(member.getUserId());
                             }
-                        } else if (members.size() <= 10) {
+                        } else if (otherRoomMembers.size() <= 10) {
                             if (posBigRooms >= 0) {
                                 members_BigRooms.remove(posBigRooms);
                                 ids_BigRooms.remove(posBigRooms);
