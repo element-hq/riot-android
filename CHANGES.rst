@@ -1,3 +1,12 @@
+Changes in Console 0.4.1 (2015-06-30)
+===================================================
+Improvements:
+ * Removed the SEND_SMS permission as it isn't necessary and it adds permissions that cause problems (See issue 24)
+
+Bug fixes:
+ * Fixed a problem with emotes not being displayed properly on the recents screen
+ * Fixed a problem with a fragment not being restarted properly
+
 
 Changes in Console 0.4.2 (2015-07-06)
 ===================================================
