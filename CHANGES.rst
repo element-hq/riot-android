@@ -1,4 +1,33 @@
 
+Changes in Console 0.4.2 (2015-07-06)
+===================================================
+
+Improvements:
+ * Improve the multi-servers accounts management.
+ * Account thumbnail : use the gallery thumbnail when available.
+ * Display the server error messages when available.
+ * Do not save anymore the image into the gallery. The user has to use the “save” action.
+ * Use the gallery filename for the "filename" post param
+
+Features:
+ * Add the notification settings page.
+ * Add images slider when tapping on an image.
+
+Bug fixes:
+ * SYAND-91 : server is not federating - endless load of public room list.
+ * Fix a crash on contact sort. In some cases, the contactId was null.
+ * The pagination could have been broken after restarting the application. The user has to clear the application cached (settings page).
+ * Image capture crashed on nexus 6 (android 5.1.1).
+ * Crash when listing the room members whereas the list was updated.
+ * Crash while leaving the room member page.
+
+Changes in Console 0.4.1 (2015-06-22)
+===================================================
+
+Bug fixes:
+ * The emotes were not properly displayed on the recents.
+ * The matrixMessagesFragment was not properly restarted after have been killed by a low memory.
+
 Changes in Console 0.4.0 (2015-06-19)
 ===================================================
 
