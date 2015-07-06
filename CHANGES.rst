@@ -1,12 +1,3 @@
-Changes in Console 0.4.1 (2015-06-30)
-===================================================
-Improvements:
- * Removed the SEND_SMS permission as it isn't necessary and it adds permissions that cause problems (See issue 24)
-
-Bug fixes:
- * Fixed a problem with emotes not being displayed properly on the recents screen
- * Fixed a problem with a fragment not being restarted properly
-
 
 Changes in Console 0.4.2 (2015-07-06)
 ===================================================
@@ -30,12 +21,14 @@ Bug fixes:
  * Crash when listing the room members whereas the list was updated.
  * Crash while leaving the room member page.
 
-Changes in Console 0.4.1 (2015-06-22)
+Changes in Console 0.4.1 (2015-06-30)
 ===================================================
+Improvements:
+ * Removed the SEND_SMS permission as it isn't necessary and it adds permissions that cause problems (See issue 24)
 
 Bug fixes:
- * The emotes were not properly displayed on the recents.
- * The matrixMessagesFragment was not properly restarted after have been killed by a low memory.
+ * Fixed a problem with emotes not being displayed properly on the recents screen
+ * Fixed a problem with a fragment not being restarted properly
 
 Changes in Console 0.4.0 (2015-06-19)
 ===================================================
