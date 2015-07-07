@@ -402,6 +402,11 @@ public class EventStreamService extends Service {
                     public void onStoreReady(String accountId) {
                         startEventStream(fSession, store);
                     }
+
+                    @Override
+                    public void onStoreCorrupted(String accountId) {
+                        startEventStream(fSession, store);
+                    }
                 });
             };
         }
