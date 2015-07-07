@@ -18,6 +18,9 @@ package org.matrix.console.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -35,6 +39,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
 
@@ -83,6 +88,32 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
                             });
                         }
                     }
+                }
+            });
+        }
+
+        @Override
+        public void onPresenceUpdate(Event event, final User user) {
+            if (mMemberId.equals(user.userId)) {
+                // Someone's presence has changed, reprocess the whole list
+                MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updatePresenceInfo();
+                    }
+                });
+            }
+        }
+
+        /**
+         * User presences was synchronized..
+         */
+        @Override
+        public void onPresencesSyncComplete() {
+            MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updatePresenceInfo();
                 }
             });
         }
@@ -260,8 +291,6 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
             });
         }
 
-        mSession.getDataHandler().getRoom(mRoom.getRoomId()).addEventListener(mEventListener);
-
         // load the thumbnail
         mThumbnailImageView = (ImageView) findViewById(R.id.avatar_img);
 
@@ -367,6 +396,40 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
             Button button = mButtonsList.get(buttonIndex);
             button.setVisibility(View.INVISIBLE);
         }
+        updatePresenceInfo();
+    }
+
+    private void updatePresenceInfo() {
+        // update the presence ring
+        IMXStore store = mSession.getDataHandler().getStore();
+        User user = store.getUser(mMemberId);
+
+        ImageView presenceRingView = (ImageView)findViewById(R.id.imageView_presenceRing);
+
+        String presence = null;
+
+        if (null != user) {
+            presence = user.presence;
+        }
+
+        if (User.PRESENCE_ONLINE.equals(presence)) {
+            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_online));
+        } else if (User.PRESENCE_UNAVAILABLE.equals(presence)) {
+            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_unavailable));
+        } else if (User.PRESENCE_OFFLINE.equals(presence)) {
+            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_offline));
+        } else {
+            presenceRingView.setColorFilter(android.R.color.transparent);
+        }
+
+        TextView presenceTextView = (TextView)findViewById(R.id.textView_lastPresence);
+
+        if ((user == null) || (user.lastActiveAgo == null)) {
+            presenceTextView.setVisibility(View.GONE);
+        }
+        else {
+            presenceTextView.setText(buildLastActiveDisplay(user.getRealLastActiveAgo()));
+        }
     }
 
     /**
@@ -381,14 +444,38 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         }
     }
 
+    private String buildLastActiveDisplay(long lastActiveAgo) {
+        lastActiveAgo /= 1000; // In seconds
+        if (lastActiveAgo < 60) {
+            return this.getString(org.matrix.androidsdk.R.string.last_seen_secs, lastActiveAgo);
+        }
+
+        lastActiveAgo /= 60; // In minutes
+        if (lastActiveAgo < 60) {
+            return this.getString(org.matrix.androidsdk.R.string.last_seen_mins, lastActiveAgo);
+        }
+
+        lastActiveAgo /= 60; // In hours
+        if (lastActiveAgo < 24) {
+            return this.getString(org.matrix.androidsdk.R.string.last_seen_hours, lastActiveAgo);
+        }
+
+        lastActiveAgo /= 24; // In days
+        return this.getString(org.matrix.androidsdk.R.string.last_seen_days, lastActiveAgo);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
+
+        mSession.getDataHandler().getRoom(mRoom.getRoomId()).removeEventListener(mEventListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        mSession.getDataHandler().getRoom(mRoom.getRoomId()).addEventListener(mEventListener);
     }
 
     @Override
