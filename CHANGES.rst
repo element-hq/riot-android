@@ -1,4 +1,15 @@
 
+Changes in Console 0.4.3 (2015-07-07)
+===================================================
+
+Improvements:
+ * Add the presence information in the room and in the room member description activities.
+
+
+Bug fixes:
+ * Update to 0.4.2 used to display an empty history list. It was required to clear the application cache.
+
+
 Changes in Console 0.4.2 (2015-07-06)
 ===================================================
 

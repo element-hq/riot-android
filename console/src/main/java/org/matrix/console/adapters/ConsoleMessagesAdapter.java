@@ -31,6 +31,7 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.console.ConsoleApplication;
+import org.matrix.console.R;
 import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.activity.ImageSliderActivity;
 import org.matrix.console.activity.ImageWebViewActivity;
@@ -185,4 +186,15 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         }
     }
 
+    public int presenceOnlineColor() {
+        return mContext.getResources().getColor(R.color.presence_online);
+    }
+
+    public int presenceOfflineColor() {
+        return mContext.getResources().getColor(R.color.presence_offline);
+    }
+
+    public int presenceUnavailableColor() {
+        return mContext.getResources().getColor(R.color.presence_unavailable);
+    }
 }
