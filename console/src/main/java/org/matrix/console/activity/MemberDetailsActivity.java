@@ -43,8 +43,10 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.console.Matrix;
 import org.matrix.console.R;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 public class MemberDetailsActivity extends MXCActionBarActivity {
 
@@ -424,10 +426,11 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
         TextView presenceTextView = (TextView)findViewById(R.id.textView_lastPresence);
 
-        if ((user == null) || (user.lastActiveAgo == null)) {
+        if ((user == null) || (user.lastActiveAgo == null) || User.PRESENCE_ONLINE.equals(presence)) {
             presenceTextView.setVisibility(View.GONE);
         }
         else {
+            presenceTextView.setVisibility(View.VISIBLE);
             presenceTextView.setText(buildLastActiveDisplay(user.getRealLastActiveAgo()));
         }
     }
@@ -444,24 +447,17 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         }
     }
 
-    private String buildLastActiveDisplay(long lastActiveAgo) {
-        lastActiveAgo /= 1000; // In seconds
-        if (lastActiveAgo < 60) {
-            return this.getString(org.matrix.androidsdk.R.string.last_seen_secs, lastActiveAgo);
+    private String buildLastActiveDisplay(final long lastActiveAgo) {
+        String res = "";
+        long msInDay = 1000 * 60 * 60 * 24;
+
+        if (lastActiveAgo < msInDay) {
+            res = DateFormat.getDateTimeInstance().format(System.currentTimeMillis() - lastActiveAgo);
+        } else {
+            res = getString(org.matrix.androidsdk.R.string.last_seen_days, lastActiveAgo / msInDay);
         }
 
-        lastActiveAgo /= 60; // In minutes
-        if (lastActiveAgo < 60) {
-            return this.getString(org.matrix.androidsdk.R.string.last_seen_mins, lastActiveAgo);
-        }
-
-        lastActiveAgo /= 60; // In hours
-        if (lastActiveAgo < 24) {
-            return this.getString(org.matrix.androidsdk.R.string.last_seen_hours, lastActiveAgo);
-        }
-
-        lastActiveAgo /= 24; // In days
-        return this.getString(org.matrix.androidsdk.R.string.last_seen_days, lastActiveAgo);
+        return res;
     }
 
     @Override
