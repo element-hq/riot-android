@@ -1155,36 +1155,45 @@ public class RoomActivity extends MXCActionBarActivity {
                                     Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
                                 }
 
+                                double thumbnailWidth = mConsoleMessageListFragment.getMaxThumbnailWith();
+                                double thumbnailHeight = mConsoleMessageListFragment.getMaxThumbnailHeight();
+
                                 // no thumbnail has been found or the mimetype is unknown
-                                if (null == thumbnailBitmap) {
+                                if ((null == thumbnailBitmap) || (thumbnailBitmap.getHeight() > thumbnailHeight) ||  (thumbnailBitmap.getWidth() > thumbnailWidth)) {
                                     // need to decompress the high res image
                                     BitmapFactory.Options options = new BitmapFactory.Options();
                                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                                     resource = ResourceUtils.openResource(RoomActivity.this, mediaUri);
 
                                     // get the full size bitmap
-                                    Bitmap fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                                    Bitmap fullSizeBitmap = null;
 
-                                    // create a thumbnail bitmap if there is none
                                     if (null == thumbnailBitmap) {
-                                        if (fullSizeBitmap != null) {
-                                            double fullSizeWidth = fullSizeBitmap.getWidth();
-                                            double fullSizeHeight = fullSizeBitmap.getHeight();
+                                        fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                                    }
 
-                                            double thumbnailWidth = mConsoleMessageListFragment.getMaxThumbnailWith();
-                                            double thumbnailHeight = mConsoleMessageListFragment.getMaxThumbnailHeight();
+                                    if ((fullSizeBitmap != null) || (thumbnailBitmap != null)) {
+                                        double imageWidth;
+                                        double imageHeight;
 
-                                            if (fullSizeWidth > fullSizeHeight) {
-                                                thumbnailHeight = thumbnailWidth * fullSizeHeight / fullSizeWidth;
-                                            } else {
-                                                thumbnailWidth = thumbnailHeight * fullSizeWidth / fullSizeHeight;
-                                            }
+                                        if (null == thumbnailBitmap) {
+                                            imageWidth = fullSizeBitmap.getWidth();
+                                            imageHeight = fullSizeBitmap.getHeight();
+                                        } else {
+                                            imageWidth = thumbnailBitmap.getWidth();
+                                            imageHeight = thumbnailBitmap.getHeight();
+                                        }
 
-                                            try {
-                                                thumbnailBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, (int) thumbnailWidth, (int) thumbnailHeight, false);
-                                            } catch (OutOfMemoryError ex) {
-                                                Log.e(LOG_TAG, "Bitmap.createScaledBitmap " + ex.getMessage());
-                                            }
+                                        if (imageWidth > imageHeight) {
+                                            thumbnailHeight = thumbnailWidth * imageHeight / imageWidth;
+                                        } else {
+                                            thumbnailWidth = thumbnailHeight * imageWidth / imageHeight;
+                                        }
+
+                                        try {
+                                            thumbnailBitmap = Bitmap.createScaledBitmap((null == fullSizeBitmap) ? thumbnailBitmap : fullSizeBitmap, (int) thumbnailWidth, (int) thumbnailHeight, false);
+                                        } catch (OutOfMemoryError ex) {
+                                            Log.e(LOG_TAG, "Bitmap.createScaledBitmap " + ex.getMessage());
                                         }
                                     }
 
@@ -1197,6 +1206,12 @@ public class RoomActivity extends MXCActionBarActivity {
                                     // unknown mimetype
                                     if ((null == mimeType) || (mimeType.startsWith("image/"))) {
                                         try {
+                                            // try again
+                                            if (null == fullSizeBitmap) {
+                                                System.gc();
+                                                fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                                            }
+
                                             if (null != fullSizeBitmap) {
                                                 Uri uri = Uri.parse(mediaUrl);
 
