@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
     <TextView
-        android:paddingLeft="20dp"
+        android:paddingLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -25,10 +25,11 @@
             android:paddingLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="right|center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="A text here"
             android:id="@+id/ImageSizesAdapter_info"
+            android:paddingRight="5dp"
             />
     </LinearLayout>
 
