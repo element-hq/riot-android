@@ -236,8 +236,14 @@ public class RoomActivity extends MXCActionBarActivity {
         }
     };
 
+    public void appendTextToEditor(String text) {
+        if (null != text) {
+            mEditText.append(text);
+        }
+    }
+
     /**
-     * Laucnh the files selection intent
+     * Launch the files selection intent
      */
     private void launchFileSelectionIntent() {
         Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
