@@ -1103,10 +1103,23 @@ public class RoomActivity extends MXCActionBarActivity {
                             final String fFilename = filename;
 
                             ResourceUtils.Resource resource = ResourceUtils.openResource(RoomActivity.this, mediaUri);
-                            if (resource == null) {
-                                Toast.makeText(RoomActivity.this,
-                                        getString(R.string.message_failed_to_upload),
-                                        Toast.LENGTH_LONG).show();
+
+                            if (null == resource) {
+                                RoomActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        handlerThread.quit();
+                                        progressBackground.setVisibility(View.GONE);
+                                        progress.setVisibility(View.GONE);
+
+                                        Toast.makeText(RoomActivity.this,
+                                                getString(R.string.message_failed_to_upload),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+
+                                    ;
+                                });
+
                                 return;
                             }
 
