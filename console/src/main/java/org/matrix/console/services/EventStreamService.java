@@ -197,7 +197,7 @@ public class EventStreamService extends Service {
             // should never happen.
             // But it could be triggered because of multi accounts management.
             // The dedicated account is removing but some pushes are still received.
-            if (null == session) {
+            if ((null == session) || !session.isActive()) {
                 return;
             }
 
