@@ -421,8 +421,10 @@ public class EventStreamService extends Service {
 
         if (mSessions != null) {
             for(MXSession session : mSessions) {
-                session.stopEventStream();
-                session.getDataHandler().removeListener(mListener);
+                if (session.isActive()) {
+                    session.stopEventStream();
+                    session.getDataHandler().removeListener(mListener);
+                }
             }
         }
         mMatrixIds = null;
