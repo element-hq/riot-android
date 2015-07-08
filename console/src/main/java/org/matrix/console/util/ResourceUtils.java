@@ -18,7 +18,11 @@ package org.matrix.console.util;
 import android.app.Activity;
 import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -48,12 +52,24 @@ public class ResourceUtils {
      */
     public static Resource openResource(Activity activity, Uri uri) {
         try {
+            String mimetype = activity.getContentResolver().getType(uri);
+
+            // try to find the mimetype from the filename
+            if (null == mimetype) {
+                String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+                if (extension != null) {
+                    mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                }
+            }
+
             return new Resource(
                     activity.getContentResolver().openInputStream(uri),
-                    activity.getContentResolver().getType(uri));
+                    mimetype);
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "Failed to open resource input stream", e);
-            return null;
         }
+
+        return null;
     }
 }
