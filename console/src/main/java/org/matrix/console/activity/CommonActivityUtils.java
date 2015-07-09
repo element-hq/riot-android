@@ -83,11 +83,11 @@ public class CommonActivityUtils {
         MyPresenceManager.getInstance(activity, session).advertiseOffline();
         MyPresenceManager.remove(session);
 
-        // clear credentials
-        Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
-
         // unregister from the GCM.
         Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
+
+        // clear credentials
+        Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
     }
 
     /**
