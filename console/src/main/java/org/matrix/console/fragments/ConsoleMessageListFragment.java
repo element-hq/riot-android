@@ -325,7 +325,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
 
         entries.add(getActivity().getText(R.string.downloads).toString());
 
-        if (mediaMimeType.startsWith("image/")) {
+        if ((null == mediaMimeType) || mediaMimeType.startsWith("image/")) {
             entries.add(getActivity().getText(R.string.gallery).toString());
         }
 

@@ -4,10 +4,15 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 
 import org.matrix.console.R;
 import org.matrix.console.activity.LockScreenActivity;
@@ -28,7 +33,7 @@ public class NotificationUtils {
     public static final String EXTRA_ROOM_ID = "org.matrix.console.EXTRA_ROOM_ID";
 
     public static Notification buildMessageNotification(
-            Context context, String from, String matrixId, Boolean displayMatrixId, String body, String roomId, String roomName,
+            Context context, String from, String matrixId, Boolean displayMatrixId, Bitmap largeIcon, int unseen, String body, String roomId, String roomName,
             boolean shouldPlaySound) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
@@ -43,6 +48,14 @@ public class NotificationUtils {
             builder.setSmallIcon(R.drawable.ic_menu_small_matrix);
         } else {
             builder.setSmallIcon(R.drawable.ic_menu_small_matrix_transparent);
+        }
+
+        if (null != largeIcon) {
+            builder.setLargeIcon(largeIcon);
+        }
+
+        if (0 != unseen) {
+            builder.setContentInfo(context.getString(R.string.unseen_messages, unseen));
         }
 
         String name = ": ";
