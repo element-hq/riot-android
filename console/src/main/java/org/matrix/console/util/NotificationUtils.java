@@ -97,7 +97,7 @@ public class NotificationUtils {
                     canvas.drawBitmap(rescaledBitmap, (side - scaledWidth) / 2, (side - scaledHeight) / 2, null);
 
                     String text = "" + unseen;
-
+                    
                     // prepare the text drawing
                     Paint textPaint = new Paint();
                     textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -122,7 +122,7 @@ public class NotificationUtils {
                     canvas.drawCircle(canvas.getWidth() - radius, radius,  radius , paint);
 
                     // draw the text
-                    canvas.drawText(text, canvas.getWidth() - textBounds.width() - (radius - (textBounds.width() / 2)), -textBounds.top + (radius / 2), textPaint);
+                    canvas.drawText(text, canvas.getWidth() - textBounds.width() - (radius - (textBounds.width() / 2)), -textBounds.top + (radius - (-textBounds.top / 2)), textPaint);
 
                     // get the new bitmap
                     largeIcon = bitmapCopy;
