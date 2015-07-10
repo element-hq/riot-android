@@ -36,8 +36,10 @@ import org.matrix.console.contacts.ContactsManager;
 import org.matrix.console.contacts.PIDsRetriever;
 import org.matrix.console.ga.Analytics;
 import org.matrix.console.services.EventStreamService;
+import org.matrix.console.util.LogUtilities;
 
 import java.io.Console;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,6 +71,9 @@ public class ConsoleApplication extends Application {
             VERSION_STRING = pinfo.versionName;
         }
         catch (PackageManager.NameNotFoundException e) {}
+
+        LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath()+"/logs"));
+        LogUtilities.storeLogcat();
 
         initGoogleAnalytics();
 

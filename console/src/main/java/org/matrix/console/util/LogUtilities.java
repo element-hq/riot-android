@@ -18,16 +18,17 @@ package org.matrix.console.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /** Manages all the logs which are sent to us when a user sends a bug report.
  */
 public class LogUtilities {
 
-    private static LogUtilities instance = null;
-
-    private File mLogDirectory;
+    private static File mLogDirectory = null;
 
     public static final String[] LOGCAT_CMD = new String[] { 
              "logcat", ///< Run 'logcat' command
@@ -100,5 +101,111 @@ public class LogUtilities {
 
     public static String getLogCatDebug() {
         return getLog(LOGCAT_CMD_DEBUG);
+    }
+
+    // general method to store several logs
+
+    public static void setLogDirectory(File logDirectory) {
+        mLogDirectory = logDirectory;
+    }
+
+    private static File ensureLogDirectoryExists() throws IOException {
+        if (mLogDirectory == null) {
+            return null;
+        }
+        if (!mLogDirectory.exists()) {
+            mLogDirectory.mkdirs();
+        }
+        return mLogDirectory;
+    }
+
+    public static void storeLogcat() {
+        LogUtilities.rotateLogs();
+
+        File cacheDirectory;
+        try {
+            cacheDirectory = LogUtilities.ensureLogDirectoryExists();
+        }
+        catch (IOException e) {
+            return;
+        }
+
+        File file = new File(cacheDirectory, "logcat.0");
+        FileOutputStream stream = null;
+        try {
+            stream = new FileOutputStream(file);
+            stream.write(LogUtilities.getLogCatDebug().getBytes());
+        }
+        catch (FileNotFoundException e) {
+        }
+        catch (IOException e) {
+        }
+        finally {
+            try {
+                stream.close();
+            }
+            catch (IOException e) {}
+        }
+    }
+
+    public static ArrayList<File> getLogsFileList() {
+        ArrayList<File> list = new ArrayList<File>();
+
+        try {
+            File logDir = LogUtilities.ensureLogDirectoryExists();
+
+            File log1 = new File(logDir, "logcat.0");
+            if (log1.exists()) {
+                list.add(log1);
+            }
+
+            File log2 = new File(logDir, "logcat.1");
+            if (log2.exists()) {
+                list.add(log2);
+            }
+
+            File log3 = new File(logDir, "logcat.2");
+            if (log3.exists()) {
+                list.add(log3);
+            }
+
+            File log4 = new File(logDir, "logcat.3");
+            if (log4.exists()) {
+                list.add(log4);
+            }
+
+        } catch (Exception e) {
+
+        }
+
+        return list;
+    }
+
+    private static void rotateLogs() {
+        try {
+            File logDir = LogUtilities.ensureLogDirectoryExists();
+
+            File log1 = new File(logDir, "logcat.0");
+            File log2 = new File(logDir, "logcat.1");
+            File log3 = new File(logDir, "logcat.2");
+            File log4 = new File(logDir, "logcat.3");
+
+            if (log4.exists()) {
+                log4.delete();
+            }
+
+            if (log3.exists()) {
+                log3.renameTo(log4);
+            }
+
+            if (log2.exists()) {
+                log2.renameTo(log3);
+            }
+
+            if (log1.exists()) {
+                log1.renameTo(log2);
+            }
+        }
+        catch (IOException e) {}
     }
 }
