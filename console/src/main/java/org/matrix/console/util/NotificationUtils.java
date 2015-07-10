@@ -6,7 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
@@ -32,6 +38,9 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_REPLY = "org.matrix.console.ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "org.matrix.console.EXTRA_ROOM_ID";
 
+    // the bubble radius is computed for 99 
+    static int mUnreadBubbleWidth = -1;
+
     public static Notification buildMessageNotification(
             Context context, String from, String matrixId, Boolean displayMatrixId, Bitmap largeIcon, int unseen, String body, String roomId, String roomName,
             boolean shouldPlaySound) {
@@ -50,7 +59,77 @@ public class NotificationUtils {
             builder.setSmallIcon(R.drawable.ic_menu_small_matrix_transparent);
         }
 
+        // assume 99 is the max value
+        // it seems being the same in android applications.
+        if (unseen > 99) {
+            unseen = 99;
+        }
+
         if (null != largeIcon) {
+        	// add a bubble in the top right
+            if (0 != unseen) {
+                try {
+                    android.graphics.Bitmap.Config bitmapConfig = largeIcon.getConfig();
+
+                    // set default bitmap config if none
+                    if(bitmapConfig == null) {
+                        bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+                    }
+
+                    // setLargeIcon must used a 64 * 64 pixels bitmap
+                    // rescale to have the same text UI.
+                    float densityScale = context.getResources().getDisplayMetrics().density;
+                    int side = (int)(64 * densityScale);
+
+                    Bitmap bitmapCopy = Bitmap.createBitmap(side, side, bitmapConfig);
+                    Canvas canvas = new Canvas(bitmapCopy);
+
+                    // resize the bitmap to fill in size
+                    int bitmapWidth = largeIcon.getWidth();
+                    int bitmapHeight = largeIcon.getHeight();
+
+                    float scale = Math.max((float) canvas.getWidth() / (float) bitmapWidth, (float) canvas.getHeight() / (float) bitmapHeight);
+
+                    int scaledWidth = (int) (bitmapWidth * scale);
+                    int scaledHeight = (int) (bitmapHeight * scale);
+
+                    Bitmap rescaledBitmap = Bitmap.createScaledBitmap(largeIcon, scaledWidth, scaledHeight, true);
+                    canvas.drawBitmap(rescaledBitmap, (side - scaledWidth) / 2, (side - scaledHeight) / 2, null);
+
+                    String text = "" + unseen;
+
+                    // prepare the text drawing
+                    Paint textPaint = new Paint();
+                    textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    textPaint.setColor(Color.WHITE);
+                    textPaint.setTextSize(10 * densityScale);
+
+                    // get its size
+                    Rect textBounds = new Rect();
+
+                    if (-1 == mUnreadBubbleWidth) {
+                        textPaint.getTextBounds("99", 0, 2, textBounds);
+                        mUnreadBubbleWidth = textBounds.width();
+                    }
+
+                    textPaint.getTextBounds(text, 0, text.length(), textBounds);
+
+                    // draw a red circle
+                    int radius = mUnreadBubbleWidth;
+                    Paint paint = new Paint();
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setColor(Color.RED);
+                    canvas.drawCircle(canvas.getWidth() - radius, radius,  radius , paint);
+
+                    // draw the text
+                    canvas.drawText(text, canvas.getWidth() - textBounds.width() - (radius - (textBounds.width() / 2)), -textBounds.top + (radius / 2), textPaint);
+
+                    // get the new bitmap
+                    largeIcon = bitmapCopy;
+                } catch (Exception e) {
+                }
+            }
+
             builder.setLargeIcon(largeIcon);
         }
 
