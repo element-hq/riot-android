@@ -367,12 +367,6 @@ public class SettingsActivity extends MXCActionBarActivity {
         );
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MyPresenceManager.advertiseAllUnavailableAfterDelay();
-    }
-
     private void refreshGCMEntries() {
         GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
@@ -391,6 +385,7 @@ public class SettingsActivity extends MXCActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         MyPresenceManager.advertiseAllOnline();
 
         for(MXSession session : Matrix.getMXSessions(this)) {

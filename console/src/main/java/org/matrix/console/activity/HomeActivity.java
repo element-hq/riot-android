@@ -752,9 +752,7 @@ public class HomeActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MyPresenceManager.advertiseAllUnavailableAfterDelay();
         mExpandedGroups = getExpandedGroupsList();
-
         mIsPaused = true;
     }
 

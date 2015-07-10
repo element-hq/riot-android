@@ -97,6 +97,8 @@ public class ConsoleApplication extends Application {
                     CommonActivityUtils.pauseEventStream(ConsoleApplication.this);
                 }
                 PIDsRetriever.getIntance().onAppBackgrounded();
+
+                MyPresenceManager.advertiseAllUnavailable();
             }
         };
 
@@ -127,6 +129,8 @@ public class ConsoleApplication extends Application {
             // get the contact update at application launch
             ContactsManager.refreshLocalContactsSnapshot(this);
         }
+
+        MyPresenceManager.advertiseAllOnline();
 
         this.isInBackground = false;
     }
