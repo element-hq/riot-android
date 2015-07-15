@@ -48,8 +48,14 @@ public class NotificationUtils {
         builder.setWhen(System.currentTimeMillis());
 
         if (null != from) {
-            builder.setContentTitle(from);
+            // don't display the room name for 1:1 room notifications.
+            if (!TextUtils.isEmpty(roomName) && !roomName.equals(from)) {
+                builder.setContentTitle(from + " (" + roomName + ")");
+            } else {
+                builder.setContentTitle(from);
+            }
         }
+
         builder.setContentText(body);
         builder.setAutoCancel(true);
 
