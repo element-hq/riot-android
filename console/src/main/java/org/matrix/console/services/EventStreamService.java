@@ -49,6 +49,7 @@ import org.matrix.console.util.NotificationUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.crypto.AEADBadTagException;
@@ -82,6 +83,7 @@ public class EventStreamService extends Service {
 
     private Boolean mIsForegound = false;
     private int mUnreadMessagesCounter = 0;
+    private HashMap<String, HashMap<String, Integer>> mUnreadMessagesMapByRoomId = new HashMap<String, HashMap<String, Integer>>();
 
     private Notification mLatestNotification = null;
 
@@ -213,9 +215,27 @@ public class EventStreamService extends Service {
                 return;
             }
 
+            int unreadNotifForThisUser = 0;
+
             // update the badge
             if (ConsoleApplication.isAppInBackground()) {
                 CommonActivityUtils.updateUnreadMessagesBadge(getApplicationContext(), ++mUnreadMessagesCounter);
+
+                HashMap<String, Integer> countByUserIds = null;
+
+                if (mUnreadMessagesMapByRoomId.containsKey(roomId)) {
+                    countByUserIds = mUnreadMessagesMapByRoomId.get(roomId);
+                } else {
+                    countByUserIds = new HashMap<String, Integer>();
+                    mUnreadMessagesMapByRoomId.put(roomId, countByUserIds);
+                }
+
+                if (countByUserIds.containsKey(senderID)) {
+                    unreadNotifForThisUser = countByUserIds.get(senderID);
+                }
+
+                unreadNotifForThisUser++;
+                countByUserIds.put(senderID, unreadNotifForThisUser);
             }
 
             String from = "";
@@ -257,6 +277,7 @@ public class EventStreamService extends Service {
                     Matrix.getMXSessions(getApplicationContext()).size() > 1,
                     largeBitmap,
                     mUnreadMessagesCounter,
+                    unreadNotifForThisUser,
                     body,
                     event.roomId,
                     roomName,
@@ -393,6 +414,7 @@ public class EventStreamService extends Service {
         if (0 != mUnreadMessagesCounter) {
             mUnreadMessagesCounter = 0;
             CommonActivityUtils.updateUnreadMessagesBadge(this, mUnreadMessagesCounter);
+            mUnreadMessagesMapByRoomId = new HashMap<String, HashMap<String, Integer>>();
         }
 
         if (mState == StreamAction.START) {

@@ -16,14 +16,17 @@ import android.graphics.Typeface;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 
 import org.matrix.console.R;
 import org.matrix.console.activity.LockScreenActivity;
 import org.matrix.console.activity.RoomActivity;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -42,7 +45,7 @@ public class NotificationUtils {
     static int mUnreadBubbleWidth = -1;
 
     public static Notification buildMessageNotification(
-            Context context, String from, String matrixId, Boolean displayMatrixId, Bitmap largeIcon, int unseen, String body, String roomId, String roomName,
+            Context context, String from, String matrixId, Boolean displayMatrixId, Bitmap largeIcon, int globalUnseen, int memberUnseen, String body, String roomId, String roomName,
             boolean shouldPlaySound) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
@@ -65,15 +68,9 @@ public class NotificationUtils {
             builder.setSmallIcon(R.drawable.ic_menu_small_matrix_transparent);
         }
 
-        // assume 99 is the max value
-        // it seems being the same in android applications.
-        if (unseen > 99) {
-            unseen = 99;
-        }
-
         if (null != largeIcon) {
         	// add a bubble in the top right
-            if (0 != unseen) {
+            if (0 != memberUnseen) {
                 try {
                     android.graphics.Bitmap.Config bitmapConfig = largeIcon.getConfig();
 
@@ -102,7 +99,7 @@ public class NotificationUtils {
                     Bitmap rescaledBitmap = Bitmap.createScaledBitmap(largeIcon, scaledWidth, scaledHeight, true);
                     canvas.drawBitmap(rescaledBitmap, (side - scaledWidth) / 2, (side - scaledHeight) / 2, null);
 
-                    String text = "" + unseen;
+                    String text = "" + memberUnseen;
                     
                     // prepare the text drawing
                     Paint textPaint = new Paint();
@@ -139,8 +136,16 @@ public class NotificationUtils {
             builder.setLargeIcon(largeIcon);
         }
 
-        if (0 != unseen) {
-            builder.setContentInfo(context.getString(R.string.unseen_messages, unseen));
+        if (0 != globalUnseen) {
+            String unseenText = context.getString((globalUnseen == 1) ? R.string.unseen_message : R.string.unseen_messages, globalUnseen);
+
+            SpannableString spannable = new SpannableString(unseenText);
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), 0, unseenText.length(), 0);
+
+            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+            spannable.setSpan(boldSpan, 0, unseenText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            builder.setSubText(spannable);
         }
 
         String name = ": ";
