@@ -307,6 +307,56 @@ public class SettingsActivity extends MXCActionBarActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
+
+        managePedingGCMregistration();
+    }
+
+    /**
+     * A GCM registration could be in progress.
+     * So disable the UI until the registration is done.
+     */
+    private void managePedingGCMregistration() {
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(SettingsActivity.this).getSharedGcmRegistrationManager();
+
+        if (gcmRegistrationManager.isRegistrating()) {
+            final View gcmLayout = findViewById(R.id.gcm_layout);
+
+            gcmLayout.setEnabled(false);
+            gcmLayout.setAlpha(0.25f);
+
+            final GcmRegistrationManager.GcmSessionRegistration listener = new GcmRegistrationManager.GcmSessionRegistration() {
+                @Override
+                public void onSessionRegistred() {
+                    SettingsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            gcmLayout.setEnabled(true);
+                            gcmLayout.setAlpha(1.0f);
+                            refreshGCMEntries();
+
+                            CommonActivityUtils.onGcmUpdate(SettingsActivity.this);
+                        }
+                    });
+                }
+
+                @Override
+                public void onSessionRegistrationFailed() {
+                    onSessionRegistred();
+                }
+
+                @Override
+                public void onSessionUnregistred() {
+                    onSessionRegistred();
+                }
+
+                @Override
+                public void onSessionUnregistrationFailed() {
+                    onSessionRegistred();
+                }
+            };
+
+            gcmRegistrationManager.addSessionsRegistrationListener(listener);
+        }
     }
 
     private void listenBoxUpdate(final SharedPreferences preferences, final int boxId, final String preferenceKey, boolean defaultValue) {
@@ -333,11 +383,16 @@ public class SettingsActivity extends MXCActionBarActivity {
                             final GcmRegistrationManager.GcmSessionRegistration listener = new GcmRegistrationManager.GcmSessionRegistration() {
                                 @Override
                                 public void onSessionRegistred(){
-                                    gcmLayout.setEnabled(true);
-                                    gcmLayout.setAlpha(1.0f);
-                                    refreshGCMEntries();
+                                    SettingsActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            gcmLayout.setEnabled(true);
+                                            gcmLayout.setAlpha(1.0f);
+                                            refreshGCMEntries();
 
-                                    CommonActivityUtils.onGcmUpdate(SettingsActivity.this);
+                                            CommonActivityUtils.onGcmUpdate(SettingsActivity.this);
+                                        }
+                                    });
                                 }
 
                                 @Override
