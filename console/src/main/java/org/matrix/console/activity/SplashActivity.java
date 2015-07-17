@@ -164,6 +164,8 @@ public class SplashActivity extends MXCActionBarActivity {
                     onPusherRegistered();
                 }
             });
+        } else if (mGcmRegistrationManager.useGCM()) {
+            mGcmRegistrationManager.reregisterSessions(null);
         }
 
         boolean noUpdate;

@@ -289,11 +289,11 @@ public final class GcmRegistrationManager {
      * @param session the session to register.
      * @param listener the registration listener
      */
-    public void registerSession(final MXSession session, final GcmSessionRegistration listener) {
+    public void registerSession(final MXSession session, boolean append, final GcmSessionRegistration listener) {
         session.getPushersRestClient()
                 .addHttpPusher(mPushKey, mPusherAppId, mPusherFileTag + "_" + session.getMyUser().userId,
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
-                        mPusherUrl, new ApiCallback<Void>() {
+                        mPusherUrl, append, new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 Log.d(LOG_TAG, "registerPusher succeeded");
@@ -407,6 +407,21 @@ public final class GcmRegistrationManager {
         }
     }
 
+    public void reregisterSessions(final GcmSessionRegistration listener) {
+        if ((mRegistrationState == RegistrationState.SERVER_REGISTERED) || (mRegistrationState == RegistrationState.GCM_REGISTRED)){
+            mRegistrationState = RegistrationState.GCM_REGISTRED;
+
+            registerSessions(listener);
+        } else {
+            if (null != listener) {
+                try {
+                    listener.onSessionRegistrationFailed();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
     /**
      * Register the current sessions to the 3rd party GCM server
      * @param listener the registration listener.
@@ -445,7 +460,7 @@ public final class GcmRegistrationManager {
 
         MXSession session = sessions.get(index);
 
-        registerSession(session, new GcmSessionRegistration() {
+        registerSession(session, (index > 0), new GcmSessionRegistration() {
             @Override
             public void onSessionRegistred() {
                 registerSessions(sessions, index + 1);
@@ -542,6 +557,7 @@ public final class GcmRegistrationManager {
             }
         } else {
             mRegistrationState = RegistrationState.SERVER_UNREGISTRATING;
+            addSessionsRegistrationListener(listener);
             unregisterSessions(new ArrayList<MXSession>(Matrix.getInstance(mContext).getSessions()), 0);
         }
     }
