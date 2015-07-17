@@ -305,7 +305,7 @@ public final class GcmRegistrationManager {
 
                                 if (null != listener) {
                                     try {
-                                        listener.
+                                        listener.onSessionRegistrationFailed();
                                     } catch (Exception e) {
                                     }
                                 }
