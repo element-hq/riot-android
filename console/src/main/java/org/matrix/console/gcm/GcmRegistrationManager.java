@@ -26,6 +26,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -93,7 +94,8 @@ public final class GcmRegistrationManager {
         GCM_REGISTRATING,
         GCM_REGISTRED,
         SERVER_REGISTRATING,
-        SERVER_REGISTERED
+        SERVER_REGISTERED,
+        SERVER_UNREGISTRATING,
     };
 
     private static String mBasePusherDeviceName = Build.MODEL.trim();
@@ -122,6 +124,7 @@ public final class GcmRegistrationManager {
      * reset the Registration
      */
     public void reset() {
+
         unregisterSessions(null);
 
         // remove the customized keys
@@ -252,6 +255,10 @@ public final class GcmRegistrationManager {
         return mRegistrationState == RegistrationState.SERVER_REGISTERED;
     }
 
+    public Boolean isRegistrating() {
+        return (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_UNREGISTRATING);
+    }
+
     private String getPushKey(Context appContext) {
         String pushKey = getStoredPushKey();
 
@@ -293,10 +300,12 @@ public final class GcmRegistrationManager {
                                 }
                             }
 
-                            private void onError() {
+                            private void onError(String message) {
+                                Toast.makeText(mContext, "fail to register " + session.getMyUser().userId + " (" + message +")", Toast.LENGTH_LONG).show();
+
                                 if (null != listener) {
                                     try {
-                                        listener.onSessionRegistrationFailed();
+                                        listener.
                                     } catch (Exception e) {
                                     }
                                 }
@@ -305,19 +314,19 @@ public final class GcmRegistrationManager {
                             @Override
                             public void onNetworkError(Exception e) {
                                 Log.e(LOG_TAG, "registerPusher onNetworkError " + e.getMessage());
-                                onError();
+                                onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onMatrixError(MatrixError e) {
                                 Log.e(LOG_TAG, "registerPusher onMatrixError " + e.errcode);
-                                onError();
+                                onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onUnexpectedError(Exception e) {
                                 Log.e(LOG_TAG, "registerPusher onUnexpectedError " + e.getMessage());
-                                onError();
+                                onError(e.getLocalizedMessage());
                             }
                         });
     }
@@ -328,6 +337,8 @@ public final class GcmRegistrationManager {
      */
     public void registerSessions(final GcmSessionRegistration listener) {
         if (mRegistrationState != RegistrationState.GCM_REGISTRED) {
+            Log.e(LOG_TAG, "registerSessions : invalid state " + mRegistrationState);
+
             if (null != listener) {
                 try {
                     listener.onSessionRegistrationFailed();
@@ -410,7 +421,9 @@ public final class GcmRegistrationManager {
                                 }
                             }
 
-                            private void onError() {
+                            private void onError(String message) {
+                                Toast.makeText(mContext, "fail to unregister " + session.getMyUser().userId + " (" + message +")", Toast.LENGTH_LONG).show();
+
                                 if (null != listener) {
                                     try {
                                         listener.onSessionUnregistrationFailed();
@@ -422,19 +435,19 @@ public final class GcmRegistrationManager {
                             @Override
                             public void onNetworkError(Exception e) {
                                 Log.e(LOG_TAG, "unregisterSession onNetworkError " + e.getMessage());
-                                onError();
+                                onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onMatrixError(MatrixError e) {
                                 Log.e(LOG_TAG, "unregisterSession onMatrixError " + e.errcode);
-                                onError();
+                                onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onUnexpectedError(Exception e) {
                                 Log.e(LOG_TAG, "unregisterSession onUnexpectedError " + e.getMessage());
-                                onError();
+                                onError(e.getLocalizedMessage());
                             }
                         });
     }
@@ -445,6 +458,8 @@ public final class GcmRegistrationManager {
      */
     public void unregisterSessions(final GcmSessionRegistration listener) {
         if (mRegistrationState != RegistrationState.SERVER_REGISTERED) {
+            Log.e(LOG_TAG, "unregisterSessions : invalid state " + mRegistrationState);
+
             if (null != listener) {
                 try {
                     listener.onSessionUnregistrationFailed();
@@ -452,7 +467,7 @@ public final class GcmRegistrationManager {
                 }
             }
         } else {
-            mRegistrationState = RegistrationState.GCM_REGISTRED;
+            mRegistrationState = RegistrationState.SERVER_UNREGISTRATING;
             unregisterSessions(new ArrayList<MXSession>(Matrix.getInstance(mContext).getSessions()), 0, listener);
         }
     }
@@ -466,6 +481,8 @@ public final class GcmRegistrationManager {
     private void unregisterSessions(final ArrayList<MXSession> sessions, final int index, final GcmSessionRegistration listener) {
         // reach this end of the list ?
         if (index >= sessions.size()) {
+            mRegistrationState = RegistrationState.GCM_REGISTRED;
+
             if (null != listener) {
                 try {
                     listener.onSessionUnregistred();
@@ -493,6 +510,8 @@ public final class GcmRegistrationManager {
 
             @Override
             public void onSessionUnregistrationFailed() {
+                mRegistrationState = RegistrationState.SERVER_REGISTERED;
+
                 if (null != listener) {
                     try {
                         listener.onSessionUnregistrationFailed();
