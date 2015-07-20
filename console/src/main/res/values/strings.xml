@@ -2,7 +2,7 @@
 <resources>
 
     <!-- titles -->
-    <string name="app_name">Matrix Console</string>
+    <string name="app_name">Vector</string>
     <string name="title_activity_home">Matrix Home</string>
     <string name="title_activity_room">Matrix Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
@@ -71,10 +71,11 @@
     <string name="create_room">Create room</string>
     <string name="join_room">Join room</string>
     <string name="create">Create:</string>
-    <string name="username">Username</string>
+    <string name="sign_in">Sign in</string>
+    <string name="username">Email or user name</string>
     <string name="password">Password</string>
     <string name="matrix_login">Matrix Login</string>
-    <string name="login">Login</string>
+    <string name="login">Log in</string>
     <string name="create_account">Create account</string>
     <string name="hs_url">Home Server URL</string>
 

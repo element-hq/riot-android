@@ -14,4 +14,6 @@
     <color name="room_summary_highlight_background">#FF88BBFF</color>
     <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
 
+    <color name="vector_green">#FF68CA9D</color>
+
 </resources>

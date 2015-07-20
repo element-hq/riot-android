@@ -2,18 +2,30 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:background="#FFFFFFFF"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="50dp"
         android:src="@drawable/logo_large"
         android:contentDescription="@string/logo"/>
 
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/sign_in"/>
+
     <EditText
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
@@ -21,6 +33,8 @@
         android:hint="@string/username"/>
 
     <EditText
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
@@ -30,6 +44,7 @@
         android:hint="@string/password"/>
 
     <EditText
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
@@ -38,15 +53,24 @@
         android:text="https://matrix.org"/>
 
     <Button
+        android:radius="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
+        android:textColor="#FFFFFFFF"
         android:id="@+id/button_login"
+        android:background="@drawable/rounded_button_bg"
         android:layout_gravity="center_horizontal"/>
+
     <Button
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_account"
         android:id="@+id/button_create_account"
         android:layout_gravity="center_horizontal"/>
+
 </LinearLayout>
