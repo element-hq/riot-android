@@ -61,8 +61,7 @@ public class MyPresenceManager {
 
     private MyUser myUser;
     private Handler mHandler;
-    private String latestAdvertisedPresence; // Presence we're advertising
-    private String tmpPresence;
+    private String latestAdvertisedPresence = ""; // Presence we're advertising
 
     private MyPresenceManager(Context context, MXSession session) {
         myUser = session.getMyUser();
@@ -142,91 +141,36 @@ public class MyPresenceManager {
      * Send the advertise presence message.
      * @param presence the presence message.
      */
-    private void advertisePresence(String presence) {
-        latestAdvertisedPresence = presence;
-        tmpPresence = presence;
+    public void advertisePresence(String presence) {
+        if (!latestAdvertisedPresence.equals(presence)) {
+            latestAdvertisedPresence = presence;
 
-        // Only do it if different
-        if (!presence.equals(myUser.presence)) {
             Log.d(LOG_TAG, "Advertising presence " + presence);
             myUser.updatePresence(presence, null, null);
         }
     }
 
-    /**
-     * Send the advertise presence message after delay.
-     * @param presence the presence message.
-     */
-    private void advertisePresenceAfterDelay(final String presence) {
-        tmpPresence = presence;
+    private static void advertiseAll(String presence) {
+        Collection<MyPresenceManager> values = instances.values();
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Only advertise if the presence hasn't changed in the meantime
-                if (presence.equals(tmpPresence)) {
-                    advertisePresence(presence);
-                }
-            }
-        }, DELAY_TS);
+        for(MyPresenceManager myPresenceManager : values) {
+            myPresenceManager.advertisePresence(presence);
+        }
     }
 
-    /**
-     * Send the online event to each known MyPresenceManager
-     */
     public static void advertiseAllOnline() {
-        Collection<MyPresenceManager> values = instances.values();
-
-        for(MyPresenceManager myPresenceManager : values) {
-            myPresenceManager.advertiseOnline();
-        }
+        advertiseAll(User.PRESENCE_ONLINE);
     }
 
-    /**
-     * Send the online message.
-     */
-    public void advertiseOnline() {
-        advertisePresence(User.PRESENCE_ONLINE);
-    }
-
-    /**
-     * Send the offline event to each known MyPresenceManager.
-     */
     public static void advertiseAllOffline() {
-        Collection<MyPresenceManager> values = instances.values();
-
-        for(MyPresenceManager myPresenceManager : values) {
-            myPresenceManager.advertiseOffline();
-        }
+        advertiseAll(User.PRESENCE_OFFLINE);
     }
 
-    /**
-     * Send the offline message.
-     */
+    public static void advertiseAllUnavailable() {
+        advertiseAll(User.PRESENCE_UNAVAILABLE);
+    }
+
     public void advertiseOffline() {
         advertisePresence(User.PRESENCE_OFFLINE);
-    }
-
-    /**
-     * Send the Unavailable event to each known MyPresenceManager.
-     */
-    public static void advertiseAllUnavailableAfterDelay() {
-        Collection<MyPresenceManager> values = instances.values();
-
-        for(MyPresenceManager myPresenceManager : values) {
-            myPresenceManager.advertiseUnavailableAfterDelay();
-        }
-    }
-
-    /**
-     * Send the Unavailable mesage after delay
-     */
-    public void advertiseUnavailableAfterDelay() {
-        // If we've advertised that we're offline, we can't go straight to unavailable
-        // This avoids the case where the user logs out, advertising OFFLINE, but then leaves the
-        // activity, advertising UNAVAILABLE
-        if (!User.PRESENCE_OFFLINE.equals(latestAdvertisedPresence)) {
-            advertisePresenceAfterDelay(User.PRESENCE_UNAVAILABLE);
-        }
     }
 }

@@ -36,8 +36,10 @@ import org.matrix.console.contacts.ContactsManager;
 import org.matrix.console.contacts.PIDsRetriever;
 import org.matrix.console.ga.Analytics;
 import org.matrix.console.services.EventStreamService;
+import org.matrix.console.util.LogUtilities;
 
 import java.io.Console;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,6 +72,9 @@ public class ConsoleApplication extends Application {
         }
         catch (PackageManager.NameNotFoundException e) {}
 
+        LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath()+"/logs"));
+        LogUtilities.storeLogcat();
+
         initGoogleAnalytics();
 
         // reset the application badge at application launch
@@ -97,6 +102,8 @@ public class ConsoleApplication extends Application {
                     CommonActivityUtils.pauseEventStream(ConsoleApplication.this);
                 }
                 PIDsRetriever.getIntance().onAppBackgrounded();
+
+                MyPresenceManager.advertiseAllUnavailable();
             }
         };
 
@@ -127,6 +134,8 @@ public class ConsoleApplication extends Application {
             // get the contact update at application launch
             ContactsManager.refreshLocalContactsSnapshot(this);
         }
+
+        MyPresenceManager.advertiseAllOnline();
 
         this.isInBackground = false;
     }

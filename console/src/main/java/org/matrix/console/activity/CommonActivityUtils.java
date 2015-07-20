@@ -83,11 +83,11 @@ public class CommonActivityUtils {
         MyPresenceManager.getInstance(activity, session).advertiseOffline();
         MyPresenceManager.remove(session);
 
-        // clear credentials
-        Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
-
         // unregister from the GCM.
         Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
+
+        // clear credentials
+        Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
     }
 
     /**
@@ -264,7 +264,7 @@ public class CommonActivityUtils {
         MXSession session = (aSession == null) ? Matrix.getMXSession(fromActivity, null) : aSession;
 
         // sanity check
-        if (null == session) {
+        if ((null == session) || !session.isActive()) {
             return;
         }
 
@@ -328,7 +328,7 @@ public class CommonActivityUtils {
         }
 
         // sanity check
-        if (null == session) {
+        if ((null == session) || !session.isActive()) {
             return;
         }
 
@@ -488,6 +488,11 @@ public class CommonActivityUtils {
      * @param session the session/
      */
     public static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
+        // sanity check
+        if ((null == session) || !session.isActive()) {
+            return;
+        }
+
         final ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>();
         mergedSummaries.addAll(session.getDataHandler().getStore().getSummaries());
 

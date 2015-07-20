@@ -51,7 +51,14 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         public void onMessageLongClick(int position, Message message);
     }
 
+    public static interface AvatarClickListener {
+        public Boolean onAvatarClick(String roomId, String userId);
+        public Boolean onAvatarLongClick(String roomId, String userId);
+        public Boolean onDisplayNameClick(String userId, String displayName);
+    }
+
     private MessageLongClickListener mLongClickListener = null;
+    private AvatarClickListener mAvatarClickListener = null;
 
     public ConsoleMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context, mediasCache);
@@ -61,13 +68,45 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         mLongClickListener = listener;
     }
 
+    public void setAvatarClickListener(AvatarClickListener listener) {
+        mAvatarClickListener = listener;
+    }
+
     @Override
     public void onAvatarClick(String roomId, String userId){
+        if (null != mAvatarClickListener) {
+            if (mAvatarClickListener.onAvatarClick(roomId, userId)) {
+                return;
+            }
+        }
+
         Intent startRoomInfoIntent = new Intent(mContext, MemberDetailsActivity.class);
         startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, roomId);
         startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, userId);
         startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
         mContext.startActivity(startRoomInfoIntent);
+    }
+
+    @Override
+    public Boolean onAvatarLongClick(String roomId, String userId) {
+        if (null != mAvatarClickListener) {
+            if (mAvatarClickListener.onAvatarLongClick(roomId, userId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onSenderNameClick(String userId, String displayName) {
+        if (null != mAvatarClickListener) {
+            if (mAvatarClickListener.onDisplayNameClick(userId, displayName)) {
+                // do something here ?
+            }
+        }
+
+        // default behaviour
     }
 
     /**

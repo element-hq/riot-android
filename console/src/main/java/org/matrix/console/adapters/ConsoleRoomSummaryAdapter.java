@@ -62,11 +62,30 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
      * @return the Room.
      */
     public Room roomFromRoomSummary(RoomSummary roomSummary) {
+        // sanity check
+        if ((null == roomSummary) || (null == roomSummary.getMatrixId())) {
+            return null;
+        }
+
+        MXSession session = Matrix.getMXSession(mContext, roomSummary.getMatrixId());
+
+        // check if the session is active
+        if ((null == session) || (!session.isActive())) {
+            return null;
+        }
+
         return Matrix.getMXSession(mContext, roomSummary.getMatrixId()).getDataHandler().getStore().getRoom(roomSummary.getRoomId());
     }
 
     public String memberDisplayName(String matrixId, String userId) {
-        User user = Matrix.getMXSession(mContext, matrixId).getDataHandler().getStore().getUser(userId);
+        MXSession session = Matrix.getMXSession(mContext, matrixId);
+
+        // check if the session is active
+        if ((null == session) || (!session.isActive())) {
+            return null;
+        }
+
+        User user = session.getDataHandler().getStore().getUser(userId);
 
         if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
             return user.displayname;
@@ -85,7 +104,11 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
         if (mSessions.size() == 1) {
             return mContext.getResources().getString(R.string.my_rooms);
         } else {
-            return mSessions.get(section).getMyUser().userId;
+            if (mSessions.get(section).isActive()) {
+                return mSessions.get(section).getMyUser().userId;
+            } else {
+                return mContext.getResources().getString(R.string.my_rooms);
+            }
         }
     }
 

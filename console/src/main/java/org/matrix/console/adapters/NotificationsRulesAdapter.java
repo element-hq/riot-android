@@ -173,12 +173,12 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
                         if (existingRoomIds.indexOf(room.getRoomId()) < 0) {
                             String name = room.getName(mMyUserId);
 
-                            if (TextUtils.isEmpty(name)) {
-                                name = room.getRoomId();
+                            // don't add room with no "human readable" name
+                            // it should hide the pending invitation rooms
+                            if (!TextUtils.isEmpty(name) && !name.equals(room.getRoomId())) {
+                                namesList.add(name);
+                                roomsList.add(room);
                             }
-
-                            namesList.add(name);
-                            roomsList.add(room);
                         }
                     }
 

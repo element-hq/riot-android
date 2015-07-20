@@ -53,7 +53,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsoleMessageListFragment extends MatrixMessageListFragment implements ConsoleMessagesAdapter.MessageLongClickListener {
+public class ConsoleMessageListFragment extends MatrixMessageListFragment implements ConsoleMessagesAdapter.MessageLongClickListener, ConsoleMessagesAdapter.AvatarClickListener {
 
     public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         ConsoleMessageListFragment f = new ConsoleMessageListFragment();
@@ -81,6 +81,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
         // can set any adapters
         ConsoleMessagesAdapter adapter = new ConsoleMessagesAdapter(mSession, getActivity(), getMXMediasCache());
         adapter.setMessageLongClickListener(this);
+        adapter.setAvatarClickListener(this);
 
         return adapter;
     }
@@ -324,7 +325,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
 
         entries.add(getActivity().getText(R.string.downloads).toString());
 
-        if (mediaMimeType.startsWith("image/")) {
+        if ((null == mediaMimeType) || mediaMimeType.startsWith("image/")) {
             entries.add(getActivity().getText(R.string.gallery).toString());
         }
 
@@ -391,5 +392,25 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
     @Override
     public void onMessageLongClick(int position, Message message) {
         onItemClick(position);
+    }
+
+    @Override
+    public Boolean onAvatarClick(String roomId, String userId) {
+        return false;
+    }
+
+    @Override
+    public Boolean onAvatarLongClick(String roomId, String userId) {
+        return false;
+    }
+
+    @Override
+    public Boolean onDisplayNameClick(String userId, String displayName) {
+        if (getActivity() instanceof RoomActivity) {
+            ((RoomActivity)getActivity()).appendTextToEditor(displayName);
+            return true;
+        }
+
+        return false;
     }
 }

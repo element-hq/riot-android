@@ -244,5 +244,7 @@
 
     <string name="logo">Logo</string>
     <string name="user_says_body">%1$s says %2$s</string>
+    <string name="unseen_message">%1$s unseen notified message</string>
+    <string name="unseen_messages">%1$s unseen notified messages</string>
 
 </resources>

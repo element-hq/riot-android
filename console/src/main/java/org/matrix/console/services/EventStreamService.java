@@ -22,6 +22,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -44,9 +46,13 @@ import org.matrix.console.activity.CommonActivityUtils;
 import org.matrix.console.activity.HomeActivity;
 import org.matrix.console.util.NotificationUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.crypto.AEADBadTagException;
 
 /**
  * A foreground service in charge of controlling whether the event stream is running or not.
@@ -77,6 +83,7 @@ public class EventStreamService extends Service {
 
     private Boolean mIsForegound = false;
     private int mUnreadMessagesCounter = 0;
+    private HashMap<String, HashMap<String, Integer>> mUnreadMessagesMapByRoomId = new HashMap<String, HashMap<String, Integer>>();
 
     private Notification mLatestNotification = null;
 
@@ -197,7 +204,7 @@ public class EventStreamService extends Service {
             // should never happen.
             // But it could be triggered because of multi accounts management.
             // The dedicated account is removing but some pushes are still received.
-            if (null == session) {
+            if ((null == session) || !session.isActive()) {
                 return;
             }
 
@@ -208,7 +215,31 @@ public class EventStreamService extends Service {
                 return;
             }
 
+            int unreadNotifForThisUser = 0;
+
+            // update the badge
+            if (ConsoleApplication.isAppInBackground()) {
+                CommonActivityUtils.updateUnreadMessagesBadge(getApplicationContext(), ++mUnreadMessagesCounter);
+
+                HashMap<String, Integer> countByUserIds = null;
+
+                if (mUnreadMessagesMapByRoomId.containsKey(roomId)) {
+                    countByUserIds = mUnreadMessagesMapByRoomId.get(roomId);
+                } else {
+                    countByUserIds = new HashMap<String, Integer>();
+                    mUnreadMessagesMapByRoomId.put(roomId, countByUserIds);
+                }
+
+                if (countByUserIds.containsKey(senderID)) {
+                    unreadNotifForThisUser = countByUserIds.get(senderID);
+                }
+
+                unreadNotifForThisUser++;
+                countByUserIds.put(senderID, unreadNotifForThisUser);
+            }
+
             String from = "";
+            Bitmap largeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_contact_picture_holo_light);
 
             // when the event is an invitation one
             // don't check if the sender ID is known because the members list are not yet downloaded
@@ -221,6 +252,16 @@ public class EventStreamService extends Service {
                 }
 
                 from = member.getName();
+
+                int size = getApplicationContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+
+                File f = session.getMediasCache().thumbnailCacheFile(member.avatarUrl, size);
+
+                if (null != f) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                }
             }
 
             String roomName = null;
@@ -232,11 +273,15 @@ public class EventStreamService extends Service {
 
             mLatestNotification = NotificationUtils.buildMessageNotification(
                     EventStreamService.this,
-                    from, session.getCredentials().userId, Matrix.getMXSessions(getApplicationContext()).size() > 1, body, event.roomId, roomName, bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
-
-            if (ConsoleApplication.isAppInBackground()) {
-                CommonActivityUtils.updateUnreadMessagesBadge(getApplicationContext(), ++mUnreadMessagesCounter);
-            }
+                    from, session.getCredentials().userId,
+                    Matrix.getMXSessions(getApplicationContext()).size() > 1,
+                    largeBitmap,
+                    mUnreadMessagesCounter,
+                    unreadNotifForThisUser,
+                    body,
+                    event.roomId,
+                    roomName,
+                    bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
         }
 
         @Override
@@ -369,6 +414,7 @@ public class EventStreamService extends Service {
         if (0 != mUnreadMessagesCounter) {
             mUnreadMessagesCounter = 0;
             CommonActivityUtils.updateUnreadMessagesBadge(this, mUnreadMessagesCounter);
+            mUnreadMessagesMapByRoomId = new HashMap<String, HashMap<String, Integer>>();
         }
 
         if (mState == StreamAction.START) {
@@ -421,8 +467,10 @@ public class EventStreamService extends Service {
 
         if (mSessions != null) {
             for(MXSession session : mSessions) {
-                session.stopEventStream();
-                session.getDataHandler().removeListener(mListener);
+                if (session.isActive()) {
+                    session.stopEventStream();
+                    session.getDataHandler().removeListener(mListener);
+                }
             }
         }
         mMatrixIds = null;

@@ -17,6 +17,7 @@ package org.matrix.console.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.adapters.RoomMembersAdapter;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -419,19 +421,26 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         } else if (User.PRESENCE_UNAVAILABLE.equals(presence)) {
             presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_unavailable));
         } else if (User.PRESENCE_OFFLINE.equals(presence)) {
-            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_offline));
+            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_unavailable));
         } else {
             presenceRingView.setColorFilter(android.R.color.transparent);
         }
 
         TextView presenceTextView = (TextView)findViewById(R.id.textView_lastPresence);
 
-        if ((user == null) || (user.lastActiveAgo == null) || User.PRESENCE_ONLINE.equals(presence)) {
+        if ((user == null) || (user.lastActiveAgo == null)) {
             presenceTextView.setVisibility(View.GONE);
         }
         else {
             presenceTextView.setVisibility(View.VISIBLE);
-            presenceTextView.setText(buildLastActiveDisplay(user.getRealLastActiveAgo()));
+
+            if (User.PRESENCE_OFFLINE.equals(user.presence)) {
+                presenceTextView.setText(User.PRESENCE_OFFLINE);
+                presenceTextView.setTextColor(Color.RED);
+            } else {
+                presenceTextView.setText(buildLastActiveDisplay(user.getRealLastActiveAgo()));
+                presenceTextView.setTextColor(Color.BLACK);
+            }
         }
     }
 
@@ -448,16 +457,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
     }
 
     private String buildLastActiveDisplay(final long lastActiveAgo) {
-        String res = "";
-        long msInDay = 1000 * 60 * 60 * 24;
-
-        if (lastActiveAgo < msInDay) {
-            res = DateFormat.getDateTimeInstance().format(System.currentTimeMillis() - lastActiveAgo);
-        } else {
-            res = getString(org.matrix.androidsdk.R.string.last_seen_days, lastActiveAgo / msInDay);
-        }
-
-        return res;
+        return RoomMembersAdapter.buildLastActiveDisplay(this, lastActiveAgo);
     }
 
     @Override
