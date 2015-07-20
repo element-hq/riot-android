@@ -21,6 +21,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.matrix.console.ga.Analytics;
 
@@ -32,6 +33,7 @@ import java.util.HashMap;
  * Manage the local contacts
  */
 public class ContactsManager {
+    private static final String LOG_TAG = "ContactsManager";
 
     public static interface ContactsManagerListener {
         /**
@@ -97,93 +99,121 @@ public class ContactsManager {
         HashMap<String, Contact> dict = new HashMap<String, Contact>();
 
         // get the names
-        Cursor namesCur = cr.query(ContactsContract.Data.CONTENT_URI,
-                new String[]{ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                        ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID,
-                        ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
-                },
-                ContactsContract.Data.MIMETYPE + " = ?",
-                new String[] { ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE }, null);
+        Cursor namesCur = null;
 
+        try {
+            namesCur = cr.query(ContactsContract.Data.CONTENT_URI,
+                    new String[]{ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                            ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID,
+                            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
+                    },
+                    ContactsContract.Data.MIMETYPE + " = ?",
+                    new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "cr.query ContactsContract.Data.CONTENT_URI fails " + e.getMessage());
+        }
 
         if (namesCur != null) {
-            while (namesCur.moveToNext()) {
-                String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
-                String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
-                String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
+            try {
+                while (namesCur.moveToNext()) {
+                    String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+                    String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
+                    String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
 
-                if (null != contactId) {
-                    Contact contact = dict.get(contactId);
+                    if (null != contactId) {
+                        Contact contact = dict.get(contactId);
 
-                    if (null == contact) {
-                        contact = new Contact(contactId);
-                        dict.put(contactId, contact);
-                    }
+                        if (null == contact) {
+                            contact = new Contact(contactId);
+                            dict.put(contactId, contact);
+                        }
 
-                    if (null != displayName) {
-                        contact.setDisplayName(displayName);
-                    }
+                        if (null != displayName) {
+                            contact.setDisplayName(displayName);
+                        }
 
-                    if (null != thumbnailUri) {
-                        contact.mThumbnailUri = thumbnailUri;
+                        if (null != thumbnailUri) {
+                            contact.mThumbnailUri = thumbnailUri;
+                        }
                     }
                 }
+            } catch (Exception e) {
             }
+
             namesCur.close();
         }
 
         // get the phonenumbers
-        Cursor phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Phone.DATA, // actual number
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-                },
-                null,null, null);
+        Cursor phonesCur = null;
+
+        try {
+            phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.DATA, // actual number
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                    },
+                    null, null, null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "cr.query ContactsContract.Phone.CONTENT_URI fails " + e.getMessage());
+        }
 
         if (null != phonesCur) {
-            while (phonesCur.moveToNext()) {
-                String phone = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+            try {
+                while (phonesCur.moveToNext()) {
+                    String phone = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
 
-                if (!TextUtils.isEmpty(phone)) {
-                    String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                    if (!TextUtils.isEmpty(phone)) {
+                        String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
 
-                    if (null != contactId) {
-                        Contact contact = dict.get(contactId);
-                        if (null == contact) {
-                            contact = new Contact(contactId);
-                            dict.put(contactId, contact);
+                        if (null != contactId) {
+                            Contact contact = dict.get(contactId);
+                            if (null == contact) {
+                                contact = new Contact(contactId);
+                                dict.put(contactId, contact);
+                            }
+
+                            contact.mPhoneNumbers.add(phone);
                         }
-
-                        contact.mPhoneNumbers.add(phone);
                     }
                 }
+            } catch (Exception e) {
             }
+
             phonesCur.close();
         }
 
         // get the emails
-        Cursor emailsCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Email.DATA, // actual email
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID},
-                null, null, null);
+        Cursor emailsCur = null;
 
+        try {
+            emailsCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                    new String[]{ContactsContract.CommonDataKinds.Email.DATA, // actual email
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID},
+                    null, null, null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "cr.query ContactsContract.Email.CONTENT_URI fails " + e.getMessage());
+        }
 
         if (emailsCur != null) {
-            while (emailsCur.moveToNext()) {
-                String email = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                if (!TextUtils.isEmpty(email)) {
-                    String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+            try {
+                while (emailsCur.moveToNext()) {
+                    String email = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                    if (!TextUtils.isEmpty(email)) {
+                        String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
 
-                    if (null != contactId) {
-                        Contact contact = dict.get(contactId);
-                        if (null == contact) {
-                            contact = new Contact(contactId);
-                            dict.put(contactId, contact);
+                        if (null != contactId) {
+                            Contact contact = dict.get(contactId);
+                            if (null == contact) {
+                                contact = new Contact(contactId);
+                                dict.put(contactId, contact);
+                            }
+
+                            contact.mEmails.add(email);
                         }
-
-                        contact.mEmails.add(email);
                     }
                 }
+            } catch (Exception e) {
             }
+            
             emailsCur.close();
         }
 
