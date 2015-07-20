@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="room_background">#f4f4f4</color>
+    <color name="room_background">#FFF3F8FA</color>
 
     <color name="presence_online">#38af00</color>
     <color name="presence_unavailable">#fc0</color>
@@ -15,5 +15,8 @@
     <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
 
     <color name="vector_green">#FF68CA9D</color>
+    <color name="vector_background">#FFF3F8FA</color>
+    <color name="vector_title_color">#FF80CEF4</color>
+    <color name="vector_border_color">#FF80CEF4</color>
 
 </resources>

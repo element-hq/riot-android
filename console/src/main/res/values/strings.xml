@@ -3,8 +3,8 @@
 
     <!-- titles -->
     <string name="app_name">Vector</string>
-    <string name="title_activity_home">Matrix Home</string>
-    <string name="title_activity_room">Matrix Room</string>
+    <string name="title_activity_home">Recents</string>
+    <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
     <string name="title_activity_room_info">Room info</string>
     <string name="title_activity_settings">Settings</string>
