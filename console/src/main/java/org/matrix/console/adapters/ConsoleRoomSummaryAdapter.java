@@ -62,6 +62,11 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
      * @return the Room.
      */
     public Room roomFromRoomSummary(RoomSummary roomSummary) {
+        // sanity check
+        if ((null == roomSummary) || (null == roomSummary.getMatrixId())) {
+            return null;
+        }
+
         MXSession session = Matrix.getMXSession(mContext, roomSummary.getMatrixId());
 
         // check if the session is active
