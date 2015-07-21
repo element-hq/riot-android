@@ -21,20 +21,31 @@
             android:visibility="gone"
             android:indeterminate="true" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_alignTop="@+id/editText_messageBox_layout"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/rounded_menu_bg"
+            android:layout_height="wrap_content" />
+
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_material_file"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/vector_upload"
             android:id="@+id/button_more"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="20dp"
             android:contentDescription="@string/more"/>
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/ic_material_send"
             android:id="@+id/button_send"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="20dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/send"/>
@@ -44,6 +55,8 @@
             android:layout_toLeftOf="@id/button_send"
             android:layout_alignParentBottom="true"
             android:id="@+id/editText_messageBox_layout"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
