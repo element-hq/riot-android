@@ -346,7 +346,7 @@ public class HomeActivity extends MXCActionBarActivity {
                         final Integer[] lIcons = new Integer[]{R.drawable.ic_material_exit_to_app};
                         final Integer[] lTexts = new Integer[]{R.string.action_leave};
 
-                        fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+                        fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts, null, HomeActivity.this.getResources().getColor(R.color.vector_title_color));
                         fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                             @Override
                             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {

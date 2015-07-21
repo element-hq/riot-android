@@ -584,7 +584,7 @@ public class RoomActivity extends MXCActionBarActivity {
                 };
 
 
-                fragment = IconAndTextDialogFragment.newInstance(icons, messages);
+                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, RoomActivity.this.getResources().getColor(R.color.vector_title_color));
                 fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                     @Override
                     public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {

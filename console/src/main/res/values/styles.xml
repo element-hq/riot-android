@@ -35,6 +35,8 @@
 
         <item name="android:subtitleTextStyle">@style/VectorTheme.ActionBar.SubTitleTextStyle</item>
         <item name="subtitleTextStyle">@style/VectorTheme.ActionBar.SubTitleTextStyle</item>
+
+        <item name="popupTheme">@style/VectorActionBarPopupTheme</item>
     </style>
 
     <style name="VectorTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">
@@ -45,6 +47,10 @@
     <style name="VectorTheme.ActionBar.SubTitleTextStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/vector_title_color</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="VectorActionBarPopupTheme">
+        <item name="android:textColor">@color/vector_title_color</item>
     </style>
 
 </resources>

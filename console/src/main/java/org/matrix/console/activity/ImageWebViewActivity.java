@@ -256,7 +256,7 @@ public class ImageWebViewActivity extends FragmentActivity {
                     final Integer[] icons = {R.drawable.ic_material_share, R.drawable.ic_material_forward};
                     final Integer[] textIds = {R.string.share, R.string.forward};
 
-                    fragment = IconAndTextDialogFragment.newInstance(icons, textIds, Color.WHITE);
+                    fragment = IconAndTextDialogFragment.newInstance(icons, textIds, Color.WHITE, ImageWebViewActivity.this.getResources().getColor(R.color.vector_title_color));
                     fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                         @Override
                         public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
