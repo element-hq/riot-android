@@ -17,6 +17,7 @@
 package org.matrix.console.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,8 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.Entry> {
     private int mEntryLayoutResourceId;
 
     private Context mContext;
+
+    public int mTextColor = Color.BLACK;
 
     /**
      * Construct an adapter to display a drawer adapter
@@ -96,6 +99,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerAdapter.Entry> {
 
             TextView textView = (TextView) convertView.findViewById(R.id.adapter_drawer_text);
             textView.setText(entry.mText);
+            textView.setTextColor(mTextColor);
 
             ImageView imageView = (ImageView) convertView.findViewById(R.id.adapter_drawer_thumbnail);
             imageView.setImageResource(entry.mIconResourceId);
