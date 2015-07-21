@@ -432,7 +432,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
                 bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
             }
             subView.setLayoutParams(bodyLayout);
-            
+
             bodyLayoutView.setLayoutParams(bodyLayout);
             subView.setLayoutParams(subViewLinearLayout);
 

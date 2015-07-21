@@ -18,6 +18,7 @@ package org.matrix.console.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -45,7 +46,7 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
     }
 
     public int getUnreadMessageBackgroundColor() {
-        return mContext.getResources().getColor(R.color.room_summary_unread_background);
+        return mContext.getResources().getColor(R.color.vector_background);
     }
 
     public int getHighlightMessageBackgroundColor() {
@@ -54,6 +55,26 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
 
     public int getPublicHighlightMessageBackgroundColor() {
         return mContext.getResources().getColor(R.color.room_summary_public_highlight_background);
+    }
+
+    @Override
+    protected int getUnreadMessageTextColor() {
+        return mContext.getResources().getColor(R.color.vector_title_color);
+    }
+
+    @Override
+    protected int getHighlightMessageTextColor() {
+        return mContext.getResources().getColor(R.color.vector_title_color);
+    }
+
+    @Override
+    protected int getDefaultTextColor() {
+        return Color.BLACK;
+    }
+
+    @Override
+    protected int getSectionTitleColor() {
+        return mContext.getResources().getColor(R.color.vector_title_color);
     }
 
     /**

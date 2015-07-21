@@ -8,9 +8,9 @@
 
     <ImageView
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/logo_large"
         android:contentDescription="@string/logo"/>
@@ -20,7 +20,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/sign_in"/>
 
     <EditText
@@ -44,7 +44,8 @@
         android:hint="@string/password"/>
 
     <EditText
-        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
@@ -53,8 +54,7 @@
         android:text="https://matrix.org"/>
 
     <Button
-        android:radius="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
@@ -66,10 +66,15 @@
         android:layout_gravity="center_horizontal"/>
 
     <Button
-        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_account"
+        android:textColor="#FFFFFFFF"
+        android:background="@drawable/rounded_button_bg"
         android:id="@+id/button_create_account"
         android:layout_gravity="center_horizontal"/>
 
