@@ -22,7 +22,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/notification_settings_disable_all"
-                style="@style/Base.TextAppearance.AppCompat.Body2" />
+                style="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textColor="#FFFFFFFF"
+                android:background="@drawable/rounded_button_bg"/>
 
             <TextView
                 android:id="@+id/notification_settings_disable_text"
@@ -56,6 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
                 android:text="@string/notification_settings_per_word_notifications"/>
 
             <TextView
@@ -86,6 +89,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -110,6 +114,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -134,6 +139,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -312,6 +318,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
