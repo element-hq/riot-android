@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -231,11 +232,12 @@ public class MXCActionBarActivity extends ActionBarActivity {
         // check if the dedicated resource exists
         if ((null != mDrawerLayout) && (null != mDrawerList)) {
 
+            mDrawerList.setBackgroundColor(Color.WHITE);
+
             // Set the adapter for the list view
             DrawerAdapter adapter = new DrawerAdapter(this, R.layout.adapter_drawer_header, R.layout.adapter_drawer_item);
 
             adapter.mTextColor = this.getResources().getColor(R.color.vector_title_color);
-
             adapter.setNotifyOnChange(false);
             for (int index = 0; index < iconResourceIds.length; index++) {
                 adapter.add(iconResourceIds[index], getString(textResourceIds[index]));
