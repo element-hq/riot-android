@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/vector_title_color"
             android:text="@string/settings_title_profile"/>
 
         <!-- notifications section -->
@@ -27,13 +28,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/vector_title_color"
             android:text="@string/settings_title_notifications"/>
 
         <Button
             android:id="@+id/button_notifications_rule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="#FFFFFFFF"
+            android:background="@drawable/rounded_button_bg"
             android:text="@string/settings_title_notifications_rules" />
 
         <!-- GCM section -->
@@ -43,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/vector_title_color"
             android:text="@string/settings_title_gcm"/>
 
         <LinearLayout
@@ -105,6 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/vector_title_color"
             android:text="@string/settings_title_rooms"/>
 
         <LinearLayout
@@ -196,7 +201,8 @@
             android:id="@+id/button_clear_cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="#FFFFFFFF"
+            android:background="@drawable/rounded_button_bg"
             android:text="@string/clear_cache" />
 
         <!-- configuration section -->
@@ -207,6 +213,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/vector_title_color"
             android:text="@string/settings_title_config"/>
 
         <TextView
@@ -241,6 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textColor="@color/vector_title_color"
             android:text="@string/settings_title_commands"/>
 
         <TextView
