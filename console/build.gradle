@@ -11,11 +11,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.matrix.console"
+        applicationId "org.matrix.vector"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 7
-        versionName "0.4.4"
+        versionName "0.1.0"
     }
 
     signingConfigs {
@@ -41,9 +41,9 @@ android {
 
     productFlavors {
         alpha {
-            applicationId "org.matrix.androidsdk.alpha"
-            versionCode 7
-            versionName "0.4.4"
+            applicationId "org.matrix.vector.alpha"
+            versionCode 1
+            versionName "0.1.0"
         }
     }
 

@@ -18,9 +18,9 @@ package org.matrix.console.activity;
 
 import android.support.v7.app.ActionBarActivity;
 
-import org.matrix.console.ConsoleApplication;
-import org.matrix.console.Matrix;
-import org.matrix.console.util.RageShake;
+import org.matrix.vector.ConsoleApplication;
+import org.matrix.vector.Matrix;
+import org.matrix.vector.util.RageShake;
 
 /**
  * extends ActionBarActivity to manage the rageshake
