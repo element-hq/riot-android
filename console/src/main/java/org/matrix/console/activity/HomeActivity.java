@@ -862,13 +862,13 @@ public class HomeActivity extends MXCActionBarActivity {
                     toggleSearchContacts();
                 } else if (id == R.drawable.ic_material_find_in_page) {
                     toggleSearchButton();
-                } else if (id == R.drawable.ic_material_group_add) {
+                } else if (id == R.drawable.vector_create) {
                     createRoom();
                 } else if (id == R.drawable.ic_material_group) {
                     joinRoomByName();
                 } else if (id == R.drawable.ic_material_done_all) {
                     markAllMessagesAsRead();
-                } else if (id == R.drawable.ic_material_settings) {
+                } else if (id == R.drawable.vector_settings) {
                     HomeActivity.this.startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 } else if (id == R.drawable.ic_material_clear) {
                     CommonActivityUtils.disconnect(HomeActivity.this);

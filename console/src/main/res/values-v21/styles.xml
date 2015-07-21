@@ -7,6 +7,10 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="android:actionBarStyle">@style/VectorActionBar</item>
+        <item name="actionBarStyle">@style/VectorActionBar</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,6 +23,25 @@
         <item name="android:paddingRight">10dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- style for the action bar backgrounds -->
+    <style name="VectorActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:titleTextStyle">@style/VectorTheme.ActionBar.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/VectorTheme.ActionBar.TitleTextStyle</item>
+
+        <item name="android:subtitleTextStyle">@style/VectorTheme.ActionBar.SubTitleTextStyle</item>
+        <item name="subtitleTextStyle">@style/VectorTheme.ActionBar.SubTitleTextStyle</item>
+    </style>
+
+    <style name="VectorTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/vector_title_color</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="VectorTheme.ActionBar.SubTitleTextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/vector_title_color</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>
