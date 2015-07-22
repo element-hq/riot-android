@@ -46,6 +46,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -781,6 +782,24 @@ public class RoomActivity extends MXCActionBarActivity {
         ViewedRoomTracker.getInstance().setMatrixId(null);
     }
 
+    void refreshAccountThumbnail() {
+        // remove the ring
+        ImageView presenceRingView = (ImageView) findViewById(R.id.imageView_presenceRing);
+        presenceRingView.setVisibility(View.GONE);
+
+        ImageView avatarView = (ImageView) findViewById(R.id.avatar_img);
+
+        String avatarUrl = mSession.getMyUser().avatarUrl;
+
+        if (avatarUrl == null) {
+            avatarView.setImageResource(R.drawable.ic_contact_picture_holo_light);
+        } else {
+            int size = getResources().getDimensionPixelSize(R.dimen.chat_avatar_size);
+            mMediasCache.loadAvatarThumbnail(avatarView, avatarUrl, size);
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -825,6 +844,8 @@ public class RoomActivity extends MXCActionBarActivity {
                 }
             });
         }
+
+        refreshAccountThumbnail();
     }
 
     @Override

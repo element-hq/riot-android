@@ -28,24 +28,39 @@
             android:background="@drawable/rounded_menu_bg"
             android:layout_height="wrap_content" />
 
+        <FrameLayout
+            android:id="@+id/layout_account_avatar"
+
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true">
+
+            <include layout="@layout/round_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+
         <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/vector_upload"
             android:id="@+id/button_more"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
             android:contentDescription="@string/more"/>
 
         <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/ic_material_send"
             android:id="@+id/button_send"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:contentDescription="@string/send"/>
@@ -55,8 +70,8 @@
             android:layout_toLeftOf="@id/button_send"
             android:layout_alignParentBottom="true"
             android:id="@+id/editText_messageBox_layout"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="0dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
