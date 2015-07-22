@@ -59,9 +59,9 @@ public class NotificationUtils {
         builder.setAutoCancel(true);
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.ic_menu_small_matrix);
+            builder.setSmallIcon(R.drawable.vector_notif);
         } else {
-            builder.setSmallIcon(R.drawable.ic_menu_small_matrix_transparent);
+            builder.setSmallIcon(R.drawable.vector_notif_transparent);
         }
 
         if (null != largeIcon) {
