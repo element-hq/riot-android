@@ -19,7 +19,9 @@ package org.matrix.vector.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.Layout;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +52,22 @@ import org.matrix.vector.activity.MemberDetailsActivity;
 import org.matrix.vector.util.SlidableImageInfo;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * An adapter which can display room information.
  */
 public class ConsoleMessagesAdapter extends MessagesAdapter {
+
+    private Date mReferenceDate = new Date();
+    private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
+
+    private final long MS_IN_DAY = 1000 * 60 * 60 * 24;
 
     public static interface MessageLongClickListener {
         public void onMessageLongClick(int position, Message message);
@@ -122,7 +134,11 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        view.setBackgroundColor(Color.TRANSPARENT);
+
+        if (null != view) {
+            view.setBackgroundColor(Color.TRANSPARENT);
+        }
+
         return view;
     }
 
@@ -240,6 +256,84 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         if (!VectorApplication.isAppInBackground()) {
             super.notifyDataSetChanged();
         }
+
+        // build messages timestamps
+        ArrayList<Date> dates = new ArrayList<Date>();
+
+        for(int index = 0; index < this.getCount(); index++) {
+            MessageRow row = getItem(index);
+            Event msg = row.getEvent();
+            dates.add(zeroTimeDate(new Date(msg.getOriginServerTs())));
+        }
+
+        synchronized (this) {
+            mMessagesDateList = dates;
+            mReferenceDate = new Date();
+        }
+    }
+
+    /**
+     * Reset the time of a date
+     * @param date the date with time to reset
+     * @return the 0 time date.
+     */
+    private Date zeroTimeDate(Date date) {
+        final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(date);
+        gregorianCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        gregorianCalendar.set(Calendar.MINUTE, 0);
+        gregorianCalendar.set(Calendar.SECOND, 0);
+        gregorianCalendar.set(Calendar.MILLISECOND, 0);
+        return gregorianCalendar.getTime();
+    }
+
+    /**
+     * Converts a difference of days to a string.
+     * @param date the date to dislay
+     * @param nbrDays the number of days between the reference days
+     * @return the date text
+     */
+    private String dateDiff(Date date, long nbrDays) {
+        if (nbrDays == 0) {
+            return mContext.getResources().getString(R.string.today);
+        } else if (nbrDays == 1) {
+            return mContext.getResources().getString(R.string.yesterday);
+        } else if (nbrDays < 7) {
+            return (new SimpleDateFormat("EEEE")).format(date);
+        } else  {
+            int flags = DateUtils.FORMAT_SHOW_DATE |
+                    DateUtils.FORMAT_NO_YEAR |
+                    DateUtils.FORMAT_ABBREV_ALL |
+                    DateUtils.FORMAT_SHOW_WEEKDAY;
+
+            return DateUtils.formatDateTime(mContext, date.getTime(), flags);
+        }
+    }
+
+    private String headerMessage(int position) {
+        Date prevMessageDate = null;
+        Date messageDate = null;
+
+        synchronized (this) {
+            if ((position > 0) && (position < mMessagesDateList.size())) {
+                prevMessageDate = mMessagesDateList.get(position -1);
+            }
+            if (position < mMessagesDateList.size()) {
+                messageDate = mMessagesDateList.get(position);
+            }
+        }
+
+        // sanity check
+        if (null == messageDate) {
+            return null;
+        }
+
+        // same day or get the oldest message
+        if ((null != prevMessageDate) && 0 == (prevMessageDate.getTime() - messageDate.getTime())) {
+            return null;
+        }
+
+        return dateDiff(messageDate, (mReferenceDate.getTime() - messageDate.getTime()) / MS_IN_DAY);
     }
 
     @Override
@@ -260,15 +354,18 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         // the notice messages are never merged
         /*if (msgType != ROW_TYPE_NOTICE)*/ {
             //
+            Date prevMsgDate = null;
             String prevUserId = null;
             if (position > 0) {
                 MessageRow prevRow = getItem(position - 1);
 
                 if ((null != prevRow) /*&& (getItemViewType(prevRow.getEvent()) != ROW_TYPE_NOTICE)*/) {
                     prevUserId = prevRow.getEvent().userId;
+                    prevMsgDate = mMessagesDateList.get(position - 1);
                 }
             }
 
+            Date nextMsgDate = null;
             String nextUserId = null;
 
             if ((position + 1) < this.getCount()) {
@@ -276,11 +373,29 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
                 if ((null != nextRow) /*&& (getItemViewType(nextRow.getEvent()) != ROW_TYPE_NOTICE)*/) {
                     nextUserId = nextRow.getEvent().userId;
+                    nextMsgDate = mMessagesDateList.get(position + 1);
                 }
             }
 
+            Date curMsgDate = mMessagesDateList.get(position);
+
             isMergedView = (null != prevUserId) && (prevUserId.equals(msg.userId));
+
+            // no not merge message from different day
+            if (isMergedView) {
+                if (null != prevMsgDate) {
+                    isMergedView = (curMsgDate.getTime() == prevMsgDate.getTime());
+                }
+            }
+
             willBeMerged = (null != nextUserId) && (nextUserId.equals(msg.userId));
+
+            // no not merge message from different day
+            if (willBeMerged) {
+                if (null != nextMsgDate) {
+                    willBeMerged = (curMsgDate.getTime() == nextMsgDate.getTime());
+                }
+            }
         }
 
         View leftTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_left);
@@ -432,9 +547,30 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             subView.setLayoutParams(subViewLinearLayout);
 
             view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
-
             if (null != view) {
+                View line = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator_line);
+
+                if (null != line) {
+                    line.setBackgroundColor(Color.TRANSPARENT);
+                }
                 view.setVisibility((willBeMerged || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
+            }
+
+            View headerLayout = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header);
+
+            if (null != headerLayout) {
+                String header = headerMessage(position);
+
+                if (null != header) {
+                    View headerLine = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_separator);
+                    headerLine.setBackgroundColor(mContext.getResources().getColor(R.color.vector_title_color));
+                    TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
+                    headerText.setTextColor(mContext.getResources().getColor(R.color.vector_title_color));
+                    headerText.setText(header);
+                    headerLayout.setVisibility(View.VISIBLE);
+                } else {
+                    headerLayout.setVisibility(View.GONE);
+                }
             }
         }
 

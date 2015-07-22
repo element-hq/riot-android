@@ -136,6 +136,10 @@
     <string name="members_large_room_members">Large room members</string>
 
     <!-- room creation dialog Screen -->
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+
+    <!-- room creation dialog Screen -->
     <string name="room_creation_room_name">Name</string>
     <string name="room_creation_room_name_hint">(e.g lunchGroup)</string>
     <string name="room_creation_room_alias">Alias</string>
