@@ -612,11 +612,11 @@ public class HomeActivity extends MXCActionBarActivity {
                             List<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(HomeActivity.this));
                             int section = sessions.indexOf(session);
                             String matrixId = session.getCredentials().userId;
-                            Room room = session.getDataHandler().getRoom(event.roomId);
 
                             mAdapter.setLatestEvent(section, event, roomState);
 
                             RoomSummary summary = mAdapter.getSummaryByRoomId(section, event.roomId);
+
                             if (summary == null) {
                                 // ROOM_CREATE events will be sent during initial sync. We want to ignore them
                                 // until the initial sync is done (that is, only refresh the list when there
@@ -638,18 +638,16 @@ public class HomeActivity extends MXCActionBarActivity {
                             }
 
                             // If we've left the room, remove it from the list
-                            else if (mInitialSyncComplete && Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) &&
-                                    isMembershipInRoom(RoomMember.MEMBERSHIP_LEAVE, matrixId, summary)) {
-                                mAdapter.removeRoomSummary(section, summary);
-                                // remove the cached data
-                                session.getDataHandler().getStore().deleteRoom(event.roomId);
+                            else if (mInitialSyncComplete && Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                                if (!(session.getDataHandler().doesRoomExist(event.roomId)) || isMembershipInRoom(RoomMember.MEMBERSHIP_LEAVE, matrixId, summary)) {
+                                    mAdapter.removeRoomSummary(section, summary);
+                                }
                             }
-
                             // Watch for potential room name changes
                             else if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
                                     || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                                     || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                                summary.setName(room.getName(matrixId));
+                                summary.setName(session.getDataHandler().getRoom(event.roomId).getName(matrixId));
                             }
 
                             ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
