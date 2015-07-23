@@ -353,16 +353,18 @@ public class HomeActivity extends MXCActionBarActivity {
                                     HomeActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                                            MXSession session = Matrix.getInstance(HomeActivity.this).getSession(roomSummary.getMatrixId());
+                                            final RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+                                            final MXSession roomSession = Matrix.getInstance(HomeActivity.this).getSession(roomSummary.getMatrixId());
 
                                             String roomId = roomSummary.getRoomId();
-                                            Room room = session.getDataHandler().getRoom(roomId);
+                                            Room room = roomSession.getDataHandler().getRoom(roomId);
 
                                             if (null != room) {
                                                 room.leave(new SimpleApiCallback<Void>(HomeActivity.this) {
                                                     @Override
                                                     public void onSuccess(Void info) {
+                                                        mAdapter.removeRoomSummary(groupPosition, roomSummary);
+                                                        mAdapter.notifyDataSetChanged();
                                                     }
                                                 });
                                             }
