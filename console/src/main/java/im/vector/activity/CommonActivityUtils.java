@@ -719,8 +719,11 @@ public class CommonActivityUtils {
             if (null != fullFilePath) {
                 DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
-                File file = new File(fullFilePath);
-                downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                try {
+                    File file = new File(fullFilePath);
+                    downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
+                } catch (Exception e) {
+                }
             }
         }
 
