@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.matrix.vector"
+        applicationId "im.vector"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 7
@@ -41,7 +41,7 @@ android {
 
     productFlavors {
         alpha {
-            applicationId "org.matrix.vector.alpha"
+            applicationId "im.vector.alpha"
             versionCode 1
             versionName "0.1.0"
         }

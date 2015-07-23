@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.matrix.vector"
+    package="im.vector"
     android:versionName="0.1.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -31,7 +31,7 @@
 
     <application
         android:allowBackup="true"
-        android:name="org.matrix.vector.VectorApplication"
+        android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
         android:logo="@drawable/logo"
         android:label="@string/app_name"
@@ -57,7 +57,7 @@
 
         <!-- activities list starts here -->
         <activity
-            android:name="org.matrix.vector.activity.LoginActivity"
+            android:name="im.vector.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -67,64 +67,64 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.matrix.vector.activity.AccountCreationActivity"
+            android:name="im.vector.activity.AccountCreationActivity"
             android:label="@string/create_account" >
         </activity>
         <activity
-            android:name="org.matrix.vector.activity.SplashActivity"
+            android:name="im.vector.activity.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="org.matrix.vector.activity.HomeActivity"
+            android:name="im.vector.activity.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
         <activity
-            android:name="org.matrix.vector.activity.RoomActivity"
+            android:name="im.vector.activity.RoomActivity"
             android:label="@string/title_activity_room"
-            android:parentActivityName="org.matrix.vector.activity.HomeActivity"
+            android:parentActivityName="im.vector.activity.HomeActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.matrix.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.HomeActivity"/>
 
         </activity>
 
         <activity
-            android:name="org.matrix.vector.activity.SettingsActivity"
+            android:name="im.vector.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="org.matrix.vector.activity.HomeActivity">
+            android:parentActivityName="im.vector.activity.HomeActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.matrix.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.HomeActivity"/>
         </activity>
 
         <activity
-            android:name="org.matrix.vector.activity.NotificationSettingsActivity"
+            android:name="im.vector.activity.NotificationSettingsActivity"
             android:label="@string/title_activity_notification_settings"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="org.matrix.vector.activity.SettingsActivity">
+            android:parentActivityName="im.vector.activity.SettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.matrix.vector.activity.SettingsActivity"/>
+                android:value="im.vector.activity.SettingsActivity"/>
         </activity>
 
 
         <activity
-            android:name="org.matrix.vector.activity.MemberDetailsActivity"
+            android:name="im.vector.activity.MemberDetailsActivity"
             android:label="@string/title_activity_member_details"
-            android:parentActivityName="org.matrix.vector.activity.RoomActivity">
+            android:parentActivityName="im.vector.activity.RoomActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.matrix.vector.activity.RoomActivity"/>
+                android:value="im.vector.activity.RoomActivity"/>
         </activity>
         <activity
-            android:name="org.matrix.vector.activity.LockScreenActivity"
+            android:name="im.vector.activity.LockScreenActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
@@ -133,11 +133,11 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="org.matrix.vector.activity.ImageWebViewActivity"
+            android:name="im.vector.activity.ImageWebViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
-            android:name="org.matrix.vector.activity.ImageSliderActivity"
+            android:name="im.vector.activity.ImageSliderActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <receiver
@@ -153,7 +153,7 @@
         </receiver>
 
         <service
-            android:name="org.matrix.vector.gcm.MatrixGcmListenerService"
+            android:name="im.vector.gcm.MatrixGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -161,18 +161,18 @@
         </service>
 
         <service
-            android:name="org.matrix.vector.gcm.MatrixInstanceIDListenerService"
+            android:name="im.vector.gcm.MatrixInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
 
-        <service android:name="org.matrix.vector.services.EventStreamService" />
+        <service android:name="im.vector.services.EventStreamService" />
 
         <provider
-            android:authorities="org.matrix.vector.ConsoleApplication.provider"
-            android:name="org.matrix.vector.db.ConsoleContentProvider"
+            android:authorities="im.vector.ConsoleApplication.provider"
+            android:name="im.vector.db.ConsoleContentProvider"
             android:exported="true" />
 
     </application>
