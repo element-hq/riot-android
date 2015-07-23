@@ -55,15 +55,27 @@ public class Matrix {
      * @param context the application content
      * @return the sessions list
      */
-    public static Collection<MXSession> getMXSessions(Context context) {
-        return Matrix.getInstance(context.getApplicationContext()).getSessions();
+    public static ArrayList<MXSession> getMXSessions(Context context) {
+        if ((null != context) && (null != instance)) {
+            return instance.getSessions();
+        } else {
+            return null;
+        }
     }
 
     /**
      * @return The list of sessions
      */
-    public Collection<MXSession> getSessions() {
-        return mMXSessions;
+    public ArrayList<MXSession> getSessions() {
+        ArrayList<MXSession> sessions = new ArrayList<MXSession>();
+
+        synchronized (instance) {
+            if (null != mMXSessions) {
+                sessions = new ArrayList<MXSession>(mMXSessions);
+            }
+        }
+
+        return sessions;
     }
 
     /**
@@ -73,8 +85,10 @@ public class Matrix {
      * @return The default session or null.
      */
     public synchronized MXSession getDefaultSession() {
-        if (mMXSessions.size() > 0) {
-            return mMXSessions.get(0);
+        ArrayList<MXSession> sessions = getSessions();
+
+        if (sessions.size() > 0) {
+            return sessions.get(0);
         }
 
         ArrayList<Credentials> credsList = mLoginStorage.getCredentialsList();
@@ -85,18 +99,22 @@ public class Matrix {
         }
 
         ArrayList<String> matrixIds = new ArrayList<String>();
+        sessions = new ArrayList<MXSession>();
 
         for(Credentials creds : credsList) {
             // avoid duplicated accounts.
             if (matrixIds.indexOf(creds.userId) < 0) {
                 MXSession session = createSession(creds);
-                mMXSessions.add(session);
-
+                sessions.add(session);
                 matrixIds.add(creds.userId);
             }
         }
 
-        return mMXSessions.get(0);
+        synchronized (instance) {
+            mMXSessions = sessions;
+        }
+
+        return sessions.get(0);
     }
 
     /**
@@ -116,7 +134,13 @@ public class Matrix {
      */
     public synchronized MXSession getSession(String matrixId) {
         if (null != matrixId) {
-            for (MXSession session : mMXSessions) {
+            ArrayList<MXSession> sessions;
+
+            synchronized (this) {
+                sessions = getSessions();
+            }
+
+            for (MXSession session : sessions) {
                 Credentials credentials = session.getCredentials();
 
                 if ((null != credentials) && (credentials.userId.equals(matrixId))) {
@@ -134,8 +158,8 @@ public class Matrix {
      * @return the mediasCache.
      */
     public MXMediasCache getMediasCache() {
-        if (mMXSessions.size() > 0) {
-            return mMXSessions.get(0).getMediasCache();
+        if (getSessions().size() > 0) {
+            return getSessions().get(0).getMediasCache();
         }
         return null;
     }
@@ -146,8 +170,8 @@ public class Matrix {
      * @return the latest messages cache.
      */
     public MXLatestChatMessageCache getDefaultLatestChatMessageCache() {
-        if (mMXSessions.size() > 0) {
-            return mMXSessions.get(0).getLatestChatMessageCache();
+        if (getSessions().size() > 0) {
+            return getSessions().get(0).getLatestChatMessageCache();
         }
         return null;
     }
@@ -163,7 +187,13 @@ public class Matrix {
      * Refresh the sessions push rules.
      */
     public void refreshPushRules() {
-        for(MXSession session : mMXSessions) {
+        ArrayList<MXSession> sessions = null;
+
+        synchronized (this) {
+            sessions = getSessions();
+        }
+
+        for(MXSession session : sessions) {
             if (null != session.getDataHandler()) {
                 session.getDataHandler().refreshPushRules();
             }
@@ -182,7 +212,10 @@ public class Matrix {
         }
 
         session.clear(context);
-        mMXSessions.remove(session);
+
+        synchronized (instance) {
+            mMXSessions.remove(session);
+        }
     }
 
     /**
@@ -191,8 +224,10 @@ public class Matrix {
      * @param clearCredentials  true to clear the credentials.
      */
     public synchronized void clearSessions(Context context, Boolean clearCredentials) {
-        while (mMXSessions.size() > 0) {
-            clearSession(context, mMXSessions.get(0), clearCredentials);
+        synchronized (instance) {
+            while (mMXSessions.size() > 0) {
+                clearSession(context, mMXSessions.get(0), clearCredentials);
+            }
         }
     }
 
@@ -202,7 +237,9 @@ public class Matrix {
      */
     public synchronized void addSession(MXSession session) {
         mLoginStorage.addCredentials(session.getCredentials());
-        mMXSessions.add(session);
+        synchronized (instance) {
+            mMXSessions.add(session);
+        }
     }
 
     /**
@@ -254,18 +291,22 @@ public class Matrix {
      * @param fromActivity the caller activity
      */
     public void reloadSessions(Activity fromActivity) {
-        for(MXSession session : mMXSessions) {
+        ArrayList<MXSession> sessions = getMXSessions(fromActivity);
+
+        for(MXSession session : sessions) {
             CommonActivityUtils.logout(fromActivity, session, false);
         }
 
         clearSessions(fromActivity, false);
 
-        // build a new sessions list
-        ArrayList<Credentials> credsList = mLoginStorage.getCredentialsList();
+        synchronized (instance) {
+            // build a new sessions list
+            ArrayList<Credentials> credsList = mLoginStorage.getCredentialsList();
 
-        for(Credentials creds : credsList) {
-            MXSession session = createSession(creds);
-            mMXSessions.add(session);
+            for(Credentials creds : credsList) {
+                MXSession session = createSession(creds);
+                mMXSessions.add(session);
+            }
         }
 
         Intent intent = new Intent(fromActivity, SplashActivity.class);
