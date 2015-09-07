@@ -17,6 +17,9 @@
 package im.vector.fragments;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -40,6 +44,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
 import im.vector.R;
@@ -116,16 +121,20 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
      */
     @Override
     public void displayLoadingProgress() {
+        if (null != getActivity()) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                    if (null != getActivity()) {
                 final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
 
                 if (null != progressView) {
                     progressView.setVisibility(View.VISIBLE);
                 }
             }
+                }
         });
+    }
     }
 
     /**
@@ -133,16 +142,20 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
      */
     @Override
     public void dismissLoadingProgress() {
+        if (null != getActivity()) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                    if (null != getActivity()) {
                 final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
 
                 if (null != progressView) {
                     progressView.setVisibility(View.GONE);
                 }
             }
+                }
         });
+    }
     }
 
     /**
@@ -168,10 +181,35 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
         Uri mediaUri = null;
         Message message = JsonUtils.toMessage(messageRow.getEvent().content);
 
-        if (!Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(messageRow.getEvent().type) &&
-            !Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(messageRow.getEvent().type) &&
-            !Event.EVENT_TYPE_STATE_ROOM_NAME.equals(messageRow.getEvent().type))
-        {
+        if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(messageRow.getEvent().type) ||
+            Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(messageRow.getEvent().type) ||
+            Event.EVENT_TYPE_STATE_ROOM_NAME.equals(messageRow.getEvent().type) ||
+                Message.MSGTYPE_EMOTE.equals(message.msgtype)
+                ) {
+
+            if (!messageRow.getEvent().userId.equals(getSession().getCredentials().userId)) {
+                textIds.add(R.string.paste_username);
+                iconIds.add(R.drawable.ic_material_paste);
+            }
+
+            textIds.add(R.string.copy);
+            iconIds.add(R.drawable.ic_material_copy);
+        } else  {
+
+            // copy the message body
+            if (Event.EVENT_TYPE_MESSAGE.equals(messageRow.getEvent().type)) {
+
+                if (!messageRow.getEvent().userId.equals(getSession().getCredentials().userId)) {
+                    textIds.add(R.string.paste_username);
+                    iconIds.add(R.drawable.ic_material_paste);
+                }
+
+                if (Message.MSGTYPE_TEXT.equals(message.msgtype)) {
+                    textIds.add(R.string.copy);
+                    iconIds.add(R.drawable.ic_material_copy);
+                }
+            }
+
             if (messageRow.getEvent().canBeResent()) {
                 textIds.add(R.string.resend);
                 iconIds.add(R.drawable.ic_material_send);
@@ -248,7 +286,30 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
             public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
                 final Integer selectedVal = textIds.get(position);
 
-                if (selectedVal == R.string.resend) {
+                if (selectedVal == R.string.copy) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            Event event = messageRow.getEvent();
+                            String text = "";
+
+                            if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(messageRow.getEvent().type) ||
+                                    Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(messageRow.getEvent().type) ||
+                                    Event.EVENT_TYPE_STATE_ROOM_NAME.equals(messageRow.getEvent().type)) {
+
+                                RoomState roomState = messageRow.getRoomState();
+                                EventDisplay display = new EventDisplay(getActivity(), event, roomState);
+                                text = display.getTextualDisplay().toString();
+                            } else {
+                                text = JsonUtils.toMessage(event.content).body;
+                            }
+
+                            ClipData clip = ClipData.newPlainText("", text);
+                            clipboard.setPrimaryClip(clip);
+                        }
+                    });
+                } else if (selectedVal == R.string.resend) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -308,6 +369,15 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
                             fragment.show(fm, TAG_FRAGMENT_MESSAGE_DETAILS);
                         }
                     });
+                } else if (selectedVal == R.string.paste_username) {
+                    String displayName = messageRow.getEvent().userId;
+                    RoomState state = messageRow.getRoomState();
+
+                    if (null != state) {
+                        displayName = state.getMemberName(displayName);
+                    }
+
+                    onDisplayNameClick(messageRow.getEvent().userId, displayName);
                 }
             }
         });
@@ -407,7 +477,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
     @Override
     public Boolean onDisplayNameClick(String userId, String displayName) {
         if (getActivity() instanceof RoomActivity) {
-            ((RoomActivity)getActivity()).appendTextToEditor(displayName);
+            ((RoomActivity)getActivity()).insertInTextEditor(displayName);
             return true;
         }
 

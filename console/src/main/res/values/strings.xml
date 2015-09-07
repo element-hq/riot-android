@@ -19,9 +19,11 @@
     <string name="stay">Stay</string>
     <string name="leave">Leave</string>
     <string name="send">Send</string>
+    <string name="copy">Copy</string>
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
     <string name="share">Share</string>
+    <string name="paste_username">Paste username</string>
     <string name="forward">Forward</string>
     <string name="message_details">Message details</string>
     <string name="view">View</string>
@@ -37,16 +39,20 @@
     <string name="action_members">Members list</string>
     <string name="action_public_rooms">Public Rooms</string>
     <string name="action_my_rooms">My Rooms</string>
-    <string name="action_add_account">Add account</string>
-    <string name="action_remove_account">remove account</string>
+    <string name="action_add_account">Add Account</string>
+    <string name="action_remove_account">Remove Account</string>
     <string name="action_leave">Leave Room</string>
     <string name="action_delete">Delete Room</string>
     <string name="action_invite">Invite</string>
     <string name="action_disconnect">Disconnect</string>
     <string name="action_logout">Logout</string>
-    <string name="send_bug_report">Send bug report</string>
+    <string name="action_enable_room_notification">Enable room notifications</string>
+    <string name="action_disable_room_notification">Disable room notifications</string>
+    <string name="send_bug_report">Send Bug Report</string>
     <string name="action_create_room">Create...</string>
     <string name="action_room_info">Room info</string>
+    <string name="action_voice_call">Voice Call</string>
+    <string name="action_video_call">Video Call</string>
     <string name="action_search_room">Search room</string>
     <string name="action_search_contact">Search contact</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
@@ -57,6 +63,7 @@
     <string name="action_invite_by_list">Invite from other rooms</string>
     <string name="action_home">Home</string>
     <string name="action_drawer">Extras</string>
+    <string name="action_resume_call">Resume call</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
@@ -68,15 +75,15 @@
     <string name="other">Other</string>
 
     <string name="my_rooms">My rooms</string>
-    <string name="create_room">Create room</string>
-    <string name="join_room">Join room</string>
+    <string name="create_room">Create Room</string>
+    <string name="join_room">Join Room</string>
     <string name="create">Create:</string>
     <string name="sign_in">Sign in</string>
-    <string name="username">Email or user name</string>
+    <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Log in</string>
-    <string name="create_account">Create account</string>
+    <string name="create_account">Create Account</string>
     <string name="hs_url">Home Server URL</string>
 
     <string name="create_room_set_alias">Set room alias</string>
@@ -174,6 +181,8 @@
     <string name="settings_title_notifications_rules">Update Notifications Rules</string>
     <string name="settings_title_rooms">Rooms</string>
     <string name="settings_title_commands">Commands</string>
+    <string name="settings_bugs_report">Bug Reports</string>
+
     <string name="settings_config_console_version">matrixConsole version: %s</string>
     <string name="settings_config_sdk_version">SDK version: %s</string>
     <string name="settings_config_build_number">Build: %s</string>
@@ -185,6 +194,7 @@
     <string name="settings_display_left_members">Display left members</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_display_public_rooms">Display public rooms with recents</string>
+    <string name="settings_rage_shake">Rageshaking to submit bug reports</string>
 
     <!-- Notification settings screen -->
     <string name="notification_settings_title">Notification Settings</string>
@@ -246,10 +256,32 @@
     <string name="settings_key_display_left_members">settings_key_display_left_members</string>
     <string name="settings_key_display_public_rooms_recents">settings_key_display_public_rooms_recents</string>
     <string name="settings_key_use_google_cloud_messaging">settings_key_use_google_cloud_messaging</string>
+    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
 
     <string name="logo">Logo</string>
     <string name="user_says_body">%1$s says %2$s</string>
     <string name="unseen_message">%1$s unseen notified message</string>
     <string name="unseen_messages">%1$s unseen notified messages</string>
+
+    <!-- call string -->
+    <string name="call_connected">Call connected</string>
+    <string name="call_connecting">Call connecting...</string>
+    <string name="call_ended">Call ended</string>
+    <string name="call_ring">Calling...</string>
+    <string name="incoming_call">Incoming Call</string>
+    <string name="incoming_video_call">Incoming Video Call</string>
+    <string name="incoming_voice_call">Incoming Voice Call</string>
+    <string name="call_invite_expired">Call Invite Expired</string>
+    <string name="call_in_progress">Call In Progress</string>
+
+    <string name="call_error_user_not_responding">User Not Responding</string>
+    <string name="call_error_ice_failed">Media Connection Failed</string>
+    <string name="call_error_camera_init_failed">Cannot initialize the camera.</string>
+
+    <string name="action_accept">Accept</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_hangup">Hang up</string>
+
 
 </resources>

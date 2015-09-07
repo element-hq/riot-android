@@ -26,6 +26,7 @@ import android.util.Log;
 import com.google.android.gms.analytics.ExceptionParser;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
+import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
@@ -53,9 +54,16 @@ public class VectorApp extends Application {
     private int VERSION_BUILD = -1;
     private String VERSION_STRING = "";
 
+    private Boolean mIsCallingInBackground = false;
+
+    private static VectorApp instance = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        instance = this;
+
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
 
@@ -80,6 +88,33 @@ public class VectorApp extends Application {
         isInBackground = false;
     }
 
+    public static VectorApp getInstance() {
+        return instance;
+    }
+
+    /**
+     * Suspend background threads.
+     */
+    private void suspendApp() {
+        // suspend the events thread if the client uses GCM
+        if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
+            CommonActivityUtils.pauseEventStream(VectorApp.this);
+        }
+        PIDsRetriever.getIntance().onAppBackgrounded();
+
+        MyPresenceManager.advertiseAllUnavailable();
+    }
+
+    /**
+     * The application is warned that a call is ended.
+     */
+    public void onCallEnd() {
+        if (isInBackground && mIsCallingInBackground) {
+            mIsCallingInBackground = false;
+            suspendApp();
+        }
+    }
+
     public void startActivityTransitionTimer() {
 
         // reset the application badge when displaying a new activity
@@ -90,14 +125,13 @@ public class VectorApp extends Application {
         this.mActivityTransitionTimerTask = new TimerTask() {
             public void run() {
                 VectorApp.this.isInBackground = true;
+                mIsCallingInBackground = (null != CallViewActivity.getActiveCall());
 
-                // suspend the events thread if the client uses GCM
-                if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
-                    CommonActivityUtils.pauseEventStream(VectorApp.this);
+                // if there is a pending call
+                // the application is not suspended
+                if (!mIsCallingInBackground) {
+                    suspendApp();
                 }
-                PIDsRetriever.getIntance().onAppBackgrounded();
-
-                MyPresenceManager.advertiseAllUnavailable();
             }
         };
 

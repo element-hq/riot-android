@@ -16,11 +16,14 @@
 
 package im.vector.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -37,6 +40,8 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -55,6 +60,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.adapters.ConsoleRoomSummaryAdapter;
 import im.vector.adapters.DrawerAdapter;
@@ -106,6 +112,8 @@ public class HomeActivity extends MXCActionBarActivity {
 
     private boolean refreshOnChunkEnd = false;
 
+    private MenuItem mCallMenuItem = null;
+
     // sliding menu
     private final Integer[] mSlideMenuTitleIds = new Integer[]{
             //R.string.action_search_contact,
@@ -137,6 +145,8 @@ public class HomeActivity extends MXCActionBarActivity {
     };
 
     private HashMap<MXSession, MXEventListener> mListenersBySession = new HashMap<MXSession, MXEventListener>();
+    private HashMap<MXSession, MXCallsManager.MXCallsManagerListener> mCallListenersBySession = new HashMap<MXSession, MXCallsManager.MXCallsManagerListener>();
+
     private ConsoleRoomSummaryAdapter mAdapter;
     private EditText mSearchRoomEditText;
 
@@ -518,11 +528,24 @@ public class HomeActivity extends MXCActionBarActivity {
         mSearchRoomEditText.setText("");
     }
 
+    @SuppressLint("NewApi")
+    private boolean isScreenOn() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            return powerManager.isInteractive();
+        } else {
+            return powerManager.isScreenOn();
+        }
+    }
+
     /**
      * Add a MXEventListener to the session listeners.
      * @param session the sessions.
      */
     private void addSessionListener(final MXSession session) {
+        removeSessionListener(session);
+
         MXEventListener listener = new MXEventListener() {
             private boolean mInitialSyncComplete = false;
 
@@ -730,6 +753,67 @@ public class HomeActivity extends MXCActionBarActivity {
 
         session.getDataHandler().addListener(listener);
         mListenersBySession.put(session, listener);
+
+        // call listener
+        MXCallsManager.MXCallsManagerListener callsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+
+            /**
+             * Called when there is an incoming call within the room.
+             */
+            @Override
+            public void onIncomingCall(final IMXCall call) {
+                // can only manage one call instance.
+                if (null == CallViewActivity.getActiveCall()) {
+                    // display the call activity only if the application is in background.
+                    if (HomeActivity.this.isScreenOn()) {
+                        // create the call object
+                        if (null != call) {
+                            final Intent intent = new Intent(HomeActivity.this, CallViewActivity.class);
+
+                            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, session.getCredentials().userId);
+                            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                            HomeActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HomeActivity.this.startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            call.hangup("busy");
+                        }
+                    });
+                }
+            }
+
+            /**
+             * Called when a called has been hung up
+             */
+            @Override
+            public void onCallHangUp(IMXCall call) {
+                final Boolean isActiveCall = CallViewActivity.isBackgroundedCallId(call.getCallId());
+
+                HomeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isActiveCall) {
+                            VectorApp.getInstance().onCallEnd();
+                            HomeActivity.this.manageCallButton();
+
+                            CallViewActivity.startEndCallSound(HomeActivity.this);
+                        }
+                    }
+                });
+            }
+        };
+
+        session.mCallsManager.addListener(callsManagerListener);
+        mCallListenersBySession.put(session, callsManagerListener);
     }
 
     /**
@@ -741,8 +825,12 @@ public class HomeActivity extends MXCActionBarActivity {
             session.getDataHandler().removeListener(mListenersBySession.get(session));
             mListenersBySession.remove(session);
         }
-    }
 
+        if (mCallListenersBySession.containsKey(session)) {
+            session.mCallsManager.removeListener(mCallListenersBySession.get(session));
+            mCallListenersBySession.remove(session);
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -831,6 +919,7 @@ public class HomeActivity extends MXCActionBarActivity {
         }
 
         refreshSlidingList();
+        manageCallButton();
     }
 
     @Override
@@ -904,10 +993,24 @@ public class HomeActivity extends MXCActionBarActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * Display or hide the the call button.
+     * it is used to resume a call.
+     */
+    private void manageCallButton() {
+        if (null != mCallMenuItem) {
+            mCallMenuItem.setVisible(CallViewActivity.getActiveCall() != null);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
+        mCallMenuItem = menu.findItem(R.id.ic_action_resume_call);
+        manageCallButton();
+
         return true;
     }
 
@@ -922,8 +1025,22 @@ public class HomeActivity extends MXCActionBarActivity {
             toggleSearchButton();
         } else if (id == R.id.ic_action_mark_all_as_read) {
             markAllMessagesAsRead();
+        } else if (id == R.id.ic_action_resume_call) {
+            IMXCall call = CallViewActivity.getActiveCall();
+            if (null != call) {
+                final Intent intent = new Intent(HomeActivity.this, CallViewActivity.class);
+                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                HomeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HomeActivity.this.startActivity(intent);
+                    }
+                });
         }
 
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -169,8 +169,8 @@ public class MembersInvitationDialogFragment extends DialogFragment {
 
         // remove the current room members
         ArrayList<String> idsToIgnore = new ArrayList<String>();
-        Room room = store.getRoom(mRoomId);
-        Collection<RoomMember> currentMembers = room.getMembers();
+        Room fromRoom = store.getRoom(mRoomId);
+        Collection<RoomMember> currentMembers = fromRoom.getMembers();
 
         for(RoomMember member : currentMembers) {
             idsToIgnore.add(member.getUserId());
@@ -191,7 +191,8 @@ public class MembersInvitationDialogFragment extends DialogFragment {
         for(RoomSummary summary : summaries) {
             // not the current summary
             if (!summary.getRoomId().equals(mRoomId)) {
-                Collection<RoomMember> otherRoomMembers = room.getMembers();
+                Room curRoom = store.getRoom(summary.getRoomId());
+                Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
 
                 for (RoomMember member : otherRoomMembers) {
                     String userID = member.getUserId();

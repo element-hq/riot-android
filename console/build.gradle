@@ -15,7 +15,7 @@ android {
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 7
-        versionName "0.1.0"
+        versionName "0.1.1"
     }
 
     signingConfigs {
@@ -73,6 +73,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'io.pristine:libjingle:9690@aar'
     compile(name: 'matrix-sdk', ext: 'aar')
 }
 

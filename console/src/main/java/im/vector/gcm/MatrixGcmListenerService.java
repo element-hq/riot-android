@@ -22,12 +22,14 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import im.vector.Matrix;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 
 public class MatrixGcmListenerService extends GcmListenerService {
 
     private static final String LOG_TAG = "GcmListenerService";
     private Boolean mCheckLaunched = false;
+    private android.os.Handler mUIhandler = null;
 
     /**
      * Called when message is received.
@@ -37,9 +39,16 @@ public class MatrixGcmListenerService extends GcmListenerService {
      *             For Set of keys use data.keySet().
      */
     @Override
-    public void onMessageReceived(String from, Bundle data) {
+    public void onMessageReceived(final String from, final Bundle data) {
         Log.d(LOG_TAG, " onMessageReceived ");
 
+        if (null == mUIhandler) {
+            mUIhandler = new android.os.Handler(VectorApp.getInstance().getMainLooper());
+        }
+
+        mUIhandler.post(new Runnable() {
+            @Override
+            public void run() {
         for (String key : data.keySet()) {
             Log.e(LOG_TAG, " >>> " + key + " : " + data.get(key));
         }
@@ -47,10 +56,12 @@ public class MatrixGcmListenerService extends GcmListenerService {
         // the first GCM event could have been triggered whereas the application is not yet launched.
         // so it is required to create the sessions and to start/resume event stream
         if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
-            CommonActivityUtils.startEventStreamService(this);
+                    CommonActivityUtils.startEventStreamService(MatrixGcmListenerService.this);
             mCheckLaunched = true;
         }
         
-        CommonActivityUtils.catchupEventStream(this);
+                CommonActivityUtils.catchupEventStream(MatrixGcmListenerService.this);
+            }
+        });
     }
 }

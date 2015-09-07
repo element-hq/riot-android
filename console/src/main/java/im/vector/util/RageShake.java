@@ -32,6 +32,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -42,6 +43,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -224,6 +226,18 @@ public class RageShake implements SensorEventListener {
                         sendBugReport();
                     }
                 })
+                .setNeutralButton("Disable", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), false);
+                        editor.commit();
+
+                        dialog.dismiss();
+                    }
+                })
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -402,7 +416,12 @@ public class RageShake implements SensorEventListener {
                     if (now - lastShake >= intervalNanos && (System.currentTimeMillis() - lastShakeTimestamp) > timeToNextShakeMs) { 
                          Log.d(LOG_TAG, "Shaking detected.");
                          lastShakeTimestamp = System.currentTimeMillis();
+
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+                        if (preferences.getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true)) {
                          promptForReport();
+                    }
                     }
                     else {
                         Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: "+(timeToNextShakeMs - 

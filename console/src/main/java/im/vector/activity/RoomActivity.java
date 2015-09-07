@@ -50,6 +50,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -65,6 +66,8 @@ import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.bingrules.BingRule;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.ErrorListener;
@@ -102,6 +105,9 @@ import java.util.TimerTask;
 public class RoomActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_ROOM_ID = "org.matrix.console.RoomActivity.EXTRA_ROOM_ID";
+
+    // the room is launched but it expects to start the dedicated call activity
+    public static final String EXTRA_START_CALL_ID = "org.matrix.console.RoomActivity.EXTRA_START_CALL_ID";
 
     private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "org.matrix.console.RoomActivity.TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
     private static final String TAG_FRAGMENT_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_MEMBERS_DIALOG";
@@ -163,6 +169,16 @@ public class RoomActivity extends MXCActionBarActivity {
     private String mPendingMimeType;
     private String mPendingFilename;
 
+    private MenuItem mVoiceMenuItem = null;
+    private MenuItem mVideoMenuItem = null;
+
+    private Boolean mRuleInProgress = false;
+    private BingRule mBingRule = null;
+    private MenuItem mEnableNotifItem = null;
+    private MenuItem mDisableNotifItem = null;
+
+    private String mCallId = null;
+
     private String mLatestTakePictureCameraUri; // has to be String not Uri because of Serializable
 
     // typing event management
@@ -187,6 +203,7 @@ public class RoomActivity extends MXCActionBarActivity {
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                         setTitle(mRoom.getName(mMyUserId));
+                        updateMenuEntries();
 
                         // check if the user does not leave the room with another client
                         if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && mMyUserId.equals(event.stateKey)) {
@@ -221,6 +238,8 @@ public class RoomActivity extends MXCActionBarActivity {
                     setTopic(mRoom.getTopic());
 
                     mConsoleMessageListFragment.onInitialMessagesLoaded();
+
+                    updateMenuEntries();
                 }
             });
         }
@@ -230,15 +249,20 @@ public class RoomActivity extends MXCActionBarActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    updateMenuEntries();
                     mConsoleMessageListFragment.onBingRulesUpdate();
                 }
             });
         }
     };
 
-    public void appendTextToEditor(String text) {
+    public void insertInTextEditor(String text) {
         if (null != text) {
-            mEditText.append(text);
+            if (TextUtils.isEmpty(mEditText.getText())) {
+                mEditText.append(text + ": ");
+            } else {
+                mEditText.getText().insert(mEditText.getSelectionStart(), text);
+            }
         }
     }
 
@@ -327,6 +351,10 @@ public class RoomActivity extends MXCActionBarActivity {
             Log.e(LOG_TAG, "No room ID extra.");
             finish();
             return;
+        }
+
+        if (intent.hasExtra(EXTRA_START_CALL_ID)) {
+            mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
         }
 
         // the user has tapped on the "View" notification button
@@ -835,6 +863,8 @@ public class RoomActivity extends MXCActionBarActivity {
 
         manageSendMoreButtons();
 
+        updateMenuEntries();
+
         // refresh the UI : the timezone could have been updated
         mConsoleMessageListFragment.refresh();
 
@@ -851,12 +881,86 @@ public class RoomActivity extends MXCActionBarActivity {
         }
 
         refreshAccountThumbnail();
+
+        if (null != mCallId) {
+            IMXCall call = CallViewActivity.getActiveCall();
+
+            // can only manage one call instance.
+            // either there is no active call or resume the active one
+            if ((null == call) || call.getCallId().equals(mCallId)) {
+                final Intent intent = new Intent(RoomActivity.this, CallViewActivity.class);
+                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, mCallId);
+
+                if (null == call) {
+                    intent.putExtra(CallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
+                }
+
+                RoomActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            RoomActivity.this.startActivity(intent);
+                        }
+                    });
+
+            }
+
+            mCallId = null;
+        }
+    }
+
+    /**
+     * Refresh the calls buttons
+     */
+    private void updateMenuEntries() {
+        Boolean visible = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+
+        if (null != mVoiceMenuItem) {
+            mVoiceMenuItem.setVisible(visible);
+        }
+
+        if (null != mVideoMenuItem) {
+            mVideoMenuItem.setVisible(visible);
+        }
+
+        Boolean isPushDownloaded = (null != mSession.getDataHandler().pushRules());
+
+        if (isPushDownloaded) {
+            // search if there is a rule for this room
+            List<BingRule> roomsRulesList = mSession.getDataHandler().pushRules().getRoomRules();
+
+            if (null != roomsRulesList) {
+                for (BingRule rule : roomsRulesList) {
+                    if (TextUtils.equals(rule.ruleId, mRoom.getRoomId())) {
+                        mBingRule = rule;
+                    }
+                }
+            }
+        }
+
+        boolean hasActiveRule = (null == mBingRule) || (mBingRule.isEnabled && mBingRule.shouldNotify());
+
+        if (null != mEnableNotifItem) {
+            mEnableNotifItem.setVisible(!hasActiveRule && !mRuleInProgress && isPushDownloaded);
+        }
+
+        if (null != mDisableNotifItem) {
+            mDisableNotifItem.setVisible(hasActiveRule && !mRuleInProgress && isPushDownloaded);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.room, menu);
+
+        mVoiceMenuItem = menu.findItem(R.id.ic_action_voice_call);
+        mVideoMenuItem = menu.findItem(R.id.ic_action_video_call);
+        mEnableNotifItem =  menu.findItem(R.id.ic_action_enable_notification);
+        mDisableNotifItem =  menu.findItem(R.id.ic_action_disable_notification);
+
+        updateMenuEntries();
+
         return true;
     }
 
@@ -864,7 +968,87 @@ public class RoomActivity extends MXCActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.ic_action_invite_by_list) {
+        // mBingRulesManager.toggleRule(rule, mOnBingRuleUpdateListener);
+        if (!mRuleInProgress && ((id == R.id.ic_action_enable_notification) || (id == R.id.ic_action_disable_notification))) {
+            final BingRulesManager bingRulesManager = mSession.getDataHandler().getBingRulesManager();
+            final Boolean shouldNotify = (id == R.id.ic_action_enable_notification);
+
+            mRuleInProgress = true;
+
+            // if there is no dedicated rule -> add a new one
+            if (null == mBingRule) {
+                bingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, mRoom.getRoomId(), shouldNotify, shouldNotify, shouldNotify), new BingRulesManager.onBingRuleUpdateListener() {
+                    @Override
+                    public void onBingRuleUpdateSuccess() {
+                        mRuleInProgress = false;
+                        RoomActivity.this.runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                updateMenuEntries();
+                                                            }
+                                                        }
+                        );
+                    }
+
+                    @Override
+                    public void onBingRuleUpdateFailure(String errorMessage) {
+                        mRuleInProgress = false;
+                    }
+                });
+
+            } else {
+                // replace the existing one
+                bingRulesManager.deleteRule(mBingRule, new BingRulesManager.onBingRuleUpdateListener() {
+                    @Override
+                    public void onBingRuleUpdateSuccess() {
+                        bingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, mRoom.getRoomId(), shouldNotify, shouldNotify, shouldNotify), new BingRulesManager.onBingRuleUpdateListener() {
+                            @Override
+                            public void onBingRuleUpdateSuccess() {
+                                mRuleInProgress = false;
+                                RoomActivity.this.runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        updateMenuEntries();
+                                                                    }
+                                                                }
+                                );
+                            }
+
+                            @Override
+                            public void onBingRuleUpdateFailure(String errorMessage) {
+                                mRuleInProgress = false;
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onBingRuleUpdateFailure(String errorMessage) {
+                        mRuleInProgress = false;
+                    }
+                });
+            }
+        } else if ((id == R.id.ic_action_voice_call) || (id == R.id.ic_action_video_call)) {
+            // create the call object
+            IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+            if (null != call) {
+                call.setIsVideo((id != R.id.ic_action_voice_call));
+                call.setRoom(mRoom);
+                call.setIsIncoming(false);
+
+                final Intent intent = new Intent(RoomActivity.this, CallViewActivity.class);
+
+                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                RoomActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RoomActivity.this.startActivity(intent);
+                    }
+                });
+            }
+        } else if (id == R.id.ic_action_invite_by_list) {
             FragmentManager fm = getSupportFragmentManager();
 
             MembersInvitationDialogFragment fragment = (MembersInvitationDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG);

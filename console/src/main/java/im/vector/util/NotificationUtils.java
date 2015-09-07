@@ -40,8 +40,49 @@ public class NotificationUtils {
     // the bubble radius is computed for 99 
     static int mUnreadBubbleWidth = -1;
 
+
+    public static Notification buildCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setWhen(System.currentTimeMillis());
+
+        builder.setContentTitle(roomName);
+        builder.setContentText(context.getString(R.string.call_in_progress));
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            builder.setSmallIcon(R.drawable.ic_menu_small_matrix);
+        } else {
+            builder.setSmallIcon(R.drawable.ic_menu_small_matrix_transparent);
+        }
+
+
+        // Build the pending intent for when the notification is clicked
+        Intent roomIntent = new Intent(context, RoomActivity.class);
+        roomIntent.putExtra(RoomActivity.EXTRA_ROOM_ID, roomId);
+        roomIntent.putExtra(RoomActivity.EXTRA_MATRIX_ID, matrixId);
+        roomIntent.putExtra(RoomActivity.EXTRA_START_CALL_ID, callId);
+
+        // Recreate the back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
+                .addParentStack(RoomActivity.class)
+                .addNextIntent(roomIntent);
+
+
+        // android 4.3 issue
+        // use a generator for the private requestCode.
+        // When using 0, the intent is not created/launched when the user taps on the notification.
+        //
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        Notification n = builder.build();
+        n.flags |= Notification.FLAG_SHOW_LIGHTS;
+        n.defaults |= Notification.DEFAULT_LIGHTS;
+
+        return n;
+    }
+
     public static Notification buildMessageNotification(
-            Context context, String from, String matrixId, Boolean displayMatrixId, Bitmap largeIcon, int globalUnseen, int memberUnseen, String body, String roomId, String roomName,
+            Context context, String from, String matrixId, String callId, Boolean displayMatrixId, Bitmap largeIcon, int globalUnseen, int memberUnseen, String body, String roomId, String roomName,
             boolean shouldPlaySound) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
@@ -155,7 +196,6 @@ public class NotificationUtils {
 
         builder.setTicker(from + name + body);
 
-        {
             // Build the pending intent for when the notification is clicked
             Intent roomIntent = new Intent(context, RoomActivity.class);
             roomIntent.putExtra(RoomActivity.EXTRA_ROOM_ID, roomId);
@@ -163,6 +203,10 @@ public class NotificationUtils {
             if (null != matrixId) {
                 roomIntent.putExtra(RoomActivity.EXTRA_MATRIX_ID, matrixId);
             }
+
+        if (null != callId) {
+            roomIntent.putExtra(RoomActivity.EXTRA_START_CALL_ID, callId);
+        }
 
             // Recreate the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
@@ -174,8 +218,8 @@ public class NotificationUtils {
             // use a generator for the private requestCode.
             // When using 0, the intent is not created/launched when the user taps on the notification.
             //
-            builder.setContentIntent(stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT));
-        }
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
 
         // display the message with more than 1 lines when the device supports it
         NotificationCompat.BigTextStyle textStyle = new NotificationCompat.BigTextStyle();
@@ -183,7 +227,7 @@ public class NotificationUtils {
         builder.setStyle(textStyle);
 
         // do not offer to quick respond if the user did not dismiss the previous one
-        if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
+        if (!LockScreenActivity.isDisplayingALockScreenActivity() && (null == callId)) {
             // offer to type a quick answer (i.e. without launching the application)
             Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
             quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId);
@@ -226,6 +270,11 @@ public class NotificationUtils {
         if (shouldPlaySound) {
             n.defaults |= Notification.DEFAULT_SOUND;
         }
+
+        // some devices crash if this field is not set
+        // even if it is deprecated
+        n.setLatestEventInfo(context, from, body, pendingIntent);
+
         return n;
     }
 

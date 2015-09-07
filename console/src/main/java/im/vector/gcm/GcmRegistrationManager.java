@@ -82,7 +82,7 @@ public final class GcmRegistrationManager {
     // theses both entries can be updated from the settings page in debug mode
     private String mPusherAppId = null;
     private String mPusherUrl = null;
-    private String mPusherFileTag = null;
+    private String mPusherBaseFileTag = null;
 
     private String mPusherAppName = null;
     private String mPusherLang = null;
@@ -153,12 +153,12 @@ public final class GcmRegistrationManager {
     }
 
     public String pusherFileTag() {
-        return mPusherFileTag;
+        return mPusherBaseFileTag;
     }
 
     public void setPusherFileTag(String pusherFileTag) {
-        if (!TextUtils.isEmpty(pusherFileTag) && !pusherFileTag.equals(mPusherFileTag)) {
-            mPusherFileTag = pusherFileTag;
+        if (!TextUtils.isEmpty(pusherFileTag) && !pusherFileTag.equals(mPusherBaseFileTag)) {
+            mPusherBaseFileTag = pusherFileTag;
             SaveGCMData();
         }
     }
@@ -281,13 +281,29 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * Compute the profileTag for a session
+     * @param session the session
+     * @return the profile tag
+     */
+    private String computePushTag(final MXSession session) {
+        String tag =  mPusherBaseFileTag + "_" + Math.abs(session.getMyUser().userId.hashCode());
+
+        // tag max length : 32 bytes
+        if (tag.length() > 32) {
+            tag = Math.abs(tag.hashCode()) + "";
+        }
+
+        return tag;
+    }
+
+    /**
      * Register the session to the 3rd-party app server
      * @param session the session to register.
      * @param listener the registration listener
      */
     public void registerSession(final MXSession session, boolean append, final GcmSessionRegistration listener) {
         session.getPushersRestClient()
-                .addHttpPusher(mPushKey, mPusherAppId, mPusherFileTag + "_" + session.getMyUser().userId,
+                .addHttpPusher(mPushKey, mPusherAppId, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
                         mPusherUrl, append, new ApiCallback<Void>() {
                             @Override
@@ -484,7 +500,7 @@ public final class GcmRegistrationManager {
      */
     public void unregisterSession(final MXSession session, final GcmSessionRegistration listener) {
         session.getPushersRestClient()
-                .removeHttpPusher(mPushKey, mPusherAppId, mPusherFileTag + "_" + session.getMyUser().userId,
+                .removeHttpPusher(mPushKey, mPusherAppId, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
                         mPusherUrl, new ApiCallback<Void>() {
                             @Override
@@ -643,7 +659,7 @@ public final class GcmRegistrationManager {
 
             editor.putString(PREFS_PUSHER_APP_ID_KEY, mPusherAppId);
             editor.putString(PREFS_PUSHER_URL_KEY, mPusherUrl);
-            editor.putString(PREFS_PUSHER_FILE_TAG_KEY, mPusherFileTag);
+            editor.putString(PREFS_PUSHER_FILE_TAG_KEY, mPusherBaseFileTag);
 
             editor.commit();
         } catch (Exception e) {
@@ -665,7 +681,7 @@ public final class GcmRegistrationManager {
             mPusherUrl = TextUtils.isEmpty(pusherUrl) ? DEFAULT_PUSHER_URL : pusherUrl;
 
             String pusherFileTag = preferences.getString(PREFS_PUSHER_FILE_TAG_KEY, null);
-            mPusherFileTag = TextUtils.isEmpty(pusherFileTag) ? DEFAULT_PUSHER_FILE_TAG : pusherFileTag;
+            mPusherBaseFileTag = TextUtils.isEmpty(pusherFileTag) ? DEFAULT_PUSHER_FILE_TAG : pusherFileTag;
 
         } catch (Exception e) {
 

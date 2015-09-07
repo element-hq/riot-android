@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -42,6 +43,7 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
+import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.HomeActivity;
 import im.vector.util.NotificationUtils;
@@ -72,12 +74,21 @@ public class EventStreamService extends Service {
     private static final String LOG_TAG = "EventStreamService";
     private static final int NOTIFICATION_ID = 42;
     private static final int MSG_NOTIFICATION_ID = 43;
+    private static final int PENDING_CALL_ID = 44;
 
     private ArrayList<MXSession> mSessions;
     private ArrayList<String> mMatrixIds;
     private StreamAction mState = StreamAction.UNKNOWN;
 
     private String mNotificationRoomId = null;
+
+    // call in progress
+    // foreground notification
+    private String mCallId = null;
+
+    // current displayed notification
+    // use to hide the "incoming call" notification
+    private String mNotifiedCallId = null;
 
     private Boolean mIsForegound = false;
     private int mUnreadMessagesCounter = 0;
@@ -118,6 +129,25 @@ public class EventStreamService extends Service {
     }
 
     private MXEventListener mListener = new MXEventListener() {
+        /**
+         * Manage hangup event.
+         * The ringing sound is disabled and pending incoming call is dismissed.
+         * @param event the hangup event.
+         */
+        private void manageHangUpEvent(Event event) {
+            String callId = null;
+
+            try {
+                callId = event.content.get("call_id").getAsString();
+            } catch (Exception e) {}
+
+            if (null != callId) {
+                // hide the "call in progress notification"
+                hidePendingCallNotification(callId);
+            }
+
+            CallViewActivity.stopRinging();
+        }
 
         // White list of displayable events
         private boolean isDisplayableEvent(Event event) {
@@ -132,6 +162,10 @@ public class EventStreamService extends Service {
 
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
+            if (Event.EVENT_TYPE_CALL_HANGUP.equals(event.type)) {
+                manageHangUpEvent(event);
+            }
+
             if ((event.roomId != null) && isDisplayableEvent(event)) {
                 ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
                 String viewedRoomId = rTracker.getViewedRoomId();
@@ -177,23 +211,19 @@ public class EventStreamService extends Service {
             // FIXME: Support event contents with no body
             if (!event.content.has("body")) {
                 // only the membership events are supported
-                if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && !event.isCallEvent()) {
                     return;
                 }
+
+                // display only the invitation messages by now
+                // because the other ones are not displayed.
+                if (event.isCallEvent() && !event.type.equals(Event.EVENT_TYPE_CALL_INVITE)) {
+                    // dismiss the call notifications
+                    if (event.type.equals(Event.EVENT_TYPE_CALL_HANGUP)) {
+                        manageHangUpEvent(event);
+                    }
+                    return;
             }
-
-            Boolean isInvitationEvent = false;
-            String body;
-
-            if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                body = EventDisplay.getMembershipNotice(getApplicationContext(), event, roomState);
-
-                try {
-                    isInvitationEvent = "invite".equals(event.content.getAsJsonPrimitive("membership").getAsString());
-                } catch (Exception e) {}
-
-            } else {
-                body = event.content.getAsJsonPrimitive("body").getAsString();
             }
 
             MXSession session = Matrix.getMXSession(getApplicationContext(), event.getMatrixId());
@@ -211,6 +241,34 @@ public class EventStreamService extends Service {
             // invalid room ?
             if (null == room) {
                 return;
+            }
+
+            Boolean isInvitationEvent = false;
+            String body;
+
+            mNotifiedCallId = null;
+
+            // call invitation
+            if (event.isCallEvent()) {
+                if (event.type.equals(Event.EVENT_TYPE_CALL_INVITE)) {
+                    body = getApplicationContext().getString(R.string.incoming_call);
+
+                    try {
+                        mNotifiedCallId = event.content.get("call_id").getAsString();
+                     } catch (Exception e) {}
+                } else {
+                    EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
+                    body = eventDisplay.getTextualDisplay().toString();
+                }
+            } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                body = EventDisplay.getMembershipNotice(getApplicationContext(), event, roomState);
+
+                try {
+                    isInvitationEvent = "invite".equals(event.content.getAsJsonPrimitive("membership").getAsString());
+                } catch (Exception e) {}
+
+            } else {
+                body = event.content.getAsJsonPrimitive("body").getAsString();
             }
 
             int unreadNotifForThisUser = 0;
@@ -269,9 +327,16 @@ public class EventStreamService extends Service {
 
             mNotificationRoomId = roomId;
 
+            if (bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
+                if (null == CallViewActivity.getActiveCall()) {
+                    CallViewActivity.startRinging(EventStreamService.this);
+                }
+            }
+
             mLatestNotification = NotificationUtils.buildMessageNotification(
                     EventStreamService.this,
                     from, session.getCredentials().userId,
+                    mNotifiedCallId,
                     Matrix.getMXSessions(getApplicationContext()).size() > 1,
                     largeBitmap,
                     mUnreadMessagesCounter,
@@ -285,9 +350,10 @@ public class EventStreamService extends Service {
         @Override
         public void onLiveEventsChunkProcessed() {
             if (null != mLatestNotification) {
+
+                try {
                 NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
                 nm.cancelAll();
-
                 nm.notify(MSG_NOTIFICATION_ID, mLatestNotification);
 
                 // turn the screen on for 3 seconds
@@ -295,6 +361,9 @@ public class EventStreamService extends Service {
                 PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MXEventListener");
                 wl.acquire(3000);
                 wl.release();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onLiveEventsChunkProcessed crashed "+ e.getLocalizedMessage());
+                }
 
                 mLatestNotification = null;
             }
@@ -408,7 +477,7 @@ public class EventStreamService extends Service {
     }
 
     private void start() {
-        // reset the badbge counter when resuming the application
+        // reset the badge counter when resuming the application
         if (0 != mUnreadMessagesCounter) {
             mUnreadMessagesCounter = 0;
             CommonActivityUtils.updateUnreadMessagesBadge(this, mUnreadMessagesCounter);
@@ -456,6 +525,8 @@ public class EventStreamService extends Service {
         }
 
         updateListenerNotification();
+
+        mState = StreamAction.START;
     }
 
     private void stop() {
@@ -528,10 +599,9 @@ public class EventStreamService extends Service {
         if (!Matrix.getInstance(this).getSharedGcmRegistrationManager().useGCM()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
-            mIsForegound = true;
+            mIsForegound = false;
         } else {
-            NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.cancel(NOTIFICATION_ID);
+            stopForeground(true);
             mIsForegound = false;
         }
     }
@@ -556,5 +626,37 @@ public class EventStreamService extends Service {
                 pi);
         notification.flags |= Notification.FLAG_NO_CLEAR;
         return notification;
+    }
+
+
+    /**
+     * A call is in progress.
+     * @param session the session
+     * @param callId the callId
+     */
+    public void displayPendingCallNotification(MXSession session, Room room, String callId) {
+        if (null != callId) {
+            Notification notification = NotificationUtils.buildCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
+            startForeground(PENDING_CALL_ID, notification);
+            mCallId = callId;
+        }
+    }
+
+    /**
+     * @param callId the ended call call id
+     */
+    public void hidePendingCallNotification(String callId) {
+        if (TextUtils.equals(mCallId, callId)) {
+            stopForeground(true);
+            updateListenerNotification();
+            mCallId = null;
+        }
+
+        // hide the "incoming call" notification
+        if (TextUtils.equals(mNotifiedCallId, callId)) {
+            NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.cancelAll();
+            mNotifiedCallId = null;
+        }
     }
 }
