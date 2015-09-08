@@ -677,7 +677,7 @@ public class CommonActivityUtils {
                 fileExt = sourceFile.getName().substring(dotPos);
             }
 
-            dstFileName = "MatrixConsole_" + System.currentTimeMillis() + fileExt;
+            dstFileName = "vector_" + System.currentTimeMillis() + fileExt;
         } else {
             dstFileName = outputFilename;
         }

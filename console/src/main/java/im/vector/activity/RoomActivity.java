@@ -142,6 +142,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final int REQUEST_FILES = 0;
     private static final int TAKE_IMAGE = 1;
     private static final int CREATE_DOCUMENT = 2;
+    private static final int MEDIAS_PICKER = 1;
 
     // max image sizes
     private static final int LARGE_IMAGE_SIZE  = 2000;
@@ -282,7 +283,7 @@ public class RoomActivity extends MXCActionBarActivity {
      * Launch the camera
      */
     private void launchCamera() {
-        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // the following is a fix for buggy 2.x devices
         Date date = new Date();
@@ -317,9 +318,10 @@ public class RoomActivity extends MXCActionBarActivity {
         // Because Activities tend to use a single MediaProvider for all their intents, this field will only be the
         // *latest* TAKE_PICTURE Uri. This is deemed acceptable as the normal flow is to create the intent then immediately
         // fire it, meaning onActivityResult/getUri will be the next thing called, not another createIntentFor.
-        RoomActivity.this.mLatestTakePictureCameraUri = dummyUri == null ? null : dummyUri.toString();
+        RoomActivity.this.mLatestTakePictureCameraUri = dummyUri == null ? null : dummyUri.toString();*/
 
-        startActivityForResult(captureIntent, TAKE_IMAGE);
+        Intent intent = new Intent(RoomActivity.this, VectorMediasPickerActivity.class);
+        startActivityForResult(intent, TAKE_IMAGE);
     }
 
     private class ImageSize {
@@ -1574,7 +1576,6 @@ public class RoomActivity extends MXCActionBarActivity {
                         uris.add(uri);
                     }
                 }
-
             } else if (null != data.getData()) {
                 uris.add(data.getData());
             }
