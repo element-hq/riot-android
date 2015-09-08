@@ -11,6 +11,7 @@
     <string name="title_activity_notification_settings">Notification Settings</string>
     <string name="title_activity_member_details">Member Details</string>
     <string name="title_activity_invite_user">Invite Users</string>
+    <string name="title_activity_medias_picker">Select Medias</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
@@ -282,6 +283,13 @@
     <string name="action_reject">Reject</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_hangup">Hang up</string>
+
+    <!-- medias picker string -->
+    <string name="take_a_picture">Take a picture</string>
+    <string name="choose_from_library">Choose from library</string>
+    <string name="retake">Retake</string>
+    <string name="attach">Attach</string>
+    <string name="library">Library</string>
 
 
 </resources>

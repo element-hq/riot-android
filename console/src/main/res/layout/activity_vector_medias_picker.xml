@@ -1,0 +1,150 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        android:background="@color/vector_background">
+
+        <RelativeLayout
+            android:background="@color/vector_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.075">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
+                android:text="@string/take_a_picture"/>
+
+            <ImageView
+                android:id="@+id/medias_picker_switch_camera"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_material_switch_camera"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@color/vector_background"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5">
+
+            <SurfaceView
+                android:visibility="gone"
+                android:id="@+id/medias_picker_surface_view"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:background="@color/vector_background"
+                android:id="@+id/medias_picker_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_contact_picture_holo_light"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.075"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/medias_picker_retake_button"
+                android:layout_weight="0.3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textColor="#FFFFFFFF"
+                android:background="@drawable/rounded_button_bg"
+                android:text="@string/retake"/>
+
+            <ImageView
+                android:id="@+id/medias_picker_camera_button"
+                android:src="@drawable/ic_material_camera"
+                android:layout_weight="0.4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/medias_picker_attach1_button"
+                android:layout_weight="0.3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textColor="#FFFFFFFF"
+                android:background="@drawable/rounded_button_bg"
+                android:text="@string/attach"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:background="@color/vector_background"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.075">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/vector_title_color"
+                android:text="@string/choose_from_library"/>
+
+        </RelativeLayout>
+
+        <View
+            android:background="@color/material_red_100"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <LinearLayout
+            android:background="@color/vector_background"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.075"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/medias_picker_library_button"
+                android:layout_weight="0.3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textColor="#FFFFFFFF"
+                android:background="@drawable/rounded_button_bg"
+                android:text="@string/library"/>
+
+            <Button
+                android:layout_weight="0.4"
+                android:layout_width="0dp"
+                android:visibility="invisible"
+                android:layout_height="match_parent"
+                android:textColor="@color/vector_title_color"
+                android:text=""/>
+
+            <Button
+                android:id="@+id/medias_picker_attach2_button"
+                android:layout_weight="0.3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textColor="#FFFFFFFF"
+                android:background="@drawable/rounded_button_bg"
+                android:text="@string/attach"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

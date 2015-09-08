@@ -156,6 +156,20 @@
             android:name="im.vector.activity.CallViewActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+        <activity
+            android:name="im.vector.activity.VectorMediasPickerActivity"
+            android:label="@string/title_activity_room"
+            android:parentActivityName="im.vector.activity.RoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.HomeActivity"/>
+
+        </activity>
+
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
