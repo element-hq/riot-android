@@ -106,11 +106,22 @@
 
         </RelativeLayout>
 
-        <View
+        <HorizontalScrollView
+            android:id="@+id/medias_picker_recents_scrollview"
             android:background="@color/material_red_100"
+            android:scrollbars="none"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp">
+
+                <LinearLayout
+                    android:id="@+id/medias_picker_recents_listview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                </LinearLayout>
+
+        </HorizontalScrollView>
 
         <LinearLayout
             android:background="@color/vector_background"

@@ -17,31 +17,57 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import im.vector.R;
 
 import android.hardware.Camera;
+import android.os.HandlerThread;
+import android.provider.MediaStore;
+import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import org.matrix.androidsdk.MXSession;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements SurfaceHolder.Callback {
-
     // medias folder
     private static final int REQUEST_MEDIAS = 0;
+
+    /**
+     * define a recent media
+     */
+    private class RecentMedia {
+        public Uri mFileUri;
+        public long mCreationTime;
+        public Bitmap mThumbnail = null;
+        public Boolean mIsvideo = false;
+    }
+
+    // recents medias list
+    private ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
 
     // camera object
     private Camera mCamera = null;
@@ -58,11 +84,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     Button mAttachImageButton = null;
     Button mOpenLibraryButton = null;
     Button mUseImagesListButton = null;
+    LinearLayout mRecentsListView = null;
 
     private String mShootedPicturePath = null;
     private Boolean mIsPreviewStarted = false;
 
+    private Boolean mIsSingleImageMode = false;
+
     int mCameraOrientation = 0;
+
+    /**
+     * The recent requests are performed in a dedicated thread
+     */
+    private HandlerThread mHandlerThread = null;
+    private android.os.Handler mFileHandler = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +117,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mAttachImageButton = (Button) findViewById(R.id.medias_picker_attach1_button);
         mOpenLibraryButton = (Button) findViewById(R.id.medias_picker_library_button);
         mUseImagesListButton = (Button) findViewById(R.id.medias_picker_attach2_button);
+        mRecentsListView = (LinearLayout) findViewById(R.id.medias_picker_recents_listview);
 
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +161,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 VectorMediasPickerActivity.this.attachCarouselMedias();
             }
         });
+
+        mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
+        mHandlerThread.start();
+        mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (null != mHandlerThread) {
+            mHandlerThread.quit();
+            mHandlerThread = null;
+        }
     }
 
     /**
@@ -194,12 +244,21 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    private int getCarouselItemWidth() {
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        return display.getWidth() / 6;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        refreshRecentsMediasList();
 
         // should always be true
         if (null == mCamera) {
+
             // check if the device has at least camera
             if (Camera.getNumberOfCameras() > 0) {
                 mCameraDefaultView.setVisibility(View.GONE);
@@ -240,6 +299,155 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         }
     }
+
+    /**
+     * List the existing images thumbnails
+     * @param maxLifetime the max image lifetime
+     */
+    private void addImagesThumbnails(long maxLifetime) {
+        final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN};
+        Cursor thumbnailsCursor = null;
+
+
+        try {
+            thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection, // Which columns to return
+                    null,       // Return all rows
+                    null,
+                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+        } catch (Exception e) {
+        }
+
+        if (null != thumbnailsCursor) {
+            int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
+            int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+
+            if (thumbnailsCursor.moveToFirst()) {
+                do {
+                    try {
+                        RecentMedia recentMedia = new RecentMedia();
+                        recentMedia.mIsvideo = false;
+
+                        String id = thumbnailsCursor.getString(idIndex);
+                        String dateAsString = thumbnailsCursor.getString(timeIndex);
+                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
+
+                        if ((maxLifetime > 0) && ((System.currentTimeMillis() - recentMedia.mCreationTime) > maxLifetime)) {
+                            break;
+                        }
+
+                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+
+                        if (null != recentMedia.mThumbnail) {
+                            mRecentsMedias.add(recentMedia);
+                        }
+                    } catch (Exception e) {
+                    }
+                } while (thumbnailsCursor.moveToNext());
+            }
+            thumbnailsCursor.close();
+        }
+    }
+
+    /**
+     * List the existing video thumbnails
+     * @param maxLifetime the max image lifetime
+     */
+    private void addVideoThumbnails(long maxLifetime) {
+        final String[] projection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN};
+        Cursor thumbnailsCursor = null;
+
+
+        try {
+            thumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    projection, // Which columns to return
+                    null,       // Return all rows
+                    null,
+                    MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC");
+        } catch (Exception e) {
+        }
+
+        if (null != thumbnailsCursor) {
+            int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN);
+            int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Video.VideoColumns._ID);
+
+            if (thumbnailsCursor.moveToFirst()) {
+                do {
+                    try {
+                        RecentMedia recentMedia = new RecentMedia();
+                        recentMedia.mIsvideo = true;
+
+                        String id = thumbnailsCursor.getString(idIndex);
+                        String dateAsString = thumbnailsCursor.getString(timeIndex);
+                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
+
+                        if ((maxLifetime > 0) && ((System.currentTimeMillis() - recentMedia.mCreationTime) > maxLifetime)) {
+                            break;
+                        }
+                        recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MINI_KIND, null);
+                        recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+
+                        if (null != recentMedia.mThumbnail) {
+                            mRecentsMedias.add(recentMedia);
+                        }
+                    } catch (Exception e) {
+                    }
+                } while (thumbnailsCursor.moveToNext());
+            }
+            thumbnailsCursor.close();
+        }
+    }
+
+    /**
+     * Refresh the recent medias
+     */
+    private void refreshRecentsMediasList() {
+        // the last 30 days
+        final long maxLifetime = 1000L * 60L * 60L * 24L * 30L;
+
+        mRecentsListView.removeAllViews();
+        mRecentsMedias.clear();
+
+        mFileHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                addImagesThumbnails(maxLifetime);
+
+                if (!mIsSingleImageMode) {
+                    addVideoThumbnails(maxLifetime);
+
+                    Collections.sort(mRecentsMedias, new Comparator<RecentMedia>() {
+                        @Override
+                        public int compare(RecentMedia r1, RecentMedia r2) {
+                            long t1 = r1.mCreationTime;
+                            long t2 = r2.mCreationTime;
+
+                            // sort from the most recent
+                            return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
+                        }
+                    });
+                }
+
+                VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int itemWidth = getCarouselItemWidth();
+
+                        for (RecentMedia recentMedia : mRecentsMedias) {
+                            ImageView imageView = new ImageView(VectorMediasPickerActivity.this);
+                            imageView.setImageBitmap(recentMedia.mThumbnail);
+                            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+                            imageView.setLayoutParams(params);
+
+                            mRecentsListView.addView(imageView, params);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     /**
      * Take a picture of the current preview
@@ -301,7 +509,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * The taken image is accpeted
+     * The taken image is accepted
      */
     void attachImage() {
         try {
