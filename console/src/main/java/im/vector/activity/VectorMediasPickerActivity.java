@@ -16,16 +16,14 @@
 
 package im.vector.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import im.vector.R;
-import im.vector.adapters.AdapterUtils;
 
 import android.hardware.Camera;
-import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.util.Size;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -33,21 +31,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
-
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements SurfaceHolder.Callback {
 
+    // medias folder
+    private static final int REQUEST_MEDIAS = 0;
+
+    // camera object
     private Camera mCamera = null;
+    // start with back camera
     private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
     // graphical items
@@ -222,6 +220,27 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    @SuppressLint("NewApi")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_MEDIAS) {
+                // provide the Uri
+                Bundle conData = new Bundle();
+                Intent intent = new Intent();
+                intent.setData(data.getData());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    intent.setClipData(data.getClipData());
+                }
+                intent.putExtras(conData);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }
+    }
+
     /**
      * Take a picture of the current preview
      */
@@ -307,7 +326,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     void openFileExplorer() {
-        // TODO
+        Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        }
+        // did not find a way to filter image and video files
+        fileIntent.setType("*/*");
+        startActivityForResult(fileIntent, REQUEST_MEDIAS);
     }
 
     void attachCarouselMedias() {
