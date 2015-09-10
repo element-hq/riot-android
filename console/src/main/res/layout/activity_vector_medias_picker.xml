@@ -32,6 +32,15 @@
                 android:gravity="center_vertical"
                 android:src="@drawable/ic_material_switch_camera"
                 />
+
+            <ImageView
+                android:id="@+id/medias_picker_recording_mode"
+                android:layout_toLeftOf="@+id/medias_picker_switch_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_material_camera"
+                />
         </RelativeLayout>
 
         <RelativeLayout
@@ -47,6 +56,13 @@
                 android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+
+            <VideoView
+                android:visibility="gone"
+                android:id="@+id/medias_picker_video_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
 
             <ImageView
                 android:background="@color/vector_background"
@@ -108,7 +124,6 @@
 
         <HorizontalScrollView
             android:id="@+id/medias_picker_recents_scrollview"
-            android:background="@color/material_red_100"
             android:scrollbars="none"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"

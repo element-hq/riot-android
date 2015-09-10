@@ -765,4 +765,20 @@ public class CommonActivityUtils {
 
         return filePath;
     }
+
+    /**
+     * Save an image URI into the Movies
+     * @param context the context.
+     * @param sourceFile the video path to save.
+     */
+    public static String saveIntoMovies(Context context, File sourceFile) {
+        String filePath = saveFileInto(context, sourceFile, Environment.DIRECTORY_MOVIES, null);
+
+        if (null != filePath) {
+            // This broadcasts that there's been a change in the media directory
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filePath))));
+        }
+
+        return filePath;
+    }
 }

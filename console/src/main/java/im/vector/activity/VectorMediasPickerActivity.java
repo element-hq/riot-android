@@ -21,6 +21,8 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import im.vector.view.RecentMediaLayout;
 import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -40,6 +43,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -52,6 +56,7 @@ import java.util.Comparator;
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements SurfaceHolder.Callback {
     // medias folder
     private static final int REQUEST_MEDIAS = 0;
+    private static final String LOG_TAG = "VectorMedPicker";
 
     /**
      * define a recent media
@@ -75,6 +80,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     // graphical items
     ImageView mSwitchCameraImageView = null;
+    ImageView mRecordModeImageView = null;
+
     ImageView mTakePhotoImageView = null;
     SurfaceHolder mCameraSurfaceHolder = null;
     SurfaceView mCameraSurfaceView = null;
@@ -85,11 +92,17 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     Button mUseImagesListButton = null;
     LinearLayout mRecentsListView = null;
     HorizontalScrollView mRecentsScrollView = null;
+    VideoView mVideoView = null;
+
+    //
+    MediaRecorder mMediaRecorder = null;
 
     private String mShootedPicturePath = null;
+    private String mRecordedVideoPath = null;
     private Boolean mIsPreviewStarted = false;
 
     private Boolean mIsSingleImageMode = false;
+    static private Boolean mIsPhotoMode = true;
 
     int mCameraOrientation = 0;
 
@@ -119,6 +132,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mUseImagesListButton = (Button) findViewById(R.id.medias_picker_attach2_button);
         mRecentsListView = (LinearLayout) findViewById(R.id.medias_picker_recents_listview);
         mRecentsScrollView = (HorizontalScrollView) findViewById(R.id.medias_picker_recents_scrollview);
+        mRecordModeImageView = (ImageView) findViewById(R.id.medias_picker_recording_mode);
+        mVideoView = (VideoView) findViewById(R.id.medias_picker_video_view);
 
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +178,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
 
+        mRecordModeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VectorMediasPickerActivity.this.mIsPhotoMode = !mIsPhotoMode;
+                VectorMediasPickerActivity.this.manageButtons();
+            }
+        });
+
         mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
@@ -200,6 +223,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Manage the buttons status
      */
     private void manageButtons() {
+
+        if (mIsPhotoMode) {
+            mRecordModeImageView.setImageResource(R.drawable.ic_material_camera);
+            mTakePhotoImageView.setImageResource(R.drawable.ic_material_camera);
+        } else {
+            mRecordModeImageView.setImageResource(R.drawable.ic_material_videocam);
+            if (null != mMediaRecorder) {
+                mTakePhotoImageView.setImageResource(R.drawable.ic_material_stop);
+            } else {
+                mTakePhotoImageView.setImageResource(R.drawable.ic_material_videocam);
+            }
+        }
+
         // avoid having an empty area
         if (null == mCamera) {
             mCameraDefaultView.setVisibility(View.VISIBLE);
@@ -210,19 +246,28 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
 
         if (null == mCamera) {
+            disableView(mRecordModeImageView);
             disableView(mTakePhotoImageView);
             disableView(mRetakeButton);
             disableView(mAttachImageButton);
             disableView(mSwitchCameraImageView);
-        } else if (null == mShootedPicturePath) {
+        } else if ((null == mShootedPicturePath) && (null == mRecordedVideoPath)) {
             enableView(mTakePhotoImageView);
             disableView(mRetakeButton);
             disableView(mAttachImageButton);
             enableView(mSwitchCameraImageView);
+            enableView(mRecordModeImageView);
+        } else if (null != mMediaRecorder) {
+            enableView(mTakePhotoImageView);
+            disableView(mRetakeButton);
+            disableView(mAttachImageButton);
+            disableView(mSwitchCameraImageView);
+            disableView(mRecordModeImageView);
         } else {
             disableView(mTakePhotoImageView);
             enableView(mRetakeButton);
             enableView(mAttachImageButton);
+            disableView(mSwitchCameraImageView);
             disableView(mSwitchCameraImageView);
         }
 
@@ -280,8 +325,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
             }
         } else {
-            if (null == mShootedPicturePath) {
-                mCamera.startPreview();
+            if ((null == mShootedPicturePath) && (null == mRecordedVideoPath)) {
+                try {
+                    mCamera.startPreview();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "mCamera.startPreview failed " + e.getLocalizedMessage());
+
+                    // the preview cannot be resumed close this activity
+                    VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            VectorMediasPickerActivity.this.finish();
+                        }
+                    });
+                }
             }
             manageButtons();
         }
@@ -316,7 +373,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN};
         Cursor thumbnailsCursor = null;
 
-
         try {
             thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     projection, // Which columns to return
@@ -324,6 +380,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     null,
                     MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
         } catch (Exception e) {
+            Log.e(LOG_TAG, "addImagesThumbnails" + e.getLocalizedMessage());
         }
 
         if (null != thumbnailsCursor) {
@@ -351,6 +408,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             mRecentsMedias.add(recentMedia);
                         }
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "addImagesThumbnails 2" + e.getLocalizedMessage());
                     }
                 } while (thumbnailsCursor.moveToNext());
             }
@@ -374,6 +432,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     null,
                     MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC");
         } catch (Exception e) {
+            Log.e(LOG_TAG, "addVideoThumbnails" + e.getLocalizedMessage());
         }
 
         if (null != thumbnailsCursor) {
@@ -400,6 +459,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             mRecentsMedias.add(recentMedia);
                         }
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "addVideoThumbnails 2" + e.getLocalizedMessage());
                     }
                 } while (thumbnailsCursor.moveToNext());
             }
@@ -483,52 +543,130 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         });
     }
 
+    /**
+     * Stop the video recorder
+     */
+    private void stopVideoRecord() {
+        if (null != mMediaRecorder) {
+            try {
+                mMediaRecorder.stop();
+                mMediaRecorder.reset();
+            } catch (Exception e) {
+            }
+        }
+
+        mMediaRecorder = null;
+    }
 
     /**
      * Take a picture of the current preview
      */
     void takePicture() {
         if (null != mCamera) {
-            mCamera.takePicture(null, null, new Camera.PictureCallback() {
-                @Override
-                public void onPictureTaken(byte[] data, Camera camera) {
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-                    File dstFile = new File(getCacheDir().getAbsolutePath(), "edited.jpg");
+            if (mIsPhotoMode) {
+                mCamera.takePicture(null, null, new Camera.PictureCallback() {
+                    @Override
+                    public void onPictureTaken(byte[] data, Camera camera) {
+                        ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+                        File dstFile = new File(getCacheDir().getAbsolutePath(), "edited.jpg");
 
-                    // remove any previously saved image
-                    if (dstFile.exists()) {
-                        dstFile.delete();
-                    }
+                        // remove any previously saved image
+                        if (dstFile.exists()) {
+                            dstFile.delete();
+                        }
 
-                    // Copy source file to destination
-                    FileOutputStream outputStream = null;
-                    try {
-                        // create only the
-                        if (!dstFile.exists()) {
-                            dstFile.createNewFile();
+                        // Copy source file to destination
+                        FileOutputStream outputStream = null;
+                        try {
+                            // create only the
+                            if (!dstFile.exists()) {
+                                dstFile.createNewFile();
 
-                            outputStream = new FileOutputStream(dstFile);
+                                outputStream = new FileOutputStream(dstFile);
 
-                            byte[] buffer = new byte[1024 * 10];
-                            int len;
-                            while ((len = inputStream.read(buffer)) != -1) {
-                                outputStream.write(buffer, 0, len);
+                                byte[] buffer = new byte[1024 * 10];
+                                int len;
+                                while ((len = inputStream.read(buffer)) != -1) {
+                                    outputStream.write(buffer, 0, len);
+                                }
+                            }
+                            mShootedPicturePath = dstFile.getAbsolutePath();
+                            manageButtons();
+                        } catch (Exception e) {
+                            Toast.makeText(VectorMediasPickerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        } finally {
+                            // Close resources
+                            try {
+                                if (inputStream != null) inputStream.close();
+                                if (outputStream != null) outputStream.close();
+                            } catch (Exception e) {
                             }
                         }
-                        mShootedPicturePath = dstFile.getAbsolutePath();
-                        manageButtons();
+                    }
+                });
+            } else {
+                // video mode
+                File videoFile = new File(getCacheDir().getAbsolutePath(), "EditedVideo.mp4");
+
+                // not yet started
+                if (null == mMediaRecorder) {
+                    if (videoFile.exists()) {
+                        videoFile.delete();
+                    }
+
+                    try {
+                        mCamera.lock();
+                        mCamera.unlock();
+
+                        mMediaRecorder = new MediaRecorder();
+                        mMediaRecorder.setCamera(mCamera);
+                        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+                        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+                        mMediaRecorder.setProfile(cpHigh);
+                        mMediaRecorder.setOrientationHint(mCameraOrientation);
+                        mMediaRecorder.setPreviewDisplay(mCameraSurfaceHolder.getSurface());
+                        mMediaRecorder.setOutputFile(videoFile.getAbsolutePath());
                     } catch (Exception e) {
-                        Toast.makeText(VectorMediasPickerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    } finally {
-                        // Close resources
+                        stopVideoRecord();
+                        Toast.makeText(VectorMediasPickerActivity.this, "Cannot start the record" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(LOG_TAG, "Cannot start the record" + e.getLocalizedMessage());
+                    }
+
+                    // the media recorder has been created
+                    if (null != mMediaRecorder) {
                         try {
-                            if (inputStream != null) inputStream.close();
-                            if (outputStream != null) outputStream.close();
+                            mMediaRecorder.prepare();
+
+                            VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        mMediaRecorder.start();
+                                        manageButtons();
+                                    } catch (Exception e) {
+                                        stopVideoRecord();
+                                        Toast.makeText(VectorMediasPickerActivity.this, "Cannot start the record" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        Log.e(LOG_TAG, "Cannot start the record" + e.getLocalizedMessage());
+                                    }
+                                }
+                            });
                         } catch (Exception e) {
+                            stopVideoRecord();
+                            Toast.makeText(VectorMediasPickerActivity.this, "Cannot start the record" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e(LOG_TAG, "Cannot start the record" + e.getLocalizedMessage());
                         }
                     }
+                } else {
+                    stopVideoRecord();
+
+                    if (videoFile.exists()) {
+                        mRecordedVideoPath = videoFile.getAbsolutePath();
+                    }
+
+                    manageButtons();
                 }
-            });
+            }
         }
     }
 
@@ -539,6 +677,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (null != mCamera) {
             mCamera.startPreview();
             mShootedPicturePath = null;
+            mRecordedVideoPath = null;
             manageButtons();
         }
     }
@@ -548,7 +687,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     void attachImage() {
         try {
-            String uriString = CommonActivityUtils.saveImageIntoGallery(this, new File(mShootedPicturePath));
+            String uriString;
+
+            if (null != mShootedPicturePath) {
+                uriString = CommonActivityUtils.saveImageIntoGallery(this, new File(mShootedPicturePath));
+            } else {
+                uriString = CommonActivityUtils.saveIntoMovies(this, new File(mRecordedVideoPath));
+            }
 
             // sanity check
             if (null != uriString) {
@@ -753,6 +898,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param holder The SurfaceHolder whose surface is being destroyed.
      */
     public void surfaceDestroyed(SurfaceHolder holder) {
+        stopVideoRecord();
         mCamera.stopPreview();
         mCamera.release();
         mCamera = null;
