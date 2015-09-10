@@ -62,6 +62,8 @@
                 android:id="@+id/medias_picker_video_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
                 />
 
             <ImageView
