@@ -17,7 +17,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -25,30 +25,27 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import im.vector.R;
+import im.vector.view.RecentMediaLayout;
 
 import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
-import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import org.matrix.androidsdk.MXSession;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -64,10 +61,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         public long mCreationTime;
         public Bitmap mThumbnail = null;
         public Boolean mIsvideo = false;
+        public RecentMediaLayout mRecentMediaLayout = null;
     }
 
     // recents medias list
     private ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
+    private ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
 
     // camera object
     private Camera mCamera = null;
@@ -85,6 +84,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     Button mOpenLibraryButton = null;
     Button mUseImagesListButton = null;
     LinearLayout mRecentsListView = null;
+    HorizontalScrollView mRecentsScrollView = null;
 
     private String mShootedPicturePath = null;
     private Boolean mIsPreviewStarted = false;
@@ -118,6 +118,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mOpenLibraryButton = (Button) findViewById(R.id.medias_picker_library_button);
         mUseImagesListButton = (Button) findViewById(R.id.medias_picker_attach2_button);
         mRecentsListView = (LinearLayout) findViewById(R.id.medias_picker_recents_listview);
+        mRecentsScrollView = (HorizontalScrollView) findViewById(R.id.medias_picker_recents_scrollview);
 
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +230,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (2 > Camera.getNumberOfCameras()) {
             disableView(mSwitchCameraImageView);
         }
+
+        // selection from the media list
+        if (mSelectedRecents.size() > 0)  {
+            enableView(mUseImagesListButton);
+        } else {
+            disableView(mUseImagesListButton);
+        }
     }
 
     @Override
@@ -245,16 +253,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     private int getCarouselItemWidth() {
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        return display.getWidth() / 6;
+        return mRecentsScrollView.getLayoutParams().height;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refreshRecentsMediasList();
+
+        if (0 == mRecentsMedias.size()) {
+            refreshRecentsMediasList();
+        }
 
         // should always be true
         if (null == mCamera) {
@@ -336,7 +344,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             break;
                         }
 
-                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MICRO_KIND, null);
                         recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
                         if (null != recentMedia.mThumbnail) {
@@ -385,7 +393,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         if ((maxLifetime > 0) && ((System.currentTimeMillis() - recentMedia.mCreationTime) > maxLifetime)) {
                             break;
                         }
-                        recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MINI_KIND, null);
+                        recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MICRO_KIND, null);
                         recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
                         if (null != recentMedia.mThumbnail) {
@@ -435,12 +443,39 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         int itemWidth = getCarouselItemWidth();
 
                         for (RecentMedia recentMedia : mRecentsMedias) {
-                            ImageView imageView = new ImageView(VectorMediasPickerActivity.this);
-                            imageView.setImageBitmap(recentMedia.mThumbnail);
-                            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
-                            imageView.setLayoutParams(params);
+                            final RecentMediaLayout recentMediaLayout = new RecentMediaLayout(VectorMediasPickerActivity.this);
 
-                            mRecentsListView.addView(imageView, params);
+                            recentMediaLayout.setThumbnail(recentMedia.mThumbnail);
+                            recentMediaLayout.setIsVideo(recentMedia.mIsvideo);
+
+                            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+                            recentMediaLayout.setLayoutParams(params);
+
+                            recentMedia.mRecentMediaLayout = recentMediaLayout;
+                            mRecentsListView.addView(recentMediaLayout, params);
+
+                            final RecentMedia frecentMedia = recentMedia;
+
+                            recentMediaLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // unselect it ?
+                                    if (recentMediaLayout.isSelected()) {
+                                        mSelectedRecents.remove(frecentMedia);
+                                    } else {
+                                        // single image mode : disable any previously selected image
+                                        if ((mIsSingleImageMode || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) && (mSelectedRecents.size() > 0)) {
+                                            mSelectedRecents.get(0).mRecentMediaLayout.setIsSelected(false);
+                                            mSelectedRecents.clear();
+                                        }
+
+                                        mSelectedRecents.add(frecentMedia);
+                                    }
+
+                                    recentMediaLayout.setIsSelected(!recentMediaLayout.isSelected());
+                                    VectorMediasPickerActivity.this.manageButtons();
+                                }
+                            });
                         }
                     }
                 });
@@ -543,8 +578,30 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         startActivityForResult(fileIntent, REQUEST_MEDIAS);
     }
 
+    @SuppressLint("NewApi")
     void attachCarouselMedias() {
-        // TODO
+
+        Bundle conData = new Bundle();
+        Intent intent = new Intent();
+
+        if ((mSelectedRecents.size() == 1) || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) {
+            // provide the Uri
+            intent.setData(mSelectedRecents.get(0).mFileUri);
+        } else if (mSelectedRecents.size() > 0) {
+            ClipData.Item firstUri = new ClipData.Item(null, null, null, mSelectedRecents.get(0).mFileUri);
+            String[] mimeType = { "*/*" };
+            ClipData clipData = new ClipData("", mimeType, firstUri);
+
+            for(int index = 1; index < mSelectedRecents.size(); index++) {
+                ClipData.Item item = new ClipData.Item(null, null, null, mSelectedRecents.get(index).mFileUri);
+                clipData.addItem(item);
+            }
+            intent.setClipData(clipData);
+        }
+
+        intent.putExtras(conData);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     /**

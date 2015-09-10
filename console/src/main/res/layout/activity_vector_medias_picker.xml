@@ -112,7 +112,7 @@
             android:scrollbars="none"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="60dp">
 
                 <LinearLayout
                     android:id="@+id/medias_picker_recents_listview"
