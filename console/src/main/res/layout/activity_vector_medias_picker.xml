@@ -17,12 +17,13 @@
             android:layout_weight="0.075">
 
             <TextView
+                android:id="@+id/medias_picker_camera_title"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical"
                 style="@style/Base.TextAppearance.AppCompat.Title"
                 android:textColor="@color/vector_title_color"
-                android:text="@string/take_a_picture"/>
+                android:text="@string/media_picker_picture_capture_title"/>
 
             <ImageView
                 android:id="@+id/medias_picker_switch_camera"
@@ -88,7 +89,7 @@
                 android:layout_height="match_parent"
                 android:textColor="#FFFFFFFF"
                 android:background="@drawable/rounded_button_bg"
-                android:text="@string/retake"/>
+                android:text="@string/media_picker_retake"/>
 
             <ImageView
                 android:id="@+id/medias_picker_camera_button"
@@ -104,7 +105,7 @@
                 android:layout_height="match_parent"
                 android:textColor="#FFFFFFFF"
                 android:background="@drawable/rounded_button_bg"
-                android:text="@string/attach"/>
+                android:text="@string/media_picker_attach"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -120,7 +121,7 @@
                 android:gravity="center_vertical"
                 style="@style/Base.TextAppearance.AppCompat.Title"
                 android:textColor="@color/vector_title_color"
-                android:text="@string/choose_from_library"/>
+                android:text="@string/media_picker_choose_from_library"/>
 
         </RelativeLayout>
 
@@ -155,7 +156,7 @@
                 android:layout_height="match_parent"
                 android:textColor="#FFFFFFFF"
                 android:background="@drawable/rounded_button_bg"
-                android:text="@string/library"/>
+                android:text="@string/media_picker_library"/>
 
             <Button
                 android:layout_weight="0.4"
@@ -172,7 +173,7 @@
                 android:layout_height="match_parent"
                 android:textColor="#FFFFFFFF"
                 android:background="@drawable/rounded_button_bg"
-                android:text="@string/attach"/>
+                android:text="@string/media_picker_attach"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

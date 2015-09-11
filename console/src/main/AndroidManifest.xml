@@ -158,7 +158,7 @@
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"
-            android:label="@string/title_activity_room"
+            android:label="@string/media_picker_both_capture_title"
             android:parentActivityName="im.vector.activity.RoomActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">

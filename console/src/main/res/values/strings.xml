@@ -285,11 +285,12 @@
     <string name="action_hangup">Hang up</string>
 
     <!-- medias picker string -->
-    <string name="take_a_picture">Take a picture</string>
-    <string name="choose_from_library">Choose from library</string>
-    <string name="retake">Retake</string>
-    <string name="attach">Attach</string>
-    <string name="library">Library</string>
-
-
+    <string name="media_picker_picture_capture_title">Take a picture</string>
+    <string name="media_picker_video_capture_title">Record a video</string>
+    <string name="media_picker_both_capture_title">Take a picture or a video"</string>
+    <string name="media_picker_retake">Retake"</string>
+    <string name="media_picker_choose">Choose"</string>
+    <string name="media_picker_attach">Attach"</string>
+    <string name="media_picker_choose_from_library">Choose from library"</string>
+    <string name="media_picker_library">Library"</string>
 </resources>

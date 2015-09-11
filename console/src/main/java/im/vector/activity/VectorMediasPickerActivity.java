@@ -21,9 +21,11 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +45,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -58,6 +61,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // medias folder
     private static final int REQUEST_MEDIAS = 0;
     private static final String LOG_TAG = "VectorMedPicker";
+
+    public static final String EXTRA_SINGLE_IMAGE_MODE = "im.vector.activity.VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE";
 
     /**
      * define a recent media
@@ -83,6 +88,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     ImageView mSwitchCameraImageView = null;
     ImageView mRecordModeImageView = null;
 
+    TextView mCaptureTitleTextView = null;
     ImageView mTakePhotoImageView = null;
     SurfaceHolder mCameraSurfaceHolder = null;
     SurfaceView mCameraSurfaceView = null;
@@ -102,7 +108,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private String mRecordedVideoPath = null;
     private Boolean mIsPreviewStarted = false;
 
-    private Boolean mIsSingleImageMode = false;
+    static private Boolean mIsSingleImageMode = false;
     static private Boolean mIsPhotoMode = true;
 
     int mCameraOrientation = 0;
@@ -135,6 +141,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mRecentsScrollView = (HorizontalScrollView) findViewById(R.id.medias_picker_recents_scrollview);
         mRecordModeImageView = (ImageView) findViewById(R.id.medias_picker_recording_mode);
         mVideoView = (VideoView) findViewById(R.id.medias_picker_video_view);
+        mCaptureTitleTextView = (TextView) findViewById(R.id.medias_picker_camera_title);
+
+        Intent intent = getIntent();
+        mIsSingleImageMode = intent.hasExtra(EXTRA_SINGLE_IMAGE_MODE);
+
+        if (mIsSingleImageMode) {
+            mRecordModeImageView.setVisibility(View.INVISIBLE);
+        }
 
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +305,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (mIsPhotoMode) {
             mRecordModeImageView.setImageResource(R.drawable.ic_material_camera);
             mTakePhotoImageView.setImageResource(R.drawable.ic_material_camera);
+            mCaptureTitleTextView.setText(R.string.media_picker_picture_capture_title);
         } else {
+            mCaptureTitleTextView.setText(R.string.media_picker_video_capture_title);
             mRecordModeImageView.setImageResource(R.drawable.ic_material_videocam);
             // playing mode
             if (mVideoView.getVisibility() == View.VISIBLE) {
@@ -613,7 +629,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // play
             if (mVideoView.isPlaying()) {
                 mVideoView.stopPlayback();
+                refreshVideoThumbnail(true);
             } else {
+                refreshVideoThumbnail(false);
                 mVideoView.start();
 
                 mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -621,6 +639,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     public void onCompletion(MediaPlayer mp) {
                         if (null != mRecordedVideoPath) {
                             manageButtons();
+                            refreshVideoThumbnail(true);
                         }
                     }
                 });
@@ -727,11 +746,31 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     if (videoFile.exists()) {
                         mRecordedVideoPath = videoFile.getAbsolutePath();
                         mVideoView.setVideoPath(mRecordedVideoPath);
+                        manageButtons();
+                        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            public void onPrepared(MediaPlayer mp) {
+                                refreshVideoThumbnail(true);
+                            }
+                        });
                     }
-
-                    manageButtons();
                 }
             }
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void refreshVideoThumbnail(boolean show) {
+        BitmapDrawable bitmapDrawable = null;
+
+        if (show && (null != mRecordedVideoPath)) {
+            Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mRecordedVideoPath, MediaStore.Images.Thumbnails.MINI_KIND);
+            bitmapDrawable = new BitmapDrawable(VectorMediasPickerActivity.this.getResources(), thumb);
+        }
+        // display the video thumbnail
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
+            mVideoView.setBackground(bitmapDrawable);
+        } else {
+            mVideoView.setBackgroundDrawable(bitmapDrawable);
         }
     }
 
@@ -788,7 +827,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         // did not find a way to filter image and video files
-        fileIntent.setType("*/*");
+        fileIntent.setType(mIsSingleImageMode ? "image/*" : "*/*");
         startActivityForResult(fileIntent, REQUEST_MEDIAS);
     }
 
