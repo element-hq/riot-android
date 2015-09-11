@@ -21,13 +21,11 @@ import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.HandlerThread;
@@ -45,7 +43,6 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -91,11 +88,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -158,12 +152,10 @@ public class RoomActivity extends MXCActionBarActivity {
     private MXMediasCache mMediasCache;
 
     private ImageButton mSendButton;
-    private ImageButton mAttachmentButton;
+    private ImageButton mMoreAttachmentsButton;
+    private ImageButton mCameraButton;
     private EditText mEditText;
-
-    private View mImagePreviewLayout;
-    private ImageView mImagePreviewView;
-    private ImageButton mImagePreviewButton;
+    private LinearLayout mMediaButtonsLayout;
 
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
@@ -283,43 +275,6 @@ public class RoomActivity extends MXCActionBarActivity {
      * Launch the camera
      */
     private void launchCamera() {
-        /*Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // the following is a fix for buggy 2.x devices
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, CAMERA_VALUE_TITLE + formatter.format(date));
-        // The Galaxy S not only requires the name of the file to output the image to, but will also not
-        // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
-        // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        Uri dummyUri = null;
-        try {
-            dummyUri = RoomActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        }
-        catch (UnsupportedOperationException uoe) {
-            Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI - no SD card? Attempting to insert into device storage.");
-            try {
-                dummyUri = RoomActivity.this.getContentResolver().insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, values);
-            }
-            catch (Exception e) {
-                Log.e(LOG_TAG, "Unable to insert camera URI into internal storage. Giving up. "+e);
-            }
-        }
-        catch (Exception e) {
-            Log.e(LOG_TAG, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI. "+e);
-        }
-        if (dummyUri != null) {
-            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, dummyUri);
-        }
-        // Store the dummy URI which will be set to a placeholder location. When all is lost on samsung devices,
-        // this will point to the data we're looking for.
-        // Because Activities tend to use a single MediaProvider for all their intents, this field will only be the
-        // *latest* TAKE_PICTURE Uri. This is deemed acceptable as the normal flow is to create the intent then immediately
-        // fire it, meaning onActivityResult/getUri will be the next thing called, not another createIntentFor.
-        RoomActivity.this.mLatestTakePictureCameraUri = dummyUri == null ? null : dummyUri.toString();*/
-
         Intent intent = new Intent(RoomActivity.this, VectorMediasPickerActivity.class);
         startActivityForResult(intent, TAKE_IMAGE);
     }
@@ -338,6 +293,200 @@ public class RoomActivity extends MXCActionBarActivity {
             mHeight = height;
         }
     }
+
+    private void resizeMediaAndSend() {
+        if (null != mPendingThumbnailUrl) {
+            boolean sendMedia = true;
+
+            // check if the media could be resized
+            if ("image/jpeg".equals(mPendingMimeType)) {
+
+                System.gc();
+                FileInputStream imageStream = null;
+
+                try {
+                    Uri uri = Uri.parse(mPendingMediaUrl);
+                    final String filename = uri.getPath();
+
+                    final int rotationAngle = ImageUtils.getRotationAngleForBitmap(RoomActivity.this, uri);
+
+                    imageStream = new FileInputStream(new File(filename));
+
+                    int fileSize = imageStream.available();
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    options.outWidth = -1;
+                    options.outHeight = -1;
+
+                    // get the full size bitmap
+                    Bitmap fullSizeBitmap;
+
+                    try {
+                        fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
+                    } catch (OutOfMemoryError e) {
+                        Log.e(LOG_TAG, "Onclick BitmapFactory.decodeStream : " + e.getMessage());
+                    }
+
+                    final ImageSize fullImageSize = new ImageSize(options.outWidth, options.outHeight);
+
+                    imageStream.close();
+
+                    int maxSide = (fullImageSize.mHeight > fullImageSize.mWidth) ? fullImageSize.mHeight : fullImageSize.mWidth;
+
+                    // can be rescaled ?
+                    if (maxSide > SMALL_IMAGE_SIZE) {
+                        ImageSize largeImageSize = null;
+
+                        int divider = 2;
+
+                        if (maxSide > LARGE_IMAGE_SIZE) {
+                            largeImageSize = new ImageSize((fullImageSize.mWidth + (divider - 1)) / divider, (fullImageSize.mHeight + (divider - 1)) / divider);
+                            divider *= 2;
+                        }
+
+                        ImageSize mediumImageSize = null;
+
+                        if (maxSide > MEDIUM_IMAGE_SIZE) {
+                            mediumImageSize = new ImageSize((fullImageSize.mWidth + (divider - 1)) / divider, (fullImageSize.mHeight + (divider - 1)) / divider);
+                            divider *= 2;
+                        }
+
+                        ImageSize smallImageSize = null;
+
+                        if (maxSide > SMALL_IMAGE_SIZE) {
+                            smallImageSize = new ImageSize((fullImageSize.mWidth + (divider - 1)) / divider, (fullImageSize.mHeight + (divider - 1)) / divider);
+                        }
+
+                        FragmentManager fm = getSupportFragmentManager();
+                        ImageSizeSelectionDialogFragment fragment = (ImageSizeSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
+
+                        if (fragment != null) {
+                            fragment.dismissAllowingStateLoss();
+                        }
+
+                        final ArrayList<ImageCompressionDescription> textsList = new ArrayList<ImageCompressionDescription>();
+                        final ArrayList<ImageSize> sizesList = new ArrayList<ImageSize>();
+
+                        ImageCompressionDescription description = new ImageCompressionDescription();
+                        description.mCompressionText = getString(R.string.compression_opt_list_original);
+                        description.mCompressionInfoText = fullImageSize.mWidth + "x" + fullImageSize.mHeight + " (" + android.text.format.Formatter.formatFileSize(RoomActivity.this, fileSize) + ")";
+
+                        textsList.add(description);
+                        sizesList.add(fullImageSize);
+
+                        if (null != largeImageSize) {
+                            int estFileSize = largeImageSize.mWidth * largeImageSize.mHeight * 2 / 10 / 1024 * 1024;
+
+                            description = new ImageCompressionDescription();
+                            description.mCompressionText = getString(R.string.compression_opt_list_large);
+                            description.mCompressionInfoText = largeImageSize.mWidth + "x" + largeImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(RoomActivity.this, estFileSize) + ")";
+
+                            textsList.add(description);
+                            sizesList.add(largeImageSize);
+                        }
+
+                        if (null != mediumImageSize) {
+                            int estFileSize = mediumImageSize.mWidth * mediumImageSize.mHeight * 2 / 10 / 1024 * 1024;
+
+                            description = new ImageCompressionDescription();
+                            description.mCompressionText = getString(R.string.compression_opt_list_medium);
+                            description.mCompressionInfoText = mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(RoomActivity.this, estFileSize) + ")";
+
+                            textsList.add(description);
+                            sizesList.add(mediumImageSize);
+                        }
+
+                        if (null != smallImageSize) {
+                            int estFileSize = smallImageSize.mWidth * smallImageSize.mHeight * 2 / 10 / 1024 * 1024;
+
+                            description = new ImageCompressionDescription();
+                            description.mCompressionText = getString(R.string.compression_opt_list_small);
+                            description.mCompressionInfoText = smallImageSize.mWidth + "x" + smallImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(RoomActivity.this, estFileSize) + ")";
+
+                            textsList.add(description);
+                            sizesList.add(smallImageSize);
+                        }
+
+                        fragment = ImageSizeSelectionDialogFragment.newInstance(textsList);
+                        fragment.setListener(new ImageSizeSelectionDialogFragment.ImageSizeListener() {
+                            @Override
+                            public void onSelected(int pos) {
+                                final int fPos = pos;
+
+                                RoomActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            // pos == 0 -> original
+                                            if (0 != fPos) {
+                                                FileInputStream imageStream = new FileInputStream(new File(filename));
+
+                                                ImageSize imageSize = sizesList.get(fPos);
+                                                InputStream resizeBitmapStream = null;
+
+                                                try {
+                                                    resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
+                                                } catch (OutOfMemoryError ex) {
+                                                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
+                                                } catch (Exception e) {
+                                                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
+                                                }
+
+                                                if (null != resizeBitmapStream) {
+                                                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
+
+
+                                                    if (null != bitmapURL) {
+                                                        mPendingMediaUrl = bitmapURL;
+                                                    }
+
+                                                    resizeBitmapStream.close();
+
+                                                    // try to apply exif rotation
+                                                    if (0 != rotationAngle) {
+                                                        // rotate the image content
+                                                        ImageUtils.rotateImage(RoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
+                                                    }
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            Log.e(LOG_TAG, "Onclick " + e.getMessage());
+                                        }
+
+                                        //
+                                        mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
+                                        mPendingThumbnailUrl = null;
+                                        mPendingMediaUrl = null;
+                                        mPendingMimeType = null;
+                                        mPendingFilename = null;
+                                        manageSendMoreButtons();
+                                    }
+                                });
+                            }
+                        });
+
+                        fragment.show(fm, TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
+                        sendMedia = false;
+                    }
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Onclick " + e.getMessage());
+                }
+            }
+
+            if (sendMedia) {
+                mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
+                mPendingThumbnailUrl = null;
+                mPendingMediaUrl = null;
+                mPendingMimeType = null;
+                mPendingFilename = null;
+                manageSendMoreButtons();
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (CommonActivityUtils.shouldRestartApp()) {
@@ -393,211 +542,29 @@ public class RoomActivity extends MXCActionBarActivity {
         Log.i(LOG_TAG, "Displaying " + roomId);
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
+        mMediaButtonsLayout = (LinearLayout)findViewById(R.id.media_buttons_layout);
 
         mSendButton = (ImageButton) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                // send the previewed image ?
-                if (null != mPendingThumbnailUrl) {
-                    boolean sendMedia = true;
-
-                    // check if the media could be resized
-                    if ("image/jpeg".equals(mPendingMimeType)) {
-
-                        System.gc();
-                        FileInputStream imageStream = null;
-
-                        try {
-                            Uri uri = Uri.parse(mPendingMediaUrl);
-                            final String filename = uri.getPath();
-
-                            final int rotationAngle = ImageUtils.getRotationAngleForBitmap(RoomActivity.this, uri);
-
-                            imageStream = new FileInputStream (new File(filename));
-
-                            int fileSize =  imageStream.available();
-
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inJustDecodeBounds = true;
-                            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                            options.outWidth = -1;
-                            options.outHeight = -1;
-
-                            // get the full size bitmap
-                            Bitmap fullSizeBitmap = null;
-                            try {
-                                fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
-                            } catch (OutOfMemoryError e) {
-                                Log.e(LOG_TAG, "Onclick BitmapFactory.decodeStream : " + e.getMessage());
-                            }
-
-                            final ImageSize fullImageSize = new ImageSize(options.outWidth, options.outHeight);
-
-                            imageStream.close();
-
-                            int maxSide = (fullImageSize.mHeight >  fullImageSize.mWidth) ? fullImageSize.mHeight : fullImageSize.mWidth;
-
-                            // can be rescaled ?
-                            if (maxSide > SMALL_IMAGE_SIZE) {
-                                ImageSize largeImageSize = null;
-
-                                int divider = 2;
-
-                                if (maxSide > LARGE_IMAGE_SIZE) {
-                                    largeImageSize = new ImageSize((fullImageSize.mWidth + (divider-1)) / divider, (fullImageSize.mHeight + (divider-1)) / divider);
-                                    divider *= 2;
-                                }
-
-                                ImageSize mediumImageSize = null;
-
-                                if (maxSide > MEDIUM_IMAGE_SIZE)  {
-                                    mediumImageSize = new ImageSize((fullImageSize.mWidth + (divider-1)) / divider, (fullImageSize.mHeight + (divider-1)) / divider);
-                                    divider *= 2;
-                                }
-
-                                ImageSize smallImageSize = null;
-
-                                if (maxSide > SMALL_IMAGE_SIZE)  {
-                                    smallImageSize = new ImageSize((fullImageSize.mWidth + (divider-1)) / divider, (fullImageSize.mHeight + (divider-1)) / divider);
-                                }
-
-                                FragmentManager fm = getSupportFragmentManager();
-                                ImageSizeSelectionDialogFragment fragment = (ImageSizeSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
-
-                                if (fragment != null) {
-                                    fragment.dismissAllowingStateLoss();
-                                }
-
-                                final ArrayList<ImageCompressionDescription> textsList = new ArrayList<ImageCompressionDescription>();
-                                final ArrayList<ImageSize> sizesList = new ArrayList<ImageSize>();
-
-                                ImageCompressionDescription description = new ImageCompressionDescription();
-                                description.mCompressionText = getString(R.string.compression_opt_list_original);
-                                description.mCompressionInfoText = fullImageSize.mWidth + "x" + fullImageSize.mHeight + " (" + android.text.format.Formatter.formatFileSize(RoomActivity.this, fileSize) + ")";
-
-                                textsList.add(description);
-                                sizesList.add(fullImageSize);
-
-                                if (null != largeImageSize) {
-                                    int estFileSize = largeImageSize.mWidth * largeImageSize.mHeight * 2 / 10 / 1024 * 1024;
-
-                                    description = new ImageCompressionDescription();
-                                    description.mCompressionText = getString(R.string.compression_opt_list_large);
-                                    description.mCompressionInfoText = largeImageSize.mWidth + "x" + largeImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(RoomActivity.this, estFileSize) + ")";
-
-                                    textsList.add(description);
-                                    sizesList.add(largeImageSize);
-                                }
-
-                                if (null != mediumImageSize) {
-                                    int estFileSize = mediumImageSize.mWidth * mediumImageSize.mHeight * 2 / 10 / 1024 * 1024;
-
-                                    description = new ImageCompressionDescription();
-                                    description.mCompressionText = getString(R.string.compression_opt_list_medium);
-                                    description.mCompressionInfoText = mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(RoomActivity.this, estFileSize) + ")";
-
-                                    textsList.add(description);
-                                    sizesList.add(mediumImageSize);
-                                }
-
-                                if (null != smallImageSize) {
-                                    int estFileSize = smallImageSize.mWidth * smallImageSize.mHeight * 2 / 10 / 1024 * 1024;
-
-                                    description = new ImageCompressionDescription();
-                                    description.mCompressionText = getString(R.string.compression_opt_list_small);
-                                    description.mCompressionInfoText = smallImageSize.mWidth + "x" + smallImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(RoomActivity.this, estFileSize) + ")";
-
-                                    textsList.add(description);
-                                    sizesList.add(smallImageSize);
-                                }
-
-                                fragment = ImageSizeSelectionDialogFragment.newInstance(textsList);
-                                fragment.setListener( new ImageSizeSelectionDialogFragment.ImageSizeListener() {
-                                    @Override
-                                    public void onSelected(int pos) {
-                                        final int fPos = pos;
-
-                                        RoomActivity.this.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    // pos == 0 -> original
-                                                    if (0 != fPos) {
-                                                        FileInputStream imageStream = new FileInputStream (new File(filename));
-
-                                                        ImageSize imageSize = sizesList.get(fPos);
-                                                        InputStream resizeBitmapStream = null;
-
-                                                        try {
-                                                            resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
-                                                        } catch (OutOfMemoryError ex) {
-                                                            Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
-                                                        } catch (Exception e) {
-                                                            Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
-                                                        }
-
-                                                        if (null != resizeBitmapStream) {
-                                                            String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
-
-
-                                                            if (null != bitmapURL) {
-                                                                mPendingMediaUrl = bitmapURL;
-                                                            }
-
-                                                            resizeBitmapStream.close();
-
-                                                            // try to apply exif rotation
-                                                            if (0 != rotationAngle) {
-                                                                // rotate the image content
-                                                                ImageUtils.rotateImage(RoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
-                                                            }
-                                                        }
-                                                    }
-                                                } catch (Exception e) {
-                                                    Log.e(LOG_TAG, "Onclick " + e.getMessage());
-                                                }
-
-                                                //
-                                                mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
-                                                mPendingThumbnailUrl = null;
-                                                mPendingMediaUrl = null;
-                                                mPendingMimeType = null;
-                                                mPendingFilename = null;
-                                                manageSendMoreButtons();
-                                            }
-                                        });
-                                    }
-                                });
-
-                                fragment.show(fm, TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
-                                sendMedia = false;
-                            }
-
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "Onclick " + e.getMessage());
-                        }
-                    }
-
-                    if (sendMedia) {
-                        mConsoleMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
-                        mPendingThumbnailUrl = null;
-                        mPendingMediaUrl = null;
-                        mPendingMimeType = null;
-                        mPendingFilename = null;
-                        manageSendMoreButtons();
-                    }
-                } else {
-                    String body = mEditText.getText().toString();
-                    sendMessage(body);
-                    mEditText.setText("");
-                }
+                String body = mEditText.getText().toString();
+                sendMessage(body);
+                mEditText.setText("");
             }
         });
 
-        mAttachmentButton = (ImageButton) findViewById(R.id.button_more);
-        mAttachmentButton.setOnClickListener(new View.OnClickListener() {
+        mCameraButton = (ImageButton) findViewById(R.id.button_camera);
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RoomActivity.this.launchCamera();
+            }
+        });
+
+        mMoreAttachmentsButton = (ImageButton) findViewById(R.id.button_more_attachments);
+        mMoreAttachmentsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -693,22 +660,6 @@ public class RoomActivity extends MXCActionBarActivity {
         // The error listener needs the current activity
         mSession.setFailureCallback(new ErrorListener(this));
 
-        mImagePreviewLayout = findViewById(R.id.room_image_preview_layout);
-        mImagePreviewView   = (ImageView)findViewById(R.id.room_image_preview);
-        mImagePreviewButton = (ImageButton)findViewById(R.id.room_image_preview_cancel_button);
-
-        // the user cancels the image selection
-        mImagePreviewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPendingThumbnailUrl = null;
-                mPendingMediaUrl = null;
-                mPendingMimeType = null;
-                mPendingFilename = null;
-                manageSendMoreButtons();
-            }
-        });
-
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
         mMediasCache = Matrix.getInstance(this).getMediasCache();
 
@@ -768,18 +719,8 @@ public class RoomActivity extends MXCActionBarActivity {
      */
     private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
-        boolean hasPreviewedMedia = (null != mPendingThumbnailUrl);
-
-
-        if (hasPreviewedMedia) {
-            mMediasCache.loadBitmap(mImagePreviewView, mPendingThumbnailUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, mPendingMimeType);
-        }
-
-        mImagePreviewLayout.setVisibility(hasPreviewedMedia ? View.VISIBLE : View.GONE);
-        mEditText.setVisibility(hasPreviewedMedia ? View.INVISIBLE : View.VISIBLE);
-
-        mSendButton.setVisibility((hasText || hasPreviewedMedia) ? View.VISIBLE : View.INVISIBLE);
-        mAttachmentButton.setVisibility((hasText || hasPreviewedMedia) ? View.INVISIBLE : View.VISIBLE);
+        mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
+        mMediaButtonsLayout.setVisibility(hasText ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -816,24 +757,6 @@ public class RoomActivity extends MXCActionBarActivity {
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
     }
-
-    void refreshAccountThumbnail() {
-        // remove the ring
-        ImageView presenceRingView = (ImageView) findViewById(R.id.imageView_presenceRing);
-        presenceRingView.setVisibility(View.GONE);
-
-        ImageView avatarView = (ImageView) findViewById(R.id.avatar_img);
-
-        String avatarUrl = mSession.getMyUser().avatarUrl;
-
-        if (avatarUrl == null) {
-            avatarView.setImageResource(R.drawable.ic_contact_picture_holo_light);
-        } else {
-            int size = getResources().getDimensionPixelSize(R.dimen.chat_avatar_size);
-            mMediasCache.loadAvatarThumbnail(avatarView, avatarUrl, size);
-        }
-    }
-
 
     @Override
     protected void onResume() {
@@ -881,8 +804,6 @@ public class RoomActivity extends MXCActionBarActivity {
                 }
             });
         }
-
-        refreshAccountThumbnail();
 
         if (null != mCallId) {
             IMXCall call = CallViewActivity.getActiveCall();
@@ -1499,15 +1420,22 @@ public class RoomActivity extends MXCActionBarActivity {
                                             public void run() {
                                                 // if there is only one image
                                                 if (mediaCount == 1) {
+
                                                     // display an image preview before sending it
                                                     mPendingThumbnailUrl = fThumbnailURL;
                                                     mPendingMediaUrl = fMediaUrl;
                                                     mPendingMimeType = fMimeType;
                                                     mPendingFilename = fFilename;
-
                                                     mConsoleMessageListFragment.scrollToBottom();
 
                                                     manageSendMoreButtons();
+
+                                                    RoomActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            resizeMediaAndSend();
+                                                        }
+                                                    });
                                                 } else {
                                                     mConsoleMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, fFilename, fMimeType);
                                                 }
