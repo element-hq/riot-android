@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/message_header"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <include layout="@layout/rounded_rect_avatar"
+            android:id="@+id/messagesAdapter_roundAvatar_left"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="0dp"
+            android:paddingBottom="5dp">
+
+            <include layout="@layout/message_sender"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/message_timestamp"
+                    android:id="@+id/message_timestamp_layout_left"/>
+
+                <FrameLayout
+                    android:layout_marginLeft="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/upload_content_layout"
+                        android:orientation="vertical">
+
+                        <org.matrix.androidsdk.view.PieFractionView
+                            android:id="@+id/upload_content_piechart"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="9sp"
+                            android:gravity="center_vertical"
+                            android:text="@string/uploading_dot"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/upload_event_failed"
+                        android:background ="#ffff0000"
+                        android:src="@drawable/ic_menu_end_conversation"
+                        android:layout_width="40dp"
+                        android:layout_height="40sp"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:id="@+id/messagesAdapter_body_layout">
+
+                    <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_gravity="right"
+                        android:background="#44DDDDDD"
+                        android:id="@+id/messagesAdapter_file_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="@dimen/chat_avatar_keyboard_size"
+                                android:layout_height="@dimen/chat_avatar_keyboard_size"
+                                android:visibility="visible"
+                                android:id="@+id/messagesAdapter_file_type"
+                                android:src="@drawable/filetype_attachment"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text= "A filename here"
+                                android:autoLink="none"
+                                android:id="@+id/messagesAdapter_filename"
+                            />
+
+                            <FrameLayout
+                                android:layout_alignLeft = "@+id/messagesAdapter_image"
+                                android:layout_alignRight="@+id/messagesAdapter_image"
+                                android:layout_alignBottom="@+id/messagesAdapter_image"
+                                android:layout_alignTop="@+id/messagesAdapter_image"
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ProgressBar
+                                    android:id="@+id/upload_event_spinner"
+                                    android:layout_gravity="center"
+                                    android:layout_width="@dimen/chat_avatar_size"
+                                    android:layout_height="@dimen/chat_avatar_size"
+                                    android:visibility="visible"/>
+                            </FrameLayout>
+                        </RelativeLayout>
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/download_content_layout"
+                        android:background="#44DDDDDD"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <org.matrix.androidsdk.view.PieFractionView
+                                android:id="@+id/download_content_piechart"
+                                android:paddingLeft="5dp"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="9sp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_weight="1"
+                            android:text="@string/downloading_dot"
+                            android:id="@+id/download_content_text"/>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <include layout="@layout/message_timestamp"
+                    android:id="@+id/message_timestamp_layout_right"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/rounded_rect_avatar"
+            android:id="@+id/messagesAdapter_roundAvatar_right"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/message_separator"/>
+
+</LinearLayout>

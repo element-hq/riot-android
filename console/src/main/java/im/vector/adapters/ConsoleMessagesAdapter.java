@@ -83,7 +83,13 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     private AvatarClickListener mAvatarClickListener = null;
 
     public ConsoleMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
-        super(session, context, mediasCache);
+        super(session, context,
+                R.layout.adapter_item_vector_message_text,
+                R.layout.adapter_item_vector_message_image,
+                R.layout.adapter_item_vector_message_notice,
+                R.layout.adapter_item_vector_message_emote,
+                R.layout.adapter_item_vector_message_file,
+                mediasCache);
     }
 
     public void setMessageLongClickListener(MessageLongClickListener listener) {
