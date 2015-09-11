@@ -338,239 +338,46 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
-        MessageRow row = getItem(position);
-        Event msg = row.getEvent();
-        RoomState roomState = row.getRoomState();
+        Boolean isMergedView = super.manageSubView(position, convertView, subView, msgType);
 
-        MyUser myUser = mSession.getMyUser();
+        View view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
+        if (null != view) {
+            View line = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator_line);
 
-        // isMergedView -> the message is going to be merged with the previous one
-        // willBeMerged -> false if it is the last message of the user
-        boolean isMergedView = false;
-        boolean willBeMerged = false;
-
-        convertView.setClickable(false);
-
-        // the notice messages are never merged
-        /*if (msgType != ROW_TYPE_NOTICE)*/ {
-            //
-            Date prevMsgDate = null;
-            String prevUserId = null;
-            if (position > 0) {
-                MessageRow prevRow = getItem(position - 1);
-
-                if ((null != prevRow) /*&& (getItemViewType(prevRow.getEvent()) != ROW_TYPE_NOTICE)*/) {
-                    prevUserId = prevRow.getEvent().userId;
-                    prevMsgDate = mMessagesDateList.get(position - 1);
-                }
+            if (null != line) {
+                line.setBackgroundColor(Color.TRANSPARENT);
             }
 
-            Date nextMsgDate = null;
+            MessageRow row = getItem(position);
+            Event msg = row.getEvent();
             String nextUserId = null;
 
             if ((position + 1) < this.getCount()) {
                 MessageRow nextRow = getItem(position + 1);
 
-                if ((null != nextRow) /*&& (getItemViewType(nextRow.getEvent()) != ROW_TYPE_NOTICE)*/) {
+                if (null != nextRow)  {
                     nextUserId = nextRow.getEvent().userId;
-                    nextMsgDate = mMessagesDateList.get(position + 1);
                 }
             }
 
-            Date curMsgDate = mMessagesDateList.get(position);
-
-            isMergedView = (null != prevUserId) && (prevUserId.equals(msg.userId));
-
-            // no not merge message from different day
-            if (isMergedView) {
-                if (null != prevMsgDate) {
-                    isMergedView = (curMsgDate.getTime() == prevMsgDate.getTime());
-                }
-            }
-
-            willBeMerged = (null != nextUserId) && (nextUserId.equals(msg.userId));
-
-            // no not merge message from different day
-            if (willBeMerged) {
-                if (null != nextMsgDate) {
-                    willBeMerged = (curMsgDate.getTime() == nextMsgDate.getTime());
-                }
-            }
+            view.setVisibility(((null != nextUserId) && (nextUserId.equals(msg.userId)) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
-        View leftTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_left);
-        View rightTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right);
+        View headerLayout = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header);
 
-        // manage sender text
-        TextView textView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_sender);
-        if (null != textView) {
-            if (null == rightTsTextLayout) {
-                textView.setVisibility(View.VISIBLE);
+        if (null != headerLayout) {
+            String header = headerMessage(position);
 
-                if (isMergedView) {
-                    textView.setText("");
-                } else {
-                    textView.setText(getUserDisplayName(msg.userId, row.getRoomState()));
-                }
-            }
-            else if (isMergedView || (msgType == ROW_TYPE_NOTICE)) {
-                textView.setVisibility(View.GONE);
+            if (null != header) {
+                View headerLine = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_separator);
+                headerLine.setVisibility(View.GONE);
+                TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
+                headerText.setTextColor(mContext.getResources().getColor(R.color.vector_title_color));
+                headerText.setText(header);
+                headerText.setGravity(Gravity.CENTER);
+                headerLayout.setVisibility(View.VISIBLE);
             } else {
-                textView.setVisibility(View.VISIBLE);
-                textView.setText(getUserDisplayName(msg.userId, row.getRoomState()));
-            }
-
-            final String fSenderId = msg.userId;
-            final String fDisplayName = textView.getText().toString();
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onSenderNameClick(fSenderId, fDisplayName);
-                }
-            });
-        }
-
-        TextView tsTextView;
-
-        if (null == rightTsTextLayout) {
-            tsTextView = (TextView)leftTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
-        } else {
-            TextView leftTsTextView = (TextView)leftTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
-            TextView rightTsTextView = (TextView)rightTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
-
-            leftTsTextView.setVisibility(View.GONE);
-            tsTextView = rightTsTextView;
-        }
-
-        tsTextView.setVisibility(View.VISIBLE);
-        tsTextView.setText(msg.formattedOriginServerTs());
-
-        if (row.getEvent().isUndeliverable()) {
-            tsTextView.setTextColor(notSentColor);
-        } else {
-            tsTextView.setTextColor(mContext.getResources().getColor(org.matrix.androidsdk.R.color.chat_gray_text));
-        }
-
-        // Sender avatar
-        RoomMember sender = roomState.getMember(msg.userId);
-
-        View avatarLeftView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
-        View avatarRightView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_right);
-
-        // does the layout display the avatar ?
-        if ((null != avatarLeftView) && (null != avatarRightView)) {
-            View avatarLayoutView = null;
-
-            avatarLayoutView = avatarLeftView;
-            avatarRightView.setVisibility(View.GONE);
-
-            final String userId = msg.userId;
-            final String roomId = roomState.roomId;
-
-            avatarLeftView.setClickable(true);
-
-            avatarLeftView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return onAvatarLongClick(roomId, userId);
-                }
-            });
-
-            // click on the avatar opens the details page
-            avatarLeftView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onAvatarClick(roomId, userId);
-                }
-            });
-
-            ImageView avatarImageView = (ImageView) avatarLayoutView.findViewById(org.matrix.androidsdk.R.id.avatar_img);
-
-            ImageView presenceView = (ImageView) avatarLayoutView.findViewById(org.matrix.androidsdk.R.id.imageView_presenceRing);
-            presenceView.setColorFilter(mContext.getResources().getColor(android.R.color.transparent));
-
-            updatePresenceRing(presenceView, userId);
-
-            if (isMergedView) {
-                avatarLayoutView.setVisibility(View.GONE);
-            } else {
-                avatarLayoutView.setVisibility(View.VISIBLE);
-                avatarImageView.setTag(null);
-                avatarImageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
-
-                String url = null;
-
-                // Check whether this avatar url is updated by the current event (This happens in case of new joined member)
-                if (msg.content.has("avatar_url")) {
-                    url = msg.content.get("avatar_url") == JsonNull.INSTANCE ? null : msg.content.get("avatar_url").getAsString();
-                }
-
-                if ((sender != null) && (null == url)) {
-                    url = sender.avatarUrl;
-                }
-
-                if (TextUtils.isEmpty(url) && (null != msg.userId)) {
-                    url = ContentManager.getIdenticonURL(msg.userId);
-                }
-
-                if (!TextUtils.isEmpty(url)) {
-                    loadAvatar(avatarImageView, url);
-                }
-
-                // display the typing icon when required
-                ImageView typingImage = (ImageView) avatarLayoutView.findViewById(org.matrix.androidsdk.R.id.avatar_typing_img);
-                typingImage.setVisibility(((mTypingUsers.indexOf(msg.userId) >= 0)) ? View.VISIBLE : View.GONE);
-            }
-
-            // if the messages are merged
-            // the thumbnail is hidden
-            // and the subview must be moved to be aligned with the previous body
-            View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
-            ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
-            FrameLayout.LayoutParams subViewLinearLayout = (FrameLayout.LayoutParams) subView.getLayoutParams();
-
-            View view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
-            ViewGroup.LayoutParams avatarLayout = view.getLayoutParams();
-
-            subViewLinearLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-
-            if (isMergedView) {
-                bodyLayout.setMargins(avatarLayout.width, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-
-            } else {
-                bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
-            }
-            subView.setLayoutParams(bodyLayout);
-
-            bodyLayoutView.setLayoutParams(bodyLayout);
-            subView.setLayoutParams(subViewLinearLayout);
-
-            view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
-            if (null != view) {
-                View line = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator_line);
-
-                if (null != line) {
-                    line.setBackgroundColor(Color.TRANSPARENT);
-                }
-                view.setVisibility((willBeMerged || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
-            }
-
-            View headerLayout = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header);
-
-            if (null != headerLayout) {
-                String header = headerMessage(position);
-
-                if (null != header) {
-                    View headerLine = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_separator);
-                    headerLine.setBackgroundColor(mContext.getResources().getColor(R.color.vector_title_color));
-                    TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
-                    headerText.setTextColor(mContext.getResources().getColor(R.color.vector_title_color));
-                    headerText.setText(header);
-                    headerLayout.setVisibility(View.VISIBLE);
-                } else {
-                    headerLayout.setVisibility(View.GONE);
-                }
+                headerLayout.setVisibility(View.GONE);
             }
         }
 
