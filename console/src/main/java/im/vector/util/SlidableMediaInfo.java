@@ -15,18 +15,22 @@
  */
 package im.vector.util;
 
-
 import java.io.Serializable;
 
-public class SlidableImageInfo implements Serializable {
+public class SlidableMediaInfo implements Serializable {
+
+    // Message.MSGTYPE_XXX
+    public String mMessageType;
     public String midentifier;
-    public String mImageUrl = null;
-    public int mRotationAngle = 0;
-    public int mOrientation = 0;
+    public String mMediaUrl = null;
+    public String mThumbnailUrl = null;
     public String mMimeType = null;
 
-    // default costructor
-    public SlidableImageInfo() {
+    // exif infos
+    public int mRotationAngle = 0;
+    public int mOrientation = 0;
 
+    // default constructor
+    public SlidableMediaInfo() {
     }
 }

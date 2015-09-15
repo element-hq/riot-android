@@ -21,38 +21,28 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Layout;
-import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.gson.JsonNull;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
-import org.matrix.androidsdk.data.MyUser;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.VideoMessage;
-import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.ImageSliderActivity;
 import im.vector.activity.MemberDetailsActivity;
-import im.vector.util.SlidableImageInfo;
+import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -60,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 /**
  * An adapter which can display room information.
@@ -157,10 +146,10 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     }
 
     /**
-     * @return the imageMessages list
+     * @return the image and video messages list
      */
-    private ArrayList<SlidableImageInfo> listImageMessages() {
-        ArrayList<SlidableImageInfo> res = new ArrayList<SlidableImageInfo>();
+    private ArrayList<SlidableMediaInfo> listSlidableMessages() {
+        ArrayList<SlidableMediaInfo> res = new ArrayList<SlidableMediaInfo>();
 
         for(int position = 0; position < getCount(); position++) {
             MessageRow row = this.getItem(position);
@@ -169,13 +158,22 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
                 ImageMessage imageMessage = (ImageMessage)message;
 
-                SlidableImageInfo info = new SlidableImageInfo();
-
-                info.mImageUrl = imageMessage.url;
+                SlidableMediaInfo info = new SlidableMediaInfo();
+                info.mMessageType = Message.MSGTYPE_IMAGE;
+                info.mMediaUrl = imageMessage.url;
                 info.mRotationAngle = imageMessage.getRotation();
                 info.mOrientation = imageMessage.getOrientation();
                 info.mMimeType = imageMessage.getMimeType();
                 info.midentifier = row.getEvent().eventId;
+                res.add(info);
+            } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
+                SlidableMediaInfo info = new SlidableMediaInfo();
+                VideoMessage videoMessage = (VideoMessage)message;
+
+                info.mMessageType = Message.MSGTYPE_VIDEO;
+                info.mMediaUrl = videoMessage.url;
+                info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
+                info.mMimeType = videoMessage.getVideoMimeType();
                 res.add(info);
             }
         }
@@ -184,15 +182,28 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     }
 
     /**
-     * Returns the imageMessages position in listImageMessages.
-     * @param listImageMessages the messages list.
-     * @param imageMessage the imageMessage
+     * Returns the mediageMessage position in listMediaMessages.
+     * @param mediaMessagesList the media messages list
+     * @param mediaMessage the imageMessage
      * @return the imageMessage position. -1 if not found.
      */
-    private int getImageMessagePosition(ArrayList<SlidableImageInfo> listImageMessages, ImageMessage imageMessage) {
+    private int getMediaMessagePosition(ArrayList<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
+        String url = null;
 
-        for(int index = 0; index < listImageMessages.size(); index++) {
-            if (listImageMessages.get(index).mImageUrl.equals(imageMessage.url)) {
+        if (mediaMessage instanceof ImageMessage) {
+            url = ((ImageMessage)mediaMessage).url;
+        } else if (mediaMessage instanceof VideoMessage) {
+            url = ((VideoMessage)mediaMessage).url;
+        }
+
+        // sanity check
+        if (null == url) {
+            return -1;
+        }
+
+
+        for(int index = 0; index < mediaMessagesList.size(); index++) {
+            if (mediaMessagesList.get(index).mMediaUrl.equals(url)) {
                 return index;
             }
         }
@@ -203,16 +214,15 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     @Override
     public void onImageClick(int position, ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
         if (null != imageMessage.url) {
-
-            ArrayList<SlidableImageInfo> listImageMessages = listImageMessages();
-            int listPosition = getImageMessagePosition(listImageMessages, imageMessage);
+            ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
+            int listPosition = getMediaMessagePosition(mediaMessagesList, imageMessage);
 
             if (listPosition >= 0) {
                 Intent viewImageIntent = new Intent(mContext, ImageSliderActivity.class);
 
                 viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
                 viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST, listImageMessages);
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST, mediaMessagesList);
                 viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST_INDEX, listPosition);
 
                 mContext.startActivity(viewImageIntent);
@@ -266,41 +276,18 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     @Override
     public void onVideoClick(int position, VideoMessage videoMessage) {
         if (null != videoMessage.url) {
-            File mediaFile =  mMediasCache.mediaCacheFile(videoMessage.url, videoMessage.getVideoMimeType());
+            ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
+            int listPosition = getMediaMessagePosition(mediaMessagesList, videoMessage);
 
-            // is the file already saved
-            if (null != mediaFile) {
-                String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(mContext, mediaFile, videoMessage.body, videoMessage.getVideoMimeType());
-                CommonActivityUtils.openMedia(VectorApp.getCurrentActivity(), savedMediaPath, videoMessage.getVideoMimeType());
-            } else {
-                final String downloadId = mMediasCache.downloadMedia(mContext, videoMessage.url, videoMessage.getVideoMimeType());
-                final VideoMessage fVideoMessage = videoMessage;
-                final int fPosition = position;
+            if (listPosition >= 0) {
+                Intent viewImageIntent = new Intent(mContext, ImageSliderActivity.class);
 
-                mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
-                    @Override
-                    public void onDownloadStart(String aDownloadId) {
-                        if (downloadId.equals(aDownloadId)) {
-                            mUiHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ConsoleMessagesAdapter.this.notifyDataSetChanged();
-                                }
-                            });
-                        }
-                    }
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_WIDTH, getMaxThumbnailWith());
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, getMaxThumbnailHeight());
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST, mediaMessagesList);
+                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST_INDEX, listPosition);
 
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
-                    }
-
-                    @Override
-                    public void onDownloadComplete(String aDownloadId) {
-                        if (aDownloadId.equals(downloadId)) {
-                            onVideoClick(fPosition, fVideoMessage);
-                        }
-                    }
-                });
+                mContext.startActivity(viewImageIntent);
             }
         }
     }

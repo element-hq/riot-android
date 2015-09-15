@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
@@ -30,18 +31,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.VideoView;
 
+import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.view.PieFractionView;
 import im.vector.Matrix;
 import im.vector.R;
 
 import org.matrix.androidsdk.db.MXMediasCache;
-import im.vector.util.SlidableImageInfo;
+import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,17 +57,18 @@ import java.util.List;
 public class ImagesSliderAdapter extends PagerAdapter {
 
     Context context;
-    List<SlidableImageInfo> mListImageMessages = null;
+    List<SlidableMediaInfo> mMediasMessagesList = null;
     int mMaxImageWidth;
     int mMaxImageHeight;
     int mLastPrimaryItem = -1;
     ArrayList<Integer> mHighResMediaIndex = new ArrayList<Integer>();
+    VideoView mPlayingVideoView = null;
 
     private LayoutInflater mLayoutInflater;
 
-    public ImagesSliderAdapter(Context context, List<SlidableImageInfo> listImageMessages, int maxImageWidth, int maxImageHeight) {
+    public ImagesSliderAdapter(Context context, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
         this.context = context;
-        this.mListImageMessages = listImageMessages;
+        this.mMediasMessagesList = mediaMessagesList;
         this.mMaxImageWidth = maxImageWidth;
         this.mMaxImageHeight = maxImageHeight;
         this.mLayoutInflater = LayoutInflater.from(context);
@@ -69,33 +76,118 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mListImageMessages.size();
+        return mMediasMessagesList.size();
     }
 
     @Override
     public void setPrimaryItem(ViewGroup container, final int position, Object object) {
         if (mLastPrimaryItem != position) {
             mLastPrimaryItem = position;
+            final View view = (View)object;
+
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    stopPlayingVideo();
+                }
+            });
             //
             if (mHighResMediaIndex.indexOf(position) < 0) {
-                final View view = (View)object;
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                       downloadHighResPict(view, position);
+                       downloadHighResMedia(view, position);
                     }
                 });
             }
         }
     }
 
-    private void downloadHighResPict(final View view, final int position) {
-        final WebView webView = (WebView)view.findViewById(R.id.image_webview);
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.download_zoomed_image_piechart);
+
+    private void downloadHighResMedia(final View view, final int position) {
+        final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
+
+        if (imageInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
+            downloadHighResPict(view, position);
+        } else {
+            downloadVideo(view, position);
+        }
+    }
+
+    private void downloadVideo(final View view, final int position) {
+        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+
         final MXMediasCache mediasCache = Matrix.getInstance(this.context).getMediasCache();
-        final SlidableImageInfo imageInfo = mListImageMessages.get(position);
+        final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
+        final String loadingUri = mediaInfo.mMediaUrl;
+        final String thumbnailUrl = mediaInfo.mThumbnailUrl;
+        final String downloadId = mediasCache.downloadMedia(this.context, loadingUri, mediaInfo.mMimeType);
+
+        // check if the media has been downloaded
+        File file;
+
+        if (loadingUri.startsWith("file://")) {
+            file = new File(Uri.parse(loadingUri).getPath());
+        } else {
+            file = mediasCache.mediaCacheFile(loadingUri, mediaInfo.mMimeType);
+        }
+
+        if ((null != file) && (file.exists())) {
+            mHighResMediaIndex.add(position);
+            loadVideo(view, thumbnailUrl, Uri.fromFile(file).toString(), mediaInfo.mMimeType);
+            return;
+        }
+
+        if (null != downloadId) {
+            pieFractionView.setVisibility(View.VISIBLE);
+            pieFractionView.setFraction(mediasCache.progressValueForDownloadId(downloadId));
+            mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                @Override
+                public void onDownloadStart(String downloadId) {
+                }
+
+                @Override
+                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                    if (aDownloadId.equals(downloadId)) {
+                        pieFractionView.setFraction(percentageProgress);
+                    }
+                }
+
+                @Override
+                public void onDownloadComplete(String aDownloadId) {
+                    if (aDownloadId.equals(downloadId)) {
+                        pieFractionView.setVisibility(View.GONE);
+
+                        final File mediaFile = mediasCache.mediaCacheFile(loadingUri, mediaInfo.mMimeType);
+
+                        if (null != mediaFile) {
+                            mHighResMediaIndex.add(position);
+
+                            Uri uri = Uri.fromFile(mediaFile);
+                            final String newHighResUri = uri.toString();
+
+                            thumbView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadVideo(view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
+    private void downloadHighResPict(final View view, final int position) {
+        final WebView webView = (WebView)view.findViewById(R.id.media_slider_image_webview);
+        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
+        final MXMediasCache mediasCache = Matrix.getInstance(this.context).getMediasCache();
+        final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
-        final String loadingUri = imageInfo.mImageUrl;
+        final String loadingUri = imageInfo.mMediaUrl;
         final String downloadId = mediasCache.loadBitmap(this.context, loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType);
 
         if (null != downloadId) {
@@ -154,59 +246,188 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View view  = mLayoutInflater.inflate(R.layout.activity_image_web_view, null, false);
+        View view  = mLayoutInflater.inflate(R.layout.adapter_item_media_slider, null, false);
 
         // hide the pie chart
-        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.download_zoomed_image_piechart);
+        final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
         pieFractionView.setVisibility(View.GONE);
-
-        final WebView webView = (WebView)view.findViewById(R.id.image_webview);
+        final WebView imageWebView = (WebView)view.findViewById(R.id.media_slider_image_webview);
+        final View videoLayout = (View)view.findViewById(R.id.media_slider_videolayout);
 
         // black background
         view.setBackgroundColor(0xFF000000);
-        webView.setBackgroundColor(0xFF000000);
+        imageWebView.setBackgroundColor(0xFF000000);
+        videoLayout.setBackgroundColor(0xFF000000);
 
-        final SlidableImageInfo imageInfo = mListImageMessages.get(position);
+        final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
+        String mediaUrl = mediaInfo.mMediaUrl;
 
-        String mediaUrl = imageInfo.mImageUrl;
-        final int rotationAngle = imageInfo.mRotationAngle;
-        final String mimeType = imageInfo.mMimeType;
+        if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
+            imageWebView.setVisibility(View.VISIBLE);
+            videoLayout.setVisibility(View.GONE);
+
+            final int rotationAngle = mediaInfo.mRotationAngle;
+            final String mimeType = mediaInfo.mMimeType;
+
+            final MXMediasCache mediasCache = Matrix.getInstance(this.context).getMediasCache();
+            File mediaFile = mediasCache.mediaCacheFile(mediaUrl, mimeType);
+
+            // is the high picture already downloaded ?
+            if (null != mediaFile) {
+                if (mHighResMediaIndex.indexOf(position) < 0) {
+                    mHighResMediaIndex.add(position);
+                }
+            } else {
+                // try to retrieve the thumbnail
+                mediaFile = mediasCache.mediaCacheFile(mediaUrl, mMaxImageWidth, mMaxImageHeight, null);
+            }
+
+            // the thumbnail is not yet downloaded
+            if (null == mediaFile) {
+                // display nothing
+                container.addView(view, 0);
+                return view;
+            }
+
+            String mediaUri = "file://" + mediaFile.getPath();
+
+            String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
+            final String viewportContent = "width=640";
+
+            imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            imageWebView.getSettings().setJavaScriptEnabled(true);
+            imageWebView.getSettings().setLoadWithOverviewMode(true);
+            imageWebView.getSettings().setUseWideViewPort(true);
+            imageWebView.getSettings().setBuiltInZoomControls(true);
+
+            loadImage(imageWebView, Uri.parse(mediaUri), viewportContent, css);
+            container.addView(view, 0);
+        } else {
+            loadVideo(view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
+            container.addView(view, 0);
+        }
+
+        return view;
+    }
+
+    private void displayVideoThumbnail(final View view, boolean display){
+        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
+
+        videoView.setVisibility(display ? View.GONE : View.VISIBLE);
+        thumbView.setVisibility(display ? View.VISIBLE : View.GONE);
+        playView.setVisibility(display ? View.VISIBLE : View.GONE);
+    }
+
+    private void stopPlayingVideo() {
+        if (null != mPlayingVideoView) {
+            mPlayingVideoView.stopPlayback();
+            mPlayingVideoView = null;
+        }
+    }
+
+    private void loadVideo(final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType) {
+        final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
+        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
+
+        displayVideoThumbnail(view, !videoView.isPlaying());
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mPlayingVideoView = null;
+                displayVideoThumbnail(view, true);
+            }
+        });
+
+        ((View)videoView.getParent()).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopPlayingVideo();
+                displayVideoThumbnail(view, true);
+            }
+        });
+
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                mPlayingVideoView = null;
+                displayVideoThumbnail(view, true);
+                return false;
+            }
+        });
 
         final MXMediasCache mediasCache = Matrix.getInstance(this.context).getMediasCache();
-        File mediaFile = mediasCache.mediaCacheFile(mediaUrl, mimeType);
+        mediasCache.loadBitmap(thumbView, thumbnailUrl, 0, 0, null);
 
-        // is the high picture already downloaded ?
-        if (null != mediaFile) {
-            if (mHighResMediaIndex.indexOf(position) < 0) {
-                mHighResMediaIndex.add(position);
+        playView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // init the video view only if there is a valid file
+                // check if the media has been downloaded
+                File srcFile;
+
+                if (videoUrl.startsWith("file://")) {
+                    srcFile = new File(Uri.parse(videoUrl).getPath());
+                } else {
+                    srcFile = mediasCache.mediaCacheFile(videoUrl, videoMimeType);
+                }
+
+                if ((null != srcFile) && srcFile.exists()) {
+                    try {
+                        stopPlayingVideo();
+                        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(videoMimeType);
+
+                        if (null != extension) {
+                            extension += "." + extension;
+                        }
+
+                        // copy the media to ensure that it is deleted while playing
+                        File dstFile = new File(context.getCacheDir(), "sliderMedia" + extension);
+                        if (dstFile.exists()) {
+                            dstFile.delete();
+                        }
+
+                        // Copy source file to destination
+                        FileInputStream inputStream = null;
+                        FileOutputStream outputStream = null;
+                        try {
+                            // create only the
+                            if (!dstFile.exists()) {
+                                dstFile.createNewFile();
+
+                                inputStream = new FileInputStream(srcFile);
+                                outputStream = new FileOutputStream(dstFile);
+
+                                byte[] buffer = new byte[1024 * 10];
+                                int len;
+                                while ((len = inputStream.read(buffer)) != -1) {
+                                    outputStream.write(buffer, 0, len);
+                                }
+                            }
+                        } catch (Exception e) {
+                            dstFile = null;
+                        } finally {
+                            // Close resources
+                            try {
+                                if (inputStream != null) inputStream.close();
+                                if (outputStream != null) outputStream.close();
+                            } catch (Exception e) {
+                            }
+                        }
+
+                        videoView.setVideoPath(dstFile.getAbsolutePath());
+                        displayVideoThumbnail(view, false);
+                        mPlayingVideoView = videoView;
+                        videoView.start();
+
+                    } catch (Exception e) {
+                    }
+                }
             }
-        } else {
-            // try to retrieve the thumbnail
-            mediaFile = mediasCache.mediaCacheFile(mediaUrl, mMaxImageWidth, mMaxImageHeight, null);
-        }
-
-        // the thumbnail is not yet downloaded
-        if (null == mediaFile) {
-            // display nothing
-            container.addView(view, 0);
-            return view;
-        }
-
-        String mediaUri = "file://" + mediaFile.getPath();
-
-        String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
-        final String viewportContent = "width=640";
-
-        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-
-        loadImage(webView, Uri.parse(mediaUri), viewportContent, css);
-
-        container.addView(view, 0);
-        return view;
+        });
     }
 
     private void loadImage(WebView webView, Uri imageUri, String viewportContent, String css) {

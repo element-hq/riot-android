@@ -20,14 +20,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
+
+import java.util.List;
 
 import im.vector.R;
 import im.vector.adapters.ImagesSliderAdapter;
-import im.vector.util.SlidableImageInfo;
-
-import java.util.List;
+import im.vector.util.SlidableMediaInfo;
 
 public class ImageSliderActivity extends FragmentActivity {
 
@@ -87,12 +86,12 @@ public class ImageSliderActivity extends FragmentActivity {
 
         final Intent intent = getIntent();
 
-        List<SlidableImageInfo> listImageMessages = (List<SlidableImageInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
+        List<SlidableMediaInfo> mediasList = (List<SlidableMediaInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
         int position = intent.getIntExtra(KEY_INFO_LIST_INDEX, 0);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        ImagesSliderAdapter adapter = new ImagesSliderAdapter(this, listImageMessages, maxImageWidth, maxImageHeight);
+        ImagesSliderAdapter adapter = new ImagesSliderAdapter(this, mediasList, maxImageWidth, maxImageHeight);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
         viewPager.setPageTransformer(true, new DepthPageTransformer());
