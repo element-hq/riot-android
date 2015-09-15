@@ -105,6 +105,10 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
             mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
                 @Override
+                public void onDownloadStart(String downloadId) {
+                }
+
+                @Override
                 public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setFraction(percentageProgress);

@@ -555,7 +555,7 @@ public class RoomActivity extends MXCActionBarActivity {
             }
         });
 
-        mCameraButton = (ImageButton) findViewById(R.id.button_camera);
+        mCameraButton = (ImageButton) findViewById(R.id.button_more_attachments);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1452,7 +1452,11 @@ public class RoomActivity extends MXCActionBarActivity {
                                     RoomActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            mConsoleMessageListFragment.uploadMediaContent(fMediaUrl, fMimeType, fFilename);
+                                            if ((null != fMimeType) && fMimeType.startsWith("video/")) {
+                                                mConsoleMessageListFragment.uploadVideoContent(fMediaUrl, null, fMimeType);
+                                            } else {
+                                                mConsoleMessageListFragment.uploadFileContent(fMediaUrl, fMimeType, fFilename);
+                                            }
                                         }
                                     });
                                 }

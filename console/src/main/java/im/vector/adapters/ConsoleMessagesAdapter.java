@@ -19,6 +19,8 @@ package im.vector.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -42,6 +44,7 @@ import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.VectorApp;
@@ -66,6 +69,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
     private Date mReferenceDate = new Date();
     private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
+    private Handler mUiHandler;
 
     private final long MS_IN_DAY = 1000 * 60 * 60 * 24;
 
@@ -89,7 +93,11 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
                 R.layout.adapter_item_vector_message_notice,
                 R.layout.adapter_item_vector_message_emote,
                 R.layout.adapter_item_vector_message_file,
+                R.layout.adapter_item_vector_message_video,
                 mediasCache);
+
+        // for dispatching data to add to the adapter we need to be on the main thread
+        mUiHandler = new Handler(Looper.getMainLooper());
     }
 
     public void setMessageLongClickListener(MessageLongClickListener listener) {
@@ -249,6 +257,57 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     public boolean onFileLongClick(int position, FileMessage fileMessage) {
         if (null != mLongClickListener) {
             mLongClickListener.onMessageLongClick(position, fileMessage);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onVideoClick(int position, VideoMessage videoMessage) {
+        if (null != videoMessage.url) {
+            File mediaFile =  mMediasCache.mediaCacheFile(videoMessage.url, videoMessage.getVideoMimeType());
+
+            // is the file already saved
+            if (null != mediaFile) {
+                String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(mContext, mediaFile, videoMessage.body, videoMessage.getVideoMimeType());
+                CommonActivityUtils.openMedia(VectorApp.getCurrentActivity(), savedMediaPath, videoMessage.getVideoMimeType());
+            } else {
+                final String downloadId = mMediasCache.downloadMedia(mContext, videoMessage.url, videoMessage.getVideoMimeType());
+                final VideoMessage fVideoMessage = videoMessage;
+                final int fPosition = position;
+
+                mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                    @Override
+                    public void onDownloadStart(String aDownloadId) {
+                        if (downloadId.equals(aDownloadId)) {
+                            mUiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ConsoleMessagesAdapter.this.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                    }
+
+                    @Override
+                    public void onDownloadComplete(String aDownloadId) {
+                        if (aDownloadId.equals(downloadId)) {
+                            onVideoClick(fPosition, fVideoMessage);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public boolean onVideoLongClick(int position, VideoMessage videoMessage) {
+        if (null != mLongClickListener) {
+            mLongClickListener.onMessageLongClick(position, videoMessage);
             return true;
         }
 

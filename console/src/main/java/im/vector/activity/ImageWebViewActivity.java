@@ -193,6 +193,11 @@ public class ImageWebViewActivity extends FragmentActivity {
                 pieFractionView.setFraction(mediasCache.progressValueForDownloadId(downloadId));
 
                 mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+
+                    @Override
+                    public void onDownloadStart(String downloadId) {
+                    }
+
                     @Override
                     public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                         if (aDownloadId.equals(downloadId)) {
