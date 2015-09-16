@@ -18,13 +18,17 @@ package im.vector.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.matrix.androidsdk.rest.model.Message;
@@ -42,6 +47,9 @@ import org.matrix.androidsdk.view.PieFractionView;
 import im.vector.R;
 
 import org.matrix.androidsdk.db.MXMediasCache;
+
+import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
@@ -140,15 +148,6 @@ public class ImagesSliderAdapter extends PagerAdapter {
             downloadHighResPict(view, position);
         } else {
             downloadVideo(view, position);
-        }
-    }
-
-    /**
-     * Download the current video file
-     */
-    public void downloadVideo() {
-        if (null != mLatestPrimaryView) {
-            downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
         }
     }
 
@@ -312,8 +311,26 @@ public class ImagesSliderAdapter extends PagerAdapter {
         // hide the pie chart
         final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
         pieFractionView.setVisibility(View.GONE);
+
         final WebView imageWebView = (WebView)view.findViewById(R.id.media_slider_image_webview);
         final View videoLayout = (View)view.findViewById(R.id.media_slider_videolayout);
+        final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+
+        imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ImagesSliderAdapter.this.onLongClick(position, videoLayout);
+                return true;
+            }
+        });
+
+        thumbView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ImagesSliderAdapter.this.onLongClick(position, videoLayout);
+                return true;
+            }
+        });
 
         // black background
         view.setBackgroundColor(0xFF000000);
@@ -462,6 +479,73 @@ public class ImagesSliderAdapter extends PagerAdapter {
             } catch (Exception e) {
             }
         }
+    }
+
+    /**
+     * Download the current video file
+     */
+    public void downloadMedia() {
+        final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(mLatestPrimaryItemPosition);
+        File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+
+        if (null != file) {
+            if (null != CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType)) {
+                Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
+            final String downloadId = mMediasCache.downloadMedia(mContext, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+
+            if (null != downloadId) {
+                mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                    @Override
+                    public void onDownloadStart(String downloadId) {
+                    }
+
+                    @Override
+                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                    }
+
+                    @Override
+                    public void onDownloadComplete(String aDownloadId) {
+                        if (aDownloadId.equals(downloadId)) {
+                            File file = mMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+                            if (null != file) {
+                                if (null != CommonActivityUtils.saveMediaIntoDownloads(mContext, file, null, mediaInfo.mMimeType)) {
+                                    Toast.makeText(mContext, mContext.getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Long click management
+     * @param position
+     * @param view
+     */
+    private void onLongClick(final int position, final View view) {
+        // The user is trying to leave with unsaved changes. Warn about that
+        new AlertDialog.Builder(mContext)
+                .setMessage(R.string.media_slider_saved_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        downloadMedia();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
 
     /**
