@@ -40,8 +40,8 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.ImageSliderActivity;
 import im.vector.activity.MemberDetailsActivity;
+import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
@@ -218,12 +218,13 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             int listPosition = getMediaMessagePosition(mediaMessagesList, imageMessage);
 
             if (listPosition >= 0) {
-                Intent viewImageIntent = new Intent(mContext, ImageSliderActivity.class);
+                Intent viewImageIntent = new Intent(mContext, VectorMediasViewerActivity.class);
 
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST, mediaMessagesList);
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST_INDEX, listPosition);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
 
                 mContext.startActivity(viewImageIntent);
             }
@@ -280,12 +281,13 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             int listPosition = getMediaMessagePosition(mediaMessagesList, videoMessage);
 
             if (listPosition >= 0) {
-                Intent viewImageIntent = new Intent(mContext, ImageSliderActivity.class);
+                Intent viewImageIntent = new Intent(mContext, VectorMediasViewerActivity.class);
 
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_WIDTH, getMaxThumbnailWith());
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, getMaxThumbnailHeight());
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST, mediaMessagesList);
-                viewImageIntent.putExtra(ImageSliderActivity.KEY_INFO_LIST_INDEX, listPosition);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, getMaxThumbnailWith());
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, getMaxThumbnailHeight());
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
+                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
 
                 mContext.startActivity(viewImageIntent);
             }

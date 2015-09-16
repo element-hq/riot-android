@@ -29,10 +29,10 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.adapters.ImagesSliderAdapter;
+import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.util.SlidableMediaInfo;
 
-public class ImageSliderActivity extends FragmentActivity {
+public class VectorMediasViewerActivity extends FragmentActivity {
 
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";
@@ -45,7 +45,7 @@ public class ImageSliderActivity extends FragmentActivity {
     private MXSession mSession;
     private MXMediasCache mxMediasCache;
     private ViewPager mViewPager;
-    private ImagesSliderAdapter mAdapter;
+    private VectorMediasViewerAdapter mAdapter;
 
     public class DepthPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.75f;
@@ -109,19 +109,18 @@ public class ImageSliderActivity extends FragmentActivity {
 
         final List<SlidableMediaInfo> mediasList = (List<SlidableMediaInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
 
-        setContentView(R.layout.activity_images_slider);
+        setContentView(R.layout.activity_vector_medias_viewer);
         mViewPager=(ViewPager) findViewById(R.id.view_pager);
 
         int position = intent.getIntExtra(KEY_INFO_LIST_INDEX, 0);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
-        int maxImageHeight = intent.getIntExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, 0);
+        int maxImageHeight = intent.getIntExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        mAdapter = new ImagesSliderAdapter(this,mxMediasCache, mediasList, maxImageWidth, maxImageHeight);
-
-        mAdapter.autPlayItemAt(position);
+        mAdapter = new VectorMediasViewerAdapter(this, mxMediasCache, mediasList, maxImageWidth, maxImageHeight);
+        mAdapter.autoPlayItemAt(position);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(position);
-        mViewPager.setPageTransformer(true,new DepthPageTransformer());
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
     }
 
     @Override

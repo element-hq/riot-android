@@ -61,7 +61,7 @@ import java.util.List;
 /**
  * An images slider
  */
-public class ImagesSliderAdapter extends PagerAdapter {
+public class VectorMediasViewerAdapter extends PagerAdapter {
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
@@ -78,7 +78,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
     private int mAutoPlayItemAt = -1;
 
-    public ImagesSliderAdapter(Context context, MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
+    public VectorMediasViewerAdapter(Context context, MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
         this.mContext = context;
         this.mMediasMessagesList = mediaMessagesList;
         this.mMaxImageWidth = maxImageWidth;
@@ -131,7 +131,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
      *
      * @param position
      */
-    public void autPlayItemAt(int position) {
+    public void autoPlayItemAt(int position) {
         mAutoPlayItemAt = position;
     }
 
@@ -289,7 +289,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
                                 public void run() {
                                     Uri mediaUri = Uri.parse(newHighResUri);
                                     // refresh the UI
-                                    loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, ImagesSliderAdapter.this.mMaxImageWidth, ImagesSliderAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
+                                    loadImage(webView, mediaUri, viewportContent, computeCss(newHighResUri, VectorMediasViewerAdapter.this.mMaxImageWidth, VectorMediasViewerAdapter.this.mMaxImageHeight, imageInfo.mRotationAngle));
                                 }
                             });
                         }
@@ -306,7 +306,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View view  = mLayoutInflater.inflate(R.layout.adapter_item_media_slider, null, false);
+        View view  = mLayoutInflater.inflate(R.layout.adapter_vector_medias_viewer, null, false);
 
         // hide the pie chart
         final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
@@ -319,7 +319,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
         imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ImagesSliderAdapter.this.onLongClick(position, videoLayout);
+                VectorMediasViewerAdapter.this.onLongClick(position, videoLayout);
                 return true;
             }
         });
@@ -327,7 +327,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
         thumbView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ImagesSliderAdapter.this.onLongClick(position, videoLayout);
+                VectorMediasViewerAdapter.this.onLongClick(position, videoLayout);
                 return true;
             }
         });

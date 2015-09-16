@@ -154,7 +154,7 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
-            android:name="im.vector.activity.ImageSliderActivity"
+            android:name="im.vector.activity.VectorMediasViewerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
