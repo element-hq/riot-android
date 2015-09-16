@@ -158,14 +158,18 @@ public class ImagesSliderAdapter extends PagerAdapter {
         File file = mMediasCache.mediaCacheFile(loadingUri, mediaInfo.mMimeType);
         if (null != file) {
             mHighResMediaIndex.add(position);
-            loadVideo(view, thumbnailUrl, Uri.fromFile(file).toString(), mediaInfo.mMimeType);
+            loadVideo(position, view, thumbnailUrl, Uri.fromFile(file).toString(), mediaInfo.mMimeType);
 
             if (position == mAutoPlayItemAt) {
                 playVideo(view, videoView, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
             }
-
             mAutoPlayItemAt = -1;
+            return;
+        }
 
+        // the video download starts only when the user taps on click
+        // let assumes it might configurable
+        if (mAutoPlayItemAt != position) {
             return;
         }
 
@@ -203,7 +207,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
                             thumbView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadVideo(view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType);
+                                    loadVideo(position, view, thumbnailUrl, newHighResUri, mediaInfo.mMimeType);
 
                                     if (position == mAutoPlayItemAt) {
                                         playVideo(view, videoView, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
@@ -335,7 +339,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
             loadImage(imageWebView, Uri.parse(mediaUri), viewportContent, css);
             container.addView(view, 0);
         } else {
-            loadVideo(view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
+            loadVideo(position , view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
             container.addView(view, 0);
         }
 
@@ -444,7 +448,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
      * @param videoUrl the video Url
      * @param videoMimeType the video mime type
      */
-    private void loadVideo(final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType) {
+    private void loadVideo(final int position, final View view, final String thumbnailUrl, final String videoUrl, final String videoMimeType) {
         final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
         final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
         final ImageView playView = (ImageView)view.findViewById(R.id.media_slider_video_playView);
@@ -484,7 +488,16 @@ public class ImagesSliderAdapter extends PagerAdapter {
         playView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playVideo(view, videoView, videoUrl, videoMimeType);
+                // init the video view only if there is a valid file
+                // check if the media has been downloaded
+                File srcFile = mMediasCache.mediaCacheFile(videoUrl, videoMimeType);
+
+                if (null != srcFile) {
+                    playVideo(view, videoView, videoUrl, videoMimeType);
+                } else {
+                    mAutoPlayItemAt = position;
+                    downloadVideo(view, position);
+                }
             }
         });
     }

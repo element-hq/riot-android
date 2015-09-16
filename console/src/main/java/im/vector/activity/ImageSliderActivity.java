@@ -109,24 +109,27 @@ public class ImageSliderActivity extends FragmentActivity {
             manageView(mDownloadButton, false);
         } else {
             manageView(mDownloadButton, true);
-            final String downloadId = mxMediasCache.downloadMedia(ImageSliderActivity.this, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+            final String downloadId = mxMediasCache.downloadIdFromUrl(mediaInfo.mMediaUrl);
 
-            mxMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
-                @Override
-                public void onDownloadStart(String downloadId) {
-                }
-
-                @Override
-                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
-                }
-
-                @Override
-                public void onDownloadComplete(String aDownloadId) {
-                    if (aDownloadId.equals(downloadId)) {
-                        manageView(mDownloadButton, false);
+            if (null != downloadId) {
+                mxMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                    @Override
+                    public void onDownloadStart(String downloadId) {
                     }
-                }
-            });
+
+                    @Override
+                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                    }
+
+                    @Override
+                    public void onDownloadComplete(String aDownloadId) {
+                        if (aDownloadId.equals(downloadId)) {
+                            manageView(mDownloadButton, false);
+                        }
+                    }
+
+                });
+            }
         }
     }
 
