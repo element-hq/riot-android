@@ -17,13 +17,22 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.db.MXMediasCache;
+
+import java.io.File;
 import java.util.List;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.ImagesSliderAdapter;
 import im.vector.util.SlidableMediaInfo;
@@ -35,6 +44,16 @@ public class ImageSliderActivity extends FragmentActivity {
 
     public static final String KEY_THUMBNAIL_WIDTH = "ImageSliderActivity.KEY_THUMBNAIL_WIDTH";
     public static final String KEY_THUMBNAIL_HEIGHT = "ImageSliderActivity.KEY_THUMBNAIL_HEIGHT";
+
+    public static final String EXTRA_MATRIX_ID = "ImageSliderActivity.EXTRA_MATRIX_ID";
+
+    private MXSession mSession;
+    private MXMediasCache mxMediasCache;
+    private Button mPrevContentButton;
+    private Button mNextContentButton;
+    private Button mDownloadButton;
+    private ViewPager mViewPager;
+    private ImagesSliderAdapter mAdapter;
 
     public class DepthPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.75f;
@@ -73,6 +92,44 @@ public class ImageSliderActivity extends FragmentActivity {
         }
     }
 
+    private void manageView(View view, boolean disabled) {
+        view.setAlpha(disabled ? 0.5f : 1.0f);
+        view.setEnabled(!disabled);
+    }
+
+    private void manageButtons(final List<SlidableMediaInfo> mediasList, final int position) {
+        manageView(mPrevContentButton, 0 == position);
+        manageView(mNextContentButton, mAdapter.getCount() == (position + 1));
+
+        SlidableMediaInfo mediaInfo = mediasList.get(position);
+
+        // check if the media has been downloaded
+        File file = mxMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+        if (null != file) {
+            manageView(mDownloadButton, false);
+        } else {
+            manageView(mDownloadButton, true);
+            final String downloadId = mxMediasCache.downloadMedia(ImageSliderActivity.this, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+
+            mxMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                @Override
+                public void onDownloadStart(String downloadId) {
+                }
+
+                @Override
+                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                }
+
+                @Override
+                public void onDownloadComplete(String aDownloadId) {
+                    if (aDownloadId.equals(downloadId)) {
+                        manageView(mDownloadButton, false);
+                    }
+                }
+            });
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (CommonActivityUtils.shouldRestartApp()) {
@@ -80,20 +137,97 @@ public class ImageSliderActivity extends FragmentActivity {
         }
 
         super.onCreate(savedInstanceState);
+
+        String matrixId = null;
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_MATRIX_ID)) {
+            matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
+        }
+
+        mSession = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
+
+        if (mSession == null) {
+            finish();
+            return;
+        }
+
+        mxMediasCache = mSession.getMediasCache();
+
+        final List<SlidableMediaInfo> mediasList = (List<SlidableMediaInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
+
         setContentView(R.layout.activity_images_slider);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.view_pager);
+        mPrevContentButton = (Button)findViewById(R.id.media_slider_prev);
+        mPrevContentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((null != mViewPager) && (null != mAdapter)) {
+                    mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                }
+            }
+        });
 
-        final Intent intent = getIntent();
 
-        List<SlidableMediaInfo> mediasList = (List<SlidableMediaInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
+        mNextContentButton = (Button)findViewById(R.id.media_slider_next);
+        mNextContentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((null != mViewPager) && (null != mAdapter)) {
+                    mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+                }
+            }
+        });
+
+        mDownloadButton = (Button)findViewById(R.id.media_slider_download);
+        mDownloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SlidableMediaInfo mediaInfo = mediasList.get(mViewPager.getCurrentItem());
+
+                File file = mxMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+
+                if (null != file) {
+                    if (null != CommonActivityUtils.saveMediaIntoDownloads(ImageSliderActivity.this, file, null, mediaInfo.mMimeType)) {
+                        Toast.makeText(ImageSliderActivity.this, getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+        mViewPager = (ViewPager)findViewById(R.id.view_pager);
         int position = intent.getIntExtra(KEY_INFO_LIST_INDEX, 0);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        ImagesSliderAdapter adapter = new ImagesSliderAdapter(this, mediasList, maxImageWidth, maxImageHeight);
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(position);
-        viewPager.setPageTransformer(true, new DepthPageTransformer());
+        mAdapter = new ImagesSliderAdapter(this, mxMediasCache,  mediasList, maxImageWidth, maxImageHeight);
+        mAdapter.autPlayItemAt(position);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(position);
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        manageButtons(mediasList, position);
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                manageButtons(mediasList, position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // stop any playing video
+        mAdapter.stopPlayingVideo();
     }
 }

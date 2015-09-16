@@ -298,28 +298,6 @@ public class SettingsActivity extends MXCActionBarActivity {
 
         refreshGCMEntries();
 
-        final EditText pusherUrlEditText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
-        pusherUrlEditText.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-                gcmRegistrationManager.setPusherUrl(pusherUrlEditText.getText().toString());
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
-        final EditText pusherProfileEditText = (EditText)findViewById(R.id.editText_gcm_pusher_profile_tag);
-        pusherProfileEditText.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-                gcmRegistrationManager.setPusherFileTag(pusherProfileEditText.getText().toString());
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
         managePedingGCMregistration();
     }
 
@@ -437,16 +415,8 @@ public class SettingsActivity extends MXCActionBarActivity {
     private void refreshGCMEntries() {
         GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
-        Boolean debugMode = (0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
-
         final CheckBox gcmBox = (CheckBox) findViewById(R.id.checkbox_useGcm);
         gcmBox.setChecked(gcmRegistrationManager.useGCM() && gcmRegistrationManager.is3rdPartyServerRegistred());
-
-        EditText editText = (EditText)findViewById(R.id.editText_gcm_pusher_url);
-        editText.setText(gcmRegistrationManager.pusherUrl());
-
-        editText = (EditText)findViewById(R.id.editText_gcm_pusher_profile_tag);
-        editText.setText(gcmRegistrationManager.pusherFileTag());
     }
 
     @Override

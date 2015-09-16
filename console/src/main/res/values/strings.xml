@@ -293,4 +293,7 @@
     <string name="media_picker_attach">Attach"</string>
     <string name="media_picker_choose_from_library">Choose from library"</string>
     <string name="media_picker_library">Library"</string>
+
+    <!-- medias slider string -->
+    <string name="media_slider_saved">Saved</string>
 </resources>
