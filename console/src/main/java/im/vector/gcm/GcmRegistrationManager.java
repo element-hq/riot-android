@@ -57,7 +57,7 @@ public final class GcmRegistrationManager {
 
     // TODO: Make this configurable at build time
     private static String DEFAULT_PUSHER_APP_ID = "org.matrix.console.android";
-    private static String DEFAULT_PUSHER_URL = "http://matrix.org/_matrix/push/v1/notify";
+    private static String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
     private static String DEFAULT_PUSHER_FILE_TAG = "mobile";
 
     /**
