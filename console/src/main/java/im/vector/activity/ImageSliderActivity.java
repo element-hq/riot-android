@@ -16,12 +16,11 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -100,37 +99,6 @@ public class ImageSliderActivity extends FragmentActivity {
     private void manageButtons(final List<SlidableMediaInfo> mediasList, final int position) {
         manageView(mPrevContentButton, 0 == position);
         manageView(mNextContentButton, mAdapter.getCount() == (position + 1));
-
-        SlidableMediaInfo mediaInfo = mediasList.get(position);
-
-        // check if the media has been downloaded
-        File file = mxMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
-        if (null != file) {
-            manageView(mDownloadButton, false);
-        } else {
-            manageView(mDownloadButton, true);
-            final String downloadId = mxMediasCache.downloadIdFromUrl(mediaInfo.mMediaUrl);
-
-            if (null != downloadId) {
-                mxMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
-                    @Override
-                    public void onDownloadStart(String downloadId) {
-                    }
-
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
-                    }
-
-                    @Override
-                    public void onDownloadComplete(String aDownloadId) {
-                        if (aDownloadId.equals(downloadId)) {
-                            manageView(mDownloadButton, false);
-                        }
-                    }
-
-                });
-            }
-        }
     }
 
     @Override
@@ -170,7 +138,6 @@ public class ImageSliderActivity extends FragmentActivity {
             }
         });
 
-
         mNextContentButton = (Button)findViewById(R.id.media_slider_next);
         mNextContentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,45 +152,78 @@ public class ImageSliderActivity extends FragmentActivity {
         mDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SlidableMediaInfo mediaInfo = mediasList.get(mViewPager.getCurrentItem());
+                final SlidableMediaInfo mediaInfo = mediasList.get(mViewPager.getCurrentItem());
 
                 File file = mxMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
-
                 if (null != file) {
                     if (null != CommonActivityUtils.saveMediaIntoDownloads(ImageSliderActivity.this, file, null, mediaInfo.mMimeType)) {
                         Toast.makeText(ImageSliderActivity.this, getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                     }
+                } else {
+                    mAdapter.downloadVideo();
+                    final String downloadId = mxMediasCache.downloadMedia(ImageSliderActivity.this, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+
+                    if (null != downloadId) {
+                        mxMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                            @Override
+                            public void onDownloadStart(String downloadId) {
+                            }
+
+                            @Override
+                            public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                            }
+
+                            @Override
+                            public void onDownloadComplete(String aDownloadId) {
+                                if (aDownloadId.equals(downloadId)) {
+                                    File file = mxMediasCache.mediaCacheFile(mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+                                    if (null != file) {
+                                        if (null != CommonActivityUtils.saveMediaIntoDownloads(ImageSliderActivity.this, file, null, mediaInfo.mMimeType)) {
+                                            Toast.makeText(ImageSliderActivity.this, getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
+                                }
+                            }
+                        });
+
+                    }
                 }
             }
+
         });
 
-        mViewPager = (ViewPager)findViewById(R.id.view_pager);
+        mViewPager=(ViewPager) findViewById(R.id.view_pager);
+
         int position = intent.getIntExtra(KEY_INFO_LIST_INDEX, 0);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(ImageSliderActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        mAdapter = new ImagesSliderAdapter(this, mxMediasCache,  mediasList, maxImageWidth, maxImageHeight);
+        mAdapter=new ImagesSliderAdapter(this,mxMediasCache, mediasList, maxImageWidth, maxImageHeight);
+
         mAdapter.autPlayItemAt(position);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(position);
-        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        mViewPager.setPageTransformer(true,new DepthPageTransformer());
+
         manageButtons(mediasList, position);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+               @Override
+               public void onPageScrolled ( int position, float positionOffset,
+                                            int positionOffsetPixels){
+               }
 
-            }
+               @Override
+               public void onPageSelected ( int position){
+                   manageButtons(mediasList, position);
+               }
 
-            @Override
-            public void onPageSelected(int position) {
-                manageButtons(mediasList, position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+               @Override
+               public void onPageScrollStateChanged ( int state){
+               }
+           }
+        );
     }
 
     @Override

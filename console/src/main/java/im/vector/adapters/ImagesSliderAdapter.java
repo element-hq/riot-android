@@ -61,7 +61,8 @@ public class ImagesSliderAdapter extends PagerAdapter {
     private List<SlidableMediaInfo> mMediasMessagesList = null;
     private int mMaxImageWidth;
     private int mMaxImageHeight;
-    private int mLastPrimaryItem = -1;
+    private int mLatestPrimaryItemPosition = -1;
+    private View mLatestPrimaryView = null;
     private MXMediasCache mMediasCache;
     private ArrayList<Integer> mHighResMediaIndex = new ArrayList<Integer>();
     // current playing video
@@ -85,9 +86,11 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(ViewGroup container, final int position, Object object) {
-        if (mLastPrimaryItem != position) {
-            mLastPrimaryItem = position;
+        if (mLatestPrimaryItemPosition != position) {
+            mLatestPrimaryItemPosition = position;
+
             final View view = (View)object;
+            mLatestPrimaryView = view;
 
             view.post(new Runnable() {
                 @Override
@@ -141,11 +144,31 @@ public class ImagesSliderAdapter extends PagerAdapter {
     }
 
     /**
-     * Download the video file
+     * Download the current video file
+     */
+    public void downloadVideo() {
+        if (null != mLatestPrimaryView) {
+            downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
+        }
+    }
+
+    /**
+     * Download the video file.
+     * The download will only start if the video should be auto played.
      * @param view the slider page view
      * @param position the item position
      */
-    private void downloadVideo(final View view, final int position) {
+    public void downloadVideo(final View view, final int position) {
+        downloadVideo(view, position, false);
+    }
+
+    /**
+     * Download the video file
+     * @param view the slider page view
+     * @param position the item position
+     * @param force true to do not check the auto playmode
+     */
+    public void downloadVideo(final View view, final int position, Boolean force) {
         final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
         final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
         final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
@@ -169,7 +192,7 @@ public class ImagesSliderAdapter extends PagerAdapter {
 
         // the video download starts only when the user taps on click
         // let assumes it might configurable
-        if (mAutoPlayItemAt != position) {
+        if (!force && (mAutoPlayItemAt != position)) {
             return;
         }
 
