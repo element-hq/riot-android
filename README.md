@@ -1,7 +1,7 @@
 Console
 =======
 
-Console is an android Matrix client. 
+Console is an Android Matrix client. 
 
 It uses https://github.com/matrix-org/matrix-android-sdk
 
