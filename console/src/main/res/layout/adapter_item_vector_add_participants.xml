@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/chat_avatar_size"
+    android:orientation="horizontal">
+
+    <include layout="@layout/rounded_rect_avatar"
+        android:id="@+id/filtered_list_avatar"/>
+
+    <TextView
+        android:id="@+id/filtered_list_name"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:text="a text here" />
+
+    <Button
+        android:id="@+id/filtered_list_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/chat_avatar_size"
+        android:text="+" />
+</LinearLayout>

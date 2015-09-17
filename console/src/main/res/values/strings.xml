@@ -299,4 +299,49 @@
     <string name="media_slider_saved_message">Save to downloads</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
+
+    // Actions
+    <string name="mark_all_as_read_prompt">Mark all as read?</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="remove">Remove</string>
+
+    // Chat creation
+    <string name="room_creation_title">New Chat</string>
+    <string name="room_creation_account">Account</string>
+    <string name="room_creation_appearance">Appearance</string>
+    <string name="room_creation_appearance_name">Name</string>
+    <string name="room_creation_appearance_picture">Chat picture (optional)</string>
+    <string name="room_creation_privacy">Privacy</string>
+    <string name="room_creation_private_room">This chat is private</string>
+    <string name="room_creation_public_room">This chat is public</string>
+    <string name="room_creation_make_public">Make public</string>
+    <string name="room_creation_make_public_prompt_title">Make this chat public?</string>
+    <string name="room_creation_make_public_prompt_msg">Are you sure you want to make this chat public? Anyone can read your messages and join the chat.</string>
+    <string name="room_creation_keep_private">Keep private</string>
+    <string name="room_creation_make_private">Make private</string>
+    <string name="room_creation_name_mobile_email">name, mobile or email</string>
+
+    // Chat participants
+    <string name="room_participants_title">Participants</string>
+    <string name="room_participants_add_participant">Add participant</string>
+    <string name="room_participants_one_participant">1 participant</string>
+    <string name="room_participants_multi_participants">%s participants</string>
+    <string name="room_participants_leave_prompt_title">Leave?</string>
+    <string name="room_participants_leave_prompt_msg">Are you sure you want to leave this chat?</string>
+    <string name="room_participants_remove_prompt_title">Remove?</string>
+    <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %@ from this chat?</string>
+    <string name="room_participants_admin_name">%s (admin)</string>
+
+    // Chat
+    <string name="room_menu_search">Search</string>
+    <string name="room_menu_participants">Participants</string>
+    <string name="room_menu_favourite">Favourite</string>
+    <string name="room_menu_unfavourite">Unfavourite</string>
+    <string name="room_menu_settings">Settings</string>
+    <string name="room_option_start_group_voice">Start group audio chat</string>
+    <string name="room_option_start_group_video">Start group video chat</string>
+    <string name="room_option_share_location">Share location</string>
+    <string name="room_option_share_contact">Share contact</string>
+
 </resources>

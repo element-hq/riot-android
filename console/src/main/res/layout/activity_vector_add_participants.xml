@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/add_participants_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="@string/room_participants_add_participant" />
+
+    <LinearLayout
+        android:layout_below="@+id/add_participants_subtitle"
+        android:id="@+id/add_participants_search_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="40dp">
+
+        <EditText
+            android:id="@+id/add_participants_search_participants"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="@string/room_creation_name_mobile_email"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:focusable="true"/>
+
+        <Button
+            android:id="@+id/add_participants_cancel_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/cancel" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/add_participants_black_line"
+        android:layout_below="@+id/add_participants_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000" />
+
+    <TextView
+        android:id="@+id/add_participants_listview_header_textview"
+        android:layout_below="@+id/add_participants_black_line"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="10dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="@string/room_participants_add_participant" />
+
+    <View
+        android:id="@+id/add_participants_empty_line"
+        android:layout_below="@+id/add_participants_listview_header_textview"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#00000000" />
+
+    <ListView
+        android:layout_below="@id/add_participants_empty_line"
+        android:id="@+id/add_participants_members_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+</RelativeLayout>

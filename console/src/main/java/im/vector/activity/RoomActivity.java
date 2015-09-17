@@ -1011,14 +1011,13 @@ public class RoomActivity extends MXCActionBarActivity {
 
             alert.show();
         } else if (id ==  R.id.ic_action_members) {
-            FragmentManager fm = getSupportFragmentManager();
 
-            RoomMembersDialogFragment fragment = (RoomMembersDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MEMBERS_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-            fragment = RoomMembersDialogFragment.newInstance(mSession, mRoom.getRoomId());
-            fragment.show(fm, TAG_FRAGMENT_MEMBERS_DIALOG);
+            // pop to the home activity
+            Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            RoomActivity.this.startActivity(intent);
+
         } else if (id ==  R.id.ic_action_room_info) {
 
             FragmentManager fm = getSupportFragmentManager();
