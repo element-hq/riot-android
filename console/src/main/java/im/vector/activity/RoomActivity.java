@@ -830,6 +830,19 @@ public class RoomActivity extends MXCActionBarActivity {
 
             mCallId = null;
         }
+
+        // check if the room has been left from another activity
+        if (mRoom.isLeaving() || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+
+            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    RoomActivity.this.finish();
+                                                }
+                                            }
+            );
+
+        }
     }
 
     /**
@@ -1016,6 +1029,7 @@ public class RoomActivity extends MXCActionBarActivity {
             Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
             intent.putExtra(VectorAddParticipantsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
             intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
             RoomActivity.this.startActivity(intent);
 
         } else if (id ==  R.id.ic_action_room_info) {

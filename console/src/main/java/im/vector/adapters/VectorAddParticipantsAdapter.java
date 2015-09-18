@@ -17,25 +17,21 @@
 package im.vector.adapters;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.util.JsonUtils;
 
 
 import java.util.ArrayList;
@@ -45,6 +41,20 @@ import java.util.Collections;
 import im.vector.R;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
+
+    public interface OnParticipantsListener {
+        /**
+         * The user taps on the dedicated "Remove" button
+         * @param roomMember the room member to remove
+         */
+        void onRemoveClick(final RoomMember roomMember);
+
+        /**
+         * The user taps on "Leave" button
+         */
+        void onLeaveClick();
+    }
+
     //
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -54,11 +64,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
     private String mRoomId;
     private Room mRoom;
     private int mLayoutResourceId;
+    private Boolean mIsEditionMode;
+    private ArrayList<RoomMember> mCreationMembersList = new ArrayList<RoomMember>();
 
     ArrayList<RoomMember> mOtherRoomsMembers = null;
     String mPattern = "";
 
-    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, MXMediasCache mediasCache) {
+    OnParticipantsListener mOnParticipantsListener = null;
+
+    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, Boolean isEditionMode, String roomId, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
 
         mContext = context;
@@ -66,8 +80,19 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
         mLayoutResourceId = layoutResourceId;
         mMediasCache = mediasCache;
         mSession = session;
-        mRoomId = roomId;
-        mRoom = mSession.getDataHandler().getRoom(roomId);
+        mIsEditionMode = isEditionMode;
+
+        if (mIsEditionMode) {
+            mRoomId = roomId;
+            mRoom = mSession.getDataHandler().getRoom(roomId);
+        } else {
+            // in create mode, the oneself member is displayed at top
+            RoomMember oneselfMember = new RoomMember();
+            oneselfMember.displayname = mSession.getMyUser().displayname;
+            oneselfMember.avatarUrl = mSession.getMyUser().avatarUrl;
+            this.add(oneselfMember);
+            mCreationMembersList.add(oneselfMember);
+        }
     }
 
     /**
@@ -81,6 +106,47 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
         if (!pattern.trim().equals(mPattern)) {
             mPattern = pattern.trim().toLowerCase();
             refresh();
+        }
+    }
+
+    /**
+     * @return the searched pattern.
+     */
+    public String getSearchedPattern() {
+        return mPattern;
+    }
+
+    /**
+     * Update the paticipants listener
+     * @param onParticipantsListener
+     */
+    public void setOnParticipantsListener(OnParticipantsListener onParticipantsListener) {
+        mOnParticipantsListener = onParticipantsListener;
+    }
+
+    /**
+     * Add a room member to the edition list.
+     * @param roomMember the room member to add.
+     */
+    public void addRoomMember(RoomMember roomMember) {
+        if (!mIsEditionMode) {
+            mCreationMembersList.add(roomMember);
+            this.add(roomMember);
+        }
+    }
+
+    /**
+     * Remove a room member from the edition list.
+     * @param index the room member index to remove.
+     */
+    public void removeMemberAt(int index) {
+        if (!mIsEditionMode) {
+            // the index 0 is oneself
+            if ((0 != index) && (index < mCreationMembersList.size())) {
+                RoomMember member = mCreationMembersList.get(index);
+                mCreationMembersList.remove(member);
+                this.remove(member);
+            }
         }
     }
 
@@ -140,33 +206,38 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
         ArrayList<RoomMember> nextMembersList = new ArrayList<RoomMember>();
 
         if (TextUtils.isEmpty(mPattern)) {
-            ArrayList<RoomMember> admins = new ArrayList<RoomMember>();
-            ArrayList<RoomMember> otherMembers = new ArrayList<RoomMember>();
+            // retrieve the room members
+            if (mIsEditionMode) {
+                ArrayList<RoomMember> admins = new ArrayList<RoomMember>();
+                ArrayList<RoomMember> otherMembers = new ArrayList<RoomMember>();
 
-            Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
-            String myUserId = mSession.getMyUser().userId;
-            PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
+                Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
+                String myUserId = mSession.getMyUser().userId;
+                PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-            for(RoomMember member : activeMembers) {
-                // oneself member is displayed at top
-                if (member.getUserId().equals(myUserId)) {
-                    nextMembersList.add(member);
-                } else {
-                    if (powerLevels.getUserPowerLevel(member.getUserId()) == 100) {
-                        admins.add(member);
+                for (RoomMember member : activeMembers) {
+                    // oneself member is displayed at top
+                    if (member.getUserId().equals(myUserId)) {
+                        nextMembersList.add(member);
                     } else {
-                        otherMembers.add(member);
+                        if (powerLevels.getUserPowerLevel(member.getUserId()) == 100) {
+                            admins.add(member);
+                        } else {
+                            otherMembers.add(member);
+                        }
                     }
                 }
+
+                Collections.sort(admins, RoomMember.alphaComparator);
+                nextMembersList.addAll(admins);
+
+                Collections.sort(otherMembers, RoomMember.alphaComparator);
+                nextMembersList.addAll(otherMembers);
+
+                mOtherRoomsMembers = null;
+            } else {
+                nextMembersList = mCreationMembersList;
             }
-
-            Collections.sort(admins, RoomMember.alphaComparator);
-            nextMembersList.addAll(admins);
-
-            Collections.sort(otherMembers, RoomMember.alphaComparator);
-            nextMembersList.addAll(otherMembers);
-
-            mOtherRoomsMembers = null;
         } else {
             if (null == mOtherRoomsMembers) {
                 listOtherMembers();
@@ -201,18 +272,68 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
         int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
         mMediasCache.loadAvatarThumbnail(thumbView, member.avatarUrl, size);
 
-        TextView textView = (TextView) convertView.findViewById(R.id.filtered_list_name);
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
+        TextView textView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         String text = member.getName();
 
         if (!isSearchMode) {
             // show the admin
-            if (100 == mRoom.getLiveState().getPowerLevels().getUserPowerLevel(member.getUserId())) {
+            if (100 == powerLevels.getUserPowerLevel(member.getUserId())) {
                 text = mContext.getString(R.string.room_participants_admin_name, text);
             }
         }
-
         textView.setText(text);
+
+        final Button button = (Button) convertView.findViewById(R.id.filtered_list_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnParticipantsListener) {
+                    try {
+                        if (mContext.getString(R.string.leave).equals(button.getText())) {
+                            mOnParticipantsListener.onLeaveClick();
+                        } else {
+                            // assume that the tap on remove
+                            mOnParticipantsListener.onRemoveClick(member);
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        });
+
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.filtered_list_image);
+
+        if (isSearchMode) {
+            button.setVisibility(View.GONE);
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource(R.drawable.ic_material_add_circle);
+        } else {
+            if (mIsEditionMode) {
+                imageView.setVisibility(View.GONE);
+                int myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
+                int userPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
+
+                String buttonText = "";
+
+                if (0 == position) {
+                    buttonText = mContext.getText(R.string.leave).toString();
+                } else {
+                    // check if the user can kick the user
+                    if ((myPowerLevel >= powerLevels.kick) && (myPowerLevel >= userPowerLevel)) {
+                        buttonText = mContext.getText(R.string.remove).toString();
+                    }
+                }
+                button.setText(buttonText);
+                button.setVisibility(TextUtils.isEmpty(buttonText) ? View.GONE : View.VISIBLE);
+            } else {
+                button.setVisibility(View.GONE);
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageResource(R.drawable.ic_material_remove_circle);
+            }
+        }
 
         return convertView;
     }

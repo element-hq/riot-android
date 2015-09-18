@@ -16,12 +16,17 @@
 
 package im.vector.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,10 +37,17 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
+
+import java.util.ArrayList;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
 public class VectorAddParticipantsActivity extends MXCActionBarActivity {
@@ -43,6 +55,10 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
 
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorAddParticipantsActivity.EXTRA_ROOM_ID";
+
+    // creation mode : the members are listed to create a new room
+    // edition mode (by default) : the members are dynamically added/removed
+    public static final String EXTRA_EDITION_MODE = "VectorAddParticipantsActivity.EXTRA_EDITION_MODE";
 
     private MXSession mSession;
     private String mRoomId;
@@ -55,6 +71,7 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
     private ListView mParticantsListView;
 
     private VectorAddParticipantsAdapter mAdapter;
+    private boolean mIsEditionMode = true;
 
     private MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -64,6 +81,8 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                 public void run() {
                     if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                         mAdapter.listOtherMembers();
+                        mAdapter.refresh();
+                        refreshListViewHeader();
                     }
                 }
             });
@@ -77,7 +96,12 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
     private void refreshListViewHeader() {
         if (TextUtils.isEmpty(mSearchEdit.getText())) {
             mListViewHeaderView.setVisibility(View.VISIBLE);
-            mListViewHeaderView.setText(getString(R.string.room_participants_multi_participants, mAdapter.getCount()));
+
+            if (1 < mAdapter.getCount()) {
+                mListViewHeaderView.setText(getString(R.string.room_participants_multi_participants, mAdapter.getCount()));
+            } else {
+                mListViewHeaderView.setText(getString(R.string.room_participants_one_participant));
+            }
         } else {
             mListViewHeaderView.setVisibility(View.GONE);
         }
@@ -92,7 +116,12 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
+
+        // creation mode : the members are listed to create a new room
+        // edition mode (by default) : the members are dynamically added/removed
+        mIsEditionMode = intent.hasExtra(EXTRA_EDITION_MODE);
+
+        if (mIsEditionMode && !intent.hasExtra(EXTRA_ROOM_ID)) {
             Log.e(LOG_TAG, "No room ID extra.");
             finish();
             return;
@@ -105,12 +134,16 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
 
         mSession = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
 
-        if (mSession == null) {
+        if (null == mSession) {
             finish();
             return;
         }
-        mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
-        mRoom = mSession.getDataHandler().getRoom(mRoomId);
+
+        if (mIsEditionMode) {
+            mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
+            mRoom = mSession.getDataHandler().getRoom(mRoomId);
+        }
+
         mxMediasCache = mSession.getMediasCache();
 
         setContentView(R.layout.activity_vector_add_participants);
@@ -118,8 +151,128 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
         mListViewHeaderView = (TextView)findViewById(R.id.add_participants_listview_header_textview);
 
         mParticantsListView = (ListView)findViewById(R.id.add_participants_members_list);
-        mAdapter = new VectorAddParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mRoomId, mxMediasCache);
+        mAdapter = new VectorAddParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mIsEditionMode, mRoomId, mxMediasCache);
         mParticantsListView.setAdapter(mAdapter);
+
+        mParticantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mIsEditionMode) {
+                    if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+                        final ArrayList<String> userIDs = new ArrayList<String>();
+                        RoomMember member = mAdapter.getItem(position);
+                        userIDs.add(member.getUserId());
+                        mRoom.invite(userIDs, new SimpleApiCallback<Void>(VectorAddParticipantsActivity.this) {
+                            @Override
+                            public void onSuccess(Void info) {
+                                // display something ?
+                            }
+                        });
+
+                        // leave the search
+                        mSearchEdit.setText("");
+                    }
+                } else {
+                    // --> creation mode
+                    // no search -> remove the entry
+                    if (TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+                        mAdapter.removeMemberAt(position);
+                    } else {
+                        // add the entry
+                        mAdapter.addRoomMember(mAdapter.getItem(position));
+                        // leave the search
+                        mSearchEdit.setText("");
+                    }
+                }
+            }
+        });
+
+        mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+            @Override
+            public void onRemoveClick(final RoomMember roomMember) {
+                String text = VectorAddParticipantsActivity.this.getString(R.string.room_participants_remove_prompt_msg, roomMember.getName());
+
+                // The user is trying to leave with unsaved changes. Warn about that
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_remove_prompt_title)
+                        .setMessage(text)
+                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mRoom.kick(roomMember.getUserId(), new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        // display something
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+
+            @Override
+            public void onLeaveClick() {
+                // The user is trying to leave with unsaved changes. Warn about that
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_leave_prompt_title)
+                        .setMessage(VectorAddParticipantsActivity.this.getString(R.string.room_participants_leave_prompt_msg))
+                        .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mRoom.leave(new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                    }
+                                });
+                                VectorAddParticipantsActivity.this.finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        });
 
         mSearchEdit = (EditText)findViewById(R.id.add_participants_search_participants);
         mSearchEdit.addTextChangedListener(new TextWatcher() {
@@ -147,7 +300,9 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mRoom.addEventListener(mEventListener);
+        if (null != mRoom) {
+            mRoom.addEventListener(mEventListener);
+        }
         mAdapter.listOtherMembers();
         mAdapter.refresh();
         refreshListViewHeader();
@@ -156,6 +311,8 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mRoom.removeEventListener(mEventListener);
+        if (null != mRoom) {
+            mRoom.removeEventListener(mEventListener);
+        }
     }
 }

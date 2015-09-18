@@ -19,7 +19,15 @@
 
     <Button
         android:id="@+id/filtered_list_button"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/chat_avatar_size"
         android:text="+" />
+
+
+    <ImageView
+        android:id="@+id/filtered_list_image"
+        android:layout_width="@dimen/chat_avatar_size"
+        android:layout_height="@dimen/chat_avatar_size"/>
+
 </LinearLayout>
