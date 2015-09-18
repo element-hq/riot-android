@@ -20,6 +20,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -94,42 +96,18 @@ public class Contact {
         return (0 != mEmails.size());
     }
 
-    // assume that the search is performed on all the existing contacts
-    // so apply upper / lower case only once
-    static String mCurrentPattern = "";
-    static String mUpperCasePattern = "";
-    static String mLowerCasePattern = "";
-
     /**
      * test if some fields match with the pattern
      * @param pattern
      * @return
      */
     public boolean matchWithPattern(String pattern) {
-        // no pattern -> true
-        if (TextUtils.isEmpty(pattern)) {
-            mCurrentPattern = "";
-            mUpperCasePattern = "";
-            mLowerCasePattern = "";
-        }
-
-        // no display name
-        if (TextUtils.isEmpty(mDisplayName)) {
+        // empty pattern -> cannot match
+        if (TextUtils.isEmpty(pattern) || TextUtils.isEmpty(pattern.trim())) {
             return false;
         }
 
-        if (TextUtils.isEmpty(mUpperCaseDisplayName)) {
-            mUpperCaseDisplayName = mDisplayName.toLowerCase();
-            mLowerCaseDisplayName = mDisplayName.toUpperCase();
-        }
-
-        if (!pattern.equals(mCurrentPattern)) {
-            mCurrentPattern = pattern;
-            mUpperCasePattern = pattern.toUpperCase();
-            mLowerCasePattern = pattern.toLowerCase();
-        }
-
-        return (mUpperCaseDisplayName.indexOf(mUpperCasePattern) >= 0) || (mLowerCaseDisplayName.indexOf(mUpperCasePattern) >= 0);
+        return mDisplayName.matches("(?i:.*" + pattern.trim() + ".*)");
     }
 
     /**

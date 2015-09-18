@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
 public class VectorAddParticipantsActivity extends MXCActionBarActivity {
@@ -160,8 +161,8 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                 if (mIsEditionMode) {
                     if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
                         final ArrayList<String> userIDs = new ArrayList<String>();
-                        RoomMember member = mAdapter.getItem(position);
-                        userIDs.add(member.getUserId());
+                        ParticipantAdapterItem participant = mAdapter.getItem(position);
+                        userIDs.add(participant.mUserId);
                         mRoom.invite(userIDs, new SimpleApiCallback<Void>(VectorAddParticipantsActivity.this) {
                             @Override
                             public void onSuccess(Void info) {
@@ -179,7 +180,7 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                         mAdapter.removeMemberAt(position);
                     } else {
                         // add the entry
-                        mAdapter.addRoomMember(mAdapter.getItem(position));
+                        mAdapter.add(mAdapter.getItem(position));
                         // leave the search
                         mSearchEdit.setText("");
                     }
@@ -197,8 +198,8 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
 
         mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
             @Override
-            public void onRemoveClick(final RoomMember roomMember) {
-                String text = VectorAddParticipantsActivity.this.getString(R.string.room_participants_remove_prompt_msg, roomMember.getName());
+            public void onRemoveClick(final ParticipantAdapterItem participantItem) {
+                String text = VectorAddParticipantsActivity.this.getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
 
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(VectorApp.getCurrentActivity())
@@ -208,7 +209,7 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                mRoom.kick(roomMember.getUserId(), new ApiCallback<Void>() {
+                                mRoom.kick(participantItem.mUserId, new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
                                     }

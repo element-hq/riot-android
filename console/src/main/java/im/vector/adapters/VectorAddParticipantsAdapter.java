@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -37,17 +38,17 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 
 import im.vector.R;
 
-public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
-
+public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
     public interface OnParticipantsListener {
         /**
          * The user taps on the dedicated "Remove" button
-         * @param roomMember the room member to remove
+         * @param participant the participant to remove
          */
-        void onRemoveClick(final RoomMember roomMember);
+        void onRemoveClick(final ParticipantAdapterItem participant);
 
         /**
          * The user taps on "Leave" button
@@ -65,9 +66,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
     private Room mRoom;
     private int mLayoutResourceId;
     private Boolean mIsEditionMode;
-    private ArrayList<RoomMember> mCreationMembersList = new ArrayList<RoomMember>();
+    private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
-    ArrayList<RoomMember> mOtherRoomsMembers = null;
+    ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
 
     OnParticipantsListener mOnParticipantsListener = null;
@@ -86,13 +87,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             mRoomId = roomId;
             mRoom = mSession.getDataHandler().getRoom(roomId);
         } else {
-            // in create mode, the oneself member is displayed at top
-            RoomMember oneselfMember = new RoomMember();
-            oneselfMember.displayname = mSession.getMyUser().displayname;
-            oneselfMember.avatarUrl = mSession.getMyUser().avatarUrl;
-            oneselfMember.setUserId(mSession.getMyUser().userId);
-            this.add(oneselfMember);
-            mCreationMembersList.add(oneselfMember);
+            MyUser myUser = mSession.getMyUser();
+
+            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.avatarUrl, myUser.userId);
+            this.add(item);
+            mCreationParticipantsList.add(item);
         }
     }
 
@@ -126,28 +125,28 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
     }
 
     /**
-     * Add a room member to the edition list.
-     * @param roomMember the room member to add.
+     * Add a participant to the edition list.
+     * @param participant the participant to add.
      */
-    public void addRoomMember(RoomMember roomMember) {
+    public void ParticipantAdapterItem(ParticipantAdapterItem participant) {
         if (!mIsEditionMode) {
-            mOtherRoomsMembers.remove(roomMember);
-            mCreationMembersList.add(roomMember);
-            this.add(roomMember);
+            mUnusedParticipants.remove(participant);
+            mCreationParticipantsList.add(participant);
+            this.add(participant);
         }
     }
 
     /**
-     * Remove a room member from the edition list.
-     * @param index the room member index to remove.
+     * Remove a participant from the edition list.
+     * @param index the participant index to remove.
      */
     public void removeMemberAt(int index) {
         if (!mIsEditionMode) {
             // the index 0 is oneself
-            if ((0 != index) && (index < mCreationMembersList.size())) {
-                RoomMember member = mCreationMembersList.get(index);
-                mCreationMembersList.remove(member);
-                mOtherRoomsMembers.add(member);
+            if ((0 != index) && (index < mCreationParticipantsList.size())) {
+                ParticipantAdapterItem member = mCreationParticipantsList.get(index);
+                mCreationParticipantsList.remove(member);
+                mUnusedParticipants.add(member);
                 this.remove(member);
             }
         }
@@ -162,23 +161,23 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             return;
         }
 
-        ArrayList<RoomMember> otherMembers = new ArrayList<RoomMember>();
+        ArrayList<ParticipantAdapterItem> unusedParticipants = new ArrayList<ParticipantAdapterItem>();
         IMXStore store = mSession.getDataHandler().getStore();
 
         // list the used members IDs
         ArrayList<String> idsToIgnore = new ArrayList<String>();
 
-        Collection<RoomMember> currentMembers;
-
         if (null != mRoomId) {
             Room fromRoom = store.getRoom(mRoomId);
-            currentMembers = fromRoom.getMembers();
-        } else {
-            currentMembers = mCreationMembersList;
-        }
+            Collection<RoomMember> members = fromRoom.getMembers();
+            for(RoomMember member : members) {
+                idsToIgnore.add(member.getUserId());
+            }
 
-        for (RoomMember member : currentMembers) {
-            idsToIgnore.add(member.getUserId());
+        } else {
+            for(ParticipantAdapterItem item : mCreationParticipantsList) {
+                idsToIgnore.add(item.mUserId);
+            }
         }
 
         // checks for each room
@@ -196,7 +195,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
 
                         // accepted User ID or still active users
                         if ((idsToIgnore.indexOf(userID) < 0) && (RoomMember.MEMBERSHIP_JOIN.equals(member.membership))) {
-                            otherMembers.add(member);
+                            unusedParticipants.add(new ParticipantAdapterItem(member));
                             idsToIgnore.add(member.getUserId());
                         }
                     }
@@ -204,8 +203,31 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             }
         }
 
-        mOtherRoomsMembers = otherMembers;
+        mUnusedParticipants = unusedParticipants;
     }
+
+    // Comparator to order members alphabetically
+    public static Comparator<RoomMember> alphaComparator = new Comparator<RoomMember>() {
+        @Override
+        public int compare(RoomMember member1, RoomMember member2) {
+            String lhs = member1.getName();
+            String rhs = member2.getName();
+
+            if (lhs == null) {
+                return -1;
+            }
+            else if (rhs == null) {
+                return 1;
+            }
+            if (lhs.startsWith("@")) {
+                lhs = lhs.substring(1);
+            }
+            if (rhs.startsWith("@")) {
+                rhs = rhs.substring(1);
+            }
+            return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
+        }
+    };
 
     /**
      * refresh the list
@@ -213,13 +235,13 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
     public void refresh() {
         this.setNotifyOnChange(false);
         this.clear();
-        ArrayList<RoomMember> nextMembersList = new ArrayList<RoomMember>();
+        ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
 
         if (TextUtils.isEmpty(mPattern)) {
             // retrieve the room members
             if (mIsEditionMode) {
-                ArrayList<RoomMember> admins = new ArrayList<RoomMember>();
-                ArrayList<RoomMember> otherMembers = new ArrayList<RoomMember>();
+                ArrayList<ParticipantAdapterItem> admins = new ArrayList<ParticipantAdapterItem>();
+                ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
 
                 Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
                 String myUserId = mSession.getMyUser().userId;
@@ -228,39 +250,38 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
                 for (RoomMember member : activeMembers) {
                     // oneself member is displayed at top
                     if (member.getUserId().equals(myUserId)) {
-                        nextMembersList.add(member);
+                        nextMembersList.add(new ParticipantAdapterItem(member));
                     } else {
                         if (powerLevels.getUserPowerLevel(member.getUserId()) == 100) {
-                            admins.add(member);
+                            admins.add(new ParticipantAdapterItem(member));
                         } else {
-                            otherMembers.add(member);
+                            otherMembers.add(new ParticipantAdapterItem(member));
                         }
                     }
                 }
 
-                Collections.sort(admins, RoomMember.alphaComparator);
+                Collections.sort(admins, ParticipantAdapterItem.alphaComparator);
                 nextMembersList.addAll(admins);
 
-                Collections.sort(otherMembers, RoomMember.alphaComparator);
+                Collections.sort(otherMembers, ParticipantAdapterItem.alphaComparator);
                 nextMembersList.addAll(otherMembers);
-
-                mOtherRoomsMembers = null;
+                mUnusedParticipants = null;
             } else {
-                nextMembersList = mCreationMembersList;
+                nextMembersList = mCreationParticipantsList;
             }
         } else {
-            if (null == mOtherRoomsMembers) {
+            if (null == mUnusedParticipants) {
                 listOtherMembers();
             }
 
             // check if each member matches the pattern
-            for(RoomMember member : mOtherRoomsMembers) {
-                if (member.matchWith(mPattern)) {
-                    nextMembersList.add(member);
+            for(ParticipantAdapterItem item: mUnusedParticipants) {
+                if (item.matchWith(mPattern)) {
+                    nextMembersList.add(item);
                 }
             }
 
-            Collections.sort(nextMembersList, RoomMember.alphaComparator);
+            Collections.sort(nextMembersList, ParticipantAdapterItem.alphaComparator);
         }
 
         this.setNotifyOnChange(true);
@@ -273,14 +294,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
         }
 
-        final RoomMember member = getItem(position);
+        final ParticipantAdapterItem participant = getItem(position);
         boolean isSearchMode = !TextUtils.isEmpty(mPattern);
 
         ImageView thumbView = (ImageView) convertView.findViewById(R.id.avatar_img);
         thumbView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
 
         int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-        mMediasCache.loadAvatarThumbnail(thumbView, member.avatarUrl, size);
+        mMediasCache.loadAvatarThumbnail(thumbView, participant.mAvatarUrl, size);
 
         PowerLevels powerLevels = null;
 
@@ -288,11 +309,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             powerLevels = mRoom.getLiveState().getPowerLevels();
         }
         TextView textView = (TextView) convertView.findViewById(R.id.filtered_list_name);
-        String text = member.getName();
+        String text = participant.mDisplayName;
 
         if (!isSearchMode && (null != powerLevels)) {
             // show the admin
-            if (100 == powerLevels.getUserPowerLevel(member.getUserId())) {
+            if (100 == powerLevels.getUserPowerLevel(participant.mUserId)) {
                 text = mContext.getString(R.string.room_participants_admin_name, text);
             }
         }
@@ -309,7 +330,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
                             mOnParticipantsListener.onLeaveClick();
                         } else {
                             // assume that the tap on remove
-                            mOnParticipantsListener.onRemoveClick(member);
+                            mOnParticipantsListener.onRemoveClick(participant);
                         }
                     } catch (Exception e) {
                     }
@@ -327,7 +348,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             if (mIsEditionMode) {
                 imageView.setVisibility(View.GONE);
                 int myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
-                int userPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
+                int userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
 
                 String buttonText = "";
 
