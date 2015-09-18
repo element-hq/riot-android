@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -183,6 +184,14 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                         mSearchEdit.setText("");
                     }
                 }
+            }
+        });
+
+        mAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                refreshListViewHeader();
             }
         });
 

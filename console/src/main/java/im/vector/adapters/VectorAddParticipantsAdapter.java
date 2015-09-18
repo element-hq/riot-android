@@ -90,6 +90,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             RoomMember oneselfMember = new RoomMember();
             oneselfMember.displayname = mSession.getMyUser().displayname;
             oneselfMember.avatarUrl = mSession.getMyUser().avatarUrl;
+            oneselfMember.setUserId(mSession.getMyUser().userId);
             this.add(oneselfMember);
             mCreationMembersList.add(oneselfMember);
         }
@@ -130,6 +131,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
      */
     public void addRoomMember(RoomMember roomMember) {
         if (!mIsEditionMode) {
+            mOtherRoomsMembers.remove(roomMember);
             mCreationMembersList.add(roomMember);
             this.add(roomMember);
         }
@@ -145,6 +147,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
             if ((0 != index) && (index < mCreationMembersList.size())) {
                 RoomMember member = mCreationMembersList.get(index);
                 mCreationMembersList.remove(member);
+                mOtherRoomsMembers.add(member);
                 this.remove(member);
             }
         }
@@ -164,10 +167,17 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
 
         // list the used members IDs
         ArrayList<String> idsToIgnore = new ArrayList<String>();
-        Room fromRoom = store.getRoom(mRoomId);
-        Collection<RoomMember> currentMembers = fromRoom.getMembers();
 
-        for(RoomMember member : currentMembers) {
+        Collection<RoomMember> currentMembers;
+
+        if (null != mRoomId) {
+            Room fromRoom = store.getRoom(mRoomId);
+            currentMembers = fromRoom.getMembers();
+        } else {
+            currentMembers = mCreationMembersList;
+        }
+
+        for (RoomMember member : currentMembers) {
             idsToIgnore.add(member.getUserId());
         }
 
@@ -272,12 +282,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
         int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
         mMediasCache.loadAvatarThumbnail(thumbView, member.avatarUrl, size);
 
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        PowerLevels powerLevels = null;
 
+        if (null != mRoom) {
+            powerLevels = mRoom.getLiveState().getPowerLevels();
+        }
         TextView textView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         String text = member.getName();
 
-        if (!isSearchMode) {
+        if (!isSearchMode && (null != powerLevels)) {
             // show the admin
             if (100 == powerLevels.getUserPowerLevel(member.getUserId())) {
                 text = mContext.getString(R.string.room_participants_admin_name, text);
@@ -330,8 +343,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<RoomMember> {
                 button.setVisibility(TextUtils.isEmpty(buttonText) ? View.GONE : View.VISIBLE);
             } else {
                 button.setVisibility(View.GONE);
-                imageView.setVisibility(View.VISIBLE);
-                imageView.setImageResource(R.drawable.ic_material_remove_circle);
+
+                // the first row is oneself
+                if (0 != position) {
+                    imageView.setVisibility(View.VISIBLE);
+                    imageView.setImageResource(R.drawable.ic_material_remove_circle);
+                } else {
+                    imageView.setVisibility(View.GONE);
+                }
             }
         }
 
