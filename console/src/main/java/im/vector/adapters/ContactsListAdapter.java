@@ -93,15 +93,7 @@ public class ContactsListAdapter extends ArrayAdapter<Contact> implements Sectio
 
         // member thumbnail
         ImageView imageView = (ImageView) convertView.findViewById(R.id.avatar_img);
-
-        Bitmap bitmap = contact.mThumbnail;
-
-        if ((null != contact.mThumbnailUri) && (null == bitmap)) {
-            try {
-                contact.mThumbnail = bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(contact.mThumbnailUri));
-            } catch (Exception e) {
-            }
-        }
+        Bitmap bitmap = contact.getThumbnail(mContext);
 
         if (null == bitmap) {
             imageView.setImageResource(R.drawable.ic_contact_picture_holo_light);

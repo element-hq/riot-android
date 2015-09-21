@@ -15,6 +15,8 @@
  */
 
 package im.vector.adapters;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -28,6 +30,7 @@ public class ParticipantAdapterItem {
     // displayed info
     public String mDisplayName;
     public String mAvatarUrl;
+    public Bitmap mAvatarBitmap;
 
     // user id
     public String mUserId;
@@ -45,7 +48,14 @@ public class ParticipantAdapterItem {
         mContact = null;
     }
 
-    public ParticipantAdapterItem(Contact contact) {
+    public ParticipantAdapterItem(Contact contact, Context context) {
+        mDisplayName = contact.getDisplayName();
+        mAvatarBitmap = contact.getThumbnail(context);
+
+        mUserId = null;
+        mRoomMember = null;
+
+        mContact = contact;
     }
 
     public ParticipantAdapterItem(String displayName, String avatarUrl, String userId) {

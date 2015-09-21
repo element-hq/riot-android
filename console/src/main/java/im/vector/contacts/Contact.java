@@ -18,6 +18,8 @@ package im.vector.contacts;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import org.w3c.dom.Text;
@@ -39,12 +41,10 @@ public class Contact {
         }
     }
 
-    public String mContactId = "";
+    public  String mContactId = "";
     private String mDisplayName;
-    private String mUpperCaseDisplayName = "";
-    private String mLowerCaseDisplayName = "";
-    public String mThumbnailUri;
-    public Bitmap mThumbnail = null;
+    public String mThumbnailUri = null;
+    private Bitmap mThumbnail = null;
 
     public ArrayList<String>mPhoneNumbers = new ArrayList<String>();
     public ArrayList<String>mEmails = new ArrayList<String>();
@@ -107,7 +107,18 @@ public class Contact {
             return false;
         }
 
-        return mDisplayName.matches("(?i:.*" + pattern.trim() + ".*)");
+        String regEx = "(?i:.*" + pattern.trim() + ".*)";
+        Boolean matched = false;
+
+        matched = mDisplayName.matches(regEx);
+
+        if (!matched) {
+            for(String email : mEmails) {
+                matched |= email.matches(regEx);
+            }
+        }
+
+        return matched;
     }
 
     /**
@@ -146,6 +157,23 @@ public class Contact {
         }
 
         return res;
+    }
+
+    /**
+     * Return the contact thumbnail bitmap.
+     * @param context the context.
+     * @return the contact thumbnail bitmap.
+     */
+    public Bitmap getThumbnail(Context context) {
+
+        if ((null == mThumbnail) && (null != mThumbnailUri)) {
+            try {
+                mThumbnail = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mThumbnailUri));
+            } catch (Exception e) {
+            }
+        }
+
+        return mThumbnail;
     }
 }
 

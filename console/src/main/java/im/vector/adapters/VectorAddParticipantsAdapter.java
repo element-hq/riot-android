@@ -41,6 +41,8 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import im.vector.R;
+import im.vector.contacts.Contact;
+import im.vector.contacts.ContactsManager;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
     public interface OnParticipantsListener {
@@ -203,6 +205,23 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         }
 
+        // contacts
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
+
+        for(Contact contact : contacts) {
+            if (contact.hasMatridIds(mContext)) {
+                Contact.MXID mxId = contact.getFirstMatrixId();
+
+                if (idsToIgnore.indexOf(mxId.mMatrixId) < 0) {
+                    unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
+                    idsToIgnore.add(mxId.mMatrixId);
+                }
+
+            } else {
+                unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
+            }
+        }
+
         mUnusedParticipants = unusedParticipants;
     }
 
@@ -300,8 +319,12 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         ImageView thumbView = (ImageView) convertView.findViewById(R.id.avatar_img);
         thumbView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
 
-        int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-        mMediasCache.loadAvatarThumbnail(thumbView, participant.mAvatarUrl, size);
+        if (null != participant.mAvatarBitmap) {
+            thumbView.setImageBitmap(participant.mAvatarBitmap);
+        } else {
+            int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+            mMediasCache.loadAvatarThumbnail(thumbView, participant.mAvatarUrl, size);
+        }
 
         PowerLevels powerLevels = null;
 

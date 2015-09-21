@@ -16,7 +16,9 @@
 
 package im.vector.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,8 +51,10 @@ import java.util.ArrayList;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.adapters.AdapterUtils;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.contacts.Contact;
 
 public class VectorAddParticipantsActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = "VectorAddActivity";
@@ -160,15 +164,59 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mIsEditionMode) {
                     if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
-                        final ArrayList<String> userIDs = new ArrayList<String>();
                         ParticipantAdapterItem participant = mAdapter.getItem(position);
-                        userIDs.add(participant.mUserId);
-                        mRoom.invite(userIDs, new SimpleApiCallback<Void>(VectorAddParticipantsActivity.this) {
-                            @Override
-                            public void onSuccess(Void info) {
-                                // display something ?
+                        if (null == participant.mUserId) {
+                            // check if it is a contact
+                            if (null != participant.mContact) {
+                                final Contact contact = participant.mContact;
+
+                                if (null != contact) {
+                                    final ArrayList<String> choicesList = new ArrayList<String>();
+                                    final Activity activity = VectorAddParticipantsActivity.this;
+
+                                    if (AdapterUtils.canSendSms(VectorAddParticipantsActivity.this)) {
+                                        choicesList.addAll(contact.mPhoneNumbers);
+                                    }
+
+                                    choicesList.addAll(contact.mEmails);
+
+                                    // something to offer
+                                    if (choicesList.size() > 0) {
+                                        final String[] labels = new String[choicesList.size()];
+
+                                        for (int index = 0; index < choicesList.size(); index++) {
+                                            labels[index] = choicesList.get(index);
+                                        }
+
+                                        new AlertDialog.Builder(activity)
+                                                .setItems(labels, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        String value = labels[which];
+
+                                                        // SMS ?
+                                                        if (contact.mPhoneNumbers.indexOf(value) >= 0) {
+                                                            AdapterUtils.launchSmsIntent(activity, value, activity.getString(R.string.invitation_message));
+                                                        } else {
+                                                            // emails
+                                                            AdapterUtils.launchEmailIntent(activity, value, activity.getString(R.string.invitation_message));
+                                                        }
+                                                    }
+                                                }).setTitle(activity.getString(R.string.invite_this_user_to_use_matrix)).show();
+                                    }
+                                }
                             }
-                        });
+                        } else {
+
+                            final ArrayList<String> userIDs = new ArrayList<String>();
+                            userIDs.add(participant.mUserId);
+                            mRoom.invite(userIDs, new SimpleApiCallback<Void>(VectorAddParticipantsActivity.this) {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    // display something ?
+                                }
+                            });
+                        }
 
                         // leave the search
                         mSearchEdit.setText("");
