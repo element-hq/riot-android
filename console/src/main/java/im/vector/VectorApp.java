@@ -28,6 +28,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorAddParticipantsActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.Analytics;
@@ -46,7 +47,7 @@ public class VectorApp extends Application {
 
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
-    public boolean isInBackground = true;
+    private boolean mIsInBackground = true;
     private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
 
     // google analytics
@@ -74,7 +75,7 @@ public class VectorApp extends Application {
         }
         catch (PackageManager.NameNotFoundException e) {}
 
-        LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath()+"/logs"));
+        LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
         LogUtilities.storeLogcat();
 
         initGoogleAnalytics();
@@ -84,8 +85,6 @@ public class VectorApp extends Application {
 
         // get the contact update at application launch
         ContactsManager.refreshLocalContactsSnapshot(this);
-
-        isInBackground = false;
     }
 
     public static VectorApp getInstance() {
@@ -109,13 +108,14 @@ public class VectorApp extends Application {
      * The application is warned that a call is ended.
      */
     public void onCallEnd() {
-        if (isInBackground && mIsCallingInBackground) {
-            mIsCallingInBackground = false;
+        if (isAppInBackground() && mIsCallingInBackground) {
             suspendApp();
         }
+
+        mIsCallingInBackground = false;
     }
 
-    public void startActivityTransitionTimer() {
+    private void startActivityTransitionTimer() {
 
         // reset the application badge when displaying a new activity
         // when the user taps on a notification, it is the first called method.
@@ -124,7 +124,17 @@ public class VectorApp extends Application {
         this.mActivityTransitionTimer = new Timer();
         this.mActivityTransitionTimerTask = new TimerTask() {
             public void run() {
-                VectorApp.this.isInBackground = true;
+                if (VectorApp.this.mActivityTransitionTimerTask != null) {
+                    VectorApp.this.mActivityTransitionTimerTask.cancel();
+                    VectorApp.this.mActivityTransitionTimerTask = null;
+                }
+
+                if (VectorApp.this.mActivityTransitionTimer != null) {
+                    VectorApp.this.mActivityTransitionTimer.cancel();
+                    VectorApp.this.mActivityTransitionTimer = null;
+                }
+
+                VectorApp.this.mIsInBackground = true;
                 mIsCallingInBackground = (null != CallViewActivity.getActiveCall());
 
                 // if there is a pending call
@@ -138,16 +148,18 @@ public class VectorApp extends Application {
         this.mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
     }
 
-    public void stopActivityTransitionTimer() {
+    private void stopActivityTransitionTimer() {
         if (this.mActivityTransitionTimerTask != null) {
             this.mActivityTransitionTimerTask.cancel();
+            this.mActivityTransitionTimerTask = null;
         }
 
         if (this.mActivityTransitionTimer != null) {
             this.mActivityTransitionTimer.cancel();
+            this.mActivityTransitionTimer = null;
         }
 
-        if (isInBackground) {
+        if (isAppInBackground()) {
             // resume the events thread if the client uses GCM
             if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
 
@@ -165,11 +177,21 @@ public class VectorApp extends Application {
 
         MyPresenceManager.advertiseAllOnline();
 
-        this.isInBackground = false;
+        this.mIsCallingInBackground = false;
+        this.mIsInBackground = false;
     }
 
     static private Activity mCurrentActivity = null;
     public static void setCurrentActivity(Activity activity) {
+        // wait 2s to check that the application is put in background
+        if (null != getInstance()) {
+            if (null == activity) {
+                getInstance().startActivityTransitionTimer();
+            } else {
+                getInstance().stopActivityTransitionTimer();
+            }
+        }
+
         mCurrentActivity = activity;
     }
     public static Activity getCurrentActivity() { return mCurrentActivity; }
@@ -178,11 +200,7 @@ public class VectorApp extends Application {
      * Return true if the application is in background.
      */
     public static boolean isAppInBackground() {
-        if (mCurrentActivity != null) {
-            return ((VectorApp)(mCurrentActivity.getApplication())).isInBackground;
-        }
-
-        return true;
+        return (null == mCurrentActivity) && (null != getInstance()) && getInstance().mIsInBackground;
     }
 
     private void initGoogleAnalytics() {

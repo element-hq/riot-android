@@ -360,6 +360,7 @@ public class CallViewActivity extends FragmentActivity {
     @Override
     public void finish() {
         super.finish();
+        stopRinging();
         instance = null;
     }
 
@@ -372,7 +373,6 @@ public class CallViewActivity extends FragmentActivity {
             mCall.removeListener(mListener);
         }
         VectorApp.setCurrentActivity(null);
-        ((VectorApp)getApplication()).startActivityTransitionTimer();
     }
 
     @Override
@@ -390,7 +390,6 @@ public class CallViewActivity extends FragmentActivity {
         }
 
         VectorApp.setCurrentActivity(this);
-        ((VectorApp)getApplication()).stopActivityTransitionTimer();
     }
 
     private void refreshSpeakerButton() {
