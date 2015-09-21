@@ -565,15 +565,32 @@ public class EventStreamService extends Service {
     }
 
     private void catchup() {
-        if (mSessions != null) {
-            for(MXSession session : mSessions) {
-                session.catchupEventStream();
-            }
-        } else {
-            Log.e(LOG_TAG, "catchup no session");
+        Log.d(LOG_TAG, "catchup with state " + mState + " CurrentActivity " + VectorApp.getCurrentActivity());
+
+        // the catchup should only be done when the thread is suspended
+        Boolean canCatchup = (mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP);
+        //
+
+        // other use case
+        // the application has been launched by a push
+        // so there is no displayed activity
+        if (!canCatchup && (mState == StreamAction.START)) {
+            canCatchup = (null == VectorApp.getCurrentActivity());
         }
 
-        mState = StreamAction.CATCHUP;
+        if (canCatchup) {
+            if (mSessions != null) {
+                for (MXSession session : mSessions) {
+                    session.catchupEventStream();
+                }
+            } else {
+                Log.e(LOG_TAG, "catchup no session");
+            }
+
+            mState = StreamAction.CATCHUP;
+        } else {
+            Log.d(LOG_TAG, "No catchup is triggered because there is already a running event thread");
+        }
     }
 
     private void resume() {
