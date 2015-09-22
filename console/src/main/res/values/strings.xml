@@ -332,6 +332,7 @@
     <string name="room_participants_remove_prompt_title">Remove?</string>
     <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
     <string name="room_participants_admin_name">%s (admin)</string>
+    <string name="room_participants_create">Create</string>
 
     // Chat
     <string name="room_menu_search">Search</string>

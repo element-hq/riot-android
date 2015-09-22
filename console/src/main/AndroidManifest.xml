@@ -98,7 +98,7 @@
 
         <activity
             android:name="im.vector.activity.VectorRoomCreationActivity"
-            android:label="@string/title_activity_room"
+            android:label="@string/room_creation_title"
             android:parentActivityName="im.vector.activity.HomeActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">

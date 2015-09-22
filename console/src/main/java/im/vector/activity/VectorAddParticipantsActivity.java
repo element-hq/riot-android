@@ -18,16 +18,15 @@ package im.vector.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -44,7 +43,6 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RoomMember;
 
 import java.util.ArrayList;
 
@@ -65,6 +63,9 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
     // creation mode : the members are listed to create a new room
     // edition mode (by default) : the members are dynamically added/removed
     public static final String EXTRA_EDITION_MODE = "VectorAddParticipantsActivity.EXTRA_EDITION_MODE";
+
+    // in creation mode, this is the key to retrieve the users IDs liste
+    public static final String RESULT_USERS_ID = "VectorAddParticipantsActivity.RESULT_USERS_ID";
 
     private MXSession mSession;
     private String mRoomId;
@@ -228,7 +229,7 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                         mAdapter.removeMemberAt(position);
                     } else {
                         // add the entry
-                        mAdapter.add(mAdapter.getItem(position));
+                        mAdapter.addParticipantAdapterItem(mAdapter.getItem(position));
                         // leave the search
                         mSearchEdit.setText("");
                     }
@@ -353,6 +354,47 @@ public class VectorAddParticipantsActivity extends MXCActionBarActivity {
                 mSearchEdit.setText("");
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mIsEditionMode) {
+            getMenuInflater().inflate(R.menu.vector_add_participants, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_create) {
+
+            VectorAddParticipantsActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // provide the Uri
+                    Intent intent = new Intent();
+                    ArrayList<String> users = new ArrayList<String>();
+                    int count = mAdapter.getCount();
+
+                    for (int index = 0; index < count; index++) {
+                        ParticipantAdapterItem item = mAdapter.getItem(index);
+
+                        // add only the registered users (except oneself)
+                        if ((null != item.mRoomMember) && !TextUtils.isEmpty(item.mRoomMember.getUserId()) && !item.mRoomMember.getUserId().equals(mSession.getCredentials().userId)) {
+                            users.add(item.mRoomMember.getUserId());
+                        }
+                    }
+                    intent.putStringArrayListExtra(RESULT_USERS_ID, users);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

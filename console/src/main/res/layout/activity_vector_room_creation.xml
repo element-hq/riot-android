@@ -33,7 +33,6 @@
 
             <Spinner
                 android:id="@+id/room_creation_accounts_spinner"
-                android:background="#f00"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
@@ -53,7 +52,7 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,11 +63,10 @@
 
             <EditText
                 android:id="@+id/room_creation_account_name_edit"
-                android:background="#f00"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:layout_height="match_parent"/>
         </LinearLayout>
 
@@ -88,7 +86,6 @@
 
             <include layout="@layout/rounded_rect_avatar"
                 android:id="@+id/room_creation_account_room_thumbnail"
-                android:background="#f00"
                 android:layout_width="@dimen/chat_avatar_size"
                 android:layout_height="@dimen/chat_avatar_size"
                 android:layout_alignParentRight="true"/>

@@ -17,24 +17,19 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,24 +39,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.util.ResourceUtils;
 
-public class VectorRoomCreationActivity extends FragmentActivity {
+public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
     private static final int TAKE_IMAGE = 1;
+    private static final int GET_MEMBERS = 2;
 
     // backup while rotating the screen
     private static final String BACKUP_IS_PRIVATE = "BACKUP_IS_PRIVATE";
@@ -83,8 +77,6 @@ public class VectorRoomCreationActivity extends FragmentActivity {
 
     // values
     Boolean mIsPrivate = true;
-    String mAccountId = "";
-    String mSelectedText = "";
 
     Uri mThumbnailUri = null;
     Bitmap mThumbnail = null;
@@ -114,15 +106,15 @@ public class VectorRoomCreationActivity extends FragmentActivity {
             }
 
             if (savedInstanceState.containsKey(BACKUP_ACCOUNT_ID)) {
-                mAccountId = savedInstanceState.getString(BACKUP_ACCOUNT_ID);
+                String accountId = savedInstanceState.getString(BACKUP_ACCOUNT_ID);
 
-                if (!TextUtils.isEmpty(mAccountId)) {
+                if (!TextUtils.isEmpty(accountId)) {
                     Collection<MXSession> sessions = Matrix.getInstance(this).getSessions();
                     int index = 0;
 
                     // search the session
                     for(MXSession session : sessions) {
-                        if (session.getMyUser().userId.equals(mAccountId)) {
+                        if (session.getMyUser().userId.equals(accountId)) {
                             mSessionIndex = index;
                             break;
                         }
@@ -204,8 +196,31 @@ public class VectorRoomCreationActivity extends FragmentActivity {
                 }
             }
         });
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.vector_room_creation, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_next) {
+            Intent intent = new Intent(VectorRoomCreationActivity.this, VectorAddParticipantsActivity.class);
+
+            MXSession session = (null == mSessions) ? Matrix.getInstance(this).getDefaultSession() : mSessions.get(mSessionIndex);
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, session.getCredentials().userId);
+            startActivityForResult(intent, GET_MEMBERS);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /**
      * Refresh the page UI items
@@ -217,7 +232,7 @@ public class VectorRoomCreationActivity extends FragmentActivity {
         // one session -> no need to select a session
         if (sessions.size() == 1) {
             mAccountsSelectionLayout.setVisibility(View.GONE);
-            mAccountsSpinner.setVisibility(View.GONE);
+            mAccountTile.setVisibility(View.GONE);
         } else {
             mAccountsSelectionLayout.setVisibility(View.VISIBLE);
             mAccountsSpinner.setVisibility(View.VISIBLE);
@@ -231,8 +246,9 @@ public class VectorRoomCreationActivity extends FragmentActivity {
                     mSessions.add(session);
                     sessionsTextsList.add(session.getMyUser().displayname + " (" + session.getMyUser().userId + ")");
                 }
+
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_spinner_item, (String[])sessionsTextsList.toArray());
+                        android.R.layout.simple_spinner_item, sessionsTextsList.toArray(new String[sessionsTextsList.size()]));
 
 
                 mAccountsSpinner.setAdapter(adapter);
@@ -275,7 +291,9 @@ public class VectorRoomCreationActivity extends FragmentActivity {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putBoolean(BACKUP_IS_PRIVATE, mIsPrivate);
-        savedInstanceState.putString(BACKUP_ACCOUNT_ID, mAccountId);
+
+        MXSession session = (null == mSessions) ? Matrix.getInstance(this).getDefaultSession() : mSessions.get(mSessionIndex);
+        savedInstanceState.putString(BACKUP_ACCOUNT_ID, session.getCredentials().userId);
 
         if (null != mThumbnailUri) {
             savedInstanceState.putString(BACKUP_THUMB_URL, mThumbnailUri.toString());
@@ -350,6 +368,28 @@ public class VectorRoomCreationActivity extends FragmentActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_IMAGE) {
                 onPickerDone(data);
+            } else if (requestCode == GET_MEMBERS) {
+                final ArrayList<String> userIDsList = (ArrayList<String>)data.getExtras().get(VectorAddParticipantsActivity.RESULT_USERS_ID);
+                final MXSession session = (null == mSessions) ? Matrix.getInstance(this).getDefaultSession() : mSessions.get(mSessionIndex);
+                final Activity activity = VectorRoomCreationActivity.this;
+                final String roomVisibility = !mIsPrivate ? RoomState.VISIBILITY_PUBLIC : RoomState.VISIBILITY_PRIVATE;
+
+                session.createRoom(mRoomNameEditText.getText().toString(), null, roomVisibility, null, new SimpleApiCallback<String>(activity) {
+                    @Override
+                    public void onSuccess(String roomId) {
+                        CommonActivityUtils.goToRoomPage(session, roomId, activity, null);
+
+                        Room room = session.getDataHandler().getRoom(roomId);
+
+                        if ((null != room) && (null != userIDsList)) {
+                            room.invite(userIDsList, new SimpleApiCallback<Void>(activity) {
+                                @Override
+                                public void onSuccess(Void info) {
+                                }
+                            });
+                        }
+                    }
+                });
             }
         }
     }
