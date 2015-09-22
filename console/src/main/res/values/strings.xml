@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">UK</string>
 
     <!-- titles -->
     <string name="app_name">Vector</string>

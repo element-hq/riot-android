@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -116,6 +117,24 @@ public class AdapterUtils {
         return gregorianCalendar.getTime();
     }
 
+    //
+    private static String mLanguage = null;
+    private static String mCountryLanguage = null;
+    private static Locale mLocale = null;
+
+    public static Locale getLocale(Context context) {
+        String langague = context.getString(R.string.resouces_language);
+        String country = context.getString(R.string.resouces_country);
+
+        if (!TextUtils.equals(langague, mLanguage) || !TextUtils.equals(country, mCountryLanguage) || (null == mLocale)) {
+            mLanguage = langague;
+            mCountryLanguage = country;
+            mLocale = new Locale(mLanguage, country);
+        }
+
+        return mLocale;
+    }
+
     // month day time
     private static SimpleDateFormat mLongDateFormat = null;
     // day_name time
@@ -134,10 +153,11 @@ public class AdapterUtils {
         long daysDiff = (new Date().getTime() - zeroTimeDate(new Date(ts)).getTime()) / MS_IN_DAY;
         long timeZoneOffset = TimeZone.getDefault().getRawOffset();
 
+
         // the formatter must be updated if the timezone has been updated
         // else the formatted string are wrong (does not use the current timezone)
         if ((null == mLongDateFormat) || (mFormatterRawOffset != timeZoneOffset)) {
-            Locale locale = context.getResources().getConfiguration().locale;
+            Locale locale = getLocale(context);
 
             mLongDateFormat = new SimpleDateFormat("MMM d HH:mm", locale);
             mMediumDateFormat = new SimpleDateFormat("ccc HH:mm", locale);

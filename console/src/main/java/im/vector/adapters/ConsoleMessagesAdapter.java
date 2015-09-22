@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -347,14 +348,15 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         } else if (nbrDays == 1) {
             return mContext.getResources().getString(R.string.yesterday);
         } else if (nbrDays < 7) {
-            return (new SimpleDateFormat("EEEE")).format(date);
+            return (new SimpleDateFormat("EEEE", AdapterUtils.getLocale(mContext))).format(date);
         } else  {
             int flags = DateUtils.FORMAT_SHOW_DATE |
                     DateUtils.FORMAT_NO_YEAR |
                     DateUtils.FORMAT_ABBREV_ALL |
                     DateUtils.FORMAT_SHOW_WEEKDAY;
 
-            return DateUtils.formatDateTime(mContext, date.getTime(), flags);
+            Formatter f = new Formatter(new StringBuilder(50), AdapterUtils.getLocale(mContext));
+            return DateUtils.formatDateRange(mContext, f, date.getTime(), date.getTime(), flags).toString();
         }
     }
 
