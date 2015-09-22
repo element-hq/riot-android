@@ -130,7 +130,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * Add a participant to the edition list.
      * @param participant the participant to add.
      */
-    public void ParticipantAdapterItem(ParticipantAdapterItem participant) {
+    public void addParticipantAdapterItem(ParticipantAdapterItem participant) {
         if (!mIsEditionMode) {
             mUnusedParticipants.remove(participant);
             mCreationParticipantsList.add(participant);
