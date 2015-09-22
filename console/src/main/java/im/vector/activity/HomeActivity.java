@@ -1128,47 +1128,9 @@ public class HomeActivity extends MXCActionBarActivity {
     }
 
     private void createRoom() {
-        if (Matrix.getMXSessions(this).size() == 1) {
-            // use the default session
-            createRoom(Matrix.getMXSession(this, null));
-        } else {
-            FragmentManager fm = getSupportFragmentManager();
-
-            AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-
-            fragment = AccountsSelectionDialogFragment.newInstance(Matrix.getMXSessions(getApplicationContext()));
-
-            fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
-                @Override
-                public void onSelected(final MXSession session) {
-
-                    HomeActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            HomeActivity.this.createRoom(session);
-                        }
-                    });
-                }
-            });
-
-            fragment.show(fm, TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
-        }
+        Intent intent = new Intent(this, VectorRoomCreationActivity.class);
+        startActivity(intent);
     }
-
-    private void createRoom(MXSession session) {
-        FragmentManager fm = getSupportFragmentManager();
-
-        RoomCreationDialogFragment fragment = (RoomCreationDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_CREATE_ROOM_DIALOG);
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
-        }
-        fragment = RoomCreationDialogFragment.newInstance(session);
-        fragment.show(fm, TAG_FRAGMENT_CREATE_ROOM_DIALOG);
-    }
-
 
     private void markAllMessagesAsRead() {
         // flush the summaries
