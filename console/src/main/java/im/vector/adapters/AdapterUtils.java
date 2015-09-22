@@ -24,13 +24,24 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import im.vector.R;
 
 /**
  * Contains useful functions for adapters.
  */
 public class AdapterUtils {
+
     private static final String LOG_TAG = "AdapterUtils";
+
+    public static final long MS_IN_DAY = 1000 * 60 * 60 * 24;
 
     /** Checks if the device can send SMS messages.
      *
@@ -87,6 +98,62 @@ public class AdapterUtils {
         List<ResolveInfo> emailresolveInfos = emailpackageManager.queryIntentActivities(emailIntent, 0);
         if(emailresolveInfos.size() > 0) {
             activity.startActivity(emailIntent);
+        }
+    }
+
+    /**
+     * Reset the time of a date
+     * @param date the date with time to reset
+     * @return the 0 time date.
+     */
+    public static Date zeroTimeDate(Date date) {
+        final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(date);
+        gregorianCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        gregorianCalendar.set(Calendar.MINUTE, 0);
+        gregorianCalendar.set(Calendar.SECOND, 0);
+        gregorianCalendar.set(Calendar.MILLISECOND, 0);
+        return gregorianCalendar.getTime();
+    }
+
+    // month day time
+    private static SimpleDateFormat mLongDateFormat = null;
+    // day_name time
+    private static SimpleDateFormat mMediumDateFormat = null;
+    // today / yesterday time
+    private static SimpleDateFormat mShortDateFormat = null;
+    private static long mFormatterRawOffset = 1234;
+
+    /**
+     * Convert a time since epoch date to a string.
+     * @param context the context.
+     * @param ts the time since epoch.
+     * @return the formatted date
+     */
+    public static String tsToString(Context context, long ts) {
+        long daysDiff = (new Date().getTime() - zeroTimeDate(new Date(ts)).getTime()) / MS_IN_DAY;
+        long timeZoneOffset = TimeZone.getDefault().getRawOffset();
+
+        // the formatter must be updated if the timezone has been updated
+        // else the formatted string are wrong (does not use the current timezone)
+        if ((null == mLongDateFormat) || (mFormatterRawOffset != timeZoneOffset)) {
+            Locale locale = context.getResources().getConfiguration().locale;
+
+            mLongDateFormat = new SimpleDateFormat("MMM d HH:mm", locale);
+            mMediumDateFormat = new SimpleDateFormat("ccc HH:mm", locale);
+            mShortDateFormat = new SimpleDateFormat("HH:mm", locale);
+
+            mFormatterRawOffset = timeZoneOffset;
+        }
+
+        if (0 == daysDiff) {
+            return context.getString(R.string.today) + " " + mShortDateFormat.format(new Date(ts));
+        } else if (1 == daysDiff) {
+            return context.getString(R.string.yesterday) + " " + mShortDateFormat.format(new Date(ts));
+        } else if (7 > daysDiff) {
+            return mMediumDateFormat.format(new Date(ts));
+        } else {
+            return mLongDateFormat.format(new Date(ts));
         }
     }
 }

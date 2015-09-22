@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 import im.vector.Matrix;
 import im.vector.R;
@@ -75,6 +76,17 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
     @Override
     protected int getSectionTitleColor() {
         return mContext.getResources().getColor(R.color.vector_title_color);
+    }
+
+    /**
+     * Provides the formatted timestamp to display.
+     * null means that the timestamp text must be hidden.
+     * @param event the event.
+     * @return  the formatted timestamp to display.
+     */
+    @Override
+    protected String getFormattedTimestamp(Event event) {
+        return AdapterUtils.tsToString(mContext, event.getOriginServerTs());
     }
 
     /**

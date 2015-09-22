@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * An adapter which can display room information.
@@ -59,8 +60,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     private Date mReferenceDate = new Date();
     private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     private Handler mUiHandler;
-
-    private final long MS_IN_DAY = 1000 * 60 * 60 * 24;
 
     public static interface MessageLongClickListener {
         public void onMessageLongClick(int position, Message message);
@@ -87,6 +86,17 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
         // for dispatching data to add to the adapter we need to be on the main thread
         mUiHandler = new Handler(Looper.getMainLooper());
+    }
+
+    /**
+     * Provides the formatted timestamp to display.
+     * null means that the timestamp text must be hidden.
+     * @param event the event.
+     * @return  the formatted timestamp to display.
+     */
+    @Override
+    protected String getFormattedTimestamp(Event event) {
+        return AdapterUtils.tsToString(mContext, event.getOriginServerTs());
     }
 
     public void setMessageLongClickListener(MessageLongClickListener listener) {
@@ -200,7 +210,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         if (null == url) {
             return -1;
         }
-
 
         for(int index = 0; index < mediaMessagesList.size(); index++) {
             if (mediaMessagesList.get(index).mMediaUrl.equals(url)) {
@@ -317,28 +326,13 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         for(int index = 0; index < this.getCount(); index++) {
             MessageRow row = getItem(index);
             Event msg = row.getEvent();
-            dates.add(zeroTimeDate(new Date(msg.getOriginServerTs())));
+            dates.add( AdapterUtils.zeroTimeDate(new Date(msg.getOriginServerTs())));
         }
 
         synchronized (this) {
             mMessagesDateList = dates;
             mReferenceDate = new Date();
         }
-    }
-
-    /**
-     * Reset the time of a date
-     * @param date the date with time to reset
-     * @return the 0 time date.
-     */
-    private Date zeroTimeDate(Date date) {
-        final GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(date);
-        gregorianCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        gregorianCalendar.set(Calendar.MINUTE, 0);
-        gregorianCalendar.set(Calendar.SECOND, 0);
-        gregorianCalendar.set(Calendar.MILLISECOND, 0);
-        return gregorianCalendar.getTime();
     }
 
     /**
@@ -387,7 +381,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             return null;
         }
 
-        return dateDiff(messageDate, (mReferenceDate.getTime() - messageDate.getTime()) / MS_IN_DAY);
+        return dateDiff(messageDate, (mReferenceDate.getTime() - messageDate.getTime()) / AdapterUtils.MS_IN_DAY);
     }
 
     @Override
