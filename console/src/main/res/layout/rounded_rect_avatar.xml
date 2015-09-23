@@ -2,30 +2,30 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/chat_avatar_size"
-    android:layout_height="@dimen/chat_avatar_size">
+    android:layout_height="50dp">
 
-    <ImageView
-        android:id="@+id/avatar_img"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/rounded_rect_mask"/>
+        <im.vector.view.ThreeDotsImageView
+            android:id="@+id/avatar_typing_img"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_width="30dp"
+            android:layout_height="20dp" />
 
-    <ImageView
-        android:id="@+id/imageView_presenceRing"
-        android:visibility="gone"
-        android:layout_width="0dp"
-        android:layout_height="0dp"/>
+        <ImageView
+            android:id="@+id/avatar_img"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/chat_avatar_size"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"/>
 
-    <ImageView
-        android:layout_width="@dimen/chat_avatar_keyboard_size"
-        android:layout_height="@dimen/chat_avatar_keyboard_size"
-        android:visibility="gone"
-        android:id="@+id/avatar_typing_img"
-        android:src="@drawable/icon_keyboard"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/chat_avatar_size"
+            android:src="@drawable/rounded_rect_mask"/>
+    </RelativeLayout>
+
 </FrameLayout>

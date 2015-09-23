@@ -25,6 +25,7 @@ import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -35,6 +36,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.VectorApp;
@@ -96,6 +98,17 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         }
 
         return view;
+    }
+
+    @Override
+    protected void setTypingVisibility(View avatarLayoutView, int status) {
+        // display the typing icon when required
+        ImageView typingImage = (ImageView) avatarLayoutView.findViewById(org.matrix.androidsdk.R.id.avatar_typing_img);
+        typingImage.setVisibility(status);
+    }
+
+    @Override
+    protected void refreshPresenceRing(ImageView presenceView, String userId) {
     }
 
     @Override
