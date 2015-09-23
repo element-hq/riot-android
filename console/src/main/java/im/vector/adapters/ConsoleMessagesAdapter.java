@@ -62,19 +62,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     private Handler mUiHandler;
 
-    public static interface MessageLongClickListener {
-        public void onMessageLongClick(int position, Message message);
-    }
-
-    public static interface AvatarClickListener {
-        public Boolean onAvatarClick(String roomId, String userId);
-        public Boolean onAvatarLongClick(String roomId, String userId);
-        public Boolean onDisplayNameClick(String userId, String displayName);
-    }
-
-    private MessageLongClickListener mLongClickListener = null;
-    private AvatarClickListener mAvatarClickListener = null;
-
     public ConsoleMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text,
@@ -100,51 +87,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         return AdapterUtils.tsToString(mContext, event.getOriginServerTs());
     }
 
-    public void setMessageLongClickListener(MessageLongClickListener listener) {
-        mLongClickListener = listener;
-    }
-
-    public void setAvatarClickListener(AvatarClickListener listener) {
-        mAvatarClickListener = listener;
-    }
-
-    @Override
-    public void onAvatarClick(String roomId, String userId){
-        if (null != mAvatarClickListener) {
-            if (mAvatarClickListener.onAvatarClick(roomId, userId)) {
-                return;
-            }
-        }
-
-        Intent startRoomInfoIntent = new Intent(mContext, MemberDetailsActivity.class);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, roomId);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-        mContext.startActivity(startRoomInfoIntent);
-    }
-
-    @Override
-    public Boolean onAvatarLongClick(String roomId, String userId) {
-        if (null != mAvatarClickListener) {
-            if (mAvatarClickListener.onAvatarLongClick(roomId, userId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onSenderNameClick(String userId, String displayName) {
-        if (null != mAvatarClickListener) {
-            if (mAvatarClickListener.onDisplayNameClick(userId, displayName)) {
-                // do something here ?
-            }
-        }
-
-        // default behaviour
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
@@ -154,163 +96,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         }
 
         return view;
-    }
-
-    /**
-     * @return the image and video messages list
-     */
-    private ArrayList<SlidableMediaInfo> listSlidableMessages() {
-        ArrayList<SlidableMediaInfo> res = new ArrayList<SlidableMediaInfo>();
-
-        for(int position = 0; position < getCount(); position++) {
-            MessageRow row = this.getItem(position);
-            Message message = JsonUtils.toMessage(row.getEvent().content);
-
-            if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
-                ImageMessage imageMessage = (ImageMessage)message;
-
-                SlidableMediaInfo info = new SlidableMediaInfo();
-                info.mMessageType = Message.MSGTYPE_IMAGE;
-                info.mMediaUrl = imageMessage.url;
-                info.mRotationAngle = imageMessage.getRotation();
-                info.mOrientation = imageMessage.getOrientation();
-                info.mMimeType = imageMessage.getMimeType();
-                info.midentifier = row.getEvent().eventId;
-                res.add(info);
-            } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
-                SlidableMediaInfo info = new SlidableMediaInfo();
-                VideoMessage videoMessage = (VideoMessage)message;
-
-                info.mMessageType = Message.MSGTYPE_VIDEO;
-                info.mMediaUrl = videoMessage.url;
-                info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
-                info.mMimeType = videoMessage.getVideoMimeType();
-                res.add(info);
-            }
-        }
-
-        return res;
-    }
-
-    /**
-     * Returns the mediageMessage position in listMediaMessages.
-     * @param mediaMessagesList the media messages list
-     * @param mediaMessage the imageMessage
-     * @return the imageMessage position. -1 if not found.
-     */
-    private int getMediaMessagePosition(ArrayList<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
-        String url = null;
-
-        if (mediaMessage instanceof ImageMessage) {
-            url = ((ImageMessage)mediaMessage).url;
-        } else if (mediaMessage instanceof VideoMessage) {
-            url = ((VideoMessage)mediaMessage).url;
-        }
-
-        // sanity check
-        if (null == url) {
-            return -1;
-        }
-
-        for(int index = 0; index < mediaMessagesList.size(); index++) {
-            if (mediaMessagesList.get(index).mMediaUrl.equals(url)) {
-                return index;
-            }
-        }
-
-        return -1;
-    }
-
-    @Override
-    public void onImageClick(int position, ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
-        if (null != imageMessage.url) {
-            ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
-            int listPosition = getMediaMessagePosition(mediaMessagesList, imageMessage);
-
-            if (listPosition >= 0) {
-                Intent viewImageIntent = new Intent(mContext, VectorMediasViewerActivity.class);
-
-                viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, maxImageWidth);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, maxImageHeight);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
-
-                mContext.startActivity(viewImageIntent);
-            }
-        }
-    }
-
-    @Override
-    public boolean onImageLongClick(int position, ImageMessage imageMessage, int maxImageWidth, int maxImageHeight, int rotationAngle){
-        if (null != mLongClickListener) {
-            mLongClickListener.onMessageLongClick(position, imageMessage);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onFileDownloaded(int position, FileMessage fileMessage) {
-        // save into the downloads
-        File mediaFile = mMediasCache.mediaCacheFile(fileMessage.url, fileMessage.getMimeType());
-
-        if (null != mediaFile) {
-            CommonActivityUtils.saveMediaIntoDownloads(mContext, mediaFile, fileMessage.body, fileMessage.getMimeType());
-        }
-    }
-
-    @Override
-         public void onFileClick(int position, FileMessage fileMessage) {
-        if (null != fileMessage.url) {
-            File mediaFile =  mMediasCache.mediaCacheFile(fileMessage.url, fileMessage.getMimeType());
-
-            // is the file already saved
-            if (null != mediaFile) {
-                String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(mContext, mediaFile, fileMessage.body, fileMessage.getMimeType());
-                CommonActivityUtils.openMedia(VectorApp.getCurrentActivity(), savedMediaPath, fileMessage.getMimeType());
-            }
-        }
-    }
-
-    @Override
-    public boolean onFileLongClick(int position, FileMessage fileMessage) {
-        if (null != mLongClickListener) {
-            mLongClickListener.onMessageLongClick(position, fileMessage);
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onVideoClick(int position, VideoMessage videoMessage) {
-        if (null != videoMessage.url) {
-            ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
-            int listPosition = getMediaMessagePosition(mediaMessagesList, videoMessage);
-
-            if (listPosition >= 0) {
-                Intent viewImageIntent = new Intent(mContext, VectorMediasViewerActivity.class);
-
-                viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, getMaxThumbnailWith());
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, getMaxThumbnailHeight());
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
-
-                mContext.startActivity(viewImageIntent);
-            }
-        }
-    }
-
-    public boolean onVideoLongClick(int position, VideoMessage videoMessage) {
-        if (null != mLongClickListener) {
-            mLongClickListener.onMessageLongClick(position, videoMessage);
-            return true;
-        }
-
-        return false;
     }
 
     @Override
@@ -433,7 +218,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
         return isMergedView;
     }
-
 
     public int presenceOnlineColor() {
         return mContext.getResources().getColor(R.color.presence_online);

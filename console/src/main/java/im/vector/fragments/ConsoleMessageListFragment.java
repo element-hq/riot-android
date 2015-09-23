@@ -44,21 +44,25 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.MemberDetailsActivity;
 import im.vector.activity.RoomActivity;
+import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.ConsoleMessagesAdapter;
 import im.vector.db.ConsoleContentProvider;
+import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsoleMessageListFragment extends MatrixMessageListFragment implements ConsoleMessagesAdapter.MessageLongClickListener, ConsoleMessagesAdapter.AvatarClickListener {
+public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
     public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         ConsoleMessageListFragment f = new ConsoleMessageListFragment();
@@ -82,13 +86,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        // use the defaults message layouts
-        // can set any adapters
-        ConsoleMessagesAdapter adapter = new ConsoleMessagesAdapter(mSession, getActivity(), getMXMediasCache());
-        adapter.setMessageLongClickListener(this);
-        adapter.setAvatarClickListener(this);
-
-        return adapter;
+        return new ConsoleMessagesAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
     /**
@@ -125,14 +123,14 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                    if (null != getActivity()) {
-                final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
+                if (null != getActivity()) {
+                    final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
 
-                if (null != progressView) {
-                    progressView.setVisibility(View.VISIBLE);
+                    if (null != progressView) {
+                        progressView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
-                }
         });
     }
     }
@@ -166,12 +164,11 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
         CommonActivityUtils.logout(ConsoleMessageListFragment.this.getActivity());
     }
 
-    /**
-     * User actions when the user click on message row.
-     * This example displays a menu to perform some actions on the message.
-     */
-    @Override
-    public void onItemClick(int position) {
+
+    public void onRowClick(int position) {
+    }
+
+    public Boolean onRowLongClick(int position) {
         final MessageRow messageRow = mAdapter.getItem(position);
         final List<Integer> textIds = new ArrayList<>();
         final List<Integer> iconIds = new ArrayList<Integer>();
@@ -377,13 +374,197 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
                         displayName = state.getMemberName(displayName);
                     }
 
-                    onDisplayNameClick(messageRow.getEvent().userId, displayName);
+                    onSenderNameClick(messageRow.getEvent().userId, displayName);
                 }
             }
         });
 
         fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
+
+        return true;
     }
+
+    /**
+     * @return the image and video messages list
+     */
+    private ArrayList<SlidableMediaInfo> listSlidableMessages() {
+        ArrayList<SlidableMediaInfo> res = new ArrayList<SlidableMediaInfo>();
+
+        for(int position = 0; position < mAdapter.getCount(); position++) {
+            MessageRow row = mAdapter.getItem(position);
+            Message message = JsonUtils.toMessage(row.getEvent().content);
+
+            if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
+                ImageMessage imageMessage = (ImageMessage)message;
+
+                SlidableMediaInfo info = new SlidableMediaInfo();
+                info.mMessageType = Message.MSGTYPE_IMAGE;
+                info.mMediaUrl = imageMessage.url;
+                info.mRotationAngle = imageMessage.getRotation();
+                info.mOrientation = imageMessage.getOrientation();
+                info.mMimeType = imageMessage.getMimeType();
+                info.midentifier = row.getEvent().eventId;
+                res.add(info);
+            } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
+                SlidableMediaInfo info = new SlidableMediaInfo();
+                VideoMessage videoMessage = (VideoMessage)message;
+
+                info.mMessageType = Message.MSGTYPE_VIDEO;
+                info.mMediaUrl = videoMessage.url;
+                info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
+                info.mMimeType = videoMessage.getVideoMimeType();
+                res.add(info);
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Returns the mediageMessage position in listMediaMessages.
+     * @param mediaMessagesList the media messages list
+     * @param mediaMessage the imageMessage
+     * @return the imageMessage position. -1 if not found.
+     */
+    private int getMediaMessagePosition(ArrayList<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
+        String url = null;
+
+        if (mediaMessage instanceof ImageMessage) {
+            url = ((ImageMessage)mediaMessage).url;
+        } else if (mediaMessage instanceof VideoMessage) {
+            url = ((VideoMessage)mediaMessage).url;
+        }
+
+        // sanity check
+        if (null == url) {
+            return -1;
+        }
+
+        for(int index = 0; index < mediaMessagesList.size(); index++) {
+            if (mediaMessagesList.get(index).mMediaUrl.equals(url)) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Called when a click is performed on the message content
+     * @param position the cell position
+     */
+    public void onContentClick(int position) {
+        MessageRow row = mAdapter.getItem(position);
+        Event event = row.getEvent();
+        Message message = JsonUtils.toMessage(event.content);
+
+        // image message -> display it within the medias swipper
+        if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
+            ImageMessage imageMessage = JsonUtils.toImageMessage(event.content);
+
+            if (null != imageMessage.url) {
+                ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
+                int listPosition = getMediaMessagePosition(mediaMessagesList, imageMessage);
+
+                if (listPosition >= 0) {
+                    Intent viewImageIntent = new Intent(getActivity(), VectorMediasViewerActivity.class);
+
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWith());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
+
+                    getActivity().startActivity(viewImageIntent);
+                }
+            }
+        } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
+            FileMessage fileMessage = JsonUtils.toFileMessage(event.content);
+
+            if (null != fileMessage.url) {
+                File mediaFile =  mSession.getMediasCache().mediaCacheFile(fileMessage.url, fileMessage.getMimeType());
+
+                // is the file already saved
+                if (null != mediaFile) {
+                    String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), mediaFile, fileMessage.body, fileMessage.getMimeType());
+                    CommonActivityUtils.openMedia(getActivity(), savedMediaPath, fileMessage.getMimeType());
+                } else {
+                    mSession.getMediasCache().downloadMedia(getActivity(), fileMessage.url, fileMessage.getMimeType());
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
+            VideoMessage videoMessage = JsonUtils.toVideoMessage(event.content);
+
+            if (null != videoMessage.url) {
+                ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
+                int listPosition = getMediaMessagePosition(mediaMessagesList, videoMessage);
+
+                if (listPosition >= 0) {
+                    Intent viewImageIntent = new Intent(getActivity(), VectorMediasViewerActivity.class);
+
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, getMaxThumbnailWith());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, getMaxThumbnailHeight());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
+
+                    getActivity().startActivity(viewImageIntent);
+                }
+            }
+        } else {
+            onRowClick(position);
+        }
+    }
+
+    /**
+     * Called when a long click is performed on the message content
+     * @param position the cell position
+     * @return true if managed
+     */
+    public Boolean onContentLongClick(int position) {
+        return onRowLongClick(position);
+    }
+
+    /**
+     * Define the action to perform when the user tap on an avatar
+     * @param userId the user ID
+     */
+    public void onAvatarClick(String userId) {
+        Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
+        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        getActivity().startActivity(startRoomInfoIntent);
+    }
+
+    /**
+     * Define the action to perform when the user performs a long tap on an avatar
+     * @param userId the user ID
+     * @return true if the long clik event is managed
+     */
+    public Boolean onAvatarLongClick(String userId) {
+        return false;
+    }
+
+    /**
+     * Define the action to perform when the user taps on the message sender
+     * @param userId
+     * @param displayName
+     */
+    public void onSenderNameClick(String userId, String displayName) {
+        if (getActivity() instanceof RoomActivity) {
+            ((RoomActivity)getActivity()).insertInTextEditor(displayName);
+        }
+    }
+
+    /**
+     * A media download is done
+     * @param position
+     */
+    public void onMediaDownloaded(int position) {
+    }
+
 
     private void save(final Message message, final String mediaUrl, final String mediaMimeType) {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
@@ -457,30 +638,5 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
                     }
                 });
         builderSingle.show();
-    }
-
-    @Override
-    public void onMessageLongClick(int position, Message message) {
-        onItemClick(position);
-    }
-
-    @Override
-    public Boolean onAvatarClick(String roomId, String userId) {
-        return false;
-    }
-
-    @Override
-    public Boolean onAvatarLongClick(String roomId, String userId) {
-        return false;
-    }
-
-    @Override
-    public Boolean onDisplayNameClick(String userId, String displayName) {
-        if (getActivity() instanceof RoomActivity) {
-            ((RoomActivity)getActivity()).insertInTextEditor(displayName);
-            return true;
-        }
-
-        return false;
     }
 }
