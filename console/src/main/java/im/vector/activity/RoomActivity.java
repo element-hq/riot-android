@@ -119,6 +119,7 @@ public class RoomActivity extends MXCActionBarActivity {
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
     private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
+    private static final String SEARCHED_PATTERN = "SEARCHED_PATTERN";
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
 
@@ -156,6 +157,8 @@ public class RoomActivity extends MXCActionBarActivity {
     private ImageButton mCameraButton;
     private EditText mEditText;
     private LinearLayout mMediaButtonsLayout;
+    private EditText mSearchEditText;
+    private LinearLayout mSearchLayout;
 
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
@@ -321,7 +324,7 @@ public class RoomActivity extends MXCActionBarActivity {
                     options.outHeight = -1;
 
                     // get the full size bitmap
-                    Bitmap fullSizeBitmap;
+                    Bitmap fullSizeBitmap = null;
 
                     try {
                         fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
@@ -555,7 +558,7 @@ public class RoomActivity extends MXCActionBarActivity {
             }
         });
 
-        mCameraButton = (ImageButton) findViewById(R.id.button_more_attachments);
+        mCameraButton = (ImageButton) findViewById(R.id.button_camera);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -626,6 +629,23 @@ public class RoomActivity extends MXCActionBarActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
+
+        mSearchLayout = (LinearLayout) findViewById(R.id.room_search_layout);
+        mSearchLayout.setVisibility(View.GONE);
+        mSearchEditText = (EditText) findViewById(R.id.room_search_edit_text);
+
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(android.text.Editable s) {
+                mConsoleMessageListFragment.searchPattern(mSearchEditText.getText().toString());
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
 
         mSession = getSession(intent);
 
@@ -701,6 +721,10 @@ public class RoomActivity extends MXCActionBarActivity {
         }
 
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mConsoleMessageListFragment.mMessageListView.getFirstVisiblePosition());
+
+        if (!TextUtils.isEmpty(mSearchEditText.getText())) {
+            savedInstanceState.putString(SEARCHED_PATTERN, mSearchEditText.getText().toString());
+        }
     }
 
     @Override
@@ -711,6 +735,11 @@ public class RoomActivity extends MXCActionBarActivity {
             // the scroll will be done in resume.
             // the listView will be refreshed so the offset might be lost.
             mScrollToIndex = savedInstanceState.getInt(FIRST_VISIBLE_ROW);
+        }
+
+        if (savedInstanceState.containsKey(SEARCHED_PATTERN)) {
+            mSearchLayout.setVisibility(View.VISIBLE);
+            mSearchEditText.setText(savedInstanceState.getString(SEARCHED_PATTERN));
         }
     }
 
@@ -849,7 +878,7 @@ public class RoomActivity extends MXCActionBarActivity {
      * Refresh the calls buttons
      */
     private void updateMenuEntries() {
-        Boolean visible = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+        /*Boolean visible = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
 
         if (null != mVoiceMenuItem) {
             mVoiceMenuItem.setVisible(visible);
@@ -882,20 +911,20 @@ public class RoomActivity extends MXCActionBarActivity {
 
         if (null != mDisableNotifItem) {
             mDisableNotifItem.setVisible(hasActiveRule && !mRuleInProgress && isPushDownloaded);
-        }
+        }*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.room, menu);
+        getMenuInflater().inflate(R.menu.vector_room, menu);
 
-        mVoiceMenuItem = menu.findItem(R.id.ic_action_voice_call);
+        /*mVoiceMenuItem = menu.findItem(R.id.ic_action_voice_call);
         mVideoMenuItem = menu.findItem(R.id.ic_action_video_call);
         mEnableNotifItem =  menu.findItem(R.id.ic_action_enable_notification);
         mDisableNotifItem =  menu.findItem(R.id.ic_action_disable_notification);
 
-        updateMenuEntries();
+        updateMenuEntries();*/
 
         return true;
     }
@@ -904,8 +933,26 @@ public class RoomActivity extends MXCActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.ic_action_members) {
+            // pop to the home activity
+            Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
+            RoomActivity.this.startActivity(intent);
+        } else if (id == R.id.ic_action_search_in_room) {
+
+            if (mSearchLayout.getVisibility() == View.VISIBLE) {
+                mSearchLayout.setVisibility(View.GONE);
+                mSearchEditText.setText("");
+                mConsoleMessageListFragment.searchPattern(null);
+
+            } else {
+                mSearchLayout.setVisibility(View.VISIBLE);
+            }
+        }
         // mBingRulesManager.toggleRule(rule, mOnBingRuleUpdateListener);
-        if (!mRuleInProgress && ((id == R.id.ic_action_enable_notification) || (id == R.id.ic_action_disable_notification))) {
+        else if (!mRuleInProgress && ((id == R.id.ic_action_enable_notification) || (id == R.id.ic_action_disable_notification))) {
             final BingRulesManager bingRulesManager = mSession.getDataHandler().getBingRulesManager();
             final Boolean shouldNotify = (id == R.id.ic_action_enable_notification);
 

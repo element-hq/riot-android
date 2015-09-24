@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity" >
+
+    <item android:id="@+id/ic_action_search_in_room"
+        android:title="@string/room_menu_search"
+        android:icon="@drawable/ic_material_search"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/ic_action_members"
+        android:title="@string/room_menu_participants"
+        android:icon="@drawable/ic_material_group_small"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/ic_action_favorite"
+        android:title="@string/room_menu_favourite"
+        android:icon="@drawable/ic_material_favorite"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/ic_action_room_settings"
+        android:title="@string/room_menu_settings"
+        android:icon="@drawable/ic_material_settings_small"
+        app:showAsAction="ifRoom" />
+</menu>

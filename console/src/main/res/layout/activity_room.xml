@@ -11,6 +11,22 @@
         android:background="@color/vector_background"
         tools:context="org.matrix.vector.activity.RoomActivity">
 
+        <LinearLayout
+            android:id="@+id/room_search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/room_search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+        </LinearLayout>
+
         <ProgressBar
             android:id="@+id/loading_room_content_progress"
             android:layout_height="40dp"
@@ -82,6 +98,7 @@
 
 
         <LinearLayout
+            android:layout_below="@id/room_search_layout"
             android:layout_above="@id/bottom_separator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,7 +106,6 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/anchor_fragment_messages"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
             android:orientation="vertical"
             android:accessibilityLiveRegion="polite"/>
 
@@ -100,8 +116,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:visibility="gone"
-            android:background="@color/chat_encoding_background"
-             />
+            android:background="@color/chat_encoding_background" />
 
         <ProgressBar
             android:id="@+id/medias_processing_progress"
