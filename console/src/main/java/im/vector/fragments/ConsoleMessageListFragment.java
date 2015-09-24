@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -36,13 +37,16 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -81,7 +85,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
     @Override
     public MXMediasCache getMXMediasCache() {
-       return Matrix.getInstance(getActivity()).getMediasCache();
+        return Matrix.getInstance(getActivity()).getMediasCache();
     }
 
     @Override
@@ -120,19 +124,19 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     @Override
     public void displayLoadingProgress() {
         if (null != getActivity()) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (null != getActivity()) {
-                    final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != getActivity()) {
+                        final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
 
-                    if (null != progressView) {
-                        progressView.setVisibility(View.VISIBLE);
+                        if (null != progressView) {
+                            progressView.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
-            }
-        });
-    }
+            });
+        }
     }
 
     /**
@@ -141,19 +145,19 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     @Override
     public void dismissLoadingProgress() {
         if (null != getActivity()) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     if (null != getActivity()) {
-                final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
+                        final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
 
-                if (null != progressView) {
-                    progressView.setVisibility(View.GONE);
+                        if (null != progressView) {
+                            progressView.setVisibility(View.GONE);
+                        }
+                    }
                 }
-            }
-                }
-        });
-    }
+            });
+        }
     }
 
     /**
@@ -166,6 +170,54 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
 
     public void onRowClick(int position) {
+        final String fEventId = mAdapter.getItem(position).getEvent().eventId;
+
+        mRoom.requestSearchHistory(null, new SimpleApiCallback<ArrayList<Room.SnapshotedEvent>>(getActivity()) {
+            @Override
+            public void onSuccess(ArrayList<Room.SnapshotedEvent> snapshotedEvents) {
+                final ArrayList<Room.SnapshotedEvent> fsnapshotedEvents = snapshotedEvents;
+
+                ConsoleMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<MessageRow> messageRows = new ArrayList<MessageRow>(fsnapshotedEvents.size());
+                        int newPos = 0;
+                        int index = 0;
+
+                        for (Room.SnapshotedEvent snapshotedEvent : fsnapshotedEvents) {
+                            if (TextUtils.equals(snapshotedEvent.mEvent.eventId, fEventId)) {
+                                newPos = index;
+                            }
+                            messageRows.add(new MessageRow(snapshotedEvent.mEvent, snapshotedEvent.mState));
+                            index++;
+                        }
+
+                        mPattern = null;
+                        mAdapter.setSearchPattern(null);
+
+                        mAdapter.clear();
+                        mAdapter.addAll(messageRows);
+
+                        mMessageListView.setSelection(newPos);
+                        mRoom.flushSearchBackState();
+                    }
+                });
+            }
+
+            // the request will be auto restarted when a valid network will be found
+            @Override
+            public void onNetworkError(Exception e) {
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+            }
+        });
+
     }
 
     public Boolean onRowLongClick(int position) {
@@ -179,8 +231,8 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
         Message message = JsonUtils.toMessage(messageRow.getEvent().content);
 
         if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(messageRow.getEvent().type) ||
-            Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(messageRow.getEvent().type) ||
-            Event.EVENT_TYPE_STATE_ROOM_NAME.equals(messageRow.getEvent().type) ||
+                Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(messageRow.getEvent().type) ||
+                Event.EVENT_TYPE_STATE_ROOM_NAME.equals(messageRow.getEvent().type) ||
                 Message.MSGTYPE_EMOTE.equals(message.msgtype)
                 ) {
 
