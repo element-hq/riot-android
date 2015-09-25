@@ -96,7 +96,7 @@ import java.util.TimerTask;
 /**
  * Displays a single room with messages.
  */
-public class RoomActivity extends MXCActionBarActivity {
+public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessageListFragment.SearchEventsListener {
 
     public static final String EXTRA_ROOM_ID = "org.matrix.console.RoomActivity.EXTRA_ROOM_ID";
 
@@ -666,7 +666,7 @@ public class RoomActivity extends MXCActionBarActivity {
 
         if (mConsoleMessageListFragment == null) {
             // this fragment displays messages and handles all message logic
-            mConsoleMessageListFragment = ConsoleMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mConsoleMessageListFragment = ConsoleMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment, this);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mConsoleMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         }
 
@@ -1795,5 +1795,13 @@ public class RoomActivity extends MXCActionBarActivity {
             mRoom.sendTypingNotification(false, -1, new SimpleApiCallback<Void>(RoomActivity.this) {
             });
         }
+    }
+
+    /**
+     * Call when the search is cancelled.
+     */
+    public void onSearchCancel() {
+        mSearchLayout.setVisibility(View.GONE);
+        mSearchEditText.setText("");
     }
 }

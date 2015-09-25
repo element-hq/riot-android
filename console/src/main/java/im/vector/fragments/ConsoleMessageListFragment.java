@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -42,6 +43,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
@@ -68,8 +70,16 @@ import java.util.List;
 
 public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
-    public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
+    public static interface SearchEventsListener {
+        /**
+         * Call when the search is cancelled.
+         */
+        public void onSearchCancel();
+    }
+
+    public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId, SearchEventsListener searchEventsListener) {
         ConsoleMessageListFragment f = new ConsoleMessageListFragment();
+        f.mSearchEventsListener = searchEventsListener;
         Bundle args = new Bundle();
         args.putString(ARG_ROOM_ID, roomId);
         args.putInt(ARG_LAYOUT_ID, layoutResId);
@@ -77,6 +87,8 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
         f.setArguments(args);
         return f;
     }
+
+    protected SearchEventsListener mSearchEventsListener = null;
 
     @Override
     public MXSession getSession(String matrixId) {
@@ -180,7 +192,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                 ConsoleMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayList<MessageRow> messageRows = new ArrayList<MessageRow>(fsnapshotedEvents.size());
+                        final ArrayList<MessageRow> messageRows = new ArrayList<MessageRow>(fsnapshotedEvents.size());
                         int newPos = 0;
                         int index = 0;
 
@@ -193,13 +205,23 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                         }
 
                         mPattern = null;
-                        mAdapter.setSearchPattern(null);
+                        mAdapter.cancelSearchWith(messageRows);
 
-                        mAdapter.clear();
-                        mAdapter.addAll(messageRows);
-
-                        mMessageListView.setSelection(newPos);
+                        if (null != mSearchEventsListener) {
+                            try {
+                                mSearchEventsListener.onSearchCancel();
+                            } catch (Exception e) {
+                            }
+                        }
                         mRoom.flushSearchBackState();
+
+                        final int fPos = newPos;
+                        mMessageListView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMessageListView.setSelection(fPos);
+                            }
+                        });
                     }
                 });
             }
