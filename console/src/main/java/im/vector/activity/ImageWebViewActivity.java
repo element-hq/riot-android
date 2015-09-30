@@ -39,6 +39,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import org.matrix.androidsdk.HomeserverConnectionConfig;
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.util.ImageUtils;
@@ -50,14 +52,15 @@ import im.vector.db.ConsoleContentProvider;
 public class ImageWebViewActivity extends FragmentActivity {
     private static final String LOG_TAG = "ImageWebViewActivity";
 
-    private static final String TAG_FRAGMENT_IMAGE_OPTIONS = "ImageWebViewActivity.TAG_FRAGMENT_IMAGE_OPTIONS";
+    private static final String TAG_FRAGMENT_IMAGE_OPTIONS = "org.matrix.console.activity.ImageWebViewActivity.TAG_FRAGMENT_IMAGE_OPTIONS";
 
-    public static final String KEY_HIGHRES_IMAGE_URI = "ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI";
-    public static final String KEY_THUMBNAIL_WIDTH = "ImageWebViewActivity.KEY_THUMBNAIL_WIDTH";
-    public static final String KEY_THUMBNAIL_HEIGHT = "ImageWebViewActivity.KEY_THUMBNAIL_HEIGHT";
-    public static final String KEY_HIGHRES_MIME_TYPE = "ImageWebViewActivity.KEY_HIGHRES_MIME_TYPE";
-    public static final String KEY_IMAGE_ROTATION = "ImageWebViewActivity.KEY_IMAGE_ROTATION";
-    public static final String KEY_IMAGE_ORIENTATION = "ImageWebViewActivity.KEY_IMAGE_ORIENTATION";
+    public static final String KEY_HIGHRES_IMAGE_URI = "org.matrix.console.activity.ImageWebViewActivity.KEY_HIGHRES_IMAGE_URI";
+    public static final String KEY_THUMBNAIL_WIDTH = "org.matrix.console.activity.ImageWebViewActivity.KEY_THUMBNAIL_WIDTH";
+    public static final String KEY_THUMBNAIL_HEIGHT = "org.matrix.console.activity.ImageWebViewActivity.KEY_THUMBNAIL_HEIGHT";
+    public static final String KEY_HIGHRES_MIME_TYPE = "org.matrix.console.activity.ImageWebViewActivity.KEY_HIGHRES_MIME_TYPE";
+    public static final String KEY_IMAGE_ROTATION = "org.matrix.console.activity.ImageWebViewActivity.KEY_IMAGE_ROTATION";
+    public static final String KEY_IMAGE_ORIENTATION = "org.matrix.console.activity.ImageWebViewActivity.KEY_IMAGE_ORIENTATION";
+    public static final String EXTRA_MATRIX_ID = "org.matrix.console.activity.ImageWebViewActivity.EXTRA_MATRIX_ID";
 
     private WebView mWebView;
 
@@ -123,8 +126,22 @@ public class ImageWebViewActivity extends FragmentActivity {
         return css;
     }
 
+    /**
+     * Return the used MXSession from an intent.
+     * @param intent
+     * @return the MXsession if it exists.
+     */
+    private MXSession getSession(Intent intent) {
+        String matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
+        return Matrix.getInstance(getApplicationContext()).getSession(matrixId);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (CommonActivityUtils.shouldRestartApp()) {
+            CommonActivityUtils.restartApp(this);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_web_view);
 
@@ -147,6 +164,9 @@ public class ImageWebViewActivity extends FragmentActivity {
             finish();
             return;
         }
+
+        MXSession session = getSession(intent);
+        HomeserverConnectionConfig hsConfig = session != null ? session.getHomeserverConfig() : null;
 
         final int thumbnailWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         final int thumbnailHeight = intent.getIntExtra(KEY_THUMBNAIL_HEIGHT, 0);
@@ -187,15 +207,14 @@ public class ImageWebViewActivity extends FragmentActivity {
             final String loadingUri = mHighResUri;
             mThumbnailUri = mHighResUri = "file://" + mediaFile.getPath();
 
-            final String downloadId = mediasCache.loadBitmap(this, loadingUri, mRotationAngle, mOrientation, mHighResMimeType);
+            final String downloadId = mediasCache.loadBitmap(this, hsConfig, loadingUri, mRotationAngle, mOrientation, mHighResMimeType);
 
             if (null != downloadId) {
                 pieFractionView.setFraction(mediasCache.progressValueForDownloadId(downloadId));
 
                 mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
-
                     @Override
-                    public void onDownloadStart(String downloadId) {
+                    public void onDownloadStart(String aDownloadId) {
                     }
 
                     @Override
@@ -298,7 +317,7 @@ public class ImageWebViewActivity extends FragmentActivity {
         });
 
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -313,8 +332,8 @@ public class ImageWebViewActivity extends FragmentActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    } 
-    
+    }
+
     private void loadImage(Uri imageUri, String viewportContent, String css) {
         String html =
                 "<html><head><meta name='viewport' content='" +
@@ -360,12 +379,12 @@ public class ImageWebViewActivity extends FragmentActivity {
             final String rot180 = "-webkit-transform: rotate(180deg);";
 
             switch (rot) {
-            case 90:
-                return "-webkit-transform-origin: 50% 50%; -webkit-transform: rotate(90deg) scale(" + scale + " , " + scale + ");";
-            case 180:
-                return rot180;
-            case 270:
-                return "-webkit-transform-origin: 50% 50%; -webkit-transform: rotate(270deg) scale(" + scale + " , " + scale + ");";
+                case 90:
+                    return "-webkit-transform-origin: 50% 50%; -webkit-transform: rotate(90deg) scale(" + scale + " , " + scale + ");";
+                case 180:
+                    return rot180;
+                case 270:
+                    return "-webkit-transform-origin: 50% 50%; -webkit-transform: rotate(270deg) scale(" + scale + " , " + scale + ");";
             }
         }
         return "";

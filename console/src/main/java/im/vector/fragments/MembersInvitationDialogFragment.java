@@ -239,7 +239,7 @@ public class MembersInvitationDialogFragment extends DialogFragment {
             }
         }
 
-        mAdapter = new MembersInvitationAdapter(getActivity(), R.layout.adapter_item_members_invitation, getMXMediasCache());
+        mAdapter = new MembersInvitationAdapter(getActivity(), mSession.getHomeserverConfig(), R.layout.adapter_item_members_invitation, getMXMediasCache());
 
         Collections.sort(members_OneToOne, alphaComparator);
         Collections.sort(members_MaxTenMembers, alphaComparator);

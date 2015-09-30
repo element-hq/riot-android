@@ -20,25 +20,35 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
+import android.text.Html;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
@@ -57,6 +67,8 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
+
+import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
@@ -64,12 +76,17 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.adapters.ConsoleRoomSummaryAdapter;
 import im.vector.adapters.DrawerAdapter;
+import im.vector.db.ConsoleContentProvider;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.fragments.ContactsListDialogFragment;
 import im.vector.fragments.RoomCreationDialogFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.RageShake;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,6 +131,10 @@ public class HomeActivity extends MXCActionBarActivity {
 
     private MenuItem mCallMenuItem = null;
 
+    // about
+    private AlertDialog mMainAboutDialog = null;
+    private String mLicenseString = null;
+
     // sliding menu
     private final Integer[] mSlideMenuTitleIds = new Integer[]{
             //R.string.action_search_contact,
@@ -127,6 +148,7 @@ public class HomeActivity extends MXCActionBarActivity {
             R.string.action_disconnect,
             R.string.action_logout,
             R.string.send_bug_report,
+            R.string.about
     };
 
     // sliding menu
@@ -142,6 +164,7 @@ public class HomeActivity extends MXCActionBarActivity {
             R.drawable.ic_material_clear, // R.string.action_disconnect,
             R.drawable.ic_material_exit_to_app, // R.string.action_logout,
             R.drawable.ic_material_bug_report, // R.string.send_bug_report,
+            R.drawable.ic_menu_matrix_transparent, // R.string.about
     };
 
     private HashMap<MXSession, MXEventListener> mListenersBySession = new HashMap<MXSession, MXEventListener>();
@@ -157,31 +180,41 @@ public class HomeActivity extends MXCActionBarActivity {
     private void refreshPublicRoomsList(final ArrayList<MXSession> sessions, final ArrayList<String> checkedHomeServers, final int index, final ArrayList<List<PublicRoom>> publicRoomsListList) {
         // sanity checks
         if ((null == sessions) || (index >= sessions.size())) {
+            Log.d(LOG_TAG, "notifyDataSetChanged after the public rooms update.");
+
             mAdapter.setPublicRoomsList(publicRoomsListList, checkedHomeServers);
+            mAdapter.notifyDataSetChanged();
             mPublicRoomsListList = publicRoomsListList;
             mHomeServerNames = checkedHomeServers;
             return;
         }
 
         final MXSession session = sessions.get(index);
-        final String homeServer = session.getCredentials().homeServer;
 
-        // the home server has already been checked ?
-        if (checkedHomeServers.indexOf(homeServer) >= 0) {
-            // jump to the next session
-            refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
+
+        // check if the session is still active
+        if (session.isActive()) {
+            final String homeServerUrl = session.getHomeserverConfig().getHomeserverUri().toString();
+
+            // the home server has already been checked ?
+            if (checkedHomeServers.indexOf(homeServerUrl) >= 0) {
+                // jump to the next session
+                refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
+            } else {
+                // use any session to get the public rooms list
+                session.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(this) {
+                    @Override
+                    public void onSuccess(List<PublicRoom> publicRooms) {
+                        checkedHomeServers.add(homeServerUrl);
+                        publicRoomsListList.add(publicRooms);
+
+                        // jump to the next session
+                        refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
+                    }
+                });
+            }
         } else {
-            // use any session to get the public rooms list
-            session.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(this) {
-                @Override
-                public void onSuccess(List<PublicRoom> publicRooms) {
-                    checkedHomeServers.add(homeServer);
-                    publicRoomsListList.add(publicRooms);
-
-                    // jump to the next session
-                    refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
-                }
-            });
+            refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
         }
     }
 
@@ -192,7 +225,8 @@ public class HomeActivity extends MXCActionBarActivity {
         ArrayList<MXSession> matchedSessions = new ArrayList<MXSession>();
 
         for(MXSession session : sessions) {
-            if (session.getCredentials().homeServer.equals(homeServerURL)) {
+            String sessionHsUrl = session.getHomeserverConfig().getHomeserverUri().toString();
+            if (sessionHsUrl.equals(homeServerURL)) {
                 matchedSessions.add(session);
             }
         }
@@ -550,16 +584,6 @@ public class HomeActivity extends MXCActionBarActivity {
             private boolean mInitialSyncComplete = false;
 
             @Override
-            public void onPresencesSyncComplete() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-            @Override
             public void onInitialSyncComplete() {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -581,9 +605,8 @@ public class HomeActivity extends MXCActionBarActivity {
                         mAdapter.highlightRoom("#matrix-dev:matrix.org");
                         mAdapter.highlightRoom("#matrix-fr:matrix.org");
 
-                        mAdapter.setPublicRoomsList(mPublicRoomsListList, mHomeServerNames);
                         mAdapter.sortSummaries();
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.setPublicRoomsList(mPublicRoomsListList, mHomeServerNames);
 
                         expandAllGroups();
 
@@ -621,6 +644,7 @@ public class HomeActivity extends MXCActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(LOG_TAG, "onLiveEventsChunkProcessed");
                         if (!mIsPaused && refreshOnChunkEnd) {
                             mAdapter.sortSummaries();
                             mAdapter.notifyDataSetChanged();
@@ -638,10 +662,10 @@ public class HomeActivity extends MXCActionBarActivity {
                     public void run() {
                         if ((event.roomId != null) && isDisplayableEvent(event)) {
                             List<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(HomeActivity.this));
-                            int section = sessions.indexOf(session);
+                            final int section = sessions.indexOf(session);
                             String matrixId = session.getCredentials().userId;
 
-                            mAdapter.setLatestEvent(section, event, roomState);
+                            mAdapter.setLatestEvent(section, event, roomState, false);
 
                             RoomSummary summary = mAdapter.getSummaryByRoomId(section, event.roomId);
 
@@ -971,6 +995,8 @@ public class HomeActivity extends MXCActionBarActivity {
                     HomeActivity.this.addAccount();
                 } else if (id == R.drawable.ic_material_remove_circle_outline) {
                     HomeActivity.this.removeAccount();
+                } else if (id == R.drawable.ic_menu_matrix_transparent) {
+                    HomeActivity.this.displayAbout();
                 }
             }
         });
@@ -1151,6 +1177,9 @@ public class HomeActivity extends MXCActionBarActivity {
     /**
      * Add an existing account
      */
+    /**
+     * Add an existing account
+     */
     private void addAccount() {
         LayoutInflater factory = LayoutInflater.from(this);
 
@@ -1165,11 +1194,11 @@ public class HomeActivity extends MXCActionBarActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int whichButton) {
-                        String hsUrl = homeServerEditText.getText().toString();
+                        String hsUrlString = homeServerEditText.getText().toString();
                         String username = usernameEditText.getText().toString();
                         String password = passwordEditText.getText().toString();
 
-                        if (!hsUrl.startsWith("http")) {
+                        if (!hsUrlString.startsWith("http")) {
                             Toast.makeText(HomeActivity.this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -1179,10 +1208,13 @@ public class HomeActivity extends MXCActionBarActivity {
                             return;
                         }
 
+                        Uri hsUrl = Uri.parse(hsUrlString);
+
                         LoginRestClient client = null;
+                        final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(hsUrl);
 
                         try {
-                            client = new LoginRestClient(Uri.parse(hsUrl));
+                            client = new LoginRestClient(hsConfig);
                         } catch (Exception e) {
                         }
 
@@ -1191,45 +1223,37 @@ public class HomeActivity extends MXCActionBarActivity {
                             return;
                         }
 
-                        client.loginWithPassword(username, password, new SimpleApiCallback<Credentials>(HomeActivity.this) {
-                            @Override
-                            public void onSuccess(Credentials credentials) {
-                                // check if there is active sessions with the same credentials.
-                                Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
-
-                                Boolean isDuplicated = false;
-
-                                for (MXSession existingSession : sessions) {
-                                    isDuplicated |= (existingSession.getCredentials().userId.equals(credentials.userId));
-                                }
-
-                                if (isDuplicated) {
-                                    Toast.makeText(getApplicationContext(), getString(R.string.login_error_already_logged_in), Toast.LENGTH_LONG).show();
-                                } else {
-                                    MXSession session = Matrix.getInstance(getApplicationContext()).createSession(credentials);
-                                    Matrix.getInstance(getApplicationContext()).addSession(session);
+                        try {
+                            LoginHandler loginHandler = new LoginHandler();
+                            loginHandler.login(HomeActivity.this, hsConfig, username, password, new SimpleApiCallback<HomeserverConnectionConfig>(HomeActivity.this) {
+                                @Override
+                                public void onSuccess(HomeserverConnectionConfig c) {
+                                    // loginHandler creates the session so just need to switch to the splash activity
                                     startActivity(new Intent(HomeActivity.this, SplashActivity.class));
                                     HomeActivity.this.finish();
                                 }
-                            }
 
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.login_error_network_error), Toast.LENGTH_LONG).show();
-                            }
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
+                                    Toast.makeText(getApplicationContext(), getString(R.string.login_error_network_error), Toast.LENGTH_LONG).show();
+                                }
 
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                String msg = getString(R.string.login_error_unable_login) + " : " + e.getMessage();
-                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                            }
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    String msg = getString(R.string.login_error_unable_login) + " : " + e.getMessage();
+                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                                }
 
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                String msg = getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")";
-                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    String msg = getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")";
+                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } catch (Exception e) {
+                            Toast.makeText(HomeActivity.this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }).setNegativeButton(R.string.cancel,
@@ -1288,5 +1312,130 @@ public class HomeActivity extends MXCActionBarActivity {
         });
 
         fragment.show(fm, TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
+    }
+
+    // trick to trap the clink on the Licenses link
+    class MovementCheck extends LinkMovementMethod {
+        @Override
+        public boolean onTouchEvent(TextView widget,
+                                    Spannable buffer, MotionEvent event ) {
+            int action = event.getAction();
+
+            if (action == MotionEvent.ACTION_UP)
+            {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+
+                x -= widget.getTotalPaddingLeft();
+                y -= widget.getTotalPaddingTop();
+
+                x += widget.getScrollX();
+                y += widget.getScrollY();
+
+                Layout layout = widget.getLayout();
+                int line = layout.getLineForVertical(y);
+                int off = layout.getOffsetForHorizontal(line, x);
+
+                URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
+                if (link.length != 0)
+                {
+                    // display the license
+                    displayLicense();
+                    return true;
+                }
+            }
+
+            return super.onTouchEvent(widget, buffer, event);
+        }
+    }
+
+    /**
+     * Display the licenses text
+     */
+    private void displayLicense() {
+        if (null != mMainAboutDialog) {
+            mMainAboutDialog.dismiss();
+            mMainAboutDialog = null;
+        }
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog dialog = new AlertDialog.Builder(HomeActivity.this)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setMessage(mLicenseString)
+                        .setTitle("Third Part licenses")
+                        .create();
+                dialog.show();
+            }
+        });
+    }
+
+    /**
+     * Display third party licenses
+     */
+    private void displayAbout() {
+
+        if (null == mLicenseString) {
+            // build a local license file
+            InputStream inputStream = this.getResources().openRawResource(R.raw.all_licenses);
+            StringBuilder buf = new StringBuilder();
+
+            try {
+                String str;
+                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+                while ((str = in.readLine()) != null) {
+                    buf.append(str);
+                    buf.append("\n");
+                }
+
+                in.close();
+            } catch (Exception e) {
+
+            }
+
+            mLicenseString = buf.toString();
+        }
+
+        // sanity check
+        if (null == mLicenseString) {
+            return;
+        }
+
+        File cachedLicenseFile = new File(getFilesDir(), "Licenses.txt");
+        // convert the file to content:// uri
+        Uri uri = ConsoleContentProvider.absolutePathToUri(this, cachedLicenseFile.getAbsolutePath());
+
+        if (null == uri) {
+            return;
+        }
+
+        String message = "<div class=\"banner\"> <div class=\"l-page no-clear align-center\"> <h2 class=\"s-heading\">"+ getString(R.string.settings_title_config) + "</h2> </div> </div>";
+
+        String versionName = "";
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pInfo.versionName;
+        } catch (Exception e) {
+
+        }
+
+        message += "<strong>matrixConsole version</strong> <br>" + versionName;
+        message += "<p><strong>SDK version</strong> <br>" + versionName;
+        message += "<div class=\"banner\"> <div class=\"l-page no-clear align-center\"> <h2 class=\"s-heading\">Third Party Library Licenses</h2> </div> </div>";
+        message += "<a href=\"" + uri.toString() + "\">Licenses</a>";
+
+        Spanned text = Html.fromHtml(message);
+
+        mMainAboutDialog = new AlertDialog.Builder(this)
+                .setPositiveButton(android.R.string.ok, null)
+                .setMessage(text)
+                .setIcon(R.drawable.ic_menu_small_matrix_transparent)
+                .create();
+        mMainAboutDialog.show();
+
+        // allow link to be clickable
+        ((TextView)mMainAboutDialog.findViewById(android.R.id.message)).setMovementMethod(new MovementCheck());
     }
 }

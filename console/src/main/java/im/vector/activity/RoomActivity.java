@@ -175,7 +175,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
 
     private String mCallId = null;
 
-    private String mLatestTakePictureCameraUri; // has to be String not Uri because of Serializable
+    private static String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
 
     // typing event management
     private Timer mTypingTimer = null;
@@ -676,9 +676,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
 
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
-
-        // The error listener needs the current activity
-        mSession.setFailureCallback(new ErrorListener(this));
 
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
         mMediasCache = Matrix.getInstance(this).getMediasCache();

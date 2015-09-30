@@ -43,15 +43,36 @@ public class LogUtilities {
              };
 
     public static final String[]  LOGCAT_CMD_DEBUG = new String[] {
-                "logcat",
-                "-d",
-                "-v",
-                "threadtime",
-                "Retrofit:S",
-                "ProgressBar:S",
-                "AbsListView:S",
-                "dalvikvm:S",
-                "*:*"
+            "logcat",
+            "-d",
+            "-v",
+            "threadtime",
+            "Retrofit:S",
+            "ProgressBar:S",
+            "AbsListView:S",
+            "dalvikvm:S",
+            "OpenGLRenderer:S",
+            "NativeCrypto:S",
+            "VelocityTracker:S",
+            "MaliEGL:S",
+            "GraphicBuffer:S",
+            "WifiStateMachine:S",
+            "ActivityThread:S",
+            "PowerManagerService:S",
+            "BufferQueue:S",
+            "KeyguardUpdateMonitor:S",
+            "wpa_supplicant:S",
+            "ANRManager:S",
+            "InputReader:S",
+            "PowerUI:S",
+            "BatteryService:S",
+            "qdhwcomposer:S",
+            "ServiceDumpSys:S",
+            "DisplayPowerController:S",
+            "View:S",
+            "ListView:S",
+            "Posix:S",
+            "*:*"
     };
 
     private static final int BUFFER_SIZE = 1024;

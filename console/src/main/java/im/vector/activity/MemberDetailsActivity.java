@@ -452,7 +452,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
         if (mMember.avatarUrl != null) {
             int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-            Matrix.getInstance(this).getMediasCache().loadAvatarThumbnail(mThumbnailImageView, mMember.avatarUrl, size);
+            Matrix.getInstance(this).getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mThumbnailImageView, mMember.avatarUrl, size);
         }
     }
 

@@ -563,7 +563,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                     String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), mediaFile, fileMessage.body, fileMessage.getMimeType());
                     CommonActivityUtils.openMedia(getActivity(), savedMediaPath, fileMessage.getMimeType());
                 } else {
-                    mSession.getMediasCache().downloadMedia(getActivity(), fileMessage.url, fileMessage.getMimeType());
+                    mSession.getMediasCache().downloadMedia(getActivity(), mSession.getHomeserverConfig(), fileMessage.url, fileMessage.getMimeType());
                     mAdapter.notifyDataSetChanged();
                 }
             }

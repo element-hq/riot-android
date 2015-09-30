@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
@@ -50,6 +51,10 @@ public class Matrix {
         return instance;
     }
 
+    public LoginStorage getLoginStorage() {
+        return mLoginStorage;
+    }
+
     /**
      * Static method top the MXSession list
      * @param context the application content
@@ -91,22 +96,22 @@ public class Matrix {
             return sessions.get(0);
         }
 
-        ArrayList<Credentials> credsList = mLoginStorage.getCredentialsList();
+        ArrayList<HomeserverConnectionConfig> hsConfigList = mLoginStorage.getCredentialsList();
 
         // any account ?
-        if ((credsList == null) || (credsList.size() == 0)) {
+        if ((hsConfigList == null) || (hsConfigList.size() == 0)) {
             return null;
         }
 
         ArrayList<String> matrixIds = new ArrayList<String>();
         sessions = new ArrayList<MXSession>();
 
-        for(Credentials creds : credsList) {
+        for(HomeserverConnectionConfig config: hsConfigList) {
             // avoid duplicated accounts.
-            if (matrixIds.indexOf(creds.userId) < 0) {
-                MXSession session = createSession(creds);
+            if (config.getCredentials() != null && matrixIds.indexOf(config.getCredentials().userId) < 0) {
+                MXSession session = createSession(config);
                 sessions.add(session);
-                matrixIds.add(creds.userId);
+                matrixIds.add(config.getCredentials().userId);
             }
         }
 
@@ -150,6 +155,37 @@ public class Matrix {
         }
 
         return getDefaultSession();
+    }
+
+    /**
+     * Add an error listener to each sessions
+     * @param activity the activity.
+     */
+    public static void setSessionErrorListener(Activity activity) {
+        if ((null != instance) && (null != activity)) {
+            Collection<MXSession> sessions = getMXSessions(activity);
+
+            for(MXSession session : sessions) {
+                if (session.isActive()) {
+                    session.setFailureCallback(new ErrorListener(session, activity));
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove the sessions error listener to each
+     */
+    public static void removeSessionErrorListener(Activity activity) {
+        if ((null != instance) && (null != activity)) {
+            Collection<MXSession> sessions = getMXSessions(activity);
+
+            for(MXSession session : sessions) {
+                if (session.isActive()) {
+                    session.setFailureCallback(null);
+                }
+            }
+        }
     }
 
     /**
@@ -208,7 +244,7 @@ public class Matrix {
      */
     public synchronized void clearSession(Context context, MXSession session, Boolean clearCredentials) {
         if (clearCredentials) {
-            mLoginStorage.removeCredentials(session.getCredentials());
+            mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
 
         session.clear(context);
@@ -236,7 +272,7 @@ public class Matrix {
      * @param session The session to store as the default session.
      */
     public synchronized void addSession(MXSession session) {
-        mLoginStorage.addCredentials(session.getCredentials());
+        mLoginStorage.addCredentials(session.getHomeserverConfig());
         synchronized (instance) {
             mMXSessions.add(session);
         }
@@ -244,44 +280,31 @@ public class Matrix {
 
     /**
      * Creates an MXSession from some credentials.
-     * @param credentials The credentials to create a session from.
+     * @param hsConfig The HomeserverConnectionConfig to create a session from.
      * @return The session.
      */
-    public MXSession createSession(Credentials credentials) {
-        return createSession(mAppContext, credentials, true);
+    public MXSession createSession(HomeserverConnectionConfig hsConfig) {
+        return createSession(mAppContext, hsConfig);
     }
 
     /**
      * Creates an MXSession from some credentials.
      * @param context the context.
-     * @param credentials The credentials to create a session from.
-     * @param useHttps True to enforce https URIs on the home server.
+     * @param hsConfig The HomeserverConnectionConfig to create a session from.
      * @return The session.
      */
-    public MXSession createSession(Context context, Credentials credentials, boolean useHttps) {
-        if (!credentials.homeServer.startsWith("http")) {
-            if (useHttps) {
-                credentials.homeServer = "https://" + credentials.homeServer;
-            }
-            else {
-                credentials.homeServer = "http://" + credentials.homeServer;
-            }
-        }
-
-        // remove the trailing /
-        if (credentials.homeServer.endsWith("/")) {
-            credentials.homeServer = credentials.homeServer.substring(0, credentials.homeServer.length()-1);
-        }
-
+    public MXSession createSession(Context context, HomeserverConnectionConfig hsConfig) {
         IMXStore store;
 
-        if (true ) {
-            store = new MXFileStore(credentials, context);
+        Credentials credentials = hsConfig.getCredentials();
+
+        if (true) {
+            store = new MXFileStore(hsConfig, context);
         } else {
-            store = new MXMemoryStore(credentials);
+            store = new MXMemoryStore(hsConfig.getCredentials());
         }
 
-        return new MXSession(new MXDataHandler(store, credentials), credentials, mAppContext);
+        return new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
     }
 
     /**
@@ -301,10 +324,10 @@ public class Matrix {
 
         synchronized (instance) {
             // build a new sessions list
-            ArrayList<Credentials> credsList = mLoginStorage.getCredentialsList();
+            ArrayList<HomeserverConnectionConfig> configs = mLoginStorage.getCredentialsList();
 
-            for(Credentials creds : credsList) {
-                MXSession session = createSession(creds);
+            for(HomeserverConnectionConfig config : configs) {
+                MXSession session = createSession(config);
                 mMXSessions.add(session);
             }
         }

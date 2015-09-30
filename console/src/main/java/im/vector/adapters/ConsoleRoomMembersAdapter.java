@@ -17,6 +17,8 @@
 package im.vector.adapters;
 
 import android.content.Context;
+
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.adapters.RoomMembersAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -30,10 +32,9 @@ import java.util.HashMap;
  */
 public class ConsoleRoomMembersAdapter extends RoomMembersAdapter {
 
-    public ConsoleRoomMembersAdapter(Context context, int layoutResourceId, RoomState roomState, MXMediasCache mediasCache, HashMap<String, String> membershipStrings) {
-        super(context, layoutResourceId, roomState, mediasCache, membershipStrings);
+    public ConsoleRoomMembersAdapter(Context context, HomeserverConnectionConfig hsConfig, int layoutResourceId, RoomState roomState, MXMediasCache mediasCache, HashMap<String, String> membershipStrings) {
+        super(context, hsConfig, layoutResourceId, roomState, mediasCache, membershipStrings);
     }
-
 
     public int lastSeenTextColor() {
         return mContext.getResources().getColor(R.color.member_list_last_seen_text);

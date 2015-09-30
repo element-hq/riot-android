@@ -94,7 +94,7 @@ public class SettingsActivity extends MXCActionBarActivity {
             avatarView.setImageResource(R.drawable.ic_contact_picture_holo_light);
         } else {
             int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-            mMediasCache.loadAvatarThumbnail(avatarView, avatarUrl, size);
+            mMediasCache.loadAvatarThumbnail(session.getHomeserverConfig(), avatarView, avatarUrl, size);
         }
     }
 
@@ -250,7 +250,10 @@ public class SettingsActivity extends MXCActionBarActivity {
                 sessionIndex++;
             }
 
-            config += String.format(getString(R.string.settings_config_home_server), session.getCredentials().homeServer);
+            config += String.format(
+                    getString(R.string.settings_config_home_server),
+                    session.getHomeserverConfig().getHomeserverUri().toString()
+            );
             config += "\n";
 
             config += String.format(getString(R.string.settings_config_user_id), session.getMyUser().userId);

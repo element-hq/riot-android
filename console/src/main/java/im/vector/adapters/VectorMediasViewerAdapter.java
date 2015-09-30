@@ -41,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.view.PieFractionView;
@@ -75,11 +76,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private ArrayList<Integer> mHighResMediaIndex = new ArrayList<Integer>();
     // current playing video
     private VideoView mPlayingVideoView = null;
+    private MXSession mSession;
 
     private int mAutoPlayItemAt = -1;
 
-    public VectorMediasViewerAdapter(Context context, MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
+    public VectorMediasViewerAdapter(Context context, MXSession session,  MXMediasCache mediasCache, List<SlidableMediaInfo> mediaMessagesList, int maxImageWidth, int maxImageHeight) {
         this.mContext = context;
+        this.mSession = session;
         this.mMediasMessagesList = mediaMessagesList;
         this.mMaxImageWidth = maxImageWidth;
         this.mMaxImageHeight = maxImageHeight;
@@ -196,7 +199,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // else download it
-        final String downloadId = mMediasCache.downloadMedia(mContext, loadingUri, mediaInfo.mMimeType);
+        final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -255,7 +258,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
-        final String downloadId = mMediasCache.loadBitmap(mContext, loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType);
+        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeserverConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -494,7 +497,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             }
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext, mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
@@ -590,7 +593,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         });
 
         // init the thumbnail views
-        mMediasCache.loadBitmap(thumbView, thumbnailUrl, 0, 0, null);
+        mMediasCache.loadBitmap(mSession.getHomeserverConfig(), thumbView, thumbnailUrl, 0, 0, null);
 
         playView.setOnClickListener(new View.OnClickListener() {
             @Override

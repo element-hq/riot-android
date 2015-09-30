@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="7dp"
+        android:text="@string/ssl_cert_not_trust"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="7dp"
+        android:text="@string/ssl_cert_new_account_expl"
+        android:id="@+id/ssl_explanation"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:padding="7dp"
+        android:id="@+id/ssl_user_id"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="7dp"
+        android:text="@string/ssl_fingerprint_hash"
+        android:id="@+id/ssl_fingerprint_title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="15dp"
+        android:text="@string/ssl_fingerprint_example"
+        android:id="@+id/ssl_fingerprint"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="7dp"
+        android:text="@string/ssl_only_accept"/>
+</LinearLayout>

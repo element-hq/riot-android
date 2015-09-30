@@ -323,7 +323,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
             int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mMediasCache.loadAvatarThumbnail(thumbView, participant.mAvatarUrl, size);
+            mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbView, participant.mAvatarUrl, size);
         }
 
         PowerLevels powerLevels = null;

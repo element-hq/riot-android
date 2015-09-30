@@ -18,9 +18,14 @@ package im.vector.store;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import java.util.ArrayList;
@@ -30,17 +35,22 @@ import java.util.Arrays;
  * Stores login credentials in SharedPreferences.
  */
 public class LoginStorage {
-    public static final String PREFS_LOGIN = "LoginStorage";
+    private static final String LOG_TAG = "LoginStorage";
+
+    public static final String PREFS_LOGIN = "org.matrix.console.store.LoginStorage";
 
     // one account
-    public static final String PREFS_KEY_USERNAME = "LoginStorage.PREFS_KEY_USERNAME";
-    public static final String PREFS_KEY_HOME_SERVER = "LoginStorage.PREFS_KEY_HOME_SERVER";
-    public static final String PREFS_KEY_ACCESS_TOKEN = "LoginStorage.PREFS_KEY_ACCESS_TOKEN";
+    public static final String PREFS_KEY_USERNAME = "org.matrix.console.store.LoginStorage.PREFS_KEY_USERNAME";
+    public static final String PREFS_KEY_HOME_SERVER = "org.matrix.console.store.LoginStorage.PREFS_KEY_HOME_SERVER";
+    public static final String PREFS_KEY_ACCESS_TOKEN = "org.matrix.console.store.LoginStorage.PREFS_KEY_ACCESS_TOKEN";
 
     // multi accounts
-    public static final String PREFS_KEY_USERNAMES = "LoginStorage.PREFS_KEY_USERNAMES";
-    public static final String PREFS_KEY_HOME_SERVERS = "LoginStorage.PREFS_KEY_HOME_SERVERS";
-    public static final String PREFS_KEY_ACCESS_TOKENS = "LoginStorage.PREFS_KEY_ACCESS_TOKENS";
+    public static final String PREFS_KEY_USERNAMES = "org.matrix.console.store.LoginStorage.PREFS_KEY_USERNAMES";
+    public static final String PREFS_KEY_HOME_SERVERS = "org.matrix.console.store.LoginStorage.PREFS_KEY_HOME_SERVERS";
+    public static final String PREFS_KEY_ACCESS_TOKENS = "org.matrix.console.store.LoginStorage.PREFS_KEY_ACCESS_TOKENS";
+
+    // multi accounts + HomeserverConnectionConfig
+    public static final String PREFS_KEY_CONNECTION_CONFIGS = "org.matrix.console.store.LoginStorage.PREFS_KEY_CONNECTION_CONFIGS";
 
     private Context mContext;
     private Gson mGson;
@@ -65,182 +75,147 @@ public class LoginStorage {
         return new ArrayList(Arrays.asList(mGson.fromJson(listAsString,String[].class)));
     }
 
-    public Credentials getDefaultCredentials() {
-        ArrayList<Credentials> credentialsList = getCredentialsList();
-
-        if ((null == credentialsList) || (0 == credentialsList.size())) {
-            return null;
-        }
-
-        return credentialsList.get(0);
-    }
-
     /**
-     * Return a list of credentials.
-     * @return a list of credentials.
+     * Return a list of HomeserverConnectionConfig.
+     * @return a list of HomeserverConnectionConfig.
      */
-    public ArrayList<Credentials> getCredentialsList() {
+    public ArrayList<HomeserverConnectionConfig> getCredentialsList() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
 
-        String username = prefs.getString(PREFS_KEY_USERNAME, null);
-        String server = prefs.getString(PREFS_KEY_HOME_SERVER, null);
-        String token = prefs.getString(PREFS_KEY_ACCESS_TOKEN, null);
+        String connectionConfigsString = prefs.getString(PREFS_KEY_CONNECTION_CONFIGS, null);
 
-        String usernames = prefs.getString(PREFS_KEY_USERNAMES, null);
-        String servers = prefs.getString(PREFS_KEY_HOME_SERVERS, null);
-        String tokens = prefs.getString(PREFS_KEY_ACCESS_TOKENS, null);
+        Log.d(LOG_TAG, "Got connection json: " + connectionConfigsString);
 
-        boolean withDefaultCredentials = (username != null) && (server != null) && (token != null);
-
-        // backward compatibility
-        if (((null == usernames) || (null == servers) || (null == tokens)) && !withDefaultCredentials) {
-            return null;
+        if (connectionConfigsString == null) {
+            return new ArrayList<HomeserverConnectionConfig>();
         }
 
-        ArrayList<Credentials> credsList = new ArrayList<Credentials>();
+        try {
 
-        // the client used to manage only one account
-        // backward compatibility
-        if (withDefaultCredentials) {
-            Credentials creds = new Credentials();
-            creds.userId = username;
-            creds.homeServer = server;
-            creds.accessToken = token;
+            JSONArray connectionConfigsStrings = new JSONArray(connectionConfigsString);
 
-            if (addCredentials(creds)) {
-                SharedPreferences.Editor e = prefs.edit();
-                e.putString(PREFS_KEY_ACCESS_TOKEN, null);
-                e.putString(PREFS_KEY_HOME_SERVER, null);
-                e.putString(PREFS_KEY_USERNAME, null);
-                e.commit();
+            ArrayList<HomeserverConnectionConfig> configList = new ArrayList<HomeserverConnectionConfig>(
+                    connectionConfigsStrings.length()
+            );
+
+            for (int i = 0; i < connectionConfigsStrings.length(); i++) {
+                configList.add(
+                        HomeserverConnectionConfig.fromJson(connectionConfigsStrings.getJSONObject(i))
+                );
             }
 
-            credsList.add(creds);
-        } else {
-            // return a list of credentials
-            ArrayList<String> usernamesList = deserialize(usernames);
-            ArrayList<String> serversList = deserialize(servers);
-            ArrayList<String> tokensList = deserialize(tokens);
-
-            for(int index = 0; index < usernamesList.size(); index++) {
-                Credentials creds = new Credentials();
-                creds.userId = usernamesList.get(index);
-                creds.homeServer = serversList.get(index);
-                creds.accessToken = tokensList.get(index);
-
-                credsList.add(creds);
-            }
+            return configList;
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Failed to deserialize accounts " + e.getMessage(), e);
+            throw new RuntimeException("Failed to deserialize accounts");
         }
-
-        return credsList;
     }
 
     /**
      * Add a credentials to the credentials list
-     * @param credentials the credentials to add.
-     * @return true if the credentials has been succcessfully added
+     * @param config the HomeserverConnectionConfig to add.
      */
-    public boolean addCredentials(Credentials credentials) {
-        if (null != credentials) {
+    public void addCredentials(HomeserverConnectionConfig config) {
+        if (null != config && config.getCredentials() != null) {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
-            SharedPreferences.Editor e = prefs.edit();
+            SharedPreferences.Editor editor = prefs.edit();
 
-            // add the usernames
-            {
-                ArrayList<String> usernamesList = deserialize(prefs.getString(PREFS_KEY_USERNAMES, null));
+            ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
 
-                if (null == usernamesList) {
-                    usernamesList = new ArrayList<String>();
+            configs.add(config);
+
+            ArrayList<JSONObject> serialized = new ArrayList<JSONObject>(configs.size());
+
+            try {
+                for (HomeserverConnectionConfig c : configs) {
+                    serialized.add(c.toJson());
                 }
-
-                usernamesList.add(credentials.userId);
-                e.putString(PREFS_KEY_USERNAMES, serialize(usernamesList));
+            } catch (JSONException e) {
+                throw new RuntimeException("Failed to serialize connection config");
             }
 
-            // add the home server
-            {
-                ArrayList<String> homeServersList = deserialize(prefs.getString(PREFS_KEY_HOME_SERVERS, null));
+            String ser = new JSONArray(serialized).toString();
 
-                if (null == homeServersList) {
-                    homeServersList = new ArrayList<String>();
-                }
+            Log.d(LOG_TAG, "Storing " + serialized.size() + " credentials");
 
-                homeServersList.add(credentials.homeServer);
-                e.putString(PREFS_KEY_HOME_SERVERS, serialize(homeServersList));
-            }
-
-            // add the token
-            {
-                ArrayList<String> tokensList = deserialize(prefs.getString(PREFS_KEY_ACCESS_TOKENS, null));
-
-                if (null == tokensList) {
-                    tokensList = new ArrayList<String>();
-                }
-
-                tokensList.add(credentials.accessToken);
-                e.putString(PREFS_KEY_ACCESS_TOKENS, serialize(tokensList));
-            }
-
-            return e.commit();
+            editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            editor.commit();
         }
-
-        return false;
     }
 
     /**
      * Remove the credentials from credentials list
-     * @param credentials teh credentials to remove
-     * @return
+     * @param config the credentials to remove
      */
-    public Boolean removeCredentials(Credentials credentials) {
-        SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
+    public void removeCredentials(HomeserverConnectionConfig config) {
+        if (null != config && config.getCredentials() != null) {
+            Log.d(LOG_TAG, "Removing account: " + config.getCredentials().userId);
 
-        String usernames = prefs.getString(PREFS_KEY_USERNAMES, null);
-        String servers = prefs.getString(PREFS_KEY_HOME_SERVERS, null);
-        String tokens = prefs.getString(PREFS_KEY_ACCESS_TOKENS, null);
+            SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
 
-        // has some credentials
-        if ((null == usernames) || (null == servers) || (null == tokens)) {
-            return false;
+            ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
+            ArrayList<JSONObject> serialized = new ArrayList<JSONObject>(configs.size());
+
+            boolean found = false;
+            try {
+                for (HomeserverConnectionConfig c : configs) {
+                    if (c.getCredentials().userId.equals(config.getCredentials().userId)) {
+                        found = true;
+                    } else {
+                        serialized.add(c.toJson());
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException("Failed to serialize connection config");
+            }
+
+            if (!found) return;
+
+            String ser = new JSONArray(serialized).toString();
+
+            Log.d(LOG_TAG, "Storing " + serialized.size() + " credentials");
+
+            editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            editor.commit();
         }
+    }
 
-        ArrayList<String> usernamesList = deserialize(usernames);
-        int pos = usernamesList.indexOf(credentials.userId);
+    /**
+     * Replace the credential from credentials list, based on credentials.userId.
+     * If it does not match an existing credential it does *not* insert the new credentials.
+     * @param config the credentials to insert
+     */
+    public void replaceCredentials(HomeserverConnectionConfig config) {
+        if (null != config && config.getCredentials() != null) {
+            SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
 
-        if (pos >= 0) {
-            SharedPreferences.Editor e = prefs.edit();
+            ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
+            ArrayList<JSONObject> serialized = new ArrayList<JSONObject>(configs.size());
 
-            usernamesList.remove(pos);
-            if (0 == usernamesList.size()) {
-                e.putString(PREFS_KEY_USERNAMES, null);
-            } else {
-                e.putString(PREFS_KEY_USERNAMES, serialize(usernamesList));
+            boolean found = false;
+            try {
+                for (HomeserverConnectionConfig c : configs) {
+                    if (c.getCredentials().userId.equals(config.getCredentials().userId)) {
+                        serialized.add(config.toJson());
+                        found = true;
+                    } else {
+                        serialized.add(c.toJson());
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException("Failed to serialize connection config");
             }
 
-            ArrayList<String> homeServersList = deserialize(servers);
-            homeServersList.remove(pos);
-            if (0 == homeServersList.size()) {
-                e.putString(PREFS_KEY_HOME_SERVERS, null);
-            } else {
-                e.putString(PREFS_KEY_HOME_SERVERS, serialize(homeServersList));
-            }
+            if (!found) return;
 
-            ArrayList<String> tokensList = deserialize(tokens);
-            tokensList.remove(pos);
-            if (0 == tokensList.size()) {
-                e.putString(PREFS_KEY_ACCESS_TOKENS, null);
-            } else {
-                e.putString(PREFS_KEY_ACCESS_TOKENS, serialize(tokensList));
-            }
+            String ser = new JSONArray(serialized).toString();
 
-            // remove the old storage
-            e.putString(PREFS_KEY_ACCESS_TOKEN, null);
-            e.putString(PREFS_KEY_HOME_SERVER, null);
-            e.putString(PREFS_KEY_USERNAME, null);
+            Log.d(LOG_TAG, "Storing " + serialized.size() + " credentials");
 
-            return e.commit();
+            editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            editor.commit();
         }
-
-        return true;
     }
 }

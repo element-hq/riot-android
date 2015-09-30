@@ -250,7 +250,7 @@ public class CallViewActivity extends FragmentActivity {
 
         if (!TextUtils.isEmpty(avatarUrl)) {
             int size = CallViewActivity.this.getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
-            mSession.getMediasCache().loadAvatarThumbnail(avatarView, avatarUrl, size);
+            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), avatarView, avatarUrl, size);
         }
 
         RelativeLayout layout = (RelativeLayout)CallViewActivity.this.findViewById(R.id.call_layout);

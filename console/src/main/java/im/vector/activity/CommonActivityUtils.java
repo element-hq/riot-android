@@ -74,22 +74,23 @@ public class CommonActivityUtils {
     private static final String LOG_TAG = "CommonActivityUtils";
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
+        if (session.isActive()) {
+            // stop the service
+            EventStreamService eventStreamService = EventStreamService.getInstance();
+            ArrayList<String> matrixIds = new ArrayList<String>();
+            matrixIds.add(session.getMyUser().userId);
+            eventStreamService.stopAccounts(matrixIds);
 
-        // stop the service
-        EventStreamService eventStreamService = EventStreamService.getInstance();
-        ArrayList<String> matrixIds = new ArrayList<String>();
-        matrixIds.add(session.getMyUser().userId);
-        eventStreamService.stopAccounts(matrixIds);
+            // Publish to the server that we're now offline
+            MyPresenceManager.getInstance(activity, session).advertiseOffline();
+            MyPresenceManager.remove(session);
 
-        // Publish to the server that we're now offline
-        MyPresenceManager.getInstance(activity, session).advertiseOffline();
-        MyPresenceManager.remove(session);
+            // unregister from the GCM.
+            Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
 
-        // unregister from the GCM.
-        Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
-
-        // clear credentials
-        Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
+            // clear credentials
+            Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
+        }
     }
 
     public static Boolean shouldRestartApp() {

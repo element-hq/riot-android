@@ -116,7 +116,7 @@ public class VectorMediasViewerActivity extends FragmentActivity {
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
         int maxImageHeight = intent.getIntExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, 0);
 
-        mAdapter = new VectorMediasViewerAdapter(this, mxMediasCache, mediasList, maxImageWidth, maxImageHeight);
+        mAdapter = new VectorMediasViewerAdapter(this, mSession, mxMediasCache, mediasList, maxImageWidth, maxImageHeight);
         mAdapter.autoPlayItemAt(position);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(position);

@@ -59,11 +59,15 @@ public class VectorApp extends Application {
 
     private static VectorApp instance = null;
 
+    private EventEmitter<Activity> mOnActivityDestroyedListener;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         instance = this;
+
+        mOnActivityDestroyedListener = new EventEmitter<>();
 
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
@@ -91,6 +95,9 @@ public class VectorApp extends Application {
         return instance;
     }
 
+    public EventEmitter<Activity> getOnActivityDestroyedListener() {
+        return mOnActivityDestroyedListener;
+    }
     /**
      * Suspend background threads.
      */
@@ -109,6 +116,7 @@ public class VectorApp extends Application {
      */
     public void onCallEnd() {
         if (isAppInBackground() && mIsCallingInBackground) {
+            Log.d(LOG_TAG, "onCallEnd : Suspend the events thread because the call was ended whereas the application was in background");
             suspendApp();
         }
 
@@ -140,6 +148,7 @@ public class VectorApp extends Application {
                 // if there is a pending call
                 // the application is not suspended
                 if (!mIsCallingInBackground) {
+                    Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within 2 seconds");
                     suspendApp();
                 }
             }
@@ -159,7 +168,7 @@ public class VectorApp extends Application {
             this.mActivityTransitionTimer = null;
         }
 
-        if (isAppInBackground()) {
+        if (isAppInBackground() && !mIsCallingInBackground) {
             // resume the events thread if the client uses GCM
             if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
 

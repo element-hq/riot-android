@@ -181,7 +181,7 @@ public class RoomMembersDialogFragment extends DialogFragment {
         membershipStrings.put(RoomMember.MEMBERSHIP_LEAVE, getActivity().getString(R.string.membership_leave));
         membershipStrings.put(RoomMember.MEMBERSHIP_BAN, getActivity().getString(R.string.membership_ban));
 
-        mAdapter = new ConsoleRoomMembersAdapter(getActivity(), R.layout.adapter_item_room_members, room.getLiveState(), getMXMediasCache(), membershipStrings);
+        mAdapter = new ConsoleRoomMembersAdapter(getActivity(), mSession.getHomeserverConfig(), R.layout.adapter_item_room_members, room.getLiveState(), getMXMediasCache(), membershipStrings);
 
         // apply the sort settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());

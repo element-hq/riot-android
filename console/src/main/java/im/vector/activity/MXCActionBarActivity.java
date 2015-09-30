@@ -125,6 +125,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         VectorApp.setCurrentActivity(null);
+        Matrix.removeSessionErrorListener(this);
 
         // close any opened dialog
         FragmentManager fm = getSupportFragmentManager();
@@ -138,6 +139,13 @@ public class MXCActionBarActivity extends ActionBarActivity {
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        VectorApp.getInstance().getOnActivityDestroyedListener().fire(this);
+    }
+
 
     @Override
     protected void onResume() {
@@ -156,6 +164,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
         }
 
         VectorApp.setCurrentActivity(this);
+        Matrix.setSessionErrorListener(this);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
