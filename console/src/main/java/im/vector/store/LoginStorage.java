@@ -218,4 +218,14 @@ public class LoginStorage {
             editor.commit();
         }
     }
+
+    /**
+     * Clear the stored values
+     */
+    public void clear() {
+        SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(PREFS_KEY_CONNECTION_CONFIGS);
+        editor.commit();
+    }
 }

@@ -140,6 +140,9 @@ public class CommonActivityUtils {
         // reset the GCM
         Matrix.getInstance(activity).getSharedGcmRegistrationManager().reset();
 
+        // ensure that corrupted values are cleared
+        Matrix.getInstance(activity).getLoginStorage().clear();
+
         // reset the contacts
         PIDsRetriever.getIntance().reset();
         ContactsManager.reset();
