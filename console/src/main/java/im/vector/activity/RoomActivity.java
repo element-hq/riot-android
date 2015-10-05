@@ -70,6 +70,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.adapters.ImageCompressionDescription;
 import im.vector.fragments.ConsoleMessageListFragment;
@@ -219,6 +220,10 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                         Log.e(LOG_TAG, "Updating room topic.");
                         RoomState roomState = JsonUtils.toRoomState(event.content);
                         setTopic(roomState.topic);
+                    }
+
+                    if (!VectorApp.isAppInBackground()) {
+                        mRoom.sendReadReceipt();
                     }
                 }
             });
@@ -674,9 +679,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         setTitle(mRoom.getName(mMyUserId));
         setTopic(mRoom.getTopic());
 
-        // listen for room name or topic changes
-        mRoom.addEventListener(mEventListener);
-
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
         mMediasCache = Matrix.getInstance(this).getMediasCache();
 
@@ -751,12 +753,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
 
     @Override
     public void onDestroy() {
-        // add sanity check
-        // the activity creation could have been cancelled because the roomId was missing
-        if ((null != mRoom) && (null != mEventListener)) {
-            mRoom.removeEventListener(mEventListener);
-        }
-
         if (null != mConsoleMessageListFragment) {
             mConsoleMessageListFragment.onDestroy();
         }
@@ -770,6 +766,10 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         super.onPause();
         // warn other member that the typing is ended
         cancelTypingNotification();
+
+
+        // listen for room name or topic changes
+        mRoom.removeEventListener(mEventListener);
     }
 
     @Override
@@ -790,18 +790,13 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
+        // listen for room name or topic changes
+        mRoom.addEventListener(mEventListener);
+
         EventStreamService.cancelNotificationsForRoomId(mRoom.getRoomId());
 
         // reset the unread messages counter
-        // the room activity can be launched from a notification
-        // so it is required to reset the unread messages counter to have valid global counter
-        RoomSummary summary = mSession.getDataHandler().getStore().getSummary(mRoom.getRoomId());
-
-        if (null != summary) {
-            if (summary.resetUnreadMessagesCount()) {
-                mSession.getDataHandler().getStore().flushSummary(summary);
-            }
-        }
+        mRoom.sendReadReceipt();
 
         String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
@@ -909,6 +904,12 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         if (null != mDisableNotifItem) {
             mDisableNotifItem.setVisible(hasActiveRule && !mRuleInProgress && isPushDownloaded);
         }*/
+
+        // set general room information
+        setTitle(mRoom.getName(mMyUserId));
+        setTopic(mRoom.getTopic());
+        updateMenuEntries();
+
     }
 
     @Override

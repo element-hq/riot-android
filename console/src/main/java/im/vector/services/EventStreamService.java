@@ -165,35 +165,6 @@ public class EventStreamService extends Service {
             if (Event.EVENT_TYPE_CALL_HANGUP.equals(event.type)) {
                 manageHangUpEvent(event);
             }
-
-            if ((event.roomId != null) && isDisplayableEvent(event)) {
-                ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                String viewedRoomId = rTracker.getViewedRoomId();
-                String fromMatrixId = rTracker.getMatrixId();
-
-                Matrix matrix = Matrix.getInstance(EventStreamService.this);
-                RoomSummary summary = null;
-
-                // sanity check
-                if (null != matrix) {
-                    MXSession session = matrix.getSession(event.getMatrixId());
-
-                    // sanity check
-                    if (null != session) {
-                        summary = session.getDataHandler().getStore().getSummary(event.roomId);
-                    }
-                }
-
-                // existing summary ?
-                if (null != summary) {
-                    // If we're not currently viewing this room or not sent by myself, increment the unread count
-                    if (VectorApp.isAppInBackground() || (!event.roomId.equals(viewedRoomId) || !event.getMatrixId().equals(fromMatrixId)) && !event.userId.equals(event.getMatrixId())) {
-                        summary.incrementUnreadMessagesCount();
-                    } else {
-                        summary.resetUnreadMessagesCount();
-                    }
-                }
-            }
         }
 
         @Override
