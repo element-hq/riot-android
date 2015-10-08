@@ -45,6 +45,7 @@ import im.vector.adapters.DrawerAdapter;
 import im.vector.services.EventStreamService;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * extends ActionBarActivity to manage the rageshake
@@ -53,6 +54,34 @@ public class MXCActionBarActivity extends ActionBarActivity {
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "org.matrix.console.ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
     public static final String EXTRA_MATRIX_ID = "org.matrix.console.MXCActionBarActivity.EXTRA_MATRIX_ID";
 
+    private boolean hasCorruptedStore(Activity activity) {
+        boolean hasCorruptedStore = false;
+        ArrayList<MXSession> sessions = Matrix.getMXSessions(activity);
+
+        if (null != sessions) {
+            for (MXSession session : sessions) {
+                if (session.isActive()) {
+                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
+                }
+            }
+        }
+        return hasCorruptedStore;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (hasCorruptedStore(this)) {
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    CommonActivityUtils.logout(MXCActionBarActivity.this);
+                }
+            });
+        }
+    }
+    
     /**
      * Return the used MXSession from an intent.
      * @param intent

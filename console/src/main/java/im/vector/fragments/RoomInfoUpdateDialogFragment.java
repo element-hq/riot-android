@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -40,8 +41,8 @@ import im.vector.util.UIUtils;
  */
 public class RoomInfoUpdateDialogFragment extends DialogFragment {
 
-    public static final String EXTRA_MATRIX_ID = "RoomInfoUpdateDialogFragment.EXTRA_MATRIX_ID";
-    public static final String EXTRA_ROOM_ID = "RoomInfoUpdateDialogFragment.EXTRA_ROOM_ID";
+    public static final String EXTRA_MATRIX_ID = "org.matrix.console.fragments.RoomInfoUpdateDialogFragment.EXTRA_MATRIX_ID";
+    public static final String EXTRA_ROOM_ID = "org.matrix.console.fragments.RoomInfoUpdateDialogFragment.EXTRA_ROOM_ID";
 
     public static RoomInfoUpdateDialogFragment newInstance(String matrixId, String roomId) {
         RoomInfoUpdateDialogFragment f = new RoomInfoUpdateDialogFragment();
@@ -58,6 +59,7 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
 
     private EditText mEditTextName;
     private EditText mEditTextTopic;
+    private EditText mEditTextCanonical;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
         RoomState roomState = mRoom.getLiveState();
         String nameFromForm = mEditTextName.getText().toString();
         String topicFromForm = mEditTextTopic.getText().toString();
+        String canonicalFromForm = mEditTextCanonical.getText().toString();
 
         ApiCallback<Void> changeCallback = UIUtils.buildOnChangeCallback(null);
 
@@ -91,15 +94,24 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
         if (UIUtils.hasFieldChanged(roomState.topic, topicFromForm)) {
             mRoom.updateTopic(topicFromForm, changeCallback);
         }
+
+        if (UIUtils.hasFieldChanged(roomState.alias, canonicalFromForm)) {
+            mRoom.updateCanonicalAlias(canonicalFromForm, changeCallback);
+        }
     }
 
-    private void manageOkButton(final Button okButton) {
+    private boolean hasChanges() {
         // Save things
         RoomState roomState = mRoom.getLiveState();
         String nameFromForm = mEditTextName.getText().toString();
         String topicFromForm = mEditTextTopic.getText().toString();
+        String canonicalFromForm = mEditTextCanonical.getText().toString();
 
-        okButton.setEnabled(UIUtils.hasFieldChanged(roomState.name, nameFromForm) || UIUtils.hasFieldChanged(roomState.topic, topicFromForm));
+        return UIUtils.hasFieldChanged(roomState.alias, canonicalFromForm) || UIUtils.hasFieldChanged(roomState.name, nameFromForm) || UIUtils.hasFieldChanged(roomState.topic, topicFromForm);
+    }
+
+    private void manageOkButton(final Button okButton) {
+        okButton.setEnabled(hasChanges());
     }
 
     @Override
@@ -112,13 +124,14 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
 
         mEditTextName =  (EditText)view.findViewById(R.id.editText_name);
         mEditTextTopic = (EditText)view.findViewById(R.id.editText_topic);
+        mEditTextCanonical = (EditText)view.findViewById(R.id.editText_canonical);
 
         mEditTextName.setText(mRoom.getLiveState().name);
         mEditTextTopic.setText(mRoom.getLiveState().topic);
+        mEditTextCanonical.setText(mRoom.getLiveState().alias);
 
         final Button okButton = (Button) view.findViewById(R.id.room_info_ok);
         final Button cancelButton = (Button) view.findViewById(R.id.room_info_cancel);
-
 
         mEditTextName.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(android.text.Editable s) {
@@ -144,6 +157,18 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
             }
         });
 
+        mEditTextCanonical.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(android.text.Editable s) {
+                manageOkButton(okButton);
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,12 +180,8 @@ public class RoomInfoUpdateDialogFragment extends DialogFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoomState roomState = mRoom.getLiveState();
-                String nameFromForm = mEditTextName.getText().toString();
-                String topicFromForm = mEditTextTopic.getText().toString();
-
                 // something has been updated ?
-                if (UIUtils.hasFieldChanged(roomState.name, nameFromForm) || UIUtils.hasFieldChanged(roomState.topic, topicFromForm)) {
+                if (hasChanges()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage(
                             R.string.room_info_room_discard_changes)

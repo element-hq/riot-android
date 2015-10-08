@@ -420,6 +420,14 @@ public class SettingsActivity extends MXCActionBarActivity {
 
         final CheckBox gcmBox = (CheckBox) findViewById(R.id.checkbox_useGcm);
         gcmBox.setChecked(gcmRegistrationManager.useGCM() && gcmRegistrationManager.is3rdPartyServerRegistred());
+
+        // check if the GCM registration has not been rejected.
+        boolean gcmButEnabled = gcmRegistrationManager.useGCM() || gcmRegistrationManager.isGCMRegistred();
+        View parentView = (View)gcmBox.getParent();
+
+        parentView.setEnabled(gcmButEnabled);
+        gcmBox.setEnabled(gcmButEnabled);
+        parentView.setAlpha(gcmButEnabled ? 1.0f : 0.5f);
     }
 
     @Override

@@ -72,6 +72,7 @@
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
     <string name="file_is_saved">%1$s is saved.</string>
+    <string name="read_receipt">Read</string>
 
     <string name="downloads">Downloads</string>
     <string name="gallery">Gallery</string>
@@ -131,6 +132,9 @@
     <!-- members list Screen -->
     <string name="members_list">Members List</string>
 
+    <!-- read receipts list Screen -->
+    <string name="read_receipts_list">Read Receipts List</string>
+
     <!-- accounts list Screen -->
     <string name="choose_account">Choose account</string>
 
@@ -166,6 +170,8 @@
     <string name="room_info_room_name_hint">Enter a room name</string>
     <string name="room_info_room_topic">Room topic</string>
     <string name="room_info_room_topic_hint">Enter a room topic</string>
+    <string name="room_info_room_canonical_alias">Canonical alias</string>
+    <string name="room_info_room_canonical_hint">Enter a canonical alias</string>
     <string name="room_info_room_discard_changes">Discard changes ?</string>
     <string name="room_info_room_discard">Discard</string>
 

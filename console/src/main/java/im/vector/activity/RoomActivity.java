@@ -908,8 +908,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         // set general room information
         setTitle(mRoom.getName(mMyUserId));
         setTopic(mRoom.getTopic());
-        updateMenuEntries();
-
     }
 
     @Override

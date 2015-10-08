@@ -65,6 +65,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         // this will turn the screen on whilst honouring the screen timeout setting, so it will
         // dim/turn off depending on user configured values.
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_lock_screen);
 
         // remove any pending notifications
@@ -96,8 +97,9 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         // display the room name as title
         setTitle(room.getName(session.getCredentials().userId));
 
-        ((TextView)findViewById(R.id.lock_screen_sender)).setText( intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
+        ((TextView)findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
         ((TextView)findViewById(R.id.lock_screen_body)).setText( intent.getStringExtra(EXTRA_MESSAGE_BODY));
+        ((TextView)findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
 
         findViewById(R.id.lock_screen_sendbutton).setOnClickListener(new View.OnClickListener() {
 

@@ -162,6 +162,8 @@ public class LoginActivity extends MXCActionBarActivity {
             });
         } catch (Exception e) {
             Toast.makeText(this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
+            mLoginButton.setEnabled(true);
+            mcreateAccountButton.setEnabled(true);
         }
     }
 

@@ -249,6 +249,16 @@ public final class GcmRegistrationManager {
         return preferences.getBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), true);
     }
 
+    /**
+     * Update the GCM status
+     * @param use
+     */
+    public void setUseGCM(Boolean use) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
+        editor.putBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), use);
+        editor.commit();
+    }
+
     public Boolean isGCMRegistred() {
         return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }

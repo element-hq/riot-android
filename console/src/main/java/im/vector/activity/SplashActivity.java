@@ -46,15 +46,31 @@ public class SplashActivity extends MXCActionBarActivity {
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
 
+    private boolean hasCorruptedStore() {
+        boolean hasCorruptedStore = false;
+        ArrayList<MXSession> sessions = Matrix.getMXSessions(this);
+
+        for(MXSession session : sessions) {
+            if (session.isActive()) {
+                hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
+            }
+        }
+        return hasCorruptedStore;
+    }
+
     private void finishIfReady() {
         Log.e(LOG_TAG, "finishIfReady " + mInitialSyncComplete + " " + mPusherRegistrationComplete);
 
         if (mInitialSyncComplete && mPusherRegistrationComplete) {
             Log.e(LOG_TAG, "finishIfRead start HomeActivity");
 
-            // Go to the home page
-            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-            SplashActivity.this.finish();
+            if (!hasCorruptedStore()) {
+                // Go to the home page
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                SplashActivity.this.finish();
+            } else {
+                CommonActivityUtils.logout(this);
+            }
         }
     }
 
@@ -160,6 +176,16 @@ public class SplashActivity extends MXCActionBarActivity {
 
                 @Override
                 public void onPusherRegistrationFailed() {
+                    // fallback to the events service
+                    Matrix.getInstance(SplashActivity.this).getSharedGcmRegistrationManager().setUseGCM(false);
+
+                    SplashActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CommonActivityUtils.onGcmUpdate(SplashActivity.this);
+                        }
+                    });
+
                     // can register it ignore
                     onPusherRegistered();
                 }
