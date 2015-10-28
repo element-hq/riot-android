@@ -82,6 +82,7 @@ import im.vector.fragments.ContactsListDialogFragment;
 import im.vector.fragments.RoomCreationDialogFragment;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.RageShake;
+import im.vector.view.AddAccountAlertDialog;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1189,92 +1190,8 @@ public class HomeActivity extends MXCActionBarActivity {
     /**
      * Add an existing account
      */
-    /**
-     * Add an existing account
-     */
     private void addAccount() {
-        LayoutInflater factory = LayoutInflater.from(this);
-
-        final View layout = factory.inflate(R.layout.fragment_dialog_add_account, null);
-        final EditText usernameEditText = (EditText) layout.findViewById(R.id.editText_username);
-        final EditText passwordEditText = (EditText) layout.findViewById(R.id.editText_password);
-        final EditText homeServerEditText = (EditText) layout.findViewById(R.id.editText_hs);
-
-
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(R.string.action_add_account).setView(layout).setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        String hsUrlString = homeServerEditText.getText().toString();
-                        String username = usernameEditText.getText().toString();
-                        String password = passwordEditText.getText().toString();
-
-                        if (!hsUrlString.startsWith("http")) {
-                            Toast.makeText(HomeActivity.this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-                            Toast.makeText(HomeActivity.this, getString(R.string.login_error_invalid_credentials), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        Uri hsUrl = Uri.parse(hsUrlString);
-
-                        LoginRestClient client = null;
-                        final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(hsUrl);
-
-                        try {
-                            client = new LoginRestClient(hsConfig);
-                        } catch (Exception e) {
-                        }
-
-                        if (null == client) {
-                            Toast.makeText(HomeActivity.this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        try {
-                            LoginHandler loginHandler = new LoginHandler();
-                            loginHandler.login(HomeActivity.this, hsConfig, username, password, new SimpleApiCallback<HomeserverConnectionConfig>(HomeActivity.this) {
-                                @Override
-                                public void onSuccess(HomeserverConnectionConfig c) {
-                                    // loginHandler creates the session so just need to switch to the splash activity
-                                    startActivity(new Intent(HomeActivity.this, SplashActivity.class));
-                                    HomeActivity.this.finish();
-                                }
-
-                                @Override
-                                public void onNetworkError(Exception e) {
-                                    Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
-                                    Toast.makeText(getApplicationContext(), getString(R.string.login_error_network_error), Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onUnexpectedError(Exception e) {
-                                    String msg = getString(R.string.login_error_unable_login) + " : " + e.getMessage();
-                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    String msg = getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")";
-                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        } catch (Exception e) {
-                            Toast.makeText(HomeActivity.this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }).setNegativeButton(R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                    }
-                });
-        alert.show();
+        (new AddAccountAlertDialog(this)).show();
     }
 
     private void removeAccount() {
@@ -1449,5 +1366,11 @@ public class HomeActivity extends MXCActionBarActivity {
 
         // allow link to be clickable
         ((TextView)mMainAboutDialog.findViewById(android.R.id.message)).setMovementMethod(new MovementCheck());
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
+        if (AddAccountAlertDialog.FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode) {
+            AddAccountAlertDialog.onFlowActivityResult(this, requestCode, resultCode, data);
+        }
     }
 }
