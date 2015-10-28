@@ -138,7 +138,7 @@ public class EventStreamService extends Service {
             String callId = null;
 
             try {
-                callId = event.content.get("call_id").getAsString();
+                callId = event.getContentAsJsonObject().get("call_id").getAsString();
             } catch (Exception e) {}
 
             if (null != callId) {
@@ -180,7 +180,7 @@ public class EventStreamService extends Service {
 
             String senderID = event.userId;
             // FIXME: Support event contents with no body
-            if (!event.content.has("body")) {
+            if (!event.getContentAsJsonObject().has("body")) {
                 // only the membership events are supported
                 if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && !event.isCallEvent()) {
                     return;
@@ -225,7 +225,7 @@ public class EventStreamService extends Service {
                     body = getApplicationContext().getString(R.string.incoming_call);
 
                     try {
-                        mNotifiedCallId = event.content.get("call_id").getAsString();
+                        mNotifiedCallId = event.getContentAsJsonObject().get("call_id").getAsString();
                      } catch (Exception e) {}
                 } else {
                     EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
@@ -235,11 +235,11 @@ public class EventStreamService extends Service {
                 body = EventDisplay.getMembershipNotice(getApplicationContext(), event, roomState);
 
                 try {
-                    isInvitationEvent = "invite".equals(event.content.getAsJsonPrimitive("membership").getAsString());
+                    isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
                 } catch (Exception e) {}
 
             } else {
-                body = event.content.getAsJsonPrimitive("body").getAsString();
+                body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
             }
 
             int unreadNotifForThisUser = 0;

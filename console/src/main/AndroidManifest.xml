@@ -86,6 +86,11 @@
             android:name="im.vector.activity.AccountCreationActivity"
             android:label="@string/create_account" >
         </activity>
+
+        <activity
+            android:name="im.vector.activity.FallbackLoginActivity"
+            android:label="@string/login" >
+        </activity>
         <activity
             android:name="im.vector.activity.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">

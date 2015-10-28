@@ -1,81 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:background="#FFFFFFFF"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo_large"
-        android:contentDescription="@string/logo"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Title"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="@string/sign_in"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="50dp"
+            android:src="@drawable/logo_large"
+            android:contentDescription="@string/logo"/>
 
-    <EditText
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/editText_username"
+            android:hint="@string/username"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText_password"
+            android:hint="@string/password"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/editText_hs"
+            android:hint="@string/hs_url"
+            android:text="https://matrix.org"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:id="@+id/button_login"
+            android:layout_gravity="center_horizontal"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:id="@+id/button_create_account"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/search_mask_view"
+        android:background="#AAAAAAAA"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:id="@+id/editText_username"
-        android:hint="@string/username"/>
+        android:indeterminate="true" />
 
-    <EditText
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText_password"
-        android:hint="@string/password"/>
+    <ProgressBar
+        android:id="@+id/search_progress"
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true" />
 
-    <EditText
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:id="@+id/editText_hs"
-        android:hint="@string/hs_url"
-        android:text="https://matrix.org"/>
+</RelativeLayout>
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:textColor="#FFFFFFFF"
-        android:id="@+id/button_login"
-        android:background="@drawable/rounded_button_bg"
-        android:layout_gravity="center_horizontal"/>
-
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/create_account"
-        android:textColor="#FFFFFFFF"
-        android:background="@drawable/rounded_button_bg"
-        android:id="@+id/button_create_account"
-        android:layout_gravity="center_horizontal"/>
-
-</LinearLayout>
