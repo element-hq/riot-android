@@ -28,6 +28,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
@@ -135,6 +136,16 @@ public class EventStreamService extends Service {
          * @param event the hangup event.
          */
         private void manageHangUpEvent(Event event) {
+            // check if the user answer from another device
+            if (Event.EVENT_TYPE_CALL_ANSWER.equals(event.type)) {
+                MXSession session = Matrix.getMXSession(getApplicationContext(), event.getMatrixId());
+
+                // ignore the answer event if it was sent by another member
+                if (!TextUtils.equals(event.userId, session.getCredentials().userId)) {
+                    return;
+                }
+            }
+
             String callId = null;
 
             try {
@@ -146,6 +157,7 @@ public class EventStreamService extends Service {
                 hidePendingCallNotification(callId);
             }
 
+            Log.d(LOG_TAG, "manageHangUpEvent stopRinging");
             CallViewActivity.stopRinging();
         }
 
@@ -162,7 +174,7 @@ public class EventStreamService extends Service {
 
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
-            if (Event.EVENT_TYPE_CALL_HANGUP.equals(event.type)) {
+            if (Event.EVENT_TYPE_CALL_HANGUP.equals(event.type) || Event.EVENT_TYPE_CALL_ANSWER.equals(event.type)) {
                 manageHangUpEvent(event);
             }
         }
@@ -180,7 +192,7 @@ public class EventStreamService extends Service {
 
             String senderID = event.userId;
             // FIXME: Support event contents with no body
-            if (!event.getContentAsJsonObject().has("body")) {
+            if (!event.content.getAsJsonObject().has("body")) {
                 // only the membership events are supported
                 if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && !event.isCallEvent()) {
                     return;
@@ -300,6 +312,7 @@ public class EventStreamService extends Service {
 
             if (bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
                 if (null == CallViewActivity.getActiveCall()) {
+                    Log.d(LOG_TAG, "onBingEvent starting");
                     CallViewActivity.startRinging(EventStreamService.this);
                 }
             }
@@ -339,6 +352,24 @@ public class EventStreamService extends Service {
                 mLatestNotification = null;
             }
 
+            // special catchup cases
+            if (mState == StreamAction.CATCHUP) {
+
+                Boolean hasActiveCalls = false;
+
+                for (MXSession session : mSessions) {
+                    hasActiveCalls |= session.mCallsManager.hasActiveCalls();
+                }
+
+                // if there are some active calls, the catchup should not be stopped.
+                // because an user could answer to a call from another device.
+                // there will no push because it is his own message.
+                // so, the client has no choice to catchup until the ring is shutdown
+                if (hasActiveCalls) {
+                    Log.d(LOG_TAG, "Catchup again because there are active calls");
+                    catchup();
+                }
+            }
         }
 
 
@@ -488,7 +519,8 @@ public class EventStreamService extends Service {
                     }
 
                     @Override
-                    public void onStoreCorrupted(String accountId) {
+                    public void onStoreCorrupted(String accountId, String description) {
+                        Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
                         startEventStream(fSession, store);
                     }
                 });
@@ -587,7 +619,7 @@ public class EventStreamService extends Service {
         if (!Matrix.getInstance(this).getSharedGcmRegistrationManager().useGCM()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
-            mIsForegound = false;
+            mIsForegound = true;
         } else {
             stopForeground(true);
             mIsForegound = false;

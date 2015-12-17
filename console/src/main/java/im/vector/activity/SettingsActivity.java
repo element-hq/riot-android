@@ -405,7 +405,7 @@ public class SettingsActivity extends MXCActionBarActivity {
                             };
 
                             if (checkBox.isChecked()) {
-                                gcmRegistrationManager.registerSessions(listener);
+                                gcmRegistrationManager.registerSessions(SettingsActivity.this, listener);
                             } else {
                                 gcmRegistrationManager.unregisterSessions(listener);
                             }
