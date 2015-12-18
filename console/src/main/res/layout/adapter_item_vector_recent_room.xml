@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp">
+
+    <FrameLayout
+        android:id="@+id/layout_avatar"
+        android:layout_width="@dimen/member_list_avatar_size"
+        android:layout_height="@dimen/member_list_avatar_size"
+        android:padding="4dp">
+
+        <include layout="@layout/round_avatar_vector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:text="Room Name"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:id="@+id/roomSummaryAdapter_roomName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Jan 1 00:00"
+                android:textColor="?android:attr/textColorSecondary"
+                android:id="@+id/roomSummaryAdapter_ts"/>
+
+            <ProgressBar
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/roomSummaryAdapter_delete_progress"
+                android:indeterminate="true"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Caption"
+            android:text="Small Text"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/roomSummaryAdapter_message"/>
+
+    </LinearLayout>
+
+
+</LinearLayout><!-- From: file:/Users/ylecollen/matrix-android-sdk/matrix-sdk/src/main/res/layout/adapter_item_my_rooms.xml -->
