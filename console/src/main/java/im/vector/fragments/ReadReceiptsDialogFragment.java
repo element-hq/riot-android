@@ -27,7 +27,7 @@ import android.widget.ListView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.Receipt;
+import org.matrix.androidsdk.rest.model.ReceiptData;
 
 import java.util.ArrayList;
 
@@ -103,7 +103,7 @@ public class ReadReceiptsDialogFragment extends DialogFragment {
         final Room room = mSession.getDataHandler().getRoom(mRoomId);
         mAdapter = new ReadReceiptsAdapter(getActivity(), mSession.getHomeserverConfig(), R.layout.adapter_item_read_receipt, room, getMXMediasCache());
 
-        mAdapter.addAll(new ArrayList<Receipt>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId)));
+        mAdapter.addAll(new ArrayList<ReceiptData>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId, true, true)));
         mListView.setAdapter(mAdapter);
 
         return v;

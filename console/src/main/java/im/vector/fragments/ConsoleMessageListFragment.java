@@ -52,7 +52,7 @@ import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.Receipt;
+import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.EventDisplay;
@@ -723,7 +723,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
         builderSingle.show();
     }
 
-    public void onReadReceiptClick(String eventId, String userId, Receipt receipt) {
+    public void onReadReceiptClick(String eventId, String userId, ReceiptData receipt) {
         RoomMember member = mRoom.getMember(userId);
 
         // sanity check
