@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="room_background">#FFF3F8FA</color>
+    <color name="room_background">#FFFFFFFF</color>
 
     <color name="presence_online">#38af00</color>
     <color name="presence_unavailable">#fc0</color>
@@ -14,10 +14,9 @@
     <color name="room_summary_highlight_background">#FF88BBFF</color>
     <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
 
-    <color name="vector_green">#FF68CA9D</color>
     <color name="vector_background">#FFF3F8FA</color>
-    <color name="vector_title_color">#FF80CEF4</color>
-    <color name="vector_border_color">#FF80CEF4</color>
+    <color name="vector_title_color">#FF3C3C3C</color>
+    <color name="vector_border_color">#FF3C3C3C</color>
 
     <color name="vector_green_color">#FF62CE9C</color>
     <color name="vector_light_gray_color">#FFF2F2F2</color>

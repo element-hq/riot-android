@@ -73,7 +73,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      */
     @Override
     protected String getFormattedTimestamp(Event event) {
-        return AdapterUtils.tsToString(mContext, event.getOriginServerTs());
+        return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 headerLayout.setVisibility(View.GONE);
             }
         }
-
+        
         return isMergedView;
     }
 

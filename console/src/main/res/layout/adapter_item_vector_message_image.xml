@@ -24,14 +24,14 @@
             android:layout_marginLeft="0dp"
             android:paddingBottom="5dp">
 
-            <include layout="@layout/message_sender"/>
+            <include layout="@layout/vector_message_sender"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <include layout="@layout/message_timestamp"
+                <include layout="@layout/vector_message_timestamp"
                     android:id="@+id/message_timestamp_layout_left"/>
 
                 <FrameLayout
@@ -152,7 +152,7 @@
                     </LinearLayout>
                 </FrameLayout>
 
-                <include layout="@layout/message_timestamp"
+                <include layout="@layout/vector_message_timestamp"
                     android:id="@+id/message_timestamp_layout_right"/>
 
             </LinearLayout>

@@ -147,9 +147,10 @@ public class AdapterUtils {
      * Convert a time since epoch date to a string.
      * @param context the context.
      * @param ts the time since epoch.
+     * @param timeOnly true to return the time without the day.
      * @return the formatted date
      */
-    public static String tsToString(Context context, long ts) {
+    public static String tsToString(Context context, long ts, boolean timeOnly) {
         long daysDiff = (new Date().getTime() - zeroTimeDate(new Date(ts)).getTime()) / MS_IN_DAY;
         long timeZoneOffset = TimeZone.getDefault().getRawOffset();
 
@@ -166,7 +167,9 @@ public class AdapterUtils {
             mFormatterRawOffset = timeZoneOffset;
         }
 
-        if (0 == daysDiff) {
+        if (timeOnly) {
+            return mShortDateFormat.format(new Date(ts));
+        } else if (0 == daysDiff) {
             return context.getString(R.string.today) + " " + mShortDateFormat.format(new Date(ts));
         } else if (1 == daysDiff) {
             return context.getString(R.string.yesterday) + " " + mShortDateFormat.format(new Date(ts));
