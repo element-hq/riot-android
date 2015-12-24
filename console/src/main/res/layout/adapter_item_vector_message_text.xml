@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <include layout="@layout/rounded_rect_avatar"
+        <include layout="@layout/round_avatar"
                  android:id="@+id/messagesAdapter_roundAvatar_left"/>
 
         <LinearLayout
@@ -60,7 +60,7 @@
 
         </LinearLayout>
 
-        <include layout="@layout/rounded_rect_avatar"
+        <include layout="@layout/round_avatar"
             android:id="@+id/messagesAdapter_roundAvatar_right"/>
     </LinearLayout>
 

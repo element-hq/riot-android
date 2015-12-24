@@ -65,7 +65,7 @@ import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.MemberDetailsActivity;
 import im.vector.activity.RoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
-import im.vector.adapters.ConsoleMessagesAdapter;
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.ConsoleContentProvider;
 import im.vector.util.SlidableMediaInfo;
 
@@ -111,7 +111,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new ConsoleMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
     /**

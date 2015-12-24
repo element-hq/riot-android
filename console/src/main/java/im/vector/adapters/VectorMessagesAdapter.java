@@ -33,38 +33,25 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.rest.model.VideoMessage;
-import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.VectorApp;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.MemberDetailsActivity;
-import im.vector.activity.VectorMediasViewerActivity;
-import im.vector.util.SlidableMediaInfo;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 /**
  * An adapter which can display room information.
  */
-public class ConsoleMessagesAdapter extends MessagesAdapter {
+public class VectorMessagesAdapter extends MessagesAdapter {
 
     private Date mReferenceDate = new Date();
     private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     private Handler mUiHandler;
 
-    public ConsoleMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text,
                 R.layout.adapter_item_vector_message_image,
@@ -182,6 +169,11 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
         }
 
         return dateDiff(messageDate, (mReferenceDate.getTime() - messageDate.getTime()) / AdapterUtils.MS_IN_DAY);
+    }
+
+    @Override
+    protected boolean isAvatarDisplayedOnRightSide(Event event) {
+        return false;
     }
 
     @Override
