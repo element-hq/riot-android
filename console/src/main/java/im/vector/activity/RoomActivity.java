@@ -1138,12 +1138,12 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             }
 
             String text = "";
-            
+
             if (1 == names.size()) {
                 text = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
             } else if (2 == names.size()) {
                 text = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
-            } else {
+            } else if (names.size() > 2) {
                 text = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
             }
 

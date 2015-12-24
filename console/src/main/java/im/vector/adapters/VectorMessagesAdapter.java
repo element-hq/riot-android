@@ -89,9 +89,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void setTypingVisibility(View avatarLayoutView, int status) {
-        // display the typing icon when required
-        ImageView typingImage = (ImageView) avatarLayoutView.findViewById(org.matrix.androidsdk.R.id.avatar_typing_img);
-        typingImage.setVisibility(status);
     }
 
     @Override
