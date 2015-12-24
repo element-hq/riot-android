@@ -44,7 +44,12 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -161,6 +166,9 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private EditText mSearchEditText;
     private LinearLayout mSearchLayout;
 
+    private View mTypingArea;
+    private TextView mTypingMessageTextView;
+
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
     private String mPendingMimeType;
@@ -217,9 +225,13 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                         }
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
-                        Log.e(LOG_TAG, "Updating room topic.");
+                        Log.d(LOG_TAG, "Updating room topic.");
                         RoomState roomState = JsonUtils.toRoomState(event.content);
                         setTopic(roomState.topic);
+                    }
+                    else if (Event.EVENT_TYPE_TYPING.equals(event.type)) {
+                        Log.d(LOG_TAG, "on room typing");
+                        onRoomTypings();
                     }
 
                     if (!VectorApp.isAppInBackground()) {
@@ -651,6 +663,8 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             }
         });
 
+        mTypingArea = findViewById(R.id.room_notifications_area);
+        mTypingMessageTextView = (TextView)findViewById(R.id.room_notification_message);
 
         mSession = getSession(intent);
 
@@ -1103,6 +1117,39 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private void setTopic(String topic) {
         if (null != this.getSupportActionBar()) {
             this.getSupportActionBar().setSubtitle(topic);
+        }
+    }
+
+    private void onRoomTypings() {
+        ArrayList<String> typingUsers = mRoom.getTypingUsers();
+
+        if ((null != typingUsers) && (typingUsers.size() > 0)) {
+            mTypingArea.setVisibility(View.VISIBLE);
+
+            // get the room member names
+            ArrayList<String> names = new ArrayList<String>();
+
+            for(int i = 0; i < Math.min(typingUsers.size(), 2); i++) {
+                RoomMember member = mRoom.getMember(typingUsers.get(i));
+
+                if (null != member) {
+                    names.add(member.displayname);
+                }
+            }
+
+            String text = "";
+            
+            if (1 == names.size()) {
+                text = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
+            } else if (2 == names.size()) {
+                text = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+            } else {
+                text = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
+            }
+
+            mTypingMessageTextView.setText(text);
+        } else {
+            mTypingArea.setVisibility(View.INVISIBLE);
         }
     }
 
