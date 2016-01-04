@@ -260,4 +260,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     public int presenceUnavailableColor() {
         return mContext.getResources().getColor(R.color.presence_unavailable);
     }
+
+    public int highlightMessageColor(Context context) {
+        return context.getResources().getColor(R.color.vector_green_color);
+    }
 }
