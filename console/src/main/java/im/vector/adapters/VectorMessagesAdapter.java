@@ -206,18 +206,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             String header = headerMessage(position);
 
             if (null != header) {
-                View headerLine = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_separator);
-                headerLine.setVisibility(View.GONE);
                 TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
-                headerText.setTextColor(mContext.getResources().getColor(R.color.vector_title_color));
-                headerText.setText(header);
-                headerText.setGravity(Gravity.CENTER);
+                headerText.setText(header.toUpperCase());
                 headerLayout.setVisibility(View.VISIBLE);
             } else {
                 headerLayout.setVisibility(View.GONE);
             }
         }
-        
+
         return isMergedView;
     }
 
