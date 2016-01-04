@@ -26,13 +26,18 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.ReceiptData;
+
 import im.vector.VectorApp;
 import im.vector.R;
 
@@ -41,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.List;
 
 /**
  * An adapter which can display room information.
@@ -171,6 +177,21 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     @Override
     protected boolean isAvatarDisplayedOnRightSide(Event event) {
         return false;
+    }
+
+    @Override
+    protected void refreshReceiverLayout(final LinearLayout receiversLayout, final boolean leftAlign, final String eventId, final RoomState roomState) {
+        IMXStore store = mSession.getDataHandler().getStore();
+        List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
+
+        // no receipt
+        if ((null == receipts) || (0 == receipts.size())) {
+            // hide the avatars layout
+            receiversLayout.setVisibility(View.GONE);
+        } else {
+            receiversLayout.setVisibility(View.VISIBLE);
+            super.refreshReceiverLayout(receiversLayout, leftAlign, eventId, roomState);
+        }
     }
 
     @Override
