@@ -4,9 +4,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/message_header" android:visibility="gone" />
+    <include layout="@layout/vector_message_header" android:visibility="gone" />
 
     <LinearLayout
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -19,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="0dp"
+            android:layout_marginLeft="13dp"
             android:layout_gravity="center_vertical"
             android:paddingBottom="5dp">
 

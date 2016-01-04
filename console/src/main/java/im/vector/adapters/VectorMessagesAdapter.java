@@ -235,7 +235,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
         }
 
-
         // the timestamp is hidden except for the latest message
         View rightTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right);
 
