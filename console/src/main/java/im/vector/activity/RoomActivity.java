@@ -43,6 +43,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -159,12 +160,12 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private MXMediasCache mMediasCache;
 
     private ImageButton mSendButton;
-    private ImageButton mMoreAttachmentsButton;
-    private ImageButton mCameraButton;
+    private ImageButton mAttachmentsButton;
+    private ImageButton mCallButton;
     private EditText mEditText;
-    private LinearLayout mMediaButtonsLayout;
     private EditText mSearchEditText;
     private LinearLayout mSearchLayout;
+    private ImageView mAvatarImageView;
 
     private View mTypingArea;
     private TextView mTypingMessageTextView;
@@ -562,7 +563,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         Log.i(LOG_TAG, "Displaying " + roomId);
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
-        mMediaButtonsLayout = (LinearLayout)findViewById(R.id.media_buttons_layout);
 
         mSendButton = (ImageButton) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -575,16 +575,17 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             }
         });
 
-        mCameraButton = (ImageButton) findViewById(R.id.button_camera);
-        mCameraButton.setOnClickListener(new View.OnClickListener() {
+        mCallButton = (ImageButton) findViewById(R.id.button_call);
+        mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoomActivity.this.launchCamera();
+                // TODO implement a dedicated call activity
+                // we do not get any design by now
             }
         });
 
-        mMoreAttachmentsButton = (ImageButton) findViewById(R.id.button_more_attachments);
-        mMoreAttachmentsButton.setOnClickListener(new View.OnClickListener() {
+        mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
+        mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -710,6 +711,14 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                 }, 1000);
             }
         }
+
+        View avatarLayout = findViewById(R.id.room_self_avatar);
+
+        if (null != avatarLayout) {
+            mAvatarImageView = (ImageView)avatarLayout.findViewById(R.id.avatar_img);
+        }
+
+        refreshSelfAvatar();
     }
 
     @Override
@@ -761,8 +770,10 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
      */
     private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
+
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-        mMediaButtonsLayout.setVisibility(hasText ? View.GONE : View.VISIBLE);
+        mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+        mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -1020,27 +1031,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                     }
                 });
             }
-        } else if ((id == R.id.ic_action_voice_call) || (id == R.id.ic_action_video_call)) {
-            // create the call object
-            IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
-
-            if (null != call) {
-                call.setIsVideo((id != R.id.ic_action_voice_call));
-                call.setRoom(mRoom);
-                call.setIsIncoming(false);
-
-                final Intent intent = new Intent(RoomActivity.this, CallViewActivity.class);
-
-                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                RoomActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        RoomActivity.this.startActivity(intent);
-                    }
-                });
-            }
         } else if (id == R.id.ic_action_invite_by_list) {
             FragmentManager fm = getSupportFragmentManager();
 
@@ -1120,23 +1110,37 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         }
     }
 
+    private void refreshSelfAvatar() {
+        // sanity check
+        if (null != mAvatarImageView) {
+            String avatarUrl = mSession.getMyUser().avatarUrl;
+
+            if (avatarUrl == null) {
+                mAvatarImageView.setImageResource(R.drawable.ic_contact_picture_holo_light);
+            } else {
+                int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+                mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarImageView, avatarUrl, size);
+            }
+        }
+    }
+
     private void onRoomTypings() {
         ArrayList<String> typingUsers = mRoom.getTypingUsers();
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             mTypingArea.setVisibility(View.VISIBLE);
 
+            String myUserId = mSession.getMyUser().userId;
+
             // get the room member names
             ArrayList<String> names = new ArrayList<String>();
 
-            for(int i = 0; i < Math.min(typingUsers.size(), 2); i++) {
+            for(int i = 0; i < typingUsers.size(); i++) {
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
 
-                // sanity check
-                if ((null != member) && (null != member.displayname)) {
-                    if (null != member.displayname) {
-                        names.add(member.displayname);
-                    }
+                // check if the user is known and not oneself
+                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) &&  (null != member.displayname)) {
+                    names.add(member.displayname);
                 }
             }
 
