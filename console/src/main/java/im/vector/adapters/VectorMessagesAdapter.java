@@ -139,7 +139,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             return (new SimpleDateFormat("EEEE", AdapterUtils.getLocale(mContext))).format(date);
         } else  {
             int flags = DateUtils.FORMAT_SHOW_DATE |
-                    DateUtils.FORMAT_NO_YEAR |
+                    DateUtils.FORMAT_SHOW_YEAR |
                     DateUtils.FORMAT_ABBREV_ALL |
                     DateUtils.FORMAT_SHOW_WEEKDAY;
 

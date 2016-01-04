@@ -7,10 +7,6 @@
     android:id="@+id/messagesAdapter_message_header"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"/>
-
     <TextView
         android:id="@+id/messagesAdapter_message_header_text"
         android:layout_width="fill_parent"
