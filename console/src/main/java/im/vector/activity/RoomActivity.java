@@ -1132,8 +1132,11 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             for(int i = 0; i < Math.min(typingUsers.size(), 2); i++) {
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
 
-                if (null != member) {
-                    names.add(member.displayname);
+                // sanity check
+                if ((null != member) && (null != member.displayname)) {
+                    if (null != member.displayname) {
+                        names.add(member.displayname);
+                    }
                 }
             }
 
