@@ -214,6 +214,18 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
         }
 
+
+        // the timestamp is hidden except for the latest message
+        View rightTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right);
+
+        if (null != rightTsTextLayout) {
+            TextView tsTextView = (TextView)rightTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+
+            if (null != tsTextView) {
+                tsTextView.setVisibility(((position + 1) == this.getCount()) ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+
         return isMergedView;
     }
 
