@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_below="@+id/add_participants_subtitle"
+        android:id="@+id/add_participants_search_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="44dp">
+
+        <EditText
+            android:id="@+id/add_participants_search_participants"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="@string/room_participants_invite_another_user"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:focusable="true"/>
+
+        <Button
+            android:id="@+id/add_participants_cancel_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/cancel" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/add_participants_separator_line"
+        android:layout_below="@+id/add_participants_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/vector_silver_color" />
+
+    <ListView
+        android:layout_below="@id/add_participants_separator_line"
+        android:id="@+id/add_participants_members_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+
+</RelativeLayout>
