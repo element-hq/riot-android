@@ -37,6 +37,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.ReceiptData;
+import org.matrix.androidsdk.rest.model.RoomMember;
 
 import im.vector.VectorApp;
 import im.vector.R;
@@ -44,6 +45,7 @@ import im.vector.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
@@ -181,23 +183,79 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void refreshReceiverLayout(final LinearLayout receiversLayout, final boolean leftAlign, final String eventId, final RoomState roomState) {
+        // replaced by displayReadReceipts
+        receiversLayout.setVisibility(View.GONE);
+    }
+
+    /**
+     * Display the read receipts within the dedicated vector layout.
+     * Console application displays them on the message side.
+     * Vector application displays them in a dedicated line under the message
+     * @param avatarsListView the read receipts layout
+     * @param eventId the event Id.
+     * @param roomState the room state.
+     */
+    private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
         IMXStore store = mSession.getDataHandler().getStore();
         List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
 
-        // no receipt
+        // if there is no receipt to display
+        // hide the dedicated layout
         if ((null == receipts) || (0 == receipts.size())) {
-            // hide the avatars layout
-            receiversLayout.setVisibility(View.GONE);
-        } else {
-            receiversLayout.setVisibility(View.VISIBLE);
-            super.refreshReceiverLayout(receiversLayout, leftAlign, eventId, roomState);
+            avatarsListView.setVisibility(View.GONE);
+            return;
+        }
+
+        avatarsListView.setVisibility(View.VISIBLE);
+
+        ArrayList<View> imageViews = new ArrayList<View>();
+
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+
+        TextView moreText = (TextView)avatarsListView.findViewById(R.id.message_more_than_expected);
+
+        int index = 0;
+        int bound = Math.min(receipts.size(), imageViews.size());
+
+        for (; index < bound; index++) {
+            final ReceiptData r = receipts.get(index);
+            RoomMember member = roomState.getMember(r.userId);
+            ImageView imageView = (ImageView) imageViews.get(index);
+
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setTag(null);
+            // TODO replace with the new Vector style icon.
+            imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+
+            if (null != member.avatarUrl) {
+                loadSmallAvatar(imageView, member.avatarUrl);
+            }
+
+            // FIXME expected behaviour when the avatar is tapped.
+        }
+
+        // FIXME expected behaviour when this text is tapped.
+        moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
+        moreText.setText(receipts.size() - imageViews.size() + "+");
+
+        for(; index < imageViews.size(); index++) {
+            imageViews.get(index).setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
+        MessageRow row = getItem(position);
+        Event msg = row.getEvent();
+
+        // mother class call
         Boolean isMergedView = super.manageSubView(position, convertView, subView, msgType);
 
+        // remove the message separator when it is not required
         View view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
         if (null != view) {
             View line = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator_line);
@@ -206,8 +264,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 line.setBackgroundColor(Color.TRANSPARENT);
             }
 
-            MessageRow row = getItem(position);
-            Event msg = row.getEvent();
             String nextUserId = null;
 
             if ((position + 1) < this.getCount()) {
@@ -221,8 +277,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             view.setVisibility(((null != nextUserId) && (nextUserId.equals(msg.userId)) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
+        // display the day separator
         View headerLayout = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header);
-
         if (null != headerLayout) {
             String header = headerMessage(position);
 
@@ -244,6 +300,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             if (null != tsTextView) {
                 tsTextView.setVisibility(((position + 1) == this.getCount()) ? View.VISIBLE : View.INVISIBLE);
             }
+        }
+
+        // On Vector application, the read receipts are displayed in a dedicated line under the message
+        View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
+
+        if (null != avatarsListView) {
+            displayReadReceipts(avatarsListView, msg.eventId, row.getRoomState());
         }
 
         return isMergedView;

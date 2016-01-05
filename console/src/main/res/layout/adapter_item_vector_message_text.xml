@@ -49,7 +49,7 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:layout_gravity="left"
                         android:textIsSelectable="false"
-                        android:text="A message body goes here"
+                        android:text="A body"
                         android:autoLink="web"
                         android:id="@+id/messagesAdapter_body"/>
 
@@ -65,6 +65,9 @@
         <include layout="@layout/vector_room_round_avatar"
             android:id="@+id/messagesAdapter_roundAvatar_right"/>
     </LinearLayout>
+
+    <include layout="@layout/vector_message_receipts_list"
+        android:id="@+id/messagesAdapter_avatars_list"/>
 
     <include layout="@layout/message_separator"/>
 
