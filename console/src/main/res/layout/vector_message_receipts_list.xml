@@ -14,10 +14,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="15dp"
+                android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="8dp"
+                android:textSize="9dp"
                 android:id="@+id/message_more_than_expected"
                 android:text="+999" />
 
