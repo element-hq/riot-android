@@ -86,7 +86,7 @@ public class ConsoleRoomSummaryAdapter extends RoomSummaryAdapter {
      */
     @Override
     protected String getFormattedTimestamp(Event event) {
-        return AdapterUtils.tsToString(mContext, event.getOriginServerTs());
+        return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
     }
 
     /**

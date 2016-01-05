@@ -43,8 +43,14 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -154,12 +160,15 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private MXMediasCache mMediasCache;
 
     private ImageButton mSendButton;
-    private ImageButton mMoreAttachmentsButton;
-    private ImageButton mCameraButton;
+    private ImageButton mAttachmentsButton;
+    private ImageButton mCallButton;
     private EditText mEditText;
-    private LinearLayout mMediaButtonsLayout;
     private EditText mSearchEditText;
     private LinearLayout mSearchLayout;
+    private ImageView mAvatarImageView;
+
+    private View mTypingArea;
+    private TextView mTypingMessageTextView;
 
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
@@ -217,9 +226,13 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                         }
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
-                        Log.e(LOG_TAG, "Updating room topic.");
+                        Log.d(LOG_TAG, "Updating room topic.");
                         RoomState roomState = JsonUtils.toRoomState(event.content);
                         setTopic(roomState.topic);
+                    }
+                    else if (Event.EVENT_TYPE_TYPING.equals(event.type)) {
+                        Log.d(LOG_TAG, "on room typing");
+                        onRoomTypings();
                     }
 
                     if (!VectorApp.isAppInBackground()) {
@@ -550,7 +563,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         Log.i(LOG_TAG, "Displaying " + roomId);
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
-        mMediaButtonsLayout = (LinearLayout)findViewById(R.id.media_buttons_layout);
 
         mSendButton = (ImageButton) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -563,16 +575,17 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             }
         });
 
-        mCameraButton = (ImageButton) findViewById(R.id.button_camera);
-        mCameraButton.setOnClickListener(new View.OnClickListener() {
+        mCallButton = (ImageButton) findViewById(R.id.button_call);
+        mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoomActivity.this.launchCamera();
+                // TODO implement a dedicated call activity
+                // we do not get any design by now
             }
         });
 
-        mMoreAttachmentsButton = (ImageButton) findViewById(R.id.button_more_attachments);
-        mMoreAttachmentsButton.setOnClickListener(new View.OnClickListener() {
+        mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
+        mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -651,6 +664,8 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             }
         });
 
+        mTypingArea = findViewById(R.id.room_notifications_area);
+        mTypingMessageTextView = (TextView)findViewById(R.id.room_notification_message);
 
         mSession = getSession(intent);
 
@@ -696,6 +711,14 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                 }, 1000);
             }
         }
+
+        View avatarLayout = findViewById(R.id.room_self_avatar);
+
+        if (null != avatarLayout) {
+            mAvatarImageView = (ImageView)avatarLayout.findViewById(R.id.avatar_img);
+        }
+
+        refreshSelfAvatar();
     }
 
     @Override
@@ -747,8 +770,10 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
      */
     private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
+
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-        mMediaButtonsLayout.setVisibility(hasText ? View.GONE : View.VISIBLE);
+        mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+        mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -929,14 +954,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.ic_action_members) {
-            // pop to the home activity
-            Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
-            RoomActivity.this.startActivity(intent);
-        } else if (id == R.id.ic_action_search_in_room) {
+        if (id == R.id.ic_action_search_in_room) {
 
             if (mSearchLayout.getVisibility() == View.VISIBLE) {
                 mSearchLayout.setVisibility(View.GONE);
@@ -946,127 +964,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             } else {
                 mSearchLayout.setVisibility(View.VISIBLE);
             }
-        }
-        // mBingRulesManager.toggleRule(rule, mOnBingRuleUpdateListener);
-        else if (!mRuleInProgress && ((id == R.id.ic_action_enable_notification) || (id == R.id.ic_action_disable_notification))) {
-            final BingRulesManager bingRulesManager = mSession.getDataHandler().getBingRulesManager();
-            final Boolean shouldNotify = (id == R.id.ic_action_enable_notification);
-
-            mRuleInProgress = true;
-
-            // if there is no dedicated rule -> add a new one
-            if (null == mBingRule) {
-                bingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, mRoom.getRoomId(), shouldNotify, shouldNotify, shouldNotify), new BingRulesManager.onBingRuleUpdateListener() {
-                    @Override
-                    public void onBingRuleUpdateSuccess() {
-                        mRuleInProgress = false;
-                        RoomActivity.this.runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                updateMenuEntries();
-                                                            }
-                                                        }
-                        );
-                    }
-
-                    @Override
-                    public void onBingRuleUpdateFailure(String errorMessage) {
-                        mRuleInProgress = false;
-                    }
-                });
-
-            } else {
-                // replace the existing one
-                bingRulesManager.deleteRule(mBingRule, new BingRulesManager.onBingRuleUpdateListener() {
-                    @Override
-                    public void onBingRuleUpdateSuccess() {
-                        bingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, mRoom.getRoomId(), shouldNotify, shouldNotify, shouldNotify), new BingRulesManager.onBingRuleUpdateListener() {
-                            @Override
-                            public void onBingRuleUpdateSuccess() {
-                                mRuleInProgress = false;
-                                RoomActivity.this.runOnUiThread(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        updateMenuEntries();
-                                                                    }
-                                                                }
-                                );
-                            }
-
-                            @Override
-                            public void onBingRuleUpdateFailure(String errorMessage) {
-                                mRuleInProgress = false;
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onBingRuleUpdateFailure(String errorMessage) {
-                        mRuleInProgress = false;
-                    }
-                });
-            }
-        } else if ((id == R.id.ic_action_voice_call) || (id == R.id.ic_action_video_call)) {
-            // create the call object
-            IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
-
-            if (null != call) {
-                call.setIsVideo((id != R.id.ic_action_voice_call));
-                call.setRoom(mRoom);
-                call.setIsIncoming(false);
-
-                final Intent intent = new Intent(RoomActivity.this, CallViewActivity.class);
-
-                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                RoomActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        RoomActivity.this.startActivity(intent);
-                    }
-                });
-            }
-        } else if (id == R.id.ic_action_invite_by_list) {
-            FragmentManager fm = getSupportFragmentManager();
-
-            MembersInvitationDialogFragment fragment = (MembersInvitationDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-            fragment = MembersInvitationDialogFragment.newInstance(mSession, mRoom.getRoomId());
-            fragment.show(fm, TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG);
-        } else if (id == R.id.ic_action_invite_by_name) {
-            AlertDialog alert = CommonActivityUtils.createEditTextAlert(RoomActivity.this, RoomActivity.this.getResources().getString(R.string.title_activity_invite_user), RoomActivity.this.getResources().getString(R.string.room_creation_participants_hint), null, new CommonActivityUtils.OnSubmitListener() {
-                @Override
-                public void onSubmit(final String text) {
-                    if (TextUtils.isEmpty(text)) {
-                        return;
-                    }
-
-                    // get the user suffix
-                    String homeServerSuffix = mMyUserId.substring(mMyUserId.indexOf(":"), mMyUserId.length());
-
-                    ArrayList<String> userIDsList = CommonActivityUtils.parseUserIDsList(text, homeServerSuffix);
-
-                    if (userIDsList.size() > 0) {
-                        mRoom.invite(userIDsList, new SimpleApiCallback<Void>(RoomActivity.this) {
-                            @Override
-                            public void onSuccess(Void info) {
-                                Toast.makeText(getApplicationContext(), "Sent invite to " + text.trim() + ".", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled() {
-
-                }
-            });
-
-            alert.show();
-        } else if (id ==  R.id.ic_action_members) {
+        } else if (id ==  R.id.ic_action_room_settings) {
 
             // pop to the home activity
             Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
@@ -1074,27 +972,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
             RoomActivity.this.startActivity(intent);
-
-        } else if (id ==  R.id.ic_action_room_info) {
-
-            FragmentManager fm = getSupportFragmentManager();
-
-            RoomInfoUpdateDialogFragment roomInfoFragment = (RoomInfoUpdateDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOM_INFO);
-            if (roomInfoFragment != null) {
-                roomInfoFragment.dismissAllowingStateLoss();
-            }
-
-            roomInfoFragment = RoomInfoUpdateDialogFragment.newInstance(mMyUserId, mRoom.getRoomId());
-            roomInfoFragment.show(fm, TAG_FRAGMENT_ROOM_INFO);
-
-        } else if (id ==  R.id.ic_action_leave) {
-            mRoom.leave(new SimpleApiCallback<Void>(RoomActivity.this) {
-            });
-            RoomActivity.this.finish();
-        } else if (id ==  R.id.ic_action_settings) {
-            RoomActivity.this.startActivity(new Intent(RoomActivity.this, SettingsActivity.class));
-        } else if (id ==  R.id.ic_send_bug_report) {
-            RageShake.getInstance().sendBugReport();
         }
 
         return super.onOptionsItemSelected(item);
@@ -1103,6 +980,59 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private void setTopic(String topic) {
         if (null != this.getSupportActionBar()) {
             this.getSupportActionBar().setSubtitle(topic);
+        }
+    }
+
+    private void refreshSelfAvatar() {
+        // sanity check
+        if (null != mAvatarImageView) {
+            String avatarUrl = mSession.getMyUser().avatarUrl;
+
+            if (avatarUrl == null) {
+                mAvatarImageView.setImageResource(R.drawable.ic_contact_picture_holo_light);
+            } else {
+                int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+                mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarImageView, avatarUrl, size);
+            }
+        }
+    }
+
+    private void onRoomTypings() {
+        ArrayList<String> typingUsers = mRoom.getTypingUsers();
+
+        if ((null != typingUsers) && (typingUsers.size() > 0)) {
+            mTypingArea.setVisibility(View.VISIBLE);
+
+            String myUserId = mSession.getMyUser().userId;
+
+            // get the room member names
+            ArrayList<String> names = new ArrayList<String>();
+
+            for(int i = 0; i < typingUsers.size(); i++) {
+                RoomMember member = mRoom.getMember(typingUsers.get(i));
+
+                // check if the user is known and not oneself
+                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) &&  (null != member.displayname)) {
+                    names.add(member.displayname);
+                }
+            }
+
+            String text = "";
+
+            // nothing to display ?
+            if (0 == names.size()) {
+                mTypingArea.setVisibility(View.INVISIBLE);
+            } else if (1 == names.size()) {
+                text = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
+            } else if (2 == names.size()) {
+                text = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+            } else if (names.size() > 2) {
+                text = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
+            }
+
+            mTypingMessageTextView.setText(text);
+        } else {
+            mTypingArea.setVisibility(View.INVISIBLE);
         }
     }
 

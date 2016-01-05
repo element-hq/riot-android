@@ -26,45 +26,40 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.rest.model.VideoMessage;
-import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.rest.model.ReceiptData;
+import org.matrix.androidsdk.rest.model.RoomMember;
+
 import im.vector.VectorApp;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.MemberDetailsActivity;
-import im.vector.activity.VectorMediasViewerActivity;
-import im.vector.util.SlidableMediaInfo;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.List;
 
 /**
  * An adapter which can display room information.
  */
-public class ConsoleMessagesAdapter extends MessagesAdapter {
+public class VectorMessagesAdapter extends MessagesAdapter {
 
     private Date mReferenceDate = new Date();
     private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     private Handler mUiHandler;
 
-    public ConsoleMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
+    public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text,
                 R.layout.adapter_item_vector_message_image,
@@ -86,7 +81,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
      */
     @Override
     protected String getFormattedTimestamp(Event event) {
-        return AdapterUtils.tsToString(mContext, event.getOriginServerTs());
+        return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
     }
 
     @Override
@@ -102,9 +97,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void setTypingVisibility(View avatarLayoutView, int status) {
-        // display the typing icon when required
-        ImageView typingImage = (ImageView) avatarLayoutView.findViewById(org.matrix.androidsdk.R.id.avatar_typing_img);
-        typingImage.setVisibility(status);
     }
 
     @Override
@@ -149,7 +141,7 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             return (new SimpleDateFormat("EEEE", AdapterUtils.getLocale(mContext))).format(date);
         } else  {
             int flags = DateUtils.FORMAT_SHOW_DATE |
-                    DateUtils.FORMAT_NO_YEAR |
+                    DateUtils.FORMAT_SHOW_YEAR |
                     DateUtils.FORMAT_ABBREV_ALL |
                     DateUtils.FORMAT_SHOW_WEEKDAY;
 
@@ -185,9 +177,85 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
     }
 
     @Override
+    protected boolean isAvatarDisplayedOnRightSide(Event event) {
+        return false;
+    }
+
+    @Override
+    protected void refreshReceiverLayout(final LinearLayout receiversLayout, final boolean leftAlign, final String eventId, final RoomState roomState) {
+        // replaced by displayReadReceipts
+        receiversLayout.setVisibility(View.GONE);
+    }
+
+    /**
+     * Display the read receipts within the dedicated vector layout.
+     * Console application displays them on the message side.
+     * Vector application displays them in a dedicated line under the message
+     * @param avatarsListView the read receipts layout
+     * @param eventId the event Id.
+     * @param roomState the room state.
+     */
+    private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
+        IMXStore store = mSession.getDataHandler().getStore();
+        List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
+
+        // if there is no receipt to display
+        // hide the dedicated layout
+        if ((null == receipts) || (0 == receipts.size())) {
+            avatarsListView.setVisibility(View.GONE);
+            return;
+        }
+
+        avatarsListView.setVisibility(View.VISIBLE);
+
+        ArrayList<View> imageViews = new ArrayList<View>();
+
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_3).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_4).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+        imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_5).findViewById(org.matrix.androidsdk.R.id.avatar_img));
+
+        TextView moreText = (TextView)avatarsListView.findViewById(R.id.message_more_than_expected);
+
+        int index = 0;
+        int bound = Math.min(receipts.size(), imageViews.size());
+
+        for (; index < bound; index++) {
+            final ReceiptData r = receipts.get(index);
+            RoomMember member = roomState.getMember(r.userId);
+            ImageView imageView = (ImageView) imageViews.get(index);
+
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setTag(null);
+            // TODO replace with the new Vector style icon.
+            imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+
+            if (null != member.avatarUrl) {
+                loadSmallAvatar(imageView, member.avatarUrl);
+            }
+
+            // FIXME expected behaviour when the avatar is tapped.
+        }
+
+        // FIXME expected behaviour when this text is tapped.
+        moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
+        moreText.setText(receipts.size() - imageViews.size() + "+");
+
+        for(; index < imageViews.size(); index++) {
+            imageViews.get(index).setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
+        MessageRow row = getItem(position);
+        Event msg = row.getEvent();
+
+        // mother class call
         Boolean isMergedView = super.manageSubView(position, convertView, subView, msgType);
 
+        // remove the message separator when it is not required
         View view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
         if (null != view) {
             View line = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator_line);
@@ -196,8 +264,6 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
                 line.setBackgroundColor(Color.TRANSPARENT);
             }
 
-            MessageRow row = getItem(position);
-            Event msg = row.getEvent();
             String nextUserId = null;
 
             if ((position + 1) < this.getCount()) {
@@ -211,22 +277,36 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
             view.setVisibility(((null != nextUserId) && (nextUserId.equals(msg.userId)) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
+        // display the day separator
         View headerLayout = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header);
-
         if (null != headerLayout) {
             String header = headerMessage(position);
 
             if (null != header) {
-                View headerLine = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_separator);
-                headerLine.setVisibility(View.GONE);
                 TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
-                headerText.setTextColor(mContext.getResources().getColor(R.color.vector_title_color));
-                headerText.setText(header);
-                headerText.setGravity(Gravity.CENTER);
+                headerText.setText(header.toUpperCase());
                 headerLayout.setVisibility(View.VISIBLE);
             } else {
                 headerLayout.setVisibility(View.GONE);
             }
+        }
+
+        // the timestamp is hidden except for the latest message
+        View rightTsTextLayout = convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right);
+
+        if (null != rightTsTextLayout) {
+            TextView tsTextView = (TextView)rightTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+
+            if (null != tsTextView) {
+                tsTextView.setVisibility(((position + 1) == this.getCount()) ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+
+        // On Vector application, the read receipts are displayed in a dedicated line under the message
+        View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
+
+        if (null != avatarsListView) {
+            displayReadReceipts(avatarsListView, msg.eventId, row.getRoomState());
         }
 
         return isMergedView;
@@ -242,5 +322,9 @@ public class ConsoleMessagesAdapter extends MessagesAdapter {
 
     public int presenceUnavailableColor() {
         return mContext.getResources().getColor(R.color.presence_unavailable);
+    }
+
+    public int highlightMessageColor(Context context) {
+        return context.getResources().getColor(R.color.vector_green_color);
     }
 }
