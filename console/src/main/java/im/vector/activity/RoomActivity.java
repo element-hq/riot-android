@@ -954,14 +954,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.ic_action_members) {
-            // pop to the home activity
-            Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
-            RoomActivity.this.startActivity(intent);
-        } else if (id == R.id.ic_action_search_in_room) {
+        if (id == R.id.ic_action_search_in_room) {
 
             if (mSearchLayout.getVisibility() == View.VISIBLE) {
                 mSearchLayout.setVisibility(View.GONE);
@@ -971,106 +964,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             } else {
                 mSearchLayout.setVisibility(View.VISIBLE);
             }
-        }
-        // mBingRulesManager.toggleRule(rule, mOnBingRuleUpdateListener);
-        else if (!mRuleInProgress && ((id == R.id.ic_action_enable_notification) || (id == R.id.ic_action_disable_notification))) {
-            final BingRulesManager bingRulesManager = mSession.getDataHandler().getBingRulesManager();
-            final Boolean shouldNotify = (id == R.id.ic_action_enable_notification);
-
-            mRuleInProgress = true;
-
-            // if there is no dedicated rule -> add a new one
-            if (null == mBingRule) {
-                bingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, mRoom.getRoomId(), shouldNotify, shouldNotify, shouldNotify), new BingRulesManager.onBingRuleUpdateListener() {
-                    @Override
-                    public void onBingRuleUpdateSuccess() {
-                        mRuleInProgress = false;
-                        RoomActivity.this.runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                updateMenuEntries();
-                                                            }
-                                                        }
-                        );
-                    }
-
-                    @Override
-                    public void onBingRuleUpdateFailure(String errorMessage) {
-                        mRuleInProgress = false;
-                    }
-                });
-
-            } else {
-                // replace the existing one
-                bingRulesManager.deleteRule(mBingRule, new BingRulesManager.onBingRuleUpdateListener() {
-                    @Override
-                    public void onBingRuleUpdateSuccess() {
-                        bingRulesManager.addRule(new BingRule(BingRule.KIND_ROOM, mRoom.getRoomId(), shouldNotify, shouldNotify, shouldNotify), new BingRulesManager.onBingRuleUpdateListener() {
-                            @Override
-                            public void onBingRuleUpdateSuccess() {
-                                mRuleInProgress = false;
-                                RoomActivity.this.runOnUiThread(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        updateMenuEntries();
-                                                                    }
-                                                                }
-                                );
-                            }
-
-                            @Override
-                            public void onBingRuleUpdateFailure(String errorMessage) {
-                                mRuleInProgress = false;
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onBingRuleUpdateFailure(String errorMessage) {
-                        mRuleInProgress = false;
-                    }
-                });
-            }
-        } else if (id == R.id.ic_action_invite_by_list) {
-            FragmentManager fm = getSupportFragmentManager();
-
-            MembersInvitationDialogFragment fragment = (MembersInvitationDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG);
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-            fragment = MembersInvitationDialogFragment.newInstance(mSession, mRoom.getRoomId());
-            fragment.show(fm, TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG);
-        } else if (id == R.id.ic_action_invite_by_name) {
-            AlertDialog alert = CommonActivityUtils.createEditTextAlert(RoomActivity.this, RoomActivity.this.getResources().getString(R.string.title_activity_invite_user), RoomActivity.this.getResources().getString(R.string.room_creation_participants_hint), null, new CommonActivityUtils.OnSubmitListener() {
-                @Override
-                public void onSubmit(final String text) {
-                    if (TextUtils.isEmpty(text)) {
-                        return;
-                    }
-
-                    // get the user suffix
-                    String homeServerSuffix = mMyUserId.substring(mMyUserId.indexOf(":"), mMyUserId.length());
-
-                    ArrayList<String> userIDsList = CommonActivityUtils.parseUserIDsList(text, homeServerSuffix);
-
-                    if (userIDsList.size() > 0) {
-                        mRoom.invite(userIDsList, new SimpleApiCallback<Void>(RoomActivity.this) {
-                            @Override
-                            public void onSuccess(Void info) {
-                                Toast.makeText(getApplicationContext(), "Sent invite to " + text.trim() + ".", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled() {
-
-                }
-            });
-
-            alert.show();
-        } else if (id ==  R.id.ic_action_members) {
+        } else if (id ==  R.id.ic_action_room_settings) {
 
             // pop to the home activity
             Intent intent = new Intent(RoomActivity.this, VectorAddParticipantsActivity.class);
@@ -1078,27 +972,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
             RoomActivity.this.startActivity(intent);
-
-        } else if (id ==  R.id.ic_action_room_info) {
-
-            FragmentManager fm = getSupportFragmentManager();
-
-            RoomInfoUpdateDialogFragment roomInfoFragment = (RoomInfoUpdateDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOM_INFO);
-            if (roomInfoFragment != null) {
-                roomInfoFragment.dismissAllowingStateLoss();
-            }
-
-            roomInfoFragment = RoomInfoUpdateDialogFragment.newInstance(mMyUserId, mRoom.getRoomId());
-            roomInfoFragment.show(fm, TAG_FRAGMENT_ROOM_INFO);
-
-        } else if (id ==  R.id.ic_action_leave) {
-            mRoom.leave(new SimpleApiCallback<Void>(RoomActivity.this) {
-            });
-            RoomActivity.this.finish();
-        } else if (id ==  R.id.ic_action_settings) {
-            RoomActivity.this.startActivity(new Intent(RoomActivity.this, SettingsActivity.class));
-        } else if (id ==  R.id.ic_send_bug_report) {
-            RageShake.getInstance().sendBugReport();
         }
 
         return super.onOptionsItemSelected(item);

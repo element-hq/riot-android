@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="15dp"
-                android:hint="Type here..."
+                android:hint="@string/room_message_placeholder"
                 android:id="@+id/editText_messageBox"
                 android:layout_centerHorizontal="true"/>
 
