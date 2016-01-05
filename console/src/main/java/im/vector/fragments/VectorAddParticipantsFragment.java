@@ -17,57 +17,69 @@
 package im.vector.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.DialogInterface;
+import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
-import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.MemberDetailsActivity;
-import im.vector.adapters.ConsoleRoomMembersAdapter;
+import im.vector.activity.VectorRoomDetailsActivity;
+import im.vector.adapters.ParticipantAdapterItem;
+import im.vector.adapters.VectorAddParticipantsAdapter;
 
-import java.util.Collection;
-import java.util.HashMap;
-
+import java.util.ArrayList;
 
 public class VectorAddParticipantsFragment extends Fragment {
     private static final String LOG_TAG = "VectorAddParticipantsFragment";
 
-    public static final String ARG_ROOM_ID = "RoomMembersDialogFragment.ARG_ROOM_ID";
-
-    private ListView mListView;
-    private ConsoleRoomMembersAdapter mAdapter;
-    private String mRoomId;
+    // class members
     private MXSession mSession;
+    private Room mRoom;
+    private MXMediasCache mxMediasCache;
 
-    private Handler uiThreadHandler;
+    // fragment items
+    private EditText mSearchEdit;
+    private Button mCancelButton;
+    private ListView mParticantsListView;
+    private VectorAddParticipantsAdapter mAdapter;
 
+    private MXEventListener mEventListener = new MXEventListener() {
+        @Override
+        public void onLiveEvent(final Event event, RoomState roomState) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                        mAdapter.listOtherMembers();
+                        mAdapter.refresh();
+                    }
+                }
+            });
+        }
+    };
 
-    public void setSession(MXSession session) {
-        mSession = session;
-    }
+    // top view
+    private View mViewHierarchy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,19 +90,194 @@ public class VectorAddParticipantsFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
+        // sanity check
+        if (null != mRoom) {
+            mRoom.removeEventListener(mEventListener);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-    }
 
+        // sanity check
+        if (null != mRoom) {
+            mRoom.addEventListener(mEventListener);
+        }
+
+        // sanity check
+        if (null != mAdapter) {
+            mAdapter.listOtherMembers();
+            mAdapter.refresh();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mViewHierarchy = inflater.inflate(R.layout.fragment_vector_add_participants, container, false);
 
-        View v = inflater.inflate(R.layout.fragment_vector_add_participants, container, false);
-        return v;
+        Activity activity = getActivity();
+
+        if (activity instanceof VectorRoomDetailsActivity) {
+            VectorRoomDetailsActivity vectorRoomDetailsActivity = (VectorRoomDetailsActivity)activity;
+
+            mRoom = vectorRoomDetailsActivity.getRoom();
+            mSession = vectorRoomDetailsActivity.getSession();
+
+            finalizeInit();
+        }
+
+        return mViewHierarchy;
+    }
+
+    /**
+     * Finalize the fragment initialization.
+     */
+    private void finalizeInit() {
+        mxMediasCache = mSession.getMediasCache();
+
+        mParticantsListView = (ListView)mViewHierarchy.findViewById(R.id.add_participants_members_list);
+        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, true, mRoom.getRoomId(), mxMediasCache);
+        mParticantsListView.setAdapter(mAdapter);
+
+        mParticantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+                    ParticipantAdapterItem participant = mAdapter.getItem(position);
+
+                    final ArrayList<String> userIDs = new ArrayList<String>();
+                    userIDs.add(participant.mUserId);
+                    mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
+                        @Override
+                        public void onSuccess(Void info) {
+                            // display something ?
+                        }
+                    });
+                }
+
+                // leave the search
+                mSearchEdit.setText("");
+            }
+        });
+
+        mAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+            }
+        });
+
+        mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+            @Override
+            public void onRemoveClick(final ParticipantAdapterItem participantItem) {
+                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
+
+                // The user is trying to leave with unsaved changes. Warn about that
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_remove_prompt_title)
+                        .setMessage(text)
+                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mRoom.kick(participantItem.mUserId, new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        // display something
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+
+            @Override
+            public void onLeaveClick() {
+                // The user is trying to leave with unsaved changes. Warn about that
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_leave_prompt_title)
+                        .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                        .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                mRoom.leave(new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        // display something
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                    }
+                                });
+                                getActivity().finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        });
+
+        mSearchEdit = (EditText)mViewHierarchy.findViewById(R.id.add_participants_search_participants);
+        mSearchEdit.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(android.text.Editable s) {
+                mAdapter.setSearchedPattern(s.toString());
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        mCancelButton = (Button)mViewHierarchy.findViewById(R.id.add_participants_cancel_search_button);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchEdit.setText("");
+            }
+        });
+
+        mAdapter.setSearchedPattern(mSearchEdit.getText().toString());
+        mAdapter.refresh();
     }
 }

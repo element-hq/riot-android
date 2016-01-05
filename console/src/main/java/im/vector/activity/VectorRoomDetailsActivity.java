@@ -64,8 +64,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorRoomDetailsActivity.EXTRA_ROOM_ID";
 
-
-
     private MXSession mSession;
     private String mRoomId;
     private Room mRoom;
@@ -78,6 +76,14 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     private RelativeLayout mFragmentsLayout;
     private LinearLayout mTabsLayout;
 
+    public MXSession getSession() {
+        return mSession;
+    }
+
+    public Room getRoom() {
+        return mRoom;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (CommonActivityUtils.shouldRestartApp()) {
@@ -86,6 +92,30 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
         }
 
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+
+        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
+            Log.e(LOG_TAG, "No room ID extra.");
+            finish();
+            return;
+        }
+
+        String matrixId = null;
+        if (intent.hasExtra(EXTRA_MATRIX_ID)) {
+            matrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
+        }
+
+        mSession = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
+
+        if (null == mSession) {
+            finish();
+            return;
+        }
+
+        mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
+        mRoom = mSession.getDataHandler().getRoom(mRoomId);
+
         setContentView(R.layout.activity_vector_room_details);
 
         mFragmentsLayout = (RelativeLayout)findViewById(R.id.room_details_fragments);

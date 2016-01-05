@@ -968,9 +968,8 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
 
             // pop to the home activity
             Intent intent = new Intent(RoomActivity.this, VectorRoomDetailsActivity.class);
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(VectorAddParticipantsActivity.EXTRA_EDITION_MODE, "");
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             RoomActivity.this.startActivity(intent);
         }
 

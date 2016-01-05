@@ -17,53 +17,25 @@
 package im.vector.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.IMXEventListener;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.JsonUtils;
-import im.vector.VectorApp;
-import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.MemberDetailsActivity;
-import im.vector.adapters.ConsoleRoomMembersAdapter;
-
-import java.util.Collection;
-import java.util.HashMap;
+import im.vector.activity.VectorRoomDetailsActivity;
 
 
 public class VectorRoomSettingsFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomSettingsFragment";
 
-    public static final String ARG_ROOM_ID = "RoomMembersDialogFragment.ARG_ROOM_ID";
-
-    private ListView mListView;
-    private ConsoleRoomMembersAdapter mAdapter;
-    private String mRoomId;
     private MXSession mSession;
+    private Room mRoom;
 
-    private Handler uiThreadHandler;
-
+    // top view
+    private View mViewHierarchy;
 
     public void setSession(MXSession session) {
         mSession = session;
@@ -89,8 +61,25 @@ public class VectorRoomSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mViewHierarchy = inflater.inflate(R.layout.fragment_vector_room_settings, container, false);
 
-        View v = inflater.inflate(R.layout.fragment_vector_room_settings, container, false);
-        return v;
+        Activity activity = getActivity();
+
+        if (activity instanceof VectorRoomDetailsActivity) {
+            VectorRoomDetailsActivity vectorRoomDetailsActivity = (VectorRoomDetailsActivity)activity;
+
+            mRoom = vectorRoomDetailsActivity.getRoom();
+            mSession = vectorRoomDetailsActivity.getSession();
+
+            finalizeInit();
+        }
+
+        return mViewHierarchy;
+    }
+
+    /**
+     * Finalize the fragment initialization.
+     */
+    private void finalizeInit() {
     }
 }
