@@ -138,6 +138,19 @@
                 android:value="im.vector.activity.RoomActivity"/>
         </activity>
 
+
+        <activity
+            android:name="im.vector.activity.VectorRoomDetailsActivity"
+            android:label="@string/room_details_title"
+            android:parentActivityName="im.vector.activity.RoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.RoomActivity"/>
+        </activity>
+
         <activity
             android:name="im.vector.activity.SettingsActivity"
             android:label="@string/title_activity_settings"

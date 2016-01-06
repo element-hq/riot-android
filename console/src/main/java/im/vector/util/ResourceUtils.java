@@ -16,14 +16,27 @@
 package im.vector.util;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+
+import im.vector.R;
 
 /**
  * Static resource utility methods.
@@ -45,14 +58,14 @@ public class ResourceUtils {
     /**
      * Get a resource stream and metadata about it given its URI returned from onActivityResult.
      *
-     * @param activity the activity
-     * @param uri the URI
+     * @param context the context.
+     * @param uri     the URI
      * @return a {@link Resource} encapsulating the opened resource stream and associated metadata
-     *      or {@code null} if opening the resource stream failed.
+     * or {@code null} if opening the resource stream failed.
      */
-    public static Resource openResource(Activity activity, Uri uri) {
+    public static Resource openResource(Context context, Uri uri) {
         try {
-            String mimetype = activity.getContentResolver().getType(uri);
+            String mimetype = context.getContentResolver().getType(uri);
 
             // try to find the mimetype from the filename
             if (null == mimetype) {
@@ -63,7 +76,7 @@ public class ResourceUtils {
             }
 
             return new Resource(
-                    activity.getContentResolver().openInputStream(uri),
+                    context.getContentResolver().openInputStream(uri),
                     mimetype);
 
         } catch (Exception e) {
@@ -71,5 +84,95 @@ public class ResourceUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Return the thumbnail bitmap from a media Uri
+     *
+     * @param context  the context
+     * @param mediaUri the media Uri
+     * @return the bitmap.
+     */
+    public static Bitmap getThumbnailBitmap(Context context, Uri mediaUri) {
+        Bitmap thumbnailBitmap = null;
+        ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+
+        // check if the resource can be i
+        if (null == resource) {
+            return null;
+        }
+
+        if ((null != resource.mimeType) && resource.mimeType.startsWith("image/")) {
+            try {
+                ContentResolver resolver = context.getContentResolver();
+
+                List uriPath = mediaUri.getPathSegments();
+                long imageId = -1;
+                String lastSegment = (String) uriPath.get(uriPath.size() - 1);
+
+                // > Kitkat
+                if (lastSegment.startsWith("image:")) {
+                    lastSegment = lastSegment.substring("image:".length());
+                }
+
+                imageId = Long.parseLong(lastSegment);
+
+                thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "getThumbnailBitmap " + e.getMessage());
+            }
+
+            //
+            double thumbnailWidth = 1024.0;
+            double thumbnailHeight = 1024.0;
+
+            // no thumbnail has been found or the mimetype is unknown
+            if ((null == thumbnailBitmap) || (thumbnailBitmap.getHeight() > thumbnailHeight) || (thumbnailBitmap.getWidth() > thumbnailWidth)) {
+                // need to decompress the high res image
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                resource = ResourceUtils.openResource(context, mediaUri);
+
+                // get the full size bitmap
+                Bitmap fullSizeBitmap = null;
+
+                if (null == thumbnailBitmap) {
+                    fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                }
+
+                if ((fullSizeBitmap != null) || (thumbnailBitmap != null)) {
+                    double imageWidth;
+                    double imageHeight;
+
+                    if (null == thumbnailBitmap) {
+                        imageWidth = fullSizeBitmap.getWidth();
+                        imageHeight = fullSizeBitmap.getHeight();
+                    } else {
+                        imageWidth = thumbnailBitmap.getWidth();
+                        imageHeight = thumbnailBitmap.getHeight();
+                    }
+
+                    if (imageWidth > imageHeight) {
+                        thumbnailHeight = thumbnailWidth * imageHeight / imageWidth;
+                    } else {
+                        thumbnailWidth = thumbnailHeight * imageWidth / imageHeight;
+                    }
+
+                    try {
+                        thumbnailBitmap = Bitmap.createScaledBitmap((null == fullSizeBitmap) ? thumbnailBitmap : fullSizeBitmap, (int) thumbnailWidth, (int) thumbnailHeight, false);
+                    } catch (OutOfMemoryError ex) {
+                        Log.e(LOG_TAG, "Bitmap.createScaledBitmap " + ex.getMessage());
+                    }
+                }
+
+                // reduce the memory consumption
+                if (null != fullSizeBitmap) {
+                    fullSizeBitmap.recycle();
+                    System.gc();
+                }
+            }
+        }
+
+        return thumbnailBitmap;
     }
 }

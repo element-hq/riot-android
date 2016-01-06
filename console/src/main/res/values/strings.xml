@@ -342,6 +342,7 @@
     <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
     <string name="room_participants_admin_name">%s (admin)</string>
     <string name="room_participants_create">Create</string>
+    <string name="room_participants_invite_another_user">Invite another user</string>
 
     // Chat
     <string name="room_menu_search">Search</string>
@@ -371,5 +372,18 @@
     <string name="ssl_only_accept">ONLY accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
     <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
 
+    // Room Details
+    <string name="room_details_title">Room Details</string>
+    <string name="room_details_mute_notifs">Mute notifications</string>
+    <string name="room_details_photo">Room Photo</string>
+    <string name="room_details_room_name">Room Name</string>
+    <string name="room_details_topic">Topic</string>
+    <string name="room_details_people">People</string>
+    <string name="room_details_settings">Settings</string>
+    <string name="room_details_fail_to_update_topic">Fail to update the topic</string>
+    <string name="room_details_fail_to_update_room_name">Fail to update the room name</string>
+    <string name="room_details_with_updates">The updates will be lost : are you sure to leave ?</string>
+    <string name="room_details_room_is_public">This room is public</string>
+    <string name="room_details_room_is_private">This room is private</string>
 
 </resources>
