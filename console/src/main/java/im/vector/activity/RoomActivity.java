@@ -1528,7 +1528,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+         protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {

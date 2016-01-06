@@ -16,47 +16,25 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.adapters.AdapterUtils;
-import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.adapters.VectorAddParticipantsAdapter;
-import im.vector.contacts.Contact;
 
 public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = "VectorAddActivity";
@@ -138,7 +116,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
             mFragmentsLayout.getChildAt(index).setVisibility(View.GONE);
         }
 
-        onSelectedTab(0);
+        onSelectedTab(1);
     }
 
     /**
@@ -192,5 +170,17 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        List<android.support.v4.app.Fragment> allFragments = getSupportFragmentManager().getFragments();
+
+        // dispatch the result to each fragments
+        for (android.support.v4.app.Fragment fragment : allFragments) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
