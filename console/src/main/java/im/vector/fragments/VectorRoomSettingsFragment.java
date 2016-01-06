@@ -46,17 +46,14 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
-import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
-import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.HashMap;
 
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.util.ResourceUtils;
@@ -70,6 +67,7 @@ public class VectorRoomSettingsFragment extends Fragment {
     private MXSession mSession;
     private Room mRoom;
     private MXMediasCache mMediasCache = null;
+    private BingRulesManager mBingRulesManager = null;
 
     // UI elements
     private ImageView mRoomAvatarImageView;
@@ -141,6 +139,7 @@ public class VectorRoomSettingsFragment extends Fragment {
 
         if (null != mRoom) {
             mRoom.addEventListener(mEventListener);
+            refresh();
         }
     }
 
@@ -188,6 +187,7 @@ public class VectorRoomSettingsFragment extends Fragment {
             mRoom = vectorRoomDetailsActivity.getRoom();
             mSession = vectorRoomDetailsActivity.getSession();
             mMediasCache = mSession.getMediasCache();
+            mBingRulesManager = mSession.getDataHandler().getBingRulesManager();
 
             finalizeInit();
         }
@@ -273,7 +273,7 @@ public class VectorRoomSettingsFragment extends Fragment {
         if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_push_checkbox)) {
             mRoomMuteNotificationCheckBox.setChecked((Boolean)mUpdatedItemsByResourceId.get(R.id.room_settings_push_checkbox));
         } else {
-            // TODO
+            mRoomMuteNotificationCheckBox.setChecked(mBingRulesManager.isRoomNotificationsDisabled(mRoom));
         }
 
         refreshSaveButtonDisplay();
@@ -357,7 +357,13 @@ public class VectorRoomSettingsFragment extends Fragment {
         mRoomMuteNotificationCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUpdatedItemsByResourceId.put(R.id.room_settings_push_checkbox, mRoomMuteNotificationCheckBox.isChecked());
+
+                // add the updated item if the value is new
+                if (mBingRulesManager.isRoomNotificationsDisabled(mRoom) != mRoomMuteNotificationCheckBox.isChecked()) {
+                    mUpdatedItemsByResourceId.put(R.id.room_settings_push_checkbox, mRoomMuteNotificationCheckBox.isChecked());
+                } else {
+                    mUpdatedItemsByResourceId.remove(R.id.room_settings_push_checkbox);
+                }
 
                 refreshSaveButtonDisplay();
             }
@@ -533,6 +539,33 @@ public class VectorRoomSettingsFragment extends Fragment {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_push_checkbox)) {
+            Boolean isMuted = (Boolean)mUpdatedItemsByResourceId.get(R.id.room_settings_push_checkbox);
+
+            mBingRulesManager.muteRoomNotifications(mRoom, isMuted, new BingRulesManager.onBingRuleUpdateListener() {
+
+                private void onDone() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUpdatedItemsByResourceId.remove(R.id.room_settings_push_checkbox);
+                            saveUpdates();
+                        }
+                    });
+                }
+
+                @Override
+                public void onBingRuleUpdateSuccess() {
+                    onDone();
+                }
+
+                @Override
+                public void onBingRuleUpdateFailure(String errorMessage) {
                     onDone();
                 }
             });
