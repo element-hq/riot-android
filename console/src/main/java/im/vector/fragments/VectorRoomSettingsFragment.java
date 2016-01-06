@@ -19,18 +19,18 @@ package im.vector.fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -43,9 +43,14 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.ImageMessage;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.HashMap;
@@ -76,8 +81,12 @@ public class VectorRoomSettingsFragment extends Fragment {
     // top view
     private View mViewHierarchy;
 
+    // the save button is disabled until there is an updated items
+    private MenuItem mSaveMenuItem;
+
     //
     private HashMap<Integer, Object> mUpdatedItemsByResourceId = new HashMap<Integer, Object>();
+    private String mServerAvatarUri = null;
 
     private MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -136,6 +145,31 @@ public class VectorRoomSettingsFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        if (isVisible()) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            inflater.inflate(R.menu.vector_room_settings, menu);
+
+            mSaveMenuItem = menu.findItem(R.id.ic_action_room_details_save);
+            refreshSaveButtonDisplay();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.ic_action_room_details_save) {
+            saveUpdates();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("mUpdatedItemsByResourceId", mUpdatedItemsByResourceId);
@@ -158,7 +192,20 @@ public class VectorRoomSettingsFragment extends Fragment {
             finalizeInit();
         }
 
+        setHasOptionsMenu(true);
+
         return mViewHierarchy;
+    }
+
+    /**
+     * Refresh the save button display.
+     */
+    private void refreshSaveButtonDisplay() {
+        if (null != mSaveMenuItem) {
+            Boolean hasUpdatedItems = mUpdatedItemsByResourceId.size() > 0;
+            mSaveMenuItem.setEnabled(hasUpdatedItems);
+            mSaveMenuItem.getIcon().setAlpha(hasUpdatedItems ? 255 : 70);
+        }
     }
 
     /**
@@ -228,6 +275,8 @@ public class VectorRoomSettingsFragment extends Fragment {
         } else {
             // TODO
         }
+
+        refreshSaveButtonDisplay();
     }
 
     /**
@@ -248,12 +297,20 @@ public class VectorRoomSettingsFragment extends Fragment {
                     value = "";
                 }
 
+                String roomName = mRoom.getName(mSession.getMyUser().userId);
+
+                if (null == roomName) {
+                    roomName = "";
+                }
+
                 // save only if there is an update
-                if (!TextUtils.equals(value, mRoom.getName(mSession.getMyUser().userId))) {
+                if (!TextUtils.equals(value, roomName)) {
                     mUpdatedItemsByResourceId.put(R.id.room_settings_room_name_edit_text, value);
                 } else {
                     mUpdatedItemsByResourceId.remove(R.id.room_settings_room_name_edit_text);
                 }
+
+                refreshSaveButtonDisplay();
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -270,12 +327,16 @@ public class VectorRoomSettingsFragment extends Fragment {
                     value = "";
                 }
 
+                String topic = (null != mRoom.getTopic()) ? mRoom.getTopic() : "";
+
                 // save only if there is an update
-                if (!TextUtils.equals(value, mRoom.getTopic())) {
+                if (!TextUtils.equals(value, topic)) {
                     mUpdatedItemsByResourceId.put(R.id.room_settings_room_topic_edit_text, value);
                 } else {
                     mUpdatedItemsByResourceId.remove(R.id.room_settings_room_topic_edit_text);
                 }
+
+                refreshSaveButtonDisplay();
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -297,6 +358,8 @@ public class VectorRoomSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mUpdatedItemsByResourceId.put(R.id.room_settings_push_checkbox, mRoomMuteNotificationCheckBox.isChecked());
+
+                refreshSaveButtonDisplay();
             }
         });
 
@@ -326,5 +389,155 @@ public class VectorRoomSettingsFragment extends Fragment {
                 }
             }
         }
+    }
+
+    /**
+     * Save the room updates.
+     */
+    private void saveUpdates() {
+
+        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_avatar)) {
+            Bitmap bitmap = (Bitmap) mUpdatedItemsByResourceId.get(R.id.room_settings_room_avatar);
+            String thumbnailURL = mMediasCache.saveBitmap(bitmap, null);
+
+            ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailURL));
+
+            mSession.getContentManager().uploadContent(resource.contentStream, mRoom.getRoomId(), "image/jpeg", thumbnailURL, new ContentManager.UploadCallback() {
+                @Override
+                public void onUploadStart(String uploadId) {
+                }
+
+                @Override
+                public void onUploadProgress(String anUploadId, int percentageProgress) {
+                }
+
+                @Override
+                public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUpdatedItemsByResourceId.remove(R.id.room_settings_room_avatar);
+
+                            if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
+                                mServerAvatarUri = uploadResponse.contentUri;
+                            }
+
+                            saveUpdates();
+                        }
+                    });
+                }
+            });
+        }
+
+        if (null != mServerAvatarUri) {
+            mRoom.updateAvatarUrl(mServerAvatarUri, new ApiCallback<Void>() {
+
+                private void onDone() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mServerAvatarUri = null;
+                            saveUpdates();
+                        }
+                    });
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_name_edit_text)) {
+            String roomName = (String) mUpdatedItemsByResourceId.get(R.id.room_settings_room_name_edit_text);
+
+            mRoom.updateName(roomName, new ApiCallback<Void>() {
+
+                private void onDone() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUpdatedItemsByResourceId.remove(R.id.room_settings_room_name_edit_text);
+                            saveUpdates();
+                        }
+                    });
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_topic_edit_text)) {
+            String topic = (String) mUpdatedItemsByResourceId.get(R.id.room_settings_room_topic_edit_text);
+
+            mRoom.updateTopic(topic, new ApiCallback<Void>() {
+
+                private void onDone() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUpdatedItemsByResourceId.remove(R.id.room_settings_room_topic_edit_text);
+                            saveUpdates();
+                        }
+                    });
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+        getActivity().finish();
     }
 }

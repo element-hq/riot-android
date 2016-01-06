@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -127,6 +129,8 @@ public class VectorAddParticipantsFragment extends Fragment {
 
             finalizeInit();
         }
+
+        setHasOptionsMenu(true);
 
         return mViewHierarchy;
     }

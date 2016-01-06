@@ -139,6 +139,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     private void onSelectedTab(int index) {
         if (index != mSelectedSection) {
 
+            invalidateOptionsMenu();
+
             // hide the previous one
             if (mSelectedSection >= 0) {
                 toggleTab(mSelectedSection, false);
@@ -149,17 +151,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
             toggleTab(mSelectedSection, true);
             mFragmentsLayout.getChildAt(mSelectedSection).setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
