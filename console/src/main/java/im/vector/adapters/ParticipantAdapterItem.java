@@ -39,6 +39,10 @@ public class ParticipantAdapterItem {
     public RoomMember mRoomMember;
     public Contact mContact;
 
+    // search fields
+    private String mLowerCaseDisplayName;
+    private String mLowerCaseMatrixId;
+
     public ParticipantAdapterItem(RoomMember member) {
         mDisplayName = member.getName();
         mAvatarUrl = member.avatarUrl;
@@ -46,6 +50,8 @@ public class ParticipantAdapterItem {
 
         mRoomMember = member;
         mContact = null;
+
+        initSearchByPatternFields();
     }
 
     public ParticipantAdapterItem(Contact contact, Context context) {
@@ -56,12 +62,34 @@ public class ParticipantAdapterItem {
         mRoomMember = null;
 
         mContact = contact;
+
+        initSearchByPatternFields();
     }
 
     public ParticipantAdapterItem(String displayName, String avatarUrl, String userId) {
         mDisplayName = displayName;
         mAvatarUrl = avatarUrl;
         mUserId = userId;
+
+        initSearchByPatternFields();
+    }
+
+    /**
+     * Init the search by pattern fields
+     */
+    private void initSearchByPatternFields() {
+        if (!TextUtils.isEmpty(mDisplayName)) {
+            mLowerCaseDisplayName = mDisplayName.toLowerCase();
+        }
+
+        if (!TextUtils.isEmpty(mUserId)) {
+
+            int sepPos = mUserId.indexOf(":");
+
+            if (sepPos > 0) {
+                mLowerCaseMatrixId = mUserId.substring(0, sepPos).toLowerCase();
+            }
+        }
     }
 
     // Comparator to order members alphabetically
@@ -96,27 +124,62 @@ public class ParticipantAdapterItem {
      * @param aPattern the pattern to search.
      * @return true if it matches.
      */
-    public boolean matchWith(String aPattern) {
-        if (TextUtils.isEmpty(aPattern) || TextUtils.isEmpty(aPattern.trim())) {
+    public boolean matchWithPattern(String aPattern) {
+        if (TextUtils.isEmpty(aPattern)) {
             return false;
         }
-        String regEx = "(?i:.*" + aPattern.trim() + ".*)";
+
         boolean res = false;
 
-        if (!TextUtils.isEmpty(mDisplayName)) {
-            res = mDisplayName.matches(regEx);
+        if (!res && !TextUtils.isEmpty(mLowerCaseDisplayName)) {
+            res = mLowerCaseDisplayName.indexOf(aPattern) >= 0;
         }
 
-        if (!TextUtils.isEmpty(mUserId)) {
-            res = mUserId.matches(regEx);
+        if (!res && !TextUtils.isEmpty(mLowerCaseMatrixId)) {
+            res = mLowerCaseMatrixId.indexOf(aPattern) >= 0;
         }
 
-        if (!res && (null != mRoomMember)) {
-            res = mRoomMember.matchWith(aPattern);
-        }
+        // the room member class only checks the matrixId and the displayname
+        // avoid testing twice
+        /*if (!res && (null != mRoomMember)) {
+            res = mRoomMember.matchWithPattern(aPattern);
+        }*/
 
         if (!res && (null != mContact)) {
             res = mContact.matchWithPattern(aPattern);
+        }
+
+        return res;
+    }
+
+    /**
+     * Test if a room member fields matches with a regex
+     * The check is done with the displayname and the userId.
+     * @param aRegEx the pattern to search.
+     * @return true if it matches.
+     */
+    public boolean matchWithRegEx(String aRegEx) {
+
+        if (TextUtils.isEmpty(aRegEx)) {
+            return false;
+        }
+
+        boolean res = false;
+
+        if (!res && !TextUtils.isEmpty(mDisplayName)) {
+            res = mDisplayName.matches(aRegEx);
+        }
+
+        if (!res && !TextUtils.isEmpty(mUserId)) {
+            res = mUserId.matches(aRegEx);
+        }
+
+        if (!res && (null != mRoomMember)) {
+            res = mRoomMember.matchWithRegEx(aRegEx);
+        }
+
+        if (!res && (null != mContact)) {
+            res = mContact.matchWithRegEx(aRegEx);
         }
 
         return res;

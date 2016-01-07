@@ -306,9 +306,12 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 listOtherMembers();
             }
 
+            // remove trailing spaces.
+            String pattern = mPattern.trim().toLowerCase();
+
             // check if each member matches the pattern
             for(ParticipantAdapterItem item: mUnusedParticipants) {
-                if (item.matchWith(mPattern)) {
+                if (item.matchWithPattern(pattern)) {
                     nextMembersList.add(item);
                 }
             }
