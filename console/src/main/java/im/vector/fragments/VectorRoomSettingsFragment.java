@@ -433,6 +433,8 @@ public class VectorRoomSettingsFragment extends Fragment {
                     });
                 }
             });
+
+            return;
         }
 
         if (null != mServerAvatarUri) {
@@ -468,6 +470,8 @@ public class VectorRoomSettingsFragment extends Fragment {
                     onDone();
                 }
             });
+
+            return;
         }
 
         if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_name_edit_text)) {
@@ -505,6 +509,8 @@ public class VectorRoomSettingsFragment extends Fragment {
                     onDone();
                 }
             });
+
+            return;
         }
 
         if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_topic_edit_text)) {
@@ -542,6 +548,8 @@ public class VectorRoomSettingsFragment extends Fragment {
                     onDone();
                 }
             });
+
+            return;
         }
 
         if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_push_checkbox)) {
@@ -569,6 +577,8 @@ public class VectorRoomSettingsFragment extends Fragment {
                     onDone();
                 }
             });
+
+            return;
         }
 
         getActivity().finish();
