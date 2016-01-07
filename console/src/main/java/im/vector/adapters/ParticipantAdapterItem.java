@@ -107,6 +107,10 @@ public class ParticipantAdapterItem {
             res = mDisplayName.matches(regEx);
         }
 
+        if (!TextUtils.isEmpty(mUserId)) {
+            res = mUserId.matches(regEx);
+        }
+
         if (!res && (null != mRoomMember)) {
             res = mRoomMember.matchWith(aPattern);
         }

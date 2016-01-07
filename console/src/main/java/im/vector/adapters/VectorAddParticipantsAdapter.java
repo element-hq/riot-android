@@ -195,17 +195,26 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 Room curRoom = mSession.getDataHandler().getRoom(summary.getRoomId());
                 Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
 
-                if (otherRoomMembers.size() < 100) {
-                    for (RoomMember member : otherRoomMembers) {
-                        String userID = member.getUserId();
+                for (RoomMember member : otherRoomMembers) {
+                    String userID = member.getUserId();
 
-                        // accepted User ID or still active users
-                        if ((idsToIgnore.indexOf(userID) < 0) && (RoomMember.MEMBERSHIP_JOIN.equals(member.membership))) {
-                            unusedParticipants.add(new ParticipantAdapterItem(member));
-                            idsToIgnore.add(member.getUserId());
-                        }
+                    // accepted User ID or still active users
+                    if (idsToIgnore.indexOf(userID) < 0) {
+                        unusedParticipants.add(new ParticipantAdapterItem(member));
+                        idsToIgnore.add(member.getUserId());
                     }
                 }
+            }
+        }
+
+        // check from any other known users
+        // because theirs presence have been received
+        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
+        for(User user : users) {
+            // accepted User ID or still active users
+            if (idsToIgnore.indexOf(user.userId) < 0) {
+                unusedParticipants.add(new ParticipantAdapterItem(user.userId, null, user.userId));
+                idsToIgnore.add(user.userId);
             }
         }
 
@@ -337,7 +346,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
-        String text = (0 == position) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
+        String text = ((0 == position) && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
         if (!isSearchMode && (null != powerLevels)) {
             // show the admin
