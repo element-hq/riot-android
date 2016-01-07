@@ -17,12 +17,16 @@
 package im.vector.adapters;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -67,12 +71,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private LayoutInflater mLayoutInflater;
     private MXMediasCache mMediasCache;
 
+    private View mSwipingCellView = null;
+
     private MXSession mSession;
     private String mRoomId;
     private Room mRoom;
     private int mLayoutResourceId;
     private Boolean mIsEditionMode;
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
+
 
     ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
@@ -385,7 +392,6 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
             // find a related user
             if (null != user) {
-
                 if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
                     status = mContext.getString(R.string.room_participants_active);
                 } else {
@@ -410,6 +416,97 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         statusTextView.setText(status);
+
+        //
+        final int fpos = position;
+
+        View deleteActionsView = convertView.findViewById(R.id.filtered_list_delete_action);
+        deleteActionsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnParticipantsListener) {
+                    try {
+                        if (0 == fpos) {
+                            mOnParticipantsListener.onLeaveClick();
+                        } else {
+                            // assume that the tap on remove
+                            mOnParticipantsListener.onRemoveClick(participant);
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        });
+
+        // manage the swipe to display actions
+        final RelativeLayout cellLayout = (RelativeLayout) convertView.findViewById(R.id.filtered_list_cell);
+
+        if (null != mSwipingCellView) {
+            mSwipingCellView.setTranslationX(0);
+            mSwipingCellView = null;
+        }
+
+        // cancel any translation
+        cellLayout.setTranslationX(0);
+
+        int myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
+        int userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
+
+        // the swipe should be enabled when there is no search and the user can kick other members
+        if (isSearchMode || ((0 != position) && (myPowerLevel < powerLevels.kick) && (myPowerLevel < userPowerLevel))) {
+            cellLayout.setOnTouchListener(null);
+        } else {
+            final View hiddenView = convertView.findViewById(R.id.filtered_list_actions);
+            cellLayout.setOnTouchListener(new View.OnTouchListener() {
+                private float mStartX = 0;
+
+                @Override
+                public boolean onTouch(final View v, MotionEvent event) {
+                    final int hiddenViewWidth = hiddenView.getWidth();
+
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+
+                            // cancel hidden view display
+                            if (null != mSwipingCellView) {
+                                mSwipingCellView.setTranslationX(0);
+                                mSwipingCellView = null;
+                                return false;
+                            }
+
+                            mSwipingCellView = cellLayout;
+                            mStartX = event.getX();
+                            break;
+                        }
+                        case MotionEvent.ACTION_MOVE: {
+                            float x = event.getX() + v.getTranslationX();
+                            float deltaX = Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+                            cellLayout.setTranslationX(deltaX);
+                        }
+                        break;
+                        case MotionEvent.ACTION_CANCEL:
+                        case MotionEvent.ACTION_UP: {
+                            float x = event.getX() + v.getTranslationX();
+                            float aa = hiddenViewWidth;
+                            float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+
+                            if (deltaX > (hiddenViewWidth / 2)) {
+                                cellLayout.setTranslationX(-hiddenViewWidth);
+                            } else {
+                                cellLayout.setTranslationX(0);
+                                mSwipingCellView = null;
+                            }
+
+                            break;
+                        }
+
+                        default:
+                            return false;
+                    }
+                    return true;
+                }
+            });
+        }
 
         return convertView;
     }
