@@ -344,6 +344,15 @@
     <string name="room_participants_create">Create</string>
     <string name="room_participants_invite_another_user">Invite another user</string>
 
+    <string name="room_participants_active">Active</string>
+    <string name="room_participants_invite">Invite</string>
+    <string name="room_participants_leave">Left</string>
+    <string name="room_participants_ban">Banned</string>
+    <string name="room_participants_active_less_1_hour">Active less 1 hour ago</string>
+    <string name="room_participants_active_less_x_hours">Active less %d hours ago</string>
+    <string name="room_participants_active_less_x_days">Active less %d days ago</string>
+    <string name="you">You</string>
+
     // Chat
     <string name="room_menu_search">Search</string>
     <string name="room_menu_participants">Participants</string>

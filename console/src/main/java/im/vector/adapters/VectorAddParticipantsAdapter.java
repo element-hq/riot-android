@@ -33,16 +33,20 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.User;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.UIUtils;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
     public interface OnParticipantsListener {
@@ -331,8 +335,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         if (null != mRoom) {
             powerLevels = mRoom.getLiveState().getPowerLevels();
         }
-        TextView textView = (TextView) convertView.findViewById(R.id.filtered_list_name);
-        String text = participant.mDisplayName;
+
+        TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
+        String text = (0 == position) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
         if (!isSearchMode && (null != powerLevels)) {
             // show the admin
@@ -340,63 +345,59 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 text = mContext.getString(R.string.room_participants_admin_name, text);
             }
         }
-        textView.setText(text);
+        nameTextView.setText(text);
 
-        final Button button = (Button) convertView.findViewById(R.id.filtered_list_button);
+        TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
+        String status = "";
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mOnParticipantsListener) {
-                    try {
-                        if (mContext.getString(R.string.leave).equals(button.getText())) {
-                            mOnParticipantsListener.onLeaveClick();
-                        } else {
-                            // assume that the tap on remove
-                            mOnParticipantsListener.onRemoveClick(participant);
-                        }
-                    } catch (Exception e) {
-                    }
+        if ((null != participant.mRoomMember) && (null != participant.mRoomMember.membership) && !TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_JOIN)) {
+            if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                status = mContext.getString(R.string.room_participants_invite);
+            } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                status = mContext.getString(R.string.room_participants_leave);
+            } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_BAN)) {
+                status = mContext.getString(R.string.room_participants_ban);
+            }
+        } else if (null != participant.mUserId) {
+            User user = null;
+
+            // retrieve the linked user
+            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+
+            for(MXSession session : sessions) {
+
+                if (null == user) {
+                    user = session.getDataHandler().getUser(participant.mUserId);
                 }
             }
-        });
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.filtered_list_image);
+            // find a related user
+            if (null != user) {
 
-        if (isSearchMode) {
-            button.setVisibility(View.GONE);
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageResource(R.drawable.ic_material_add_circle);
-        } else {
-            if (mIsEditionMode) {
-                imageView.setVisibility(View.GONE);
-                int myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
-                int userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
-
-                String buttonText = "";
-
-                if (0 == position) {
-                    buttonText = mContext.getText(R.string.leave).toString();
+                if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
+                    status = mContext.getString(R.string.room_participants_active);
                 } else {
-                    // check if the user can kick the user
-                    if ((myPowerLevel >= powerLevels.kick) && (myPowerLevel >= userPowerLevel)) {
-                        buttonText = mContext.getText(R.string.remove).toString();
+                    Long lastActiveMs = user.lastActiveAgo;
+
+                    if ((null != lastActiveMs) &&  (-1 != lastActiveMs)) {
+                        Long lastActivehour = lastActiveMs / 1000 / 60 / 60;
+                        Long lastActiveDays = lastActivehour / 24;
+
+                        if (lastActivehour < 1) {
+                            status = mContext.getString(R.string.room_participants_active_less_1_hour);
+                        }
+                        else if (lastActivehour < 24) {
+                            status = mContext.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
+                        }
+                        else {
+                            status = mContext.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
+                         }
                     }
-                }
-                button.setText(buttonText);
-                button.setVisibility(TextUtils.isEmpty(buttonText) ? View.GONE : View.VISIBLE);
-            } else {
-                button.setVisibility(View.GONE);
-
-                // the first row is oneself
-                if (0 != position) {
-                    imageView.setVisibility(View.VISIBLE);
-                    imageView.setImageResource(R.drawable.ic_material_remove_circle);
-                } else {
-                    imageView.setVisibility(View.GONE);
                 }
             }
         }
+
+        statusTextView.setText(status);
 
         return convertView;
     }

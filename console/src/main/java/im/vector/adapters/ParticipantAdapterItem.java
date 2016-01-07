@@ -68,8 +68,8 @@ public class ParticipantAdapterItem {
     public static Comparator<ParticipantAdapterItem> alphaComparator = new Comparator<ParticipantAdapterItem>() {
         @Override
         public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-            String lhs = part1.mDisplayName;
-            String rhs = part2.mDisplayName;
+            String lhs = TextUtils.isEmpty(part1.mDisplayName) ? part1.mUserId : part1.mDisplayName;
+            String rhs = TextUtils.isEmpty(part2.mDisplayName) ? part2.mUserId : part2.mDisplayName;
 
             if (lhs == null) {
                 return -1;
@@ -77,18 +77,21 @@ public class ParticipantAdapterItem {
             else if (rhs == null) {
                 return 1;
             }
+            
+            /*
+            // disable to have the same sort order than the IOS client.
             if (lhs.startsWith("@")) {
                 lhs = lhs.substring(1);
             }
             if (rhs.startsWith("@")) {
                 rhs = rhs.substring(1);
-            }
+            }*/
             return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
         }
     };
 
     /**
-     * Test if a room memmber matches with a pattern.
+     * Test if a room member matches with a pattern.
      * The check is done with the displayname and the userId.
      * @param aPattern the pattern to search.
      * @return true if it matches.
