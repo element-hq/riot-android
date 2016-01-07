@@ -207,7 +207,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
                     // accepted User ID or still active users
                     if (idsToIgnore.indexOf(userID) < 0) {
-                        unusedParticipants.add(new ParticipantAdapterItem(member));
+                        unusedParticipants.add(new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
                         idsToIgnore.add(member.getUserId());
                     }
                 }
@@ -236,7 +236,6 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                     unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
                     idsToIgnore.add(mxId.mMatrixId);
                 }
-
             } else {
                 unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
             }
@@ -449,11 +448,19 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // cancel any translation
         cellLayout.setTranslationX(0);
 
-        int myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
-        int userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
+        int myPowerLevel = 0;
+        int userPowerLevel = 50;
+        int kickPowerLevel = 50;
+
+        // during a room creation, there is no dedicated power level
+        if (null != powerLevels) {
+            myPowerLevel =powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
+            userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
+            kickPowerLevel = powerLevels.kick;
+        }
 
         // the swipe should be enabled when there is no search and the user can kick other members
-        if (isSearchMode || ((0 != position) && (myPowerLevel < powerLevels.kick) && (myPowerLevel < userPowerLevel))) {
+        if (isSearchMode || ((0 != position) && (myPowerLevel < userPowerLevel) && (myPowerLevel < kickPowerLevel))) {
             cellLayout.setOnTouchListener(null);
         } else {
             final View hiddenView = convertView.findViewById(R.id.filtered_list_actions);
