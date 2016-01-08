@@ -60,7 +60,7 @@ public final class GcmRegistrationManager {
     public static final String PREFS_PUSHER_URL_KEY = "GcmRegistrationManager.pusherUrl";
     public static final String PREFS_PUSHER_FILE_TAG_KEY = "GcmRegistrationManager.pusherFileTag";
 
-    private static String DEFAULT_PUSHER_APP_ID = "org.matrix.console.android";
+    private static String DEFAULT_PUSHER_APP_ID = "im.vector.app.android";
     private static String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
     private static String DEFAULT_PUSHER_FILE_TAG = "mobile";
 
