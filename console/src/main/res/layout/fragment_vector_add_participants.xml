@@ -37,14 +37,28 @@
         android:layout_below="@+id/add_participants_search_layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/vector_silver_color" />
+        android:background="@color/vector_silver_color"/>
 
     <ListView
         android:layout_below="@id/add_participants_separator_line"
         android:id="@+id/add_participants_members_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+        android:divider="#00000000"
+        android:dividerHeight="1px"/>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:background="#33333333"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/add_participants_progress_view">
+
+        <ProgressBar
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

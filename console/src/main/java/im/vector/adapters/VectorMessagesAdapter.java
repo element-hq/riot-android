@@ -231,7 +231,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             // TODO replace with the new Vector style icon.
             imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
 
-            if (null != member.avatarUrl) {
+            if ((null != member) && (null != member.avatarUrl)) {
                 loadSmallAvatar(imageView, member.avatarUrl);
             }
 

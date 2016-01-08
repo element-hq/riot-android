@@ -103,18 +103,41 @@ public class Contact {
      */
     public boolean matchWithPattern(String pattern) {
         // empty pattern -> cannot match
-        if (TextUtils.isEmpty(pattern) || TextUtils.isEmpty(pattern.trim())) {
+        if (TextUtils.isEmpty(pattern)) {
             return false;
         }
 
-        String regEx = "(?i:.*" + pattern.trim() + ".*)";
         Boolean matched = false;
 
-        matched = mDisplayName.matches(regEx);
+        matched = (mDisplayName.toLowerCase().indexOf(pattern) >= 0);
 
         if (!matched) {
             for(String email : mEmails) {
-                matched |= email.matches(regEx);
+                matched |= email.toLowerCase().indexOf(pattern) >= 0;
+            }
+        }
+
+        return matched;
+    }
+
+    /**
+     * test if some fields match with the reg ex.
+     * @param aRegEx the reg ex.
+     * @return true if it matches
+     */
+    public boolean matchWithRegEx(String aRegEx) {
+        // empty pattern -> cannot match
+        if (TextUtils.isEmpty(aRegEx)) {
+            return false;
+        }
+
+        Boolean matched = false;
+
+        matched = mDisplayName.matches(aRegEx);
+
+        if (!matched) {
+            for(String email : mEmails) {
+                matched |= email.matches(aRegEx);
             }
         }
 

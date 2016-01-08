@@ -17,12 +17,16 @@
 package im.vector.adapters;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -33,16 +37,20 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.User;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.UIUtils;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
     public interface OnParticipantsListener {
@@ -63,12 +71,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private LayoutInflater mLayoutInflater;
     private MXMediasCache mMediasCache;
 
+    private View mSwipingCellView = null;
+
     private MXSession mSession;
     private String mRoomId;
     private Room mRoom;
     private int mLayoutResourceId;
     private Boolean mIsEditionMode;
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
+
 
     ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
@@ -173,7 +184,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             Room fromRoom = store.getRoom(mRoomId);
             Collection<RoomMember> members = fromRoom.getMembers();
             for(RoomMember member : members) {
-                idsToIgnore.add(member.getUserId());
+                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                    idsToIgnore.add(member.getUserId());
+                }
             }
 
         } else {
@@ -191,17 +204,26 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 Room curRoom = mSession.getDataHandler().getRoom(summary.getRoomId());
                 Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
 
-                if (otherRoomMembers.size() < 100) {
-                    for (RoomMember member : otherRoomMembers) {
-                        String userID = member.getUserId();
+                for (RoomMember member : otherRoomMembers) {
+                    String userID = member.getUserId();
 
-                        // accepted User ID or still active users
-                        if ((idsToIgnore.indexOf(userID) < 0) && (RoomMember.MEMBERSHIP_JOIN.equals(member.membership))) {
-                            unusedParticipants.add(new ParticipantAdapterItem(member));
-                            idsToIgnore.add(member.getUserId());
-                        }
+                    // accepted User ID or still active users
+                    if (idsToIgnore.indexOf(userID) < 0) {
+                        unusedParticipants.add(new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
+                        idsToIgnore.add(member.getUserId());
                     }
                 }
+            }
+        }
+
+        // check from any other known users
+        // because theirs presence have been received
+        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
+        for(User user : users) {
+            // accepted User ID or still active users
+            if (idsToIgnore.indexOf(user.userId) < 0) {
+                unusedParticipants.add(new ParticipantAdapterItem(user.userId, null, user.userId));
+                idsToIgnore.add(user.userId);
             }
         }
 
@@ -216,7 +238,6 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                     unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
                     idsToIgnore.add(mxId.mMatrixId);
                 }
-
             } else {
                 unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
             }
@@ -293,9 +314,12 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 listOtherMembers();
             }
 
+            // remove trailing spaces.
+            String pattern = mPattern.trim().toLowerCase();
+
             // check if each member matches the pattern
             for(ParticipantAdapterItem item: mUnusedParticipants) {
-                if (item.matchWith(mPattern)) {
+                if (item.matchWithPattern(pattern)) {
                     nextMembersList.add(item);
                 }
             }
@@ -331,8 +355,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         if (null != mRoom) {
             powerLevels = mRoom.getLiveState().getPowerLevels();
         }
-        TextView textView = (TextView) convertView.findViewById(R.id.filtered_list_name);
-        String text = participant.mDisplayName;
+
+        TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
+        String text = ((0 == position) && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
         if (!isSearchMode && (null != powerLevels)) {
             // show the admin
@@ -340,16 +365,69 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 text = mContext.getString(R.string.room_participants_admin_name, text);
             }
         }
-        textView.setText(text);
+        nameTextView.setText(text);
 
-        final Button button = (Button) convertView.findViewById(R.id.filtered_list_button);
+        TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
+        String status = "";
 
-        button.setOnClickListener(new View.OnClickListener() {
+        if ((null != participant.mRoomMember) && (null != participant.mRoomMember.membership) && !TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_JOIN)) {
+            if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                status = mContext.getString(R.string.room_participants_invite);
+            } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                status = mContext.getString(R.string.room_participants_leave);
+            } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_BAN)) {
+                status = mContext.getString(R.string.room_participants_ban);
+            }
+        } else if (null != participant.mUserId) {
+            User user = null;
+
+            // retrieve the linked user
+            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+
+            for(MXSession session : sessions) {
+
+                if (null == user) {
+                    user = session.getDataHandler().getUser(participant.mUserId);
+                }
+            }
+
+            // find a related user
+            if (null != user) {
+                if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
+                    status = mContext.getString(R.string.room_participants_active);
+                } else {
+                    Long lastActiveMs = user.lastActiveAgo;
+
+                    if ((null != lastActiveMs) &&  (-1 != lastActiveMs)) {
+                        Long lastActivehour = lastActiveMs / 1000 / 60 / 60;
+                        Long lastActiveDays = lastActivehour / 24;
+
+                        if (lastActivehour < 1) {
+                            status = mContext.getString(R.string.room_participants_active_less_1_hour);
+                        }
+                        else if (lastActivehour < 24) {
+                            status = mContext.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
+                        }
+                        else {
+                            status = mContext.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
+                         }
+                    }
+                }
+            }
+        }
+
+        statusTextView.setText(status);
+
+        //
+        final int fpos = position;
+
+        View deleteActionsView = convertView.findViewById(R.id.filtered_list_delete_action);
+        deleteActionsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mOnParticipantsListener) {
                     try {
-                        if (mContext.getString(R.string.leave).equals(button.getText())) {
+                        if (0 == fpos) {
                             mOnParticipantsListener.onLeaveClick();
                         } else {
                             // assume that the tap on remove
@@ -361,41 +439,82 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         });
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.filtered_list_image);
+        // manage the swipe to display actions
+        final RelativeLayout cellLayout = (RelativeLayout) convertView.findViewById(R.id.filtered_list_cell);
 
-        if (isSearchMode) {
-            button.setVisibility(View.GONE);
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageResource(R.drawable.ic_material_add_circle);
+        if (null != mSwipingCellView) {
+            mSwipingCellView.setTranslationX(0);
+            mSwipingCellView = null;
+        }
+
+        // cancel any translation
+        cellLayout.setTranslationX(0);
+
+        int myPowerLevel = 0;
+        int userPowerLevel = 50;
+        int kickPowerLevel = 50;
+
+        // during a room creation, there is no dedicated power level
+        if (null != powerLevels) {
+            myPowerLevel =powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
+            userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
+            kickPowerLevel = powerLevels.kick;
+        }
+
+        // the swipe should be enabled when there is no search and the user can kick other members
+        if (isSearchMode || ((0 != position) && (myPowerLevel < userPowerLevel) && (myPowerLevel < kickPowerLevel))) {
+            cellLayout.setOnTouchListener(null);
         } else {
-            if (mIsEditionMode) {
-                imageView.setVisibility(View.GONE);
-                int myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
-                int userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
+            final View hiddenView = convertView.findViewById(R.id.filtered_list_actions);
+            cellLayout.setOnTouchListener(new View.OnTouchListener() {
+                private float mStartX = 0;
 
-                String buttonText = "";
+                @Override
+                public boolean onTouch(final View v, MotionEvent event) {
+                    final int hiddenViewWidth = hiddenView.getWidth();
 
-                if (0 == position) {
-                    buttonText = mContext.getText(R.string.leave).toString();
-                } else {
-                    // check if the user can kick the user
-                    if ((myPowerLevel >= powerLevels.kick) && (myPowerLevel >= userPowerLevel)) {
-                        buttonText = mContext.getText(R.string.remove).toString();
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+
+                            // cancel hidden view display
+                            if (null != mSwipingCellView) {
+                                mSwipingCellView.setTranslationX(0);
+                                mSwipingCellView = null;
+                                return false;
+                            }
+
+                            mSwipingCellView = cellLayout;
+                            mStartX = event.getX();
+                            break;
+                        }
+                        case MotionEvent.ACTION_MOVE: {
+                            float x = event.getX() + v.getTranslationX();
+                            float deltaX = Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+                            cellLayout.setTranslationX(deltaX);
+                        }
+                        break;
+                        case MotionEvent.ACTION_CANCEL:
+                        case MotionEvent.ACTION_UP: {
+                            float x = event.getX() + v.getTranslationX();
+                            float aa = hiddenViewWidth;
+                            float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+
+                            if (deltaX > (hiddenViewWidth / 2)) {
+                                cellLayout.setTranslationX(-hiddenViewWidth);
+                            } else {
+                                cellLayout.setTranslationX(0);
+                                mSwipingCellView = null;
+                            }
+
+                            break;
+                        }
+
+                        default:
+                            return false;
                     }
+                    return true;
                 }
-                button.setText(buttonText);
-                button.setVisibility(TextUtils.isEmpty(buttonText) ? View.GONE : View.VISIBLE);
-            } else {
-                button.setVisibility(View.GONE);
-
-                // the first row is oneself
-                if (0 != position) {
-                    imageView.setVisibility(View.VISIBLE);
-                    imageView.setImageResource(R.drawable.ic_material_remove_circle);
-                } else {
-                    imageView.setVisibility(View.GONE);
-                }
-            }
+            });
         }
 
         return convertView;

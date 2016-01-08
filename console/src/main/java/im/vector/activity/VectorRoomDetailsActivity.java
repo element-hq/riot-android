@@ -116,7 +116,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
             mFragmentsLayout.getChildAt(index).setVisibility(View.GONE);
         }
 
-        onSelectedTab(1);
+        onSelectedTab(0);
     }
 
     /**

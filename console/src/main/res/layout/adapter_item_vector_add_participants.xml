@@ -1,33 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/chat_avatar_size"
+    android:layout_height="74dp"
     android:orientation="horizontal">
 
-    <include layout="@layout/rounded_rect_avatar"
-        android:id="@+id/filtered_list_avatar"/>
+    <LinearLayout
+        android:id="@+id/filtered_list_actions"
+        android:background="@color/vector_light_gray_color"
+        android:layout_width="74dp"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        
+        <RelativeLayout
+            android:layout_width="74dp"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/filtered_list_name"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
-        android:text="a text here" />
+            <ImageView
+                android:id="@+id/filtered_list_delete_action"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/vector_remove"/>
 
-    <Button
-        android:id="@+id/filtered_list_button"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/chat_avatar_size"
-        android:text="+" />
+        </RelativeLayout>
+    </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/filtered_list_cell"
+        android:background="#FFF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/filtered_list_image"
-        android:layout_width="@dimen/chat_avatar_size"
-        android:layout_height="@dimen/chat_avatar_size"/>
+        <RelativeLayout
+            android:id="@+id/filtered_list_avatar"
+            android:layout_marginLeft="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
 
-</LinearLayout>
+            <include layout="@layout/vector_add_participants_round_avatar"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/filtered_list_name"
+            android:layout_toRightOf="@id/filtered_list_avatar"
+            android:layout_alignTop="@id/filtered_list_avatar"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="13dp"
+            android:textColor="@color/vector_text_black_color"
+            android:text="A member name" />
+
+        <TextView
+            android:id="@+id/filtered_list_status"
+            android:layout_alignLeft="@id/filtered_list_name"
+            android:layout_alignBottom="@id/filtered_list_avatar"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:layout_marginRight="13dp"
+            android:textColor="@color/vector_text_gray_color"
+            android:text="A member status" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/vector_silver_color"
+            android:layout_alignLeft="@id/filtered_list_avatar"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>
