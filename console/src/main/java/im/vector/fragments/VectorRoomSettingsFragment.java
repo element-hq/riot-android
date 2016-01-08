@@ -161,6 +161,13 @@ public class VectorRoomSettingsFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.ic_action_room_details_save) {
+            View pageContentView = mViewHierarchy.findViewById(R.id.settings_layout);
+            pageContentView.setAlpha(0.5f);
+            pageContentView.setEnabled(false);
+
+            View spinnerView = mViewHierarchy.findViewById(R.id.room_settings_saving_progress);
+            spinnerView.setVisibility(View.VISIBLE);
+
             saveUpdates();
             return true;
         }
@@ -401,7 +408,6 @@ public class VectorRoomSettingsFragment extends Fragment {
      * Save the room updates.
      */
     private void saveUpdates() {
-
         if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_avatar)) {
             Bitmap bitmap = (Bitmap) mUpdatedItemsByResourceId.get(R.id.room_settings_room_avatar);
             String thumbnailURL = mMediasCache.saveBitmap(bitmap, null);

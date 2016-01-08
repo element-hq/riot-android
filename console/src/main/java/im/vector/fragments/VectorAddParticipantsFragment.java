@@ -61,6 +61,7 @@ public class VectorAddParticipantsFragment extends Fragment {
     private EditText mSearchEdit;
     private Button mCancelButton;
     private ListView mParticantsListView;
+    private View mProgressView;
     private VectorAddParticipantsAdapter mAdapter;
 
     private MXEventListener mEventListener = new MXEventListener() {
@@ -139,6 +140,7 @@ public class VectorAddParticipantsFragment extends Fragment {
     private void finalizeInit() {
         mxMediasCache = mSession.getMediasCache();
 
+        mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         mParticantsListView = (ListView)mViewHierarchy.findViewById(R.id.add_participants_members_list);
         mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, true, mRoom.getRoomId(), mxMediasCache);
         mParticantsListView.setAdapter(mAdapter);
@@ -150,10 +152,28 @@ public class VectorAddParticipantsFragment extends Fragment {
 
                     final ArrayList<String> userIDs = new ArrayList<String>();
                     userIDs.add(participant.mUserId);
+
+                    mProgressView.setVisibility(View.VISIBLE);
+
                     mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
                         @Override
                         public void onSuccess(Void info) {
-                            // display something ?
+                            mProgressView.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            mProgressView.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onMatrixError(final MatrixError e) {
+                            mProgressView.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onUnexpectedError(final Exception e) {
+                            mProgressView.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -183,23 +203,30 @@ public class VectorAddParticipantsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+
+                                mProgressView.setVisibility(View.VISIBLE);
+
                                 mRoom.kick(participantItem.mUserId, new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
+                                        mProgressView.setVisibility(View.GONE);
                                     }
 
                                     @Override
                                     public void onNetworkError(Exception e) {
+                                        mProgressView.setVisibility(View.GONE);
                                         // display something
                                     }
 
                                     @Override
                                     public void onMatrixError(MatrixError e) {
+                                        mProgressView.setVisibility(View.GONE);
                                         // display something
                                     }
 
                                     @Override
                                     public void onUnexpectedError(Exception e) {
+                                        mProgressView.setVisibility(View.GONE);
                                         // display something
                                     }
                                 });
@@ -225,23 +252,30 @@ public class VectorAddParticipantsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+
+                                mProgressView.setVisibility(View.VISIBLE);
+
                                 mRoom.leave(new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
+                                        mProgressView.setVisibility(View.GONE);
                                         // display something
                                     }
 
                                     @Override
                                     public void onNetworkError(Exception e) {
+                                        mProgressView.setVisibility(View.GONE);
                                         // display something
                                     }
 
                                     @Override
                                     public void onMatrixError(MatrixError e) {
+                                        mProgressView.setVisibility(View.GONE);
                                     }
 
                                     @Override
                                     public void onUnexpectedError(Exception e) {
+                                        mProgressView.setVisibility(View.GONE);
                                     }
                                 });
                                 getActivity().finish();

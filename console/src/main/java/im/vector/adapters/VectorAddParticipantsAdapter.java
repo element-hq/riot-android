@@ -184,7 +184,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             Room fromRoom = store.getRoom(mRoomId);
             Collection<RoomMember> members = fromRoom.getMembers();
             for(RoomMember member : members) {
-                idsToIgnore.add(member.getUserId());
+                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                    idsToIgnore.add(member.getUserId());
+                }
             }
 
         } else {
