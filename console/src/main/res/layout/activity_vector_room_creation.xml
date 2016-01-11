@@ -1,6 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,18 +33,33 @@
                 android:gravity="center"
                 android:text="@string/room_creation_account"/>
 
-            <Spinner
-                android:id="@+id/room_creation_accounts_spinner"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:layout_height="match_parent"></Spinner>
+                android:gravity="center">
+
+                <Spinner
+                    android:id="@+id/room_creation_accounts_spinner"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"/>
+
+                <TextView
+                    android:id="@+id/room_creation_single_account_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:textColor="@color/vector_green_color"
+                    android:text="a Text here"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <TextView
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -52,7 +69,7 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="40dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -84,11 +101,15 @@
                 android:layout_alignParentLeft="true"
                 android:text="@string/room_creation_appearance_picture"/>
 
-            <include layout="@layout/rounded_rect_avatar"
+            <RelativeLayout
                 android:id="@+id/room_creation_account_room_thumbnail"
-                android:layout_width="@dimen/chat_avatar_size"
-                android:layout_height="@dimen/chat_avatar_size"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+                <include layout="@layout/vector_room_round_avatar"/>
+            </RelativeLayout>
+
         </RelativeLayout>
 
         <TextView
@@ -102,7 +123,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="40dp">
 
             <TextView
                 android:id="@+id/room_creation_account_privacy_state"

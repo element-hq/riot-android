@@ -44,6 +44,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,13 +65,12 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private static final String BACKUP_ROOM_NAME = "BACKUP_ROOM_NAME";
 
     // UI items
-    TextView mAccountTile;
-    LinearLayout mAccountsSelectionLayout;
     Spinner mAccountsSpinner;
     EditText mRoomNameEditText;
     ImageView mAvatarImageView;
     TextView mPrivacyText;
     Button mPrivacyButton;
+    TextView mSingleAccountText;
 
     ArrayList<MXSession> mSessions = null;
     Integer mSessionIndex = 0;
@@ -91,8 +91,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
         setContentView(R.layout.activity_vector_room_creation);
 
-        mAccountTile = (TextView)findViewById(R.id.room_creation_account_title);
-        mAccountsSelectionLayout = (LinearLayout)findViewById(R.id.room_creation_account_selection_layout);
+        mSingleAccountText = (TextView)findViewById(R.id.room_creation_single_account_text);
         mAccountsSpinner =  (Spinner)findViewById(R.id.room_creation_accounts_spinner);
         mRoomNameEditText = (EditText) findViewById(R.id.room_creation_account_name_edit);
         mAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
@@ -227,14 +226,16 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
      */
     private void refreshUIItems() {
         // session selection
-        Collection<MXSession> sessions = Matrix.getInstance(this).getSessions();
+        ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
 
         // one session -> no need to select a session
         if (sessions.size() == 1) {
-            mAccountsSelectionLayout.setVisibility(View.GONE);
-            mAccountTile.setVisibility(View.GONE);
+            mAccountsSpinner.setVisibility(View.GONE);
+            mSingleAccountText.setVisibility(View.VISIBLE);
+
+            mSingleAccountText.setText(sessions.get(0).getMyUser().displayname + " (" + sessions.get(0).getMyUser().userId + ")");
         } else {
-            mAccountsSelectionLayout.setVisibility(View.VISIBLE);
+            mSingleAccountText.setVisibility(View.GONE);
             mAccountsSpinner.setVisibility(View.VISIBLE);
 
             // not yet initialized
