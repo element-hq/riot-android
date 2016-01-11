@@ -1,146 +1,166 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFFFF"
-    >
+    android:background="#FFFFFFFF">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/room_creation_account_title"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/room_creation_account"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/room_creation_account_selection_layout"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:id="@+id/room_creation_account_title"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="@string/room_creation_account"/>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:gravity="center">
-
-                <Spinner
-                    android:id="@+id/room_creation_accounts_spinner"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"/>
+            <LinearLayout
+                android:id="@+id/room_creation_account_selection_layout"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
 
                 <TextView
-                    android:id="@+id/room_creation_single_account_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:singleLine="true"
-                    android:textColor="@color/vector_green_color"
-                    android:text="a Text here"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/room_creation_account"/>
 
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center">
 
-        </LinearLayout>
+                    <Spinner
+                        android:id="@+id/room_creation_accounts_spinner"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"/>
 
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/room_creation_appearance"/>
+                    <TextView
+                        android:id="@+id/room_creation_single_account_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:singleLine="true"
+                        android:textColor="@color/vector_green_color"
+                        android:text="a Text here"/>
 
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
+                </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/room_creation_appearance_name"/>
-
-            <EditText
-                android:id="@+id/room_creation_account_name_edit"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/chat_avatar_size">
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_alignParentLeft="true"
-                android:text="@string/room_creation_appearance_picture"/>
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/room_creation_appearance"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/room_creation_appearance_name"/>
+
+                <EditText
+                    android:id="@+id/room_creation_account_name_edit"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/room_creation_account_room_thumbnail"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
-                <include layout="@layout/vector_room_round_avatar"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/chat_avatar_size">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/room_creation_appearance_picture"/>
+
+                <RelativeLayout
+                    android:id="@+id/room_creation_account_room_thumbnail"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+                    <include layout="@layout/vector_room_round_avatar"/>
+                </RelativeLayout>
+
             </RelativeLayout>
 
-        </RelativeLayout>
-
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/room_creation_privacy"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
             <TextView
-                android:id="@+id/room_creation_account_privacy_state"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/room_creation_private_room"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/room_creation_privacy"/>
 
-            <Button
-                android:id="@+id/room_creation_account_privacy_button"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/room_creation_make_public"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
 
+                <TextView
+                    android:id="@+id/room_creation_account_privacy_state"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/room_creation_private_room"/>
+
+                <Button
+                    android:id="@+id/room_creation_account_privacy_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/room_creation_make_public"/>
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:background="#33333333"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/room_creation_progress_view">
+
+        <ProgressBar
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

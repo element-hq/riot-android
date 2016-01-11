@@ -56,12 +56,12 @@ public class VectorRoomCreationAddParticipantsActivity extends MXCActionBarActiv
 
         mSession = Matrix.getInstance(getApplicationContext()).getSession(matrixId);
 
-        setContentView(R.layout.activity_vector_room_creation_second_step);
+        setContentView(R.layout.activity_vector_room_creation_add_participants);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.vector_room_create_second_step, menu);
+        getMenuInflater().inflate(R.menu.vector_room_create_add_participants, menu);
         return true;
     }
 
