@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -77,16 +78,25 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private String mRoomId;
     private Room mRoom;
     private int mLayoutResourceId;
-    private Boolean mIsEditionMode;
-    private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
+    private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
     ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
 
     OnParticipantsListener mOnParticipantsListener = null;
 
-    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, Boolean isEditionMode, String roomId, MXMediasCache mediasCache) {
+    /**
+     * Create a room member adapter.
+     * If a room id is defined, the adapter is in edition mode : the user can add / remove dynamically members or leave the room.
+     * If there is none, the room is in creation mode : the user can add/remove members to create a new room.
+     * @param context the context.
+     * @param layoutResourceId the layout.
+     * @param session the session.
+     * @param roomId the room id.
+     * @param mediasCache the medias cache.
+     */
+    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
 
         mContext = context;
@@ -94,12 +104,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         mLayoutResourceId = layoutResourceId;
         mMediasCache = mediasCache;
         mSession = session;
-        mIsEditionMode = isEditionMode;
 
-        if (mIsEditionMode) {
+        // retrieve the room
+        if (null != roomId) {
             mRoomId = roomId;
             mRoom = mSession.getDataHandler().getRoom(roomId);
-        } else {
+        }
+
+        if (null == mRoom) {
             MyUser myUser = mSession.getMyUser();
 
             ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.avatarUrl, myUser.userId);
@@ -141,8 +153,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * Add a participant to the edition list.
      * @param participant the participant to add.
      */
-    public void addParticipantAdapterItem(ParticipantAdapterItem participant) {
-        if (!mIsEditionMode) {
+    public void addParticipant(ParticipantAdapterItem participant) {
+        if (null == mRoom) {
             mUnusedParticipants.remove(participant);
             mCreationParticipantsList.add(participant);
             this.add(participant);
@@ -151,17 +163,13 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
     /**
      * Remove a participant from the edition list.
-     * @param index the participant index to remove.
+     * @param participant the participant to remove.
      */
-    public void removeMemberAt(int index) {
-        if (!mIsEditionMode) {
-            // the index 0 is oneself
-            if ((0 != index) && (index < mCreationParticipantsList.size())) {
-                ParticipantAdapterItem member = mCreationParticipantsList.get(index);
-                mCreationParticipantsList.remove(member);
-                mUnusedParticipants.add(member);
-                this.remove(member);
-            }
+    public void removeParticipant(ParticipantAdapterItem participant) {
+        if (null == mRoom) {
+            mCreationParticipantsList.remove(participant);
+            mUnusedParticipants.add(participant);
+            this.remove(participant);
         }
     }
 
@@ -279,7 +287,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         if (TextUtils.isEmpty(mPattern)) {
             // retrieve the room members
-            if (mIsEditionMode) {
+            if (null != mRoom) {
                 ArrayList<ParticipantAdapterItem> admins = new ArrayList<ParticipantAdapterItem>();
                 ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
 
@@ -450,19 +458,25 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // cancel any translation
         cellLayout.setTranslationX(0);
 
-        int myPowerLevel = 0;
-        int userPowerLevel = 50;
-        int kickPowerLevel = 50;
+        Boolean hideDisplayActionsMenu = false;
 
         // during a room creation, there is no dedicated power level
         if (null != powerLevels) {
-            myPowerLevel =powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
+            int myPowerLevel;
+            int userPowerLevel;
+            int kickPowerLevel;
+
+            myPowerLevel = powerLevels.getUserPowerLevel(mSession.getCredentials().userId);
             userPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
             kickPowerLevel = powerLevels.kick;
+
+            hideDisplayActionsMenu = ((0 != position) && (myPowerLevel < userPowerLevel) && (myPowerLevel < kickPowerLevel));
+        } else {
+            hideDisplayActionsMenu = (null == mRoom) && (0 == position);
         }
 
         // the swipe should be enabled when there is no search and the user can kick other members
-        if (isSearchMode || ((0 != position) && (myPowerLevel < userPowerLevel) && (myPowerLevel < kickPowerLevel))) {
+        if (isSearchMode || hideDisplayActionsMenu) {
             cellLayout.setOnTouchListener(null);
         } else {
             final View hiddenView = convertView.findViewById(R.id.filtered_list_actions);
@@ -518,5 +532,24 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         return convertView;
+    }
+
+    /**
+     * @return the participant User Ids except oneself.
+     */
+    public ArrayList<String> getUserIdsist() {
+        ArrayList<String> idsList = new ArrayList<String>();
+
+        // the first item is always oneself
+        for(int index = 1; index < getCount(); index++) {
+            ParticipantAdapterItem item = getItem(index);
+
+            // sanity check
+            if (null != item.mUserId) {
+                idsList.add(item.mUserId);
+            }
+        }
+
+        return idsList;
     }
 }

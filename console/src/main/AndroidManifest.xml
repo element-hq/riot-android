@@ -127,7 +127,7 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.VectorAddParticipantsActivity"
+            android:name="im.vector.activity.VectorRoomCreationSecondStepActivity"
             android:label="@string/room_participants_title"
             android:parentActivityName="im.vector.activity.RoomActivity"
             android:launchMode="singleTop"

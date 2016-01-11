@@ -28,7 +28,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorAddParticipantsActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.Analytics;

@@ -43,11 +43,14 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
+import im.vector.activity.VectorRoomCreationSecondStepActivity;
 import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VectorAddParticipantsFragment extends Fragment {
     private static final String LOG_TAG = "VectorAddParticipantsFragment";
@@ -122,9 +125,14 @@ public class VectorAddParticipantsFragment extends Fragment {
 
         if (activity instanceof VectorRoomDetailsActivity) {
             VectorRoomDetailsActivity vectorRoomDetailsActivity = (VectorRoomDetailsActivity)activity;
-
             mRoom = vectorRoomDetailsActivity.getRoom();
             mSession = vectorRoomDetailsActivity.getSession();
+
+            finalizeInit();
+        } else if (activity instanceof VectorRoomCreationSecondStepActivity) {
+            VectorRoomCreationSecondStepActivity anActivity = (VectorRoomCreationSecondStepActivity)activity;
+            mRoom = null;
+            mSession = anActivity.getSession();
 
             finalizeInit();
         }
@@ -134,6 +142,7 @@ public class VectorAddParticipantsFragment extends Fragment {
         return mViewHierarchy;
     }
 
+
     /**
      * Finalize the fragment initialization.
      */
@@ -142,7 +151,7 @@ public class VectorAddParticipantsFragment extends Fragment {
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         mParticantsListView = (ListView)mViewHierarchy.findViewById(R.id.add_participants_members_list);
-        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, true, mRoom.getRoomId(), mxMediasCache);
+        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, mxMediasCache);
         mParticantsListView.setAdapter(mAdapter);
 
         mParticantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,32 +159,36 @@ public class VectorAddParticipantsFragment extends Fragment {
                 if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
                     ParticipantAdapterItem participant = mAdapter.getItem(position);
 
-                    final ArrayList<String> userIDs = new ArrayList<String>();
-                    userIDs.add(participant.mUserId);
+                    if (null != mRoom) {
+                        final ArrayList<String> userIDs = new ArrayList<String>();
+                        userIDs.add(participant.mUserId);
 
-                    mProgressView.setVisibility(View.VISIBLE);
+                        mProgressView.setVisibility(View.VISIBLE);
 
-                    mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
-                        @Override
-                        public void onSuccess(Void info) {
-                            mProgressView.setVisibility(View.GONE);
-                        }
+                        mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
+                            @Override
+                            public void onSuccess(Void info) {
+                                mProgressView.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            mProgressView.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                mProgressView.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onMatrixError(final MatrixError e) {
-                            mProgressView.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onMatrixError(final MatrixError e) {
+                                mProgressView.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onUnexpectedError(final Exception e) {
-                            mProgressView.setVisibility(View.GONE);
-                        }
-                    });
+                            @Override
+                            public void onUnexpectedError(final Exception e) {
+                                mProgressView.setVisibility(View.GONE);
+                            }
+                        });
+                    } else {
+                        mAdapter.addParticipant(participant);
+                    }
                 }
 
                 // leave the search
@@ -193,53 +206,57 @@ public class VectorAddParticipantsFragment extends Fragment {
         mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
+                if (null == mRoom) {
+                    mAdapter.removeParticipant(participantItem);
+                } else {
+                    String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
 
-                // The user is trying to leave with unsaved changes. Warn about that
-                new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                        .setTitle(R.string.room_participants_remove_prompt_title)
-                        .setMessage(text)
-                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                    // The user is trying to leave with unsaved changes. Warn about that
+                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            .setTitle(R.string.room_participants_remove_prompt_title)
+                            .setMessage(text)
+                            .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
 
-                                mProgressView.setVisibility(View.VISIBLE);
+                                    mProgressView.setVisibility(View.VISIBLE);
 
-                                mRoom.kick(participantItem.mUserId, new ApiCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        mProgressView.setVisibility(View.GONE);
-                                    }
+                                    mRoom.kick(participantItem.mUserId, new ApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            mProgressView.setVisibility(View.GONE);
+                                        }
 
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        mProgressView.setVisibility(View.GONE);
-                                        // display something
-                                    }
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            mProgressView.setVisibility(View.GONE);
+                                            // display something
+                                        }
 
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        mProgressView.setVisibility(View.GONE);
-                                        // display something
-                                    }
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            mProgressView.setVisibility(View.GONE);
+                                            // display something
+                                        }
 
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        mProgressView.setVisibility(View.GONE);
-                                        // display something
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create()
-                        .show();
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            mProgressView.setVisibility(View.GONE);
+                                            // display something
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create()
+                            .show();
+                }
             }
 
             @Override
@@ -315,5 +332,12 @@ public class VectorAddParticipantsFragment extends Fragment {
 
         mAdapter.setSearchedPattern(mSearchEdit.getText().toString());
         mAdapter.refresh();
+    }
+
+    /**
+     * @return the participant User Ids except oneself.
+     */
+    public ArrayList<String> getUserIdsList() {
+        return mAdapter.getUserIdsist();
     }
 }
