@@ -43,14 +43,11 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
-import im.vector.activity.VectorRoomCreationSecondStepActivity;
-import im.vector.activity.VectorRoomDetailsActivity;
+import im.vector.activity.MXCActionBarActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class VectorAddParticipantsFragment extends Fragment {
     private static final String LOG_TAG = "VectorAddParticipantsFragment";
@@ -123,15 +120,9 @@ public class VectorAddParticipantsFragment extends Fragment {
 
         Activity activity = getActivity();
 
-        if (activity instanceof VectorRoomDetailsActivity) {
-            VectorRoomDetailsActivity vectorRoomDetailsActivity = (VectorRoomDetailsActivity)activity;
-            mRoom = vectorRoomDetailsActivity.getRoom();
-            mSession = vectorRoomDetailsActivity.getSession();
-
-            finalizeInit();
-        } else if (activity instanceof VectorRoomCreationSecondStepActivity) {
-            VectorRoomCreationSecondStepActivity anActivity = (VectorRoomCreationSecondStepActivity)activity;
-            mRoom = null;
+        if (activity instanceof MXCActionBarActivity) {
+            MXCActionBarActivity anActivity = (MXCActionBarActivity)activity;
+            mRoom = anActivity.getRoom();
             mSession = anActivity.getSession();
 
             finalizeInit();

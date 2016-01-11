@@ -42,9 +42,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorRoomDetailsActivity.EXTRA_ROOM_ID";
 
-    private MXSession mSession;
     private String mRoomId;
-    private Room mRoom;
     private MXMediasCache mxMediasCache;
 
     // define the selection section
@@ -53,14 +51,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity {
     // indexed by mSelectedSection
     private RelativeLayout mFragmentsLayout;
     private LinearLayout mTabsLayout;
-
-    public MXSession getSession() {
-        return mSession;
-    }
-
-    public Room getRoom() {
-        return mRoom;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

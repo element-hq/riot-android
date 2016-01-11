@@ -16,61 +16,28 @@
 
 package im.vector.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
-import im.vector.adapters.AdapterUtils;
-import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.adapters.VectorAddParticipantsAdapter;
-import im.vector.contacts.Contact;
 import im.vector.fragments.VectorAddParticipantsFragment;
 
-public class VectorRoomCreationSecondStepActivity extends MXCActionBarActivity {
-    private static final String LOG_TAG = "VectorAddActivity";
+public class VectorRoomCreationAddParticipantsActivity extends MXCActionBarActivity {
+    private static final String LOG_TAG = "VectorRCAddParticipantsActivity";
 
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorAddParticipantsActivity.EXTRA_ROOM_ID";
 
-    // creation mode : the members are listed to create a new room
-    // edition mode (by default) : the members are dynamically added/removed
-    public static final String EXTRA_EDITION_MODE = "VectorAddParticipantsActivity.EXTRA_EDITION_MODE";
-
     // in creation mode, this is the key to retrieve the users IDs liste
     public static final String RESULT_USERS_ID = "VectorAddParticipantsActivity.RESULT_USERS_ID";
-
-    public MXSession mSession;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,10 +59,6 @@ public class VectorRoomCreationSecondStepActivity extends MXCActionBarActivity {
         setContentView(R.layout.activity_vector_room_creation_second_step);
     }
 
-    public MXSession getSession() {
-        return mSession;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vector_room_create_second_step, menu);
@@ -107,7 +70,7 @@ public class VectorRoomCreationSecondStepActivity extends MXCActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_create) {
-            VectorRoomCreationSecondStepActivity.this.runOnUiThread(new Runnable() {
+            VectorRoomCreationAddParticipantsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Fragment fragment = getFragmentManager().findFragmentById(R.id.room_creation_add_participants_fragment);

@@ -227,7 +227,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_next) {
-            Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomCreationSecondStepActivity.class);
+            Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomCreationAddParticipantsActivity.class);
             startActivityForResult(intent, GET_MEMBERS);
             return true;
         }
@@ -401,7 +401,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             if (requestCode == TAKE_IMAGE) {
                 onPickerDone(data);
             } else if (requestCode == GET_MEMBERS) {
-                final ArrayList<String> userIDsList = (ArrayList<String>)data.getExtras().get(VectorRoomCreationSecondStepActivity.RESULT_USERS_ID);
+                final ArrayList<String> userIDsList = (ArrayList<String>)data.getExtras().get(VectorRoomCreationAddParticipantsActivity.RESULT_USERS_ID);
                 final MXSession session = (null == mSessions) ? Matrix.getInstance(this).getDefaultSession() : mSessions.get(mSessionIndex);
                 final Activity activity = VectorRoomCreationActivity.this;
                 final String roomVisibility = !mIsPrivate ? RoomState.VISIBILITY_PUBLIC : RoomState.VISIBILITY_PRIVATE;

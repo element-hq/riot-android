@@ -38,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
 
 import im.vector.MyPresenceManager;
 import im.vector.VectorApp;
@@ -55,6 +56,9 @@ import java.util.ArrayList;
 public class MXCActionBarActivity extends ActionBarActivity {
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "org.matrix.console.ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
     public static final String EXTRA_MATRIX_ID = "org.matrix.console.MXCActionBarActivity.EXTRA_MATRIX_ID";
+
+    protected MXSession mSession = null;
+    protected Room mRoom = null;
 
     private boolean hasCorruptedStore(Activity activity) {
         boolean hasCorruptedStore = false;
@@ -97,6 +101,14 @@ public class MXCActionBarActivity extends ActionBarActivity {
         }
 
         return Matrix.getInstance(getApplicationContext()).getSession(matrixId);
+    }
+
+    public MXSession getSession() {
+        return mSession;
+    }
+
+    public Room getRoom() {
+        return mRoom;
     }
 
     // add left sliding menu
