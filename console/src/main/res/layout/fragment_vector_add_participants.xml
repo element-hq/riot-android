@@ -5,7 +5,6 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_below="@+id/add_participants_subtitle"
         android:id="@+id/add_participants_search_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
