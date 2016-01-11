@@ -27,7 +27,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +38,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,7 +45,6 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,6 +72,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     Button mPrivacyButton;
     TextView mSingleAccountText;
 
+    // the next button should only be displayed if a room name has been entered
+    MenuItem mNextMenuItem = null;
+
     ArrayList<MXSession> mSessions = null;
     Integer mSessionIndex = 0;
 
@@ -94,6 +97,18 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         mSingleAccountText = (TextView)findViewById(R.id.room_creation_single_account_text);
         mAccountsSpinner =  (Spinner)findViewById(R.id.room_creation_accounts_spinner);
         mRoomNameEditText = (EditText) findViewById(R.id.room_creation_account_name_edit);
+
+        mRoomNameEditText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                refreshNextButtonStatus();
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
         mAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
         mPrivacyText = (TextView) findViewById(R.id.room_creation_account_privacy_state);
         mPrivacyButton = (Button) findViewById(R.id.room_creation_account_privacy_button);
@@ -138,6 +153,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
 
         refreshUIItems();
+        refreshNextButtonStatus();
 
         mAccountsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,6 +217,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_room_creation, menu);
+        mNextMenuItem = menu.findItem(R.id.action_next);
+        refreshNextButtonStatus();
         return true;
     }
 
@@ -220,6 +238,21 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * The next menu button is only enabled when there is non empty room name.
+     */
+    private void refreshNextButtonStatus() {
+        String roomName = mRoomNameEditText.getText().toString();
+        Boolean isValidRoomName = false;
+
+        if (null != roomName) {
+            isValidRoomName = !TextUtils.isEmpty(roomName.trim());
+        }
+
+        if (null != mNextMenuItem) {
+            mNextMenuItem.setEnabled(isValidRoomName);
+        }
+    }
 
     /**
      * Refresh the page UI items
@@ -284,6 +317,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     protected void onResume() {
         super.onResume();
         refreshUIItems();
+        refreshNextButtonStatus();
     }
 
     @Override
