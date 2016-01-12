@@ -52,6 +52,7 @@ import im.vector.R;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.UIUtils;
+import im.vector.util.VectorUtils;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
     public interface OnParticipantsListener {
@@ -349,7 +350,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         boolean isSearchMode = !TextUtils.isEmpty(mPattern);
 
         ImageView thumbView = (ImageView) convertView.findViewById(R.id.avatar_img);
-        thumbView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+
+        VectorUtils.setMemberAvatar(thumbView, participant.mUserId, participant.mDisplayName);
 
         if (null != participant.mAvatarBitmap) {
             thumbView.setImageBitmap(participant.mAvatarBitmap);
