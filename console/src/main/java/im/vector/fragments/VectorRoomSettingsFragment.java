@@ -57,6 +57,7 @@ import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.util.ResourceUtils;
+import im.vector.util.VectorUtils;
 
 
 public class VectorRoomSettingsFragment extends Fragment {
@@ -238,9 +239,8 @@ public class VectorRoomSettingsFragment extends Fragment {
         if (canUpdateAvatar && mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_avatar)) {
             mRoomAvatarImageView.setImageBitmap((Bitmap) mUpdatedItemsByResourceId.get(R.id.room_settings_room_avatar));
         } else {
-            // TODO use the generated vector image
-            mRoomAvatarImageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
-
+            VectorUtils.setRoomVectorAvatar(mRoomAvatarImageView, mRoom.getRoomId(), mRoom.getName(mSession.getMyUser().userId));
+            
             String roomAvatarUrl = mRoom.getLiveState().getAvatarUrl();
 
             if (null != roomAvatarUrl) {

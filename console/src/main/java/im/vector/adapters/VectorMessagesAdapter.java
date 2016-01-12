@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -38,9 +39,11 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.util.ContentManager;
 
 import im.vector.VectorApp;
 import im.vector.R;
+import im.vector.util.VectorUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,6 +104,25 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void refreshPresenceRing(ImageView presenceView, String userId) {
+    }
+
+    @Override
+    protected void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String url) {
+        if ((member != null) && (null == url)) {
+            url = member.avatarUrl;
+        }
+
+        // define a default avatar
+        if (null != member) {
+            VectorUtils.setMemberAvatar(avatarView, member.getUserId(), member.displayname);
+        } else {
+            VectorUtils.setMemberAvatar(avatarView, userId, null);
+        }
+
+        if (!TextUtils.isEmpty(url)) {
+            int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+            mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), avatarView, url, size);
+        }
     }
 
     @Override
@@ -228,8 +250,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
             imageView.setVisibility(View.VISIBLE);
             imageView.setTag(null);
-            // TODO replace with the new Vector style icon.
-            imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+
+            if (null != member) {
+                VectorUtils.setMemberAvatar(imageView, member.getUserId(), member.displayname);
+            } else {
+                // shoud never happen
+                imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+            }
 
             if ((null != member) && (null != member.avatarUrl)) {
                 loadSmallAvatar(imageView, member.avatarUrl);
