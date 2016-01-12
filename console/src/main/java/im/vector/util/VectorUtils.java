@@ -26,10 +26,120 @@ import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.rest.model.RoomMember;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import im.vector.R;
 
 public class VectorUtils {
+
+    //==============================================================================================================
+    // Rooms methods
+    //==============================================================================================================
+
+    /**
+     * Vector client formats the room display with a different manner than the SDK one.
+     * @param context the application context.
+     * @param session the room session.
+     * @param room the room.
+     * @return the room displayname.
+     */
+    public static String getRoomDisplayname(Context context, MXSession session, Room room) {
+        // this algo is the one defined in
+        // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
+        // calculateRoomName(room, userId)
+
+        RoomState roomState = room.getLiveState();
+
+        if (!TextUtils.isEmpty(roomState.name)) {
+            return roomState.name;
+        }
+
+        String alias = roomState.alias;
+
+        if (TextUtils.isEmpty(alias)) {
+            // For rooms where canonical alias is not defined, we use the 1st alias as a workaround
+            List<String> aliases = roomState.aliases;
+
+            if ((null != aliases) && (aliases.size() > 0)) {
+                alias = aliases.get(0);
+            }
+        }
+
+        if (!TextUtils.isEmpty(alias)) {
+            return alias;
+        }
+
+        String myUserId = session.getMyUser().userId;
+
+        Collection<RoomMember> members = roomState.getMembers();
+        ArrayList<RoomMember> othersActiveMembers = new ArrayList<RoomMember>();
+        ArrayList<RoomMember> activeMembers = new ArrayList<RoomMember>();
+
+        for(RoomMember member : members) {
+            if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
+                if (!TextUtils.equals(member.getUserId(), myUserId)) {
+                    othersActiveMembers.add(member);
+                }
+                activeMembers.add(member);
+            }
+        }
+
+        Collections.sort(othersActiveMembers, new Comparator<RoomMember>() {
+            @Override
+            public int compare(RoomMember m1, RoomMember m2) {
+                long diff = m1.getOriginServerTs() - m2.getOriginServerTs();
+
+                return (diff == 0) ? 0 : ((diff < 0) ? -1 : +1);
+            }
+        });
+
+        String displayName = "";
+
+        if (othersActiveMembers.size() == 0) {
+            if (activeMembers.size() == 1) {
+                RoomMember member = activeMembers.get(0);
+
+                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+
+                    if (!TextUtils.isEmpty(member.getInviterId())) {
+                        // extract who invited us to the room
+                        displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
+                    } else {
+                        displayName = context.getString(R.string.room_displayname_room_invite);
+                    }
+                }
+                else {
+                    displayName = myUserId;
+                }
+            }
+        }
+        else if (othersActiveMembers.size() == 1) {
+            RoomMember member = othersActiveMembers.get(0);
+            displayName = roomState.getMemberName(member.getUserId());
+        }
+        else if (othersActiveMembers.size() == 2) {
+            RoomMember member1 = othersActiveMembers.get(0);
+            RoomMember member2 = othersActiveMembers.get(1);
+
+            displayName = context.getString(R.string.room_displayname_two_members, roomState.getMemberName(member1.getUserId()), roomState.getMemberName(member2.getUserId()));
+        }
+        else {
+            RoomMember member = othersActiveMembers.get(0);
+            displayName = context.getString(R.string.room_displayname_more_than_two_members, roomState.getMemberName(member.getUserId()), othersActiveMembers.size() - 1);
+        }
+
+        return displayName;
+    }
 
     //==============================================================================================================
     // Avatars generation

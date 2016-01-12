@@ -88,6 +88,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.RageShake;
 import im.vector.util.ResourceUtils;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -208,7 +209,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                     if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                        setTitle(mRoom.getName(mMyUserId));
+                        setTitle(VectorUtils.getRoomDisplayname(RoomActivity.this, mSession, mRoom));
                         updateMenuEntries();
 
                         // check if the user does not leave the room with another client
@@ -248,7 +249,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                 @Override
                 public void run() {
                     // set general room information
-                    setTitle(mRoom.getName(mMyUserId));
+                    setTitle(VectorUtils.getRoomDisplayname(RoomActivity.this, mSession, mRoom));
                     setTopic(mRoom.getTopic());
 
                     mConsoleMessageListFragment.onInitialMessagesLoaded();
@@ -691,7 +692,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         }
 
         // set general room information
-        setTitle(mRoom.getName(mMyUserId));
+        setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
         setTopic(mRoom.getTopic());
 
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
@@ -931,7 +932,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         }*/
 
         // set general room information
-        setTitle(mRoom.getName(mMyUserId));
+        setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
         setTopic(mRoom.getTopic());
     }
 

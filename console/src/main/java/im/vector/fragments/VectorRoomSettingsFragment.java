@@ -240,7 +240,7 @@ public class VectorRoomSettingsFragment extends Fragment {
             mRoomAvatarImageView.setImageBitmap((Bitmap) mUpdatedItemsByResourceId.get(R.id.room_settings_room_avatar));
         } else {
             VectorUtils.setRoomVectorAvatar(mRoomAvatarImageView, mRoom.getRoomId(), mRoom.getName(mSession.getMyUser().userId));
-            
+
             String roomAvatarUrl = mRoom.getLiveState().getAvatarUrl();
 
             if (null != roomAvatarUrl) {
@@ -256,7 +256,7 @@ public class VectorRoomSettingsFragment extends Fragment {
         if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_name_edit_text)) {
             mRoomLabelEditText.setText((String) mUpdatedItemsByResourceId.get(R.id.room_settings_room_name_edit_text));
         } else {
-            mRoomLabelEditText.setText(mRoom.getName(mSession.getMyUser().userId));
+            mRoomLabelEditText.setText(VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom));
         }
 
         // room topic
@@ -304,7 +304,7 @@ public class VectorRoomSettingsFragment extends Fragment {
                     value = "";
                 }
 
-                String roomName = mRoom.getName(mSession.getMyUser().userId);
+                String roomName = VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom);
 
                 if (null == roomName) {
                     roomName = "";
