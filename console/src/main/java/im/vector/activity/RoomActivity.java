@@ -37,9 +37,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -653,18 +655,17 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         mSearchLayout.setVisibility(View.GONE);
         mSearchEditText = (EditText) findViewById(R.id.room_search_edit_text);
 
-        mSearchEditText.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(android.text.Editable s) {
-                mConsoleMessageListFragment.searchPattern(mSearchEditText.getText().toString());
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    mConsoleMessageListFragment.searchPattern(mSearchEditText.getText().toString());
+                    return true;
+                }
+                return false;
             }
         });
-
+        
         mTypingArea = findViewById(R.id.room_notifications_area);
         mTypingMessageTextView = (TextView)findViewById(R.id.room_notification_message);
 

@@ -20,6 +20,8 @@
             <EditText
                 android:id="@+id/room_search_edit_text"
                 android:layout_width="match_parent"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
                 android:layout_height="50dp" />
 
             <View
