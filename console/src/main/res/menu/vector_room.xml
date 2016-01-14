@@ -5,12 +5,12 @@
 
     <item android:id="@+id/ic_action_room_settings"
         android:title="@string/room_menu_settings"
-        android:icon="@drawable/ic_material_settings"
+        android:icon="@drawable/vector_settings"
         app:showAsAction="always" />
 
     <item android:id="@+id/ic_action_search_in_room"
         android:title="@string/room_menu_search"
-        android:icon="@drawable/ic_material_search"
+        android:icon="@drawable/vector_search"
         app:showAsAction="always" />
 
 </menu>

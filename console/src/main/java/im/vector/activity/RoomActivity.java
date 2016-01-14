@@ -17,7 +17,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ContentResolver;
@@ -50,16 +50,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
@@ -72,10 +67,8 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
-import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
-import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -83,12 +76,8 @@ import im.vector.ViewedRoomTracker;
 import im.vector.adapters.ImageCompressionDescription;
 import im.vector.fragments.ConsoleMessageListFragment;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
-import im.vector.fragments.MembersInvitationDialogFragment;
-import im.vector.fragments.RoomInfoUpdateDialogFragment;
-import im.vector.fragments.RoomMembersDialogFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
-import im.vector.util.RageShake;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -106,7 +95,7 @@ import java.util.TimerTask;
 /**
  * Displays a single room with messages.
  */
-public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessageListFragment.SearchEventsListener {
+public class RoomActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_ROOM_ID = "org.matrix.console.RoomActivity.EXTRA_ROOM_ID";
 
@@ -114,12 +103,9 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     public static final String EXTRA_START_CALL_ID = "org.matrix.console.RoomActivity.EXTRA_START_CALL_ID";
 
     private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "org.matrix.console.RoomActivity.TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
-    private static final String TAG_FRAGMENT_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_MEMBERS_DIALOG";
     private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "org.matrix.console.RoomActivity.TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
-    private static final String TAG_FRAGMENT_ROOM_INFO = "org.matrix.console.RoomActivity.TAG_FRAGMENT_ROOM_INFO";
-
 
     private static final String LOG_TAG = "RoomActivity";
     private static final int TYPING_TIMEOUT_MS = 10000;
@@ -129,7 +115,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
     private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
-    private static final String SEARCHED_PATTERN = "SEARCHED_PATTERN";
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
 
@@ -147,7 +132,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private static final int REQUEST_FILES = 0;
     private static final int TAKE_IMAGE = 1;
     private static final int CREATE_DOCUMENT = 2;
-    private static final int MEDIAS_PICKER = 1;
 
     // max image sizes
     private static final int LARGE_IMAGE_SIZE  = 2000;
@@ -166,8 +150,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private ImageButton mAttachmentsButton;
     private ImageButton mCallButton;
     private EditText mEditText;
-    private EditText mSearchEditText;
-    private LinearLayout mSearchLayout;
     private ImageView mAvatarImageView;
 
     private View mTypingArea;
@@ -178,13 +160,9 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
     private String mPendingMimeType;
     private String mPendingFilename;
 
-    private MenuItem mVoiceMenuItem = null;
-    private MenuItem mVideoMenuItem = null;
 
-    private Boolean mRuleInProgress = false;
-    private BingRule mBingRule = null;
-    private MenuItem mEnableNotifItem = null;
-    private MenuItem mDisableNotifItem = null;
+    private MenuItem mSearchMenuItem = null;
+    private MenuItem mSettingsMenuItem = null;
 
     private String mCallId = null;
 
@@ -606,7 +584,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
 
                 final Integer[] icons = new Integer[]{
                         R.drawable.ic_material_file,  // R.string.option_send_files
-                        R.drawable.ic_material_camera, // R.string.action_members
+                        R.drawable.ic_material_camera, // R.string.option_take_photo
                 };
 
 
@@ -624,7 +602,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                     }
                 });
 
-                fragment.show(fm, TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG);
+                fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
             }
         });
 
@@ -651,21 +629,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             }
         });
 
-        mSearchLayout = (LinearLayout) findViewById(R.id.room_search_layout);
-        mSearchLayout.setVisibility(View.GONE);
-        mSearchEditText = (EditText) findViewById(R.id.room_search_edit_text);
-
-        mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    mConsoleMessageListFragment.searchPattern(mSearchEditText.getText().toString());
-                    return true;
-                }
-                return false;
-            }
-        });
-        
         mTypingArea = findViewById(R.id.room_notifications_area);
         mTypingMessageTextView = (TextView)findViewById(R.id.room_notification_message);
 
@@ -688,7 +651,7 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
 
         if (mConsoleMessageListFragment == null) {
             // this fragment displays messages and handles all message logic
-            mConsoleMessageListFragment = ConsoleMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment, this);
+            mConsoleMessageListFragment = ConsoleMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mConsoleMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         }
 
@@ -745,10 +708,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         }
 
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mConsoleMessageListFragment.mMessageListView.getFirstVisiblePosition());
-
-        if (!TextUtils.isEmpty(mSearchEditText.getText())) {
-            savedInstanceState.putString(SEARCHED_PATTERN, mSearchEditText.getText().toString());
-        }
     }
 
     @Override
@@ -759,11 +718,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             // the scroll will be done in resume.
             // the listView will be refreshed so the offset might be lost.
             mScrollToIndex = savedInstanceState.getInt(FIRST_VISIBLE_ROW);
-        }
-
-        if (savedInstanceState.containsKey(SEARCHED_PATTERN)) {
-            mSearchLayout.setVisibility(View.VISIBLE);
-            mSearchEditText.setText(savedInstanceState.getString(SEARCHED_PATTERN));
         }
     }
 
@@ -889,7 +843,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
                                                 }
                                             }
             );
-
         }
     }
 
@@ -897,41 +850,6 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
      * Refresh the calls buttons
      */
     private void updateMenuEntries() {
-        /*Boolean visible = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
-
-        if (null != mVoiceMenuItem) {
-            mVoiceMenuItem.setVisible(visible);
-        }
-
-        if (null != mVideoMenuItem) {
-            mVideoMenuItem.setVisible(visible);
-        }
-
-        Boolean isPushDownloaded = (null != mSession.getDataHandler().pushRules());
-
-        if (isPushDownloaded) {
-            // search if there is a rule for this room
-            List<BingRule> roomsRulesList = mSession.getDataHandler().pushRules().getRoomRules();
-
-            if (null != roomsRulesList) {
-                for (BingRule rule : roomsRulesList) {
-                    if (TextUtils.equals(rule.ruleId, mRoom.getRoomId())) {
-                        mBingRule = rule;
-                    }
-                }
-            }
-        }
-
-        boolean hasActiveRule = (null == mBingRule) || (mBingRule.isEnabled && mBingRule.shouldNotify());
-
-        if (null != mEnableNotifItem) {
-            mEnableNotifItem.setVisible(!hasActiveRule && !mRuleInProgress && isPushDownloaded);
-        }
-
-        if (null != mDisableNotifItem) {
-            mDisableNotifItem.setVisible(hasActiveRule && !mRuleInProgress && isPushDownloaded);
-        }*/
-
         // set general room information
         setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
         setTopic(mRoom.getTopic());
@@ -942,14 +860,102 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_room, menu);
 
-        /*mVoiceMenuItem = menu.findItem(R.id.ic_action_voice_call);
-        mVideoMenuItem = menu.findItem(R.id.ic_action_video_call);
-        mEnableNotifItem =  menu.findItem(R.id.ic_action_enable_notification);
-        mDisableNotifItem =  menu.findItem(R.id.ic_action_disable_notification);
-
-        updateMenuEntries();*/
+        mSettingsMenuItem = menu.findItem(R.id.ic_action_room_settings);
+        mSearchMenuItem = menu.findItem(R.id.ic_action_search_in_room);
 
         return true;
+    }
+
+    private void showTextSearchActionBar() {
+        // replace the action bar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
+
+        android.support.v7.app.ActionBar.LayoutParams layout = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
+        actionBar.setCustomView(actionBarLayout, layout);
+
+        // add text listener
+        final EditText editText = (EditText) actionBarLayout.findViewById(R.id.room_action_bar_edit_text);
+
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    mConsoleMessageListFragment.searchPattern(editText.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        if (null != mSettingsMenuItem) {
+            mSettingsMenuItem.setVisible(false);
+        }
+
+        if (null != mSearchMenuItem) {
+            mSearchMenuItem.setVisible(false);
+        }
+
+        // display the search background
+        View searchBackgroundView = findViewById(R.id.search_background_imageview);
+        searchBackgroundView.setVisibility(View.VISIBLE);
+
+        // hide the text edit
+        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
+        roomBottomLayout.setVisibility(View.GONE);
+
+        // and the vector specific items
+        View view = findViewById(R.id.bottom_separator);
+        view.setVisibility(View.GONE);
+        view = findViewById(R.id.room_notifications_area);
+        view.setVisibility(View.GONE);
+        view = findViewById(R.id.room_notification_separator);
+        view.setVisibility(View.GONE);
+    }
+    
+    public void hideTextSearchActionBar() {
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(false);
+        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_TITLE | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
+
+        if (null != mSettingsMenuItem) {
+            mSettingsMenuItem.setVisible(true);
+        }
+
+        if (null != mSearchMenuItem) {
+            mSearchMenuItem.setVisible(true);
+        }
+
+        // display the search background
+        View searchBackgroundView = findViewById(R.id.search_background_imageview);
+        searchBackgroundView.setVisibility(View.GONE);
+
+        // hide the text edit
+        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
+        roomBottomLayout.setVisibility(View.VISIBLE);
+
+        // and the vector specific items
+        View view = findViewById(R.id.bottom_separator);
+        view.setVisibility(View.VISIBLE);
+        view = findViewById(R.id.room_notifications_area);
+        view.setVisibility(View.INVISIBLE);
+        view = findViewById(R.id.room_notification_separator);
+        view.setVisibility(View.VISIBLE);
+
+        // there is no more searched pattern
+        mConsoleMessageListFragment.searchPattern(null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // restore the standard action bar
+        if (!mSearchMenuItem.isVisible()) {
+            hideTextSearchActionBar();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -957,17 +963,8 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
         int id = item.getItemId();
 
         if (id == R.id.ic_action_search_in_room) {
-
-            if (mSearchLayout.getVisibility() == View.VISIBLE) {
-                mSearchLayout.setVisibility(View.GONE);
-                mSearchEditText.setText("");
-                mConsoleMessageListFragment.searchPattern(null);
-
-            } else {
-                mSearchLayout.setVisibility(View.VISIBLE);
-            }
+            showTextSearchActionBar();
         } else if (id ==  R.id.ic_action_room_settings) {
-
             // pop to the home activity
             Intent intent = new Intent(RoomActivity.this, VectorRoomDetailsActivity.class);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -1722,13 +1719,5 @@ public class RoomActivity extends MXCActionBarActivity implements  ConsoleMessag
             mRoom.sendTypingNotification(false, -1, new SimpleApiCallback<Void>(RoomActivity.this) {
             });
         }
-    }
-
-    /**
-     * Call when the search is cancelled.
-     */
-    public void onSearchCancel() {
-        mSearchLayout.setVisibility(View.GONE);
-        mSearchEditText.setText("");
     }
 }
