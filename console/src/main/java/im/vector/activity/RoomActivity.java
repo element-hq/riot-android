@@ -58,6 +58,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
+import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -66,7 +67,6 @@ import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
@@ -876,6 +876,37 @@ public class RoomActivity extends MXCActionBarActivity {
         View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
         actionBar.setCustomView(actionBarLayout, layout);
 
+        // display the search background
+        final View searchBackgroundView = findViewById(R.id.search_background_imageview);
+        searchBackgroundView.setVisibility(View.VISIBLE);
+
+        // hide the text edit
+        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
+        roomBottomLayout.setVisibility(View.GONE);
+
+        final View noResultTextView = findViewById(R.id.search_no_result_textview);
+        noResultTextView.setVisibility(View.GONE);
+
+        // and the vector specific items
+        View view = findViewById(R.id.bottom_separator);
+        view.setVisibility(View.GONE);
+        view = findViewById(R.id.room_notifications_area);
+        view.setVisibility(View.GONE);
+        view = findViewById(R.id.room_notification_separator);
+        view.setVisibility(View.GONE);
+
+        final View progressBackground =  findViewById(R.id.medias_processing_progress_background);
+        final View progress = findViewById(R.id.medias_processing_progress);
+
+        progressBackground.setVisibility(View.GONE);
+        progress.setVisibility(View.GONE);
+
+        // the vector design expects that the result content is empty
+        // when there is no pattern.
+        // By default, the SDK displays all the messages
+        // so hide it until there is something to search
+        mConsoleMessageListFragment.getView().setVisibility(View.INVISIBLE);
+
         // add text listener
         final EditText editText = (EditText) actionBarLayout.findViewById(R.id.room_action_bar_edit_text);
 
@@ -883,7 +914,33 @@ public class RoomActivity extends MXCActionBarActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    mConsoleMessageListFragment.searchPattern(editText.getText().toString());
+
+                    progressBackground.setVisibility(View.VISIBLE);
+                    progress.setVisibility(View.VISIBLE);
+                    
+                    mConsoleMessageListFragment.searchPattern(editText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
+                        @Override
+                        public void onSearchSucceed(int nbrMessages) {
+                            progressBackground.setVisibility(View.GONE);
+                            progress.setVisibility(View.GONE);
+
+                            // the background search is displayed until a search is triggered.
+                            mConsoleMessageListFragment.getView().setVisibility((0 != nbrMessages) ? View.VISIBLE : View.INVISIBLE);
+                            searchBackgroundView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
+                            noResultTextView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
+                        }
+
+                        @Override
+                        public void onSearchFailed() {
+                            progressBackground.setVisibility(View.GONE);
+                            progress.setVisibility(View.GONE);
+
+                            // the background search is displayed until a search is triggered.
+                            searchBackgroundView.setVisibility(View.GONE);
+                            noResultTextView.setVisibility(View.VISIBLE);
+                            // TODO : what is it expected
+                        }
+                    });
                     return true;
                 }
                 return false;
@@ -897,24 +954,8 @@ public class RoomActivity extends MXCActionBarActivity {
         if (null != mSearchMenuItem) {
             mSearchMenuItem.setVisible(false);
         }
-
-        // display the search background
-        View searchBackgroundView = findViewById(R.id.search_background_imageview);
-        searchBackgroundView.setVisibility(View.VISIBLE);
-
-        // hide the text edit
-        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
-        roomBottomLayout.setVisibility(View.GONE);
-
-        // and the vector specific items
-        View view = findViewById(R.id.bottom_separator);
-        view.setVisibility(View.GONE);
-        view = findViewById(R.id.room_notifications_area);
-        view.setVisibility(View.GONE);
-        view = findViewById(R.id.room_notification_separator);
-        view.setVisibility(View.GONE);
     }
-    
+
     public void hideTextSearchActionBar() {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(false);
@@ -928,13 +969,16 @@ public class RoomActivity extends MXCActionBarActivity {
             mSearchMenuItem.setVisible(true);
         }
 
-        // display the search background
+        // hide the search background
         View searchBackgroundView = findViewById(R.id.search_background_imageview);
         searchBackgroundView.setVisibility(View.GONE);
 
-        // hide the text edit
+        // show the text edit
         View roomBottomLayout = findViewById(R.id.room_bottom_layout);
         roomBottomLayout.setVisibility(View.VISIBLE);
+
+        View noResultTextView = findViewById(R.id.search_no_result_textview);
+        noResultTextView.setVisibility(View.GONE);
 
         // and the vector specific items
         View view = findViewById(R.id.bottom_separator);
@@ -944,8 +988,15 @@ public class RoomActivity extends MXCActionBarActivity {
         view = findViewById(R.id.room_notification_separator);
         view.setVisibility(View.VISIBLE);
 
+        mConsoleMessageListFragment.getView().setVisibility(View.VISIBLE);
+
+        View progressBackground =  findViewById(R.id.medias_processing_progress_background);
+        View progress = findViewById(R.id.medias_processing_progress);
+        progressBackground.setVisibility(View.GONE);
+        progress.setVisibility(View.GONE);
+
         // there is no more searched pattern
-        mConsoleMessageListFragment.searchPattern(null);
+        mConsoleMessageListFragment.searchPattern(null, null);
     }
 
     @Override
@@ -997,6 +1048,11 @@ public class RoomActivity extends MXCActionBarActivity {
 
     private void onRoomTypings() {
         ArrayList<String> typingUsers = mRoom.getTypingUsers();
+
+        // if there is a penting search, hide/show the typing message
+        if (!mSearchMenuItem.isVisible()) {
+            return;
+        }
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             mTypingArea.setVisibility(View.VISIBLE);

@@ -401,4 +401,7 @@
     <string name="room_displayname_two_members">%1$s and %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
 
+    // Search
+    <string name="search_no_results">No Results</string>
+
 </resources>
