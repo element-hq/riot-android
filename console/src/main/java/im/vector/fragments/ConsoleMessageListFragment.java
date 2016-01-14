@@ -63,7 +63,7 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.MemberDetailsActivity;
-import im.vector.activity.RoomActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.ConsoleContentProvider;
@@ -562,8 +562,8 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
      * @param displayName
      */
     public void onSenderNameClick(String userId, String displayName) {
-        if (getActivity() instanceof RoomActivity) {
-            ((RoomActivity)getActivity()).insertInTextEditor(displayName);
+        if (getActivity() instanceof VectorRoomActivity) {
+            ((VectorRoomActivity)getActivity()).insertInTextEditor(displayName);
         }
     }
 
@@ -630,8 +630,8 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                             // save into downloads
                             savedFilename = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), cacheFile, filename, mediaMimeType);
                         } else {
-                            if (getActivity() instanceof RoomActivity) {
-                                ((RoomActivity)getActivity()).createDocument(message, mediaUrl, mediaMimeType);
+                            if (getActivity() instanceof VectorRoomActivity) {
+                                ((VectorRoomActivity)getActivity()).createDocument(message, mediaUrl, mediaMimeType);
                             }
                         }
 

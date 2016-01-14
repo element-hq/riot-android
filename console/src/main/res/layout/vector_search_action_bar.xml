@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:singleLine="true"
-        android:hint="@string/room_message_placeholder" />
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"/>
 
 </FrameLayout>

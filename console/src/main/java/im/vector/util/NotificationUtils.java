@@ -21,7 +21,7 @@ import android.text.style.StyleSpan;
 
 import im.vector.R;
 import im.vector.activity.LockScreenActivity;
-import im.vector.activity.RoomActivity;
+import im.vector.activity.VectorRoomActivity;
 
 import java.util.Random;
 
@@ -56,14 +56,14 @@ public class NotificationUtils {
 
 
         // Build the pending intent for when the notification is clicked
-        Intent roomIntent = new Intent(context, RoomActivity.class);
-        roomIntent.putExtra(RoomActivity.EXTRA_ROOM_ID, roomId);
-        roomIntent.putExtra(RoomActivity.EXTRA_MATRIX_ID, matrixId);
-        roomIntent.putExtra(RoomActivity.EXTRA_START_CALL_ID, callId);
+        Intent roomIntent = new Intent(context, VectorRoomActivity.class);
+        roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+        roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
+        roomIntent.putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId);
 
         // Recreate the back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
-                .addParentStack(RoomActivity.class)
+                .addParentStack(VectorRoomActivity.class)
                 .addNextIntent(roomIntent);
 
 
@@ -197,20 +197,20 @@ public class NotificationUtils {
         builder.setTicker(from + name + body);
 
             // Build the pending intent for when the notification is clicked
-            Intent roomIntent = new Intent(context, RoomActivity.class);
-            roomIntent.putExtra(RoomActivity.EXTRA_ROOM_ID, roomId);
+            Intent roomIntent = new Intent(context, VectorRoomActivity.class);
+            roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
             if (null != matrixId) {
-                roomIntent.putExtra(RoomActivity.EXTRA_MATRIX_ID, matrixId);
+                roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
             }
 
         if (null != callId) {
-            roomIntent.putExtra(RoomActivity.EXTRA_START_CALL_ID, callId);
+            roomIntent.putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId);
         }
 
             // Recreate the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
-                    .addParentStack(RoomActivity.class)
+                    .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntent);
 
 
@@ -247,13 +247,13 @@ public class NotificationUtils {
                     pIntent);
 
             // Build the pending intent for when the notification is clicked
-            Intent roomIntentTap = new Intent(context, RoomActivity.class);
-            roomIntentTap.putExtra(RoomActivity.EXTRA_ROOM_ID, roomId);
+            Intent roomIntentTap = new Intent(context, VectorRoomActivity.class);
+            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
             // the action must be unique else the parameters are ignored
             roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
             // Recreate the back stack
             TaskStackBuilder stackBuildertap = TaskStackBuilder.create(context)
-                    .addParentStack(RoomActivity.class)
+                    .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntentTap);
             builder.addAction(
                     R.drawable.ic_menu_start_conversation,

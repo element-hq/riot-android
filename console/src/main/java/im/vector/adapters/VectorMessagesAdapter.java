@@ -354,4 +354,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     public int highlightMessageColor(Context context) {
         return context.getResources().getColor(R.color.vector_green_color);
     }
+
+    public int searchHighlightMessageColor(Context context) {
+        return context.getResources().getColor(R.color.vector_green_color);
+    }
 }
