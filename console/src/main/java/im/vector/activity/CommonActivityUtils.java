@@ -319,9 +319,9 @@ public class CommonActivityUtils {
                                            } else {
                                                // already to the home activity
                                                // so just need to open the room activity
-                                               Intent intent = new Intent(fromActivity, RoomActivity.class);
-                                               intent.putExtra(RoomActivity.EXTRA_ROOM_ID, roomId);
-                                               intent.putExtra(RoomActivity.EXTRA_MATRIX_ID, fSession.getCredentials().userId);
+                                               Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
+                                               intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                               intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getCredentials().userId);
                                                if (null != intentParam) {
                                                    intent.putExtra(HomeActivity.EXTRA_ROOM_INTENT, intentParam);
                                                }

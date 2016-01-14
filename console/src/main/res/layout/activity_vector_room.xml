@@ -11,22 +11,6 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="org.matrix.vector.activity.RoomActivity">
 
-        <LinearLayout
-            android:id="@+id/room_search_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/room_search_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp" />
-        </LinearLayout>
-
         <ProgressBar
             android:id="@+id/loading_room_content_progress"
             android:layout_height="40dp"
@@ -34,6 +18,25 @@
             android:layout_alignParentLeft="true"
             android:visibility="gone"
             android:indeterminate="true" />
+
+        <ImageView
+            android:id="@+id/search_background_imageview"
+            android:background="#FFFFFFFF"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/vector_search_bg"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/search_no_result_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_no_results"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/room_bottom_layout"
@@ -141,7 +144,7 @@
             android:background="@color/vector_green_color" />
 
         <LinearLayout
-            android:layout_below="@id/room_search_layout"
+            android:layout_alignParentTop="true"
             android:layout_above="@id/room_notification_separator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -63,7 +63,7 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.MemberDetailsActivity;
-import im.vector.activity.RoomActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.ConsoleContentProvider;
@@ -79,16 +79,8 @@ import java.util.Locale;
 public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "ConsoleMessageListFragment.TAG_FRAGMENT_RECEIPTS_DIALOG";
 
-    public static interface SearchEventsListener {
-        /**
-         * Call when the search is cancelled.
-         */
-        public void onSearchCancel();
-    }
-
-    public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId, SearchEventsListener searchEventsListener) {
+    public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         ConsoleMessageListFragment f = new ConsoleMessageListFragment();
-        f.mSearchEventsListener = searchEventsListener;
         Bundle args = new Bundle();
         args.putString(ARG_ROOM_ID, roomId);
         args.putInt(ARG_LAYOUT_ID, layoutResId);
@@ -96,8 +88,6 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
         f.setArguments(args);
         return f;
     }
-
-    protected SearchEventsListener mSearchEventsListener = null;
 
     @Override
     public MXSession getSession(String matrixId) {
@@ -187,68 +177,6 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     @Override
     public void logout() {
         CommonActivityUtils.logout(ConsoleMessageListFragment.this.getActivity());
-    }
-
-
-    public void onRowClick(int position) {
-        final String fEventId = mAdapter.getItem(position).getEvent().eventId;
-
-        mRoom.requestSearchHistory(null, new SimpleApiCallback<ArrayList<Room.SnapshotedEvent>>(getActivity()) {
-            @Override
-            public void onSuccess(ArrayList<Room.SnapshotedEvent> snapshotedEvents) {
-                final ArrayList<Room.SnapshotedEvent> fsnapshotedEvents = snapshotedEvents;
-
-                ConsoleMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final ArrayList<MessageRow> messageRows = new ArrayList<MessageRow>(fsnapshotedEvents.size());
-                        int newPos = 0;
-                        int index = 0;
-
-                        for (Room.SnapshotedEvent snapshotedEvent : fsnapshotedEvents) {
-                            if (TextUtils.equals(snapshotedEvent.mEvent.eventId, fEventId)) {
-                                newPos = index;
-                            }
-                            messageRows.add(new MessageRow(snapshotedEvent.mEvent, snapshotedEvent.mState));
-                            index++;
-                        }
-
-                        mPattern = null;
-                        mAdapter.cancelSearchWith(messageRows);
-
-                        if (null != mSearchEventsListener) {
-                            try {
-                                mSearchEventsListener.onSearchCancel();
-                            } catch (Exception e) {
-                            }
-                        }
-                        mRoom.flushSearchBackState();
-
-                        final int fPos = newPos;
-                        mMessageListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mMessageListView.setSelection(fPos);
-                            }
-                        });
-                    }
-                });
-            }
-
-            // the request will be auto restarted when a valid network will be found
-            @Override
-            public void onNetworkError(Exception e) {
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-            }
-        });
-
     }
 
     public Boolean onRowLongClick(int position) {
@@ -595,8 +523,6 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                     getActivity().startActivity(viewImageIntent);
                 }
             }
-        } else {
-            onRowClick(position);
         }
     }
 
@@ -636,8 +562,8 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
      * @param displayName
      */
     public void onSenderNameClick(String userId, String displayName) {
-        if (getActivity() instanceof RoomActivity) {
-            ((RoomActivity)getActivity()).insertInTextEditor(displayName);
+        if (getActivity() instanceof VectorRoomActivity) {
+            ((VectorRoomActivity)getActivity()).insertInTextEditor(displayName);
         }
     }
 
@@ -704,8 +630,8 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                             // save into downloads
                             savedFilename = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), cacheFile, filename, mediaMimeType);
                         } else {
-                            if (getActivity() instanceof RoomActivity) {
-                                ((RoomActivity)getActivity()).createDocument(message, mediaUrl, mediaMimeType);
+                            if (getActivity() instanceof VectorRoomActivity) {
+                                ((VectorRoomActivity)getActivity()).createDocument(message, mediaUrl, mediaMimeType);
                             }
                         }
 
