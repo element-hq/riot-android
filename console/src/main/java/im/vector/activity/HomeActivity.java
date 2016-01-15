@@ -534,12 +534,22 @@ public class HomeActivity extends MXCActionBarActivity {
 
     private void toggleSearchButton() {
         if (mSearchRoomEditText.getVisibility() == View.GONE) {
-            mSearchRoomEditText.setVisibility(View.VISIBLE);
+            //mSearchRoomEditText.setVisibility(View.VISIBLE);
 
             // need to collapse/expand the groups to avoid invalid refreshes
-            collapseAllGroups();
-            mAdapter.setDisplayAllGroups(true);
-            expandAllGroups();
+            //collapseAllGroups();
+            //mAdapter.setDisplayAllGroups(true);
+            //expandAllGroups();
+
+            final Intent intent = new Intent(HomeActivity.this, VectorSearchesActivity.class);
+
+            HomeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    HomeActivity.this.startActivity(intent);
+                }
+            });
+
         } else {
             // need to collapse/expand the groups to avoid invalid refreshes
             collapseAllGroups();

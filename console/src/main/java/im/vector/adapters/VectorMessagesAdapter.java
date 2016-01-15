@@ -58,9 +58,9 @@ import java.util.List;
  */
 public class VectorMessagesAdapter extends MessagesAdapter {
 
-    private Date mReferenceDate = new Date();
-    private ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
-    private Handler mUiHandler;
+    protected Date mReferenceDate = new Date();
+    protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
+    protected Handler mUiHandler;
 
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
@@ -172,7 +172,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
     }
 
-    private String headerMessage(int position) {
+    protected String headerMessage(int position) {
         Date prevMessageDate = null;
         Date messageDate = null;
 

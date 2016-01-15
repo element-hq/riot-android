@@ -54,6 +54,11 @@ public class VectorUtils {
      * @return the room displayname.
      */
     public static String getRoomDisplayname(Context context, MXSession session, Room room) {
+        // sanity checks
+        if (null == room) {
+            return null;
+        }
+
         // this algo is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)

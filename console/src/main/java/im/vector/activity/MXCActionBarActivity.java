@@ -189,7 +189,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
         VectorApp.getInstance().getOnActivityDestroyedListener().fire(this);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
