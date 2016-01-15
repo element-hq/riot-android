@@ -216,6 +216,18 @@
                 android:value="im.vector.activity.HomeActivity"/>
         </activity>
 
+        <activity
+            android:name="im.vector.activity.VectorSearchesActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.HomeActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.HomeActivity"/>
+        </activity>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
