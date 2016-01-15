@@ -109,6 +109,7 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
     private ImageView mBackgroundImageview;
     private TextView mNoResultsTextView;
     private View mInitialSearchInProgressView;
+    private EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,21 +153,21 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
         actionBar.setCustomView(actionBarLayout, layout);
 
         // add text listener
-        final EditText editText = (EditText) actionBarLayout.findViewById(R.id.room_action_bar_edit_text);
+        mEditText = (EditText) actionBarLayout.findViewById(R.id.room_action_bar_edit_text);
 
         actionBarLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                editText.requestFocus();
+                mEditText.requestFocus();
 
                 InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                im.showSoftInput(editText, 0);
+                im.showSoftInput(mEditText, 0);
             }
         }, 100);
 
         mBackgroundImageview.setVisibility(View.VISIBLE);
 
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -174,21 +175,17 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
 
                     // the search command should only be passed to the active fragment
                     // by now, there is only one active fragment
-                    // it is planned to have 3 (search by room nanmes, by messages, by member name)
-                    mVectorRoomsSearchResultsListFragment.searchPattern(editText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
+                    // it is planned to have 3 (search by room names, by messages, by member name)
+                    mVectorRoomsSearchResultsListFragment.searchPattern(mEditText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
 
                         @Override
                         public void onSearchSucceed(int nbrMessages) {
-                            mInitialSearchInProgressView.setVisibility(View.GONE);
-                            mBackgroundImageview.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
-                            mNoResultsTextView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
+                            onSearchEnd(nbrMessages);
                         }
 
                         @Override
                         public void onSearchFailed() {
-                            mInitialSearchInProgressView.setVisibility(View.GONE);
-                            mBackgroundImageview.setVisibility(View.VISIBLE);
-                            mNoResultsTextView.setVisibility( View.VISIBLE);
+                            onSearchEnd(0);
                         }
                     });
                     return true;
@@ -197,6 +194,13 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
             }
         });
 
+    }
+
+    private void onSearchEnd(int nbrMessages) {
+        mInitialSearchInProgressView.setVisibility(View.GONE);
+        mBackgroundImageview.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
+        // display the "no result" text only if there is dedicated pattern
+        mNoResultsTextView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mEditText.getText().toString())) ? View.VISIBLE : View.GONE);
     }
 
     @Override

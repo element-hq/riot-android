@@ -102,6 +102,19 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
             headerView.setVisibility(View.GONE);
         }
 
+        final int fPosition = position;
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (null != mMessagesAdapterEventsListener) {
+                    return mMessagesAdapterEventsListener.onContentLongClick(fPosition);
+                }
+
+                return false;
+            }
+        });
+
         return convertView;
     }
 }
