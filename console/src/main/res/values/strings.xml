@@ -404,4 +404,17 @@
     // Search
     <string name="search_no_results">No Results</string>
 
+    // Room recents
+    <string name="room_recents_directory">DIRECTORY</string>
+    <string name="room_recents_favourites">FAVORITES</string>
+    <string name="room_recents_conversations">ROOMS</string>
+    <string name="room_recents_low_priority">LOW PRIORITY</string>
+    <string name="room_recents_invites">INVITES</string>
+
+    // Directory
+    <string name="directory_search_results_title">Browse directory results</string>
+    <string name="directory_search_results">%1$d results found for %2$s</string>
+    <string name="directory_searching_title">Searching directory..</string>
+    <string name="directory_search_fail">Failed to fecth data</string>
+
 </resources>
