@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -82,7 +84,16 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
 
         // set the message text
         EventDisplay display = new EventDisplay(mContext, event, null);
-        messageTextView.setText(display.getTextualDisplay(true));
+        CharSequence text = display.getTextualDisplay(true);
+
+        try {
+            messageTextView.setText(text);
+        } catch (Exception e) {
+            // an exception might be triggered with HTML content
+            // Indeed, the formatting can fail because of the single line display.
+            // in this case, the formatting is ignored.
+            messageTextView.setText(text.toString());
+        }
 
         Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
         roomTextView.setText(VectorUtils.getRoomDisplayname(mContext, mSession, room));
