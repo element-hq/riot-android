@@ -141,7 +141,7 @@ public class EventStreamService extends Service {
                 MXSession session = Matrix.getMXSession(getApplicationContext(), event.getMatrixId());
 
                 // ignore the answer event if it was sent by another member
-                if (!TextUtils.equals(event.userId, session.getCredentials().userId)) {
+                if (!TextUtils.equals(event.getSender(), session.getCredentials().userId)) {
                     return;
                 }
             }
@@ -190,7 +190,7 @@ public class EventStreamService extends Service {
                 return;
             }
 
-            String senderID = event.userId;
+            String senderID = event.getSender();
             // FIXME: Support event contents with no body
             if (!event.content.getAsJsonObject().has("body")) {
                 // only the membership events are supported

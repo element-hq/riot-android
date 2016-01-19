@@ -195,7 +195,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                 Message.MSGTYPE_EMOTE.equals(message.msgtype)
                 ) {
 
-            if (!messageRow.getEvent().userId.equals(getSession().getCredentials().userId)) {
+            if (!messageRow.getEvent().getSender().equals(getSession().getCredentials().userId)) {
                 textIds.add(R.string.paste_username);
                 iconIds.add(R.drawable.ic_material_paste);
             }
@@ -207,7 +207,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
             // copy the message body
             if (Event.EVENT_TYPE_MESSAGE.equals(messageRow.getEvent().type)) {
 
-                if (!messageRow.getEvent().userId.equals(getSession().getCredentials().userId)) {
+                if (!messageRow.getEvent().getSender().equals(getSession().getCredentials().userId)) {
                     textIds.add(R.string.paste_username);
                     iconIds.add(R.drawable.ic_material_paste);
                 }
@@ -378,14 +378,14 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                         }
                     });
                 } else if (selectedVal == R.string.paste_username) {
-                    String displayName = messageRow.getEvent().userId;
+                    String displayName = messageRow.getEvent().getSender();
                     RoomState state = messageRow.getRoomState();
 
                     if (null != state) {
                         displayName = state.getMemberName(displayName);
                     }
 
-                    onSenderNameClick(messageRow.getEvent().userId, displayName);
+                    onSenderNameClick(messageRow.getEvent().getSender(), displayName);
                 }
             }
         });

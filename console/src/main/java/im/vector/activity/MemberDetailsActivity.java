@@ -76,7 +76,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
                     if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type))) {
 
                         // update only if it is the current user
-                        if ((null != event.userId) && (event.userId.equals(mMemberId))) {
+                        if ((null != event.getSender()) && (event.getSender().equals(mMemberId))) {
                             MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
