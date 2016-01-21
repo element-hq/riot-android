@@ -663,7 +663,7 @@ public class HomeActivity extends MXCActionBarActivity {
 
 
             @Override
-            public void onDeleteRoom(final String roomId) {
+            public void onLeaveRoom(final String roomId) {
                 HomeActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -701,7 +701,7 @@ public class HomeActivity extends MXCActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if ((event.roomId != null) && isDisplayableEvent(event)) {
+                        if ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) {
                             List<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(HomeActivity.this));
                             final int section = sessions.indexOf(session);
                             String matrixId = session.getCredentials().userId;
@@ -730,19 +730,6 @@ public class HomeActivity extends MXCActionBarActivity {
                                 }
                             }
 
-                            // If we've left the room, remove it from the list
-                            else if (mInitialSyncComplete && Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                                if (!(session.getDataHandler().doesRoomExist(event.roomId)) || isMembershipInRoom(RoomMember.MEMBERSHIP_LEAVE, matrixId, summary)) {
-                                    mAdapter.removeRoomSummary(section, summary);
-                                }
-                            }
-                            // Watch for potential room name changes
-                            else if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
-                                    || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
-                                    || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                                summary.setName(session.getDataHandler().getRoom(event.roomId).getName(matrixId));
-                            }
-
                             ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
                             String viewedRoomId = rTracker.getViewedRoomId();
                             String fromMatrixId = rTracker.getMatrixId();
@@ -758,16 +745,6 @@ public class HomeActivity extends MXCActionBarActivity {
                         }
                     }
                 });
-            }
-
-            // White list of displayable events
-            private boolean isDisplayableEvent(Event event) {
-                return Event.EVENT_TYPE_MESSAGE.equals(event.type)
-                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
-                        || Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(event.type)
-                        || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
-                        || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
-                        || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type);
             }
 
             private void addNewRoom(String roomId) {
