@@ -16,21 +16,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/avatar_mask_vector"/>
-
-    <!-- TODO: to be removed asap: no more used on vector -->
-    <ImageView
-        android:id="@+id/imageView_presenceRing"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/presence_ring"
-        />
-    <!-- TODO: to be removed asap: no more used on vector -->
-    <ImageView
-        android:layout_width="@dimen/chat_avatar_keyboard_size"
-        android:layout_height="@dimen/chat_avatar_keyboard_size"
-        android:visibility="gone"
-        android:id="@+id/avatar_typing_img"
-        android:src="@drawable/icon_keyboard"/>
+        android:src="@drawable/avatar_mask"/>
 
 </FrameLayout>

@@ -77,6 +77,7 @@ import im.vector.ViewedRoomTracker;
 import im.vector.adapters.ConsoleRoomSummaryAdapter;
 import im.vector.adapters.DrawerAdapter;
 import im.vector.db.ConsoleContentProvider;
+import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.fragments.ContactsListDialogFragment;
 import im.vector.fragments.RoomCreationDialogFragment;
@@ -171,10 +172,10 @@ public class HomeActivity extends MXCActionBarActivity {
     private HashMap<MXSession, MXEventListener> mListenersBySession = new HashMap<MXSession, MXEventListener>();
     private HashMap<MXSession, MXCallsManager.MXCallsManagerListener> mCallListenersBySession = new HashMap<MXSession, MXCallsManager.MXCallsManagerListener>();
 
-    private ConsoleRoomSummaryAdapter mAdapter;
-    private EditText mSearchRoomEditText;
+    private VectorRoomSummaryAdapter mAdapter;
+    //private EditText mSearchRoomEditText;
 
-    private void refreshPublicRoomsList() {
+    /*private void refreshPublicRoomsList() {
         refreshPublicRoomsList(new ArrayList<MXSession>(Matrix.getInstance(getApplicationContext()).getSessions()), new ArrayList<String>(), 0, new ArrayList<List<PublicRoom>>());
     }
 
@@ -217,10 +218,11 @@ public class HomeActivity extends MXCActionBarActivity {
         } else {
             refreshPublicRoomsList(sessions, checkedHomeServers, index + 1, publicRoomsListList);
         }
-    }
+    }*/
 
 
-    private void joinPublicRoom(final String homeServerURL, final PublicRoom publicRoom) {
+    // TODO remove asap : joinPublicRoom not anymore used
+    /*private void joinPublicRoom(final String homeServerURL, final PublicRoom publicRoom) {
 
         Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
         ArrayList<MXSession> matchedSessions = new ArrayList<MXSession>();
@@ -261,7 +263,7 @@ public class HomeActivity extends MXCActionBarActivity {
             fragment.show(fm, TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
 
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,10 +275,13 @@ public class HomeActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // get the ExpandableListView widget
         mMyRoomList = (ExpandableListView) findViewById(R.id.listView_myRooms);
         // the chevron is managed in the header view
         mMyRoomList.setGroupIndicator(null);
-        mAdapter = new ConsoleRoomSummaryAdapter(this, Matrix.getMXSessions(this), R.layout.adapter_item_my_rooms, R.layout.adapter_room_section_header);
+        // create the adapter
+        //mAdapter = new ConsoleRoomSummaryAdapter(this, Matrix.getMXSessions(this), R.layout.adapter_item_my_rooms, R.layout.adapter_room_section_header);
+        mAdapter = new VectorRoomSummaryAdapter(this, Matrix.getMXSessions(this), R.layout.adapter_item_vector_recent_room, R.layout.adapter_room_section_header);
 
         if (null != savedInstanceState) {
             if (savedInstanceState.containsKey(PUBLIC_ROOMS_LIST_LIST)) {
@@ -290,6 +295,7 @@ public class HomeActivity extends MXCActionBarActivity {
             }
         }
 
+        // process intent parameters
         final Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_JUMP_TO_ROOM_ID)) {
             mAutomaticallyOpenedRoomId = intent.getStringExtra(EXTRA_JUMP_TO_ROOM_ID);
@@ -317,119 +323,72 @@ public class HomeActivity extends MXCActionBarActivity {
         }
 
         mMyRoomList.setAdapter(mAdapter);
-        Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
 
         // check if  there is some valid session
         // the home activity could be relaunched after an application crash
-        // so, reload the sessions before displaying the hidtory
+        // so, reload the sessions before displaying the history
+        Collection<MXSession> sessions = Matrix.getMXSessions(HomeActivity.this);
         if (sessions.size() == 0) {
             Log.e(LOG_TAG, "Weird : onCreate : no session");
 
             if (null != Matrix.getInstance(this).getDefaultSession()) {
                 Log.e(LOG_TAG, "No loaded session : reload them");
+                // start splash activity and stop here
                 startActivity(new Intent(HomeActivity.this, SplashActivity.class));
                 HomeActivity.this.finish();
                 return;
             }
         }
 
+        // set MX listeners for each session
         for(MXSession session : sessions) {
             addSessionListener(session);
         }
 
+        // Set rooms click listener:
+        // - reset the unread count
+        // - start the corresponding room activity
         mMyRoomList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
+                String roomId = null;
+                MXSession session = null;
 
-                if (mAdapter.isRecentsGroupIndex(groupPosition)) {
-                    String roomId = null;
-                    MXSession session = null;
+                RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+                session = Matrix.getInstance(HomeActivity.this).getSession(roomSummary.getMatrixId());
 
-                    RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                    session = Matrix.getInstance(HomeActivity.this).getSession(roomSummary.getMatrixId());
-
-                    roomId = roomSummary.getRoomId();
-                    Room room = session.getDataHandler().getRoom(roomId);
-                    // cannot join a leaving room
-                    if ((null == room) || room.isLeaving()) {
-                        roomId = null;
-                    }
-
-                    if (mAdapter.resetUnreadCount(groupPosition, roomId)) {
-                        session.getDataHandler().getStore().flushSummary(roomSummary);
-                    }
-
-                    if (null != roomId){
-                        CommonActivityUtils.goToRoomPage(session, roomId, HomeActivity.this, null);
-                    }
-
-                } else if (mAdapter.isPublicsGroupIndex(groupPosition)) {
-                    joinPublicRoom(mAdapter.getHomeServerURLAt(groupPosition), mAdapter.getPublicRoomAt(groupPosition, childPosition));
+                roomId = roomSummary.getRoomId();
+                Room room = session.getDataHandler().getRoom(roomId);
+                // cannot join a leaving room
+                if ((null == room) || room.isLeaving()) {
+                    roomId = null;
                 }
 
+                // update the unread messages count
+                if (mAdapter.resetUnreadCount(groupPosition, childPosition)) {
+                    session.getDataHandler().getStore().flushSummary(roomSummary);
+                }
+
+                // launch corresponding room activity
+                if (null != roomId){
+                    CommonActivityUtils.goToRoomPage(session, roomId, HomeActivity.this, null);
+                }
+
+                // click is handled
                 return true;
             }
         });
 
+
+        // *******************************************************************************
+        // ExpandableListView handlers
+        // *******************************************************************************
         mMyRoomList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    long packedPos = ((ExpandableListView) parent).getExpandableListPosition(position);
-                    final int groupPosition = ExpandableListView.getPackedPositionGroup(packedPos);
-
-                    if (mAdapter.isRecentsGroupIndex(groupPosition)) {
-                        final int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
-
-                        FragmentManager fm = HomeActivity.this.getSupportFragmentManager();
-                        IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOM_OPTIONS);
-
-                        if (fragment != null) {
-                            fragment.dismissAllowingStateLoss();
-                        }
-
-                        final Integer[] lIcons = new Integer[]{R.drawable.ic_material_exit_to_app};
-                        final Integer[] lTexts = new Integer[]{R.string.action_leave};
-
-                        fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts, null, HomeActivity.this.getResources().getColor(R.color.vector_title_color));
-                        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                                Integer selectedVal = lTexts[position];
-
-                                if (selectedVal == R.string.action_leave) {
-                                    HomeActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                                            final MXSession roomSession = Matrix.getInstance(HomeActivity.this).getSession(roomSummary.getMatrixId());
-
-                                            String roomId = roomSummary.getRoomId();
-                                            Room room = roomSession.getDataHandler().getRoom(roomId);
-
-                                            if (null != room) {
-                                                room.leave(new SimpleApiCallback<Void>(HomeActivity.this) {
-                                                    @Override
-                                                    public void onSuccess(Void info) {
-                                                        mAdapter.removeRoomSummary(groupPosition, roomSummary);
-                                                        mAdapter.notifyDataSetChanged();
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-
-                        fragment.show(fm, TAG_FRAGMENT_ROOM_OPTIONS);
-
-                        return true;
-                    }
-                }
-
+                // TODO TBD
+                Log.w(LOG_TAG, "## onItemLongClick(): NOT IMPLEMENTED");
                 return false;
             }
         });
@@ -437,32 +396,28 @@ public class HomeActivity extends MXCActionBarActivity {
         mMyRoomList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                if (mAdapter.isPublicsGroupIndex(groupPosition)) {
-                    refreshPublicRoomsList();
-                }
+                // TODO TBD
+                Log.w(LOG_TAG, "## onGroupExpand(): NOT IMPLEMENTED");
+            }
+        });
+
+        mMyRoomList.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                // TODO TBD
+                Log.w(LOG_TAG, "## onGroupCollapse(): NOT IMPLEMENTED");
             }
         });
 
         mMyRoomList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                return mAdapter.getGroupCount() < 2;
+                // TODO TBD
+                Log.w(LOG_TAG,"## onGroupExpand(): NOT IMPLEMENTED");
+                return false; // mAdapter.getGroupCount() < 2;
             }
         });
-
-        mSearchRoomEditText = (EditText) this.findViewById(R.id.editText_search_room);
-        mSearchRoomEditText.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(android.text.Editable s) {
-                mAdapter.setSearchedPattern(s.toString());
-                mMyRoomList.smoothScrollToPosition(0);
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
+        // *******************************************************************************
     }
 
     @Override
@@ -486,24 +441,35 @@ public class HomeActivity extends MXCActionBarActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    /**
+     * Compute a list containing the indexes of the groups that
+     * expanded
+     * @return a list of index of the groups that are expanded
+     */
     public ArrayList<Integer> getExpandedGroupsList() {
-        ArrayList<Integer> expList = new ArrayList<Integer>();
+        ArrayList<Integer> expandGroupList = new ArrayList<Integer>();
 
         int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
 
-        for(int groupindex = 0; groupindex < groupCount; groupindex++) {
-            if (mMyRoomList.isGroupExpanded(groupindex)) {
-                expList.add(groupindex);
+        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            if (mMyRoomList.isGroupExpanded(groupIndex)) {
+                expandGroupList.add(groupIndex);
             }
         }
 
-        return expList;
+        return expandGroupList;
     }
 
+    /**
+     * Expand the groups whose indexes are passed in indexesList.
+     * If indexesList is null, then all the groups are expanded.
+     * @param indexesList list of the indexes of the groups to be expanded
+     */
     public void expandGroupIndexes(ArrayList<Integer> indexesList) {
         if (null == indexesList) {
             expandAllGroups();
-        } else {
+        }
+        else {
 
             int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
 
@@ -533,44 +499,10 @@ public class HomeActivity extends MXCActionBarActivity {
     }
 
     private void toggleSearchButton() {
-        if (mSearchRoomEditText.getVisibility() == View.GONE) {
-            //mSearchRoomEditText.setVisibility(View.VISIBLE);
-
-            // need to collapse/expand the groups to avoid invalid refreshes
-            //collapseAllGroups();
-            //mAdapter.setDisplayAllGroups(true);
-            //expandAllGroups();
-
-            final Intent intent = new Intent(HomeActivity.this, VectorSearchesActivity.class);
-
-            HomeActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    HomeActivity.this.startActivity(intent);
-                }
-            });
-
-        } else {
-            // need to collapse/expand the groups to avoid invalid refreshes
-            collapseAllGroups();
-            mAdapter.setDisplayAllGroups(false);
-            expandAllGroups();
-
-            mSearchRoomEditText.setVisibility(View.GONE);
-
-            expandAllGroups();
-
-            // force to hide the keyboard
-            mSearchRoomEditText.postDelayed(new Runnable() {
-                public void run() {
-                    InputMethodManager keyboard = (InputMethodManager) getSystemService(getApplication().INPUT_METHOD_SERVICE);
-                    keyboard.hideSoftInputFromWindow(
-                            mSearchRoomEditText.getWindowToken(), 0);
-                }
-            }, 200);
-        }
-
-        mSearchRoomEditText.setText("");
+        // TODO must be modified to launch a tab activity
+        // launch the "search in rooms" activity
+        final Intent intent = new Intent(HomeActivity.this, VectorSearchesActivity.class);
+        HomeActivity.this.startActivity(intent);
     }
 
     @SuppressLint("NewApi")
@@ -596,6 +528,7 @@ public class HomeActivity extends MXCActionBarActivity {
 
             @Override
             public void onInitialSyncComplete() {
+                Log.d(LOG_TAG,"## onInitialSyncComplete()");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -605,19 +538,12 @@ public class HomeActivity extends MXCActionBarActivity {
 
                         Log.e(LOG_TAG, ">>> onInitialSyncComplete : summaries " + summaries.size());
 
-
                         for (RoomSummary summary : summaries) {
                             addSummary(summary);
                         }
 
-                        // highlighted public rooms
-                        mAdapter.highlightRoom("Matrix HQ");
-                        mAdapter.highlightRoom("#matrix:matrix.org");
-                        mAdapter.highlightRoom("#matrix-dev:matrix.org");
-                        mAdapter.highlightRoom("#matrix-fr:matrix.org");
-
                         mAdapter.sortSummaries();
-                        mAdapter.setPublicRoomsList(mPublicRoomsListList, mHomeServerNames);
+                        // mAdapter.setPublicRoomsList(mPublicRoomsListList, mHomeServerNames);
 
                         expandAllGroups();
 
@@ -630,6 +556,7 @@ public class HomeActivity extends MXCActionBarActivity {
 
             @Override
             public void onRoomInitialSyncComplete(final String roomId) {
+                Log.d(LOG_TAG,"## onRoomInitialSyncComplete()");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -641,6 +568,7 @@ public class HomeActivity extends MXCActionBarActivity {
 
             @Override
             public void onRoomInternalUpdate(String roomId) {
+                Log.d(LOG_TAG,"## onRoomInternalUpdate()");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -717,7 +645,8 @@ public class HomeActivity extends MXCActionBarActivity {
                                 if (mInitialSyncComplete) {
                                     if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(event.type)) {
                                         addNewRoom(event.roomId);
-                                    } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                                    }
+                                    else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                                         RoomMember member = JsonUtils.toRoomMember(event.content);
 
                                         // add the room summary if the user has
@@ -743,6 +672,11 @@ public class HomeActivity extends MXCActionBarActivity {
 
                             refreshOnChunkEnd = true;
                         }
+                        else {
+                            // update event for tags: the user has changed a room position (ie. from low prio to favourite)
+                            // update event avatar: an avatar has been updated..
+                            refreshOnChunkEnd = (Event.EVENT_TYPE_TAGS.equals(event.type) || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type));
+                        }
                     }
                 });
             }
@@ -759,6 +693,13 @@ public class HomeActivity extends MXCActionBarActivity {
                 }
             }
 
+            /**
+             *
+             * @param membership
+             * @param selfUserId
+             * @param summary
+             * @return true
+             */
             private boolean isMembershipInRoom(String membership, String selfUserId, RoomSummary summary) {
                 Room room = session.getDataHandler().getStore().getRoom(summary.getRoomId());
 
@@ -804,7 +745,6 @@ public class HomeActivity extends MXCActionBarActivity {
 
         // call listener
         MXCallsManager.MXCallsManagerListener callsManagerListener = new MXCallsManager.MXCallsManagerListener() {
-
             /**
              * Called when there is an incoming call within the room.
              */
@@ -829,7 +769,8 @@ public class HomeActivity extends MXCActionBarActivity {
                             });
                         }
                     }
-                } else {
+                }
+                else {
                     HomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -944,10 +885,6 @@ public class HomeActivity extends MXCActionBarActivity {
         // it does not trigger any live event.
         // So, it is safer to sort the messages when debackgrounding
         mAdapter.sortSummaries();
-        // expand/collapse to force th group refresh
-        collapseAllGroups();
-        // all the groups must be displayed during a search
-        mAdapter.setDisplayAllGroups(mSearchRoomEditText.getVisibility() == View.VISIBLE);
         mAdapter.notifyDataSetChanged();
 
         // expand previously expanded groups.
@@ -997,9 +934,7 @@ public class HomeActivity extends MXCActionBarActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (id == R.drawable.ic_material_search) {
-                    toggleSearchContacts();
-                } else if (id == R.drawable.ic_material_find_in_page) {
+                if (id == R.drawable.ic_material_find_in_page) {
                     toggleSearchButton();
                 } else if (id == R.drawable.vector_create) {
                     createRoom();
@@ -1016,9 +951,11 @@ public class HomeActivity extends MXCActionBarActivity {
                 } else if (id == R.drawable.ic_material_exit_to_app) {
                     CommonActivityUtils.logout(HomeActivity.this);
                 } else if (id == R.drawable.ic_material_person_add) {
-                    HomeActivity.this.addAccount();
+                    //HomeActivity.this.addAccount();
+                    Toast.makeText(HomeActivity.this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
                 } else if (id == R.drawable.ic_material_remove_circle_outline) {
-                    HomeActivity.this.removeAccount();
+                    //HomeActivity.this.removeAccount();
+                    Toast.makeText(HomeActivity.this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
                 } else if (id == R.drawable.ic_menu_matrix_transparent) {
                     HomeActivity.this.displayAbout();
                 }
@@ -1067,34 +1004,49 @@ public class HomeActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        boolean retCode = true;
 
-        if (id == R.id.ic_action_search_contact) {
-            toggleSearchContacts();
-        } else if (id == R.id.ic_action_search_room) {
-            toggleSearchButton();
-        } else if (id == R.id.ic_action_mark_all_as_read) {
-            markAllMessagesAsRead();
-        } else if (id == R.id.ic_action_resume_call) {
-            IMXCall call = CallViewActivity.getActiveCall();
-            if (null != call) {
-                final Intent intent = new Intent(HomeActivity.this, CallViewActivity.class);
-                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
-                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+        switch(item.getItemId()) {
+            /* search in contacts not implemented:
+            case R.id.ic_action_search_contact:
+                toggleSearchContacts();
+                break;*/
 
-                HomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        HomeActivity.this.startActivity(intent);
-                    }
-                });
+            // search in rooms content
+            case R.id.ic_action_search_room:
+                toggleSearchButton();
+                break;
+
+            // mark all unread messages as read
+            case R.id.ic_action_mark_all_as_read:
+                markAllMessagesAsRead();
+                break;
+
+            case R.id.ic_action_resume_call:
+                IMXCall call = CallViewActivity.getActiveCall();
+                if (null != call) {
+                    final Intent intent = new Intent(HomeActivity.this, CallViewActivity.class);
+                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            HomeActivity.this.startActivity(intent);
+                        }
+                    });
+                }
+                break;
+
+            default:
+                // not handled item, return the super class implementation value
+                retCode = super.onOptionsItemSelected(item);
+                break;
         }
-
-        }
-        return super.onOptionsItemSelected(item);
+        return retCode;
     }
 
-    private void toggleSearchContacts() {
+    /*private void toggleSearchContacts() {
         FragmentManager fm = getSupportFragmentManager();
 
         ContactsListDialogFragment fragment = (ContactsListDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_CONTACTS_LIST);
@@ -1103,7 +1055,7 @@ public class HomeActivity extends MXCActionBarActivity {
         }
         fragment = ContactsListDialogFragment.newInstance();
         fragment.show(fm, TAG_FRAGMENT_CONTACTS_LIST);
-    }
+    }*/
 
     private void joinRoomByName() {
         if (Matrix.getMXSessions(this).size() == 1) {
@@ -1185,7 +1137,7 @@ public class HomeActivity extends MXCActionBarActivity {
     private void markAllMessagesAsRead() {
         // flush the summaries
         ArrayList<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(HomeActivity.this));
-        ;
+
         for (int index = 0; index < sessions.size(); index++) {
             MXSession session = sessions.get(index);
 
@@ -1196,62 +1148,6 @@ public class HomeActivity extends MXCActionBarActivity {
         }
 
         mAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Add an existing account
-     */
-    private void addAccount() {
-        (new AddAccountAlertDialog(this)).show();
-    }
-
-    private void removeAccount() {
-        final ArrayList<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(this));
-
-        // only one session -> loggout
-        if (sessions.size() == 1) {
-            CommonActivityUtils.logout(HomeActivity.this);
-        }
-
-        FragmentManager fm = getSupportFragmentManager();
-
-        AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
-        }
-
-        fragment = AccountsSelectionDialogFragment.newInstance(Matrix.getMXSessions(getApplicationContext()));
-
-        fragment.setListener(new AccountsSelectionDialogFragment.AccountsListener() {
-            @Override
-            public void onSelected(final MXSession session) {
-                HomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final int sectionPos = sessions.indexOf(session);
-
-                        CommonActivityUtils.logout(HomeActivity.this, session, true);
-
-                        HomeActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // expand/collapse to force the group refresh
-                                collapseAllGroups();
-
-                                mAdapter.removeSection(sectionPos);
-                                mAdapter.notifyDataSetChanged();
-
-                                // all the groups must be displayed during a search
-                                mAdapter.setDisplayAllGroups(mSearchRoomEditText.getVisibility() == View.VISIBLE);
-                                expandAllGroups();
-                            }
-                        });
-                    }
-                });
-            }
-        });
-
-        fragment.show(fm, TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
     }
 
     // trick to trap the clink on the Licenses link
