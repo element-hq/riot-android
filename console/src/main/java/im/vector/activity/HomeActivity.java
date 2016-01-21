@@ -659,7 +659,25 @@ public class HomeActivity extends MXCActionBarActivity {
                         refreshOnChunkEnd = true;
                     }
                 });
+            }
 
+
+            @Override
+            public void onDeleteRoom(final String roomId) {
+                HomeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(HomeActivity.this));
+                        final int section = sessions.indexOf(session);
+
+                        RoomSummary summary = mAdapter.getSummaryByRoomId(section, roomId);
+                        if (null != summary) {
+                            mAdapter.removeRoomSummary(section, summary);
+                        }
+
+                        refreshOnChunkEnd = true;
+                    }
+                });
             }
 
             @Override
@@ -730,7 +748,7 @@ public class HomeActivity extends MXCActionBarActivity {
                             String fromMatrixId = rTracker.getMatrixId();
 
                             // If we're not currently viewing this room or not sent by myself, increment the unread count
-                            if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId))  && !event.userId.equals(matrixId)) {
+                            if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId)) && !event.getSender().equals(matrixId)) {
                                 if (null != summary) {
                                     summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
                                 }

@@ -161,7 +161,6 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private String mPendingMimeType;
     private String mPendingFilename;
 
-
     private MenuItem mSearchMenuItem = null;
     private MenuItem mSettingsMenuItem = null;
 
@@ -180,6 +179,17 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private Boolean mIgnoreTextUpdate = false;
 
     private MXEventListener mEventListener = new MXEventListener() {
+
+        @Override
+        public void onDeleteRoom(String roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    VectorRoomActivity.this.finish();
+                }
+            });
+        }
+
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             VectorRoomActivity.this.runOnUiThread(new Runnable() {

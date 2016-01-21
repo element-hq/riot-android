@@ -297,11 +297,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 MessageRow nextRow = getItem(position + 1);
 
                 if (null != nextRow)  {
-                    nextUserId = nextRow.getEvent().userId;
+                    nextUserId = nextRow.getEvent().getSender();
                 }
             }
 
-            view.setVisibility(((null != nextUserId) && (nextUserId.equals(msg.userId)) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
+            view.setVisibility(((null != nextUserId) && (nextUserId.equals(msg.getSender())) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
         // display the day separator
