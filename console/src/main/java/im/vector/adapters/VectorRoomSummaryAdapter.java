@@ -59,7 +59,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     private final int mHeaderLayoutResourceId;
 
     private final MXSession mMxSession;
-    private Collection<RoomSummary> mRoomSummariesCompleteList;
+    private ArrayList<RoomSummary> mRoomSummariesCompleteList;
     private ArrayList<ArrayList<RoomSummary>> mSummaryListBySections;
     private int mFavouriteSectionIndex = -1;// "Favourites" index
     private int mNoTagSectionIndex = -1;    // "Rooms" index
@@ -107,7 +107,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         // get the complete summary list
         mMxSession = Matrix.getInstance(aContext).getDefaultSession();
         if (null != mMxSession) {
-            mRoomSummariesCompleteList = mMxSession.getDataHandler().getStore().getSummaries();
+            mRoomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries());
         }
 
         // init data model used to be be displayed in the list view
@@ -162,7 +162,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      */
     private ArrayList<ArrayList<RoomSummary>> buildSummariesBySections(final Collection<RoomSummary> aRoomSummaryCollection) {
         ArrayList<ArrayList<RoomSummary>> summaryListBySectionsRetValue = new ArrayList<ArrayList<RoomSummary>>();
-        RoomSummary roomSummary;
         String roomSummaryId;
         boolean isFound;
         // init index with default values
@@ -178,46 +177,37 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-            final List<String> lowPrioRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
+            final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
             final List<String> noTagRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_NO_TAG);
+
+            for(int i=0;i<favouriteRoomIdList.size();i++) {
+                favouriteRoomSummaryList.add(new RoomSummary());
+            }
 
             // Main search loop going through all the summaries:
             // here we translate the roomIds (Strings) to their corresponding RoomSummary objects
-            for(Iterator iterator = aRoomSummaryCollection.iterator(); iterator.hasNext(); ) {
+            //for(Iterator iterator = aRoomSummaryCollection.iterator(); iterator.hasNext(); ) {
+            for(RoomSummary roomSummary : aRoomSummaryCollection) {
                 isFound = false;
-                roomSummary = (RoomSummary) iterator.next();
+                //roomSummary = (RoomSummary) iterator.next();
                 roomSummaryId = roomSummary.getRoomId();
 
+                int pos = -1;
+
                 // favourite search to build the favourite list
-                for (String roomId : favouriteRoomIdList) {
-                    if (roomId.equals(roomSummaryId)) {
-                        favouriteRoomSummaryList.add(roomSummary);
-                        isFound = true;
-                        break;
-                    }
+                pos = favouriteRoomIdList.indexOf(roomSummaryId);
+                if (pos >= 0) {
+                    favouriteRoomSummaryList.set(pos,roomSummary);
                 }
-
-                // low priority search to build the low priority list
-                if (false == isFound) {
-                    for (String roomId : lowPrioRoomIdList) {
-                        if (roomId.equals(roomSummaryId)) {
-                            lowPriorityRoomSummaryList.add(roomSummary);
-                            isFound = true;
-                            break;
-                        }
-                    }
+                else if((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0){
+                    lowPriorityRoomSummaryList.add(roomSummary);
                 }
-
-                // no tag search to build the no tag list
-                if (false == isFound) {
-                    for (String roomId : noTagRoomIdList) {
-                        if (roomId.equals(roomSummaryId)) {
-                            noTagRoomSummaryList.add(roomSummary);
-                            break;
-                        }
-                    }
+                else {
+                    // default case: no tag
+                    noTagRoomSummaryList.add(roomSummary);
                 }
             }
+
 
             // Adding sections
             // Note the order here below: first the "favourite", then "no tag" and then "low priority"
@@ -280,11 +270,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
                 }
             };
 
-            // go through all the sections and apply "sort"
-            for(int section = 0; section < mSummaryListBySections.size(); ++section) {
-                ArrayList<RoomSummary> summariesList = (ArrayList<RoomSummary>)mSummaryListBySections.get(section);
-                Collections.sort(summariesList, summaryComparator);
-            }
+            Collections.sort(mRoomSummariesCompleteList, summaryComparator);
         }
         else {
             Log.w(DBG_CLASS_NAME, "## sortSummaries(): mSummaryListBySections = null");
@@ -439,9 +425,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     @Override
     public void notifyDataSetChanged() {
         if (null != mMxSession) {
-            mRoomSummariesCompleteList = mMxSession.getDataHandler().getStore().getSummaries();
+            mRoomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
             // init data model used to be be displayed in the list view
+            sortSummaries();
             mSummaryListBySections = buildSummariesBySections(mRoomSummariesCompleteList);
+
         }
         super.notifyDataSetChanged();
     }

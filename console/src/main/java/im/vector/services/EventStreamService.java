@@ -34,7 +34,6 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -46,7 +45,7 @@ import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.HomeActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.util.NotificationUtils;
 
 import java.io.File;
@@ -634,7 +633,7 @@ public class EventStreamService extends Service {
         );
 
         // go to the home screen if this is clicked.
-        Intent i = new Intent(this, HomeActivity.class);
+        Intent i = new Intent(this, VectorHomeActivity.class);
 
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);

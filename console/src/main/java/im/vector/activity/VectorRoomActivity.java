@@ -41,7 +41,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
@@ -422,8 +421,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mMediasCache = Matrix.getInstance(this).getMediasCache();
 
         // some medias must be sent while opening the chat
-        if (intent.hasExtra(HomeActivity.EXTRA_ROOM_INTENT)) {
-            final Intent mediaIntent = intent.getParcelableExtra(HomeActivity.EXTRA_ROOM_INTENT);
+        if (intent.hasExtra(VectorHomeActivity.EXTRA_ROOM_INTENT)) {
+            final Intent mediaIntent = intent.getParcelableExtra(VectorHomeActivity.EXTRA_ROOM_INTENT);
 
             // sanity check
             if (null != mediaIntent) {
