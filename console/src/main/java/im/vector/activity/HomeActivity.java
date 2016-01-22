@@ -708,34 +708,13 @@ public class HomeActivity extends MXCActionBarActivity {
 
                             mAdapter.setLatestEvent(section, event, roomState, false);
 
-                            RoomSummary summary = mAdapter.getSummaryByRoomId(section, event.roomId);
-
-                            if (summary == null) {
-                                // ROOM_CREATE events will be sent during initial sync. We want to ignore them
-                                // until the initial sync is done (that is, only refresh the list when there
-                                // are new rooms created AFTER we have synced).
-                                if (mInitialSyncComplete) {
-                                    if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(event.type)) {
-                                        addNewRoom(event.roomId);
-                                    } else if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                                        RoomMember member = JsonUtils.toRoomMember(event.content);
-
-                                        // add the room summary if the user has
-                                        if ((RoomMember.MEMBERSHIP_INVITE.equals(member.membership) || RoomMember.MEMBERSHIP_JOIN.equals(member.membership))
-                                                && event.stateKey.equals(matrixId)) {
-                                            // we were invited to a new room.
-                                            addNewRoom(event.roomId);
-                                        }
-                                    }
-                                }
-                            }
-
                             ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
                             String viewedRoomId = rTracker.getViewedRoomId();
                             String fromMatrixId = rTracker.getMatrixId();
 
                             // If we're not currently viewing this room or not sent by myself, increment the unread count
-                            if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId)) && !event.getSender().equals(matrixId)) {
+                            if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId))  && !event.getSender().equals(matrixId)) {
+                                RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
                                 if (null != summary) {
                                     summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
                                 }
@@ -747,16 +726,25 @@ public class HomeActivity extends MXCActionBarActivity {
                 });
             }
 
-            private void addNewRoom(String roomId) {
-                RoomSummary summary = session.getDataHandler().getStore().getSummary(roomId);
+            @Override
+            public void onNewRoom(String roomId) {
+                if (mInitialSyncComplete) {
+                    RoomSummary summary = session.getDataHandler().getStore().getSummary(roomId);
 
-                // sanity checks
-                if (null != summary) {
-                    addSummary(summary);
-                    mAdapter.sortSummaries();
-                } else {
-                    Log.e(LOG_TAG, "addNewRoom : null summary for room " + roomId);
+                    // sanity checks
+                    if (null != summary) {
+                        addSummary(summary);
+                        mAdapter.sortSummaries();
+                    }
                 }
+            }
+
+            @Override
+            public void onJoinRoom(String roomId) {
+                Log.d(LOG_TAG, "onJoinRoom");
+                // ensure that the room is displayed
+                // the server does not always warn about the roow creation
+                onNewRoom(roomId);
             }
 
             private boolean isMembershipInRoom(String membership, String selfUserId, RoomSummary summary) {
