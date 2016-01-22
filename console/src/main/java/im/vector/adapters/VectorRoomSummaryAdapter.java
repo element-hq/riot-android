@@ -33,7 +33,6 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.EventDisplay;
 
@@ -41,8 +40,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import im.vector.Matrix;
@@ -86,6 +83,19 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         }
     }
 
+    /**
+     * Recycle view holder class.
+     * Used in the group views of the expandable list view.
+     */
+    private static class SummaryGroupViewHolder {
+        final TextView mSectionNameTxtView;
+        final ImageView mSectionExpanderImageView;
+
+        SummaryGroupViewHolder(View aParentView){
+            mSectionNameTxtView = (TextView)aParentView.findViewById(org.matrix.androidsdk.R.id.heading);
+            mSectionExpanderImageView = (ImageView)aParentView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        }
+    }
 
     /**
      * Constructor
@@ -106,9 +116,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
         // get the complete summary list
         mMxSession = Matrix.getInstance(aContext).getDefaultSession();
-        if (null != mMxSession) {
-            mRoomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries());
-        }
 
         // init data model used to be be displayed in the list view
         notifyDataSetChanged();
@@ -155,15 +162,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * - ROOM_TAG_FAVOURITE
      * - ROOM_TAG_LOW_PRIORITY
      * - ROOM_TAG_NO_TAG (displayed as "ROOMS")
-     * Section indexes: mFavouriteSectionIndex, mNoTagSectionIndex and mFavouriteSectionIndex are also
-     *  computed in this method.
+     * The section indexes: mFavouriteSectionIndex, mNoTagSectionIndex and mFavouriteSectionIndex are
+     * also computed in this method.
      * @param aRoomSummaryCollection the complete list of RoomSummary objects
      * @return an array of summary lists splitted by sections
      */
     private ArrayList<ArrayList<RoomSummary>> buildSummariesBySections(final Collection<RoomSummary> aRoomSummaryCollection) {
         ArrayList<ArrayList<RoomSummary>> summaryListBySectionsRetValue = new ArrayList<ArrayList<RoomSummary>>();
         String roomSummaryId;
-        boolean isFound;
+
         // init index with default values
         mFavouriteSectionIndex = -1;
         mNoTagSectionIndex = -1;
@@ -178,40 +185,32 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-            final List<String> noTagRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_NO_TAG);
+            //final List<String> noTagRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_NO_TAG);
 
-            for(int i=0;i<favouriteRoomIdList.size();i++) {
-                favouriteRoomSummaryList.add(new RoomSummary());
-            }
-
-            // Main search loop going through all the summaries:
+            // Search loop going through all the summaries:
             // here we translate the roomIds (Strings) to their corresponding RoomSummary objects
-            //for(Iterator iterator = aRoomSummaryCollection.iterator(); iterator.hasNext(); ) {
             for(RoomSummary roomSummary : aRoomSummaryCollection) {
-                isFound = false;
-                //roomSummary = (RoomSummary) iterator.next();
                 roomSummaryId = roomSummary.getRoomId();
-
                 int pos = -1;
 
-                // favourite search to build the favourite list
+                // search for each room Id in the room Id lists, retrieved from their corresponding tags
                 pos = favouriteRoomIdList.indexOf(roomSummaryId);
                 if (pos >= 0) {
-                    favouriteRoomSummaryList.set(pos,roomSummary);
+                    // update the favourites list
+                    favouriteRoomSummaryList.add(roomSummary);
                 }
                 else if((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0){
+                    // update the low priority list
                     lowPriorityRoomSummaryList.add(roomSummary);
                 }
                 else {
-                    // default case: no tag
+                    // default case: update the no tag list
                     noTagRoomSummaryList.add(roomSummary);
                 }
             }
 
-
             // Adding sections
             // Note the order here below: first the "favourite", then "no tag" and then "low priority"
-
             // First section: add favourite list section
             int groupIndex = 0;
             if(0!=favouriteRoomSummaryList.size()) {
@@ -238,10 +237,35 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     }
 
     /**
+     * Sort the "low priority" list and the the "no tag" list by date.
+     *
+     */
+    private void sortSections() {
+        ArrayList<RoomSummary> listToBeSorted;
+
+        if(null != mSummaryListBySections) {
+            // "low priority" list sort
+            if (-1 != mLowPrioSectionIndex) {
+                listToBeSorted = mSummaryListBySections.get(mLowPrioSectionIndex);
+                sortSummaries(listToBeSorted);
+            }
+
+            // "no tag" list sort
+            if (-1 != mNoTagSectionIndex) {
+                listToBeSorted = mSummaryListBySections.get(mNoTagSectionIndex);
+                sortSummaries(listToBeSorted);
+            }
+        }
+        else {
+            Log.w(DBG_CLASS_NAME, "## sortSections(): impossible sort due to summary list = null");
+        }
+
+    }
+    /**
      * Sort the summaries list by date (timestamp).
      *
      */
-    public void sortSummaries(){
+    private void sortSummaries(final ArrayList<RoomSummary> aArrayListToSort){
         if(null != mSummaryListBySections) {
 
             // define comparator logic
@@ -270,7 +294,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
                 }
             };
 
-            Collections.sort(mRoomSummariesCompleteList, summaryComparator);
+            Collections.sort(aArrayListToSort, summaryComparator);
         }
         else {
             Log.w(DBG_CLASS_NAME, "## sortSummaries(): mSummaryListBySections = null");
@@ -379,12 +403,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
 
     /**
-     * upidate the event and the state on given room summary.
+     * Update the event and the state on given room summary.
      * The event provides the room ID identifying the room summary.
      * @param aSectionIndex section index
-     * @param aEvent the event to set
-     * @param aRoomState
-     * @param aIsRefreshed
+     * @param aEvent event to apply
+     * @param aRoomState room state to apply
+     * @param aIsRefreshed flga to indicate if refresh is required
      * @return true if operation succeed, false otherwise
      */
     public boolean setLatestEvent(int aSectionIndex, Event aEvent, RoomState aRoomState, Boolean aIsRefreshed) {
@@ -396,7 +420,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             summary.setLatestEvent(aEvent);
             summary.setLatestRoomState(aRoomState);
             if(aIsRefreshed.booleanValue()) {
-                sortSummaries();
                 notifyDataSetChanged();
             }
         }
@@ -425,11 +448,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     @Override
     public void notifyDataSetChanged() {
         if (null != mMxSession) {
+            // update/retrieve the complete summary list
             mRoomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
+
             // init data model used to be be displayed in the list view
-            sortSummaries();
             mSummaryListBySections = buildSummariesBySections(mRoomSummariesCompleteList);
 
+            // sort summaries in sections by date (newer first)
+            sortSections();
         }
         super.notifyDataSetChanged();
     }
@@ -452,15 +478,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     @Override
     public int getChildrenCount(int groupPosition) {
         int countRetValue = mSummaryListBySections.get(groupPosition).size();
-        /*
-        if(this.isRecentsGroupIndex(groupPosition)) {
-            ArrayList index1 = this.mSearchedPattern.length() > 0?this.mFilteredRecentsSummariesList:this.mRecentsSummariesList;
-            return null != index1 && index1.size() > groupPosition?((ArrayList)index1.get(groupPosition)).size():0;
-        } else {
-            int index = groupPosition - this.mPublicsGroupStartIndex;
-            return !this.displayPublicRooms()?0:(null == this.mPublicRoomsLists?1:(((List)this.mPublicRoomsLists.get(index)).size() == 0?0:(this.mSearchedPattern.length() > 0?((ArrayList)this.mFilteredPublicRoomsList.get(index)).size():((List)this.mPublicRoomsLists.get(index)).size())));
-        }
-        */
         return countRetValue;
     }
 
@@ -476,20 +493,26 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        SummaryGroupViewHolder viewHolder;
+
         if(convertView == null) {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, (ViewGroup)null);
+            viewHolder = new SummaryGroupViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        }
+        else{
+            // recylce previously created view..
+            viewHolder = (SummaryGroupViewHolder)convertView.getTag();
         }
 
-        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
-        ImageView sectionExpanderImageView = (ImageView)convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
-
         String roomTitle = getSectionTitle(groupPosition);
-        sectionNameTxtView.setText(roomTitle);
+        viewHolder.mSectionNameTxtView.setText(roomTitle);
 
+        // update the expander logo
         if(isExpanded) {
-            sectionExpanderImageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
+            viewHolder.mSectionExpanderImageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
         } else {
-            sectionExpanderImageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
+            viewHolder.mSectionExpanderImageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
         }
 
         /*
@@ -864,10 +887,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     // ****************************************************************************************
     // stubbed methods:
     // TODO remove asap
-    public void setPublicRoomsList(List<List<PublicRoom>> aRoomsListList, List<String> aHomeServerNamesList) {
-        Log.w(DBG_CLASS_NAME,"## setPublicRoomsList(): NOT IMPLEMENTED");
-    }
-
     public void addRoomSummary(int aSection, RoomSummary aRoomSummary) {
         Log.w(DBG_CLASS_NAME,"## addRoomSummary(): NOT IMPLEMENTED");
     }

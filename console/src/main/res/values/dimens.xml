@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">14dp</dimen>
     <dimen name="activity_vertical_margin">5dp</dimen>
     <dimen name="profile_avatar_size">100dp</dimen>
+    <dimen name="list_view_fading_edge_length">150dp</dimen>
 </resources>
