@@ -227,74 +227,18 @@ public class VectorHomeActivity extends MXCActionBarActivity {
                     @Override
                     public void run() {
                         mInitialSyncComplete = true;
-
-                        Collection<RoomSummary> summaries = session.getDataHandler().getStore().getSummaries();
-
-                        Log.e(LOG_TAG, ">>> onInitialSyncComplete : summaries " + summaries.size());
-
-                        for (RoomSummary summary : summaries) {
-                            addSummary(summary);
-                        }
-
                         mAdapter.notifyDataSetChanged();
 
-                        // expand all
-                        int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
-                        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-                            mMyRoomList.expandGroup(groupIndex);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onRoomInitialSyncComplete(final String roomId) {
-                Log.d(LOG_TAG,"## onRoomInitialSyncComplete()");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-            @Override
-            public void onRoomInternalUpdate(String roomId) {
-                Log.d(LOG_TAG,"## onRoomInternalUpdate()");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-
-            @Override
-            public void onReceiptEvent(String roomId) {
-                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshOnChunkEnd = true;
-                    }
-                });
-            }
-
-
-            @Override
-            public void onLeaveRoom(final String roomId) {
-                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(VectorHomeActivity.this));
-                        final int section = sessions.indexOf(session);
-
-                        RoomSummary summary = mAdapter.getSummaryByRoomId(section, roomId);
-                        if (null != summary) {
-                            mAdapter.removeRoomSummary(section, summary);
-                        }
-
-                        refreshOnChunkEnd = true;
+                        mMyRoomList.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // expand all
+                                int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
+                                for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+                                    mMyRoomList.expandGroup(groupIndex);
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -319,73 +263,56 @@ public class VectorHomeActivity extends MXCActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) {
-                            refreshOnChunkEnd = true;
-                        }
-                        else {
-                            // update event for tags: the user has changed a room position (ie. from low prio to favourite)
-                            // update event avatar: an avatar has been updated..
-                            refreshOnChunkEnd = (Event.EVENT_TYPE_TAGS.equals(event.type) || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type));
+
+                        // refresh the UI at the end of the next events chunk
+                        refreshOnChunkEnd = ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
+                                Event.EVENT_TYPE_TAGS.equals(event.type) ||
+                                Event.EVENT_TYPE_REDACTION.equals(event.type) ||
+                                Event.EVENT_TYPE_RECEIPT.equals(event.type) ||
+                                Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type);
+
+                        // highlight notified messages
+                        // the SDK only highlighted invitation messages
+                        // it lets the application chooses the behaviour.
+                        ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
+                        String viewedRoomId = rTracker.getViewedRoomId();
+                        String fromMatrixId = rTracker.getMatrixId();
+                        MXSession session = Matrix.getInstance(VectorHomeActivity.this).getDefaultSession();
+                        String matrixId = session.getCredentials().userId;
+
+                        // If we're not currently viewing this room or not sent by myself, increment the unread count
+                        if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId))  && !event.getSender().equals(matrixId)) {
+                            RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
+                            if (null != summary) {
+                                summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
+                            }
                         }
                     }
                 });
             }
 
-            private void addNewRoom(String roomId) {
-                RoomSummary summary = session.getDataHandler().getStore().getSummary(roomId);
-
-                // sanity checks
-                if (null != summary) {
-                    addSummary(summary);
-                    //mAdapter.sortSummaries();
-                } else {
-                    Log.e(LOG_TAG, "addNewRoom : null summary for room " + roomId);
-                }
-            }
-
             /**
-             *
-             * @param membership
-             * @param selfUserId
-             * @param summary
-             * @return true
+             * These 3 methods trigger an UI refresh asap because the user could have created / joined / left a room
+             * but the server events echos are not yet received.
              */
-            private boolean isMembershipInRoom(String membership, String selfUserId, RoomSummary summary) {
-                Room room = session.getDataHandler().getStore().getRoom(summary.getRoomId());
-
-                if (null != room) {
-                    Collection <RoomMember> members = room.getMembers();
-
-                    for (RoomMember member : members) {
-                        if (membership.equals(member.membership) && selfUserId.equals(member.getUserId())) {
-                            return true;
-                        }
-                    }
+            @Override
+            public void onLeaveRoom(final String roomId) {
+                if (mInitialSyncComplete) {
+                    mAdapter.notifyDataSetChanged();
                 }
-                return false;
             }
 
-            private void addSummary(RoomSummary summary) {
-                String selfUserId = session.getCredentials().userId;
-
-                if (summary.isInvited()) {
-                    Room room = session.getDataHandler().getStore().getRoom(summary.getRoomId());
-
-                    // display the room name instead of "Room invitation"
-                    // at least, you know who invited you
-                    if (null != room) {
-                        summary.setName(room.getName(session.getCredentials().userId));
-                    } else if (null == summary.getRoomName()) {
-                        summary.setName(getString(R.string.summary_invitation));
-                    }
+            @Override
+            public void onNewRoom(String roomId) {
+                if (mInitialSyncComplete) {
+                    mAdapter.notifyDataSetChanged();
                 }
+            }
 
-                // only add summaries to rooms we have not left.
-                if (!isMembershipInRoom(RoomMember.MEMBERSHIP_LEAVE, selfUserId, summary)) {
-                    List<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(VectorHomeActivity.this));
-                    int section = sessions.indexOf(session);
-
-                    mAdapter.addRoomSummary(section, summary);
+            @Override
+            public void onJoinRoom(String roomId) {
+                if (mInitialSyncComplete) {
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         };
