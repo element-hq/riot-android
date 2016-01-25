@@ -64,47 +64,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     private final String DBG_CLASS_NAME;
 
     /**
-     * Recycle view holder class.
-     * Used in the child views of the expandable list view.
-     */
-    private static class SummaryChildViewHolder {
-        final ImageView mAvatarImageView;
-        final TextView mRoomNameTxtView;
-        final TextView mRoomMsgTxtView;
-        final TextView mBingUnreadMsgTxtView;
-        final TextView mTimestampTxtView;
-
-        SummaryChildViewHolder(View aParentView){
-            mAvatarImageView = (ImageView)aParentView.findViewById(R.id.avatar_img_vector);
-            mRoomNameTxtView = (TextView) aParentView.findViewById(R.id.roomSummaryAdapter_roomName);
-            mRoomMsgTxtView = (TextView) aParentView.findViewById(R.id.roomSummaryAdapter_roomMessage);
-            mBingUnreadMsgTxtView = (TextView) aParentView.findViewById(R.id.bing_indicator_unread_message);
-            mTimestampTxtView = (TextView) aParentView.findViewById(R.id.roomSummaryAdapter_ts);
-        }
-    }
-
-    /**
-     * Recycle view holder class.
-     * Used in the group views of the expandable list view.
-     */
-    private static class SummaryGroupViewHolder {
-        final TextView mSectionNameTxtView;
-        final ImageView mSectionExpanderImageView;
-
-        SummaryGroupViewHolder(View aParentView){
-            mSectionNameTxtView = (TextView)aParentView.findViewById(org.matrix.androidsdk.R.id.heading);
-            mSectionExpanderImageView = (ImageView)aParentView.findViewById(org.matrix.androidsdk.R.id.heading_image);
-        }
-    }
-
-    /**
      * Constructor
      * @param aContext activity context
-     * @param aSessions accounts list
      * @param aChildLayoutResourceId child resource ID for the BaseExpandableListAdapter
      * @param aGroupHeaderLayoutResourceId group resource ID for the BaseExpandableListAdapter
      */
-    public VectorRoomSummaryAdapter(Context aContext, Collection<MXSession> aSessions, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId)  {
+    public VectorRoomSummaryAdapter(Context aContext, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId)  {
         //super(context, sessions, childLayoutResourceId, groupHeaderLayoutResourceId);
 
         // init internal fields
@@ -493,56 +458,25 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        SummaryGroupViewHolder viewHolder;
 
-        if(convertView == null) {
-            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, (ViewGroup)null);
-            viewHolder = new SummaryGroupViewHolder(convertView);
-            convertView.setTag(viewHolder);
-        }
-        else{
-            // recylce previously created view..
-            viewHolder = (SummaryGroupViewHolder)convertView.getTag();
+        if (null == convertView) {
+            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        String roomTitle = getSectionTitle(groupPosition);
-        viewHolder.mSectionNameTxtView.setText(roomTitle);
+        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
-        // update the expander logo
-        if(isExpanded) {
-            viewHolder.mSectionExpanderImageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
+        if (null != sectionNameTxtView) {
+            sectionNameTxtView.setText(getSectionTitle(groupPosition));
+        }
+
+        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+
+        if (!isExpanded) {
+            imageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
         } else {
-            viewHolder.mSectionExpanderImageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
+            imageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
         }
 
-        /*
-        if(this.isRecentsGroupIndex(groupPosition)) {
-            int imageView = 0;
-            Collection summaries = ((HashMap)this.mSummaryMapsBySection.get(groupPosition)).values();
-
-            RoomSummary summary;
-            for(Iterator header = summaries.iterator(); header.hasNext(); imageView += summary.getUnreadEventsCount()) {
-                summary = (RoomSummary)header.next();
-            }
-
-            String header1 = this.myRoomsTitle(groupPosition);
-            if(imageView > 0) {
-                header1 = header1 + " (" + imageView + ")";
-            }
-
-            heading.setText(header1);
-        } else {
-            heading.setText(this.publicRoomsTitle(groupPosition));
-        }
-
-        heading.setTextColor(this.mSectionTitleColor);
-
-        if(isExpanded) {
-            imageView1.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
-        } else {
-            imageView1.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
-        }
-        */
         return convertView;
     }
     /**
@@ -551,10 +485,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      */
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        SummaryChildViewHolder viewHolder;
-
         // sanity check
-        if(null == mSummaryListBySections){
+        if (null == mSummaryListBySections){
             return null;
         }
 
@@ -567,250 +499,52 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
-            viewHolder = new SummaryChildViewHolder(convertView);
-            convertView.setTag(viewHolder);
-        }
-        else {
-            // recylce previously created view..
-            viewHolder = (SummaryChildViewHolder)convertView.getTag();
         }
 
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
+        TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
+        TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
+        View bingUnreadMsgTxtView = convertView.findViewById(R.id.bing_indicator_unread_message);
+        TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
+        View separatorView = convertView.findViewById(R.id.recents_separator);
+
         // update UI: avatar, room name, room last message, timestamp and unread message information
-        VectorUtils.setRoomVectorAvatar(viewHolder.mAvatarImageView, childRoom.getRoomId(), childRoom.getName(mMxSession.getMyUser().userId));
-        viewHolder.mRoomNameTxtView.setText(childRoomSummary.getRoomName());
-        viewHolder.mRoomMsgTxtView.setText(lastMsgToDisplay); // childRoomSummary.getRoomTopic();
-        viewHolder.mTimestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
-        // TODO remove asap viewHolder.mTimestampTxtView.setVisibility(View.VISIBLE);
+        String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, childRoom);
+        VectorUtils.setRoomVectorAvatar(avatarImageView, childRoom.getRoomId(), roomName);
+
+        String roomAvatarUrl = childRoom.getLiveState().getAvatarUrl();
+        if (null != roomAvatarUrl) {
+            int size = mContext.getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+            mMxSession.getMediasCache().loadAvatarThumbnail(mMxSession.getHomeserverConfig(), avatarImageView, roomAvatarUrl, size);
+        }
+
+        roomNameTxtView.setText(roomName);
+        roomMsgTxtView.setText(lastMsgToDisplay); // childRoomSummary.getRoomTopic();
+        timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
 
         // init colour with its default value
         int newColourToApply = mContext.getResources().getColor(R.color.vector_text_black_color);
+
         // update colour of the bing zone background and the timestamp text
         if (childRoomSummary.isHighlighted()) {
             newColourToApply = getNotifiedUnreadMessageBackgroundColor();
-            viewHolder.mBingUnreadMsgTxtView.setBackgroundColor(newColourToApply);
-            viewHolder.mTimestampTxtView.setTextColor(newColourToApply);
+            bingUnreadMsgTxtView.setBackgroundColor(newColourToApply);
+            timestampTxtView.setTextColor(newColourToApply);
         }
         else if (0 != unreadMsgCount) {
             // basic unread messages
             newColourToApply = getUnreadMessageBackgroundColor();
-            viewHolder.mBingUnreadMsgTxtView.setBackgroundColor(newColourToApply);
-            viewHolder.mTimestampTxtView.setTextColor(newColourToApply);
+            bingUnreadMsgTxtView.setBackgroundColor(newColourToApply);
+            timestampTxtView.setTextColor(newColourToApply);
         }
         else {
             // reset the colours to its default values
-            viewHolder.mBingUnreadMsgTxtView.setBackgroundColor(Color.TRANSPARENT);
-            viewHolder.mTimestampTxtView.setTextColor(newColourToApply);
+            bingUnreadMsgTxtView.setBackgroundColor(Color.TRANSPARENT);
+            timestampTxtView.setTextColor(newColourToApply);
         }
 
-/*
-        // display a spinner while loading the public rooms
-        // detect if the view contains the spinner widget: progressbar_waiting_room_members
-        // TODO  why not use convertView.getId(); to check if adapter_item_waiting_room_members is displayed?
-        View spinner = null;
-        if (null != convertView) {
-            spinner = convertView.findViewById(R.id.progressbar_waiting_room_members);
-        }
+        separatorView.setVisibility(isLastChild ? View.GONE : View.VISIBLE);
 
-        // assume that some public rooms are defined
-        if (isPublicsGroupIndex(groupPosition) && (null == mPublicRoomsLists)) {
-            if (null == spinner) {
-                // display a spinner layout
-                convertView = mLayoutInflater.inflate(R.layout.adapter_item_waiting_room_members, parent, false);
-            }
-            return convertView;
-        }
-
-        // must not reuse the view if it is not the right type
-        if (null != spinner) {
-            convertView = null;
-        }
-
-        if (convertView == null) {
-            convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
-        }
-
-        try {
-            // default UI
-            // when a room is deleting, the UI is dimmed
-            final View deleteProgress = (View) convertView.findViewById(R.id.roomSummaryAdapter_delete_progress);
-            deleteProgress.setVisibility(View.GONE);
-            convertView.setAlpha(1.0f);
-
-            int textColor = getDefaultTextColor();
-
-            if (isRecentsGroupIndex(groupPosition)) {
-                List<RoomSummary> summariesList = (mSearchedPattern.length() > 0) ? mFilteredRecentsSummariesList.get(groupPosition) : mRecentsSummariesList.get(groupPosition);
-
-                // should never happen but in some races conditions, it happened.
-                if (0 == summariesList.size()) {
-                    return convertView;
-                }
-
-                RoomSummary summary = (childPosition < summariesList.size()) ? summariesList.get(childPosition) : summariesList.get(summariesList.size() - 1);
-                Integer unreadCount = summary.getUnreadEventsCount();
-
-                CharSequence message = summary.getRoomTopic();
-                String timestamp = null;
-
-                // background color
-                if (summary.isHighlighted()) {
-                    convertView.setBackgroundColor(mHighlightColor);
-                    textColor = getHighlightMessageTextColor();
-                } else if ((unreadCount == null) || (unreadCount == 0)) {
-                    convertView.setBackgroundColor(Color.TRANSPARENT);
-                } else {
-                    textColor = getUnreadMessageTextColor();
-                    convertView.setBackgroundColor(textColor);
-                }
-
-                TextView textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
-
-                RoomState latestRoomState = summary.getLatestRoomState();
-                if (null == latestRoomState) {
-                    Room room = roomFromRoomSummary(summary);
-
-                    if ((null != room) && (null != room.getLiveState())) {
-                        latestRoomState = room.getLiveState().deepCopy();
-                        // store it to avoid retrieving it once
-                        summary.setLatestRoomState(latestRoomState);
-                    }
-                }
-
-                // the public rooms are displayed with bold fonts
-                if ((null != latestRoomState) && (null != latestRoomState.visibility) && latestRoomState.visibility.equals(RoomState.VISIBILITY_PUBLIC)) {
-                    textView.setTypeface(null, Typeface.BOLD);
-                } else {
-                    textView.setTypeface(null, Typeface.NORMAL);
-                }
-
-                textView.setTextColor(textColor);
-
-                // display the unread messages count
-                String roomNameMessage = ((latestRoomState != null) && !summary.isInvited()) ? latestRoomState.getDisplayName(summary.getMatrixId()) : summary.getRoomName();
-
-                if (null != roomNameMessage) {
-                    if ((null != unreadCount) && (unreadCount > 0) && !summary.isInvited()) {
-                        roomNameMessage += " (" + unreadCount + ")";
-                    }
-                }
-
-                textView.setText(roomNameMessage);
-
-                if (summary.getLatestEvent() != null) {
-                    EventDisplay display = new EventDisplay(mContext, summary.getLatestEvent(), latestRoomState);
-                    display.setPrependMessagesWithAuthor(true);
-                    message = display.getTextualDisplay();
-                    timestamp = getFormattedTimestamp(summary.getLatestEvent());
-                }
-
-                // check if this is an invite
-                if (summary.isInvited() && (null != summary.getInviterUserId())) {
-                    String inviterName = summary.getInviterUserId();
-                    String myName = summary.getMatrixId();
-
-                    if (null != latestRoomState) {
-                        inviterName = latestRoomState.getMemberName(inviterName);
-                        myName = latestRoomState.getMemberName(myName);
-                    } else {
-                        inviterName = memberDisplayName(summary.getMatrixId(), inviterName);
-                        myName = memberDisplayName(summary.getMatrixId(), myName);
-                    }
-
-                    message = mContext.getString(R.string.notice_room_invite, inviterName, myName);
-                }
-
-                textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_message);
-                textView.setText(message);
-                textView.setTextColor(textColor);
-                textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
-                textView.setVisibility(View.VISIBLE);
-                textView.setText(timestamp);
-                textView.setTextColor(textColor);
-
-                Room room = roomFromRoomSummary(summary);
-
-                if ((null != room) && room.isLeaving()) {
-                    convertView.setAlpha(0.3f);
-                    deleteProgress.setVisibility(View.VISIBLE);
-                }
-            } else {
-                int index = groupPosition - mPublicsGroupStartIndex;
-                List<PublicRoom> publicRoomsList = null;
-
-                if (mSearchedPattern.length() > 0) {
-                    // add sanity checks
-                    // GA issue : could crash while rotating the screen
-                    if ((null != mFilteredPublicRoomsList) && (index < mFilteredPublicRoomsList.size())) {
-                        publicRoomsList = mFilteredPublicRoomsList.get(index);
-                    }
-                } else {
-                    // add sanity checks
-                    // GA issue : could crash while rotating the screen
-                    if ((null != mPublicRoomsLists) && (index < mPublicRoomsLists.size())) {
-                        publicRoomsList = mPublicRoomsLists.get(index);
-                    }
-                }
-
-                // sanity checks failed.
-                if (null == publicRoomsList) {
-                    TextView textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
-                    textView.setTypeface(null, Typeface.BOLD);
-                    textView.setTextColor(textColor);
-                    textView.setText("");
-
-                    textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_message);
-                    textView.setTextColor(textColor);
-                    textView.setText("");
-
-                    textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
-                    textView.setTextColor(textColor);
-                    textView.setVisibility(View.VISIBLE);
-                    textView.setText("");
-
-                    convertView.setBackgroundColor(0);
-                } else {
-                    PublicRoom publicRoom = publicRoomsList.get(childPosition);
-
-                    String matrixId = null;
-
-                    if ((mRecentsSummariesList.size() > 0) && (mRecentsSummariesList.get(0).size() > 0)) {
-                        matrixId = mRecentsSummariesList.get(0).get(0).getMatrixId();
-                    }
-
-                    String displayName = publicRoom.getDisplayName(matrixId);
-
-                    TextView textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
-                    textView.setTypeface(null, Typeface.BOLD);
-                    textView.setTextColor(textColor);
-                    textView.setText(displayName);
-
-                    textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_message);
-                    textView.setText(publicRoom.topic);
-                    textView.setTextColor(textColor);
-
-                    textView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
-                    textView.setVisibility(View.VISIBLE);
-                    textView.setTextColor(textColor);
-
-                    if (publicRoom.numJoinedMembers > 1) {
-                        textView.setText(publicRoom.numJoinedMembers + " " + mContext.getString(R.string.users));
-                    } else {
-                        textView.setText(publicRoom.numJoinedMembers + " " + mContext.getString(R.string.user));
-                    }
-
-                    String alias = publicRoom.getAlias();
-
-                    if ((null != alias) && (mHighLightedRooms.indexOf(alias) >= 0)) {
-                        convertView.setBackgroundColor(mPublicHighlightColor);
-                    } else {
-                        convertView.setBackgroundColor(0);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // prefer having a weird UI instead of a crash
-        }
-*/
         return convertView;
     }
 

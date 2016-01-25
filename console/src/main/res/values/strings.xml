@@ -5,7 +5,7 @@
 
     <!-- titles -->
     <string name="app_name">Vector</string>
-    <string name="title_activity_home">Recents</string>
+    <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
     <string name="title_activity_room_info">Room info</string>

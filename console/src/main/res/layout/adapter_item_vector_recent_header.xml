@@ -1,0 +1,25 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="30dp"
+    android:background="@color/vector_light_gray_color"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text = "Header"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        android:textSize="15dp"/>
+
+    <ImageView
+        android:id="@+id/heading_image"
+        android:layout_centerVertical="true"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginRight="22dp"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>
