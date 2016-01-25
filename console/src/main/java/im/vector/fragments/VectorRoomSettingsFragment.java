@@ -241,7 +241,7 @@ public class VectorRoomSettingsFragment extends Fragment {
         } else {
             VectorUtils.setRoomVectorAvatar(mRoomAvatarImageView, mRoom.getRoomId(), mRoom.getName(mSession.getMyUser().userId));
 
-            String roomAvatarUrl = mRoom.getLiveState().getAvatarUrl();
+            String roomAvatarUrl = mRoom.getAvatarUrl();
 
             if (null != roomAvatarUrl) {
                 int size = getActivity().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);

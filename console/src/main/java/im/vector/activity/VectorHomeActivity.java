@@ -291,6 +291,16 @@ public class VectorHomeActivity extends MXCActionBarActivity {
                 });
             }
 
+            @Override
+            public void onReceiptEvent(String roomId) {
+                refreshOnChunkEnd = true;
+            }
+
+            @Override
+            public void onRoomTagEvent(String roomId) {
+                refreshOnChunkEnd = true;
+            }
+
             /**
              * These 3 methods trigger an UI refresh asap because the user could have created / joined / left a room
              * but the server events echos are not yet received.

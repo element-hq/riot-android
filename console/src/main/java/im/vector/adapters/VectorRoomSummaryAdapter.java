@@ -56,8 +56,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     private final int mHeaderLayoutResourceId;
 
     private final MXSession mMxSession;
-    private ArrayList<RoomSummary> mRoomSummariesCompleteList;
     private ArrayList<ArrayList<RoomSummary>> mSummaryListBySections;
+
+    private int mInvitedSectionIndex = -1;  // "Invited" index
     private int mFavouriteSectionIndex = -1;// "Favourites" index
     private int mNoTagSectionIndex = -1;    // "Rooms" index
     private int mLowPrioSectionIndex = -1;  // "Low Priority" index
@@ -93,7 +94,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * @return  the formatted timestamp to display.
      */
     private String getFormattedTimestamp(Event event) {
-        return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+        String text =  AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+
+        // don't display the today before the time
+        String today = mContext.getString(R.string.today) + " ";
+        if (text.startsWith(today)) {
+            text = text.substring(today.length());
+        }
+
+        return text;
     }
 
     /**
@@ -113,20 +122,40 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         else if (mLowPrioSectionIndex == aSectionIndex) {
             retValue = mContext.getResources().getString(R.string.room_recents_low_priority);
         }
+        else if (mInvitedSectionIndex == aSectionIndex) {
+            retValue = mContext.getResources().getString(R.string.room_recents_invites);
+        }
         else {
             // unknown section
-            retValue = "";
+            retValue = "??";
         }
 
     return retValue;
     }
 
+
+    /**
+     * Fullfill an array list with a pattern.
+     * @param list the list to fill.
+     * @param value the pattern.
+     * @param count the number of occurences
+     * @return the updated list
+     */
+    private ArrayList<RoomSummary> fillList(ArrayList<RoomSummary> list, RoomSummary value, int count) {
+        for(int i = 0; i < count; i++) {
+            list.add(value);
+        }
+
+        return list;
+    }
+
     /**
      * Build an array of RoomSummary objects organized according to the room tags (sections).
-     * So far we have 3 sections for the following tags:
-     * - ROOM_TAG_FAVOURITE
-     * - ROOM_TAG_LOW_PRIORITY
-     * - ROOM_TAG_NO_TAG (displayed as "ROOMS")
+     * So far we have 4 sections
+     * - the invited rooms
+     * - the rooms with tags ROOM_TAG_FAVOURITE
+     * - the rooms with tags ROOM_TAG_LOW_PRIORITY
+     * - the rooms with tags ROOM_TAG_NO_TAG (displayed as "ROOMS")
      * The section indexes: mFavouriteSectionIndex, mNoTagSectionIndex and mFavouriteSectionIndex are
      * also computed in this method.
      * @param aRoomSummaryCollection the complete list of RoomSummary objects
@@ -137,40 +166,61 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         String roomSummaryId;
 
         // init index with default values
+        mInvitedSectionIndex = -1;
         mFavouriteSectionIndex = -1;
         mNoTagSectionIndex = -1;
         mLowPrioSectionIndex = -1;
 
+
         if(null != aRoomSummaryCollection) {
-            // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
-            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<RoomSummary>();
-            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<RoomSummary>();
-            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<RoomSummary>();
+
+            RoomSummary dummyRoomSummary = new RoomSummary();
 
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-            //final List<String> noTagRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_NO_TAG);
+
+            // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
+            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<RoomSummary>();
+            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<RoomSummary>(favouriteRoomIdList.size());
+            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<RoomSummary>();
+            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<RoomSummary>(lowPriorityRoomIdList.size());
+
+            fillList(favouriteRoomSummaryList, dummyRoomSummary, favouriteRoomIdList.size());
+            fillList(lowPriorityRoomSummaryList, dummyRoomSummary, lowPriorityRoomIdList.size());
 
             // Search loop going through all the summaries:
             // here we translate the roomIds (Strings) to their corresponding RoomSummary objects
             for(RoomSummary roomSummary : aRoomSummaryCollection) {
                 roomSummaryId = roomSummary.getRoomId();
-                int pos = -1;
 
-                // search for each room Id in the room Id lists, retrieved from their corresponding tags
-                pos = favouriteRoomIdList.indexOf(roomSummaryId);
-                if (pos >= 0) {
-                    // update the favourites list
-                    favouriteRoomSummaryList.add(roomSummary);
-                }
-                else if((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0){
-                    // update the low priority list
-                    lowPriorityRoomSummaryList.add(roomSummary);
-                }
-                else {
-                    // default case: update the no tag list
-                    noTagRoomSummaryList.add(roomSummary);
+                Room room = mMxSession.getDataHandler().getStore().getRoom(roomSummaryId);
+
+                // check if the room exists
+                if (null != room) {
+                    // list first the summary
+                    if (room.isInvited()) {
+                        inviteRoomSummaryList.add(roomSummary);
+                    } else {
+                        int pos;
+
+                        // search for each room Id in the room Id lists, retrieved from their corresponding tags
+                        pos = favouriteRoomIdList.indexOf(roomSummaryId);
+                        if (pos >= 0) {
+                            // update the favourites list
+                            // the favorites are ordered
+                            favouriteRoomSummaryList.set(pos, roomSummary);
+                        } else if ((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0) {
+                            // update the low priority list
+                            // the low priority are ordered
+                            lowPriorityRoomSummaryList.set(pos,roomSummary);
+                        } else {
+                            // default case: update the no tag list
+                            noTagRoomSummaryList.add(roomSummary);
+                        }
+                    }
+                } else {
+                    Log.e(DBG_CLASS_NAME, "buildSummariesBySections " + roomSummaryId + " has no known room");
                 }
             }
 
@@ -178,93 +228,37 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             // Note the order here below: first the "favourite", then "no tag" and then "low priority"
             // First section: add favourite list section
             int groupIndex = 0;
-            if(0!=favouriteRoomSummaryList.size()) {
+
+            if (0 != inviteRoomSummaryList.size()) {
+                summaryListBySectionsRetValue.add(inviteRoomSummaryList);
+                mInvitedSectionIndex = groupIndex;
+                groupIndex++;
+            }
+
+            // remove unknown room summary
+            while(favouriteRoomSummaryList.remove(dummyRoomSummary));
+            if (0 != favouriteRoomSummaryList.size()) {
                 summaryListBySectionsRetValue.add(favouriteRoomSummaryList);
                 mFavouriteSectionIndex = groupIndex; // save section index
                 groupIndex++;
             }
 
             // Second section: add no tag list section
-            if(0!=noTagRoomSummaryList.size()) {
+            if (0 != noTagRoomSummaryList.size()) {
                 summaryListBySectionsRetValue.add(noTagRoomSummaryList);
                 mNoTagSectionIndex = groupIndex; // save section index
                 groupIndex++;
             }
 
             // Third section: add low priority list section
-            if(0!=lowPriorityRoomSummaryList.size()) {
+            while(lowPriorityRoomSummaryList.remove(dummyRoomSummary));
+            if (0 != lowPriorityRoomSummaryList.size()) {
                 summaryListBySectionsRetValue.add(lowPriorityRoomSummaryList);
                 mLowPrioSectionIndex = groupIndex; // save section index
             }
         }
 
         return summaryListBySectionsRetValue;
-    }
-
-    /**
-     * Sort the "low priority" list and the the "no tag" list by date.
-     *
-     */
-    private void sortSections() {
-        ArrayList<RoomSummary> listToBeSorted;
-
-        if(null != mSummaryListBySections) {
-            // "low priority" list sort
-            if (-1 != mLowPrioSectionIndex) {
-                listToBeSorted = mSummaryListBySections.get(mLowPrioSectionIndex);
-                sortSummaries(listToBeSorted);
-            }
-
-            // "no tag" list sort
-            if (-1 != mNoTagSectionIndex) {
-                listToBeSorted = mSummaryListBySections.get(mNoTagSectionIndex);
-                sortSummaries(listToBeSorted);
-            }
-        }
-        else {
-            Log.w(DBG_CLASS_NAME, "## sortSections(): impossible sort due to summary list = null");
-        }
-
-    }
-    /**
-     * Sort the summaries list by date (timestamp).
-     *
-     */
-    private void sortSummaries(final ArrayList<RoomSummary> aArrayListToSort){
-        if(null != mSummaryListBySections) {
-
-            // define comparator logic
-            Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
-                public int compare(RoomSummary aLeftObj, RoomSummary aRightObj) {
-                    int retValue;
-                    long deltaTimestamp;
-
-                    if((null == aLeftObj) || (null == aLeftObj.getLatestEvent())){
-                        retValue = 1;
-                    }
-                    else if((null == aRightObj) || (null == aRightObj.getLatestEvent())){
-                        retValue = -1;
-                    }
-                    else if((deltaTimestamp = aRightObj.getLatestEvent().getOriginServerTs() - aLeftObj.getLatestEvent().getOriginServerTs()) > 0) {
-                        retValue = 1;
-                    }
-                    else if (deltaTimestamp < 0) {
-                        retValue = -1;
-                    }
-                    else {
-                        retValue = 0;
-                    }
-
-                    return retValue;
-                }
-            };
-
-            Collections.sort(aArrayListToSort, summaryComparator);
-        }
-        else {
-            Log.w(DBG_CLASS_NAME, "## sortSummaries(): mSummaryListBySections = null");
-        }
-
     }
 
     public RoomSummary getRoomSummaryAt(int aGroupPosition, int aChildPosition) {
@@ -367,39 +361,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     }
 
 
-    /**
-     * Update the event and the state on given room summary.
-     * The event provides the room ID identifying the room summary.
-     * @param aSectionIndex section index
-     * @param aEvent event to apply
-     * @param aRoomState room state to apply
-     * @param aIsRefreshed flga to indicate if refresh is required
-     * @return true if operation succeed, false otherwise
-     */
-    public boolean setLatestEvent(int aSectionIndex, Event aEvent, RoomState aRoomState, Boolean aIsRefreshed) {
-        boolean retCode = false;
-        RoomSummary summary = getSummaryByRoomId(aSectionIndex, aEvent.roomId);
-
-        if(null != summary) {
-            retCode = true;
-            summary.setLatestEvent(aEvent);
-            summary.setLatestRoomState(aRoomState);
-            if(aIsRefreshed.booleanValue()) {
-                notifyDataSetChanged();
-            }
-        }
-
-        return retCode;
-    }
-
-    private int getUnreadMessageBackgroundColor() {
-        return mContext.getResources().getColor(R.color.vector_silver_color);
-    }
-
-    private int getNotifiedUnreadMessageBackgroundColor() {
-        return mContext.getResources().getColor(R.color.vector_green_color);
-    }
-
     @Override
     public boolean hasStableIds() {
         return false;
@@ -414,14 +375,40 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     public void notifyDataSetChanged() {
         if (null != mMxSession) {
             // update/retrieve the complete summary list
-            mRoomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
+            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
+
+            // define comparator logic
+            Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
+                public int compare(RoomSummary aLeftObj, RoomSummary aRightObj) {
+                    int retValue;
+                    long deltaTimestamp;
+
+                    if((null == aLeftObj) || (null == aLeftObj.getLatestEvent())){
+                        retValue = 1;
+                    }
+                    else if((null == aRightObj) || (null == aRightObj.getLatestEvent())){
+                        retValue = -1;
+                    }
+                    else if((deltaTimestamp = aRightObj.getLatestEvent().getOriginServerTs() - aLeftObj.getLatestEvent().getOriginServerTs()) > 0) {
+                        retValue = 1;
+                    }
+                    else if (deltaTimestamp < 0) {
+                        retValue = -1;
+                    }
+                    else {
+                        retValue = 0;
+                    }
+
+                    return retValue;
+                }
+            };
+
+            Collections.sort(roomSummariesCompleteList, summaryComparator);
 
             // init data model used to be be displayed in the list view
-            mSummaryListBySections = buildSummariesBySections(mRoomSummariesCompleteList);
-
-            // sort summaries in sections by date (newer first)
-            sortSections();
+            mSummaryListBySections = buildSummariesBySections(roomSummariesCompleteList);
         }
+
         super.notifyDataSetChanged();
     }
 
@@ -490,6 +477,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             return null;
         }
 
+        int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
+        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
+
+
         RoomSummary childRoomSummary = mSummaryListBySections.get(groupPosition).get(childPosition);
         Room childRoom =  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
         int unreadMsgCount = childRoomSummary.getUnreadEventsCount();
@@ -501,47 +492,36 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
         }
 
+        // retrieve the UI items
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
-        View bingUnreadMsgTxtView = convertView.findViewById(R.id.bing_indicator_unread_message);
+        View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
 
-        // update UI: avatar, room name, room last message, timestamp and unread message information
+        // display the room avatar
         String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, childRoom);
         VectorUtils.setRoomVectorAvatar(avatarImageView, childRoom.getRoomId(), roomName);
 
-        String roomAvatarUrl = childRoom.getLiveState().getAvatarUrl();
+        String roomAvatarUrl = childRoom.getAvatarUrl();
         if (null != roomAvatarUrl) {
             int size = mContext.getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
             mMxSession.getMediasCache().loadAvatarThumbnail(mMxSession.getHomeserverConfig(), avatarImageView, roomAvatarUrl, size);
         }
 
+        // display the room name
         roomNameTxtView.setText(roomName);
-        roomMsgTxtView.setText(lastMsgToDisplay); // childRoomSummary.getRoomTopic();
+
+        // display the last message
+        roomMsgTxtView.setText(lastMsgToDisplay);
+
+        // set the timestamp
         timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
+        timestampTxtView.setTextColor(childRoomSummary.isHighlighted() ? vectorGreenColor : vectorSilverColor);
 
-        // init colour with its default value
-        int newColourToApply = mContext.getResources().getColor(R.color.vector_text_black_color);
-
-        // update colour of the bing zone background and the timestamp text
-        if (childRoomSummary.isHighlighted()) {
-            newColourToApply = getNotifiedUnreadMessageBackgroundColor();
-            bingUnreadMsgTxtView.setBackgroundColor(newColourToApply);
-            timestampTxtView.setTextColor(newColourToApply);
-        }
-        else if (0 != unreadMsgCount) {
-            // basic unread messages
-            newColourToApply = getUnreadMessageBackgroundColor();
-            bingUnreadMsgTxtView.setBackgroundColor(newColourToApply);
-            timestampTxtView.setTextColor(newColourToApply);
-        }
-        else {
-            // reset the colours to its default values
-            bingUnreadMsgTxtView.setBackgroundColor(Color.TRANSPARENT);
-            timestampTxtView.setTextColor(newColourToApply);
-        }
+        // bing view
+        bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
 
         separatorView.setVisibility(isLastChild ? View.GONE : View.VISIBLE);
 
