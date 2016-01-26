@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:text = "Header"
         android:fontFamily="sans-serif-medium"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="16dp"
         android:textSize="14dp"
         android:textColor="@color/vector_text_gray_color"
         />

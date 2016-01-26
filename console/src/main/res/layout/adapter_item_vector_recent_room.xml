@@ -16,7 +16,7 @@
             android:id="@+id/bing_indicator_unread_message"
             android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="9dp"
             android:background="@android:color/darker_gray"
             android:layout_marginBottom="1dp"
             android:layout_alignParentLeft="true" />
