@@ -303,11 +303,10 @@ public class VectorHomeActivity extends MXCActionBarActivity {
             }
 
             /**
-             * These 3 methods trigger an UI refresh asap because the user could have created / joined / left a room
+             * These methods trigger an UI refresh asap because the user could have created / joined / left a room
              * but the server events echos are not yet received.
              *
              */
-
             private void onForceRefresh() {
                 if (mInitialSyncComplete) {
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
@@ -318,6 +317,12 @@ public class VectorHomeActivity extends MXCActionBarActivity {
                     });
                 }
             }
+
+            @Override
+            public void onStoreReady() {
+                onForceRefresh();
+            }
+
             @Override
             public void onLeaveRoom(final String roomId) {
                 onForceRefresh();

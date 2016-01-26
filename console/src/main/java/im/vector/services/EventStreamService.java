@@ -475,6 +475,8 @@ public class EventStreamService extends Service {
     private void startEventStream(final MXSession session, final IMXStore store) {
         session.getDataHandler().checkPermanentStorageData();
         session.startEventStream(store.getEventStreamToken());
+
+        session.getDataHandler().onStoreReady();
     }
 
     private void start() {

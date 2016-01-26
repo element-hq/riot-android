@@ -538,10 +538,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         String displayNameRetValue;
         MXSession session;
 
-        if((null==aMatrixId) || (null==aUserId)){
+        if((null == aMatrixId) || (null == aUserId)){
             displayNameRetValue = null;
         }
-        else if((null == (session=Matrix.getMXSession(mContext, aMatrixId))) || (!session.isActive())) {
+        else if((null == (session = Matrix.getMXSession(mContext, aMatrixId))) || (!session.isActive())) {
             displayNameRetValue = null;
         }
         else {
