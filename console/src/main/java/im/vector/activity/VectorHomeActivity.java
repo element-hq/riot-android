@@ -292,8 +292,9 @@ public class VectorHomeActivity extends MXCActionBarActivity {
             }
 
             @Override
-            public void onReceiptEvent(String roomId) {
-                refreshOnChunkEnd = true;
+            public void onReceiptEvent(String roomId, List<String> senderIds) {
+                // refresh only if the current user read some messages (to update the unread messages counters)
+                refreshOnChunkEnd = (senderIds.indexOf(session.getCredentials().userId) >= 0);
             }
 
             @Override
@@ -304,26 +305,32 @@ public class VectorHomeActivity extends MXCActionBarActivity {
             /**
              * These 3 methods trigger an UI refresh asap because the user could have created / joined / left a room
              * but the server events echos are not yet received.
+             *
              */
+
+            private void onForceRefresh() {
+                if (mInitialSyncComplete) {
+                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
             @Override
             public void onLeaveRoom(final String roomId) {
-                if (mInitialSyncComplete) {
-                    mAdapter.notifyDataSetChanged();
-                }
+                onForceRefresh();
             }
 
             @Override
             public void onNewRoom(String roomId) {
-                if (mInitialSyncComplete) {
-                    mAdapter.notifyDataSetChanged();
-                }
+                onForceRefresh();
             }
 
             @Override
             public void onJoinRoom(String roomId) {
-                if (mInitialSyncComplete) {
-                    mAdapter.notifyDataSetChanged();
-                }
+                onForceRefresh();
             }
         };
 

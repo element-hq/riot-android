@@ -566,7 +566,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             if (aChildRoomSummary.getLatestEvent() != null) {
                 eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
-                messageToDisplayRetValue = eventDisplay.getTextualDisplay();
+                messageToDisplayRetValue = eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color));
             }
 
             // check if this is an invite
