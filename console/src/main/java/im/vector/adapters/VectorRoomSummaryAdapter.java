@@ -171,7 +171,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         mNoTagSectionIndex = -1;
         mLowPrioSectionIndex = -1;
 
-
         if(null != aRoomSummaryCollection) {
 
             RoomSummary dummyRoomSummary = new RoomSummary();
@@ -499,6 +498,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
+        View groupSeparatorView = convertView.findViewById(R.id.recents_groups_separator_view);
 
         // display the room avatar
         String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, childRoom);
@@ -524,6 +524,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
 
         separatorView.setVisibility(isLastChild ? View.GONE : View.VISIBLE);
+        groupSeparatorView.setVisibility((isLastChild && ((groupPosition+1) < getGroupCount())) ? View.VISIBLE : View.GONE);
 
         return convertView;
     }

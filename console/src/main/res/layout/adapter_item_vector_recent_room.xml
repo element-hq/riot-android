@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="74dp"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/internal_container"
         android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="74dp">
 
         <!-- Vertical bar with colour changing to indicate unread messages -->
         <View
@@ -39,12 +39,12 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/avatar_parent"
             android:layout_toLeftOf="@id/roomSummaryAdapter_ts"
-            android:layout_alignTop="@id/avatar_parent"
+            android:layout_marginTop="12dp"
             android:singleLine="true"
-            android:textStyle="bold"
-            android:textSize="17dp"
+            android:textSize="16dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="14dp"
+            android:fontFamily="sans-serif-regular"
             android:textColor="@color/vector_text_black_color"
             android:text="Room Name" />
 
@@ -56,7 +56,8 @@
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:fontFamily="sans-serif-regular"
+            android:textSize="14dp"
             android:layout_marginRight="13dp"
             android:textColor="@color/vector_text_gray_color"
             android:text="last room message" />
@@ -68,21 +69,42 @@
             android:layout_height="wrap_content"
             android:textSize="12dp"
             android:text="Jan 1 00:00"
+            android:fontFamily="sans-serif-light"
             android:textColor="@color/vector_text_black_color"
-            android:layout_alignTop="@id/roomSummaryAdapter_roomName"
+            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="11dp"/>
+            android:layout_marginRight="45dp"/>
 
-        <!-- line separator -->
+        <ImageView
+            android:id="@+id/roomSummaryAdapter_action"
+            android:background="@color/material_red_100"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginRight="21dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_menu_notifications"
+            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+            />
+        <!-- message line separator -->
         <View
             android:id="@+id/recents_separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="13dp"
-            android:background="@color/vector_silver_color"
-            />
-
+            android:layout_alignLeft="@+id/roomSummaryAdapter_roomMessage"
+            android:background="@color/vector_line_separator_gray_color"/>
     </RelativeLayout>
 
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/recents_groups_separator_view"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="34dp">
+        <View
+            android:id="@+id/recents_groups_separator_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/vector_line_separator_gray_color"/>
+    </RelativeLayout>
+</LinearLayout>
