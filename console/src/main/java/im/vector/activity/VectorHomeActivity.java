@@ -72,6 +72,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
 
     private VectorRoomSummaryAdapter mAdapter;
     private View mWaitingView = null;
+    private View mRoomCreationView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,16 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         setContentView(R.layout.activity_vector_home);
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
+        mRoomCreationView = findViewById(R.id.listView_create_room_view);
+
+        mRoomCreationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // pop to the home activity
+                Intent intent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+                VectorHomeActivity.this.startActivity(intent);
+            }
+        });
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 

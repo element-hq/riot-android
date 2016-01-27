@@ -20,6 +20,16 @@
             android:dividerHeight="0dp"
             android:divider="#00000000"/>
 
+        <ImageView
+            android:id="@+id/listView_create_room_view"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/vector_create_room" />
+        
         <RelativeLayout
             android:id="@+id/listView_spinner_views"
             android:layout_width="match_parent"
