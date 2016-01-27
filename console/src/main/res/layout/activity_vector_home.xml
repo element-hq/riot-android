@@ -9,17 +9,31 @@
 
     <!-- The main content view -->
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="org.matrix.vector.activity.VectorHomeActivity">
 
         <ExpandableListView
+            android:id="@+id/listView_myRooms"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerHeight="0dp"
-            android:divider="#00000000"
-            android:id="@+id/listView_myRooms" />
+            android:divider="#00000000"/>
+
+        <RelativeLayout
+            android:id="@+id/listView_spinner_views"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#339D9D9D">
+            <ProgressBar
+                android:id="@+id/listView_spinner"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="visible"/>
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

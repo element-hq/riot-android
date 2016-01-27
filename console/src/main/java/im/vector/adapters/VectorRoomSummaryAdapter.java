@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +51,11 @@ import im.vector.util.VectorUtils;
  * An adapter which can display room information.
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*ConsoleRoomSummaryAdapter*/ {
+    public static interface RoomEventListener {
+        public void onJoinRoom(MXSession session, String roomId);
+        public void onRejectInvitation(MXSession session, String roomId);
+    }
+
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private final int mChildLayoutResourceId;
@@ -64,15 +70,16 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     private int mLowPrioSectionIndex = -1;  // "Low Priority" index
     private final String DBG_CLASS_NAME;
 
+    // the listener
+    private RoomEventListener mListener = null;
+
     /**
      * Constructor
      * @param aContext activity context
      * @param aChildLayoutResourceId child resource ID for the BaseExpandableListAdapter
      * @param aGroupHeaderLayoutResourceId group resource ID for the BaseExpandableListAdapter
      */
-    public VectorRoomSummaryAdapter(Context aContext, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId)  {
-        //super(context, sessions, childLayoutResourceId, groupHeaderLayoutResourceId);
-
+    public VectorRoomSummaryAdapter(Context aContext, MXSession session, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, RoomEventListener listener)  {
         // init internal fields
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -81,10 +88,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         DBG_CLASS_NAME = getClass().getName();
 
         // get the complete summary list
-        mMxSession = Matrix.getInstance(aContext).getDefaultSession();
-
-        // init data model used to be be displayed in the list view
-        notifyDataSetChanged();
+        mMxSession = session;
+        mListener = listener;
     }
 
     /**
@@ -132,7 +137,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
     return retValue;
     }
-
 
     /**
      * Fullfill an array list with a pattern.
@@ -224,17 +228,19 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             }
 
             // Adding sections
-            // Note the order here below: first the "favourite", then "no tag" and then "low priority"
-            // First section: add favourite list section
+            // Note the order here below: first the "invitations",  "favourite", then "no tag" and then "low priority"
             int groupIndex = 0;
 
+            // first the invitations
             if (0 != inviteRoomSummaryList.size()) {
+                // the invitations are sorted from the older to the oldest to the more recent ones
+                Collections.reverse(inviteRoomSummaryList);
                 summaryListBySectionsRetValue.add(inviteRoomSummaryList);
                 mInvitedSectionIndex = groupIndex;
                 groupIndex++;
             }
 
-            // remove unknown room summary
+            // favourite
             while(favouriteRoomSummaryList.remove(dummyRoomSummary));
             if (0 != favouriteRoomSummaryList.size()) {
                 summaryListBySectionsRetValue.add(favouriteRoomSummaryList);
@@ -242,14 +248,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
                 groupIndex++;
             }
 
-            // Second section: add no tag list section
+            // no tag
             if (0 != noTagRoomSummaryList.size()) {
                 summaryListBySectionsRetValue.add(noTagRoomSummaryList);
                 mNoTagSectionIndex = groupIndex; // save section index
                 groupIndex++;
             }
 
-            // Third section: add low priority list section
+            // low priority
             while(lowPriorityRoomSummaryList.remove(dummyRoomSummary));
             if (0 != lowPriorityRoomSummaryList.size()) {
                 summaryListBySectionsRetValue.add(lowPriorityRoomSummaryList);
@@ -370,8 +376,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         return true;
     }
 
-    @Override
-    public void notifyDataSetChanged() {
+    private void refreshSummariesList() {
         if (null != mMxSession) {
             // update/retrieve the complete summary list
             ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
@@ -407,13 +412,21 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             // init data model used to be be displayed in the list view
             mSummaryListBySections = buildSummariesBySections(roomSummariesCompleteList);
         }
+    }
 
+    @Override
+    public void notifyDataSetChanged() {
+        refreshSummariesList();
         super.notifyDataSetChanged();
     }
 
     @Override
     public int getGroupCount() {
-        return mSummaryListBySections.size();
+        if (null != mSummaryListBySections) {
+            return mSummaryListBySections.size();
+        }
+
+        return 0;
     }
 
     @Override
@@ -499,6 +512,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
         View groupSeparatorView = convertView.findViewById(R.id.recents_groups_separator_view);
+        View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
+
+        View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
+        Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
+        Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
 
         // display the room avatar
         String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, childRoom);
@@ -522,6 +540,41 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
         // bing view
         bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
+
+        // some items are show
+        bingUnreadMsgView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
+        timestampTxtView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
+        actionView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
+        invitationView.setVisibility(childRoom.isInvited() ? View.VISIBLE : View.GONE);
+
+        final String fRoomId = childRoom.getRoomId();
+
+        if (childRoom.isInvited()) {
+            joinButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mListener) {
+                        mListener.onJoinRoom(mMxSession, fRoomId);
+                    }
+                }
+            });
+
+            rejectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mListener) {
+                        mListener.onRejectInvitation(mMxSession, fRoomId);
+                    }
+                }
+            });
+        } else {
+            actionView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
 
         separatorView.setVisibility(isLastChild ? View.GONE : View.VISIBLE);
         groupSeparatorView.setVisibility((isLastChild && ((groupPosition+1) < getGroupCount())) ? View.VISIBLE : View.GONE);
@@ -591,22 +644,5 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         }
 
         return messageToDisplayRetValue;
-    }
-
-
-    public boolean removeRoomSummary(int aSectionIndex, RoomSummary aRoomSummaryToRemove){
-        boolean retCode = mSummaryListBySections.get(aSectionIndex).remove(aRoomSummaryToRemove);
-        return retCode;
-    }
-
-    // ****************************************************************************************
-    // stubbed methods:
-    // TODO remove asap
-    public void addRoomSummary(int aSection, RoomSummary aRoomSummary) {
-        Log.w(DBG_CLASS_NAME,"## addRoomSummary(): NOT IMPLEMENTED");
-    }
-
-    public void setDisplayAllGroups(boolean displayAllGroups) {
-        Log.w(DBG_CLASS_NAME,"## setDisplayAllGroups(): NOT IMPLEMENTED");
     }
 }

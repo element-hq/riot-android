@@ -56,7 +56,7 @@
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-regular"
+            android:fontFamily="sans-serif"
             android:textSize="14dp"
             android:layout_marginRight="13dp"
             android:textColor="@color/vector_text_gray_color"
@@ -83,17 +83,72 @@
             android:layout_marginRight="21dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_menu_notifications"
-            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
-            />
-        <!-- message line separator -->
-        <View
-            android:id="@+id/recents_separator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/roomSummaryAdapter_roomMessage"
-            android:background="@color/vector_line_separator_gray_color"/>
+            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"/>
     </RelativeLayout>
+
+    <!-- invitation section -->
+    <RelativeLayout
+        android:id="@+id/recents_groups_invitation_group"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/recents_invite_sep1"
+                android:background="@android:color/white"
+                android:layout_weight="0.20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/recents_invite_join_button"
+                android:layout_weight="0.26"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="14dp"
+                android:background="@drawable/grey_button_bg"
+                android:textColor="@android:color/white"
+                android:text="@string/join"/>
+
+            <View
+                android:id="@+id/recents_invite_sep2"
+                android:background="@android:color/white"
+                android:layout_weight="0.04"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/recents_invite_reject_button"
+                android:layout_weight="0.26"
+                android:layout_width="0dp"
+                android:textColor="@color/vector_text_gray_color"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="14dp"
+                android:layout_height="match_parent"
+                android:text="@string/reject"/>
+
+            <View
+                android:id="@+id/recents_invite_sep3"
+                android:background="@android:color/white"
+                android:layout_weight="0.20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- message line separator -->
+    <View
+        android:id="@+id/recents_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="73dp"
+        android:background="@color/vector_line_separator_gray_color"/>
 
     <RelativeLayout
         android:id="@+id/recents_groups_separator_view"

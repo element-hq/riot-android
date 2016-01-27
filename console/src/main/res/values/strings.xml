@@ -314,6 +314,8 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="remove">Remove</string>
+    <string name="join">Join</string>
+    <string name="reject">Reject</string>
 
     // Chat creation
     <string name="room_creation_title">New Chat</string>

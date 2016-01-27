@@ -16,34 +16,15 @@
 
 package im.vector.activity;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.support.v4.app.FragmentManager;
-import android.text.Html;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -52,41 +33,22 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.EventUtils;
-import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.adapters.DrawerAdapter;
-import im.vector.db.ConsoleContentProvider;
 import im.vector.adapters.VectorRoomSummaryAdapter;
-import im.vector.fragments.AccountsSelectionDialogFragment;
-import im.vector.gcm.GcmRegistrationManager;
-import im.vector.util.RageShake;
-import im.vector.view.AddAccountAlertDialog;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends MXCActionBarActivity {
+public class VectorHomeActivity extends MXCActionBarActivity implements VectorRoomSummaryAdapter.RoomEventListener {
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
@@ -109,6 +71,7 @@ public class VectorHomeActivity extends MXCActionBarActivity {
     private HashMap<MXSession, MXCallsManager.MXCallsManagerListener> mCallListenersBySession = new HashMap<MXSession, MXCallsManager.MXCallsManagerListener>();
 
     private VectorRoomSummaryAdapter mAdapter;
+    private View mWaitingView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,12 +83,16 @@ public class VectorHomeActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_home);
 
+        mWaitingView = findViewById(R.id.listView_spinner_views);
+
+        mSession = Matrix.getInstance(this).getDefaultSession();
+
         // get the ExpandableListView widget
         mMyRoomList = (ExpandableListView) findViewById(R.id.listView_myRooms);
         // the chevron is managed in the header view
         mMyRoomList.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(this, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header);
+        mAdapter = new VectorRoomSummaryAdapter(this, mSession, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
 
         // process intent parameters
         final Intent intent = getIntent();
@@ -451,5 +418,52 @@ public class VectorHomeActivity extends MXCActionBarActivity {
                 break;
         }
         return retCode;
+    }
+
+    // RoomEventListener
+    private void showWaitingView() {
+        mWaitingView.setVisibility(View.VISIBLE);
+    }
+    private void hideWaitingView() {
+        mWaitingView.setVisibility(View.GONE);
+    }
+
+    public void onJoinRoom(MXSession session, String roomId) {
+        CommonActivityUtils.goToRoomPage(session, roomId, VectorHomeActivity.this, null);
+    }
+
+    public void onRejectInvitation(MXSession session, String roomId) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            showWaitingView();
+
+            room.leave(new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    hideWaitingView();
+                }
+
+                private void onError() {
+                    // TODO display a message ?
+                    hideWaitingView();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError();
+                }
+            });
+        }
     }
 }
