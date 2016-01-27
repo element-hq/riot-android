@@ -19,17 +19,27 @@ package im.vector.adapters;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.internal.view.menu.MenuPopupHelper;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -43,6 +53,8 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventDisplay;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -494,6 +506,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
         return convertView;
     }
+
     /**
      * Compute the View that should be used to render the child,
      * given its position and its group’s position
@@ -528,7 +541,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
         View groupSeparatorView = convertView.findViewById(R.id.recents_groups_separator_view);
-        View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
+        final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
+        final ImageView imageActionView = (ImageView)convertView.findViewById(R.id.roomSummaryAdapter_action_image);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
         Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
@@ -591,59 +605,84 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fm = mContext.getSupportFragmentManager();
-                    VectorHomeRoomSettingsDialogFragment fragment = (VectorHomeRoomSettingsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOM_SETTINGS_DIALOG);
+                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, imageActionView);
+                    popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
 
-                    if (fragment != null) {
-                        fragment.dismissAllowingStateLoss();
-                    }
+                    MenuItem item;
 
                     final BingRulesManager bingRulesManager = mMxSession.getDataHandler().getBingRulesManager();
 
-                    fragment = VectorHomeRoomSettingsDialogFragment.newInstance(roomName, !bingRulesManager.isRoomNotificationsDisabled(childRoom), isFavorite, isLowPrior);
-                    fragment.setOnClickListener(new VectorHomeRoomSettingsDialogFragment.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(final VectorHomeRoomSettingsDialogFragment dialogFragment, int position) {
+                    if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
+                        item = popup.getMenu().getItem(0);
+                        item.setIcon(null);
+                    }
 
-                            if (null != mListener) {
-                                switch (position) {
-                                    case VectorHomeRoomSettingsDialogFragment.NOTIF_POSITION: {
-                                        mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
-                                        break;
+                    if (!isFavorite) {
+                        item = popup.getMenu().getItem(1);
+                        item.setIcon(null);
+                    }
+
+                    if (!isLowPrior) {
+                        item = popup.getMenu().getItem(2);
+                        item.setIcon(null);
+                    }
+
+                    item = popup.getMenu().getItem(3);
+                    SpannableString s = new SpannableString(item.getTitle());
+                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
+                    item.setTitle(s);
+
+                    // force to display the icon
+                    try {
+                        Field[] fields = popup.getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            if ("mPopup".equals(field.getName())) {
+                                field.setAccessible(true);
+                                Object menuPopupHelper = field.get(popup);
+                                Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                                Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                                setForceIcons.invoke(menuPopupHelper, true);
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(final MenuItem item) {
+
+                            switch (item.getItemId()) {
+                                case R.id.ic_action_select_notifications: {
+                                    mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
+                                    break;
+                                }
+                                case R.id.ic_action_select_fav: {
+                                    if (isFavorite) {
+                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                                    } else {
+                                        mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
                                     }
-                                    case VectorHomeRoomSettingsDialogFragment.FAV_POSITION: {
-                                        if (isFavorite) {
-                                            mListener.moveToConversations(mMxSession, childRoom.getRoomId());
-                                        } else {
-                                            mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
-                                        }
-                                        break;
+                                    break;
+                                }
+                                case R.id.ic_action_select_deprioritize: {
+                                    if (isLowPrior) {
+                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                                    } else {
+                                        mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
                                     }
-                                    case VectorHomeRoomSettingsDialogFragment.DEPRIOR_POSITION: {
-                                        if (isLowPrior) {
-                                            mListener.moveToConversations(mMxSession, childRoom.getRoomId());
-                                        } else {
-                                            mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
-                                        }
-                                        break;
-                                    }
-                                    case VectorHomeRoomSettingsDialogFragment.LEAVE_POSITION: {
-                                        mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
-                                        break;
-                                    }
+                                    break;
+                                }
+                                case R.id.ic_action_select_remove: {
+                                    mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
+                                    break;
                                 }
                             }
-
-                            mContext.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialogFragment.dismiss();
-                                }
-                            });
+                            return false;
                         }
                     });
 
-                    fragment.show(fm, TAG_FRAGMENT_ROOM_SETTINGS_DIALOG);
+                    popup.show();
                 }
             });
         }

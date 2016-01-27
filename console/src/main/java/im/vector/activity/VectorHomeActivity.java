@@ -527,6 +527,8 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                 tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newtag);
             }
 
+            showWaitingView();
+
             room.replaceTag(oldTag, newtag, tagOrder, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
