@@ -75,15 +75,21 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="45dp"/>
 
-        <ImageView
+
+        <RelativeLayout
             android:id="@+id/roomSummaryAdapter_action"
-            android:background="@color/material_red_100"
-            android:layout_width="14dp"
+            android:layout_width="35dp"
             android:layout_height="14dp"
-            android:layout_marginRight="21dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_menu_notifications"
-            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"/>
+            android:background="@color/material_red_100"
+            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_menu_notifications"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <!-- invitation section -->

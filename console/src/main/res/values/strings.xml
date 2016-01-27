@@ -419,4 +419,9 @@
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
 
+    // home room settings
+    <string name="room_settings_notifications">Notifications</string>
+    <string name="room_settings_favourite">Favourite</string>
+    <string name="room_settings_de_prioritize">De-prioritize</string>
+    <string name="room_settings_leave_conversation">Leave Conversation</string>
 </resources>

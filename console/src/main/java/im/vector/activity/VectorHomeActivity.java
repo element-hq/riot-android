@@ -27,12 +27,15 @@ import android.widget.ExpandableListView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 
 import im.vector.Matrix;
@@ -43,6 +46,7 @@ import im.vector.adapters.VectorRoomSummaryAdapter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -476,5 +480,89 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                 }
             });
         }
+    }
+
+    public void onLeaveRoom(MXSession session, String roomId) {
+        onRejectInvitation(session, roomId);
+    }
+
+    public void onToggleRoomNotifications(MXSession session, String roomId) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
+
+            showWaitingView();
+
+            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), new BingRulesManager.onBingRuleUpdateListener() {
+                @Override
+                public void onBingRuleUpdateSuccess() {
+                    hideWaitingView();
+                }
+
+                @Override
+                public void onBingRuleUpdateFailure(String errorMessage) {
+                    // TODO display a message ?
+                    hideWaitingView();
+                }
+            });
+        }
+    }
+
+    private void updateRoomTag(MXSession session, String roomId, String newtag) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            String oldTag = null;
+
+            RoomAccountData accountData = room.getAccountData();
+
+            if ((null != accountData) && accountData.hasTags()) {
+                oldTag = accountData.getKeys().iterator().next();
+            }
+
+            Double tagOrder = 0.0;
+
+            if (null != newtag) {
+                tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newtag);
+            }
+
+            room.replaceTag(oldTag, newtag, tagOrder, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    hideWaitingView();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    // TODO display a message ?
+                    hideWaitingView();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    // TODO display a message ?
+                    hideWaitingView();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    // TODO display a message ?
+                    hideWaitingView();
+                }
+            });
+        }
+    }
+
+    public void moveToConversations(MXSession session, String roomId) {
+        updateRoomTag(session, roomId, null);
+    }
+
+    public void moveToFavorites(MXSession session, String roomId) {
+        updateRoomTag(session, roomId, RoomTag.ROOM_TAG_FAVOURITE);
+    }
+
+    public void moveToLowPriority(MXSession session, String roomId) {
+        updateRoomTag(session, roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
     }
 }
