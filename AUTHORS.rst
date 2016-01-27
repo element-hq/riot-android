@@ -15,3 +15,6 @@ Friedger Müffke <friedger at matrix.org>
 
 Matthew Hodgson <matthew at matrix.org>
  * General doc & housekeeping
+
+Florent Violleau <floviolleau at gmail dot com>
+ * Improuve general doc
