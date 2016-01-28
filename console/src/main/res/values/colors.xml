@@ -26,4 +26,7 @@
     <color name="vector_text_gray_color">#FF9D9D9D</color>
     <color name="vector_line_separator_gray_color">#339D9D9D</color>
 
+    <color name="vector_d8_gray">#FFD8D8D8</color>
+    <color name="vector_54_black">#8A000000</color>
+
 </resources>

@@ -18,11 +18,17 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
@@ -43,6 +49,8 @@ import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.adapters.VectorRoomSummaryAdapter;
+import im.vector.util.VectorUtils;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +85,9 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
     private VectorRoomSummaryAdapter mAdapter;
     private View mWaitingView = null;
     private View mRoomCreationView = null;
+
+    // sliding menu management
+    private NavigationView mNavigationView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -381,6 +392,8 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                 }
             });
         }
+
+        refreshSlidingMenu();
     }
 
     @Override
@@ -399,7 +412,6 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             mOpenedRoomIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -566,5 +578,75 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
 
     public void moveToLowPriority(MXSession session, String roomId) {
         updateRoomTag(session, roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
+    }
+
+    // sliding menu management
+    private void refreshSlidingMenu() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // use a dedicated view
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_material_menu,  /* nav drawer icon to replace 'Up' caret */
+                R.string.action_open,  /* "open drawer" description */
+                R.string.action_close  /* "close drawer" description */
+        )
+        {
+
+            public void onDrawerClosed(View view) {
+            }
+
+            public void onDrawerOpened(View drawerView) {
+            }
+        };
+
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                mDrawerLayout.closeDrawers();
+
+                //Check to see which item was being clicked and perform appropriate action
+                switch (menuItem.getItemId()){
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.inbox:
+                        Toast.makeText(getApplicationContext(), "Inbox Selected", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                        return true;
+
+                }
+            }
+        });
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // display the home and title button
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu));
+        }
+
+        // init the main menu
+        mNavigationView.findViewById(R.id.listView_spinner_views);
+
+        TextView displaynameTextView = (TextView)  mNavigationView.findViewById(R.id.home_menu_main_displayname);
+        displaynameTextView.setText(mSession.getMyUser().displayname);
+
+        TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
+        userIdTextView.setText(mSession.getMyUser().userId);
+
+        ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar).findViewById(R.id.avatar_img);
+        String avatarUrl = mSession.getMyUser().avatarUrl;
+        VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
+
+        mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
     }
 }
