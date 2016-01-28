@@ -47,30 +47,15 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
-        android:layout_gravity="start">
-
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_drawer_top"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="top"
-            app:itemTextColor="@color/vector_4d_gray"
-            app:headerLayout="@layout/vector_home_menu_header"
-            app:menu="@menu/vector_home_sliding_menu" />
-
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_drawer_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:itemTextColor="@color/vector_4d_gray"
-            app:menu="@menu/vector_home_about" />
-
+        android:layout_gravity="start"
+        android:background="#FFF"
+        app:theme="@style/NavigationViewStyle"
+        app:headerLayout="@layout/vector_home_menu_header"
+        app:menu="@menu/vector_home_sliding_menu">
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

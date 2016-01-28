@@ -636,12 +636,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             }
         };
 
-        NavigationView topNavigationView = (NavigationView)mNavigationView.findViewById(R.id.navigation_drawer_top);
-        topNavigationView.setNavigationItemSelectedListener(listener);
-
-        NavigationView bottomNavigationView = (NavigationView)mNavigationView.findViewById(R.id.navigation_drawer_bottom);
-        bottomNavigationView.setNavigationItemSelectedListener(listener);
-
+        mNavigationView.setNavigationItemSelectedListener(listener);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         // display the home and title button
