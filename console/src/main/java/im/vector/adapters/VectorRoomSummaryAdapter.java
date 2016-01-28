@@ -541,7 +541,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         View separatorView = convertView.findViewById(R.id.recents_separator);
         View groupSeparatorView = convertView.findViewById(R.id.recents_groups_separator_view);
         final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
-        final ImageView imageActionView = (ImageView)convertView.findViewById(R.id.roomSummaryAdapter_action_image);
+        final View popupAnchorView = convertView.findViewById(R.id.recents_groups_popup_anchor_view);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
         Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
@@ -604,7 +604,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, imageActionView);
+                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, popupAnchorView);
                     popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
 
                     MenuItem item;

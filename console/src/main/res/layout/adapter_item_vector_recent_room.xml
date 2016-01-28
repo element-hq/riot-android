@@ -83,6 +83,12 @@
             android:layout_alignParentRight="true"
             android:background="@android:color/transparent"
             android:layout_alignBottom="@+id/roomSummaryAdapter_roomName">
+            <!-- this is anchor view for the popup menu -->
+            <View
+                android:id="@+id/recents_groups_popup_anchor_view"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent"/>
 
             <ImageView
                 android:id="@+id/roomSummaryAdapter_action_image"
