@@ -96,33 +96,33 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="im.vector.activity.HomeActivity"
+            android:name="im.vector.activity.VectorHomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
 
         <activity
             android:name="im.vector.activity.VectorRoomCreationActivity"
             android:label="@string/room_creation_title"
-            android:parentActivityName="im.vector.activity.HomeActivity"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.VectorHomeActivity"/>
 
         </activity>
 
         <activity
             android:name="im.vector.activity.VectorRoomActivity"
             android:label="@string/title_activity_room"
-            android:parentActivityName="im.vector.activity.HomeActivity"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.VectorHomeActivity"/>
 
         </activity>
 
@@ -155,11 +155,11 @@
             android:name="im.vector.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="im.vector.activity.HomeActivity">
+            android:parentActivityName="im.vector.activity.VectorHomeActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
         <activity
@@ -213,19 +213,19 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
         <activity
             android:name="im.vector.activity.VectorSearchesActivity"
             android:label="Vector searches"
-            android:parentActivityName="im.vector.activity.HomeActivity"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.HomeActivity"/>
+                android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
         <receiver

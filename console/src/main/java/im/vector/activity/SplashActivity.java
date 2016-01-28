@@ -62,11 +62,11 @@ public class SplashActivity extends MXCActionBarActivity {
         Log.e(LOG_TAG, "finishIfReady " + mInitialSyncComplete + " " + mPusherRegistrationComplete);
 
         if (mInitialSyncComplete && mPusherRegistrationComplete) {
-            Log.e(LOG_TAG, "finishIfRead start HomeActivity");
+            Log.e(LOG_TAG, "finishIfRead start VectorHomeActivity");
 
             if (!hasCorruptedStore()) {
                 // Go to the home page
-                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                startActivity(new Intent(SplashActivity.this, VectorHomeActivity.class));
                 SplashActivity.this.finish();
             } else {
                 CommonActivityUtils.logout(this);

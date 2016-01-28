@@ -306,14 +306,14 @@ public class CommonActivityUtils {
                                        @Override
                                        public void run() {
                                            // if the activity is not the home activity
-                                           if (!(fromActivity instanceof HomeActivity)) {
+                                           if (!(fromActivity instanceof VectorHomeActivity)) {
                                                // pop to the home activity
-                                               Intent intent = new Intent(fromActivity, HomeActivity.class);
+                                               Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
                                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                               intent.putExtra(HomeActivity.EXTRA_JUMP_TO_ROOM_ID, roomId);
-                                               intent.putExtra(HomeActivity.EXTRA_JUMP_MATRIX_ID, fSession.getCredentials().userId);
+                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_ID, roomId);
+                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_MATRIX_ID, fSession.getCredentials().userId);
                                                if (null != intentParam) {
-                                                   intent.putExtra(HomeActivity.EXTRA_ROOM_INTENT, intentParam);
+                                                   intent.putExtra(VectorHomeActivity.EXTRA_ROOM_INTENT, intentParam);
                                                }
                                                fromActivity.startActivity(intent);
                                            } else {
@@ -323,7 +323,7 @@ public class CommonActivityUtils {
                                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                                                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getCredentials().userId);
                                                if (null != intentParam) {
-                                                   intent.putExtra(HomeActivity.EXTRA_ROOM_INTENT, intentParam);
+                                                   intent.putExtra(VectorHomeActivity.EXTRA_ROOM_INTENT, intentParam);
                                                }
                                                fromActivity.startActivity(intent);
                                            }

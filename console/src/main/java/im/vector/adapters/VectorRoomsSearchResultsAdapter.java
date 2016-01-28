@@ -84,7 +84,7 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
 
         // set the message text
         EventDisplay display = new EventDisplay(mContext, event, null);
-        CharSequence text = display.getTextualDisplay(true);
+        CharSequence text = display.getTextualDisplay();
 
         try {
             messageTextView.setText(text);

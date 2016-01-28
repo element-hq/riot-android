@@ -1,0 +1,49 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:background="#FFFFFFFF"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity_home">
+
+    <!-- The main content view -->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="org.matrix.vector.activity.VectorHomeActivity">
+
+        <ExpandableListView
+            android:id="@+id/listView_myRooms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="#00000000"/>
+
+        <ImageView
+            android:id="@+id/listView_create_room_view"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/vector_create_room" />
+        
+        <RelativeLayout
+            android:id="@+id/listView_spinner_views"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#339D9D9D">
+            <ProgressBar
+                android:id="@+id/listView_spinner"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="visible"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>

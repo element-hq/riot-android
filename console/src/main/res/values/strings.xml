@@ -5,7 +5,7 @@
 
     <!-- titles -->
     <string name="app_name">Vector</string>
-    <string name="title_activity_home">Recents</string>
+    <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
     <string name="title_activity_room_info">Room info</string>
@@ -314,6 +314,8 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="remove">Remove</string>
+    <string name="join">Join</string>
+    <string name="reject">Reject</string>
 
     // Chat creation
     <string name="room_creation_title">New Chat</string>
@@ -417,4 +419,9 @@
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
 
+    // home room settings
+    <string name="room_settings_notifications">Notifications</string>
+    <string name="room_settings_favourite">Favourite</string>
+    <string name="room_settings_de_prioritize">De-prioritize</string>
+    <string name="room_settings_leave_conversation">Leave Conversation</string>
 </resources>
