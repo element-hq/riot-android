@@ -7,8 +7,5 @@
         android:title="@string/action_search_room"
         android:icon="@drawable/vector_search"
         app:showAsAction="always" />
-    
-    <item android:id="@+id/ic_action_global_settings"
-        android:icon="@drawable/vector_settings"
-        app:showAsAction="always" />
+
 </menu>
