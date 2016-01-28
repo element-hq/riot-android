@@ -426,12 +426,6 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         boolean retCode = true;
 
         switch(item.getItemId()) {
-            case R.id.ic_action_global_settings:
-                // launch the settings activity
-                final Intent settingsIntent = new Intent(VectorHomeActivity.this, SettingsActivity.class);
-                VectorHomeActivity.this.startActivity(settingsIntent);
-                break;
-
             // search in rooms content
             case R.id.ic_action_search_room:
                 // launch the "search in rooms" activity
