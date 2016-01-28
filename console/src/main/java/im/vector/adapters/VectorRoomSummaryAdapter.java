@@ -63,7 +63,6 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.fragments.VectorHomeRoomSettingsDialogFragment;
 import im.vector.util.VectorUtils;
 
 /**

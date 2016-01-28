@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textSize="14dp"
-            android:layout_marginRight="13dp"
+            android:layout_marginRight="25dp"
             android:textColor="@color/vector_text_gray_color"
             android:text="last room message" />
 
@@ -73,12 +73,12 @@
             android:textColor="@color/vector_text_black_color"
             android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="45dp"/>
+            android:layout_marginRight="40dp"/>
 
 
         <RelativeLayout
             android:id="@+id/roomSummaryAdapter_action"
-            android:layout_width="35dp"
+            android:layout_width="28dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:background="@android:color/transparent"
@@ -86,8 +86,9 @@
 
             <ImageView
                 android:id="@+id/roomSummaryAdapter_action_image"
-                android:layout_width="14dp"
+                android:layout_width="10dp"
                 android:layout_height="14dp"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
                 android:src="@drawable/vector_actions"/>
         </RelativeLayout>
