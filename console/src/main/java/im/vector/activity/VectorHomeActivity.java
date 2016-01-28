@@ -603,27 +603,50 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             }
         };
 
-        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-            // This method will trigger on item Click of navigation menu
+        NavigationView.OnNavigationItemSelectedListener listener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
 
-                //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()){
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.inbox:
-                        Toast.makeText(getApplicationContext(), "Inbox Selected", Toast.LENGTH_SHORT).show();
+                    case R.id.sliding_menu_messages:
+                        return true;
+
+                    case R.id.sliding_menu_settings:
+
+                        mDrawerLayout.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                // launch the settings activity
+                                final Intent settingsIntent = new Intent(VectorHomeActivity.this, SettingsActivity.class);
+                                VectorHomeActivity.this.startActivity(settingsIntent);
+                            }
+                        }, 200);
+
+                        return true;
+
+                    case R.id.sliding_menu_logout:
+                        mDrawerLayout.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorHomeActivity.this.showWaitingView();
+                                CommonActivityUtils.logout(VectorHomeActivity.this);
+                            }
+                        }, 200);
+
                         return true;
                     default:
-                        Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
                         return true;
 
                 }
             }
-        });
+        };
+
+        NavigationView topNavigationView = (NavigationView)mNavigationView.findViewById(R.id.navigation_drawer_top);
+        topNavigationView.setNavigationItemSelectedListener(listener);
+
+        NavigationView bottomNavigationView = (NavigationView)mNavigationView.findViewById(R.id.navigation_drawer_bottom);
+        bottomNavigationView.setNavigationItemSelectedListener(listener);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 

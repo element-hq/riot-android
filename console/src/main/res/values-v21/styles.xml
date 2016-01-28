@@ -32,4 +32,9 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#f00</item>
+    </style>
+
 </resources>
