@@ -81,7 +81,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
         public void onLeaveRoom(MXSession session, String roomId);
     }
-    private static final String TAG_FRAGMENT_ROOM_SETTINGS_DIALOG = "TAG_FRAGMENT_ROOM_SETTINGS_DIALOG";
 
     private final FragmentActivity mContext;
     private final LayoutInflater mLayoutInflater;
@@ -541,7 +540,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         View separatorView = convertView.findViewById(R.id.recents_separator);
         View groupSeparatorView = convertView.findViewById(R.id.recents_groups_separator_view);
         final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
-        final View popupAnchorView = convertView.findViewById(R.id.recents_groups_popup_anchor_view);
+        final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
         Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
@@ -573,7 +572,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         // some items are show
         bingUnreadMsgView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
         timestampTxtView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
-        actionView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
+        actionImageView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(childRoom.isInvited() ? View.VISIBLE : View.GONE);
 
         final String fRoomId = childRoom.getRoomId();
@@ -604,7 +603,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, popupAnchorView);
+                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
                     popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
 
                     MenuItem item;
