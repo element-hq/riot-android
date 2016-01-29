@@ -1613,13 +1613,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         // sanity check
         if (null != mAvatarImageView) {
             String avatarUrl = mSession.getMyUser().avatarUrl;
-
-            if (avatarUrl == null) {
-                mAvatarImageView.setImageResource(R.drawable.ic_contact_picture_holo_light);
-            } else {
-                int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-                mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarImageView, avatarUrl, size);
-            }
+            
+            VectorUtils.setMemberAvatar(mAvatarImageView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
+            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarImageView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         }
     }
 

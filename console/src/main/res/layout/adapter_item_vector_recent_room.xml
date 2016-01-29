@@ -75,29 +75,27 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="40dp"/>
 
+        <ImageView
+            android:id="@+id/roomSummaryAdapter_action_image"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+            android:src="@drawable/vector_actions"/>
 
         <RelativeLayout
             android:id="@+id/roomSummaryAdapter_action"
-            android:layout_width="28dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:layout_alignBottom="@+id/roomSummaryAdapter_roomName">
-            <!-- this is anchor view for the popup menu -->
-            <View
-                android:id="@+id/recents_groups_popup_anchor_view"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent">
 
-            <ImageView
-                android:id="@+id/roomSummaryAdapter_action_image"
-                android:layout_width="10dp"
-                android:layout_height="14dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:src="@drawable/vector_actions"/>
-        </RelativeLayout>
+            <View
+                android:id="@+id/roomSummaryAdapter_action_anchor"
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
+            </RelativeLayout>
 
     </RelativeLayout>
 

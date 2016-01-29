@@ -26,6 +26,8 @@ import android.util.Log;
 import com.google.android.gms.analytics.ExceptionParser;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
+import org.matrix.androidsdk.MXSession;
+
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.ContactsManager;
@@ -36,6 +38,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -189,6 +192,11 @@ public class VectorApp extends Application {
 
             // get the contact update at application launch
             ContactsManager.refreshLocalContactsSnapshot(this);
+
+            ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
+            for(MXSession session : sessions) {
+                session.getMyUser().refreshUserInfos(null);
+            }
         }
 
         MyPresenceManager.advertiseAllOnline();
