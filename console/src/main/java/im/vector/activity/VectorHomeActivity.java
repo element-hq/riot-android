@@ -655,7 +655,5 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
 
         mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
-
-
     }
 }
