@@ -85,10 +85,12 @@
     <string name="create">Create:</string>
     <string name="sign_in">Sign in</string>
     <string name="username">Username</string>
+    <string name="email_address">Email address</string>
     <string name="password">Password</string>
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Log in</string>
-    <string name="create_account">Create Account</string>
+    <string name="create_account">Register</string>
+    <string name="forgot_password">Forgot password?</string>
     <string name="hs_url">Home Server URL</string>
 
     <string name="create_room_set_alias">Set room alias</string>
@@ -416,5 +418,7 @@
     <string name="directory_search_results">%1$d results found for %2$s</string>
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
+    <string name="splash_screen_display_text">Vector</string>
+    <string name="splash_screen_copyright">Copyright (c) 2015 vector.im. All rights reserved.</string>
 
 </resources>

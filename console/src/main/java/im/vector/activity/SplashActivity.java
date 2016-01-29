@@ -80,7 +80,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         Log.e(LOG_TAG, "onCreate");
 
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.vector_activity_splash);
 
         mSessions =  Matrix.getInstance(getApplicationContext()).getSessions();
 
