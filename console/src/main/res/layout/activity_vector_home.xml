@@ -21,16 +21,19 @@
             android:dividerHeight="0dp"
             android:divider="#00000000"/>
 
-        <ImageView
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/listView_create_room_view"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="12dp"
-            android:src="@drawable/vector_create_room" />
-        
+            app:backgroundTint="@color/vector_green_color"
+            android:src="@drawable/ic_add_white"
+            app:borderWidth="0dp"
+            app:elevation="4dp"/>
+
         <RelativeLayout
             android:id="@+id/listView_spinner_views"
             android:layout_width="match_parent"
@@ -45,6 +48,7 @@
                 android:layout_centerVertical="true"
                 android:visibility="visible"/>
         </RelativeLayout>
+
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
