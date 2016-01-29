@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
@@ -54,7 +53,6 @@ import im.vector.util.VectorUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -88,6 +86,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
 
     // sliding menu management
     private NavigationView mNavigationView = null;
+    private int mSlidingMenuIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -591,6 +590,26 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         {
 
             public void onDrawerClosed(View view) {
+                switch (VectorHomeActivity.this.mSlidingMenuIndex){
+                    case R.id.sliding_menu_settings: {
+                        // launch the settings activity
+                        final Intent settingsIntent = new Intent(VectorHomeActivity.this, SettingsActivity.class);
+                        VectorHomeActivity.this.startActivity(settingsIntent);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_logout: {
+                        VectorHomeActivity.this.showWaitingView();
+                        CommonActivityUtils.logout(VectorHomeActivity.this);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_terms: {
+                        VectorUtils.displayLicense(VectorHomeActivity.this);
+                    }
+                }
+
+                VectorHomeActivity.this.mSlidingMenuIndex = -1;
             }
 
             public void onDrawerOpened(View drawerView) {
@@ -601,38 +620,8 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
-
-                switch (menuItem.getItemId()){
-                    case R.id.sliding_menu_messages:
-                        return true;
-
-                    case R.id.sliding_menu_settings:
-
-                        mDrawerLayout.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                // launch the settings activity
-                                final Intent settingsIntent = new Intent(VectorHomeActivity.this, SettingsActivity.class);
-                                VectorHomeActivity.this.startActivity(settingsIntent);
-                            }
-                        }, 200);
-
-                        return true;
-
-                    case R.id.sliding_menu_logout:
-                        mDrawerLayout.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                VectorHomeActivity.this.showWaitingView();
-                                CommonActivityUtils.logout(VectorHomeActivity.this);
-                            }
-                        }, 200);
-
-                        return true;
-                    default:
-                        return true;
-
-                }
+                VectorHomeActivity.this.mSlidingMenuIndex = menuItem.getItemId();
+                return true;
             }
         };
 
@@ -646,9 +635,15 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu));
         }
 
-        // init the main menu
-        mNavigationView.findViewById(R.id.listView_spinner_views);
+        Menu menuNav = mNavigationView.getMenu();
+        MenuItem aboutMenuItem = menuNav.findItem(R.id.sliding_menu_version);
 
+        if (null != aboutMenuItem) {
+            String version = this.getString(R.string.room_sliding_menu_version) + " " + VectorUtils.getApplicationVersion(this);
+            aboutMenuItem.setTitle(version);
+        }
+
+        // init the main menu
         TextView displaynameTextView = (TextView)  mNavigationView.findViewById(R.id.home_menu_main_displayname);
         displaynameTextView.setText(mSession.getMyUser().displayname);
 
@@ -660,5 +655,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
 
         mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+
+
     }
 }
