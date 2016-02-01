@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -273,7 +274,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                         String matrixId = session.getCredentials().userId;
 
                         // If we're not currently viewing this room or not sent by myself, increment the unread count
-                        if ((!event.roomId.equals(viewedRoomId) || !matrixId.equals(fromMatrixId))  && !event.getSender().equals(matrixId)) {
+                        if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId))  && !TextUtils.equals(event.getSender(), matrixId)) {
                             RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
                             if (null != summary) {
                                 summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
