@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/chat_avatar_size"
-    android:layout_height="@dimen/chat_avatar_size">
+    android:layout_width="60dp"
+    android:layout_height="60dp">
 
-    <!-- avatar image -->
     <ImageView
-        android:id="@+id/avatar_img_vector"
+        android:id="@+id/avatar_img"
+        android:background="#0f0"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
 
-    <!-- round mask to apply on the avatar image -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/avatar_mask"/>
+        android:src="@drawable/avatar_mask_vector_home_menu"/>
 
 </FrameLayout>

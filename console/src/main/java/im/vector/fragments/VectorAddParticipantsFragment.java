@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -323,6 +325,14 @@ public class VectorAddParticipantsFragment extends Fragment {
 
         mAdapter.setSearchedPattern(mSearchEdit.getText().toString());
         mAdapter.refresh();
+    }
+
+    /**
+     * Dismiss any opened keyboard
+     */
+    public void dismissKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSearchEdit.getWindowToken(), 0);
     }
 
     /**

@@ -14,8 +14,8 @@
     <color name="room_summary_highlight_background">#FF88BBFF</color>
     <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
 
-    <color name="vector_background">#FFF3F8FA</color>
-    <color name="vector_title_color">#FF3C3C3C</color>
+    <color name="vector_background">#FFFAFAFA</color>
+    <color name="vector_title_color">#DD000000</color>
     <color name="vector_border_color">#FF3C3C3C</color>
 
     <color name="vector_green_color">#FF62CE9C</color>
@@ -24,5 +24,10 @@
 
     <color name="vector_text_black_color">#FF3C3C3C</color>
     <color name="vector_text_gray_color">#FF9D9D9D</color>
+    <color name="vector_line_separator_gray_color">#339D9D9D</color>
+
+    <color name="vector_d8_gray">#FFD8D8D8</color>
+    <color name="vector_4d_gray">#FF4D4D4D</color>
+    <color name="vector_54_black">#8A000000</color>
 
 </resources>

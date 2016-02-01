@@ -280,7 +280,8 @@ public class MXCActionBarActivity extends ActionBarActivity {
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        // there is no more sliding menu by now
+        mDrawerList = null; // (ListView) findViewById(R.id.left_drawer);
 
         // check if the dedicated resource exists
         if ((null != mDrawerLayout) && (null != mDrawerList)) {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sliding_menu_version"
+        android:title="@string/room_sliding_menu_version"/>
+
+    <item
+        android:id="@+id/sliding_menu_terms"
+        android:title="@string/room_sliding_menu_term_and_conditions"/>
+
+    <item
+        android:id="@+id/sliding_menu_privacy_policy"
+        android:title="@string/room_sliding_privacy_policy"/>
+</menu>

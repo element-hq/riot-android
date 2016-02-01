@@ -78,6 +78,8 @@ public class VectorRoomCreationAddParticipantsActivity extends MXCActionBarActiv
                     if (fragment instanceof VectorAddParticipantsFragment) {
                         VectorAddParticipantsFragment vectorAddParticipantsFragment = (VectorAddParticipantsFragment)fragment;
 
+                        vectorAddParticipantsFragment.dismissKeyboard();
+
                         Intent intent = new Intent();
 
                         ArrayList<String> users = new ArrayList<String>();
