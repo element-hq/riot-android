@@ -594,7 +594,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                 switch (VectorHomeActivity.this.mSlidingMenuIndex){
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
-                        final Intent settingsIntent = new Intent(VectorHomeActivity.this, SettingsActivity.class);
+                        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
                         VectorHomeActivity.this.startActivity(settingsIntent);
                         break;
                     }

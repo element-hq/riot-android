@@ -15,133 +15,170 @@
  */
 package im.vector.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.bingrules.BingRule;
+import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 
 import java.util.HashMap;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.pref.AvatarPreference;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsActivity extends MXCActionBarActivity {
 
-    private static final String LOG_TAG = "VectorSettingsActivity";
-
-    private static final String PROFILE_PICTURE_KEY = "PROFILE_PICTURE_KEY";
-    private static final String PROFILE_DISPLAYNAME_KEY = "PROFILE_DISPLAYNAME_KEY";
-    private static final String PROFILE_PASSWORD_KEY = "PROFILE_PASSWORD_KEY";
-
-    private static final String ENABLE_ALL_KEY = "ENABLE_ALL_KEY";
-    private static final String CONTAINING_MY_USER_NAME_KEY = "CONTAINING_MY_USER_NAME_KEY";
-    private static final String CONTAINING_MY_DISPLAY_NAME_KEY = "CONTAINING_MY_DISPLAY_NAME_KEY";
-    private static final String SENT_TO_ME_KEY = "SENT_TO_ME_KEY";
-    private static final String INVITED_TO_A_ROOM_KEY = "INVITED_TO_A_ROOM_KEY";
-    private static final String JOINED_LEAVE_ROOM_KEY = "JOINED_LEAVE_ROOM_KEY";
-    private static final String CALL_INVITATION_KEY = "CALL_INVITATION_KEY";
-
-    // views by the previous keys
-    private HashMap<String, View> mSettingsViews = new HashMap<String, View>();
-
-    // updates values
-    private HashMap<String, Object> mUpdatedValues = new HashMap<String, Object>();
-
-    MXSession mSession;
+    private static HashMap<String, String> mPushesRuleByResourceId = null;
+    private MXSession mSession;
+    public View mLoadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (CommonActivityUtils.shouldRestartApp()) {
-            Log.e(LOG_TAG, "Restart the application.");
-            CommonActivityUtils.restartApp(this);
-        }
-
         super.onCreate(savedInstanceState);
 
-        mSession = Matrix.getInstance(this).getDefaultSession();
-
         setContentView(R.layout.activity_vector_settings);
-        buildSettingsScreen(LayoutInflater.from(this), (LinearLayout) findViewById(R.id.settings_layout));
 
-        refresh();
+        // get the loading view
+        mLoadingView = findViewById(R.id.vector_settings_spinner_views);
+
+        // TODO the matrix id must be passed in parameter
+        mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
+
+        MyPreferenceFragment fragment = new MyPreferenceFragment();
+        fragment.mSession = mSession;
+
+        initPreferences();
+
+        getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, fragment).commit();
     }
 
-    private void buildSettingsScreen(LayoutInflater inflater, LinearLayout layout) {
-        TextView textView;
+    private void initPreferences() {
+        if (null == mPushesRuleByResourceId) {
+            mPushesRuleByResourceId = new HashMap<String, String>();
 
-        // profile sections
-        {
-            View profileHeader = inflater.inflate(R.layout.vector_settings_header, null);
-            textView = (TextView) profileHeader.findViewById(R.id.vector_settings_header_text);
-            textView.setText(this.getString(R.string.settings_user_settings));
-            layout.addView(profileHeader);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_my_display_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_my_user_name), BingRule.RULE_ID_CONTAIN_USER_NAME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_sent_to_me), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_invited_to_room), BingRule.RULE_ID_INVITE_ME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_call_invitations), BingRule.RULE_ID_CALL);
         }
 
-        // avatar
-        {
-            View avartarView = inflater.inflate(R.layout.vector_settings_text_avatar, null);
-            ImageView imageview = (ImageView)avartarView.findViewById(R.id.avatar_img);
-            mSettingsViews.put(PROFILE_PICTURE_KEY, imageview);
-            layout.addView(avartarView);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(this.getResources().getString(R.string.settings_display_name), mSession.getMyUser().displayname);
+        editor.putString(this.getResources().getString(R.string.settings_version), VectorUtils.getApplicationVersion(this));
+
+        BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
+
+        for(String resourceText : mPushesRuleByResourceId.keySet()) {
+            String ruleId = mPushesRuleByResourceId.get(resourceText);
+
+            BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
+            Boolean isEnabled = ((null != rule) && rule.isEnabled);
+
+            // this rule is the opposite of the bingrules
+            if (TextUtils.equals(resourceText, getResources().getString(R.string.settings_enable_all_notif))) {
+                isEnabled = !isEnabled;
+            }
+
+            editor.putBoolean(resourceText, isEnabled);
         }
 
-        layout.addView(inflater.inflate(R.layout.vector_settings_sepator, null));
-
-        // display name
-        {
-            View displayNameView = inflater.inflate(R.layout.vector_settings_double_texts, null);
-            textView = (TextView) displayNameView.findViewById(R.id.vector_settings_large_text);
-            textView.setText(this.getString(R.string.settings_display_name));
-            textView = (TextView) displayNameView.findViewById(R.id.vector_settings_sub_text);
-            mSettingsViews.put(PROFILE_DISPLAYNAME_KEY, textView);
-            layout.addView(displayNameView);
-        }
-
-        layout.addView(inflater.inflate(R.layout.vector_settings_sepator, null));
-
-        // change password
-        {
-            View passwordView = inflater.inflate(R.layout.vector_settings_double_texts, null);
-            textView = (TextView) passwordView.findViewById(R.id.vector_settings_large_text);
-            textView.setText(this.getString(R.string.settings_change_password));
-            textView = (TextView) passwordView.findViewById(R.id.vector_settings_sub_text);
-            textView.setText("*******");
-            layout.addView(passwordView);
-        }
-
-        // notification sections
-        {
-            View profileHeader = inflater.inflate(R.layout.vector_settings_header_large, null);
-            textView = (TextView) profileHeader.findViewById(R.id.vector_settings_header_text);
-            textView.setText(this.getString(R.string.settings_notifications));
-            layout.addView(profileHeader);
-        }
+        editor.commit();
     }
 
-    private void refresh() {
-        // avatar
-        MyUser myUser = mSession.getMyUser();
-        ImageView avatarImageView = (ImageView)mSettingsViews.get(PROFILE_PICTURE_KEY);
-        VectorUtils.setMemberAvatar(avatarImageView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
+    public static class MyPreferenceFragment extends PreferenceFragment
+    {
+        public MXSession mSession;
+        private View mLoadingView;
 
-        String roomAvatarUrl = myUser.avatarUrl;
-
-        if (null != roomAvatarUrl) {
-            int size = getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), avatarImageView, roomAvatarUrl, size);
+        private void displayLoadingView() {
+            mLoadingView.setVisibility(View.VISIBLE);
         }
 
-        // display name
+        private void hideLoadingView() {
+            mLoadingView.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onCreate(final Bundle savedInstanceState)
         {
-            TextView texview = (TextView)mSettingsViews.get(PROFILE_DISPLAYNAME_KEY);
-            texview.setText(myUser.displayname);
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.vector_settings_preferences);
+
+            mLoadingView = ((VectorSettingsActivity)getActivity()).mLoadingView;
+
+            PreferenceManager preferenceManager = getPreferenceManager();
+
+            AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+            avatarPreference.setSession(mSession);
+            avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    /*
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
+                    startActivityForResult(intent, 1);*/
+
+                    return true;
+                }
+            });
+
+            final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
+            displaynamePref.setSummary(mSession.getMyUser().displayname);
+            displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final String value = (String)newValue;
+
+                    if (!TextUtils.equals(mSession.getMyUser().displayname, value)) {
+                        displayLoadingView();
+
+                        mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
+                            @Override
+                                    public void onSuccess(Void info) {
+                                        displaynamePref.setSummary(value);
+                                        hideLoadingView();
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        hideLoadingView();
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        hideLoadingView();
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        hideLoadingView();
+                                    }
+                                });
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

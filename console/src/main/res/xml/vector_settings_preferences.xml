@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <PreferenceCategory android:title="@string/settings_user_settings" >
+
+        <im.vector.pref.AvatarPreference
+            android:title="@string/settings_profile_picture"
+            android:key="matrixId">
+        </im.vector.pref.AvatarPreference>
+
+        <im.vector.pref.VectorEditTextPreference
+            android:focusable="true"
+            android:title="@string/settings_display_name"
+            android:summary="@string/settings_display_name"
+            android:key="@string/settings_display_name"/>
+
+        <im.vector.pref.VectorCustomActionEditTextPreference
+            android:title="@string/settings_change_password"
+            android:summary="********"
+            android:key="@string/settings_change_password"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_notifications">
+
+        <CheckBoxPreference
+            android:title="@string/settings_enable_all_notif"
+            android:key="@string/settings_enable_all_notif"/>
+
+        <CheckBoxPreference
+            android:title="@string/settings_messages_my_display_name"
+            android:key="@string/settings_messages_my_display_name"/>
+
+        <CheckBoxPreference
+            android:title="@string/settings_messages_my_user_name"
+            android:key="@string/settings_messages_my_user_name"/>
+
+        <CheckBoxPreference
+            android:title="@string/settings_messages_sent_to_me"
+            android:key="@string/settings_messages_sent_to_me"/>
+
+        <CheckBoxPreference
+            android:title="@string/settings_invited_to_room"
+            android:key="@string/settings_invited_to_room"/>
+
+        <CheckBoxPreference
+            android:title="@string/settings_call_invitations"
+            android:key="@string/settings_call_invitations"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_other" >
+
+        <im.vector.pref.VectorCustomActionEditTextPreference
+            android:title="@string/settings_version"
+            android:summary="1.2.3"
+            android:key="@string/settings_version"/>
+
+        <im.vector.pref.VectorCustomActionEditTextPreference
+            android:title="@string/settings_term_conditions"
+            android:key="@string/settings_term_conditions"/>
+
+        <im.vector.pref.VectorCustomActionEditTextPreference
+            android:title="@string/settings_privacy_policy"
+            android:key="@string/settings_privacy_policy"/>
+
+        <im.vector.pref.VectorCustomActionEditTextPreference
+            android:title="@string/settings_clear_cache"
+            android:key="@string/settings_clear_cache"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
