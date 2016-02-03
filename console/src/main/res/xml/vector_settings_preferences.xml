@@ -31,24 +31,28 @@
 
         <CheckBoxPreference
             android:title="@string/settings_messages_my_display_name"
-            android:key="@string/settings_messages_my_display_name"/>
+            android:key="@string/settings_messages_my_display_name"
+            android:dependency="@string/settings_enable_all_notif"/>
 
         <CheckBoxPreference
             android:title="@string/settings_messages_my_user_name"
-            android:key="@string/settings_messages_my_user_name"/>
+            android:key="@string/settings_messages_my_user_name"
+            android:dependency="@string/settings_enable_all_notif"/>
 
         <CheckBoxPreference
             android:title="@string/settings_messages_sent_to_me"
-            android:key="@string/settings_messages_sent_to_me"/>
+            android:key="@string/settings_messages_sent_to_me"
+            android:dependency="@string/settings_enable_all_notif"/>
 
         <CheckBoxPreference
             android:title="@string/settings_invited_to_room"
-            android:key="@string/settings_invited_to_room"/>
+            android:key="@string/settings_invited_to_room"
+            android:dependency="@string/settings_enable_all_notif"/>
 
         <CheckBoxPreference
             android:title="@string/settings_call_invitations"
-            android:key="@string/settings_call_invitations"/>
-
+            android:key="@string/settings_call_invitations"
+            android:dependency="@string/settings_enable_all_notif"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_other" >
