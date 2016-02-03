@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.MXCallsManager;
+import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
@@ -212,6 +213,11 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
 
         MXEventListener listener = new MXEventListener() {
             private boolean mInitialSyncComplete = false;
+
+            @Override
+            public void onAccountInfoUpdate(MyUser myUser) {
+                refreshSlidingMenu();
+            }
 
             @Override
             public void onInitialSyncComplete() {
