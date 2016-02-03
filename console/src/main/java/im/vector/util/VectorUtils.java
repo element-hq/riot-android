@@ -68,9 +68,7 @@ import im.vector.db.ConsoleContentProvider;
 public class VectorUtils {
 
     public static final String LOG_TAG = "VectorUtils";
-
-    public static final String CAMERA_VALUE_TITLE = "attachment";
-
+    
     public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
 
