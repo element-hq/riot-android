@@ -27,8 +27,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -61,7 +59,7 @@ import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment {
-
+    // arguments indexes
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
     private static final String ARG_RULES_MAP_ID = "VectorSettingsPreferencesFragment.ARG_RULES_MAP_ID";
 
@@ -72,6 +70,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     private MXSession mSession;
     private View mLoadingView;
 
+    // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId, HashMap<String, String> pushesRuleByResourceId) {
         VectorSettingsPreferencesFragment f = new VectorSettingsPreferencesFragment();
         Bundle args = new Bundle();
@@ -81,7 +80,111 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         return f;
     }
 
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // retrieve the arguments
+        Bundle args = getArguments();
+        String matrixId = args.getString(ARG_MATRIX_ID);
+        mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
+        mPushesRuleByResourceId = (HashMap<String, String>)args.getSerializable(ARG_RULES_MAP_ID);
+
+        // define the layout
+        addPreferencesFromResource(R.xml.vector_settings_preferences);
+
+        final PreferenceManager preferenceManager = getPreferenceManager();
+
+        AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+        avatarPreference.setSession(mSession);
+        avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onUpdateAvatarClick();
+                return false;
+            }
+        });
+
+        EditTextPreference passwordPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
+        passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                onPasswordUpdateClick();
+                return false;
+            }
+        });
+
+        // application version
+        EditTextPreference versionTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
+        if (null != versionTextPreference) {
+            versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
+        }
+
+        // terms & conditions
+        EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_term_conditions));
+
+        if (null != termConditionsPreference) {
+            termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    VectorUtils.displayLicense(getActivity());
+                    return false;
+                }
+            });
+        }
+
+        // clear cache
+        EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
+
+        if (null != clearCachePreference) {
+            clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Matrix.getInstance(getActivity()).reloadSessions(getActivity());
+                    return false;
+                }
+            });
+        }
+
+        // push rules
+        for(String resourceText : mPushesRuleByResourceId.keySet()) {
+            final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
+
+            if (null != switchPreference) {
+                final String fResourceText = resourceText;
+
+                switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        onPushRuleClick(fResourceText);
+                        return false;
+                    }
+                });
+            }
+        }
+
+        final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
+        displaynamePref.setSummary(mSession.getMyUser().displayname);
+        displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                onDisplayNameClick((String) newValue);
+                return false;
+            }
+        });
+
+        refreshDisplay();
+    }
+
+    //==============================================================================================================
+    // Display methods
+    //==============================================================================================================
+
+    /**
+     * Display the loading view.
+     */
     private void displayLoadingView() {
+        // search the loading view from the upper view
         if (null == mLoadingView) {
             View parent = getView();
 
@@ -96,12 +199,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
     }
 
+    /**
+     * Hide the loading view.
+     */
     private void hideLoadingView() {
         if (null != mLoadingView) {
             mLoadingView.setVisibility(View.GONE);
         }
     }
 
+    /**
+     * Hide the loading view and refresh the preferences.
+     * @param refresh
+     */
     private void hideLoadingView(Boolean refresh) {
         mLoadingView.setVisibility(View.GONE);
 
@@ -110,6 +220,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
     }
 
+    /**
+     * Refresh the preferences.
+     */
     public void refreshDisplay() {
         PreferenceManager preferenceManager = getPreferenceManager();
 
@@ -133,45 +246,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-      //  outState.putSerializable("mUpdatedItemsByResourceId", mUpdatedItemsByResourceId);
-    }
+    //==============================================================================================================
+    // Update items  methods
+    //==============================================================================================================
 
-
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // retrieve the arguments
-        Bundle args = getArguments();
-        String matrixId = args.getString(ARG_MATRIX_ID);
-        mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
-        mPushesRuleByResourceId = (HashMap<String, String>)args.getSerializable(ARG_RULES_MAP_ID);
-
-        // define the layout
-        addPreferencesFromResource(R.xml.vector_settings_preferences);
-
-        final PreferenceManager preferenceManager = getPreferenceManager();
-
-        AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
-        avatarPreference.setSession(mSession);
-        avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+    /**
+     * Update the password.
+     */
+    private void onPasswordUpdateClick() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
-                startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
-
-                return false;
-            }
-        });
-
-        EditTextPreference passwordPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
-        passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+            public void run() {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 final View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_change_password, null);
                 alertDialog.setView(view);
@@ -264,133 +349,99 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                     }
                 });
 
-                return false;
             }
         });
+    }
 
-        // application version
-        EditTextPreference versionTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
-        if (null != versionTextPreference) {
-            versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
-        }
-
-        // terms & conditions
-        EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_term_conditions));
-
-        if (null != termConditionsPreference) {
-            termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayLicense(getActivity());
-                    return false;
-                }
-            });
-        }
-
-        // clear cache
-        EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
-
-        if (null != clearCachePreference) {
-            clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Matrix.getInstance(getActivity()).reloadSessions(getActivity());
-                    return false;
-                }
-            });
-        }
-
-        // push rules
-        for(String resourceText : mPushesRuleByResourceId.keySet()) {
-            final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
-
-            if (null != switchPreference) {
-                final String fResourceText = resourceText;
-
-                switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                        final String ruleId = mPushesRuleByResourceId.get(fResourceText);
-                        BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-
-                        if (null != rule) {
-                            displayLoadingView();
-                            mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
-
-                                private void onDone() {
-                                    hideLoadingView();
-
-                                    BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-                                    Boolean isEnabled = ((null != rule) && rule.isEnabled);
-
-                                    if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
-                                        isEnabled = !isEnabled;
-                                    }
-
-                                    final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putBoolean(fResourceText, isEnabled);
-                                    editor.commit();
-                                    hideLoadingView(true);
-                                }
-
-                                @Override
-                                public void onBingRuleUpdateSuccess() {
-                                    onDone();
-                                }
-
-                                @Override
-                                public void onBingRuleUpdateFailure(String errorMessage) {
-                                    onDone();
-                                }
-                            });
-                        }
-                        return false;
-                    }
-                });
-            }
-        }
-
-
-        final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
-        displaynamePref.setSummary(mSession.getMyUser().displayname);
-        displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+    /**
+     * Update a push rule.
+     */
+    private void onPushRuleClick(final String fResourceText) {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                final String value = (String) newValue;
+            public void run() {
+                final String ruleId = mPushesRuleByResourceId.get(fResourceText);
+                BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
 
-                if (!TextUtils.equals(mSession.getMyUser().displayname, value)) {
+                if (null != rule) {
                     displayLoadingView();
+                    mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
 
-                    mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void info) {
-                            displaynamePref.setSummary(value);
+                        private void onDone() {
                             hideLoadingView();
+
+                            BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
+                            Boolean isEnabled = ((null != rule) && rule.isEnabled);
+
+                            if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                                isEnabled = !isEnabled;
+                            }
+
+                            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean(fResourceText, isEnabled);
+                            editor.commit();
+                            hideLoadingView(true);
                         }
 
                         @Override
-                        public void onNetworkError(Exception e) {
-                            hideLoadingView();
+                        public void onBingRuleUpdateSuccess() {
+                            onDone();
                         }
 
                         @Override
-                        public void onMatrixError(MatrixError e) {
-                            hideLoadingView();
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            hideLoadingView();
+                        public void onBingRuleUpdateFailure(String errorMessage) {
+                            onDone();
                         }
                     });
                 }
-                return true;
             }
         });
+    }
 
-        refreshDisplay();
+    /**
+     * Update the displayname.
+     */
+    private void onDisplayNameClick(String value) {
+        if (!TextUtils.equals(mSession.getMyUser().displayname, value)) {
+            displayLoadingView();
+
+            mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    hideLoadingView(true);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    hideLoadingView();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    hideLoadingView();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    hideLoadingView();
+                }
+            });
+        }
+    }
+
+    /**
+     * Update the avatar.
+     */
+    private void onUpdateAvatarClick() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
+                startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
+            }
+        });
     }
 
     @Override
@@ -399,7 +450,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             if (null != data) {
-                Uri mThumbnailUri = null;
+                Uri thumbnailUri = null;
 
                 if (null != data) {
                     ClipData clipData = null;
@@ -411,17 +462,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                     // multiple data
                     if (null != clipData) {
                         if (clipData.getItemCount() > 0) {
-                            mThumbnailUri = clipData.getItemAt(0).getUri();
+                            thumbnailUri = clipData.getItemAt(0).getUri();
                         }
                     } else if (null != data.getData()) {
-                        mThumbnailUri = data.getData();
+                        thumbnailUri = data.getData();
                     }
                 }
 
                 Bitmap thumbnail = null;
 
-                if (null != mThumbnailUri) {
-                    thumbnail = VectorUtils.getBitmapFromuri(getActivity(), mThumbnailUri);
+                if (null != thumbnailUri) {
+                    thumbnail = VectorUtils.getBitmapFromuri(getActivity(), thumbnailUri);
                 }
 
                 String thumbnailURL = mSession.getMediasCache().saveBitmap(thumbnail, null);
