@@ -178,10 +178,8 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
             }
         }
 
-
         @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
+        public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.vector_settings_preferences);
 
@@ -201,6 +199,38 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
                     return true;
                 }
             });
+
+            // application version
+            EditTextPreference versionTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
+            if (null != versionTextPreference) {
+                versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
+            }
+
+            // terms & conditions
+            EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_term_conditions));
+
+            if (null != termConditionsPreference) {
+                termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        VectorUtils.displayLicense(getActivity());
+                        return false;
+                    }
+                });
+            }
+
+            // clear cache
+            EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
+
+            if (null != clearCachePreference) {
+                clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Matrix.getInstance(getActivity()).reloadSessions(getActivity());
+                        return false;
+                    }
+                });
+            }
 
             // push rules
             for(String resourceText : mPushesRuleByResourceId.keySet()) {
