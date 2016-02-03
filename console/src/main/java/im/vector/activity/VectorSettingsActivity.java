@@ -15,100 +15,116 @@
  */
 package im.vector.activity;
 
-import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.ContentResponse;
-import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
-import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.ContentManager;
+import org.matrix.androidsdk.util.JsonUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.pref.AvatarPreference;
-import im.vector.util.ResourceUtils;
+import im.vector.fragments.VectorSettingsPreferencesFragment;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsActivity extends MXCActionBarActivity {
 
+    // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
+
+    // session
     private MXSession mSession;
 
-    private  MyPreferenceFragment mFragment;
+    // the UI items
+    private VectorSettingsPreferencesFragment mFragment;
 
-    public View mLoadingView;
+    MXEventListener mEventsListener = new MXEventListener() {
+        private void refresh() {
+            refreshPreferences();
+            refreshPreferencesDisplay();
+        }
 
-    private static String mLatestTakePictureCameraUri = null;
+        @Override
+        public void onBingRulesUpdate() {
+            refresh();
+        }
+
+        @Override
+        public void onAccountInfoUpdate(MyUser myUser) {
+            refresh();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent intent = getIntent();
+        mSession = getSession(intent);
+
+        if (null == mSession) {
+            mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
+        }
+
+        if (mSession == null) {
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_vector_settings);
 
-        // get the loading view
-        mLoadingView = findViewById(R.id.vector_settings_spinner_views);
+        refreshPreferences();
 
-        // TODO the matrix id must be passed in parameter
-        mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
-
-        mFragment = new MyPreferenceFragment();
-        mFragment.mSession = mSession;
-        initPreferences();
-
+        // display the fragment
+        mFragment = VectorSettingsPreferencesFragment.newInstance(mSession.getMyUser().userId, mPushesRuleByResourceId);
         getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSession.getDataHandler().removeListener(mEventsListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSession.getDataHandler().addListener(mEventsListener);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        // pass the result to the fragment
         mFragment.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initPreferences() {
+    /**
+     * Refresh the fragment display.
+     */
+    private void refreshPreferencesDisplay() {
+        if (null != mFragment) {
+            mFragment.refreshDisplay();
+        }
+    }
+
+    /**
+     * Refresh the known information about the account
+     */
+    private void refreshPreferences() {
         if (null == mPushesRuleByResourceId) {
             mPushesRuleByResourceId = new HashMap<String, String>();
 
@@ -127,396 +143,21 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
 
         BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
 
-        for(String resourceText : mPushesRuleByResourceId.keySet()) {
-            String ruleId = mPushesRuleByResourceId.get(resourceText);
+        if (null != mBingRuleSet) {
+            for (String resourceText : mPushesRuleByResourceId.keySet()) {
+                String ruleId = mPushesRuleByResourceId.get(resourceText);
 
-            BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
-            Boolean isEnabled = ((null != rule) && rule.isEnabled);
+                BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
+                Boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-            if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
-                isEnabled = !isEnabled;
+                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                    isEnabled = !isEnabled;
+                }
+
+                editor.putBoolean(resourceText, isEnabled);
             }
-
-            editor.putBoolean(resourceText, isEnabled);
         }
 
         editor.commit();
-    }
-
-    public static class MyPreferenceFragment extends PreferenceFragment
-    {
-        public MXSession mSession;
-        private View mLoadingView;
-
-        private void displayLoadingView() {
-            mLoadingView.setVisibility(View.VISIBLE);
-        }
-
-        private void hideLoadingView() {
-            hideLoadingView(false);
-        }
-        private void hideLoadingView(Boolean refresh) {
-            mLoadingView.setVisibility(View.GONE);
-
-            if (refresh) {
-                refresh();
-            }
-        }
-
-        private void refresh() {
-            PreferenceManager preferenceManager = getPreferenceManager();
-
-            // refresh the avatar
-            AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
-            avatarPreference.refreshAvatar();
-
-            // refresh the display name
-            final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
-            displaynamePref.setSummary(mSession.getMyUser().displayname);
-
-            // update the push rules
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-            for(String resourceText : mPushesRuleByResourceId.keySet()) {
-                SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
-
-                if (null != switchPreference) {
-                    switchPreference.setChecked(preferences.getBoolean(resourceText, false));
-                }
-            }
-        }
-
-        @Override
-        public void onCreate(final Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.vector_settings_preferences);
-
-            mLoadingView = ((VectorSettingsActivity)getActivity()).mLoadingView;
-
-            final PreferenceManager preferenceManager = getPreferenceManager();
-
-            AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
-            avatarPreference.setSession(mSession);
-            avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                    intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
-                    startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
-
-                    return false;
-                }
-            });
-
-            EditTextPreference passwordPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
-            passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                    final View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_change_password, null);
-                    alertDialog.setView(view);
-                    alertDialog.setTitle(getString(R.string.settings_change_password));
-
-                    final EditText oldPasswordText = (EditText)view.findViewById(R.id.change_password_old_pwd_text);
-                    final EditText newPasswordText = (EditText)view.findViewById(R.id.change_password_new_pwd_text);
-                    final EditText confirmNewPasswordText = (EditText)view.findViewById(R.id.change_password_confirm_new_pwd_text);
-
-                    // Setting Positive "Yes" Button
-                    alertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-
-                            String oldPwd = oldPasswordText.getText().toString().trim();
-                            String newPwd = newPasswordText.getText().toString().trim();
-
-                            displayLoadingView();
-
-                            mSession.updatePassword(oldPwd, newPwd, new ApiCallback<Void>() {
-                                private void onDone(String message) {
-                                    hideLoadingView();
-
-                                    Toast.makeText(getActivity(),
-                                            message,
-                                            Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onSuccess(Void info) {
-                                    onDone(getActivity().getResources().getString(R.string.settings_password_updated));
-                                }
-
-                                @Override
-                                public void onNetworkError(Exception e) {
-                                    onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
-                                }
-
-                                @Override
-                                public void onUnexpectedError(Exception e) {
-                                    onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
-                                }
-                            });
-                        }
-                    });
-
-                    // Setting Negative "NO" Button
-                    alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-                        }
-                    });
-
-                    AlertDialog dialog = alertDialog.show();
-
-                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-                        }
-                    });
-
-                    final Button saveButton =  dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    saveButton.setEnabled(false);
-
-                    confirmNewPasswordText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            String oldPwd = oldPasswordText.getText().toString().trim();
-                            String newPwd = newPasswordText.getText().toString().trim();
-                            String newConfirmPwd = confirmNewPasswordText.getText().toString().trim();
-
-                            saveButton.setEnabled((oldPwd.length() > 0) && (newPwd.length() > 0) && TextUtils.equals(newPwd, newConfirmPwd));
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-
-                    return false;
-                }
-            });
-
-            // application version
-            EditTextPreference versionTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
-            if (null != versionTextPreference) {
-                versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
-            }
-
-            // terms & conditions
-            EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_term_conditions));
-
-            if (null != termConditionsPreference) {
-                termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        VectorUtils.displayLicense(getActivity());
-                        return false;
-                    }
-                });
-            }
-
-            // clear cache
-            EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
-
-            if (null != clearCachePreference) {
-                clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Matrix.getInstance(getActivity()).reloadSessions(getActivity());
-                        return false;
-                    }
-                });
-            }
-
-            // push rules
-            for(String resourceText : mPushesRuleByResourceId.keySet()) {
-                final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
-
-                if (null != switchPreference) {
-                    final String fResourceText = resourceText;
-
-                    switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                            final String ruleId = mPushesRuleByResourceId.get(fResourceText);
-                            BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-
-                            if (null != rule) {
-                                displayLoadingView();
-                                mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
-
-                                    private void onDone() {
-                                        hideLoadingView();
-
-                                        BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-                                        Boolean isEnabled = ((null != rule) && rule.isEnabled);
-
-                                        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
-                                            isEnabled = !isEnabled;
-                                        }
-
-                                        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putBoolean(fResourceText, isEnabled);
-                                        editor.commit();
-                                        hideLoadingView(true);
-                                    }
-
-                                    @Override
-                                    public void onBingRuleUpdateSuccess() {
-                                        onDone();
-                                    }
-
-                                    @Override
-                                    public void onBingRuleUpdateFailure(String errorMessage) {
-                                        onDone();
-                                    }
-                                });
-                            }
-                            return false;
-                        }
-                    });
-                }
-            }
-
-
-            final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
-            displaynamePref.setSummary(mSession.getMyUser().displayname);
-            displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    final String value = (String) newValue;
-
-                    if (!TextUtils.equals(mSession.getMyUser().displayname, value)) {
-                        displayLoadingView();
-
-                        mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void info) {
-                                displaynamePref.setSummary(value);
-                                hideLoadingView();
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                hideLoadingView();
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                hideLoadingView();
-                            }
-
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                                hideLoadingView();
-                            }
-                        });
-                    }
-                    return true;
-                }
-            });
-
-            refresh();
-        }
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, final Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-
-            if (resultCode == RESULT_OK) {
-                if (null != data) {
-                    Uri mThumbnailUri = null;
-
-                    if (null != data) {
-                        ClipData clipData = null;
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                            clipData = data.getClipData();
-                        }
-
-                        // multiple data
-                        if (null != clipData) {
-                            if (clipData.getItemCount() > 0) {
-                                mThumbnailUri = clipData.getItemAt(0).getUri();
-                            }
-                        } else if (null != data.getData()) {
-                            mThumbnailUri = data.getData();
-                        }
-                    }
-
-                    Bitmap thumbnail = null;
-
-                    if (null != mThumbnailUri) {
-                        thumbnail = VectorUtils.getBitmapFromuri(getActivity(), mThumbnailUri);
-                    }
-
-                    String thumbnailURL = mSession.getMediasCache().saveBitmap(thumbnail, null);
-
-                    if (null != thumbnailURL) {
-                        displayLoadingView();
-
-                        ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailURL));
-
-                        mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
-                            @Override
-                            public void onUploadStart(String uploadId) {
-                            }
-
-                            @Override
-                            public void onUploadProgress(String anUploadId, int percentageProgress) {
-                            }
-
-                            @Override
-                            public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                            mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
-                                                @Override
-                                                public void onSuccess(Void info) {
-                                                    hideLoadingView(true);
-                                                }
-
-                                                @Override
-                                                public void onNetworkError(Exception e) {
-                                                    hideLoadingView(false);
-                                                }
-
-                                                @Override
-                                                public void onMatrixError(MatrixError e) {
-                                                    hideLoadingView(false);
-                                                }
-
-                                                @Override
-                                                public void onUnexpectedError(Exception e) {
-                                                    hideLoadingView(false);
-                                                }
-                                            });
-                                        } else {
-                                            hideLoadingView(false);
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }
-            }
-        }
     }
 }

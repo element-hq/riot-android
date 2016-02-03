@@ -595,6 +595,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
+                        settingsIntent.putExtra(EXTRA_MATRIX_ID, mSession.getMyUser().userId);
                         VectorHomeActivity.this.startActivity(settingsIntent);
                         break;
                     }

@@ -5,18 +5,18 @@
 
     <PreferenceCategory android:title="@string/settings_user_settings" >
 
-        <im.vector.pref.AvatarPreference
+        <im.vector.preference.AvatarPreference
             android:title="@string/settings_profile_picture"
             android:key="matrixId">
-        </im.vector.pref.AvatarPreference>
+        </im.vector.preference.AvatarPreference>
 
-        <im.vector.pref.VectorEditTextPreference
+        <im.vector.preference.VectorEditTextPreference
             android:focusable="true"
             android:title="@string/settings_display_name"
             android:summary="@string/settings_display_name"
             android:key="@string/settings_display_name"/>
 
-        <im.vector.pref.VectorCustomActionEditTextPreference
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_change_password"
             android:summary="********"
             android:key="@string/settings_change_password"/>
@@ -57,20 +57,20 @@
 
     <PreferenceCategory android:title="@string/settings_other" >
 
-        <im.vector.pref.VectorCustomActionEditTextPreference
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_version"
             android:summary="1.2.3"
             android:key="@string/settings_version"/>
 
-        <im.vector.pref.VectorCustomActionEditTextPreference
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_term_conditions"
             android:key="@string/settings_term_conditions"/>
 
-        <im.vector.pref.VectorCustomActionEditTextPreference
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_privacy_policy"
             android:key="@string/settings_privacy_policy"/>
 
-        <im.vector.pref.VectorCustomActionEditTextPreference
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_clear_cache"
             android:key="@string/settings_clear_cache"/>
 
