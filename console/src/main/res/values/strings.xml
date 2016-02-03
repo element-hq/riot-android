@@ -417,7 +417,6 @@
     <string name="settings_first_name">First Name</string>
     <string name="settings_surname">Surname</string>
     <string name="settings_email_address">Email Address</string>
-    <string name="settings_change_password">Change password</string>
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
 
@@ -438,10 +437,11 @@
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
 
-    <string-array name="settings_take_choose_photo">
-        <item>"Take photo"</item>
-        <item>"Choose photo"</item>
-    </string-array>
-
+    <string name="settings_change_password">Change password</string>
+    <string name="settings_old_password">old password</string>
+    <string name="settings_new_password">new password</string>
+    <string name="settings_confirm_password">confirm password</string>
+    <string name="settings_fail_to_update_password">Fail to update password</string>
+    <string name="settings_password_updated">Your password has been updated</string>
 
 </resources>

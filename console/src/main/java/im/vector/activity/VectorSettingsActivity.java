@@ -35,12 +35,19 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -196,7 +203,107 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
                     startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
 
-                    return true;
+                    return false;
+                }
+            });
+
+            EditTextPreference passwordPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
+            passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                    final View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_change_password, null);
+                    alertDialog.setView(view);
+                    alertDialog.setTitle(getString(R.string.settings_change_password));
+
+                    final EditText oldPasswordText = (EditText)view.findViewById(R.id.change_password_old_pwd_text);
+                    final EditText newPasswordText = (EditText)view.findViewById(R.id.change_password_new_pwd_text);
+                    final EditText confirmNewPasswordText = (EditText)view.findViewById(R.id.change_password_confirm_new_pwd_text);
+
+                    // Setting Positive "Yes" Button
+                    alertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+
+                            String oldPwd = oldPasswordText.getText().toString().trim();
+                            String newPwd = newPasswordText.getText().toString().trim();
+
+                            displayLoadingView();
+
+                            mSession.updatePassword(oldPwd, newPwd, new ApiCallback<Void>() {
+                                private void onDone(String message) {
+                                    hideLoadingView();
+
+                                    Toast.makeText(getActivity(),
+                                            message,
+                                            Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onSuccess(Void info) {
+                                    onDone(getActivity().getResources().getString(R.string.settings_password_updated));
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
+                                }
+                            });
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
+                    });
+
+                    AlertDialog dialog = alertDialog.show();
+
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
+                    });
+
+                    final Button saveButton =  dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    saveButton.setEnabled(false);
+
+                    confirmNewPasswordText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            String oldPwd = oldPasswordText.getText().toString().trim();
+                            String newPwd = newPasswordText.getText().toString().trim();
+                            String newConfirmPwd = confirmNewPasswordText.getText().toString().trim();
+
+                            saveButton.setEnabled((oldPwd.length() > 0) && (newPwd.length() > 0) && TextUtils.equals(newPwd, newConfirmPwd));
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+
+                    return false;
                 }
             });
 
