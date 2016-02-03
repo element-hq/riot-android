@@ -180,32 +180,6 @@
     <string name="invite_this_user_to_use_matrix">Invite this user to use matrix with</string>
     <string name="invitation_message">I\'d like to chat with you with Vector. Please, visit the website http://vector.im to have more information.</string>
 
-    <!-- Settings screen -->
-
-    <string name="settings_webclient_push">To configure global notification settings (like rules), go find a webclient and hit Settings > Notifications.</string>
-
-    <string name="settings_title_profile">Profile information</string>
-    <string name="settings_title_gcm">Google cloud messaging (GCM)</string>
-    <string name="settings_title_config">Configuration</string>
-    <string name="settings_title_notifications">Notifications</string>
-    <string name="settings_title_notifications_rules">Update Notifications Rules</string>
-    <string name="settings_title_rooms">Rooms</string>
-    <string name="settings_title_commands">Commands</string>
-    <string name="settings_bugs_report">Bug Reports</string>
-
-    <string name="settings_config_console_version">matrixConsole version: %s</string>
-    <string name="settings_config_sdk_version">SDK version: %s</string>
-    <string name="settings_config_build_number">Build: %s</string>
-
-    <string name="settings_display_all_events">Display all events</string>
-    <string name="settings_hide_redactions">Hide redactions</string>
-    <string name="settings_hide_unsupported_events">Hide unsupported events</string>
-    <string name="settings_sort_by_last_seen">Sort members by last seen time</string>
-    <string name="settings_display_left_members">Display left members</string>
-    <string name="settings_clear_cache">Clear cache</string>
-    <string name="settings_display_public_rooms">Display public rooms with recents</string>
-    <string name="settings_rage_shake">Rageshaking to submit bug reports</string>
-
     <!-- Notification settings screen -->
     <string name="notification_settings_title">Notification Settings</string>
     <string name="notification_settings_disable_all">Disable all notifications</string>
@@ -431,4 +405,43 @@
     <string name="room_sliding_menu_version">Version </string>
     <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
     <string name="room_sliding_privacy_policy">Privacy policy</string>
+
+    // Vector Settings
+    <string name="account_logout_all">Logout all accounts</string>
+    <string name="settings_config_no_build_info">(no build info)</string>
+    <string name="settings_title_config">Configuration</string>
+
+    <string name="settings_sign_out">Sign Out</string>
+    <string name="settings_profile_picture">Profile Picture</string>
+    <string name="settings_display_name">Display Name</string>
+    <string name="settings_first_name">First Name</string>
+    <string name="settings_surname">Surname</string>
+    <string name="settings_email_address">Email Address</string>
+    <string name="settings_phone_number">Phone Number</string>
+    <string name="settings_night_mode">Night Mode</string>
+
+    <string name="settings_enable_all_notif">Enable all notifications</string>
+    <string name="settings_general_messages">General messages</string>
+    <string name="settings_messages_my_display_name">Msg containing my display name</string>
+    <string name="settings_messages_my_user_name">Msg containing my user name</string>
+    <string name="settings_messages_sent_to_me">Messages sent to me</string>
+    <string name="settings_invited_to_room">When i m invited to a room</string>
+    <string name="settings_call_invitations">Call invitations</string>
+
+    <string name="settings_version">Version</string>
+    <string name="settings_term_conditions">Terms &amp; conditions</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_clear_cache">Clear cache</string>
+
+    <string name="settings_user_settings">User settings</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_other">Other</string>
+
+    <string name="settings_change_password">Change password</string>
+    <string name="settings_old_password">old password</string>
+    <string name="settings_new_password">new password</string>
+    <string name="settings_confirm_password">confirm password</string>
+    <string name="settings_fail_to_update_password">Fail to update password</string>
+    <string name="settings_password_updated">Your password has been updated</string>
+
 </resources>

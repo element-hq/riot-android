@@ -152,7 +152,7 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.SettingsActivity"
+            android:name="im.vector.activity.VectorSettingsActivity"
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="stateHidden"
             android:parentActivityName="im.vector.activity.VectorHomeActivity">
@@ -166,11 +166,11 @@
             android:name="im.vector.activity.NotificationSettingsActivity"
             android:label="@string/title_activity_notification_settings"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="im.vector.activity.SettingsActivity">
+            android:parentActivityName="im.vector.activity.VectorSettingsActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.SettingsActivity"/>
+                android:value="im.vector.activity.VectorSettingsActivity"/>
         </activity>
 
 

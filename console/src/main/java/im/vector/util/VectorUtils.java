@@ -17,15 +17,19 @@ package im.vector.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.util.LruCache;
 import android.text.Html;
 import android.text.Layout;
@@ -34,6 +38,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,17 +52,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import im.vector.R;
 import im.vector.db.ConsoleContentProvider;
 
 public class VectorUtils {
+
+    public static final String LOG_TAG = "VectorUtils";
+    
+    public static final int REQUEST_FILES = 0;
+    public static final int TAKE_IMAGE = 1;
 
     //==============================================================================================================
     // Rooms methods
@@ -453,5 +466,29 @@ public class VectorUtils {
 
         // allow link to be clickable
         ((TextView)mMainAboutDialog.findViewById(android.R.id.message)).setMovementMethod(mMovementCheck);
+    }
+
+    //==============================================================================================================
+    // About / terms and conditions
+    //==============================================================================================================
+
+    /**
+     * return the bitmap from a resource.
+     * @param mediaUri the media URI.
+     * @return the bitmap, null if it fails.
+     */
+    public static Bitmap getBitmapFromuri(Context context, Uri mediaUri) {
+        if (null != mediaUri) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+
+            // sanity checks
+            if ((null != resource) && (null != resource.contentStream)) {
+                return BitmapFactory.decodeStream(resource.contentStream, null, options);
+            }
+        }
+
+        return null;
     }
 }

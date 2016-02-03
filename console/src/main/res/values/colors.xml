@@ -28,6 +28,9 @@
 
     <color name="vector_d8_gray">#FFD8D8D8</color>
     <color name="vector_4d_gray">#FF4D4D4D</color>
+    <color name="vector_74_gray">#FF747474</color>
+    <color name="vector_dc_gray">#FFDCDCDC</color>
     <color name="vector_54_black">#8A000000</color>
+    <color name="vector_25_black">#25000000</color>
 
 </resources>
