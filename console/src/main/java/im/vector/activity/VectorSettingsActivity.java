@@ -33,6 +33,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -177,10 +178,10 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             for(String resourceText : mPushesRuleByResourceId.keySet()) {
-                CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
+                SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
 
-                if (null != checkBoxPreference) {
-                    checkBoxPreference.setChecked(preferences.getBoolean(resourceText, false));
+                if (null != switchPreference) {
+                    switchPreference.setChecked(preferences.getBoolean(resourceText, false));
                 }
             }
         }
@@ -341,12 +342,12 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
 
             // push rules
             for(String resourceText : mPushesRuleByResourceId.keySet()) {
-                final CheckBoxPreference checkBoxPreference = (CheckBoxPreference)preferenceManager.findPreference(resourceText);
+                final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
 
-                if (null != checkBoxPreference) {
+                if (null != switchPreference) {
                     final String fResourceText = resourceText;
 
-                    checkBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
 
