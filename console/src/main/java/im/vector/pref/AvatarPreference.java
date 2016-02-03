@@ -53,4 +53,11 @@ public class AvatarPreference extends EditTextPreference {
         mSession = session;
         refreshAvatar();
     }
+
+    public void performClick(PreferenceScreen preferenceScreen) {
+        // call only the click listener
+        if (getOnPreferenceClickListener() != null && getOnPreferenceClickListener().onPreferenceClick(this)) {
+            getOnPreferenceClickListener().onPreferenceClick(this);
+        }
+    }
 }

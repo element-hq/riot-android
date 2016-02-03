@@ -438,4 +438,10 @@
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
 
+    <string-array name="settings_take_choose_photo">
+        <item>"Take photo"</item>
+        <item>"Choose photo"</item>
+    </string-array>
+
+
 </resources>

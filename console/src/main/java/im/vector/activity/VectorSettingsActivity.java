@@ -15,38 +15,64 @@
  */
 package im.vector.activity;
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
+import org.matrix.androidsdk.util.BingRulesManager;
+import org.matrix.androidsdk.util.ContentManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.pref.AvatarPreference;
+import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsActivity extends MXCActionBarActivity {
 
     private static HashMap<String, String> mPushesRuleByResourceId = null;
     private MXSession mSession;
+
+    private  MyPreferenceFragment mFragment;
+
     public View mLoadingView;
+
+    private static String mLatestTakePictureCameraUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +86,18 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         // TODO the matrix id must be passed in parameter
         mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
 
-        MyPreferenceFragment fragment = new MyPreferenceFragment();
-        fragment.mSession = mSession;
-
+        mFragment = new MyPreferenceFragment();
+        mFragment.mSession = mSession;
         initPreferences();
 
-        getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        mFragment.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initPreferences() {
@@ -93,8 +125,7 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
             BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
             Boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-            // this rule is the opposite of the bingrules
-            if (TextUtils.equals(resourceText, getResources().getString(R.string.settings_enable_all_notif))) {
+            if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
                 isEnabled = !isEnabled;
             }
 
@@ -114,8 +145,39 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         }
 
         private void hideLoadingView() {
-            mLoadingView.setVisibility(View.GONE);
+            hideLoadingView(false);
         }
+        private void hideLoadingView(Boolean refresh) {
+            mLoadingView.setVisibility(View.GONE);
+
+            if (refresh) {
+                refresh();
+            }
+        }
+
+        private void refresh() {
+            PreferenceManager preferenceManager = getPreferenceManager();
+
+            // refresh the avatar
+            AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+            avatarPreference.refreshAvatar();
+
+            // refresh the display name
+            final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
+            displaynamePref.setSummary(mSession.getMyUser().displayname);
+
+            // update the push rules
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            for(String resourceText : mPushesRuleByResourceId.keySet()) {
+                CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
+
+                if (null != checkBoxPreference) {
+                    checkBoxPreference.setChecked(preferences.getBoolean(resourceText, false));
+                }
+            }
+        }
+
 
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -125,60 +187,198 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
 
             mLoadingView = ((VectorSettingsActivity)getActivity()).mLoadingView;
 
-            PreferenceManager preferenceManager = getPreferenceManager();
+            final PreferenceManager preferenceManager = getPreferenceManager();
 
             AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
             avatarPreference.setSession(mSession);
             avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-
-                    /*
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
-                    startActivityForResult(intent, 1);*/
+                    Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
+                    intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
+                    startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
 
                     return true;
                 }
             });
+
+            // push rules
+            for(String resourceText : mPushesRuleByResourceId.keySet()) {
+                final CheckBoxPreference checkBoxPreference = (CheckBoxPreference)preferenceManager.findPreference(resourceText);
+
+                if (null != checkBoxPreference) {
+                    final String fResourceText = resourceText;
+
+                    checkBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                            final String ruleId = mPushesRuleByResourceId.get(fResourceText);
+                            BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
+
+                            if (null != rule) {
+                                displayLoadingView();
+                                mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
+
+                                    private void onDone() {
+                                        hideLoadingView();
+
+                                        BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
+                                        Boolean isEnabled = ((null != rule) && rule.isEnabled);
+
+                                        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                                            isEnabled = !isEnabled;
+                                        }
+
+                                        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putBoolean(fResourceText, isEnabled);
+                                        editor.commit();
+                                        hideLoadingView(true);
+                                    }
+
+                                    @Override
+                                    public void onBingRuleUpdateSuccess() {
+                                        onDone();
+                                    }
+
+                                    @Override
+                                    public void onBingRuleUpdateFailure(String errorMessage) {
+                                        onDone();
+                                    }
+                                });
+                            }
+                            return false;
+                        }
+                    });
+                }
+            }
+
 
             final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
             displaynamePref.setSummary(mSession.getMyUser().displayname);
             displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    final String value = (String)newValue;
+                    final String value = (String) newValue;
 
                     if (!TextUtils.equals(mSession.getMyUser().displayname, value)) {
                         displayLoadingView();
 
                         mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
                             @Override
-                                    public void onSuccess(Void info) {
-                                        displaynamePref.setSummary(value);
-                                        hideLoadingView();
-                                    }
+                            public void onSuccess(Void info) {
+                                displaynamePref.setSummary(value);
+                                hideLoadingView();
+                            }
 
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        hideLoadingView();
-                                    }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                hideLoadingView();
+                            }
 
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        hideLoadingView();
-                                    }
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                hideLoadingView();
+                            }
 
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        hideLoadingView();
-                                    }
-                                });
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                hideLoadingView();
+                            }
+                        });
                     }
                     return true;
                 }
             });
+
+            refresh();
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (resultCode == RESULT_OK) {
+                if (null != data) {
+                    Uri mThumbnailUri = null;
+
+                    if (null != data) {
+                        ClipData clipData = null;
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            clipData = data.getClipData();
+                        }
+
+                        // multiple data
+                        if (null != clipData) {
+                            if (clipData.getItemCount() > 0) {
+                                mThumbnailUri = clipData.getItemAt(0).getUri();
+                            }
+                        } else if (null != data.getData()) {
+                            mThumbnailUri = data.getData();
+                        }
+                    }
+
+                    Bitmap thumbnail = null;
+
+                    if (null != mThumbnailUri) {
+                        thumbnail = VectorUtils.getBitmapFromuri(getActivity(), mThumbnailUri);
+                    }
+
+                    String thumbnailURL = mSession.getMediasCache().saveBitmap(thumbnail, null);
+
+                    if (null != thumbnailURL) {
+                        displayLoadingView();
+
+                        ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailURL));
+
+                        mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
+                            @Override
+                            public void onUploadStart(String uploadId) {
+                            }
+
+                            @Override
+                            public void onUploadProgress(String anUploadId, int percentageProgress) {
+                            }
+
+                            @Override
+                            public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
+                                            mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                                                @Override
+                                                public void onSuccess(Void info) {
+                                                    hideLoadingView(true);
+                                                }
+
+                                                @Override
+                                                public void onNetworkError(Exception e) {
+                                                    hideLoadingView(false);
+                                                }
+
+                                                @Override
+                                                public void onMatrixError(MatrixError e) {
+                                                    hideLoadingView(false);
+                                                }
+
+                                                @Override
+                                                public void onUnexpectedError(Exception e) {
+                                                    hideLoadingView(false);
+                                                }
+                                            });
+                                        } else {
+                                            hideLoadingView(false);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
         }
     }
 }
