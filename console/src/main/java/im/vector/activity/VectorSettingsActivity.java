@@ -96,13 +96,19 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mSession.getDataHandler().removeListener(mEventsListener);
+
+        if (mSession.isActive()) {
+            mSession.getDataHandler().removeListener(mEventsListener);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSession.getDataHandler().addListener(mEventsListener);
+
+        if (mSession.isActive()) {
+            mSession.getDataHandler().addListener(mEventsListener);
+        }
     }
 
     @Override
