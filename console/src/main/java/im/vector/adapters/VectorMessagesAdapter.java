@@ -331,6 +331,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 if (TextUtils.equals(eventId, mHighlightedEventId)) {
                     int i = 0;
                     i++;
+                } else {
+                    onEventTap(eventId);
                 }
             }
         });
