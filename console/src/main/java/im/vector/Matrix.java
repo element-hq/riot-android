@@ -216,7 +216,7 @@ public class Matrix {
      * @return true if the matrix client instance defines a valid session
      */
     public static Boolean hasValidSessions() {
-        return (null != instance) && (instance.mMXSessions.size() > 0);
+        return (null != instance) && (null != instance.mMXSessions) && (instance.mMXSessions.size() > 0);
     }
 
     /**
