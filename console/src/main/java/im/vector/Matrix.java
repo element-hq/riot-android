@@ -3,6 +3,7 @@ package im.vector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
@@ -26,6 +27,8 @@ import java.util.Collection;
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
  */
 public class Matrix {
+
+    private static final String LOG_TAG = "Matrix";
 
     private static Matrix instance = null;
 
@@ -216,7 +219,22 @@ public class Matrix {
      * @return true if the matrix client instance defines a valid session
      */
     public static Boolean hasValidSessions() {
-        return (null != instance) && (null != instance.mMXSessions) && (instance.mMXSessions.size() > 0);
+        if (null == instance) {
+            Log.e(LOG_TAG, "hasValidSessions : has no instance");
+            return false;
+        }
+
+        Boolean res;
+
+        synchronized (instance) {
+            res = (null != instance.mMXSessions) && (instance.mMXSessions.size() > 0);
+
+            if (!res) {
+                Log.e(LOG_TAG, "hasValidSessions : has no session");
+            }
+        }
+
+        return res;
     }
 
     /**
