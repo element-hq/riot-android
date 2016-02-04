@@ -58,6 +58,9 @@ import java.util.List;
  */
 public class VectorMessagesAdapter extends MessagesAdapter {
 
+    // an event is highlighted when the user taps on it
+    private String mHighlightedEventId;
+
     protected Date mReferenceDate = new Date();
     protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     protected Handler mUiHandler;
@@ -74,6 +77,27 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         // for dispatching data to add to the adapter we need to be on the main thread
         mUiHandler = new Handler(Looper.getMainLooper());
+    }
+
+    /**
+     * Toogle the selection mode.
+     * @param eventId the tapped eventID.
+     */
+    public void onEventTap(String eventId) {
+        if (null == mHighlightedEventId) {
+            mHighlightedEventId = eventId;
+        } else {
+            mHighlightedEventId = null;
+        }
+
+        notifyDataSetChanged();
+    }
+
+    /**
+     * @return true if there is a selected item.
+     */
+    public boolean isInSelectionMode() {
+        return null != mHighlightedEventId;
     }
 
     /**
@@ -205,8 +229,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void refreshReceiverLayout(final LinearLayout receiversLayout, final boolean leftAlign, final String eventId, final RoomState roomState) {
-        // replaced by displayReadReceipts
-        receiversLayout.setVisibility(View.GONE);
+        if (null != receiversLayout) {
+            // replaced by displayReadReceipts
+            receiversLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -274,12 +300,48 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
     }
 
+    /**
+     * Manage the select mode i.e highlight an item when the user tap on it
+     * @param convertView teh cell view.
+     * @param event the linked event
+     */
+    private void manageSelectionMode(final View convertView, final Event event) {
+        final String eventId = event.eventId;
+
+        boolean isInSelectionMode = (null != mHighlightedEventId);
+        boolean isHighlighted = TextUtils.equals(eventId, mHighlightedEventId);
+
+        // display the action icon when selected
+        convertView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isHighlighted ? View.VISIBLE : View.GONE);
+
+        float alpha = (!isInSelectionMode || isHighlighted) ? 1.0f : 0.2f;
+
+        // the message body is dimmed when not selected
+        convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
+        convertView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
+
+        TextView tsTextView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+        if (isInSelectionMode && isHighlighted) {
+            tsTextView.setVisibility(View.VISIBLE);
+        }
+
+        convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                    int i = 0;
+                    i++;
+                }
+            }
+        });
+    }
+
     @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
         MessageRow row = getItem(position);
-        Event msg = row.getEvent();
+        Event event = row.getEvent();
 
-        // mother class call
+        // mother class implementation
         Boolean isMergedView = super.manageSubView(position, convertView, subView, msgType);
 
         // remove the message separator when it is not required
@@ -301,7 +363,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 }
             }
 
-            view.setVisibility(((null != nextUserId) && (nextUserId.equals(msg.getSender())) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
+            view.setVisibility(((null != nextUserId) && (nextUserId.equals(event.getSender())) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
         // display the day separator
@@ -333,8 +395,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         View avatarsListView = convertView.findViewById(R.id.messagesAdapter_avatars_list);
 
         if (null != avatarsListView) {
-            displayReadReceipts(avatarsListView, msg.eventId, row.getRoomState());
+            displayReadReceipts(avatarsListView, event.eventId, row.getRoomState());
         }
+
+        // selection mode
+        manageSelectionMode(convertView, event);
 
         return isMergedView;
     }

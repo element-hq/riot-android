@@ -8,6 +8,7 @@
         android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/messagesAdapter_body_view"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_width="match_parent"
@@ -33,8 +34,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <include layout="@layout/vector_message_timestamp"
-                    android:id="@+id/message_timestamp_layout_left"/>
 
                 <FrameLayout
                     android:layout_marginLeft="4dp"
@@ -163,11 +162,7 @@
                     android:id="@+id/message_timestamp_layout_right"/>
 
             </LinearLayout>
-
         </LinearLayout>
-
-        <include layout="@layout/vector_room_round_avatar"
-            android:id="@+id/messagesAdapter_roundAvatar_right"/>
     </LinearLayout>
 
     <include layout="@layout/vector_message_receipts_list"

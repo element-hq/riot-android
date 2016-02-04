@@ -461,12 +461,33 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     }
 
     /**
+     * Call when the row is clicked.
+     * @param position the cell position.
+     */
+    public void onRowClick(int position) {
+        MessageRow row = mAdapter.getItem(position);
+        Event event = row.getEvent();
+
+        // switch in section mode
+        ((VectorMessagesAdapter)mAdapter).onEventTap(event.eventId);
+    }
+
+    /**
      * Called when a click is performed on the message content
      * @param position the cell position
      */
     public void onContentClick(int position) {
         MessageRow row = mAdapter.getItem(position);
         Event event = row.getEvent();
+
+        VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter)mAdapter;
+
+        if (vectorMessagesAdapter.isInSelectionMode()) {
+            // cancel the selection mode.
+            vectorMessagesAdapter.onEventTap(null);
+            return;
+        }
+
         Message message = JsonUtils.toMessage(event.content);
 
         // image message -> display it within the medias swipper
@@ -523,6 +544,9 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                     getActivity().startActivity(viewImageIntent);
                 }
             }
+        } else {
+            // switch in section mode
+            vectorMessagesAdapter.onEventTap(event.eventId);
         }
     }
 
