@@ -21,13 +21,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -39,12 +43,15 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
 
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.util.VectorUtils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -329,8 +336,89 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             @Override
             public void onClick(View v) {
                 if (TextUtils.equals(eventId, mHighlightedEventId)) {
-                    int i = 0;
-                    i++;
+
+                    PopupMenu popup = new PopupMenu(mContext, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    popup.getMenuInflater().inflate(R.menu.vector_room_message_settings, popup.getMenu());
+
+
+                    MenuItem item;
+
+                   /* final BingRulesManager bingRulesManager = mMxSession.getDataHandler().getBingRulesManager();
+
+                    if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
+                        item = popup.getMenu().getItem(0);
+                        item.setIcon(null);
+                    }
+
+                    if (!isFavorite) {
+                        item = popup.getMenu().getItem(1);
+                        item.setIcon(null);
+                    }
+
+                    if (!isLowPrior) {
+                        item = popup.getMenu().getItem(2);
+                        item.setIcon(null);
+                    }
+
+                    item = popup.getMenu().getItem(3);
+                    SpannableString s = new SpannableString(item.getTitle());
+                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
+                    item.setTitle(s);
+                    */
+
+                    // force to display the icon
+                    try {
+                        Field[] fields = popup.getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            if ("mPopup".equals(field.getName())) {
+                                field.setAccessible(true);
+                                Object menuPopupHelper = field.get(popup);
+                                Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                                Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                                setForceIcons.invoke(menuPopupHelper, true);
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(final MenuItem item) {
+
+                            /*
+                            switch (item.getItemId()) {
+                                case R.id.ic_action_select_notifications: {
+                                    mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
+                                    break;
+                                }
+                                case R.id.ic_action_select_fav: {
+                                    if (isFavorite) {
+                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                                    } else {
+                                        mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
+                                    }
+                                    break;
+                                }
+                                case R.id.ic_action_select_deprioritize: {
+                                    if (isLowPrior) {
+                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                                    } else {
+                                        mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
+                                    }
+                                    break;
+                                }
+                                case R.id.ic_action_select_remove: {
+                                    mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
+                                    break;
+                                }
+                            }*/
+                            return false;
+                        }
+                    });
+
+                    popup.show();
+
                 } else {
                     onEventTap(eventId);
                 }

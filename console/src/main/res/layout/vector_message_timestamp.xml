@@ -7,6 +7,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/messagesAdapter_timestamp"
@@ -22,5 +24,13 @@
             android:layout_height="15dp"
             android:src="@drawable/vector_actions"/>
     </LinearLayout>
+
+    <View
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/messagesAdapter_action_anchor"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
+
 </RelativeLayout>
 
