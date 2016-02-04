@@ -3,44 +3,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/ic_action_view_profile"
+        android:id="@+id/ic_action_vector_view_profile"
         android:icon="@drawable/ic_material_identity"
         android:title="@string/view_profile"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/ic_action_direct_message"
+        android:id="@+id/ic_action_vector_direct_message"
         android:icon="@drawable/ic_material_message"
         android:title="@string/direct_message"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/ic_action_paste_user_name"
+        android:id="@+id/ic_action_vector_paste_user_name"
         android:icon="@drawable/ic_material_paste"
         android:title="@string/paste_username"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/ic_action_delete_message"
+        android:id="@+id/ic_action_vector_resend_message"
+        android:icon="@drawable/ic_material_send"
+        android:title="@string/resend"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_delete_message"
         android:icon="@drawable/ic_material_delete"
         android:title="@string/redact"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/ic_action_share"
+        android:id="@+id/ic_action_vector_copy"
+        android:icon="@drawable/ic_material_copy"
+        android:title="@string/copy"
+        app:showAsAction="never" />
+
+    <!--item
+        android:id="@+id/ic_action_vector_share"
         android:icon="@drawable/ic_material_share"
         android:title="@string/share"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/ic_action_forward"
+        android:id="@+id/ic_action_vector_forward"
         android:icon="@drawable/ic_material_forward"
         android:title="@string/forward"
-        app:showAsAction="always" />
+        app:showAsAction="never" /-->
 
     <item
-        android:id="@+id/ic_action_save"
+        android:id="@+id/ic_action_vector_save"
         android:icon="@drawable/ic_material_save"
         android:title="@string/save"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

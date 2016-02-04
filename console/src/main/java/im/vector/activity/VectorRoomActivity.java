@@ -690,7 +690,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                                     } catch (Exception e) {
                                         Log.e(LOG_TAG, "cursor.getString " + e.getMessage());
                                     } finally {
-                                        cursor.close();
+                                        if (null != cursor) {
+                                            cursor.close();
+                                        }
                                     }
 
                                     if (TextUtils.isEmpty(filename)) {

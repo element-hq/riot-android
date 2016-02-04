@@ -259,10 +259,9 @@
         <service android:name="im.vector.services.EventStreamService" />
 
         <provider
-            android:authorities="im.vector.ConsoleApplication.provider"
-            android:name="im.vector.db.ConsoleContentProvider"
-            android:exported="true" />
-
+            android:authorities="im.vector.VectorApp.provider"
+            android:name="im.vector.db.VectorContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>
