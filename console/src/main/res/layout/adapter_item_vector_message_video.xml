@@ -9,8 +9,8 @@
 
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="13dp"
+            android:layout_marginLeft="16dp"
             android:paddingBottom="5dp">
 
             <include layout="@layout/message_sender"/>

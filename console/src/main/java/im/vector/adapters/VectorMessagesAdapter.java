@@ -541,7 +541,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
             if (null != header) {
                 TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
-                headerText.setText(header.toUpperCase());
+                headerText.setText(header);
                 headerLayout.setVisibility(View.VISIBLE);
             } else {
                 headerLayout.setVisibility(View.GONE);
