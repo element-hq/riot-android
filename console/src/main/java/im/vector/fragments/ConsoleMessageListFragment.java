@@ -40,17 +40,13 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
-import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
-import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
-import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -66,7 +62,7 @@ import im.vector.activity.MemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
-import im.vector.db.ConsoleContentProvider;
+import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
@@ -76,7 +72,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ConsoleMessageListFragment extends MatrixMessageListFragment {
+public class ConsoleMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "ConsoleMessageListFragment.TAG_FRAGMENT_RECEIPTS_DIALOG";
 
     public static ConsoleMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
@@ -101,7 +97,9 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        VectorMessagesAdapter vectorMessagesAdapter = new VectorMessagesAdapter(mSession, getActivity(), getMXMediasCache());
+        vectorMessagesAdapter.setVectorMessagesAdapterActionsListener(this);
+        return vectorMessagesAdapter;
     }
 
     /**
@@ -116,6 +114,162 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
         if (mCheckSlideToHide && (event.getY() > mMessageListView.getHeight())) {
             mCheckSlideToHide = false;
             MXCActionBarActivity.dismissKeyboard(getActivity());
+        }
+    }
+
+    /**
+     * An action has been  triggered on an event.
+     * @param event the event.
+     * @param action an action ic_action_vector_XXX
+     */
+    public void onEventAction(final Event event, final int action) {
+        if (action == R.id.ic_action_vector_view_profile) {
+            if (null != event.getSender()) {
+                Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
+                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
+                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                getActivity().startActivity(startRoomInfoIntent);
+            }
+        } else if (action == R.id.ic_action_vector_direct_message) {
+            if (null != event.getSender()) {
+                CommonActivityUtils.goToOneToOneRoom(mSession, event.getSender(), getActivity(), null);
+            }
+        } else if (action == R.id.ic_action_vector_paste_user_name) {
+            String displayName = event.getSender();
+            RoomState state = mRoom.getLiveState();
+
+            if (null != state) {
+                displayName = state.getMemberName(displayName);
+            }
+
+            onSenderNameClick(event.getSender(), displayName);
+        } else if (action == R.id.ic_action_vector_paste_user_name) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    resend(event);
+                }
+            });
+        } else if (action == R.id.ic_action_vector_delete_message) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (event.isUndeliverable()) {
+                        // delete from the store
+                        mSession.getDataHandler().getStore().deleteEvent(event);
+                        mSession.getDataHandler().getStore().commit();
+
+                        // remove from the adapter
+                        mAdapter.removeEventById(event.eventId);
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        redactEvent(event.eventId);
+                    }
+                }
+            });
+        } else if (action == R.id.ic_action_vector_resend_message) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    resend(event);
+                }
+            });
+        } else if (action == R.id.ic_action_vector_copy) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    String text = "";
+
+                    if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type) ||
+                            Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
+                            Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)) {
+
+                        RoomState roomState = mRoom.getLiveState();
+                        EventDisplay display = new EventDisplay(getActivity(), event, roomState);
+                        text = display.getTextualDisplay().toString();
+                    } else {
+                        text = JsonUtils.toMessage(event.content).body;
+                    }
+
+                    ClipData clip = ClipData.newPlainText("", text);
+                    clipboard.setPrimaryClip(clip);
+                }
+            });
+        } else if (/*(action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) ||*/ (action == R.id.ic_action_vector_save)) {
+            //
+            String mediaUrl = null;
+            String mediaMimeType = null;
+            Uri mediaUri = null;
+            Message message = JsonUtils.toMessage(event.content);
+
+            // check if the media has been downloaded
+            if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
+                if (message instanceof ImageMessage) {
+                    ImageMessage imageMessage = (ImageMessage) message;
+
+                    mediaUrl = imageMessage.url;
+                    mediaMimeType = imageMessage.getMimeType();
+                } else {
+                    FileMessage fileMessage = (FileMessage) message;
+
+                    mediaUrl = fileMessage.url;
+                    mediaMimeType = fileMessage.getMimeType();
+                }
+
+                MXMediasCache cache = Matrix.getInstance(getActivity()).getMediasCache();
+
+                File mediaFile = cache.mediaCacheFile(mediaUrl, mediaMimeType);
+
+                if (null != mediaFile) {
+                    try {
+                        mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), mediaFile.getAbsolutePath());
+                    } catch (Exception e) {
+                    }
+                }
+            }
+
+            if (action == R.id.ic_action_vector_save) {
+                final Message fMessage = message;
+                final String fmediaUrl = mediaUrl;
+                final String fmediaMimeType = mediaMimeType;
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        save(fMessage, fmediaUrl, fmediaMimeType);
+                    }
+                });
+
+            } /*else {
+                final Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+
+                if (null != mediaUri) {
+                    sendIntent.setType(mediaMimeType);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
+                } else {
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, message.body);
+                    sendIntent.setType("text/plain");
+                }
+
+                if (action == R.id.ic_action_vector_forward) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
+                        }
+                    });
+                } else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(sendIntent);
+                        }
+                    });
+                }
+            }*/
         }
     }
 
@@ -248,7 +402,7 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
 
                         if (null != mediaFile) {
                             try {
-                                mediaUri = ConsoleContentProvider.absolutePathToUri(getActivity(), mediaFile.getAbsolutePath());
+                                mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), mediaFile.getAbsolutePath());
                                 supportShare = true;
                             } catch (Exception e) {
                             }
@@ -461,12 +615,33 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
     }
 
     /**
+     * Call when the row is clicked.
+     * @param position the cell position.
+     */
+    public void onRowClick(int position) {
+        MessageRow row = mAdapter.getItem(position);
+        Event event = row.getEvent();
+
+        // switch in section mode
+        ((VectorMessagesAdapter)mAdapter).onEventTap(event.eventId);
+    }
+
+    /**
      * Called when a click is performed on the message content
      * @param position the cell position
      */
     public void onContentClick(int position) {
         MessageRow row = mAdapter.getItem(position);
         Event event = row.getEvent();
+
+        VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter)mAdapter;
+
+        if (vectorMessagesAdapter.isInSelectionMode()) {
+            // cancel the selection mode.
+            vectorMessagesAdapter.onEventTap(null);
+            return;
+        }
+
         Message message = JsonUtils.toMessage(event.content);
 
         // image message -> display it within the medias swipper
@@ -523,6 +698,9 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment {
                     getActivity().startActivity(viewImageIntent);
                 }
             }
+        } else {
+            // switch in section mode
+            vectorMessagesAdapter.onEventTap(event.eventId);
         }
     }
 

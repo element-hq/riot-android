@@ -46,7 +46,7 @@ import java.util.TimerTask;
  * The main application injection point
  */
 public class VectorApp extends Application {
-    private static final String LOG_TAG = "ConsoleApplication";
+    private static final String LOG_TAG = "VectorApp";
 
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;

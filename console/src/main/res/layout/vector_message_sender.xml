@@ -8,12 +8,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="sans-serif-bold"
         android:textStyle="bold"
+        android:textSize="14dp"
         android:layout_gravity="left"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textColor="@color/vector_text_black_color"
+        android:textColor="@color/vector_54_black"
         android:text="SENDER"
         android:id="@+id/messagesAdapter_sender"/>
 </LinearLayout>

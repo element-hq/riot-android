@@ -47,7 +47,7 @@ import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.view.PieFractionView;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.db.ConsoleContentProvider;
+import im.vector.db.VectorContentProvider;
 
 public class ImageWebViewActivity extends FragmentActivity {
     private static final String LOG_TAG = "ImageWebViewActivity";
@@ -293,7 +293,7 @@ public class ImageWebViewActivity extends FragmentActivity {
                                     sendIntent.setType(mHighResMimeType);
 
                                     try {
-                                        sendIntent.putExtra(Intent.EXTRA_STREAM, ConsoleContentProvider.absolutePathToUri(ImageWebViewActivity.this, mediaFile.getAbsolutePath()));
+                                        sendIntent.putExtra(Intent.EXTRA_STREAM, VectorContentProvider.absolutePathToUri(ImageWebViewActivity.this, mediaFile.getAbsolutePath()));
                                     } catch (Exception e) {
                                     }
 

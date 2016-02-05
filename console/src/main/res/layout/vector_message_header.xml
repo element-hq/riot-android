@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="56dp"
+    android:layout_height="42dp"
     android:id="@+id/messagesAdapter_message_header"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/messagesAdapter_message_header_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold"
-        android:textColor="@color/vector_green_color"
-        android:text = "A message here" />
 
     <View
         android:id="@+id/messagesAdapter_message_header_separator"
@@ -22,8 +12,15 @@
         android:background="@color/vector_green_color"
         android:layout_height="1dp" />
 
-    <View
+    <TextView
+        android:id="@+id/messagesAdapter_message_header_text"
         android:layout_width="fill_parent"
-        android:layout_height="10dp"/>
-
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
+        android:textColor="@color/vector_green_color"
+        android:text = "A message here" />
+</RelativeLayout>

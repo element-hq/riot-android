@@ -30,9 +30,9 @@ import java.util.HashMap;
 /**
  * An adapter which can display room information.
  */
-public class ConsoleRoomMembersAdapter extends RoomMembersAdapter {
+public class VectorRoomMembersAdapter extends RoomMembersAdapter {
 
-    public ConsoleRoomMembersAdapter(Context context, HomeserverConnectionConfig hsConfig, int layoutResourceId, RoomState roomState, MXMediasCache mediasCache, HashMap<String, String> membershipStrings) {
+    public VectorRoomMembersAdapter(Context context, HomeserverConnectionConfig hsConfig, int layoutResourceId, RoomState roomState, MXMediasCache mediasCache, HashMap<String, String> membershipStrings) {
         super(context, hsConfig, layoutResourceId, roomState, mediasCache, membershipStrings);
     }
 
