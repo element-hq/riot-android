@@ -119,7 +119,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         // the chevron is managed in the header view
         mMyRoomList.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(this, mSession, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mAdapter = new VectorRoomSummaryAdapter(this, mSession, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
 
         // process intent parameters
         final Intent intent = getIntent();

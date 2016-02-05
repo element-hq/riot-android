@@ -48,7 +48,8 @@ import im.vector.fragments.VectorRoomsSearchResultsListFragment;
  * Displays a generic activity search method
  */
 public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements TabListener, ISearchParentActivityProxy {
-    private static final String LOG_TAG = "VectorSearchesActivity";
+    private static final String LOG_TAG = "VectorUniSrchActivity";
+
     public static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
 
     // tab related items
@@ -179,7 +180,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     }
 
     private void onSearchEnd(int nbrMessages) {
-        Log.d("VectorUnifiedSearchActivity","## onSearchEnd() nbrMsg="+nbrMessages);
+        Log.d(LOG_TAG,"## onSearchEnd() nbrMsg="+nbrMessages);
         // stop "wait while searching" screen
         mWaitWhileSearchInProgressView.setVisibility(View.GONE);
 
@@ -231,8 +232,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         mNoResultsTxtView.setVisibility(tabTag.mNoResultsTxtViewVisibility);
         mPatternToSearchEditText.setText(tabTag.mSearchedPattern);
     }
-
-
 
     private void searchAccordingToTabHandler() {
         int currentIndex = mActionBar.getSelectedNavigationIndex();
@@ -332,7 +331,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         if(null != mPatternToSearchEditText) {
             retValue = mPatternToSearchEditText.getText().toString();
-            Log.d("UnifiedSearch","## getPatternTextToSearch(): searched text="+retValue);
+            Log.d(LOG_TAG,"## getPatternTextToSearch(): searched text="+retValue);
         }
         else {
             Log.w(LOG_TAG,"## getTextToSearch: searched text is empty");
@@ -417,66 +416,58 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     @Override
     public void onTabSelected(android.support.v7.app.ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         TabListenerHolder tabListenerHolder = (TabListenerHolder) tab.getTag();
-        Log.d("SearchActivity", "## onTabSelected() FragTag=" + tabListenerHolder.mFragmentTag);
+        Log.d(LOG_TAG, "## onTabSelected() FragTag=" + tabListenerHolder.mFragmentTag);
 
         // inter tab selection life cycle: restore tab UI
         restoreUiTabContext(tab);
 
-        if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)){
-            if(null == mSearchInRoomNamesFragment){
+        if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
+            if (null == mSearchInRoomNamesFragment) {
                 mSearchInRoomNamesFragment = VectorRoomsSearchResultsListFragment.newInstance(mSession.getMyUser().userId);
                 ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
-                Log.d("SearchActivity","## onTabSelected() SearchInRoomNames frag added");
-            }
-            else {
+                Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
+            } else {
                 ft.attach(mSearchInRoomNamesFragment);
-                Log.d("SearchActivity", "## onTabSelected() SearchInRoomNames frag attach");
+                Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag attach");
             }
             mCurrentTabIndex = mSearchInRoomNamesTabIndex;
-        }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)){
-            if(null == mSearchInMessagesFragment){
+        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
+            if (null == mSearchInMessagesFragment) {
                 mSearchInMessagesFragment = VectorMessagesSearchResultsListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
-                Log.d("SearchActivity", "## onTabSelected() SearchInMessages frag added");
-            }
-            else {
+                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
+            } else {
                 ft.attach(mSearchInMessagesFragment);
-                Log.d("SearchActivity", "## onTabSelected() SearchInMessages frag added");
+                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             }
             mCurrentTabIndex = mSearchInMessagesTabIndex;
-        }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)){
+        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
             mCurrentTabIndex = mSearchInPeopleTabIndex;
-        }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)){
+        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
             mCurrentTabIndex = mSearchInFilesTabIndex;
-        }
-        else {
-
         }
     }
 
     @Override
     public void onTabUnselected(android.support.v7.app.ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         TabListenerHolder tabListenerHolder = (TabListenerHolder) tab.getTag();
-        Log.d("SearchActivity","## onTabUnselected() FragTag="+tabListenerHolder.mFragmentTag);
+        Log.d(LOG_TAG,"## onTabUnselected() FragTag="+tabListenerHolder.mFragmentTag);
 
         // save tab UI context before leaving the tab...
         saveUiTabContext(tab);
 
-        if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)){
+        if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if(null != mSearchInMessagesFragment)
                 ft.detach(mSearchInMessagesFragment);
         }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)){
+        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES) ){
             if(null != mSearchInRoomNamesFragment)
                 ft.detach(mSearchInRoomNamesFragment);
         }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)){
+        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
 
         }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)){
+        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
 
         }
         else {
@@ -498,7 +489,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d("VectorUnifiedSearchActivity", "## onSaveInstanceState(): ");
+        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
 
         // save current tab
         int currentIndex = mActionBar.getSelectedNavigationIndex();
@@ -528,13 +519,13 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("VectorUnifiedSearchActivity", "## onDestroy(): ");
+        Log.d(LOG_TAG, "## onDestroy(): ");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("VectorUnifiedSearchActivity", "## onResume(): ");
+        Log.d(LOG_TAG, "## onResume(): ");
     }
     // ==========================================================================================
 
