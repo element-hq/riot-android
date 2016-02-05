@@ -123,7 +123,6 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
      * @param action an action ic_action_vector_XXX
      */
     public void onEventAction(final Event event, final int action) {
-
         if (action == R.id.ic_action_vector_view_profile) {
             if (null != event.getSender()) {
                 Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
@@ -156,7 +155,17 @@ public class ConsoleMessageListFragment extends MatrixMessageListFragment implem
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    redactEvent(event.eventId);
+                    if (event.isUndeliverable()) {
+                        // delete from the store
+                        mSession.getDataHandler().getStore().deleteEvent(event);
+                        mSession.getDataHandler().getStore().commit();
+
+                        // remove from the adapter
+                        mAdapter.removeEventById(event.eventId);
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        redactEvent(event.eventId);
+                    }
                 }
             });
         } else if (action == R.id.ic_action_vector_resend_message) {

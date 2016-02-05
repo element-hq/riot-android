@@ -184,6 +184,31 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     public void notifyDataSetChanged() {
+
+        // display the undeliverable at the end of the history
+        this.setNotifyOnChange(false);
+        ArrayList<MessageRow> undeliverableEvents = null;
+
+        for(int i = 0; i < getCount(); i++) {
+            MessageRow row = getItem(i);
+
+            if ((null != row.getEvent()) && row.getEvent().isUndeliverable()) {
+                if (null == undeliverableEvents) {
+                    undeliverableEvents = new ArrayList<MessageRow>();
+                }
+                row.getEvent().setOriginServerTs(System.currentTimeMillis());
+                undeliverableEvents.add(row);
+                this.remove(row);
+                i--;
+            }
+        }
+
+        if (null != undeliverableEvents) {
+            this.addAll(undeliverableEvents);
+        }
+
+        this.setNotifyOnChange(true);
+
         //  do not refresh the room when the application is in background
         // on large rooms, it drains a lot of battery
         if (!VectorApp.isAppInBackground()) {
@@ -196,7 +221,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         for(int index = 0; index < this.getCount(); index++) {
             MessageRow row = getItem(index);
             Event msg = row.getEvent();
-            dates.add( AdapterUtils.zeroTimeDate(new Date(msg.getOriginServerTs())));
+            dates.add(AdapterUtils.zeroTimeDate(new Date(msg.getOriginServerTs())));
         }
 
         synchronized (this) {
@@ -398,6 +423,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
             if (event.canBeResent()) {
                 menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
+
+                if (event.isUndeliverable()) {
+                    menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
+                }
             } else if (event.mSentState == Event.SentState.SENT) {
                 menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
 
