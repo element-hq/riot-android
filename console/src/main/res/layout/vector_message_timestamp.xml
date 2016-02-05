@@ -1,48 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/vector_text_gray_color"
-        android:text="1970/01/01 00:00:00"
-        android:id="@+id/messagesAdapter_timestamp"/>
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/messagesAdapter_receivers_list"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:orientation="horizontal">
-
         <TextView
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="7dp"
-            android:id="@+id/messagesAdapter_more_than_three_left"
-            android:text="..." />
+            android:id="@+id/messagesAdapter_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/vector_d8_gray"
+            android:text="1970/01/01 00:00:00" />
 
-        <include layout="@layout/vector_receipt_round_avatar"
-            android:id="@+id/messagesAdapter_avatar1"/>
-
-        <include layout="@layout/vector_receipt_round_avatar"
-            android:id="@+id/messagesAdapter_avatar2"/>
-
-        <include layout="@layout/vector_receipt_round_avatar"
-            android:id="@+id/messagesAdapter_avatar3"/>
-
-        <TextView
-            android:layout_width="20dp"
-            android:textSize="7dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:id="@+id/messagesAdapter_more_than_three_right"
-            android:text="..." />
-
+        <ImageView
+            android:id="@+id/messagesAdapter_action_image"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/vector_actions"/>
     </LinearLayout>
-</LinearLayout>
+
+    <View
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/messagesAdapter_action_anchor"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
+
+</RelativeLayout>
+

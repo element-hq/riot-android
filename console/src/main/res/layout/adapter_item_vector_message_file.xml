@@ -8,8 +8,9 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:id="@+id/messagesAdapter_body_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="13dp"
+            android:layout_marginLeft="16dp"
             android:paddingBottom="5dp">
 
             <include layout="@layout/vector_message_sender"/>
@@ -33,8 +34,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <include layout="@layout/vector_message_timestamp"
-                    android:id="@+id/message_timestamp_layout_left"/>
 
                 <FrameLayout
                     android:layout_marginLeft="4dp"
@@ -163,11 +162,7 @@
                     android:id="@+id/message_timestamp_layout_right"/>
 
             </LinearLayout>
-
         </LinearLayout>
-
-        <include layout="@layout/vector_room_round_avatar"
-            android:id="@+id/messagesAdapter_roundAvatar_right"/>
     </LinearLayout>
 
     <include layout="@layout/vector_message_receipts_list"

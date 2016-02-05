@@ -45,7 +45,7 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.MemberDetailsActivity;
-import im.vector.adapters.ConsoleRoomMembersAdapter;
+import im.vector.adapters.VectorRoomMembersAdapter;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class RoomMembersDialogFragment extends DialogFragment {
     }
 
     private ListView mListView;
-    private ConsoleRoomMembersAdapter mAdapter;
+    private VectorRoomMembersAdapter mAdapter;
     private String mRoomId;
     private MXSession mSession;
 
@@ -181,7 +181,7 @@ public class RoomMembersDialogFragment extends DialogFragment {
         membershipStrings.put(RoomMember.MEMBERSHIP_LEAVE, getActivity().getString(R.string.membership_leave));
         membershipStrings.put(RoomMember.MEMBERSHIP_BAN, getActivity().getString(R.string.membership_ban));
 
-        mAdapter = new ConsoleRoomMembersAdapter(getActivity(), mSession.getHomeserverConfig(), R.layout.adapter_item_room_members, room.getLiveState(), getMXMediasCache(), membershipStrings);
+        mAdapter = new VectorRoomMembersAdapter(getActivity(), mSession.getHomeserverConfig(), R.layout.adapter_item_room_members, room.getLiveState(), getMXMediasCache(), membershipStrings);
 
         // apply the sort settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
