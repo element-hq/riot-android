@@ -429,7 +429,7 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             // search in rooms content
             case R.id.ic_action_search_room:
                 // launch the "search in rooms" activity
-                final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorSearchesActivity.class);
+                final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorUnifiedSearchActivity.class);
                 VectorHomeActivity.this.startActivity(searchIntent);
                 break;
 
@@ -449,10 +449,12 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         mWaitingView.setVisibility(View.GONE);
     }
 
+    @Override
     public void onJoinRoom(MXSession session, String roomId) {
         CommonActivityUtils.goToRoomPage(session, roomId, VectorHomeActivity.this, null);
     }
 
+    @Override
     public void onRejectInvitation(MXSession session, String roomId) {
         Room room = session.getDataHandler().getRoom(roomId);
 
@@ -488,10 +490,12 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         }
     }
 
+    @Override
     public void onLeaveRoom(MXSession session, String roomId) {
         onRejectInvitation(session, roomId);
     }
 
+    @Override
     public void onToggleRoomNotifications(MXSession session, String roomId) {
         Room room = session.getDataHandler().getRoom(roomId);
 
@@ -562,14 +566,17 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         }
     }
 
+    @Override
     public void moveToConversations(MXSession session, String roomId) {
         updateRoomTag(session, roomId, null);
     }
 
+    @Override
     public void moveToFavorites(MXSession session, String roomId) {
         updateRoomTag(session, roomId, RoomTag.ROOM_TAG_FAVOURITE);
     }
 
+    @Override
     public void moveToLowPriority(MXSession session, String roomId) {
         updateRoomTag(session, roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
     }

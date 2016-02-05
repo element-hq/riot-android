@@ -77,7 +77,7 @@ import im.vector.ViewedRoomTracker;
 import im.vector.adapters.ImageCompressionDescription;
 import im.vector.fragments.ConsoleMessageListFragment;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
-import im.vector.fragments.VectorRoomsSearchResultsListFragment;
+import im.vector.fragments.VectorMessagesSearchResultsListFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
@@ -102,7 +102,7 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
     private static final String TAG_FRAGMENT_ROOMS_SEARCH_RESULT_LIST = "im.vector.activity.TAG_FRAGMENT_ROOMS_SEARCH_RESULT_LIST";
     private static final String LOG_TAG = "VectorSearchesActivity";
 
-    private VectorRoomsSearchResultsListFragment mVectorRoomsSearchResultsListFragment;
+    private VectorMessagesSearchResultsListFragment mVectorMessagesSearchResultsListFragment;
     private MXSession mSession;
 
     // UI items
@@ -136,11 +136,11 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
         mInitialSearchInProgressView =  findViewById(R.id.search_in_progress_view);
 
         FragmentManager fm = getSupportFragmentManager();
-        mVectorRoomsSearchResultsListFragment = (VectorRoomsSearchResultsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOMS_SEARCH_RESULT_LIST);
+        mVectorMessagesSearchResultsListFragment = (VectorMessagesSearchResultsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_ROOMS_SEARCH_RESULT_LIST);
 
-        if (null == mVectorRoomsSearchResultsListFragment) {
-            mVectorRoomsSearchResultsListFragment = VectorRoomsSearchResultsListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
-            fm.beginTransaction().add(R.id.search_fragment_messages, mVectorRoomsSearchResultsListFragment, TAG_FRAGMENT_ROOMS_SEARCH_RESULT_LIST).commit();
+        if (null == mVectorMessagesSearchResultsListFragment) {
+            mVectorMessagesSearchResultsListFragment = VectorMessagesSearchResultsListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            fm.beginTransaction().add(R.id.search_fragment_messages, mVectorMessagesSearchResultsListFragment, TAG_FRAGMENT_ROOMS_SEARCH_RESULT_LIST).commit();
         }
 
         // replace the action bar
@@ -176,7 +176,7 @@ public class VectorSearchesActivity extends MXCActionBarActivity {
                     // the search command should only be passed to the active fragment
                     // by now, there is only one active fragment
                     // it is planned to have 3 (search by room names, by messages, by member name)
-                    mVectorRoomsSearchResultsListFragment.searchPattern(mEditText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
+                    mVectorMessagesSearchResultsListFragment.searchPattern(mEditText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
 
                         @Override
                         public void onSearchSucceed(int nbrMessages) {

@@ -407,6 +407,10 @@
 
     // Search
     <string name="search_no_results">No Results</string>
+    <string name="tab_title_search_rooms">ROOMS</string>
+    <string name="tab_title_search_messages">MESSAGES</string>
+    <string name="tab_title_search_people">PEOPLE</string>
+    <string name="tab_title_search_files">FILES</string>
 
     // Room recents
     <string name="room_recents_directory">DIRECTORY</string>
@@ -435,4 +439,5 @@
     <string name="room_sliding_menu_version">Version </string>
     <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
     <string name="room_sliding_privacy_policy">Privacy policy</string>
+    <string name="action_voice_search">Voice search</string>
 </resources>

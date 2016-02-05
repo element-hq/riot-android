@@ -96,6 +96,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     private int mLowPrioSectionIndex = -1;  // "Low Priority" index
     private final String DBG_CLASS_NAME;
 
+    // search mode
+    private String mPattern = null;
+    private Boolean mIsSearchMode = false;
+
     // the listener
     private RoomEventListener mListener = null;
 
@@ -753,5 +757,29 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         }
 
         return messageToDisplayRetValue;
+    }
+
+    public void setSearchPattern(String pattern) {
+        if (!TextUtils.equals(pattern, mPattern)) {
+            mPattern = pattern;
+            mIsSearchMode = !TextUtils.isEmpty(mPattern);
+
+            // in search mode, the live row are backuped to store the live events
+            /*if (mIsSearchMode) {
+                // save once
+                if (null == mLiveMessagesRowList) {
+                    // backup live events
+                    mLiveMessagesRowList = new ArrayList<MessageRow>();
+                    for (int pos = 0; pos < this.getCount(); pos++) {
+                        mLiveMessagesRowList.add(this.getItem(pos));
+                    }
+                }
+            } else if (null != mLiveMessagesRowList) {
+                // clear and restore the backuped list
+                this.clear();
+                this.addAll(mLiveMessagesRowList);
+                mLiveMessagesRowList = null;
+            }*/
+        }
     }
 }
