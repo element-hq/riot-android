@@ -14,12 +14,10 @@
         android:layout_height="match_parent"
         tools:context="org.matrix.vector.activity.VectorHomeActivity">
 
-        <ExpandableListView
-            android:id="@+id/listView_myRooms"
+        <FrameLayout
+            android:id="@+id/home_recents_list_anchor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:dividerHeight="0dp"
-            android:divider="#00000000"/>
+            android:layout_height="match_parent"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/listView_create_room_view"

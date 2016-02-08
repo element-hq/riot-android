@@ -423,7 +423,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
             if (null == mSearchInRoomNamesFragment) {
-                mSearchInRoomNamesFragment = VectorRoomsSearchResultsListFragment.newInstance(mSession.getMyUser().userId);
+                mSearchInRoomNamesFragment = VectorRoomsSearchResultsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
                 ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
             } else {

@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -50,6 +51,8 @@ import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.adapters.VectorRoomSummaryAdapter;
+import im.vector.fragments.ConsoleMessageListFragment;
+import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.util.VectorUtils;
 
 import java.util.Collection;
@@ -60,7 +63,7 @@ import java.util.List;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends MXCActionBarActivity implements VectorRoomSummaryAdapter.RoomEventListener {
+public class VectorHomeActivity extends MXCActionBarActivity  {
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
@@ -68,23 +71,20 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
     public static final String EXTRA_JUMP_MATRIX_ID = "org.matrix.console.VectorHomeActivity.EXTRA_JUMP_MATRIX_ID";
     public static final String EXTRA_ROOM_INTENT = "org.matrix.console.VectorHomeActivity.EXTRA_ROOM_INTENT";
 
-    private boolean mIsPaused = false;
+    private static final String TAG_FRAGMENT_RECENTS_LIST = "VectorHomeActivity.TAG_FRAGMENT_RECENTS_LIST";
 
-    private ExpandableListView mMyRoomList = null;
+
     // switch to a room activity
     private String mAutomaticallyOpenedRoomId = null;
     private String mAutomaticallyOpenedMatrixId = null;
     private Intent mOpenedRoomIntent = null;
 
-    // set to true to force refresh when an events chunk has been processed.
-    private boolean refreshOnChunkEnd = false;
-
-    private HashMap<MXSession, MXEventListener> mListenersBySession = new HashMap<MXSession, MXEventListener>();
-    private HashMap<MXSession, MXCallsManager.MXCallsManagerListener> mCallListenersBySession = new HashMap<MXSession, MXCallsManager.MXCallsManagerListener>();
-
-    private VectorRoomSummaryAdapter mAdapter;
     private View mWaitingView = null;
     private View mRoomCreationView = null;
+
+    private MXEventListener mEventsListener;
+
+    private VectorRecentsListFragment mRecentsListFragment;
 
     // sliding menu management
     private NavigationView mNavigationView = null;
@@ -114,13 +114,6 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 
-        // get the ExpandableListView widget
-        mMyRoomList = (ExpandableListView) findViewById(R.id.listView_myRooms);
-        // the chevron is managed in the header view
-        mMyRoomList.setGroupIndicator(null);
-        // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(this, mSession, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
-
         // process intent parameters
         final Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_JUMP_TO_ROOM_ID)) {
@@ -148,8 +141,6 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             });
         }
 
-        mMyRoomList.setAdapter(mAdapter);
-
         // check if  there is some valid session
         // the home activity could be relaunched after an application crash
         // so, reload the sessions before displaying the history
@@ -166,212 +157,27 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
             }
         }
 
-        // set MX listeners for each session
-        for(MXSession session : sessions) {
-            addSessionListener(session);
-        }
+        FragmentManager fm = getSupportFragmentManager();
+        mRecentsListFragment = (VectorRecentsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_RECENTS_LIST);
 
-        // Set rooms click listener:
-        // - reset the unread count
-        // - start the corresponding room activity
-        mMyRoomList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                MXSession session = Matrix.getInstance(VectorHomeActivity.this).getSession(roomSummary.getMatrixId());
+        if (mRecentsListFragment == null) {
+            // this fragment displays messages and handles all message logic
+            //String matrixId, int layoutResId)
 
-                String roomId = roomSummary.getRoomId();
-                Room room = session.getDataHandler().getRoom(roomId);
-                // cannot join a leaving room
-                if ((null == room) || room.isLeaving()) {
-                    roomId = null;
-                }
-
-                // update the unread messages count
-                if (mAdapter.resetUnreadCount(groupPosition, childPosition)) {
-                    session.getDataHandler().getStore().flushSummary(roomSummary);
-                }
-
-                // launch corresponding room activity
-                if (null != roomId){
-                    CommonActivityUtils.goToRoomPage(session, roomId, VectorHomeActivity.this, null);
-                }
-
-                // click is handled
-                return true;
-            }
-        });
-    }
-
-    /**
-     * Add a MXEventListener to the session listeners.
-     * @param session the sessions.
-     */
-    private void addSessionListener(final MXSession session) {
-        removeSessionListener(session);
-
-        MXEventListener listener = new MXEventListener() {
-            private boolean mInitialSyncComplete = false;
-
-            @Override
-            public void onAccountInfoUpdate(MyUser myUser) {
-                refreshSlidingMenu();
-            }
-
-            @Override
-            public void onInitialSyncComplete() {
-                Log.d(LOG_TAG,"## onInitialSyncComplete()");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mInitialSyncComplete = true;
-                        mAdapter.notifyDataSetChanged();
-
-                        mMyRoomList.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // expand all
-                                int groupCount = mMyRoomList.getExpandableListAdapter().getGroupCount();
-                                for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-                                    mMyRoomList.expandGroup(groupIndex);
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public void onLiveEventsChunkProcessed() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "onLiveEventsChunkProcessed");
-                        if (!mIsPaused && refreshOnChunkEnd) {
-                            mAdapter.notifyDataSetChanged();
-                        }
-
-                        refreshOnChunkEnd = false;
-                    }
-                });
-            }
-
-            @Override
-            public void onLiveEvent(final Event event, final RoomState roomState) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // refresh the UI at the end of the next events chunk
-                        refreshOnChunkEnd = ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
-                                Event.EVENT_TYPE_TAGS.equals(event.type) ||
-                                Event.EVENT_TYPE_REDACTION.equals(event.type) ||
-                                Event.EVENT_TYPE_RECEIPT.equals(event.type) ||
-                                Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type);
-
-                        // highlight notified messages
-                        // the SDK only highlighted invitation messages
-                        // it lets the application chooses the behaviour.
-                        ViewedRoomTracker rTracker = ViewedRoomTracker.getInstance();
-                        String viewedRoomId = rTracker.getViewedRoomId();
-                        String fromMatrixId = rTracker.getMatrixId();
-                        MXSession session = Matrix.getInstance(VectorHomeActivity.this).getDefaultSession();
-                        String matrixId = session.getCredentials().userId;
-
-                        // If we're not currently viewing this room or not sent by myself, increment the unread count
-                        if ((!TextUtils.equals(event.roomId, viewedRoomId) || !TextUtils.equals(matrixId, fromMatrixId))  && !TextUtils.equals(event.getSender(), matrixId)) {
-                            RoomSummary summary = session.getDataHandler().getStore().getSummary(event.roomId);
-                            if (null != summary) {
-                                summary.setHighlighted(summary.isHighlighted() || EventUtils.shouldHighlight(session, event));
-                            }
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onReceiptEvent(String roomId, List<String> senderIds) {
-                // refresh only if the current user read some messages (to update the unread messages counters)
-                refreshOnChunkEnd = (senderIds.indexOf(session.getCredentials().userId) >= 0);
-            }
-
-            @Override
-            public void onRoomTagEvent(String roomId) {
-                refreshOnChunkEnd = true;
-            }
-
-            /**
-             * These methods trigger an UI refresh asap because the user could have created / joined / left a room
-             * but the server events echos are not yet received.
-             *
-             */
-            private void onForceRefresh() {
-                if (mInitialSyncComplete) {
-                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onStoreReady() {
-                onForceRefresh();
-            }
-
-            @Override
-            public void onLeaveRoom(final String roomId) {
-                onForceRefresh();
-            }
-
-            @Override
-            public void onNewRoom(String roomId) {
-                onForceRefresh();
-            }
-
-            @Override
-            public void onJoinRoom(String roomId) {
-                onForceRefresh();
-            }
-        };
-
-        session.getDataHandler().addListener(listener);
-        mListenersBySession.put(session, listener);
-    }
-
-    /**
-     * Remove the MXEventListener to the session listeners.
-     * @param session the sessions.
-     */
-    private void removeSessionListener(final MXSession session) {
-        if (mListenersBySession.containsKey(session)) {
-            session.getDataHandler().removeListener(mListenersBySession.get(session));
-            mListenersBySession.remove(session);
-        }
-
-        if (mCallListenersBySession.containsKey(session)) {
-            session.mCallsManager.removeListener(mCallListenersBySession.get(session));
-            mCallListenersBySession.remove(session);
+            mRecentsListFragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
+            fm.beginTransaction().add(R.id.home_recents_list_anchor, mRecentsListFragment, TAG_FRAGMENT_RECENTS_LIST).commit();
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Collection<MXSession> sessions = Matrix.getInstance(this).getSessions();
-
-        for(MXSession session : sessions) {
-            removeSessionListener(session);
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mIsPaused = true;
+        mSession.getDataHandler().removeListener(mEventsListener);
     }
 
     @Override
@@ -379,13 +185,6 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
         super.onResume();
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
-        mIsPaused = false;
-
-        // some unsent messages could have been added
-        // it does not trigger any live event.
-        // So, it is safer to sort the messages when debackgrounding
-        //mAdapter.sortSummaries();
-        mAdapter.notifyDataSetChanged();
 
         if (null != mAutomaticallyOpenedRoomId) {
             runOnUiThread(new Runnable() {
@@ -398,6 +197,15 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
                 }
             });
         }
+
+        mEventsListener = new MXEventListener() {
+            @Override
+            public void onAccountInfoUpdate(MyUser myUser) {
+                refreshSlidingMenu();
+            }
+        };
+
+        mSession.getDataHandler().addListener(mEventsListener);
 
         refreshSlidingMenu();
     }
@@ -451,143 +259,11 @@ public class VectorHomeActivity extends MXCActionBarActivity implements VectorRo
     private void showWaitingView() {
         mWaitingView.setVisibility(View.VISIBLE);
     }
-    private void hideWaitingView() {
-        mWaitingView.setVisibility(View.GONE);
-    }
 
-    @Override
-    public void onJoinRoom(MXSession session, String roomId) {
-        CommonActivityUtils.goToRoomPage(session, roomId, VectorHomeActivity.this, null);
-    }
+    //==============================================================================================================
+    // Sliding menu management
+    //==============================================================================================================
 
-    @Override
-    public void onRejectInvitation(MXSession session, String roomId) {
-        Room room = session.getDataHandler().getRoom(roomId);
-
-        if (null != room) {
-            showWaitingView();
-
-            room.leave(new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    hideWaitingView();
-                }
-
-                private void onError() {
-                    // TODO display a message ?
-                    hideWaitingView();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onError();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onError();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onLeaveRoom(MXSession session, String roomId) {
-        onRejectInvitation(session, roomId);
-    }
-
-    @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
-        Room room = session.getDataHandler().getRoom(roomId);
-
-        if (null != room) {
-            BingRulesManager bingRulesManager = session.getDataHandler().getBingRulesManager();
-
-            showWaitingView();
-
-            bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), new BingRulesManager.onBingRuleUpdateListener() {
-                @Override
-                public void onBingRuleUpdateSuccess() {
-                    hideWaitingView();
-                }
-
-                @Override
-                public void onBingRuleUpdateFailure(String errorMessage) {
-                    // TODO display a message ?
-                    hideWaitingView();
-                }
-            });
-        }
-    }
-
-    private void updateRoomTag(MXSession session, String roomId, String newtag) {
-        Room room = session.getDataHandler().getRoom(roomId);
-
-        if (null != room) {
-            String oldTag = null;
-
-            RoomAccountData accountData = room.getAccountData();
-
-            if ((null != accountData) && accountData.hasTags()) {
-                oldTag = accountData.getKeys().iterator().next();
-            }
-
-            Double tagOrder = 0.0;
-
-            if (null != newtag) {
-                tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newtag);
-            }
-
-            showWaitingView();
-
-            room.replaceTag(oldTag, newtag, tagOrder, new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    hideWaitingView();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    // TODO display a message ?
-                    hideWaitingView();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    // TODO display a message ?
-                    hideWaitingView();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    // TODO display a message ?
-                    hideWaitingView();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void moveToConversations(MXSession session, String roomId) {
-        updateRoomTag(session, roomId, null);
-    }
-
-    @Override
-    public void moveToFavorites(MXSession session, String roomId) {
-        updateRoomTag(session, roomId, RoomTag.ROOM_TAG_FAVOURITE);
-    }
-
-    @Override
-    public void moveToLowPriority(MXSession session, String roomId) {
-        updateRoomTag(session, roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
-    }
-
-    // sliding menu management
     private void refreshSlidingMenu() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 

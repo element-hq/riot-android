@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.PublicRoom;
@@ -19,87 +21,111 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
 
-public class VectorRoomsSearchResultsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener {
-    // session identifier.
-    public static final String ARG_MATRIX_ID = "VectorRoomsSearchResultsListFragment.ARG_MATRIX_ID";
-
+public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragment {
     // log tag
     private static String LOG_TAG = "V_RoomsSearchResultsListFragment";
 
     // the session
     private MXSession mSession;
 
-    // the result list
-    private ExpandableListView mSearchResultExpandableListView;
-    private VectorRoomSummaryAdapter mAdapter;
-
     // current public Rooms List
     private List<PublicRoom> mPublicRoomsList;
 
     /**
      * Static constructor
-     * @param aMatrixId the matrix id
+     * @param matrixId the matrix id
      * @return a VectorRoomsSearchResultsListFragment instance
      */
-    public static VectorRoomsSearchResultsListFragment newInstance(String aMatrixId) {
-        VectorRoomsSearchResultsListFragment fragment = new VectorRoomsSearchResultsListFragment();
+    public static VectorRoomsSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
+        VectorRoomsSearchResultsListFragment f = new VectorRoomsSearchResultsListFragment();
         Bundle args = new Bundle();
-
-        //args.putInt(ARG_LAYOUT_ID, layoutResId);
-        args.putString(ARG_MATRIX_ID, aMatrixId);
-        fragment.setArguments(args);
-
-        return fragment;
+        args.putInt(VectorRecentsListFragment.ARG_LAYOUT_ID, layoutResId);
+        args.putString(ARG_MATRIX_ID, matrixId);
+        f.setArguments(args);
+        return f;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "## onCreateView()");
-        // get fragment parameters
-        Bundle fragArgs = getArguments();
+        super.onCreateView(inflater, container, savedInstanceState);
+        Bundle args = getArguments();
 
-        if(null != fragArgs) {
-            String matrixId = fragArgs.getString(ARG_MATRIX_ID);
-            mSession = getSession(matrixId);
-        } else {
-            Log.e(LOG_TAG,"## onCreateView(): can't create list view");
-            return null;
+        mMatrixId = args.getString(ARG_MATRIX_ID);
+        mSession = Matrix.getInstance(getActivity()).getSession(mMatrixId);
+
+        if (null == mSession) {
+            throw new RuntimeException("Must have valid default MXSession.");
         }
 
-        // inflate the expandable view & create the adapter
-        View view = inflater.inflate(R.layout.fragment_vector_search_rooms_list_fragment, container, false);
+        View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
+        mRecentsListView = (ExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        // the chevron is managed in the header view
+        mRecentsListView.setGroupIndicator(null);
+        // create the adapter
         mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mRecentsListView.setAdapter(mAdapter);
 
-        // setup the expandable view with its adapter
-        mSearchResultExpandableListView = (ExpandableListView) view.findViewById(R.id.search_result_exp_list_view);
-        mSearchResultExpandableListView.setGroupIndicator(null);
-        mSearchResultExpandableListView.setAdapter(mAdapter);
+        // hide it by default
+        mRecentsListView.setVisibility(View.GONE);
 
-        return view;
+        // Set rooms click listener:
+        // - reset the unread count
+        // - start the corresponding room activity
+        mRecentsListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+                MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+
+                String roomId = roomSummary.getRoomId();
+                Room room = session.getDataHandler().getRoom(roomId);
+                // cannot join a leaving room
+                if ((null == room) || room.isLeaving()) {
+                    roomId = null;
+                }
+
+                // update the unread messages count
+                if (mAdapter.resetUnreadCount(groupPosition, childPosition)) {
+                    session.getDataHandler().getStore().flushSummary(roomSummary);
+                }
+
+                // launch corresponding room activity
+                if (null != roomId) {
+                    CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+                }
+
+                // click is handled
+                return true;
+            }
+        });
+
+        return v;
     }
 
-    private void collapseAllSections() {
-        final int groupCount = mAdapter.getGroupCount();
-
-        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-            mSearchResultExpandableListView.collapseGroup(groupIndex);
-        }
-    }
-
+    /**
+     * Expands all existing sections.
+     */
     private void expandsAllSections() {
         final int groupCount = mAdapter.getGroupCount();
 
         for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-            mSearchResultExpandableListView.expandGroup(groupIndex);
+            mRecentsListView.expandGroup(groupIndex);
         }
     }
 
+    /**
+     * Search a pattern in the room
+     * @param pattern
+     * @param onSearchResultListener
+     */
     public void searchPattern(final String pattern,  final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
         if (TextUtils.isEmpty(pattern)) {
-
+            mRecentsListView.setVisibility(View.GONE);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -107,14 +133,13 @@ public class VectorRoomsSearchResultsListFragment extends Fragment implements Ve
                 }
             });
         } else {
-
-            collapseAllSections();
             mAdapter.setPublicRoomsList(mPublicRoomsList);
             mAdapter.setSearchPattern(pattern);
 
-            mSearchResultExpandableListView.post(new Runnable() {
+            mRecentsListView.post(new Runnable() {
                 @Override
                 public void run() {
+                    mRecentsListView.setVisibility(View.VISIBLE);
                     expandsAllSections();
                     onSearchResultListener.onSearchSucceed(1);
                 }
@@ -130,54 +155,11 @@ public class VectorRoomsSearchResultsListFragment extends Fragment implements Ve
                             mPublicRoomsList = publicRooms;
                             mAdapter.setPublicRoomsList(mPublicRoomsList);
                             mAdapter.notifyDataSetChanged();
-                            mSearchResultExpandableListView.invalidateViews();
                         }
                     }
                 });
             }
         }
-    }
-
-    public MXSession getSession(String matrixId) {
-        return Matrix.getMXSession(getActivity(), matrixId);
-    }
-
-    // =============================================================================================
-    // RoomEventListener implementation
-    @Override
-    public void onJoinRoom(MXSession session, String roomId) {
-        //CommonActivityUtils.goToRoomPage(session, roomId, VectorHomeActivity.this, null);
-        Log.d(LOG_TAG,"## onJoinRoom()");
-    }
-
-    @Override
-    public void onRejectInvitation(MXSession session, String roomId) {
-        Log.d(LOG_TAG,"## onRejectInvitation()");
-    }
-
-    @Override
-    public void onToggleRoomNotifications(MXSession session, String roomId) {
-        Log.d(LOG_TAG,"## onToggleRoomNotifications()");
-    }
-
-    @Override
-    public void moveToFavorites(MXSession session, String roomId) {
-        Log.d(LOG_TAG,"## moveToFavorites()");
-    }
-
-    @Override
-    public void moveToConversations(MXSession session, String roomId) {
-        Log.d(LOG_TAG,"## moveToConversations()");
-    }
-
-    @Override
-    public void moveToLowPriority(MXSession session, String roomId) {
-        Log.d(LOG_TAG,"## moveToLowPriority()");
-    }
-
-    @Override
-    public void onLeaveRoom(MXSession session, String roomId) {
-        Log.d(LOG_TAG,"## onLeaveRoom()");
     }
 
     @Override

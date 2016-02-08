@@ -16,6 +16,7 @@
 
 package im.vector.adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
@@ -72,7 +73,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         public void onLeaveRoom(MXSession session, String roomId);
     }
 
-    private final FragmentActivity mContext;
+    private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private final int mChildLayoutResourceId;
     private final int mHeaderLayoutResourceId;
@@ -108,7 +109,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * @param aGroupHeaderLayoutResourceId the room section header layout
      * @param listener the events listener
      */
-    public VectorRoomSummaryAdapter(FragmentActivity aContext, MXSession session, boolean isSearchMode, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, RoomEventListener listener)  {
+    public VectorRoomSummaryAdapter(Context aContext, MXSession session, boolean isSearchMode, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, RoomEventListener listener)  {
         // init internal fields
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(mContext);
