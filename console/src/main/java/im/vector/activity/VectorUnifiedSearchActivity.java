@@ -17,9 +17,11 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -41,13 +43,12 @@ import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.fragments.VectorMessagesSearchResultsListFragment;
-import im.vector.fragments.VectorMessagesSearchResultsListFragment.ISearchParentActivityProxy;
 import im.vector.fragments.VectorRoomsSearchResultsListFragment;
 
 /**
  * Displays a generic activity search method
  */
-public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements TabListener, ISearchParentActivityProxy {
+public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements TabListener {
     private static final String LOG_TAG = "VectorUniSrchActivity";
 
     public static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
@@ -160,25 +161,46 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         createNavigationTabs(savedInstanceState);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "## onDestroy(): ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "## onResume(): ");
+
+        searchAccordingToTabHandler();
+    }
+
     /**
      * Reset the UI to its init state:
      * - "waiting while searching" screen disabled
      * - background image visible
      * - no results message disabled
      */
-    private void resetUi(){
+    private void resetUi() {
         // stop "wait while searching" screen
-        if(null != mWaitWhileSearchInProgressView)
+        if (null != mWaitWhileSearchInProgressView) {
             mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+        }
 
         // display the background
-        if(null != mBackgroundImageView)
+        if (null != mBackgroundImageView) {
             mBackgroundImageView.setVisibility(View.VISIBLE);
+        }
 
-        if(null != mNoResultsTxtView)
+        if (null != mNoResultsTxtView) {
             mNoResultsTxtView.setVisibility(View.GONE);
+        }
     }
 
+    /**
+     * The search is done.
+     * @param nbrMessages the number of found messages.
+     */
     private void onSearchEnd(int nbrMessages) {
         Log.d(LOG_TAG,"## onSearchEnd() nbrMsg="+nbrMessages);
         // stop "wait while searching" screen
@@ -194,6 +216,14 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         // display the "no result" text only if the researched text is not empty
         mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * Called by the fragements when they are resumed.
+     * It is used to refresh the search while playing with the tab.
+     */
+    public void onSearchFragmentResume() {
+        searchAccordingToTabHandler();
     }
 
     /**
@@ -236,34 +266,49 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private void searchAccordingToTabHandler() {
         int currentIndex = mActionBar.getSelectedNavigationIndex();
 
-        // display the "wait while searching" screen (progress bar)
-        mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+        resetUi();
+
+        String pattern = mPatternToSearchEditText.getText().toString();
 
         if((currentIndex == mSearchInRoomNamesTabIndex) && (null != mSearchInRoomNamesFragment)) {
-            mSearchInRoomNamesFragment.searchPattern(getPatternTextToSearch(), new MatrixMessageListFragment.OnSearchResultListener() {
-                @Override
-                public void onSearchSucceed(int nbrMessages) {
-                    onSearchEnd(nbrMessages);
-                }
+            if (mSearchInRoomNamesFragment.isAdded()) {
 
-                @Override
-                public void onSearchFailed() {
-                    onSearchEnd(0);
-                }
-            });
+                // display the "wait while searching" screen (progress bar)
+                mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+
+                mSearchInRoomNamesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                    @Override
+                    public void onSearchSucceed(int nbrMessages) {
+                        onSearchEnd(nbrMessages);
+                    }
+
+                    @Override
+                    public void onSearchFailed() {
+                        onSearchEnd(0);
+                    }
+                });
+            }
         }
         else if((currentIndex == mSearchInMessagesTabIndex) && (null != mSearchInMessagesFragment)) {
-            mSearchInMessagesFragment.searchPattern(getPatternTextToSearch(), new MatrixMessageListFragment.OnSearchResultListener() {
-                @Override
-                public void onSearchSucceed(int nbrMessages) {
-                    onSearchEnd(nbrMessages);
-                }
+            if (mSearchInMessagesFragment.isAdded())  {
 
-                @Override
-                public void onSearchFailed() {
-                    onSearchEnd(0);
-                }
-            });
+                // display the "wait while searching" screen (progress bar)
+                mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+
+                mSearchInMessagesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                    @Override
+                    public void onSearchSucceed(int nbrMessages) {
+                        onSearchEnd(nbrMessages);
+                    }
+
+                    @Override
+                    public void onSearchFailed() {
+                        onSearchEnd(0);
+                    }
+                });
+            } else {
+                mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+            }
         }
         else {
             onSearchEnd(0);
@@ -289,70 +334,19 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_multiple_search_menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean retCode = true;
-
-        switch(item.getItemId()) {
-            // search in rooms content
-            case R.id.ic_action_voice_search:
-                // launch the "search in rooms" activity
-                /*final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorUnifiedSearchActivity.class);
-                VectorHomeActivity.this.startActivity(searchIntent);*/
-                Toast.makeText(this,NOT_IMPLEMENTED,Toast.LENGTH_SHORT).show();
-                break;
-
-            default:
-                // not handled item, return the super class implementation value
-                retCode = super.onOptionsItemSelected(item);
-                break;
-        }
-        return retCode;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    // =============================================================================================
-    // ISearchParentActivityProxy implementation
-    @Override
-    public String getPatternTextToSearch() {
-        String retValue;
-
-        if(null != mPatternToSearchEditText) {
-            retValue = mPatternToSearchEditText.getText().toString();
-            Log.d(LOG_TAG,"## getPatternTextToSearch(): searched text="+retValue);
-        }
-        else {
-            Log.w(LOG_TAG,"## getTextToSearch: searched text is empty");
-            retValue = "";
-        }
-
-        return retValue;
-    }
-    // =============================================================================================
-
-
-    // =============================================================================================
+    //==============================================================================================================
     // Tabs logic implementation
-    private void createNavigationTabs(Bundle aSavedInstanceState){
-        int tabIndex=0;
-        int tabIndexToRestore=-1;
-        int isBackroundDisplayedInRoomsTab=View.VISIBLE;
-        int isBackroundDisplayedInMsgTab=View.VISIBLE;
-        int isBackroundDisplayedInPeopleTab=View.VISIBLE;
-        int isBackroundDisplayedInFilesTab=View.VISIBLE;
-        String searchPattern = "";
+    //==============================================================================================================
+
+    /**
+     * Create the search fragment instances from the saved instance;
+     * @param aSavedInstanceState the saved instance.
+     */
+    private void createNavigationTabs(Bundle aSavedInstanceState) {
+        int tabIndex = 0;
+        int tabIndexToRestore;
+        int isBackroundDisplayed;
+        String searchPattern;
 
         // Set the tabs navigation mode
         mActionBar.setNavigationMode(android.support.v7.app.ActionBar.NAVIGATION_MODE_TABS);
@@ -362,9 +356,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         String tabTitle = getResources().getString(R.string.tab_title_search_rooms);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayedInRoomsTab = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_ROOMS_TAB, View.VISIBLE):View.VISIBLE;
+        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_ROOMS_TAB, View.VISIBLE):View.VISIBLE;
         searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_ROOMS_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES, isBackroundDisplayedInRoomsTab, View.GONE, searchPattern));
+        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES, isBackroundDisplayed, View.GONE, searchPattern));
         mActionBar.addTab(tabToBeadded);
         mSearchInRoomNamesTabIndex = tabIndex++;
 
@@ -373,9 +367,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         tabTitle = getResources().getString(R.string.tab_title_search_messages);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayedInRoomsTab = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_MESSAGES_TAB, View.VISIBLE):View.VISIBLE;
+        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_MESSAGES_TAB, View.VISIBLE):View.VISIBLE;
         searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_MESSAGES_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_MESSAGE, isBackroundDisplayedInMsgTab, View.GONE, searchPattern));
+        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_MESSAGE, isBackroundDisplayed, View.GONE, searchPattern));
         mActionBar.addTab(tabToBeadded);
         mSearchInMessagesTabIndex = tabIndex++;
 
@@ -384,9 +378,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         tabTitle = getResources().getString(R.string.tab_title_search_people);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayedInRoomsTab = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_PEOPLE_TAB, View.VISIBLE):View.VISIBLE;
+        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_PEOPLE_TAB, View.VISIBLE):View.VISIBLE;
         searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_PEOPLE_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_PEOPLE, isBackroundDisplayedInPeopleTab, View.GONE, searchPattern));
+        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_PEOPLE, isBackroundDisplayed, View.GONE, searchPattern));
         mActionBar.addTab(tabToBeadded);
         mSearchInPeopleTabIndex = tabIndex++;
 
@@ -395,14 +389,14 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         tabTitle = getResources().getString(R.string.tab_title_search_files);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayedInRoomsTab = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_FILES_TAB, View.VISIBLE):View.VISIBLE;
+        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_FILES_TAB, View.VISIBLE):View.VISIBLE;
         searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_FILES_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_FILES, isBackroundDisplayedInFilesTab, View.GONE, searchPattern));
+        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_FILES, isBackroundDisplayed, View.GONE, searchPattern));
         mActionBar.addTab(tabToBeadded);
         mSearchInFilesTabIndex = tabIndex++;
 
         // set the default tab to be displayed
-        tabIndexToRestore = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, -1):-1;
+        tabIndexToRestore = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
         if(-1 == tabIndexToRestore) {
             // default value: display the search in rooms tab
             tabIndexToRestore = mSearchInRoomNamesTabIndex;
@@ -418,6 +412,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         TabListenerHolder tabListenerHolder = (TabListenerHolder) tab.getTag();
         Log.d(LOG_TAG, "## onTabSelected() FragTag=" + tabListenerHolder.mFragmentTag);
 
+        // clear any displayed windows
+        resetUi();
+
         // inter tab selection life cycle: restore tab UI
         restoreUiTabContext(tab);
 
@@ -431,6 +428,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
                 Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag attach");
             }
             mCurrentTabIndex = mSearchInRoomNamesTabIndex;
+
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
                 mSearchInMessagesFragment = VectorMessagesSearchResultsListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
@@ -446,45 +444,40 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
             mCurrentTabIndex = mSearchInFilesTabIndex;
         }
+
+        if (-1 != mCurrentTabIndex) {
+            searchAccordingToTabHandler();
+        }
     }
 
     @Override
     public void onTabUnselected(android.support.v7.app.ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         TabListenerHolder tabListenerHolder = (TabListenerHolder) tab.getTag();
-        Log.d(LOG_TAG,"## onTabUnselected() FragTag="+tabListenerHolder.mFragmentTag);
+        Log.d(LOG_TAG, "## onTabUnselected() FragTag=" + tabListenerHolder.mFragmentTag);
 
         // save tab UI context before leaving the tab...
         saveUiTabContext(tab);
 
         if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
-            if(null != mSearchInMessagesFragment)
+            if(null != mSearchInMessagesFragment) {
                 ft.detach(mSearchInMessagesFragment);
+            }
         }
         else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES) ){
-            if(null != mSearchInRoomNamesFragment)
+            if(null != mSearchInRoomNamesFragment) {
                 ft.detach(mSearchInRoomNamesFragment);
-        }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
-
-        }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
-
-        }
-        else {
-
+            }
         }
     }
 
     @Override
-    public void onTabReselected(android.support.v7.app.ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-
+    public void onTabReselected(android.support.v7.app.ActionBar.Tab tab, FragmentTransaction ft) {
     }
-    // ==========================================================================================
 
-
-
-    // ==========================================================================================
+    //==============================================================================================================
     // Life cycle Activity methods
+    //==============================================================================================================
+
     @SuppressLint("LongLogTag")
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -515,20 +508,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         searchedPattern = ((TabListenerHolder)mActionBar.getTabAt(mSearchInFilesTabIndex).getTag()).mSearchedPattern;
         outState.putString(KEY_STATE_SEARCH_PATTERN_FILES_TAB, searchedPattern);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(LOG_TAG, "## onDestroy(): ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "## onResume(): ");
-    }
-    // ==========================================================================================
-
 }
 
 

@@ -37,16 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomsSearchResultsAdapter;
 
 public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListFragment {
     private static final String LOG_TAG = "VectorMessagesSearchResultsListFragment";
-    private ISearchParentActivityProxy mSearchParentActivityProxy;
-
-    // proxy class to communicate with parent Activity
-    public interface ISearchParentActivityProxy {
-        public String getPatternTextToSearch();
-    }
 
     public static VectorMessagesSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
         VectorMessagesSearchResultsListFragment frag = new VectorMessagesSearchResultsListFragment();
@@ -58,27 +53,18 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
     }
 
     @Override
-    public void onAttach(Activity aParentActivity) {
-        super.onAttach(aParentActivity);
-
-        try {
-            mSearchParentActivityProxy = (ISearchParentActivityProxy) aParentActivity;
-        }
-        catch(ClassCastException e) {
-            // onAttach() error: interface not implemented in parent activity
-            throw new ClassCastException(aParentActivity.toString() + " must implement ISearchParentActivityProxy");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mSearchParentActivityProxy = null;
-    }
-
-    @Override
     public MessagesAdapter createMessagesAdapter() {
         return new VectorRoomsSearchResultsAdapter(mSession, getActivity(), getMXMediasCache());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // warn the activity that the current fragment is ready
+        if (getActivity() instanceof VectorUnifiedSearchActivity) {
+            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        }
     }
 
     /**
@@ -150,21 +136,11 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
         }
     }
 
-    public void searchPattern(final OnSearchResultListener onSearchResultListener){
-        if(null != mSearchParentActivityProxy) {
-            String stringToBeSearched = mSearchParentActivityProxy.getPatternTextToSearch();
-            searchPattern(stringToBeSearched, onSearchResultListener);
-        }
-        else {
-            Log.w("RoomSearchListFragment","## searchPattern() parent ref activity is missing");
-        }
-    }
-
     /**
      * Update the searched pattern.
      * @param pattern the pattern to find out. null to disable the search mode
      */
-    public void searchPattern(final String pattern,  final OnSearchResultListener onSearchResultListener) {
+    public void searchPattern(final String pattern, final OnSearchResultListener onSearchResultListener) {
         // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
         // in the search case, clear the list
         if (TextUtils.isEmpty(pattern)) {
@@ -178,7 +154,7 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
                 }
             });
         } else {
-
+            mAdapter.clear();
             super.searchPattern(pattern, new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {

@@ -24,6 +24,7 @@ import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
+import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
 
@@ -183,5 +184,15 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
         super.onPause();
         mPublicRoomsList = null;
         Log.d(LOG_TAG, "## onPause()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // warn the activity that the current fragment is ready
+        if (getActivity() instanceof VectorUnifiedSearchActivity) {
+            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        }
     }
 }
