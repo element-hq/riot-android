@@ -199,27 +199,29 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
     /**
      * The search is done.
+     * @param tabIndex the tab index
      * @param nbrMessages the number of found messages.
      */
-    private void onSearchEnd(int nbrMessages) {
-        Log.d(LOG_TAG,"## onSearchEnd() nbrMsg="+nbrMessages);
-        // stop "wait while searching" screen
-        mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+    private void onSearchEnd(int tabIndex, int nbrMessages) {
+        if (mCurrentTabIndex == tabIndex) {
+            Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
+            // stop "wait while searching" screen
+            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
 
-        // display the background only if there is no result
-        if(0 == nbrMessages) {
-            mBackgroundImageView.setVisibility(View.VISIBLE);
-        }
-        else {
-            mBackgroundImageView.setVisibility(View.GONE);
-        }
+            // display the background only if there is no result
+            if (0 == nbrMessages) {
+                mBackgroundImageView.setVisibility(View.VISIBLE);
+            } else {
+                mBackgroundImageView.setVisibility(View.GONE);
+            }
 
-        // display the "no result" text only if the researched text is not empty
-        mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
+            // display the "no result" text only if the researched text is not empty
+            mNoResultsTxtView.setVisibility(((0 == nbrMessages) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString())) ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**
-     * Called by the fragements when they are resumed.
+     * Called by the fragments when they are resumed.
      * It is used to refresh the search while playing with the tab.
      */
     public void onSearchFragmentResume() {
@@ -279,12 +281,12 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
                 mSearchInRoomNamesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
                     @Override
                     public void onSearchSucceed(int nbrMessages) {
-                        onSearchEnd(nbrMessages);
+                        onSearchEnd(mSearchInRoomNamesTabIndex, nbrMessages);
                     }
 
                     @Override
                     public void onSearchFailed() {
-                        onSearchEnd(0);
+                        onSearchEnd(mSearchInRoomNamesTabIndex, 0);
                     }
                 });
             }
@@ -298,12 +300,12 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
                 mSearchInMessagesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
                     @Override
                     public void onSearchSucceed(int nbrMessages) {
-                        onSearchEnd(nbrMessages);
+                        onSearchEnd(mSearchInMessagesTabIndex, nbrMessages);
                     }
 
                     @Override
                     public void onSearchFailed() {
-                        onSearchEnd(0);
+                        onSearchEnd(mSearchInMessagesTabIndex, 0);
                     }
                 });
             } else {
@@ -311,7 +313,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
             }
         }
         else {
-            onSearchEnd(0);
+            onSearchEnd(currentIndex, 0);
             Toast.makeText(VectorUnifiedSearchActivity.this, NOT_IMPLEMENTED, Toast.LENGTH_SHORT).show();
         }
     }
