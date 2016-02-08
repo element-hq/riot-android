@@ -1,8 +1,7 @@
 package im.vector.fragments;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +16,14 @@ import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
 
@@ -79,24 +81,38 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
-                MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
 
-                String roomId = roomSummary.getRoomId();
-                Room room = session.getDataHandler().getRoom(roomId);
-                // cannot join a leaving room
-                if ((null == room) || room.isLeaving()) {
-                    roomId = null;
-                }
+                if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
+                    List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
 
-                // update the unread messages count
-                if (mAdapter.resetUnreadCount(groupPosition, childPosition)) {
-                    session.getDataHandler().getStore().flushSummary(roomSummary);
-                }
+                    if ((null != matchedPublicRooms) && (matchedPublicRooms.size() > 0)) {
+                        Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
+                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_PUBLIC_ROOMS_LIST_ID, new ArrayList<PublicRoom>(matchedPublicRooms));
 
-                // launch corresponding room activity
-                if (null != roomId) {
-                    CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+                        getActivity().startActivity(intent);
+                    }
+
+                } else {
+                    RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+                    MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+
+                    String roomId = roomSummary.getRoomId();
+                    Room room = session.getDataHandler().getRoom(roomId);
+                    // cannot join a leaving room
+                    if ((null == room) || room.isLeaving()) {
+                        roomId = null;
+                    }
+
+                    // update the unread messages count
+                    if (mAdapter.resetUnreadCount(groupPosition, childPosition)) {
+                        session.getDataHandler().getStore().flushSummary(roomSummary);
+                    }
+
+                    // launch corresponding room activity
+                    if (null != roomId) {
+                        CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+                    }
                 }
 
                 // click is handled

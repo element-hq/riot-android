@@ -228,6 +228,18 @@
         </activity>
 
         <activity
+            android:name="im.vector.activity.VectorPublicRoomsActivity"
+            android:label="@string/directory_title"
+            android:parentActivityName="im.vector.activity.VectorSearchesActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorSearchesActivity"/>
+        </activity>
+
+        <activity
             android:name=".activity.VectorUnifiedSearchActivity"
             android:label="Vector searches"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"

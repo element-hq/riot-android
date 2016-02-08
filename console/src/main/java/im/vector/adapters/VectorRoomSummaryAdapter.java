@@ -79,13 +79,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     private final int mHeaderLayoutResourceId;
 
     private final MXSession mMxSession;
-    private ArrayList<ArrayList<RoomSummary>> mSummaryListBySections;
+    private ArrayList<ArrayList<RoomSummary>> mSummaryListByGroupPosition;
 
-    private int mDirectorySectionIndex = -1;  // public rooms index
-    private int mInvitedSectionIndex = -1;  // "Invited" index
-    private int mFavouriteSectionIndex = -1;// "Favourites" index
-    private int mNoTagSectionIndex = -1;    // "Rooms" index
-    private int mLowPriorSectionIndex = -1;  // "Low Priority" index
+    private int mDirectoryGroupPosition = -1;  // public rooms index
+    private int mInvitedGroupPosition = -1;  // "Invited" index
+    private int mFavouritesGroupPosition = -1;// "Favourites" index
+    private int mNoTagGroupPosition = -1;    // "Rooms" index
+    private int mLowPriorGroupPosition = -1;  // "Low Priority" index
 
     private final String DBG_CLASS_NAME;
 
@@ -143,25 +143,25 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     }
 
     /**
-     * Compute the name of the section according to its index.
-     * @param aSectionIndex index of the section
-     * @return section title corresponding to the index
+     * Compute the name of the group according to its position.
+     * @param groupPosition index of the section
+     * @return group title corresponding to the index
      */
-    private String getSectionTitle(int aSectionIndex) {
+    private String getGroupTitle(int groupPosition) {
         String retValue;
 
-        if (mDirectorySectionIndex == aSectionIndex) {
+        if (mDirectoryGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_directory);
-        } else if (mFavouriteSectionIndex == aSectionIndex) {
+        } else if (mFavouritesGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_favourites);
         }
-        else if (mNoTagSectionIndex == aSectionIndex) {
+        else if (mNoTagGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_conversations);
         }
-        else if (mLowPriorSectionIndex == aSectionIndex) {
+        else if (mLowPriorGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_low_priority);
         }
-        else if (mInvitedSectionIndex == aSectionIndex) {
+        else if (mInvitedGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_invites);
         }
         else {
@@ -234,6 +234,38 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     }
 
     /**
+     * Test if the group position is the directory one.
+     * @param groupPosition the group position test.
+     * @return true if it is directory group.
+     */
+    public boolean isDirectoryGroupPosition(int groupPosition) {
+        return (mDirectoryGroupPosition == groupPosition);
+    }
+
+    /**
+     * @return the matched public rooms list
+     */
+    public List<PublicRoom> getMatchedPublicRooms() {
+
+        if (null != mMatchedPublicRooms) {
+            Collections.sort(mMatchedPublicRooms, new Comparator<PublicRoom>() {
+                @Override
+                public int compare(PublicRoom r1, PublicRoom r2) {
+                    int diff = r2.numJoinedMembers - r1.numJoinedMembers;
+
+                    if (0 == diff) {
+                        diff  = VectorUtils.getPublicRoomDisplayName(r1).compareTo(VectorUtils.getPublicRoomDisplayName(r2));
+                    }
+
+                    return diff;
+                }
+            });
+        }
+
+        return mMatchedPublicRooms;
+    }
+
+    /**
      * Build an array of RoomSummary objects organized according to the room tags (sections).
      * So far we have 4 sections
      * - the invited rooms
@@ -245,16 +277,16 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * @param aRoomSummaryCollection the complete list of RoomSummary objects
      * @return an array of summary lists splitted by sections
      */
-    private ArrayList<ArrayList<RoomSummary>> buildSummariesBySections(final Collection<RoomSummary> aRoomSummaryCollection) {
-        ArrayList<ArrayList<RoomSummary>> summaryListBySectionsRetValue = new ArrayList<ArrayList<RoomSummary>>();
+    private ArrayList<ArrayList<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
+        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<ArrayList<RoomSummary>>();
         String roomSummaryId;
 
         // init index with default values
-        mDirectorySectionIndex = -1;
-        mInvitedSectionIndex = -1;
-        mFavouriteSectionIndex = -1;
-        mNoTagSectionIndex = -1;
-        mLowPriorSectionIndex = -1;
+        mDirectoryGroupPosition = -1;
+        mInvitedGroupPosition = -1;
+        mFavouritesGroupPosition = -1;
+        mNoTagGroupPosition = -1;
+        mLowPriorGroupPosition = -1;
 
         if(null != aRoomSummaryCollection) {
 
@@ -325,44 +357,44 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
                     }
                 }
 
-                mDirectorySectionIndex = groupIndex++;
+                mDirectoryGroupPosition = groupIndex++;
                 // create a dummy entry to keep match between section index <-> summaries list
-                summaryListBySectionsRetValue.add(new ArrayList<RoomSummary>());
+                summaryListByGroupsRetValue.add(new ArrayList<RoomSummary>());
             }
 
             // first the invitations
             if (0 != inviteRoomSummaryList.size()) {
                 // the invitations are sorted from the older to the oldest to the more recent ones
                 Collections.reverse(inviteRoomSummaryList);
-                summaryListBySectionsRetValue.add(inviteRoomSummaryList);
-                mInvitedSectionIndex = groupIndex;
+                summaryListByGroupsRetValue.add(inviteRoomSummaryList);
+                mInvitedGroupPosition = groupIndex;
                 groupIndex++;
             }
 
             // favourite
             while(favouriteRoomSummaryList.remove(dummyRoomSummary));
             if (0 != favouriteRoomSummaryList.size()) {
-                summaryListBySectionsRetValue.add(favouriteRoomSummaryList);
-                mFavouriteSectionIndex = groupIndex; // save section index
+                summaryListByGroupsRetValue.add(favouriteRoomSummaryList);
+                mFavouritesGroupPosition = groupIndex; // save section index
                 groupIndex++;
             }
 
             // no tag
             if (0 != noTagRoomSummaryList.size()) {
-                summaryListBySectionsRetValue.add(noTagRoomSummaryList);
-                mNoTagSectionIndex = groupIndex; // save section index
+                summaryListByGroupsRetValue.add(noTagRoomSummaryList);
+                mNoTagGroupPosition = groupIndex; // save section index
                 groupIndex++;
             }
 
             // low priority
             while(lowPriorityRoomSummaryList.remove(dummyRoomSummary));
             if (0 != lowPriorityRoomSummaryList.size()) {
-                summaryListBySectionsRetValue.add(lowPriorityRoomSummaryList);
-                mLowPriorSectionIndex = groupIndex; // save section index
+                summaryListByGroupsRetValue.add(lowPriorityRoomSummaryList);
+                mLowPriorGroupPosition = groupIndex; // save section index
             }
         }
 
-        return summaryListBySectionsRetValue;
+        return summaryListByGroupsRetValue;
     }
 
     /**
@@ -372,7 +404,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * @return
      */
     public RoomSummary getRoomSummaryAt(int aGroupPosition, int aChildPosition) {
-        RoomSummary roomSummaryRetValue = mSummaryListBySections.get(aGroupPosition).get(aChildPosition);
+        RoomSummary roomSummaryRetValue = mSummaryListByGroupPosition.get(aGroupPosition).get(aChildPosition);
         return roomSummaryRetValue;
     }
 
@@ -407,7 +439,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     public boolean resetUnreadCounts(int aSection) {
         boolean retCode = false;
 
-        ArrayList<RoomSummary> summariesList = (ArrayList<RoomSummary>)mSummaryListBySections.get(aSection);
+        ArrayList<RoomSummary> summariesList = (ArrayList<RoomSummary>)mSummaryListByGroupPosition.get(aSection);
         if(null != summariesList) {
             for (int summaryIdx = 0; summaryIdx < summariesList.size(); summaryIdx++) {
                 retCode |= resetUnreadCount(aSection, summaryIdx);
@@ -455,8 +487,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         RoomSummary roomSummaryRetValue = null;
         String roomIdStr;
 
-        if(null != mSummaryListBySections) {
-            ArrayList<RoomSummary> summariesList = mSummaryListBySections.get(aSectionIndex);
+        if (null != mSummaryListByGroupPosition) {
+            ArrayList<RoomSummary> summariesList = mSummaryListByGroupPosition.get(aSectionIndex);
             if (null != summariesList) {
                 for (int summaryIdx = 0; summaryIdx < summariesList.size(); summaryIdx++) {
                     roomIdStr = (summariesList.get(summaryIdx)).getRoomId();
@@ -520,7 +552,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             Collections.sort(roomSummariesCompleteList, summaryComparator);
 
             // init data model used to be be displayed in the list view
-            mSummaryListBySections = buildSummariesBySections(roomSummariesCompleteList);
+            mSummaryListByGroupPosition = buildSummariesByGroups(roomSummariesCompleteList);
         }
     }
 
@@ -532,8 +564,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
     @Override
     public int getGroupCount() {
-        if (null != mSummaryListBySections) {
-            return mSummaryListBySections.size();
+        if (null != mSummaryListByGroupPosition) {
+            return mSummaryListByGroupPosition.size();
         }
 
         return 0;
@@ -541,22 +573,22 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
     @Override
     public Object getGroup(int groupPosition) {
-        return getSectionTitle(groupPosition);
+        return getGroupTitle(groupPosition);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        return getSectionTitle(groupPosition).hashCode();
+        return getGroupTitle(groupPosition).hashCode();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
         // the directory section has always only one entry
-        if (mDirectorySectionIndex == groupPosition) {
+        if (mDirectoryGroupPosition == groupPosition) {
             return 1;
         }
 
-        int countRetValue = mSummaryListBySections.get(groupPosition).size();
+        int countRetValue = mSummaryListByGroupPosition.get(groupPosition).size();
         return countRetValue;
     }
 
@@ -580,7 +612,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
         if (null != sectionNameTxtView) {
-            sectionNameTxtView.setText(getSectionTitle(groupPosition));
+            sectionNameTxtView.setText(getGroupTitle(groupPosition));
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
@@ -601,7 +633,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // sanity check
-        if (null == mSummaryListBySections){
+        if (null == mSummaryListByGroupPosition){
             return null;
         }
         if (convertView == null) {
@@ -628,7 +660,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
 
         // directory management
-        if (mDirectorySectionIndex == groupPosition) {
+        if (mDirectoryGroupPosition == groupPosition) {
             // some items are show
             bingUnreadMsgView.setVisibility(View.INVISIBLE);
             timestampTxtView.setVisibility(View.INVISIBLE);
@@ -650,7 +682,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             return convertView;
         }
 
-        RoomSummary childRoomSummary = mSummaryListBySections.get(groupPosition).get(childPosition);
+        RoomSummary childRoomSummary = mSummaryListByGroupPosition.get(groupPosition).get(childPosition);
         final Room childRoom =  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
         int unreadMsgCount = childRoomSummary.getUnreadEventsCount();
 
@@ -709,8 +741,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             });
         } else {
 
-            final boolean isFavorite = groupPosition == mFavouriteSectionIndex;
-            final boolean isLowPrior = groupPosition == mLowPriorSectionIndex;
+            final boolean isFavorite = groupPosition == mFavouritesGroupPosition;
+            final boolean isLowPrior = groupPosition == mLowPriorGroupPosition;
 
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override

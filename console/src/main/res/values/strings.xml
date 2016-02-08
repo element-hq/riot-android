@@ -95,6 +95,8 @@
     <string name="create_account">Register</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="hs_url">Home Server URL</string>
+    <string name="user">user</string>
+    <string name="users">users</string>
 
     <string name="create_room_set_alias">Set room alias</string>
     <string name="create_room_alias_hint">room-alias</string>
@@ -455,5 +457,8 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
+
+    // Directory
+    <string name="directory_title">Directory</string>
 
 </resources>
