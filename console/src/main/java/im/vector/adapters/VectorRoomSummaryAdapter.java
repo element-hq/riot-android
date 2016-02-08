@@ -540,12 +540,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
     @Override
     public Object getGroup(int groupPosition) {
-        return null;
+        return getSectionTitle(groupPosition);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        return 0L;
+        return getSectionTitle(groupPosition).hashCode();
     }
 
     @Override
