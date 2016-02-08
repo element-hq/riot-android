@@ -87,13 +87,12 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     // UI items
     private ImageView mBackgroundImageView;
     private TextView mNoResultsTxtView;
+    private View mLoadOldestContentView;
     private View mWaitWhileSearchInProgressView;
     private EditText mPatternToSearchEditText;
 
     private static class TabListenerHolder {
         public final String mFragmentTag;
-        //public final int mContainerId;
-        public Fragment mTabFragment;
         public int mBackgroundVisibility;
         public int mNoResultsTxtViewVisibility;
         public String mSearchedPattern;
@@ -128,7 +127,8 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         // UI widgets binding & init fields
         mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
         mNoResultsTxtView = (TextView)findViewById(R.id.search_no_result_textview);
-        mWaitWhileSearchInProgressView =  findViewById(R.id.search_in_progress_view);
+        mWaitWhileSearchInProgressView = findViewById(R.id.search_in_progress_view);
+        mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
         mActionBar = getSupportActionBar();
 
         // customize the action bar with a custom view to contain the search input text
@@ -194,6 +194,10 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         if (null != mNoResultsTxtView) {
             mNoResultsTxtView.setVisibility(View.GONE);
+        }
+
+        if (null != mLoadOldestContentView) {
+            mLoadOldestContentView.setVisibility(View.GONE);
         }
     }
 

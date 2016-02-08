@@ -16,14 +16,12 @@
 
 package im.vector.fragments;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -42,6 +40,9 @@ import im.vector.adapters.VectorRoomsSearchResultsAdapter;
 
 public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListFragment {
     private static final String LOG_TAG = "VectorMessagesSearchResultsListFragment";
+
+    private String mSearchingPattern;
+    private ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
 
     public static VectorMessagesSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
         VectorMessagesSearchResultsListFragment frag = new VectorMessagesSearchResultsListFragment();
@@ -141,39 +142,85 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
      * @param pattern the pattern to find out. null to disable the search mode
      */
     public void searchPattern(final String pattern, final OnSearchResultListener onSearchResultListener) {
+
+        if (null != onSearchResultListener) {
+            mSearchListeners.add(onSearchResultListener);
+        }
+
+        // please wait
+        if (TextUtils.equals(mSearchingPattern, pattern)) {
+            mSearchListeners.add(onSearchResultListener);
+            return;
+        }
+
+        if (mSearchListeners.size() > 1) {
+            mSearchListeners = mSearchListeners;
+        }
+
         // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
         // in the search case, clear the list
         if (TextUtils.isEmpty(pattern)) {
             mPattern = null;
             mAdapter.clear();
+            mMessageListView.setVisibility(View.GONE);
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    onSearchResultListener.onSearchSucceed(0);
+                    for(OnSearchResultListener listener : mSearchListeners) {
+                        try {
+                            listener.onSearchSucceed(0);
+                        } catch (Exception e) {
+                        }
+                    }
+                    mSearchListeners.clear();
+                    mSearchingPattern = null;
                 }
             });
         } else {
             mAdapter.clear();
+            mSearchingPattern = pattern;
+
             super.searchPattern(pattern, new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
-                    // scroll to the bottom
-                    scrollToBottom();
+                    // the pattern has been updated while search
+                    if (!TextUtils.equals(pattern, mSearchingPattern)) {
+                        mAdapter.clear();
+                        mMessageListView.setVisibility(View.GONE);
+                    } else {
+                        // scroll to the bottom
+                        scrollToBottom();
+                        mMessageListView.setVisibility(View.VISIBLE);
 
-                    if (null != onSearchResultListener) {
-                        onSearchResultListener.onSearchSucceed(nbrMessages);
+                        for (OnSearchResultListener listener : mSearchListeners) {
+                            try {
+                                listener.onSearchSucceed(nbrMessages);
+                            } catch (Exception e) {
+
+                            }
+                        }
+                        mSearchListeners.clear();
+                        mSearchingPattern = null;
                     }
                 }
 
                 @Override
                 public void onSearchFailed() {
+
+                    mMessageListView.setVisibility(View.GONE);
+
                     // clear the results list if teh search fails
                     mAdapter.clear();
 
-                    if (null != onSearchResultListener) {
-                        onSearchResultListener.onSearchFailed();
+                    for (OnSearchResultListener listener : mSearchListeners) {
+                        try {
+                            listener.onSearchFailed();
+                        } catch (Exception e) {
+                        }
                     }
+                    mSearchListeners.clear();
+                    mSearchingPattern = null;
                 }
             });
         }
