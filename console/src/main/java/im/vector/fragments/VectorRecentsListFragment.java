@@ -305,7 +305,9 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      * Remove the MXEventListener to the session listeners.
      */
     private void removeSessionListener() {
-        mSession.getDataHandler().removeListener(mEventsListener);
+        if (mSession.isActive()) {
+            mSession.getDataHandler().removeListener(mEventsListener);
+        }
     }
 
     @Override
