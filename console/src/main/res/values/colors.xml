@@ -14,8 +14,13 @@
     <color name="room_summary_highlight_background">#FF88BBFF</color>
     <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
 
+    <!-- action bar color -->
+    <color name="vector_actionbar_background">#76CFA6</color>
+    <color name="vector_actionbar_text_color">#FFFFFF</color>
+    <color name="vector_actionbar_icons_color">#FFFFFF</color>
+
     <color name="vector_background">#FFFAFAFA</color>
-    <color name="vector_title_color">#DD000000</color>
+    <color name="vector_title_color">#FFFFFF</color>
     <color name="vector_border_color">#FF3C3C3C</color>
 
     <color name="vector_green_color">#FF62CE9C</color>

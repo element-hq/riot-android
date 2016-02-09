@@ -1,39 +1,69 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-        <item name="android:typeface">sans</item>
-        <item name="android:windowActionBar">true</item>
-        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="Widget.Styled.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+
+        <!-- with action bar -->
+        <item name="android:windowActionBar">true</item>
+
+        <!-- fonts -->
+        <item name="android:typeface">sans</item>
+
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/Vector.Styled.ActionBar</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
+
+        <!-- textedit underline ... -->
+        <item name="android:colorAccent">@color/vector_actionbar_background</item>
+
+    </style>
+
+    <!-- actionbar icons color -->
+    <style name="Vector.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/vector_actionbar_icons_color</item>
+    </style>
+
+    <!-- custom action bar -->
+    <style name="Vector.Styled.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/vector_actionbar_background</item>
+        <item name="background">@color/vector_actionbar_background</item>
+
+        <!-- remove shadow under the action bar -->
+        <item name="android:elevation">0dp</item>
+        <item name="elevation">0dp</item>
+
+        <!-- main text -->
         <item name="titleTextStyle">@style/ActionBarTitleText</item>
-        <item name="android:background">@color/vector_background</item>
-        <item name="background">@color/vector_background</item>
+
+        <!-- subtext text -->
         <item name="subtitleTextStyle">@style/ActionBarSubTitleText</item>
     </style>
 
+    <!-- main text -->
     <style name="ActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/vector_title_color</item>
+        <item name="android:textColor">@color/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">20sp</item>
     </style>
 
+    <!-- subtext text -->
     <style name="ActionBarSubTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">@color/vector_title_color</item>
+        <item name="android:textColor">@color/vector_actionbar_text_color</item>
         <item name="android:fontFamily">"sans-serif-medium"</item>
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- home scroller menu -->
     <style name="NavigationViewStyle">
         <item name="android:textColor">@color/vector_4d_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
+
 </resources>
