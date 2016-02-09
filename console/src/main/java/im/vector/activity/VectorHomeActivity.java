@@ -342,7 +342,7 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
         userIdTextView.setText(mSession.getMyUser().userId);
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar).findViewById(R.id.avatar_img);
-        String avatarUrl = mSession.getMyUser().avatarUrl;
+        String avatarUrl = mSession.getMyUser().getAvatarUrl();
         VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
 
         mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
