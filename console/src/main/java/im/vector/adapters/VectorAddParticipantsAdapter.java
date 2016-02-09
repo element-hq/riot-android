@@ -115,7 +115,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         if (null == mRoom) {
             MyUser myUser = mSession.getMyUser();
 
-            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.avatarUrl, myUser.userId);
+            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.getAvatarUrl(), myUser.userId);
             this.add(item);
             mCreationParticipantsList.add(item);
         }

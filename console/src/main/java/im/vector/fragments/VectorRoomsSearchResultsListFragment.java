@@ -1,140 +1,148 @@
-/*
- * Copyright 2015 OpenMarket Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package im.vector.fragments;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.view.MotionEvent;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 
-import org.matrix.androidsdk.adapters.MessageRow;
-import org.matrix.androidsdk.adapters.MessagesAdapter;
-import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import im.vector.Matrix;
 import im.vector.R;
-import im.vector.adapters.VectorRoomsSearchResultsAdapter;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorPublicRoomsActivity;
+import im.vector.activity.VectorUnifiedSearchActivity;
+import im.vector.adapters.VectorRoomSummaryAdapter;
 
-public class VectorRoomsSearchResultsListFragment  extends ConsoleMessageListFragment {
 
+public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragment {
+    // log tag
+    private static String LOG_TAG = "V_RoomsSearchResultsListFragment";
+
+    // the session
+    private MXSession mSession;
+
+    // current public Rooms List
+    private List<PublicRoom> mPublicRoomsList;
+
+    /**
+     * Static constructor
+     * @param matrixId the matrix id
+     * @return a VectorRoomsSearchResultsListFragment instance
+     */
     public static VectorRoomsSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
         VectorRoomsSearchResultsListFragment f = new VectorRoomsSearchResultsListFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_LAYOUT_ID, layoutResId);
+        args.putInt(VectorRecentsListFragment.ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
         f.setArguments(args);
         return f;
     }
 
     @Override
-    public MessagesAdapter createMessagesAdapter() {
-        return new VectorRoomsSearchResultsAdapter(mSession, getActivity(), getMXMediasCache());
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        Bundle args = getArguments();
 
-    /**
-     * The user scrolls the list.
-     * Apply an expected behaviour
-     * @param event the scroll event
-     */
-    @Override
-    public void onListTouch(MotionEvent event) {
-    }
+        mMatrixId = args.getString(ARG_MATRIX_ID);
+        mSession = Matrix.getInstance(getActivity()).getSession(mMatrixId);
 
-    /**
-     * return true to display all the events.
-     * else the unknown events will be hidden.
-     */
-    @Override
-    public boolean isDisplayAllEvents() {
-        return true;
-    }
+        if (null == mSession) {
+            throw new RuntimeException("Must have valid default MXSession.");
+        }
 
-    /**
-     * Display a global spinner or any UI item to warn the user that there are some pending actions.
-     */
-    @Override
-    public void displayLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
+        View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
+        mRecentsListView = (ExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        // the chevron is managed in the header view
+        mRecentsListView.setGroupIndicator(null);
+        // create the adapter
+        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mRecentsListView.setAdapter(mAdapter);
 
-                        if (null != progressView) {
-                            progressView.setVisibility(View.VISIBLE);
-                        }
+        // hide it by default
+        mRecentsListView.setVisibility(View.GONE);
+
+        // Set rooms click listener:
+        // - reset the unread count
+        // - start the corresponding room activity
+        mRecentsListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+
+                if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
+                    List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
+
+                    if ((null != matchedPublicRooms) && (matchedPublicRooms.size() > 0)) {
+                        Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
+                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_PUBLIC_ROOMS_LIST_ID, new ArrayList<PublicRoom>(matchedPublicRooms));
+
+                        getActivity().startActivity(intent);
+                    }
+
+                } else {
+                    RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+                    MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+
+                    String roomId = roomSummary.getRoomId();
+                    Room room = session.getDataHandler().getRoom(roomId);
+                    // cannot join a leaving room
+                    if ((null == room) || room.isLeaving()) {
+                        roomId = null;
+                    }
+
+                    // update the unread messages count
+                    if (mAdapter.resetUnreadCount(groupPosition, childPosition)) {
+                        session.getDataHandler().getStore().flushSummary(roomSummary);
+                    }
+
+                    // launch corresponding room activity
+                    if (null != roomId) {
+                        CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
                     }
                 }
-            });
+
+                // click is handled
+                return true;
+            }
+        });
+
+        return v;
+    }
+
+    /**
+     * Expands all existing sections.
+     */
+    private void expandsAllSections() {
+        final int groupCount = mAdapter.getGroupCount();
+
+        for(int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            mRecentsListView.expandGroup(groupIndex);
         }
     }
 
     /**
-     * Dismiss any global spinner.
+     * Search a pattern in the room
+     * @param pattern
+     * @param onSearchResultListener
      */
-    @Override
-    public void dismissLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    /**
-     * Scroll the fragment to the bottom
-     */
-    public void scrollToBottom() {
-        if (0 != mAdapter.getCount()) {
-            mMessageListView.setSelection(mAdapter.getCount() - 1);
-        }
-    }
-
-    /**
-     * Update the searched pattern.
-     * @param pattern the pattern to find out. null to disable the search mode
-     */
-    public void searchPattern(final String pattern,  final OnSearchResultListener onSearchResultListener) {
-        // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
-        // in the search case, clear the list
+    public void searchPattern(final String pattern,  final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
         if (TextUtils.isEmpty(pattern)) {
-            mPattern = null;
-            mAdapter.clear();
-
+            mRecentsListView.setVisibility(View.GONE);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -142,101 +150,49 @@ public class VectorRoomsSearchResultsListFragment  extends ConsoleMessageListFra
                 }
             });
         } else {
+            mAdapter.setPublicRoomsList(mPublicRoomsList);
+            mAdapter.setSearchPattern(pattern);
 
-            super.searchPattern(pattern, new OnSearchResultListener() {
+            mRecentsListView.post(new Runnable() {
                 @Override
-                public void onSearchSucceed(int nbrMessages) {
-                    // scroll to the bottom
-                    scrollToBottom();
-
-                    if (null != onSearchResultListener) {
-                        onSearchResultListener.onSearchSucceed(nbrMessages);
-                    }
-                }
-
-                @Override
-                public void onSearchFailed() {
-                    // clear the results list if teh search fails
-                    mAdapter.clear();
-
-                    if (null != onSearchResultListener) {
-                        onSearchResultListener.onSearchFailed();
-                    }
+                public void run() {
+                    mRecentsListView.setVisibility(View.VISIBLE);
+                    expandsAllSections();
+                    onSearchResultListener.onSearchSucceed(1);
                 }
             });
-        }
-    }
 
-    public Boolean onRowLongClick(int position) {
-        final MessageRow messageRow = mAdapter.getItem(position);
-        final List<Integer> textIds = new ArrayList<>();
-        final List<Integer> iconIds = new ArrayList<Integer>();
-
-        textIds.add(R.string.copy);
-        iconIds.add(R.drawable.ic_material_copy);
-
-        // display the JSON
-        textIds.add(R.string.message_details);
-        iconIds.add(R.drawable.ic_material_description);
-
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
-
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
-        }
-
-        Integer[] lIcons = iconIds.toArray(new Integer[iconIds.size()]);
-        Integer[] lTexts = textIds.toArray(new Integer[iconIds.size()]);
-
-        fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-            @Override
-            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                final Integer selectedVal = textIds.get(position);
-
-                if (selectedVal == R.string.copy) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            Event event = messageRow.getEvent();
-                            EventDisplay display = new EventDisplay(getActivity(), event, null);
-
-                            ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
-                            clipboard.setPrimaryClip(clip);
+            // the public rooms have not yet been retrieved
+            if (null == mPublicRoomsList) {
+                // use any session to get the public rooms list
+                mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
+                    @Override
+                    public void onSuccess(List<PublicRoom> publicRooms) {
+                        if (null != publicRooms) {
+                            mPublicRoomsList = publicRooms;
+                            mAdapter.setPublicRoomsList(mPublicRoomsList);
+                            mAdapter.notifyDataSetChanged();
                         }
-                    });
-                } else if (selectedVal == R.string.message_details) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            FragmentManager fm =  getActivity().getSupportFragmentManager();
-
-                            MessageDetailsFragment fragment = (MessageDetailsFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_DETAILS);
-                            if (fragment != null) {
-                                fragment.dismissAllowingStateLoss();
-                            }
-                            fragment = MessageDetailsFragment.newInstance(messageRow.getEvent().toString());
-                            fragment.show(fm, TAG_FRAGMENT_MESSAGE_DETAILS);
-                        }
-                    });
-                }
+                    }
+                });
             }
-        });
-
-        fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
-
-        return true;
+        }
     }
 
-    /**
-     * Called when a long click is performed on the message content
-     * @param position the cell position
-     * @return true if managed
-     */
-    public Boolean onContentLongClick(int position) {
-        return onRowLongClick(position);
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPublicRoomsList = null;
+        Log.d(LOG_TAG, "## onPause()");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // warn the activity that the current fragment is ready
+        if (getActivity() instanceof VectorUnifiedSearchActivity) {
+            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        }
+    }
 }

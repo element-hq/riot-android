@@ -46,6 +46,7 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 
 import java.io.BufferedReader;
@@ -73,6 +74,28 @@ public class VectorUtils {
     //==============================================================================================================
     // Rooms methods
     //==============================================================================================================
+
+    /**
+     * Returns the displayname to display for a public room.
+     * @param publicRoom the public room.
+     * @return the room display name.
+     */
+    public static String getPublicRoomDisplayName(PublicRoom publicRoom) {
+        String displayname = publicRoom.name;
+
+        if (TextUtils.isEmpty(displayname)) {
+
+            if ((null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
+                displayname = publicRoom.aliases.get(0);
+            } else {
+                displayname = publicRoom.roomId;
+            }
+        } else if (!displayname.startsWith("#")  && (null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
+            displayname = displayname + " (" + publicRoom.aliases.get(0) + ")";
+        }
+
+        return displayname;
+    }
 
     /**
      * Vector client formats the room display with a different manner than the SDK one.

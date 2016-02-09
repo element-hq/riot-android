@@ -80,9 +80,9 @@ public class AccountsAdapter extends ArrayAdapter<MXSession> {
         ImageView avatarView = (ImageView)convertView.findViewById(R.id.avatar_img);
         avatarView.setImageResource(R.drawable.ic_contact_picture_holo_light);
 
-        if (!TextUtils.isEmpty(myUser.avatarUrl)) {
+        if (!TextUtils.isEmpty(myUser.getAvatarUrl())) {
             int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
-            mMediasCache.loadAvatarThumbnail(session.getHomeserverConfig(), avatarView, myUser.avatarUrl, size);
+            mMediasCache.loadAvatarThumbnail(session.getHomeserverConfig(), avatarView, myUser.getAvatarUrl(), size);
         }
 
         return convertView;

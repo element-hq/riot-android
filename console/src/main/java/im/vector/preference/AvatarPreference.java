@@ -61,7 +61,7 @@ public class AvatarPreference extends EditTextPreference {
     public void refreshAvatar() {
         if ((null !=  mAvatarView) && (null != mSession)) {
             VectorUtils.setMemberAvatar(mAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarView, mSession.getMyUser().avatarUrl, mContext.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarView, mSession.getMyUser().getAvatarUrl(), mContext.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         }
     }
 
