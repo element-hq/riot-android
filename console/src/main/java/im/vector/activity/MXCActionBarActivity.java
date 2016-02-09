@@ -306,7 +306,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
                 mDrawerToggle = new ActionBarDrawerToggle(
                         this,                  /* host Activity */
                         mDrawerLayout,         /* DrawerLayout object */
-                         R.drawable.ic_material_menu,  /* nav drawer icon to replace 'Up' caret */
+                         R.drawable.ic_material_menu_white,  /* nav drawer icon to replace 'Up' caret */
                         R.string.action_open,  /* "open drawer" description */
                         R.string.action_close  /* "close drawer" description */
                 ) {
@@ -334,7 +334,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
                 getSupportActionBar().setHomeButtonEnabled(true);
 
                 if (replaceUpButton) {
-                    getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu));
+                    getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu_white));
                 }
             }
         }

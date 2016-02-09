@@ -10,6 +10,9 @@
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>
 
+        <!-- status bar color -->
+        <item name="android:colorPrimaryDark">@color/vector_statusbar_color</item>
+
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 

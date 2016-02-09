@@ -36,6 +36,9 @@
         <item name="android:background">@color/vector_actionbar_background</item>
         <item name="background">@color/vector_actionbar_background</item>
 
+        <!-- status bar color -->
+        <item name="colorPrimaryDark">@color/vector_statusbar_color</item>
+
         <!-- remove shadow under the action bar -->
         <item name="elevation">0dp</item>
 
@@ -66,5 +69,5 @@
         <item name="android:textColor">@color/vector_4d_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
-    
+
 </resources>
