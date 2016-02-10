@@ -81,7 +81,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
-            android:src="@drawable/vector_actions"/>
+            android:src="@drawable/vector_actions_9b"/>
 
         <RelativeLayout
             android:id="@+id/roomSummaryAdapter_action"

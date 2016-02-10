@@ -618,9 +618,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
 
         if (!isExpanded) {
-            imageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
+            imageView.setImageResource(R.drawable.ic_material_expand_less_black);
         } else {
-            imageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
+            imageView.setImageResource(R.drawable.ic_material_expand_more_black);
         }
 
         return convertView;
