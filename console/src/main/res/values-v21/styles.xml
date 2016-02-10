@@ -39,9 +39,8 @@
         <!-- actionbar icons color -->
         <item name="actionBarTheme">@style/Vector.ActionBarTheme</item>
 
-        <!-- textedit underline ... -->
-        <item name="android:colorAccent">@color/vector_actionbar_background</item>
-
+        <!-- remove the shadow under the actionbar -->
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <!-- actionbar icons color -->
