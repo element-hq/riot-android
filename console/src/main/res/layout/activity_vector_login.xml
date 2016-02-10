@@ -1,0 +1,149 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/login_large_logo"
+        android:layout_width="172dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_large">
+    </ImageView>
+
+    <RelativeLayout
+        android:id="@+id/login_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_large_logo"
+        android:layout_marginTop="19dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <EditText
+            android:id="@+id/login_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="@string/email_address"
+            android:layout_alignParentTop="true"/>
+
+        <EditText
+            android:id="@+id/editText_password"
+            android:layout_below="@id/login_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:hint="@string/password"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/display_server_url_layout"
+            android:layout_below="@id/editText_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/advanced_server_options"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/display_server_url_expand_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_material_arrow_drop_up_black"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/login_matrix_server_url"
+            android:layout_below="@id/display_server_url_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="@string/hs_url"
+            android:text="https://matrix.org"
+            android:layout_marginTop="6dp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/vector_silver_color"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/vector_silver_color"/>
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_width="94dp"
+            android:layout_height="36dp"
+            android:background="@color/vector_green_color"
+            android:textColor="@android:color/white"
+            android:text="@string/login"/>
+
+        <Button
+            android:id="@+id/button_register"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="94dp"
+            android:layout_height="36dp"
+            android:textColor="@color/vector_green_color"
+            android:background="@android:color/white"
+            android:text="@string/create_account"/>
+    </RelativeLayout>
+
+
+
+    <!-- flow mask view: to be displayed above the entire screen -->
+    <!--RelativeLayout
+        android:id="@+id/flow_ui_mask_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true">
+
+        <View
+            android:id="@+id/search_mask_view"
+            android:background="#AAAAAAAA"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/search_progress"
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true" />
+
+    </RelativeLayout-->
+
+</RelativeLayout>
+

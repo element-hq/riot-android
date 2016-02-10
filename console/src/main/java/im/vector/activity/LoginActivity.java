@@ -55,20 +55,20 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // graphical items
     private Button mLoginButton;
-    private TextView mCreateAccountTxtView; // register a new user
-    private TextView mPasswordForgottenTxtView; // register a new user
+    //private TextView mCreateAccountTxtView; // register a new user
+    //private TextView mPasswordForgottenTxtView; // register a new user
     private EditText mHomeServerText;
-    private RelativeLayout mLogingMaskView; // used to display a UI mask on the screen
+    //private RelativeLayout mLogingMaskView; // used to display a UI mask on the screen
 
     String mHomeServerUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vector_activity_login);
+        setContentView(R.layout.activity_vector_login);
 
         // lock screen orientation in portrait
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // resume the application
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
@@ -84,10 +84,10 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         // bind UI widgets
-        mLogingMaskView = (RelativeLayout)findViewById(R.id.flow_ui_mask_login);
+        //mLogingMaskView = (RelativeLayout)findViewById(R.id.flow_ui_mask_login);
         mHomeServerText = (EditText) findViewById(R.id.login_matrix_server_url);
-        mCreateAccountTxtView = (TextView) findViewById(R.id.login_register_account);
-        mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
+        //mCreateAccountTxtView = (TextView) findViewById(R.id.login_register_account);
+        //mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
         mLoginButton = (Button)findViewById(R.id.button_login);
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +101,7 @@ public class LoginActivity extends MXCActionBarActivity {
         });
 
         // account creation handler
-        mCreateAccountTxtView.setOnClickListener(new View.OnClickListener() {
+        /*mCreateAccountTxtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String hs = mHomeServerText.getText().toString();
@@ -124,7 +124,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 intent.putExtra(AccountCreationActivity.EXTRA_HOME_SERVER_ID, hs);
                 startActivityForResult(intent, ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
             }
-        });
+        });*/
 
 
         // home server input validity: if the user taps on the next / done button
@@ -158,12 +158,12 @@ public class LoginActivity extends MXCActionBarActivity {
         });
 
         // "forgot password?" handler
-        mPasswordForgottenTxtView.setOnClickListener(new View.OnClickListener() {
+        /*mPasswordForgottenTxtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(LoginActivity.this, "Not implemented..", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
     }
 
@@ -326,8 +326,8 @@ public class LoginActivity extends MXCActionBarActivity {
         // disable/enable login buttons
         setLoginButtonsEnabled(!aIsMaskEnabled);
 
-        if(null != mLogingMaskView)
-            mLogingMaskView.setVisibility(aIsMaskEnabled ? View.VISIBLE : View.GONE);
+        /*if(null != mLogingMaskView)
+            mLogingMaskView.setVisibility(aIsMaskEnabled ? View.VISIBLE : View.GONE);*/
     }
 
     /**
@@ -335,10 +335,10 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void setLoginButtonsEnabled(Boolean enabled) {
         mLoginButton.setEnabled(enabled);
-        mCreateAccountTxtView.setEnabled(enabled);
+        //mCreateAccountTxtView.setEnabled(enabled);
 
         mLoginButton.setAlpha(enabled ? 1.0f : 0.5f);
-        mCreateAccountTxtView.setAlpha(enabled ? 1.0f : 0.5f);
+        //mCreateAccountTxtView.setAlpha(enabled ? 1.0f : 0.5f);
     }
 
     /**

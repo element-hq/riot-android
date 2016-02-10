@@ -97,6 +97,7 @@
     <string name="hs_url">Home Server URL</string>
     <string name="user">user</string>
     <string name="users">users</string>
+    <string name="advanced_server_options">Advanced server options</string>
 
     <string name="create_room_set_alias">Set room alias</string>
     <string name="create_room_alias_hint">room-alias</string>
