@@ -20,6 +20,9 @@
     <color name="vector_actionbar_text_color">#FFFFFF</color>
     <color name="vector_actionbar_icons_color">#FFFFFF</color>
 
+    <!-- activities background -->
+    <color name="vector_activity_background_color">#FFF</color>
+
     <color name="vector_background">#FFFAFAFA</color>
     <color name="vector_title_color">#FFFFFF</color>
     <color name="vector_border_color">#FF3C3C3C</color>

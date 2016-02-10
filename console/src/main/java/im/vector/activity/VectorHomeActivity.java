@@ -177,7 +177,9 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
     @Override
     protected void onPause() {
         super.onPause();
-        mSession.getDataHandler().removeListener(mEventsListener);
+        if (mSession.isActive()) {
+            mSession.getDataHandler().removeListener(mEventsListener);
+        }
     }
 
     @Override

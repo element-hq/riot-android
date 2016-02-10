@@ -75,7 +75,9 @@
         <!-- activities list starts here -->
         <activity
             android:name="im.vector.activity.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="adjustResize"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
