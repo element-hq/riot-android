@@ -77,8 +77,17 @@
             android:hint="@string/hs_url"
             android:text="https://matrix.org"
             android:layout_marginTop="6dp" />
-    </RelativeLayout>
 
+        <TextView
+            android:id="@+id/login_forgot_password"
+            android:layout_below="@id/login_matrix_server_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="14dp"
+            android:textColor="@color/vector_green_color"
+            android:text="@string/forgot_password"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_alignParentBottom="true"
@@ -119,16 +128,12 @@
             android:text="@string/create_account"/>
     </RelativeLayout>
 
-
-
     <!-- flow mask view: to be displayed above the entire screen -->
-    <!--RelativeLayout
+    <RelativeLayout
         android:id="@+id/flow_ui_mask_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true">
-
         <View
             android:id="@+id/search_mask_view"
             android:background="#AAAAAAAA"
@@ -142,8 +147,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:indeterminate="true" />
-
-    </RelativeLayout-->
+    </RelativeLayout>
 
 </RelativeLayout>
 
