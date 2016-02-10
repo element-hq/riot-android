@@ -458,8 +458,8 @@ public class LoginActivity extends MXCActionBarActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        setLoginButtonsEnabled(false);
                         setFlowsMaskEnabled(false);
+                        setLoginButtonsEnabled(false);
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     }
 

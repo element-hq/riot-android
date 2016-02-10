@@ -42,7 +42,7 @@
             android:background="@android:color/white"
             android:text="@string/create_account"/>
     </RelativeLayout>
-    
+
     <!-- the main body is defined in a scroll view to avoid split items -->
     <ScrollView
         android:layout_width="match_parent"
