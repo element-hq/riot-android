@@ -153,10 +153,6 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
             return;
         }
 
-        if (mSearchListeners.size() > 1) {
-            mSearchListeners = mSearchListeners;
-        }
-
         // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
         // in the search case, clear the list
         if (TextUtils.isEmpty(pattern)) {
