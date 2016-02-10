@@ -91,6 +91,8 @@
             android:background="@android:color/transparent">
 
             <View
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
                 android:id="@+id/roomSummaryAdapter_action_anchor"
                 android:layout_width="1dp"
                 android:layout_height="1dp" />

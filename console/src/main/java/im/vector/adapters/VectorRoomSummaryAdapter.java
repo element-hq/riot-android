@@ -16,13 +16,16 @@
 
 package im.vector.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -630,6 +633,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * Compute the View that should be used to render the child,
      * given its position and its group’s position
      */
+    @SuppressLint("NewApi")
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // sanity check
@@ -747,7 +751,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
+                    PopupMenu popup;
+
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor), Gravity.END);
+                    } else {
+                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
+                    }
                     popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
 
                     MenuItem item;
