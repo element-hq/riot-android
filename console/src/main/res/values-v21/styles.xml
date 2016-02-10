@@ -41,6 +41,16 @@
 
         <!-- remove the shadow under the actionbar -->
         <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:popupMenuStyle">@style/vector.PopupMenu</item>
+    </style>
+
+    <!--  -->
+    <style name="vector.PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="android:textColor">@color/vector_0_87_black_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:popupElevation">4dp</item>
     </style>
 
     <!-- actionbar icons color -->
