@@ -14,7 +14,7 @@
         <!-- Vertical bar with colour changing to indicate unread messages -->
         <View
             android:id="@+id/bing_indicator_unread_message"
-            android:layout_width="5dp"
+            android:layout_width="8dp"
             android:layout_height="match_parent"
             android:layout_marginRight="9dp"
             android:background="@android:color/darker_gray"
@@ -42,7 +42,7 @@
             android:layout_marginTop="12dp"
             android:singleLine="true"
             android:textSize="16dp"
-            android:layout_marginLeft="14dp"
+            android:layout_marginLeft="17dp"
             android:layout_marginRight="14dp"
             android:fontFamily="sans-serif-regular"
             android:textColor="@color/vector_text_black_color"
@@ -56,10 +56,9 @@
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:textSize="14dp"
-            android:layout_marginRight="25dp"
-            android:textColor="@color/vector_text_gray_color"
+            android:layout_marginRight="26dp"
+            android:textColor="@color/vector_0_54_black_color"
             android:text="last room message" />
 
         <!-- Message timestamp -->
@@ -70,10 +69,10 @@
             android:textSize="12dp"
             android:text="Jan 1 00:00"
             android:fontFamily="sans-serif-light"
-            android:textColor="@color/vector_text_black_color"
+            android:textColor="@color/vector_0_54_black_color"
             android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="40dp"/>
+            android:layout_marginRight="36dp"/>
 
         <ImageView
             android:id="@+id/roomSummaryAdapter_action_image"
@@ -105,7 +104,7 @@
         android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -124,7 +123,7 @@
                 android:layout_height="36dp"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="14dp"
-                android:background="@drawable/grey_button_bg"
+                android:background="@color/vector_green_color"
                 android:textColor="@android:color/white"
                 android:text="@string/join"/>
 
@@ -139,7 +138,7 @@
                 android:id="@+id/recents_invite_reject_button"
                 android:layout_weight="0.26"
                 android:layout_width="0dp"
-                android:textColor="@color/vector_text_gray_color"
+                android:textColor="@color/vector_green_color"
                 android:background="@android:color/transparent"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="14dp"
@@ -163,16 +162,11 @@
         android:layout_marginLeft="73dp"
         android:background="@color/vector_line_separator_gray_color"/>
 
-    <RelativeLayout
-        android:id="@+id/recents_groups_separator_view"
-        android:background="@android:color/white"
+    <View
+        android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
-        android:layout_height="34dp">
-        <View
-            android:id="@+id/recents_groups_separator_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/vector_line_separator_gray_color"/>
-    </RelativeLayout>
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/vector_line_separator_gray_color"/>
+
 </LinearLayout>
