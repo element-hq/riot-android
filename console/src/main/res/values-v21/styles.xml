@@ -9,6 +9,9 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
 
+        <!-- status bar color -->
+        <item name="android:colorPrimaryDark">@color/vector_statusbar_color</item>
+
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
@@ -16,6 +19,27 @@
         <item name="android:windowBackground">@color/vector_activity_background_color</item>
     </style>
 
+    <!-- toolbar styles-->
+    <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/vector_actionbar_background</item>
+        <item name="background">@color/vector_actionbar_background</item>
+
+        <!-- main text -->
+        <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
+
+        <item name="theme">@style/VectorToolbarTheme</item>
+    </style>
+
+    <style name="VectorToolbarTheme">
+        <!-- Used to tint the back arrow, menu and spinner arrow -->
+        <item name="colorControlNormal">@color/vector_actionbar_icons_color</item>
+    </style>
+
+    <style name="Vector.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/vector_actionbar_text_color</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+    </style>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
