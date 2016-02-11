@@ -14,7 +14,7 @@
         android:layout_gravity="left"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textColor="@color/vector_54_black"
+        android:textColor="@color/vector_0_54_black_color"
         android:text="SENDER"
         android:id="@+id/messagesAdapter_sender"/>
 </LinearLayout>

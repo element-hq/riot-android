@@ -4,12 +4,12 @@
     <group android:id="@+id/account_group">
         <item
             android:id="@+id/sliding_menu_messages"
-            android:icon="@drawable/vector_notif_transparent"
+            android:icon="@drawable/logo_transparent"
             android:title="@string/room_sliding_menu_messages"/>
 
         <item
             android:id="@+id/sliding_menu_settings"
-            android:icon="@drawable/ic_material_settings"
+            android:icon="@drawable/icons_settings"
             android:title="@string/room_sliding_menu_settings"/>
 
         <item

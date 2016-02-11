@@ -19,51 +19,37 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.MyUser;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomAccountData;
-import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.data.RoomSummary;
-import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.EventUtils;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
-import im.vector.ViewedRoomTracker;
-import im.vector.adapters.VectorRoomSummaryAdapter;
-import im.vector.fragments.ConsoleMessageListFragment;
 import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.util.VectorUtils;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends MXCActionBarActivity  {
+public class VectorHomeActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
@@ -90,6 +76,11 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
     private NavigationView mNavigationView = null;
     private int mSlidingMenuIndex = -1;
 
+    private android.support.v7.widget.Toolbar mToolbar;
+    private MXSession mSession;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (CommonActivityUtils.shouldRestartApp()) {
@@ -99,6 +90,12 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_home);
+
+        // use a toolbar instead of the actionbar
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.home_toolbar);
+        this.setSupportActionBar(mToolbar);
+        mToolbar.setTitle(R.string.title_activity_home);
+        this.setTitle(R.string.title_activity_home);
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
         mRoomCreationView = findViewById(R.id.listView_create_room_view);
@@ -238,6 +235,15 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
     }
 
     @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerVisible(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retCode = true;
 
@@ -275,7 +281,7 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_material_menu_white,  /* nav drawer icon to replace 'Up' caret */
+                mToolbar,
                 R.string.action_open,  /* "open drawer" description */
                 R.string.action_close  /* "close drawer" description */
         )
@@ -286,7 +292,7 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
-                        settingsIntent.putExtra(EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
                         VectorHomeActivity.this.startActivity(settingsIntent);
                         break;
                     }
@@ -343,10 +349,9 @@ public class VectorHomeActivity extends MXCActionBarActivity  {
         TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
         userIdTextView.setText(mSession.getMyUser().userId);
 
-        ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar).findViewById(R.id.avatar_img);
+        ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
         String avatarUrl = mSession.getMyUser().getAvatarUrl();
         VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-
         mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
     }
 }

@@ -92,7 +92,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         separatorView.setVisibility(View.VISIBLE);
 
         convertView.findViewById(R.id.bing_indicator_unread_message).setVisibility(View.INVISIBLE);
-        convertView.findViewById(R.id.recents_groups_separator_view).setVisibility(View.GONE);
+        convertView.findViewById(R.id.recents_groups_separator_line).setVisibility(View.GONE);
         convertView.findViewById(R.id.roomSummaryAdapter_action).setVisibility(View.GONE);
         convertView.findViewById(R.id.roomSummaryAdapter_action_image).setVisibility(View.GONE);
 

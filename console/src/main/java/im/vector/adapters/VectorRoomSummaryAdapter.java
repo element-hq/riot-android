@@ -16,13 +16,16 @@
 
 package im.vector.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -618,9 +621,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
 
         if (!isExpanded) {
-            imageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_close_holo_light);
+            imageView.setImageResource(R.drawable.ic_material_expand_less_black);
         } else {
-            imageView.setImageResource(org.matrix.androidsdk.R.drawable.expander_open_holo_light);
+            imageView.setImageResource(R.drawable.ic_material_expand_more_black);
         }
 
         return convertView;
@@ -630,6 +633,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
      * Compute the View that should be used to render the child,
      * given its position and its group’s position
      */
+    @SuppressLint("NewApi")
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // sanity check
@@ -641,8 +645,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         }
 
         int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
-        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
-
+        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_recents_bing_gray_color);
+        int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
 
         // retrieve the UI items
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
@@ -651,7 +655,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
-        View groupSeparatorView = convertView.findViewById(R.id.recents_groups_separator_view);
+        View separatorGroupView = convertView.findViewById(R.id.recents_groups_separator_line);
         final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
         final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
 
@@ -667,7 +671,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             actionImageView.setVisibility(View.INVISIBLE);
             invitationView.setVisibility(View.GONE);
             separatorView.setVisibility(View.GONE);
-            groupSeparatorView.setVisibility(View.VISIBLE);
+            separatorGroupView.setVisibility(View.VISIBLE);
 
             roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
@@ -708,7 +712,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
 
         // set the timestamp
         timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
-        timestampTxtView.setTextColor(childRoomSummary.isHighlighted() ? vectorGreenColor : vectorSilverColor);
+        timestampTxtView.setTextColor(childRoomSummary.isHighlighted() ? vectorGreenColor : vectorDefaultTimeStampColor);
 
         // bing view
         bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
@@ -747,7 +751,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
+                    PopupMenu popup;
+
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor), Gravity.END);
+                    } else {
+                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
+                    }
                     popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
 
                     MenuItem item;
@@ -830,7 +840,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         }
 
         separatorView.setVisibility(isLastChild ? View.GONE : View.VISIBLE);
-        groupSeparatorView.setVisibility((isLastChild && ((groupPosition + 1) < getGroupCount())) ? View.VISIBLE : View.GONE);
+        separatorGroupView.setVisibility((isLastChild && ((groupPosition + 1) < getGroupCount())) ? View.VISIBLE : View.GONE);
 
         return convertView;
     }

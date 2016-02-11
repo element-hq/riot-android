@@ -22,7 +22,7 @@
             android:id="@+id/messagesAdapter_action_image"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/vector_actions"/>
+            android:src="@drawable/vector_actions_9b"/>
     </LinearLayout>
 
     <View
