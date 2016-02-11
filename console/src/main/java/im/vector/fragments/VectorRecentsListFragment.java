@@ -225,6 +225,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                         // refresh the UI at the end of the next events chunk
                         refreshOnChunkEnd = ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
+                                Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
                                 Event.EVENT_TYPE_TAGS.equals(event.type) ||
                                 Event.EVENT_TYPE_REDACTION.equals(event.type) ||
                                 Event.EVENT_TYPE_RECEIPT.equals(event.type) ||
