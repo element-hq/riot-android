@@ -276,7 +276,7 @@ public class VectorHomeActivity extends AppCompatActivity {
 
         // use a dedicated view
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        
+
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -348,10 +348,9 @@ public class VectorHomeActivity extends AppCompatActivity {
         TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
         userIdTextView.setText(mSession.getMyUser().userId);
 
-        ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar).findViewById(R.id.avatar_img);
+        ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
         String avatarUrl = mSession.getMyUser().getAvatarUrl();
         VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-
         mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
     }
 }
