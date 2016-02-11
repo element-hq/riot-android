@@ -6,5 +6,5 @@
     <dimen name="list_view_fading_edge_length">150dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
-    <dimen name="floating_action_button_margin">0dp</dimen>
+    <dimen name="floating_action_button_margin">16dp</dimen>
 </resources>

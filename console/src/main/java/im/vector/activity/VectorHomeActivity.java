@@ -95,6 +95,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.home_toolbar);
         this.setSupportActionBar(mToolbar);
         mToolbar.setTitle(R.string.title_activity_home);
+        this.setTitle(R.string.title_activity_home);
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
         mRoomCreationView = findViewById(R.id.listView_create_room_view);
