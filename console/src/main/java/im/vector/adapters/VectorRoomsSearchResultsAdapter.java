@@ -71,7 +71,7 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_searches, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_messages_search, parent, false);
         }
 
         MessageRow row = getItem(position);
