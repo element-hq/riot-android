@@ -24,6 +24,7 @@ import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
@@ -112,7 +113,10 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
 
                     // launch corresponding room activity
                     if (null != roomId) {
-                        CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+                        Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        getActivity().startActivity(intent);
                     }
                 }
 
