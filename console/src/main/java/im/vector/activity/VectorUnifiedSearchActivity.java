@@ -17,12 +17,19 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,15 +37,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -50,6 +64,8 @@ import im.vector.fragments.VectorRoomsSearchResultsListFragment;
  */
 public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements TabListener {
     private static final String LOG_TAG = "VectorUniSrchActivity";
+
+    private static final int SPEECH_REQUEST_CODE = 1234;
 
     public static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
 
@@ -90,6 +106,10 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private View mLoadOldestContentView;
     private View mWaitWhileSearchInProgressView;
     private EditText mPatternToSearchEditText;
+
+    // Menu items
+    MenuItem mMicroMenuItem;
+    MenuItem mClearEditTextMenuItem;
 
     private static class TabListenerHolder {
         public final String mFragmentTag;
@@ -145,6 +165,19 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
             }
         }, 100);
 
+        mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(android.text.Editable s) {
+                VectorUnifiedSearchActivity.this.refreshMenuEntries();
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -173,6 +206,100 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         Log.d(LOG_TAG, "## onResume(): ");
 
         searchAccordingToTabHandler();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.vector_searches, menu);
+
+        mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
+        mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
+
+        refreshMenuEntries();
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.ic_action_speak_to_search) {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice recognition Demo...");
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+
+        } else if (id ==  R.id.ic_action_clear_search) {
+            mPatternToSearchEditText.setText("");
+            searchAccordingToTabHandler();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Handle the results from the voice recognition activity.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if ((requestCode == SPEECH_REQUEST_CODE) && (resultCode == RESULT_OK)) {
+            final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            // one matched items
+            if (matches.size() == 1) {
+                // use it
+                mPatternToSearchEditText.setText(matches.get(0));
+                searchAccordingToTabHandler();
+            } else if (matches.size() > 1) {
+                // if they are several matches, let the user chooses the right one.
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                String[] mes = matches.toArray(new String[matches.size()]);
+
+                builder.setItems(mes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        mPatternToSearchEditText.setText(matches.get(item));
+                        VectorUnifiedSearchActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchAccordingToTabHandler();
+                            }
+                        });
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * @return true of the device supports speech recognizer.
+     */
+    private boolean supportSpeechRecognizer() {
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+
+        return (null != activities) && (activities.size() > 0);
+    }
+
+    /**
+     * Refresh the menu entries
+     */
+    private void refreshMenuEntries() {
+        boolean hasText = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
+
+        if (null != mMicroMenuItem) {
+            mMicroMenuItem.setVisible(!hasText && supportSpeechRecognizer());
+        }
+
+        if (null != mClearEditTextMenuItem) {
+            mClearEditTextMenuItem.setVisible(hasText);
+        }
     }
 
     /**

@@ -161,9 +161,10 @@
         <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
     </style>
 
-
     <style name="VectorSearches.EditText" parent="@style/Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
     </style>
 
     <style name="VectorSearches.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
