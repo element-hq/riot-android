@@ -84,6 +84,7 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
 
+                // display the public rooms list
                 if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
                     List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
 
@@ -91,11 +92,10 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
                         Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_PUBLIC_ROOMS_LIST_ID, new ArrayList<PublicRoom>(matchedPublicRooms));
-
                         getActivity().startActivity(intent);
                     }
-
                 } else {
+                    // open the dedicated room activity
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
 
@@ -187,7 +187,6 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
     public void onPause() {
         super.onPause();
         mPublicRoomsList = null;
-        Log.d(LOG_TAG, "## onPause()");
     }
 
     @Override

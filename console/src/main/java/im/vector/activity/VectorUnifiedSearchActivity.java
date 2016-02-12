@@ -18,7 +18,6 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -37,21 +35,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import im.vector.Matrix;
@@ -96,8 +90,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     // search fragments
     private VectorMessagesSearchResultsListFragment mSearchInMessagesFragment;
     private VectorRoomsSearchResultsListFragment mSearchInRoomNamesFragment;
-    private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
-    private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
+    // TODO implement dedicated fragments
+    //private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
+    //private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
     private MXSession mSession;
 
     // UI items
@@ -111,6 +106,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     MenuItem mMicroMenuItem;
     MenuItem mClearEditTextMenuItem;
 
+    /**
+     * Save the custom date for each tab
+     */
     private static class TabListenerHolder {
         public final String mFragmentTag;
         public int mBackgroundVisibility;
@@ -197,14 +195,11 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "## onDestroy(): ");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "## onResume(): ");
-
         searchAccordingToTabHandler();
     }
 
@@ -228,7 +223,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         if (id == R.id.ic_action_speak_to_search) {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice recognition Demo...");
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
 
         } else if (id ==  R.id.ic_action_clear_search) {
@@ -357,20 +351,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
      */
     public void onSearchFragmentResume() {
         searchAccordingToTabHandler();
-    }
-
-    /**
-     * Update the tag of the current tab with its UI values
-     */
-    private void saveCurrentUiTabContext() {
-        if(-1 != mCurrentTabIndex) {
-            ActionBar.Tab currentTab = mActionBar.getTabAt(mCurrentTabIndex);
-            TabListenerHolder tabTag = (TabListenerHolder) currentTab.getTag();
-            tabTag.mBackgroundVisibility = mBackgroundImageView.getVisibility();
-            tabTag.mNoResultsTxtViewVisibility = mNoResultsTxtView.getVisibility();
-            tabTag.mSearchedPattern = mPatternToSearchEditText.getText().toString();
-            currentTab.setTag(tabTag);
-        }
     }
 
     /**

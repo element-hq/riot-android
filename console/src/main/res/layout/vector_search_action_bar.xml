@@ -14,6 +14,8 @@
         android:fontFamily="sans-serif-medium"
         android:textSize="20dp"
         android:focusable="true"
+        android:hint="@string/search_hint"
+        android:textColorHint="@color/vector_search_hint_color"
         android:focusableInTouchMode="true"
         android:singleLine="true"/>
 
