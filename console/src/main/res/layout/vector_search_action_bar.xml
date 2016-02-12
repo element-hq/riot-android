@@ -8,8 +8,11 @@
         android:id="@+id/room_action_bar_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:imeOptions="actionSearch"
         android:inputType="text"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:singleLine="true"/>
