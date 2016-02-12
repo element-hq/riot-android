@@ -224,7 +224,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     public void run() {
 
                         // refresh the UI at the end of the next events chunk
-                        refreshOnChunkEnd = ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
+                        refreshOnChunkEnd |= ((event.roomId != null) && RoomSummary.isSupportedEvent(event)) ||
                                 Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
                                 Event.EVENT_TYPE_TAGS.equals(event.type) ||
                                 Event.EVENT_TYPE_REDACTION.equals(event.type) ||
@@ -254,7 +254,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             @Override
             public void onReceiptEvent(String roomId, List<String> senderIds) {
                 // refresh only if the current user read some messages (to update the unread messages counters)
-                refreshOnChunkEnd = (senderIds.indexOf(VectorRecentsListFragment.this.mSession.getCredentials().userId) >= 0);
+                refreshOnChunkEnd |= (senderIds.indexOf(VectorRecentsListFragment.this.mSession.getCredentials().userId) >= 0);
             }
 
             @Override
