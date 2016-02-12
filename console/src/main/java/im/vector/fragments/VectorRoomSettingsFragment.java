@@ -226,11 +226,18 @@ public class VectorRoomSettingsFragment extends Fragment {
         }
 
         PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
-        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUser().userId);
-        boolean canUpdateAvatar = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
-        boolean canUpdateName = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
-        boolean canUpdateTopic = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
 
+        boolean canUpdateAvatar = false;
+        boolean canUpdateName = false;
+        boolean canUpdateTopic = false;
+
+        // sanity checks
+        if (null != powerLevels) {
+            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUser().userId);
+            canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+            canUpdateName = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+            canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+        }
 
         // room avatar
         mRoomAvatarImageView.setEnabled(canUpdateAvatar);
