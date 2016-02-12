@@ -663,6 +663,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
         Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
 
+        View showMoreView = convertView.findViewById(R.id.roomSummaryAdapter_show_more_layout);
+
         // directory management
         if (mDirectoryGroupPosition == groupPosition) {
             // some items are show
@@ -672,6 +674,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             invitationView.setVisibility(View.GONE);
             separatorView.setVisibility(View.GONE);
             separatorGroupView.setVisibility(View.VISIBLE);
+            showMoreView.setVisibility(View.VISIBLE);
 
             roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
@@ -685,6 +688,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
             avatarImageView.setImageBitmap(null);
             return convertView;
         }
+
+        showMoreView.setVisibility(View.GONE);
 
         RoomSummary childRoomSummary = mSummaryListByGroupPosition.get(groupPosition).get(childPosition);
         final Room childRoom =  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
@@ -717,10 +722,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter /*Consol
         // bing view
         bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
 
-        // some items are show
+        // some items are shown
         bingUnreadMsgView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
-        timestampTxtView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
-        actionImageView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
+        timestampTxtView.setVisibility((childRoom.isInvited() || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
+        actionImageView.setVisibility((childRoom.isInvited() || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(childRoom.isInvited() ? View.VISIBLE : View.GONE);
 
         final String fRoomId = childRoom.getRoomId();

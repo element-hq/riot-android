@@ -96,7 +96,22 @@
                 android:id="@+id/roomSummaryAdapter_action_anchor"
                 android:layout_width="1dp"
                 android:layout_height="1dp" />
-            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/roomSummaryAdapter_show_more_layout"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_material_chevron_right_black"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 
