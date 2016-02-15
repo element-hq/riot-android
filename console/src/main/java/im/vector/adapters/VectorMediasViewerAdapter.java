@@ -41,9 +41,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.gson.JsonElement;
+
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
+import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.view.PieFractionView;
 import im.vector.R;
 
@@ -51,6 +55,7 @@ import org.matrix.androidsdk.db.MXMediasCache;
 
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
@@ -210,6 +215,15 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 }
 
                 @Override
+                public void onError(String downloadId, JsonElement jsonElement) {
+                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                    if ((null != error) && error.isSupportedErrorCode()) {
+                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
                 public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     if (aDownloadId.equals(downloadId)) {
                         pieFractionView.setFraction(percentageProgress);
@@ -266,6 +280,15 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
                 @Override
                 public void onDownloadStart(String downloadId) {
+                }
+
+                @Override
+                public void onError(String downloadId, JsonElement jsonElement) {
+                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                    if ((null != error) && error.isSupportedErrorCode()) {
+                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
@@ -503,6 +526,15 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
                     @Override
                     public void onDownloadStart(String downloadId) {
+                    }
+
+                    @Override
+                    public void onError(String downloadId, JsonElement jsonElement) {
+                        MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                        if ((null != error) && error.isSupportedErrorCode()) {
+                            Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override

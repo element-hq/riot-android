@@ -78,9 +78,10 @@ public class VectorApp extends Application {
         try {
             PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             VERSION_BUILD = pinfo.versionCode;
-            VERSION_STRING = pinfo.versionName;
         }
         catch (PackageManager.NameNotFoundException e) {}
+
+        VERSION_STRING = Matrix.getInstance(this).getVersion(false);
 
         LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
         LogUtilities.storeLogcat();

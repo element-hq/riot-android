@@ -219,27 +219,14 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.VectorSearchesActivity"
-            android:label="Vector searches"
-            android:parentActivityName="im.vector.activity.VectorHomeActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.VectorHomeActivity"/>
-        </activity>
-
-        <activity
             android:name="im.vector.activity.VectorPublicRoomsActivity"
             android:label="@string/directory_title"
-            android:parentActivityName="im.vector.activity.VectorSearchesActivity"
+            android:parentActivityName="im.vector.activity.VectorUnifiedSearchActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.VectorSearchesActivity"/>
+                android:value="im.vector.activity.VectorUnifiedSearchActivity"/>
         </activity>
 
         <activity
@@ -247,12 +234,14 @@
             android:label="Vector searches"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
+
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

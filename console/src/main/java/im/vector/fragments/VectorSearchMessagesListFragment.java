@@ -36,16 +36,22 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.VectorUnifiedSearchActivity;
-import im.vector.adapters.VectorRoomsSearchResultsAdapter;
+import im.vector.adapters.VectorSearchMessagesListAdapter;
 
-public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListFragment {
-    private static final String LOG_TAG = "VectorMessagesSearchResultsListFragment";
+public class VectorSearchMessagesListFragment extends ConsoleMessageListFragment {
 
+    // parameters
     private String mSearchingPattern;
     private ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
 
-    public static VectorMessagesSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
-        VectorMessagesSearchResultsListFragment frag = new VectorMessagesSearchResultsListFragment();
+    /**
+     * static constructor
+     * @param matrixId the session Id.
+     * @param layoutResId the used layout.
+     * @return
+     */
+    public static VectorSearchMessagesListFragment newInstance(String matrixId, int layoutResId) {
+        VectorSearchMessagesListFragment frag = new VectorSearchMessagesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
@@ -55,7 +61,7 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorRoomsSearchResultsAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorSearchMessagesListAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
     @Override
@@ -142,7 +148,7 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
      * @param pattern the pattern to find out. null to disable the search mode
      */
     public void searchPattern(final String pattern, final OnSearchResultListener onSearchResultListener) {
-
+        // add the listener to list to warn when the search is done.
         if (null != onSearchResultListener) {
             mSearchListeners.add(onSearchResultListener);
         }
@@ -154,7 +160,7 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
         }
 
         // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
-        // in the search case, clear the list
+        // in the search case, clear the list and hide it
         if (TextUtils.isEmpty(pattern)) {
             mPattern = null;
             mAdapter.clear();
@@ -174,6 +180,7 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
                 }
             });
         } else {
+            // start a search
             mAdapter.clear();
             mSearchingPattern = pattern;
 
@@ -203,7 +210,6 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
 
                 @Override
                 public void onSearchFailed() {
-
                     mMessageListView.setVisibility(View.GONE);
 
                     // clear the results list if teh search fails
@@ -223,16 +229,17 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
     }
 
     public Boolean onRowLongClick(int position) {
+        onContentClick(position);
+        return true;
+    }
+
+    public void onContentClick(int position) {
         final MessageRow messageRow = mAdapter.getItem(position);
         final List<Integer> textIds = new ArrayList<>();
         final List<Integer> iconIds = new ArrayList<Integer>();
 
         textIds.add(R.string.copy);
         iconIds.add(R.drawable.ic_material_copy);
-
-        // display the JSON
-        textIds.add(R.string.message_details);
-        iconIds.add(R.drawable.ic_material_description);
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
@@ -262,27 +269,11 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
                             clipboard.setPrimaryClip(clip);
                         }
                     });
-                } else if (selectedVal == R.string.message_details) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            FragmentManager fm =  getActivity().getSupportFragmentManager();
-
-                            MessageDetailsFragment fragment = (MessageDetailsFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_DETAILS);
-                            if (fragment != null) {
-                                fragment.dismissAllowingStateLoss();
-                            }
-                            fragment = MessageDetailsFragment.newInstance(messageRow.getEvent().toString());
-                            fragment.show(fm, TAG_FRAGMENT_MESSAGE_DETAILS);
-                        }
-                    });
                 }
             }
         });
 
         fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
-
-        return true;
     }
 
     /**

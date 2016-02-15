@@ -137,4 +137,54 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <!-- searches activity -->
+    <style name="SearchesAppTheme" parent="AppTheme">
+        <!-- custom action bar -->
+        <item name="android:actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+        <item name="actionBarStyle">@style/VectorSearches.Styled.ActionBar</item>
+
+        <!-- tabbar background -->
+        <item name="android:actionBarTabStyle">@style/VectorSearches.TabView</item>
+        <item name="actionBarTabStyle">@style/VectorSearches.TabView</item>
+
+        <!-- tabbar text color -->
+        <item name="android:actionBarTabTextStyle">@style/VectorSearches.TabText</item>
+        <item name="actionBarTabTextStyle">@style/VectorSearches.TabText</item>
+
+        <!-- no divider -->
+        <item name="android:actionBarDivider">@null</item>
+
+        <!-- edittext -->
+        <item name="android:editTextStyle">@style/VectorSearches.EditText</item>
+
+        <!-- actionbar icons color -->
+        <item name="actionBarTheme">@style/VectorSearches.ActionBarTheme</item>
+    </style>
+
+    <style name="VectorSearches.EditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+    </style>
+
+    <style name="VectorSearches.Styled.ActionBar" parent="@style/Vector.Styled.ActionBar">
+        <item name="android:background">@android:color/white</item>
+        <item name="background">@android:color/white</item>
+    </style>
+
+    <!-- tabbar background -->
+    <style name="VectorSearches.TabView" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/vector_tabbar_background</item>
+        <item name="background">@drawable/vector_tabbar_background</item>
+    </style>
+
+    <!-- tabbar text color -->
+    <style name="VectorSearches.TabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/vector_green_color</item>
+    </style>
+
+    <style name="VectorSearches.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/vector_green_color</item>
+    </style>
+
 </resources>

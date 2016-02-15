@@ -125,17 +125,8 @@ public class RageShake implements SensorEventListener {
 
                 message += "\n";
 
-                String versionName = "";
-
-                try {
-                    PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-                    versionName = pInfo.versionName;
-                } catch (Exception e) {
-
-                }
-
-                message += "matrixConsole version: " + versionName + "\n";
-                message += "SDK version:  " + versionName + "\n";
+                message += "matrixConsole version: " + Matrix.getInstance(mContext).getVersion(true) + "\n";
+                message += "SDK version:  " + Matrix.getInstance(mContext).getDefaultSession().getVersion(true) + "\n";
 
                 message += "\n\n\n";
 

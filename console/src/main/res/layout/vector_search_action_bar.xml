@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,10 +8,15 @@
         android:id="@+id/room_action_bar_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:imeOptions="actionSearch"
         android:inputType="text"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20dp"
         android:focusable="true"
+        android:hint="@string/search_hint"
+        android:textColorHint="@color/vector_search_hint_color"
         android:focusableInTouchMode="true"
         android:singleLine="true"/>
 
-</FrameLayout>
+</RelativeLayout>

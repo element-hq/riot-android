@@ -28,12 +28,17 @@
     <color name="vector_silver_color">#FFC7C7C7</color>
 
     <color name="vector_text_black_color">#FF3C3C3C</color>
+
     <!-- 0_54_black gives invalid rendering so use 9D gray -->
     <color name="vector_0_54_black_color">#8E000000</color>
     <color name="vector_0_87_black_color">#DC000000</color>
     <color name="vector_line_separator_gray_color">#339D9D9D</color>
     <color name="vector_recents_header_background_color">#77F2F2F2</color>
     <color name="vector_recents_bing_gray_color">#E2E2E2</color>
+
+    <!-- tabbar color-->
+    <color name="vector_tabbar_background_color">#FFF2F2F2</color>
+    <color name="vector_search_hint_color">#333C3C3C</color>
 
     <!-- colors to check their uses -->
     <color name="vector_background">#FFFAFAFA</color>

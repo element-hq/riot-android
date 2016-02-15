@@ -3,6 +3,7 @@ package im.vector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
@@ -56,6 +57,28 @@ public class Matrix {
 
     public LoginStorage getLoginStorage() {
         return mLoginStorage;
+    }
+
+    /**
+     * @return the application version
+     */
+    public String getVersion(boolean longformat) {
+        String versionName = "";
+        try {
+            PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
+            versionName = pInfo.versionName;
+        } catch (Exception e) {
+        }
+
+        String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
+        if (longformat) {
+            String date = mAppContext.getResources().getString(R.string.git_revision_date);
+            versionName += " (" + gitVersion + "-" + date + ")";
+        } else {
+            versionName += " (" + gitVersion + ")";
+        }
+
+        return versionName;
     }
 
     /**

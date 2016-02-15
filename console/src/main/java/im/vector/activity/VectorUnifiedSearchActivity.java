@@ -17,12 +17,17 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.speech.RecognizerIntent;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -40,16 +45,21 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.fragments.VectorMessagesSearchResultsListFragment;
-import im.vector.fragments.VectorRoomsSearchResultsListFragment;
+import im.vector.fragments.VectorSearchRoomsListFragment;
+import im.vector.fragments.VectorSearchMessagesListFragment;
 
 /**
  * Displays a generic activity search method
  */
 public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements TabListener {
     private static final String LOG_TAG = "VectorUniSrchActivity";
+
+    private static final int SPEECH_REQUEST_CODE = 1234;
 
     public static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
 
@@ -78,10 +88,11 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private static final String KEY_STATE_SEARCH_PATTERN_FILES_TAB = "SEARCH_PATTERN_FILES";
 
     // search fragments
-    private VectorMessagesSearchResultsListFragment mSearchInMessagesFragment;
-    private VectorRoomsSearchResultsListFragment mSearchInRoomNamesFragment;
-    private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
-    private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
+    private VectorSearchMessagesListFragment mSearchInMessagesFragment;
+    private VectorSearchRoomsListFragment mSearchInRoomNamesFragment;
+    // TODO implement dedicated fragments
+    //private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
+    //private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
     private MXSession mSession;
 
     // UI items
@@ -91,6 +102,13 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private View mWaitWhileSearchInProgressView;
     private EditText mPatternToSearchEditText;
 
+    // Menu items
+    MenuItem mMicroMenuItem;
+    MenuItem mClearEditTextMenuItem;
+
+    /**
+     * Save the custom date for each tab
+     */
     private static class TabListenerHolder {
         public final String mFragmentTag;
         public int mBackgroundVisibility;
@@ -145,6 +163,19 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
             }
         }, 100);
 
+        mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(android.text.Editable s) {
+                VectorUnifiedSearchActivity.this.refreshMenuEntries();
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -164,15 +195,105 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "## onDestroy(): ");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "## onResume(): ");
-
         searchAccordingToTabHandler();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.vector_searches, menu);
+
+        mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
+        mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
+
+        refreshMenuEntries();
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.ic_action_speak_to_search) {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+
+        } else if (id ==  R.id.ic_action_clear_search) {
+            mPatternToSearchEditText.setText("");
+            searchAccordingToTabHandler();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Handle the results from the voice recognition activity.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if ((requestCode == SPEECH_REQUEST_CODE) && (resultCode == RESULT_OK)) {
+            final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            // one matched items
+            if (matches.size() == 1) {
+                // use it
+                mPatternToSearchEditText.setText(matches.get(0));
+                searchAccordingToTabHandler();
+            } else if (matches.size() > 1) {
+                // if they are several matches, let the user chooses the right one.
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                String[] mes = matches.toArray(new String[matches.size()]);
+
+                builder.setItems(mes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        mPatternToSearchEditText.setText(matches.get(item));
+                        VectorUnifiedSearchActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchAccordingToTabHandler();
+                            }
+                        });
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * @return true of the device supports speech recognizer.
+     */
+    private boolean supportSpeechRecognizer() {
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+
+        return (null != activities) && (activities.size() > 0);
+    }
+
+    /**
+     * Refresh the menu entries
+     */
+    private void refreshMenuEntries() {
+        boolean hasText = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
+
+        if (null != mMicroMenuItem) {
+            mMicroMenuItem.setVisible(!hasText && supportSpeechRecognizer());
+        }
+
+        if (null != mClearEditTextMenuItem) {
+            mClearEditTextMenuItem.setVisible(hasText);
+        }
     }
 
     /**
@@ -230,20 +351,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
      */
     public void onSearchFragmentResume() {
         searchAccordingToTabHandler();
-    }
-
-    /**
-     * Update the tag of the current tab with its UI values
-     */
-    private void saveCurrentUiTabContext() {
-        if(-1 != mCurrentTabIndex) {
-            ActionBar.Tab currentTab = mActionBar.getTabAt(mCurrentTabIndex);
-            TabListenerHolder tabTag = (TabListenerHolder) currentTab.getTag();
-            tabTag.mBackgroundVisibility = mBackgroundImageView.getVisibility();
-            tabTag.mNoResultsTxtViewVisibility = mNoResultsTxtView.getVisibility();
-            tabTag.mSearchedPattern = mPatternToSearchEditText.getText().toString();
-            currentTab.setTag(tabTag);
-        }
     }
 
     /**
@@ -426,7 +533,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
             if (null == mSearchInRoomNamesFragment) {
-                mSearchInRoomNamesFragment = VectorRoomsSearchResultsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
+                mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
                 ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
             } else {
@@ -437,7 +544,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
-                mSearchInMessagesFragment = VectorMessagesSearchResultsListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             } else {

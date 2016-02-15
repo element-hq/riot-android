@@ -24,11 +24,12 @@ import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
 
-public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragment {
+public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     // log tag
     private static String LOG_TAG = "V_RoomsSearchResultsListFragment";
 
@@ -43,8 +44,8 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
      * @param matrixId the matrix id
      * @return a VectorRoomsSearchResultsListFragment instance
      */
-    public static VectorRoomsSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
-        VectorRoomsSearchResultsListFragment f = new VectorRoomsSearchResultsListFragment();
+    public static VectorSearchRoomsListFragment newInstance(String matrixId, int layoutResId) {
+        VectorSearchRoomsListFragment f = new VectorSearchRoomsListFragment();
         Bundle args = new Bundle();
         args.putInt(VectorRecentsListFragment.ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
@@ -83,6 +84,7 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
 
+                // display the public rooms list
                 if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
                     List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
 
@@ -90,11 +92,10 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
                         Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_PUBLIC_ROOMS_LIST_ID, new ArrayList<PublicRoom>(matchedPublicRooms));
-
                         getActivity().startActivity(intent);
                     }
-
                 } else {
+                    // open the dedicated room activity
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
 
@@ -112,7 +113,10 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
 
                     // launch corresponding room activity
                     if (null != roomId) {
-                        CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+                        Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        getActivity().startActivity(intent);
                     }
                 }
 
@@ -120,6 +124,16 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
                 return true;
             }
         });
+
+        // disable the collapse
+        mRecentsListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                // Doing nothing
+                return true;
+            }
+        });
+
 
         return v;
     }
@@ -183,7 +197,6 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
     public void onPause() {
         super.onPause();
         mPublicRoomsList = null;
-        Log.d(LOG_TAG, "## onPause()");
     }
 
     @Override

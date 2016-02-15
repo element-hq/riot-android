@@ -423,6 +423,16 @@ public class CallViewActivity extends FragmentActivity {
             if (null != mListener) {
                 mCall.addListener(mListener);
             }
+
+            final String fState = mCall.getCallState();
+            CallViewActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(LOG_TAG, "onResume " + fState);
+                    manageSubViews();
+                }
+            });
+
         } else {
             this.finish();
         }
