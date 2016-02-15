@@ -28,7 +28,18 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            resValue "string", "git_revision", "\"${gitRevision()}\""
+            resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
+            resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+        }
+
         release {
+            resValue "string", "git_revision", "\"${gitRevision()}\""
+            resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
+            resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            shrinkResources true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -58,15 +69,28 @@ android {
     }
 }
 
+def gitRevision() {
+    def cmd = "git rev-parse --short HEAD"
+    return cmd.execute().text.trim()
+}
+
+def gitRevisionUnixDate() {
+    def cmd = "git show -s --format=%ct HEAD^{commit}"
+    return cmd.execute().text.trim()
+}
+
+def gitRevisionDate() {
+    def cmd = "git show -s --format=%ci HEAD^{commit}"
+    return cmd.execute().text.trim()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'me.leolin:ShortcutBadger:1.1.0+@aar'
+    compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:cardview-v7:21.0.+'
-    compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
 

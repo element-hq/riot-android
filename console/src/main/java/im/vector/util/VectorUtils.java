@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -374,15 +375,7 @@ public class VectorUtils {
      * @return the version. an empty string is not found.
      */
     public static String getApplicationVersion(final Activity activity) {
-        String version = "";
-
-        try {
-            PackageInfo pInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-            version = pInfo.versionName;
-        } catch (Exception e) {
-
-        }
-        return version;
+        return  im.vector.Matrix.getInstance(activity).getVersion(false);
     }
 
     /**
