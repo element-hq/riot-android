@@ -125,6 +125,16 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             }
         });
 
+        // disable the collapse
+        mRecentsListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                // Doing nothing
+                return true;
+            }
+        });
+
+
         return v;
     }
 
