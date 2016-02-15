@@ -36,9 +36,9 @@ import java.util.List;
 
 import im.vector.R;
 import im.vector.activity.VectorUnifiedSearchActivity;
-import im.vector.adapters.VectorRoomsSearchResultsAdapter;
+import im.vector.adapters.VectorSearchMessagesListAdapter;
 
-public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListFragment {
+public class VectorSearchMessagesListFragment extends ConsoleMessageListFragment {
 
     // parameters
     private String mSearchingPattern;
@@ -50,8 +50,8 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
      * @param layoutResId the used layout.
      * @return
      */
-    public static VectorMessagesSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
-        VectorMessagesSearchResultsListFragment frag = new VectorMessagesSearchResultsListFragment();
+    public static VectorSearchMessagesListFragment newInstance(String matrixId, int layoutResId) {
+        VectorSearchMessagesListFragment frag = new VectorSearchMessagesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
@@ -61,7 +61,7 @@ public class VectorMessagesSearchResultsListFragment extends ConsoleMessageListF
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorRoomsSearchResultsAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorSearchMessagesListAdapter(mSession, getActivity(), getMXMediasCache());
     }
 
     @Override

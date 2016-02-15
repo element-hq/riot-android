@@ -38,6 +38,7 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.ReceiptData;
@@ -59,11 +60,11 @@ import java.util.Formatter;
 import java.util.List;
 
 /**
- * An adapter which can display room information.
+ * An adapter which display a list of messages found after a search
  */
-public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
+public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
-    public VectorRoomsSearchResultsAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
+    public VectorSearchMessagesListAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context, mediasCache);
         setNotifyOnChange(true);
     }
@@ -71,7 +72,7 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_messages_search, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_search_messages, parent, false);
         }
 
         MessageRow row = getItem(position);
@@ -81,10 +82,15 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
         TextView timeTextView = (TextView) convertView.findViewById(R.id.searches_time);
         TextView roomTextView = (TextView) convertView.findViewById(R.id.searches_room_name);
         TextView messageTextView = (TextView) convertView.findViewById(R.id.searches_message);
+        View messageDivider =  convertView.findViewById(R.id.searches_message_divider);
+
+        Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
 
         // set the message text
-        EventDisplay display = new EventDisplay(mContext, event, null);
-        CharSequence text = display.getTextualDisplay();
+        EventDisplay display = new EventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
+        display.setPrependMessagesWithAuthor(true);
+
+        CharSequence text = display.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color));
 
         try {
             messageTextView.setText(text);
@@ -95,7 +101,6 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
             messageTextView.setText(text.toString());
         }
 
-        Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
         roomTextView.setText(VectorUtils.getRoomDisplayname(mContext, mSession, room));
 
         timeTextView.setText(AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true));
@@ -112,6 +117,11 @@ public class VectorRoomsSearchResultsAdapter extends VectorMessagesAdapter {
         } else {
             headerView.setVisibility(View.GONE);
         }
+
+        // display a divider between the results except for the last message of a day.
+        // headerMessage return a non empty string if the day must be displayed
+        // so if there is a string for the message, it is the last message of the day.
+        messageDivider.setVisibility(!TextUtils.isEmpty(headerMessage(position+1)) ? View.GONE : View.VISIBLE);
 
         final int fPosition = position;
 

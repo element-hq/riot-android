@@ -29,7 +29,7 @@ import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
 
-public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragment {
+public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     // log tag
     private static String LOG_TAG = "V_RoomsSearchResultsListFragment";
 
@@ -44,8 +44,8 @@ public class VectorRoomsSearchResultsListFragment extends VectorRecentsListFragm
      * @param matrixId the matrix id
      * @return a VectorRoomsSearchResultsListFragment instance
      */
-    public static VectorRoomsSearchResultsListFragment newInstance(String matrixId, int layoutResId) {
-        VectorRoomsSearchResultsListFragment f = new VectorRoomsSearchResultsListFragment();
+    public static VectorSearchRoomsListFragment newInstance(String matrixId, int layoutResId) {
+        VectorSearchRoomsListFragment f = new VectorSearchRoomsListFragment();
         Bundle args = new Bundle();
         args.putInt(VectorRecentsListFragment.ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);

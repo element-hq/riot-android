@@ -50,8 +50,8 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.fragments.VectorMessagesSearchResultsListFragment;
-import im.vector.fragments.VectorRoomsSearchResultsListFragment;
+import im.vector.fragments.VectorSearchRoomsListFragment;
+import im.vector.fragments.VectorSearchMessagesListFragment;
 
 /**
  * Displays a generic activity search method
@@ -88,8 +88,8 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private static final String KEY_STATE_SEARCH_PATTERN_FILES_TAB = "SEARCH_PATTERN_FILES";
 
     // search fragments
-    private VectorMessagesSearchResultsListFragment mSearchInMessagesFragment;
-    private VectorRoomsSearchResultsListFragment mSearchInRoomNamesFragment;
+    private VectorSearchMessagesListFragment mSearchInMessagesFragment;
+    private VectorSearchRoomsListFragment mSearchInRoomNamesFragment;
     // TODO implement dedicated fragments
     //private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
     //private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
@@ -533,7 +533,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
             if (null == mSearchInRoomNamesFragment) {
-                mSearchInRoomNamesFragment = VectorRoomsSearchResultsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
+                mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
                 ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
             } else {
@@ -544,7 +544,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
-                mSearchInMessagesFragment = VectorMessagesSearchResultsListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             } else {
