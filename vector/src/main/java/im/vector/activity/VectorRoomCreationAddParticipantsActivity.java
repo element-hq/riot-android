@@ -16,13 +16,11 @@
 
 package im.vector.activity;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import org.matrix.androidsdk.MXSession;
 
 import java.util.ArrayList;
 
@@ -73,7 +71,7 @@ public class VectorRoomCreationAddParticipantsActivity extends MXCActionBarActiv
             VectorRoomCreationAddParticipantsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Fragment fragment = getFragmentManager().findFragmentById(R.id.room_creation_add_participants_fragment);
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.room_creation_add_participants_fragment);
 
                     if (fragment instanceof VectorAddParticipantsFragment) {
                         VectorAddParticipantsFragment vectorAddParticipantsFragment = (VectorAddParticipantsFragment)fragment;

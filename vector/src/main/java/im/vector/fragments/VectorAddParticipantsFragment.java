@@ -18,7 +18,7 @@ package im.vector.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
@@ -57,16 +57,13 @@ public class VectorAddParticipantsFragment extends Fragment {
     // class members
     private MXSession mSession;
     private Room mRoom;
-    private MXMediasCache mxMediasCache;
 
     // fragment items
     private EditText mSearchEdit;
-    private Button mCancelButton;
-    private ListView mParticantsListView;
     private View mProgressView;
     private VectorAddParticipantsAdapter mAdapter;
 
-    private MXEventListener mEventListener = new MXEventListener() {
+    private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             getActivity().runOnUiThread(new Runnable() {
@@ -84,9 +81,8 @@ public class VectorAddParticipantsFragment extends Fragment {
     // top view
     private View mViewHierarchy;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static VectorAddParticipantsFragment newInstance() {
+        return new VectorAddParticipantsFragment();
     }
 
     @Override
@@ -140,14 +136,14 @@ public class VectorAddParticipantsFragment extends Fragment {
      * Finalize the fragment initialization.
      */
     private void finalizeInit() {
-        mxMediasCache = mSession.getMediasCache();
+        MXMediasCache mxMediasCache = mSession.getMediasCache();
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
-        mParticantsListView = (ListView)mViewHierarchy.findViewById(R.id.add_participants_members_list);
+        ListView participantsListView = (ListView)mViewHierarchy.findViewById(R.id.add_participants_members_list);
         mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, mxMediasCache);
-        mParticantsListView.setAdapter(mAdapter);
+        participantsListView.setAdapter(mAdapter);
 
-        mParticantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        participantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
                     ParticipantAdapterItem participant = mAdapter.getItem(position);
@@ -315,8 +311,8 @@ public class VectorAddParticipantsFragment extends Fragment {
             }
         });
 
-        mCancelButton = (Button)mViewHierarchy.findViewById(R.id.add_participants_cancel_search_button);
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
+        Button cancelButton = (Button)mViewHierarchy.findViewById(R.id.add_participants_cancel_search_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSearchEdit.setText("");

@@ -448,6 +448,8 @@
     <string name="settings_term_conditions">Terms &amp; conditions</string>
     <string name="settings_privacy_policy">Privacy Policy</string>
     <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_room_privacy_label">Privacy</string>
+
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
@@ -459,6 +461,8 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
+    <string name="room_settings_pref_category">Room settings</string>
+    <string name="room_settings_room_photo">Room Photo</string>
 
     // Directory
     <string name="directory_title">Directory</string>

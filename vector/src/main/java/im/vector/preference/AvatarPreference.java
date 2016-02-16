@@ -17,12 +17,14 @@
 package im.vector.preference;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import org.matrix.androidsdk.MXSession;
 
@@ -31,9 +33,10 @@ import im.vector.util.VectorUtils;
 
 public class AvatarPreference extends EditTextPreference {
 
-    Context mContext;
-    ImageView mAvatarView;
-    MXSession mSession;
+    protected Context mContext;
+    protected ImageView mAvatarView;
+    protected MXSession mSession;
+    private ProgressBar mLoadingProgressBar;
 
     public AvatarPreference(Context context) {
         super(context);
@@ -50,10 +53,12 @@ public class AvatarPreference extends EditTextPreference {
         mContext = context;
     }
 
+    @Override
     protected View onCreateView(ViewGroup parent) {
         setWidgetLayoutResource(R.layout.vector_settings_round_avatar);
         View layout = super.onCreateView(parent);
         mAvatarView = (ImageView)layout.findViewById(R.id.avatar_img);
+        mLoadingProgressBar = (ProgressBar)layout.findViewById(R.id.avatar_update_progress_bar);
         refreshAvatar();
         return layout;
     }
@@ -61,8 +66,33 @@ public class AvatarPreference extends EditTextPreference {
     public void refreshAvatar() {
         if ((null !=  mAvatarView) && (null != mSession)) {
             VectorUtils.setMemberAvatar(mAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
+            // enable progress bar when downloading
+            enableProgressBar(true);
             mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarView, mSession.getMyUser().getAvatarUrl(), mContext.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            enableProgressBar(false);
         }
+    }
+
+    public void enableProgressBar(boolean aIsProgressBarEnabled) {
+        if (null !=  mLoadingProgressBar) {
+            if(aIsProgressBarEnabled)
+                mLoadingProgressBar.setVisibility(View.VISIBLE);
+            else
+                mLoadingProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Retrieve the progress bar display status, returning true if
+     * the progress par is visible or false if the progress bar is hidden.
+     * @return true if the progress bar is visible, false otherwise
+     */
+    public boolean isProgressBarEnabled() {
+        boolean retCode = false;
+        if(null != mLoadingProgressBar){
+            retCode = (mLoadingProgressBar.getVisibility()==View.VISIBLE);
+        }
+        return retCode;
     }
 
     public void setSession(MXSession session) {
@@ -72,7 +102,7 @@ public class AvatarPreference extends EditTextPreference {
 
     public void performClick(PreferenceScreen preferenceScreen) {
         // call only the click listener
-        if (getOnPreferenceClickListener() != null && getOnPreferenceClickListener().onPreferenceClick(this)) {
+        if (getOnPreferenceClickListener() != null) {
             getOnPreferenceClickListener().onPreferenceClick(this);
         }
     }
