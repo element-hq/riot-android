@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/checkbox_room_creation"
+            />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_width="0dp"
+            android:text="@string/room_creation_public"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:textSize="15sp"
+            android:text="@string/room_creation_room_name"
+            />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:layout_width="0dp"
+            android:lines="1"
+            android:maxLines="1"
+            android:textSize="15sp"
+            android:hint="@string/room_creation_room_name_hint"
+            android:id="@+id/editText_roomName"/>
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.05"
+            android:textSize="15sp"
+            android:text="#"
+            />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.65"
+            android:lines="1"
+            android:maxLines="1"
+            android:textSize="15sp"
+            android:hint="@string/room_creation_room_alias_hint"
+            android:id="@+id/editText_roomAlias"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:textSize="15sp"
+            android:text=":homeserver"
+            android:id="@+id/textView_homeServer"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:textSize="15sp"
+            android:text="@string/room_creation_participants"
+            />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:layout_width="0dp"
+            android:lines="1"
+            android:maxLines="1"
+            android:textSize="15sp"
+            android:hint="@string/room_creation_participants_hint"
+            android:id="@+id/editText_participants"/>
+            />
+    </LinearLayout>
+
+</LinearLayout>

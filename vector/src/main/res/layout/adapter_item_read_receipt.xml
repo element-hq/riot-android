@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
+
+    <FrameLayout
+        android:id="@+id/layout_avatar"
+        android:layout_width="@dimen/member_list_avatar_size"
+        android:layout_height="@dimen/member_list_avatar_size"
+        android:padding="4dp">
+
+        <include layout="@layout/round_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/accountAdapter_name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Some Person's Name" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/read_receipt_ts"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="localpart:domain" />
+
+    </LinearLayout>
+
+</LinearLayout>

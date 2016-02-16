@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- header -->
+    <RelativeLayout
+        android:id="@+id/searches_message_header"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@color/vector_light_gray_color">
+
+        <TextView
+            android:id="@+id/messagesAdapter_message_header_text"
+            android:fontFamily="sans-serif-medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textSize="14dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/vector_text_black_color"
+            android:text = "A header here" />
+
+    </RelativeLayout>
+
+    <!-- body -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="74dp">
+
+        <TextView
+            android:id="@+id/searches_time"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:fontFamily="sans-serif-light"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/vector_0_54_black_color"
+            android:text="12:34" />
+
+        <RelativeLayout
+            android:id="@+id/searches_texts"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toLeftOf="@+id/searches_time"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <TextView
+                android:id="@+id/searches_room_name"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:textSize="16dp"
+                android:textColor="@color/vector_text_black_color"
+                android:text="A room name"/>
+
+            <TextView
+                android:id="@+id/searches_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:singleLine="true"
+                android:textSize="14dp"
+                android:textColor="@color/vector_0_54_black_color"
+                android:text="A room message" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/searches_message_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/searches_texts"
+            android:background="@color/vector_line_separator_gray_color"/>
+    </RelativeLayout>
+</LinearLayout>

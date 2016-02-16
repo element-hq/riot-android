@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/views"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/editText_username"
+            android:hint="@string/username"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText_password"
+            android:hint="@string/password"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/editText_hs"
+            android:hint="@string/hs_url"
+            android:text="https://matrix.org"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/search_mask_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/views"
+        android:layout_alignBottom="@+id/views"
+        android:layout_alignLeft="@+id/views">
+
+        <View
+            android:background="#AAAAAAAA"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:indeterminate="true" />
+
+        <ProgressBar
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

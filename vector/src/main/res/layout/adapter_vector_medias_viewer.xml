@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <WebView android:id="@+id/media_slider_image_webview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#000"/>
+
+    <RelativeLayout
+        android:id="@+id/media_slider_videolayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <VideoView android:id="@+id/media_slider_videoview"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <ImageView android:id="@+id/media_slider_video_thumbnail"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#000" />
+
+        <ImageView android:id="@+id/media_slider_video_playView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_material_play_circle"
+            android:background="#77777777" />
+    </RelativeLayout>
+
+
+    <org.matrix.androidsdk.view.PieFractionView
+        android:id="@+id/media_slider_piechart"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:alpha="0.2"
+        android:layout_width="160dp"
+        android:layout_height="160dp"/>
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
+    tools:context=".MainActivity" >
+
+    <!-- must have the same order as the tabs name-->
+    <fragment
+        android:name="im.vector.fragments.VectorAddParticipantsFragment"
+        android:id="@+id/room_creation_add_participants_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_vector_add_participants" />
+
+</RelativeLayout>
