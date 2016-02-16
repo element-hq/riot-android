@@ -325,6 +325,32 @@ public class VectorUtils {
         VectorUtils.setMemberAvatar(imageView, roomId, displayName);
     }
 
+    /**
+     * Set the image view given in parameter with the corresponding
+     * room avatar. The avatar is initialized with its default value,
+     * then updated with the server content if any.
+     *
+     * @param[out] aAvatarImageView_out room avatar to be set
+     * @param aSession session
+     * @param aRoom room
+     * @param aContext Android App context
+     */
+    public static void setRoomAvatar(ImageView aAvatarImageView_out, MXSession aSession, Room aRoom,  Context aContext) {
+        // sanity check
+        if ((null != aAvatarImageView_out) && (null != aSession) && (null != aRoom) && (null != aContext)) {
+            String  roomAvatarUrl = aRoom.getAvatarUrl();
+
+            // set default avatar
+            VectorUtils.setRoomVectorAvatar(aAvatarImageView_out, aRoom.getRoomId(), aSession.getMyUser().displayname);
+
+            if(!TextUtils.isEmpty(roomAvatarUrl)) {
+                // download avatar from server
+                int avatarSize = aContext.getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+                im.vector.Matrix.getInstance(aContext).getMediasCache().loadAvatarThumbnail(aSession.getHomeserverConfig(), aAvatarImageView_out, roomAvatarUrl, avatarSize);
+            }
+        }
+    }
+
     //==============================================================================================================
     // About / terms and conditions
     //==============================================================================================================

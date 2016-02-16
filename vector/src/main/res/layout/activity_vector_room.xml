@@ -177,4 +177,72 @@
             android:indeterminate="true" />
 
     </RelativeLayout>
+
+    <!-- room header displayed when the status bar title is pressed -->
+    <!-- note: if the main parent layout is a FrameLayout, the action_bar_header
+    layout will not intercept click events, and the underlying layout still
+    continue to process the listview scrolling gestures... -->
+    <RelativeLayout
+        android:id="@+id/action_bar_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:background="@color/vector_green_color"
+        android:layout_marginTop="0dp">
+
+        <RelativeLayout
+            android:id="@+id/room_avatar_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <include layout="@layout/vector_room_header_round_avatar"
+                android:layout_width="126dp"
+                android:layout_height="126dp"
+                android:id="@+id/room_avatar"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/action_bar_header_room_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/room_avatar_container"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="14dp" />
+
+        <TextView
+            android:id="@+id/action_bar_header_room_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/action_bar_header_room_title"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginLeft="44dp"
+            android:layout_marginRight="44dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/action_bar_header_room_members"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/action_bar_header_room_topic"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:textColor="#8b000000"
+            android:layout_marginLeft="66dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="19dp"/>
+    </RelativeLayout>
+
+
 </RelativeLayout>

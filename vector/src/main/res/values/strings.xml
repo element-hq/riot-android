@@ -314,6 +314,7 @@
     <string name="room_creation_keep_private">Keep private</string>
     <string name="room_creation_make_private">Make private</string>
     <string name="room_creation_name_mobile_email">name, mobile or email</string>
+    <string name="room_header_active_members">%1$d/%2$d active members</string>
 
     // Chat participants
     <string name="room_participants_title">Participants</string>
