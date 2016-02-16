@@ -18,6 +18,7 @@ package im.vector.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +27,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -46,6 +50,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
@@ -62,6 +67,10 @@ public class VectorAddParticipantsFragment extends Fragment {
     private EditText mSearchEdit;
     private View mProgressView;
     private VectorAddParticipantsAdapter mAdapter;
+
+    private boolean mIsEditionMode;
+    private MenuItem mRemoveMembersItem;
+    private MenuItem mSwitchDeletionItem;
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -131,6 +140,48 @@ public class VectorAddParticipantsFragment extends Fragment {
         return mViewHierarchy;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
+
+        mRemoveMembersItem = menu.findItem(R.id.ic_action_room_details_delete);
+        mSwitchDeletionItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
+
+        refreshMenuEntries();
+    }
+
+    /**
+     * Refresh the menu entries according to the edition mode
+     */
+    private void refreshMenuEntries() {
+        if (null != mRemoveMembersItem) {
+            mRemoveMembersItem.setVisible(mIsEditionMode);
+        }
+
+        if (null != mSwitchDeletionItem) {
+            mSwitchDeletionItem.setVisible(!mIsEditionMode);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.ic_action_room_details_delete) {
+            // TODO do something here
+            mIsEditionMode = !mIsEditionMode;
+            refreshMenuEntries();
+
+        } else if (id ==  R.id.ic_action_room_details_edition_mode) {
+
+            // TODO do something here
+            mIsEditionMode = !mIsEditionMode;
+            refreshMenuEntries();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * Finalize the fragment initialization.
