@@ -22,6 +22,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -38,16 +40,18 @@ import im.vector.fragments.VectorRoomSettingsFragment;
  * - Settings tab: the settings of the room
  */
 public class VectorRoomDetailsActivity extends MXCActionBarActivity implements TabListener {
-    private static final String LOG_TAG = "VectorRoomDetailsActivity";
+    private static final String LOG_TAG = "VectorRoomDetailsAct";
 
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorRoomDetailsActivity.EXTRA_ROOM_ID";
 
     // tab related items
     private static final String TAG_FRAGMENT_PEOPLE_ROOM_DETAILS = "im.vector.activity.TAG_FRAGMENT_PEOPLE_ROOM_DETAILS";
+    private static final String TAG_FRAGMENT_FILES_DETAILS = "im.vector.activity.TAG_FRAGMENT_FILES_DETAILS";
     private static final String TAG_FRAGMENT_SETTINGS_ROOM_DETAIL = "im.vector.activity.TAG_FRAGMENT_SETTINGS_ROOM_DETAIL";
     private static final String KEY_FRAGMENT_TAG = "KEY_FRAGMENT_TAG";
     private int mPeopleTabIndex = -1;
+    private int mFileTabIndex = -1;
     private int mSettingsTabIndex = -1;
     private int mCurrentTabIndex = -1;
     private ActionBar mActionBar;
@@ -164,6 +168,17 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         mPeopleTabIndex = tabIndex++; // set tab index
         mActionBar.addTab(tabToBeadded);
 
+        // Files tab creation: display the file list in the room history
+        tabToBeadded = mActionBar.newTab();
+        tabTitle = getResources().getString(R.string.room_details_files);
+        tabToBeadded.setText(tabTitle);
+        tabToBeadded.setTabListener(this);
+        tabBundle = new Bundle();
+        tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_FILES_DETAILS);
+        tabToBeadded.setTag(tabBundle);
+        mFileTabIndex = tabIndex++; // set tab index
+        mActionBar.addTab(tabToBeadded);
+
 
         // Settings tab creation: the room settings (room photo, name, topic..)
         tabToBeadded = mActionBar.newTab();
@@ -221,6 +236,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             mCurrentTabIndex = mSettingsTabIndex;
         }
         else {
+            Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+            mCurrentTabIndex = mSettingsTabIndex;
             Log.w(LOG_TAG, "## onTabSelected() unknown tab selected!!");
         }
     }

@@ -372,6 +372,7 @@
     <string name="room_details_room_name">Room Name</string>
     <string name="room_details_topic">Topic</string>
     <string name="room_details_people">People</string>
+    <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <string name="room_details_fail_to_update_topic">Fail to update the topic</string>
     <string name="room_details_fail_to_update_room_name">Fail to update the room name</string>
