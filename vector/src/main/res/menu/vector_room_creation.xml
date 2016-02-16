@@ -4,8 +4,8 @@
     tools:context="org.matrix.vector.activity.VectorRoomCreationActivity" >
 
     <item
-        android:id="@+id/action_next"
-        android:title="@string/next"
+        android:id="@+id/action_create_room"
+        android:title="@string/create"
         app:showAsAction="always"
         android:orderInCategory="0"/>
 

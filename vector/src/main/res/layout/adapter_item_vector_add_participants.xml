@@ -7,22 +7,22 @@
 
     <LinearLayout
         android:id="@+id/filtered_list_actions"
-        android:background="@color/vector_light_gray_color"
-        android:layout_width="74dp"
+        android:background="@color/vector_fuchsia_color"
+        android:layout_width="55dp"
         android:layout_alignParentRight="true"
         android:orientation="vertical"
         android:layout_height="match_parent">
-        
+
         <RelativeLayout
-            android:layout_width="74dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/filtered_list_delete_action"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/vector_remove"/>
+                android:src="@drawable/ic_material_eject_white"/>
 
         </RelativeLayout>
     </LinearLayout>
@@ -35,7 +35,7 @@
 
         <RelativeLayout
             android:id="@+id/filtered_list_avatar"
-            android:layout_marginLeft="13dp"
+            android:layout_marginLeft="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true">
@@ -51,10 +51,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="17dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="13dp"
-            android:textColor="@color/vector_text_black_color"
+            android:textSize="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/vector_21_black"
             android:text="A member name" />
 
         <TextView
@@ -64,17 +64,17 @@
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:layout_marginRight="13dp"
-            android:textColor="@color/vector_text_gray_color"
+            android:textSize="14dp"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/vector_80_gray"
             android:text="A member status" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/vector_silver_color"
-            android:layout_alignLeft="@id/filtered_list_avatar"
+            android:background="@color/vector_dc_gray"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
 
+    </RelativeLayout>
 </RelativeLayout>

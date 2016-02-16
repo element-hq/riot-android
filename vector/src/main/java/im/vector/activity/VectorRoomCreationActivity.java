@@ -79,14 +79,13 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     TextView mSingleAccountText;
 
     // the next button should only be displayed if a room name has been entered
-    MenuItem mNextMenuItem = null;
+    MenuItem mCreateMenuItem = null;
     // values
     Boolean mIsPrivate = true;
 
     Uri mThumbnailUri = null;
     Bitmap mThumbnail = null;
     String mServerAvatarUri = null;
-    ArrayList<String> mInviteduserIDsList = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,7 +218,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_room_creation, menu);
-        mNextMenuItem = menu.findItem(R.id.action_next);
+        mCreateMenuItem = menu.findItem(R.id.action_create);
         refreshNextButtonStatus();
         return true;
     }
@@ -228,9 +227,36 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_next) {
-            Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomCreationAddParticipantsActivity.class);
-            startActivityForResult(intent, GET_MEMBERS);
+        if (id == R.id.action_create_room) {
+            final String roomVisibility = !mIsPrivate ? RoomState.VISIBILITY_PUBLIC : RoomState.VISIBILITY_PRIVATE;
+
+            final View progressView = findViewById(R.id.room_creation_progress_view);
+            progressView.setVisibility(View.VISIBLE);
+
+            mSession.createRoom(mRoomNameEditText.getText().toString(), null, roomVisibility, null, new SimpleApiCallback<String>(this) {
+                @Override
+                public void onSuccess(String roomId) {
+                    mRoom = mSession.getDataHandler().getRoom(roomId);
+                    addRoomItems();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    progressView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onMatrixError(final MatrixError e) {
+                    progressView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onUnexpectedError(final Exception e) {
+                    progressView.setVisibility(View.GONE);
+                }
+            });
+
+
             return true;
         }
 
@@ -248,8 +274,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             isValidRoomName = !TextUtils.isEmpty(roomName.trim());
         }
 
-        if (null != mNextMenuItem) {
-            mNextMenuItem.setEnabled(isValidRoomName);
+        if (null != mCreateMenuItem) {
+            mCreateMenuItem.setEnabled(isValidRoomName);
         }
     }
 
@@ -396,35 +422,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_IMAGE) {
                 onPickerDone(data);
-            } else if (requestCode == GET_MEMBERS) {
-                mInviteduserIDsList = (ArrayList<String>)data.getExtras().get(VectorRoomCreationAddParticipantsActivity.RESULT_USERS_ID);
-                final String roomVisibility = !mIsPrivate ? RoomState.VISIBILITY_PUBLIC : RoomState.VISIBILITY_PRIVATE;
-
-                final View progressView = findViewById(R.id.room_creation_progress_view);
-                progressView.setVisibility(View.VISIBLE);
-
-                mSession.createRoom(mRoomNameEditText.getText().toString(), null, roomVisibility, null, new SimpleApiCallback<String>(this) {
-                    @Override
-                    public void onSuccess(String roomId) {
-                        mRoom = mSession.getDataHandler().getRoom(roomId);
-                        addRoomItems();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        progressView.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onMatrixError(final MatrixError e) {
-                        progressView.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onUnexpectedError(final Exception e) {
-                        progressView.setVisibility(View.GONE);
-                    }
-                });
             }
         }
     }
@@ -501,42 +498,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             });
 
             return;
-        }
-
-        // some users to invite ?
-        if (null != mInviteduserIDsList) {
-            mRoom.invite(mInviteduserIDsList, new SimpleApiCallback<Void>(this) {
-                private void onDone() {
-                    VectorRoomCreationActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mInviteduserIDsList = null;
-                            addRoomItems();
-                        }
-                    });
-                }
-
-                @Override
-                public void onSuccess(Void info) {
-                    onDone();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onDone();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onDone();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onDone();
-                }
-
-            });
         }
 
         CommonActivityUtils.goToRoomPage(mSession, mRoom.getRoomId(), this, null);

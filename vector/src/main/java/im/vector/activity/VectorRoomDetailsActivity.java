@@ -22,15 +22,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.util.Log;
-import android.view.Menu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.fragments.VectorAddParticipantsFragment;
+import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 
 /**
@@ -56,7 +54,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     private int mSettingsTabIndex = -1;
     private int mCurrentTabIndex = -1;
     private ActionBar mActionBar;
-    private VectorAddParticipantsFragment mAddPeopleFragment;
+    private VectorRoomDetailsMembersFragment mAddPeopleFragment;
     private VectorRoomSettingsFragment mRoomSettingsFragment;
 
     // activity life cycle management:
@@ -223,7 +221,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
             if (null == mAddPeopleFragment) {
-                mAddPeopleFragment = VectorAddParticipantsFragment.newInstance();
+                mAddPeopleFragment = VectorRoomDetailsMembersFragment.newInstance();
                 ft.replace(R.id.room_details_fragment_container, mAddPeopleFragment, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
                 Log.d(LOG_TAG, "## onTabSelected() people frag added");
             } else {

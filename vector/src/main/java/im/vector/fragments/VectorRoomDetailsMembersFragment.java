@@ -50,21 +50,19 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
-import im.vector.activity.VectorRoomDetailsActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
 import java.util.ArrayList;
 
-public class VectorAddParticipantsFragment extends Fragment {
-    private static final String LOG_TAG = "VectorAddParticipantsFragment";
+public class VectorRoomDetailsMembersFragment extends Fragment {
+    private static final String LOG_TAG = "VectorRoomDetailsMembers";
 
     // class members
     private MXSession mSession;
     private Room mRoom;
 
     // fragment items
-    private EditText mSearchEdit;
     private View mProgressView;
     private VectorAddParticipantsAdapter mAdapter;
 
@@ -90,8 +88,8 @@ public class VectorAddParticipantsFragment extends Fragment {
     // top view
     private View mViewHierarchy;
 
-    public static VectorAddParticipantsFragment newInstance() {
-        return new VectorAddParticipantsFragment();
+    public static VectorRoomDetailsMembersFragment newInstance() {
+        return new VectorRoomDetailsMembersFragment();
     }
 
     @Override
@@ -190,7 +188,7 @@ public class VectorAddParticipantsFragment extends Fragment {
         MXMediasCache mxMediasCache = mSession.getMediasCache();
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
-        ListView participantsListView = (ListView)mViewHierarchy.findViewById(R.id.add_participants_members_list);
+        ListView participantsListView = (ListView)mViewHierarchy.findViewById(R.id.room_details_members_list);
         mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, mxMediasCache);
         participantsListView.setAdapter(mAdapter);
 
@@ -230,9 +228,6 @@ public class VectorAddParticipantsFragment extends Fragment {
                         mAdapter.addParticipant(participant);
                     }
                 }
-
-                // leave the search
-                mSearchEdit.setText("");
             }
         });
 
@@ -348,38 +343,6 @@ public class VectorAddParticipantsFragment extends Fragment {
                         .show();
             }
         });
-
-        mSearchEdit = (EditText)mViewHierarchy.findViewById(R.id.add_participants_search_participants);
-        mSearchEdit.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(android.text.Editable s) {
-                mAdapter.setSearchedPattern(s.toString());
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        Button cancelButton = (Button)mViewHierarchy.findViewById(R.id.add_participants_cancel_search_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSearchEdit.setText("");
-            }
-        });
-
-        mAdapter.setSearchedPattern(mSearchEdit.getText().toString());
-        mAdapter.refresh();
-    }
-
-    /**
-     * Dismiss any opened keyboard
-     */
-    public void dismissKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mSearchEdit.getWindowToken(), 0);
     }
 
     /**
