@@ -1,46 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/add_participants_search_layout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_height="44dp">
-
-        <EditText
-            android:id="@+id/add_participants_search_participants"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:hint="@string/room_participants_invite_another_user"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
-            android:focusable="true"/>
-
-        <Button
-            android:id="@+id/add_participants_cancel_search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/cancel" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/add_participants_separator_line"
-        android:layout_below="@+id/add_participants_search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/vector_silver_color"/>
-
     <ListView
-        android:layout_below="@id/add_participants_separator_line"
-        android:id="@+id/add_participants_members_list"
+        android:id="@+id/room_details_members_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#00000000"
@@ -59,5 +26,18 @@
             android:layout_centerInParent="true"
             android:indeterminate="true" />
     </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_participants_create_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/floating_action_button_margin"
+        android:layout_marginBottom="@dimen/floating_action_button_margin"
+        app:backgroundTint="@color/vector_fuchsia_color"
+        android:src="@drawable/ic_add_white"
+        app:borderWidth="0dp"
+        app:elevation="4dp"/>
 
 </RelativeLayout>

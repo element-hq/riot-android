@@ -25,6 +25,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,6 +67,20 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
          * The user taps on "Leave" button
          */
         void onLeaveClick();
+
+        /**
+         * The user selects / deselects a member.
+         * @param userId
+         */
+        void onSelectUserId(String userId);
+
+        /**
+         * The user taps on a cell.
+         * The standard onClickListener might not work because
+         * the upper view is scrollable.
+         * @param position
+         */
+        void onClick(int position);
     }
 
     //
@@ -79,6 +94,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private String mRoomId;
     private Room mRoom;
     private int mLayoutResourceId;
+
+    private boolean mIsMultiSelectionMode;
+    private ArrayList<String> mSelectedUserIds = new ArrayList<String>();
 
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
@@ -97,7 +115,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param roomId the room id.
      * @param mediasCache the medias cache.
      */
-    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, MXMediasCache mediasCache) {
+    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, boolean multiSelectionMode, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
 
         mContext = context;
@@ -119,6 +137,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             this.add(item);
             mCreationParticipantsList.add(item);
         }
+
+        // display check box to select multiple items
+        mIsMultiSelectionMode = multiSelectionMode;
     }
 
     /**
@@ -172,6 +193,21 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             mUnusedParticipants.add(participant);
             this.remove(participant);
         }
+    }
+
+    /**
+     * @return the list of selected user ids
+     */
+    public ArrayList<String> getSelectedUserIds() {
+        return mSelectedUserIds;
+    }
+
+    /**
+     * @param isMultiSelectionMode the new selection mode
+     */
+    public void setMultiSelectionMode(boolean isMultiSelectionMode) {
+        mIsMultiSelectionMode = isMultiSelectionMode;
+        mSelectedUserIds = new ArrayList<String>();
     }
 
     /**
@@ -349,7 +385,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         final ParticipantAdapterItem participant = getItem(position);
         boolean isSearchMode = !TextUtils.isEmpty(mPattern);
 
-        ImageView thumbView = (ImageView) convertView.findViewById(R.id.avatar_img);
+        ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
 
         VectorUtils.setMemberAvatar(thumbView, participant.mUserId, participant.mDisplayName);
 
@@ -477,6 +513,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             hideDisplayActionsMenu = (null == mRoom) && (0 == position);
         }
 
+        cellLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnParticipantsListener) {
+                    mOnParticipantsListener.onClick(fpos);
+                }
+            }
+        });
+
         // the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || hideDisplayActionsMenu) {
             cellLayout.setOnTouchListener(null);
@@ -488,10 +533,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 @Override
                 public boolean onTouch(final View v, MotionEvent event) {
                     final int hiddenViewWidth = hiddenView.getWidth();
+                    boolean isMotionTrapped = true;
 
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN: {
-
                             // cancel hidden view display
                             if (null != mSwipingCellView) {
                                 mSwipingCellView.setTranslationX(0);
@@ -512,26 +557,73 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP: {
                             float x = event.getX() + v.getTranslationX();
-                            float aa = hiddenViewWidth;
-                            float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
 
-                            if (deltaX > (hiddenViewWidth / 2)) {
-                                cellLayout.setTranslationX(-hiddenViewWidth);
+                            // assume it is a tap
+                            if (Math.abs(x - mStartX) < 3) {
+                                if (null != mOnParticipantsListener) {
+                                    mOnParticipantsListener.onClick(fpos);
+                                }
+                                isMotionTrapped = false;
                             } else {
-                                cellLayout.setTranslationX(0);
-                                mSwipingCellView = null;
+                                float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+
+
+                                if (deltaX > (hiddenViewWidth / 2)) {
+                                    cellLayout.setTranslationX(-hiddenViewWidth);
+                                } else {
+                                    cellLayout.setTranslationX(0);
+                                    mSwipingCellView = null;
+                                }
                             }
 
                             break;
                         }
 
                         default:
-                            return false;
+                            isMotionTrapped = false;
+
                     }
-                    return true;
+                    return isMotionTrapped;
                 }
             });
         }
+
+        final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
+
+        int backgroundColor = mContext.getResources().getColor(android.R.color.white);
+
+        // multi selections mode
+        // do not display a checkbox for oneself
+        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUser().userId, participant.mUserId)) {
+            checkBox.setVisibility(View.VISIBLE);
+
+            checkBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
+
+            if (checkBox.isChecked()) {
+                backgroundColor = mContext.getResources().getColor(R.color.vector_05_gray);
+            }
+
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        mSelectedUserIds.add(participant.mUserId);
+                        cellLayout.setBackgroundColor(mContext.getResources().getColor(R.color.vector_05_gray));
+                    } else {
+                        mSelectedUserIds.remove(participant.mUserId);
+                        cellLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+                    }
+
+                    if (null != mOnParticipantsListener) {
+                        mOnParticipantsListener.onSelectUserId(participant.mUserId);
+                    }
+                }
+            });
+        } else {
+            checkBox.setVisibility(View.GONE);
+        }
+
+        cellLayout.setBackgroundColor(backgroundColor);
 
         return convertView;
     }
@@ -539,7 +631,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     /**
      * @return the participant User Ids except oneself.
      */
-    public ArrayList<String> getUserIdsist() {
+    public ArrayList<String> getUserIdsList() {
         ArrayList<String> idsList = new ArrayList<String>();
 
         // the first item is always oneself

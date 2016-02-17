@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- this section has no title in purpose -->
+    <PreferenceCategory>
+        <im.vector.preference.RoomAvatarPreference
+            android:key="roomPhotoAvatar"
+            android:title="@string/room_settings_room_photo"/>
+
+        <im.vector.preference.VectorEditTextPreference
+            android:key="roomNameEditText"
+            android:focusable="true"
+            android:title="@string/room_details_room_name" />
+
+        <im.vector.preference.VectorEditTextPreference
+            android:key="roomTopicEditText"
+            android:focusable="true"
+            android:title="@string/room_details_topic"/>
+    </PreferenceCategory>
+
+    <!-- this section has no title in purpose -->
+    <PreferenceCategory>
+        <!-- for further use
+        <Preference
+            android:key="roomPrivacyInfo"
+            android:title="@string/settings_room_privacy_label" />
+        -->
+
+        <SwitchPreference
+            android:key="roomPrivacySwitch"
+            android:title="@string/settings_privacy_policy"
+            android:summaryOn="@string/room_details_room_is_public"
+            android:summaryOff="@string/room_details_room_is_private"/>
+
+        <!-- mute/un mute room notifications-->
+        <SwitchPreference
+            android:key="muteNotificationsSwitch"
+            android:title="@string/room_details_mute_notifs" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

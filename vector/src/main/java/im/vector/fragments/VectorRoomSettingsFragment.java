@@ -16,32 +16,27 @@
 
 package im.vector.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
+//
+import android.content.ClipData;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
@@ -51,43 +46,50 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
 
-import java.util.HashMap;
-
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.activity.VectorRoomDetailsActivity;
+import im.vector.preference.RoomAvatarPreference;
+import im.vector.preference.VectorEditTextPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
+public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    // internal constants values
+    private static final String LOG_TAG = "VectorRoomSetFragment";
+    private static final boolean UPDATE_UI = true;
+    private static final boolean DO_NOT_UPDATE_UI = false;
+    private static final int REQ_CODE_UPDATE_ROOM_AVATAR = 0x10;
 
-public class VectorRoomSettingsFragment extends Fragment {
-    private static final String LOG_TAG = "VectorRoomSettingsFragment";
+    // fragment extra args keys
+    private static final String EXTRA_MATRIX_ID = "KEY_EXTRA_MATRIX_ID";
+    private static final String EXTRA_ROOM_ID = "KEY_EXTRA_ROOM_ID";
 
-    private static final int TAKE_IMAGE = "VectorRoomSettingsFragment_TAKE_IMAGE".hashCode();
+    // preference keys: public API to access preference
+    public static final String PREF_KEY_ROOM_PHOTO_AVATAR = "roomPhotoAvatar";
+    public static final String PREF_KEY_ROOM_NAME = "roomNameEditText";
+    public static final String PREF_KEY_ROOM_TOPIC = "roomTopicEditText";
+    public static final String PREF_KEY_ROOM_PRIVACY_SWITCH = "roomPrivacySwitch";
+    // for further use: public static final String PREF_KEY_ROOM_PRIVACY_INFO = "roomPrivacyInfo";
+    public static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
 
+    // business code
     private MXSession mSession;
     private Room mRoom;
-    private MXMediasCache mMediasCache = null;
-    private BingRulesManager mBingRulesManager = null;
+    private BingRulesManager mBingRulesManager;
 
     // UI elements
-    private ImageView mRoomAvatarImageView;
-    private EditText mRoomLabelEditText;
-    private EditText mRoomTopicEditText;
-    private TextView mRoomStatusText;
-    private CheckBox mRoomMuteNotificationCheckBox;
+    private RoomAvatarPreference mRoomPhotoAvatar;
+    private VectorEditTextPreference mRoomNameEditTxt;
+    private VectorEditTextPreference mRoomTopicEditTxt;
+    private SwitchPreference mRoomPrivacySwitch;
+    private SwitchPreference mRoomMuteNotificationsSwitch;
+    // for further use: private Preference mPrivacyInfoPreference;
+    private View mParentLoadingView;
+    private View mParentFragmentContainerView;
 
-    // top view
-    private View mViewHierarchy;
-
-    // the save button is disabled until there is an updated items
-    private MenuItem mSaveMenuItem;
-
-    //
-    private HashMap<Integer, Object> mUpdatedItemsByResourceId = new HashMap<Integer, Object>();
-    private String mServerAvatarUri = null;
-
-    private MXEventListener mEventListener = new MXEventListener() {
+    // MX system events listener
+    private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             getActivity().runOnUiThread(new Runnable() {
@@ -98,8 +100,10 @@ public class VectorRoomSettingsFragment extends Fragment {
                     if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)) {
-                        refresh();
+                            || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)
+                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
+                        Log.d(LOG_TAG,"## onLiveEvent() event="+event.type);
+                        updateUi();
                     }
                 }
             });
@@ -107,20 +111,107 @@ public class VectorRoomSettingsFragment extends Fragment {
 
         @Override
         public void onBingRulesUpdate() {
-            refresh();
+            updateUi();
         }
     };
+
+    public static VectorRoomSettingsFragment newInstance(String aMatrixId,String aRoomId) {
+        VectorRoomSettingsFragment theFragment = new VectorRoomSettingsFragment();
+        Bundle args = new Bundle();
+        args.putString(EXTRA_MATRIX_ID, aMatrixId);
+        args.putString(EXTRA_ROOM_ID, aRoomId);
+        theFragment.setArguments(args);
+
+        return theFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // check if there is any
-        if (null != savedInstanceState) {
-            mUpdatedItemsByResourceId = (HashMap<Integer, Object>) savedInstanceState.getSerializable("mUpdatedItemsByResourceId");
+        // retrieve fragment extras
+        String matrixId = getArguments().getString(EXTRA_MATRIX_ID);
+        String roomId = getArguments().getString(EXTRA_ROOM_ID);
 
-            if (null == mUpdatedItemsByResourceId) {
-                mUpdatedItemsByResourceId = new HashMap<Integer, Object>();
+        if(TextUtils.isEmpty(matrixId) || TextUtils.isEmpty(roomId)){
+            Log.e(LOG_TAG, "## onCreate(): fragment extras (MatrixId or RoomId) are missing");
+            getActivity().finish();
+        }
+        else {
+            mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
+            if (null != mSession) {
+                mRoom = mSession.getDataHandler().getRoom(roomId);
+                mBingRulesManager = mSession.getDataHandler().getBingRulesManager();
+            }
+
+            if (null == mRoom) {
+                Log.e(LOG_TAG, "## onCreate(): unable to retrieve Room object");
+                getActivity().finish();
+            }
+        }
+
+        // load preference xml file
+        addPreferencesFromResource(R.xml.fragment_vector_room_settings);
+
+        // init preference fields
+        mRoomPhotoAvatar = (RoomAvatarPreference)findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
+        mRoomNameEditTxt = (VectorEditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
+        mRoomTopicEditTxt = (VectorEditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
+        mRoomPrivacySwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_PRIVACY_SWITCH);
+        //mPrivacyInfoPreference = (Preference)findPreference(PREF_KEY_ROOM_PRIVACY_INFO); further use
+        mRoomMuteNotificationsSwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
+
+        // init the room avatar: session and room
+        mRoomPhotoAvatar.setConfiguration(mSession, mRoom);
+        mRoomPhotoAvatar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if((null != mRoomPhotoAvatar) && mRoomPhotoAvatar.isEnabled()) {
+                    onRoomAvatarPreferenceChanged();
+                    return true; //True if the click was handled.
+                }
+                else
+                    return false;
+            }
+        });
+
+        // update the UI preference screen: values & access(disable/enable widgets)
+        updateUi();
+
+        // listen to preference changes
+        SharedPreferences prefMgr = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefMgr.registerOnSharedPreferenceChangeListener(this);
+
+        setRetainInstance(true);
+    }
+
+
+    /**
+     * This method expects a view with the id "settings_loading_layout",
+     * that is present in the parent activity layout.
+     * @param view fragment view
+     * @param savedInstanceState bundle instance state
+     */
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // retrieve the loading screen in the parent view
+        View parent = getView();
+        if (null == mParentLoadingView) {
+            while ((null != parent) && (null == mParentLoadingView)) {
+                mParentLoadingView = parent.findViewById(R.id.settings_loading_layout);
+                parent = (View) parent.getParent();
+            }
+        }
+
+        // retrieve the parent fragment container view to disable access to the settings
+        // while the loading screen is enabled
+        parent = getView();
+        if (null == mParentFragmentContainerView) {
+            while ((null != parent) && (null == mParentFragmentContainerView)) {
+                mParentFragmentContainerView = parent.findViewById(R.id.room_details_fragment_container);
+                parent = (View) parent.getParent();
             }
         }
     }
@@ -140,460 +231,452 @@ public class VectorRoomSettingsFragment extends Fragment {
 
         if (null != mRoom) {
             mRoom.addEventListener(mEventListener);
-            refresh();
+            updateUi();
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+    private void updateUi(){
+        // configure the preferences that are allowed to be modified by the user
+        updatePreferenceAccessFromPowerLevel();
 
-        if (isVisible()) {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            inflater.inflate(R.menu.vector_room_settings, menu);
-
-            mSaveMenuItem = menu.findItem(R.id.ic_action_room_details_save);
-            refreshSaveButtonDisplay();
-        }
+        // set settings UI values
+        updatePreferenceUiValues();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.ic_action_room_details_save) {
-            View pageContentView = mViewHierarchy.findViewById(R.id.settings_layout);
-            pageContentView.setAlpha(0.5f);
-            pageContentView.setEnabled(false);
-
-            View spinnerView = mViewHierarchy.findViewById(R.id.room_settings_saving_progress);
-            spinnerView.setVisibility(View.VISIBLE);
-
-            saveUpdates();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void updateUiOnUiThread() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateUi();
+            }
+        });
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("mUpdatedItemsByResourceId", mUpdatedItemsByResourceId);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mViewHierarchy = inflater.inflate(R.layout.fragment_vector_room_settings, container, false);
-
-        Activity activity = getActivity();
-
-        if (activity instanceof VectorRoomDetailsActivity) {
-            VectorRoomDetailsActivity vectorRoomDetailsActivity = (VectorRoomDetailsActivity)activity;
-
-            mRoom = vectorRoomDetailsActivity.getRoom();
-            mSession = vectorRoomDetailsActivity.getSession();
-            mMediasCache = mSession.getMediasCache();
-            mBingRulesManager = mSession.getDataHandler().getBingRulesManager();
-
-            finalizeInit();
-        }
-
-        setHasOptionsMenu(true);
-
-        return mViewHierarchy;
-    }
-
-    /**
-     * Refresh the save button display.
-     */
-    private void refreshSaveButtonDisplay() {
-        if (null != mSaveMenuItem) {
-            Boolean hasUpdatedItems = mUpdatedItemsByResourceId.size() > 0;
-            mSaveMenuItem.setEnabled(hasUpdatedItems);
-            mSaveMenuItem.getIcon().setAlpha(hasUpdatedItems ? 255 : 70);
-        }
-    }
-
-    /**
-     * Refresh the fragment items
-     */
-    private void refresh() {
-        // cannot refresh if there is no valid session / room
-        if ((null == mRoom) || (null == mSession)) {
-            return;
-        }
-
-        PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
-
+    private void updatePreferenceAccessFromPowerLevel(){
         boolean canUpdateAvatar = false;
         boolean canUpdateName = false;
         boolean canUpdateTopic = false;
 
-        // sanity checks
-        if (null != powerLevels) {
+        // cannot refresh if there is no valid session / room
+        if ((null != mRoom) && (null != mSession)) {
+            PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUser().userId);
-            canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
-            canUpdateName = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
-            canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+            canUpdateAvatar = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+            canUpdateName = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+            canUpdateTopic = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+        }
+        else {
+            Log.w(LOG_TAG, "## updatePreferenceAccessFromPowerLevel(): session or room may be missing");
         }
 
-        // room avatar
-        mRoomAvatarImageView.setEnabled(canUpdateAvatar);
-        mRoomAvatarImageView.setAlpha(canUpdateAvatar ? 1.0f : 0.5f);
+        if(null != mRoomPhotoAvatar)
+            mRoomPhotoAvatar.setEnabled(canUpdateAvatar);
 
-        if (canUpdateAvatar && mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_avatar)) {
-            mRoomAvatarImageView.setImageBitmap((Bitmap) mUpdatedItemsByResourceId.get(R.id.room_settings_room_avatar));
-        } else {
-            VectorUtils.setRoomVectorAvatar(mRoomAvatarImageView, mRoom.getRoomId(), mRoom.getName(mSession.getMyUser().userId));
+        if(null != mRoomNameEditTxt)
+            mRoomNameEditTxt.setEnabled(canUpdateName);
 
-            String roomAvatarUrl = mRoom.getAvatarUrl();
+        if(null != mRoomTopicEditTxt)
+            mRoomTopicEditTxt.setEnabled(canUpdateTopic);
 
-            if (null != roomAvatarUrl) {
-                int size = getActivity().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-                mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), mRoomAvatarImageView, roomAvatarUrl, size);
-            }
-        }
+        // use the room name power to enable the privacy switch
+        if(null != mRoomPrivacySwitch)
+            mRoomPrivacySwitch.setEnabled(false);
 
-        // room name
-        mRoomLabelEditText.setEnabled(canUpdateName);
-        mRoomLabelEditText.setAlpha(canUpdateName ? 1.0f : 0.5f);
-
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_name_edit_text)) {
-            mRoomLabelEditText.setText((String) mUpdatedItemsByResourceId.get(R.id.room_settings_room_name_edit_text));
-        } else {
-            mRoomLabelEditText.setText(VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom));
-        }
-
-        // room topic
-        mRoomTopicEditText.setEnabled(canUpdateTopic);
-        mRoomTopicEditText.setAlpha(canUpdateTopic ? 1.0f : 0.5f);
-
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_topic_edit_text)) {
-            mRoomTopicEditText.setText((String)mUpdatedItemsByResourceId.get(R.id.room_settings_room_topic_edit_text));
-        } else {
-            mRoomTopicEditText.setText(mRoom.getTopic());
-        }
-
-        // room state
-        if (TextUtils.equals(mRoom.getLiveState().visibility, RoomState.VISIBILITY_PUBLIC)) {
-            mRoomStatusText.setText(R.string.room_details_room_is_public);
-        } else {
-            mRoomStatusText.setText(R.string.room_details_room_is_private);
-        }
-
-        // room push rule
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_push_checkbox)) {
-            mRoomMuteNotificationCheckBox.setChecked((Boolean)mUpdatedItemsByResourceId.get(R.id.room_settings_push_checkbox));
-        } else {
-            mRoomMuteNotificationCheckBox.setChecked(mBingRulesManager.isRoomNotificationsDisabled(mRoom));
-        }
-
-        refreshSaveButtonDisplay();
+        // use the room name power to enable the room notification mute setting
+        if(null != mRoomMuteNotificationsSwitch)
+            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName);
     }
+
 
     /**
-     * Finalize the fragment initialization.
+     * Update the UI preference from the values taken from
+     * the SDK layer.
      */
-    private void finalizeInit() {
-        mRoomAvatarImageView = (ImageView) (mViewHierarchy.findViewById(R.id.room_settings_room_avatar).findViewById(R.id.avatar_img));
-        mRoomLabelEditText = (EditText) mViewHierarchy.findViewById(R.id.room_settings_room_name_edit_text);
-        mRoomTopicEditText = (EditText) mViewHierarchy.findViewById(R.id.room_settings_room_topic_edit_text);
-        mRoomStatusText = (TextView) mViewHierarchy.findViewById(R.id.room_settings_room_status);
-        mRoomMuteNotificationCheckBox = (CheckBox) mViewHierarchy.findViewById(R.id.room_settings_push_checkbox);
+    private void updatePreferenceUiValues() {
+        String value;
 
-        mRoomLabelEditText.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                String value = mRoomLabelEditText.getText().toString();
+        if ((null == mSession) || (null == mRoom)){
+            Log.w(LOG_TAG,"## updatePreferenceUiValues(): session or room may be missing");
+            return;
+        }
 
-                if (null == value) {
-                    value = "";
-                }
+        if(null != mRoomPhotoAvatar){
+            mRoomPhotoAvatar.refreshAvatar();
+        }
 
-                String roomName = VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom);
+        // update the room name preference
+        if(null != mRoomNameEditTxt) {
+            value = VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom);
+            mRoomNameEditTxt.setSummary(value);
+        }
 
-                if (null == roomName) {
-                    roomName = "";
-                }
+        // update the room topic preference
+        if(null != mRoomTopicEditTxt) {
+            value = mRoom.getTopic();
+            mRoomTopicEditTxt.setSummary(value);
+        }
 
-                // save only if there is an update
-                if (!TextUtils.equals(value, roomName)) {
-                    mUpdatedItemsByResourceId.put(R.id.room_settings_room_name_edit_text, value);
-                } else {
-                    mUpdatedItemsByResourceId.remove(R.id.room_settings_room_name_edit_text);
-                }
+        // update the mute notifications preference
+        if(null != mRoomMuteNotificationsSwitch) {
+            boolean isChecked = mBingRulesManager.isRoomNotificationsDisabled(mRoom);
+            mRoomMuteNotificationsSwitch.setChecked(isChecked);
+        }
 
-                refreshSaveButtonDisplay();
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        mRoomTopicEditText.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                String value = mRoomTopicEditText.getText().toString();
-
-                if (null == value) {
-                    value = "";
-                }
-
-                String topic = (null != mRoom.getTopic()) ? mRoom.getTopic() : "";
-
-                // save only if there is an update
-                if (!TextUtils.equals(value, topic)) {
-                    mUpdatedItemsByResourceId.put(R.id.room_settings_room_topic_edit_text, value);
-                } else {
-                    mUpdatedItemsByResourceId.remove(R.id.room_settings_room_topic_edit_text);
-                }
-
-                refreshSaveButtonDisplay();
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        mRoomAvatarImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
-                startActivityForResult(intent, TAKE_IMAGE);
-            }
-        });
-
-        mRoomMuteNotificationCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // add the updated item if the value is new
-                if (mBingRulesManager.isRoomNotificationsDisabled(mRoom) != mRoomMuteNotificationCheckBox.isChecked()) {
-                    mUpdatedItemsByResourceId.put(R.id.room_settings_push_checkbox, mRoomMuteNotificationCheckBox.isChecked());
-                } else {
-                    mUpdatedItemsByResourceId.remove(R.id.room_settings_push_checkbox);
-                }
-
-                refreshSaveButtonDisplay();
-            }
-        });
-
-        mRoom.addEventListener(mEventListener);
-
-        refresh();
+        // update room visibility
+        boolean isRoomPublic = TextUtils.equals(mRoom.getLiveState().visibility, RoomState.VISIBILITY_PUBLIC);
+        if(null != mRoomPrivacySwitch) {
+            mRoomPrivacySwitch.setChecked(isRoomPublic);
+        }
+        /* further use: display if the room is public or private
+        if(null != mPrivacyInfoPreference) {
+            if (isRoomPublic)
+                mPrivacyInfoPreference.setSummary(R.string.room_details_room_is_public);
+            else
+                mPrivacyInfoPreference.setSummary(R.string.room_details_room_is_private);
+        }*/
     }
 
+    // OnSharedPreferenceChangeListener implementation
     @Override
-    @SuppressLint("NewApi")
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onSharedPreferenceChanged(SharedPreferences aSharedPreferences, String aKey) {
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == TAKE_IMAGE) {
-                Uri mediaUri = null;
-
-                if (null != data) {
-                    mediaUri = data.getData();
-                }
-
-                Bitmap thumbnail = ResourceUtils.getThumbnailBitmap(getActivity(), mediaUri);
-
-                if (null != thumbnail) {
-                    mUpdatedItemsByResourceId.put(R.id.room_settings_room_avatar, thumbnail);
-                    refresh();
-                }
-            }
+        if (aKey.equals(PREF_KEY_ROOM_PHOTO_AVATAR)) {
+            // unused flow: onSharedPreferenceChanged not triggered for room avatar photo
+            onRoomAvatarPreferenceChanged();
+        }
+        else if(aKey.equals(PREF_KEY_ROOM_NAME)) {
+            onRoomNamePreferenceChanged();
+        }
+        else if(aKey.equals(PREF_KEY_ROOM_TOPIC)) {
+            onRoomTopicPreferenceChanged();
+        }
+        else if(aKey.equals(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH)) {
+            onRoomMuteNotificationsPreferenceChanged();
+        }
+        else if(aKey.equals(PREF_KEY_ROOM_PRIVACY_SWITCH)) {
+            // not yet implemented
+            Activity parent = getActivity();
+            if(null != parent)
+                Toast.makeText(parent,"Not yet implemented",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Log.w(LOG_TAG,"## onSharedPreferenceChanged(): unknown preference detected");
         }
     }
 
-    /**
-     * Save the room updates.
-     */
-    private void saveUpdates() {
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_avatar)) {
-            Bitmap bitmap = (Bitmap) mUpdatedItemsByResourceId.get(R.id.room_settings_room_avatar);
-            String thumbnailURL = mMediasCache.saveBitmap(bitmap, null);
-
-            ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailURL));
-
-            mSession.getContentManager().uploadContent(resource.contentStream, mRoom.getRoomId(), "image/jpeg", thumbnailURL, new ContentManager.UploadCallback() {
-                @Override
-                public void onUploadStart(String uploadId) {
-                }
-
-                @Override
-                public void onUploadProgress(String anUploadId, int percentageProgress) {
-                }
-
-                @Override
-                public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mUpdatedItemsByResourceId.remove(R.id.room_settings_room_avatar);
-
-                            if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                mServerAvatarUri = uploadResponse.contentUri;
-                            }
-
-                            saveUpdates();
-                        }
-                    });
-                }
-            });
-
+    private void onRoomMuteNotificationsPreferenceChanged(){
+        // sanity check
+        if((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)){
             return;
         }
 
-        if (null != mServerAvatarUri) {
-            mRoom.updateAvatarUrl(mServerAvatarUri, new ApiCallback<Void>() {
+        // get new and previous values
+        boolean isNotificationsMuted = mRoomMuteNotificationsSwitch.isChecked();
+        boolean previousValue = mBingRulesManager.isRoomNotificationsDisabled(mRoom);
 
-                private void onDone() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mServerAvatarUri = null;
-                            saveUpdates();
-                        }
-                    });
-                }
-
-                @Override
-                public void onSuccess(Void info) {
-                    onDone();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onDone();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onDone();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onDone();
-                }
-            });
-
-            return;
-        }
-
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_name_edit_text)) {
-            String roomName = (String) mUpdatedItemsByResourceId.get(R.id.room_settings_room_name_edit_text);
-
-            mRoom.updateName(roomName, new ApiCallback<Void>() {
-
-                private void onDone() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mUpdatedItemsByResourceId.remove(R.id.room_settings_room_name_edit_text);
-                            saveUpdates();
-                        }
-                    });
-                }
-
-                @Override
-                public void onSuccess(Void info) {
-                    onDone();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onDone();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onDone();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onDone();
-                }
-            });
-
-            return;
-        }
-
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_room_topic_edit_text)) {
-            String topic = (String) mUpdatedItemsByResourceId.get(R.id.room_settings_room_topic_edit_text);
-
-            mRoom.updateTopic(topic, new ApiCallback<Void>() {
-
-                private void onDone() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mUpdatedItemsByResourceId.remove(R.id.room_settings_room_topic_edit_text);
-                            saveUpdates();
-                        }
-                    });
-                }
-
-                @Override
-                public void onSuccess(Void info) {
-                    onDone();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onDone();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onDone();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onDone();
-                }
-            });
-
-            return;
-        }
-
-        if (mUpdatedItemsByResourceId.containsKey(R.id.room_settings_push_checkbox)) {
-            Boolean isMuted = (Boolean)mUpdatedItemsByResourceId.get(R.id.room_settings_push_checkbox);
-
-            mBingRulesManager.muteRoomNotifications(mRoom, isMuted, new BingRulesManager.onBingRuleUpdateListener() {
-
-                private void onDone() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mUpdatedItemsByResourceId.remove(R.id.room_settings_push_checkbox);
-                            saveUpdates();
-                        }
-                    });
-                }
-
+        // update only, if values are different
+        if(isNotificationsMuted != previousValue) {
+            displayLoadingView();
+            mBingRulesManager.muteRoomNotifications(mRoom, isNotificationsMuted, new BingRulesManager.onBingRuleUpdateListener() {
                 @Override
                 public void onBingRuleUpdateSuccess() {
-                    onDone();
+                    Log.d(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): update succeed");
+                    hideLoadingView(UPDATE_UI);
                 }
 
                 @Override
                 public void onBingRuleUpdateFailure(String errorMessage) {
-                    onDone();
+                    Log.w(LOG_TAG, "##onRoomMuteNotificationsPreferenceChanged(): BingRuleUpdateFailure");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
                 }
             });
+        }
+    }
 
+    private void onRoomNamePreferenceChanged(){
+        // sanity check
+        if((null == mRoom) || (null == mSession) || (null == mRoomNameEditTxt)){
             return;
         }
 
-        getActivity().finish();
+        // get new and previous values
+        String previousName = mRoom.getName(mSession.getMyUser().userId);
+        String newName = mRoomNameEditTxt.getText();
+        // update only, if values are different
+        if (!TextUtils.equals(previousName, newName)) {
+            displayLoadingView();
+            mRoom.updateName(newName, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    Log.d(LOG_TAG, "##onRoomNamePreferenceChanged(): update succeed");
+                    hideLoadingView(UPDATE_UI);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - NetworkError");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - MatrixError");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - UnexpectedError");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+                }
+            });
+        }
+    }
+
+    private void onRoomTopicPreferenceChanged() {
+        // sanity check
+        if(null == mRoom){
+            return;
+        }
+
+        // get new and previous values
+        String previousTopic = mRoom.getTopic();
+        String newTopic = mRoomTopicEditTxt.getText();
+        // update only, if values are different
+        if (!TextUtils.equals(previousTopic, newTopic)) {
+            displayLoadingView();
+            mRoom.updateTopic(newTopic, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    Log.d(LOG_TAG, "##onRoomTopicPreferenceChanged(): update succeed");
+                    hideLoadingView(UPDATE_UI);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - NetworkError");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - MatrixError");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - UnexpectedError");
+                    hideLoadingView(DO_NOT_UPDATE_UI);
+                }
+            });
+        }
+
+    }
+    /**
+     * Update the room avatar.
+     * Start the camera activity to take the avatar picture.
+     */
+    private void onRoomAvatarPreferenceChanged() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
+                startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
+            }
+        });
+    }
+
+    /**
+     * Process the result of the room avatar picture.
+     *
+     * @param aRequestCode request ID
+     * @param aResultCode request status code
+     * @param aData result data
+     */
+    @Override
+    public void onActivityResult(int aRequestCode, int aResultCode, final Intent aData) {
+        super.onActivityResult(aRequestCode, aResultCode, aData);
+
+        if (REQ_CODE_UPDATE_ROOM_AVATAR == aRequestCode) {
+            onActivityResultRoomAvatarUpdate(aResultCode, aData);
+        }
+    }
+
+    private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData){
+        Uri thumbnailUri = null;
+        ClipData clipData = null;
+        Bitmap thumbnailBitmap = null;
+
+        // sanity check
+        if(null == mSession){
+            return;
+        }
+
+        if (aResultCode == Activity.RESULT_OK) {
+            if (null != aData) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    clipData = aData.getClipData();
+                }
+
+                // get thumbnail URI
+                if (null != clipData) { // multiple data
+                    if (clipData.getItemCount() > 0) {
+                        thumbnailUri = clipData.getItemAt(0).getUri();
+                    }
+                }
+                else if (null != aData.getData()) {
+                    thumbnailUri = aData.getData();
+                }
+
+                if (null != thumbnailUri) {
+                    thumbnailBitmap = VectorUtils.getBitmapFromuri(getActivity(), thumbnailUri);
+                }
+                else {
+                    // no thumbnail URI found, just abort here
+                    return;
+                }
+
+                // save the bitmap into the cache and retrieve its URL
+                String thumbnailUrl = mSession.getMediasCache().saveBitmap(thumbnailBitmap, null);
+
+                if (null != thumbnailUrl) {
+                    displayLoadingView();
+
+                    // save the bitmap URL on the server
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailUrl));
+                    if(null != resource) {
+                        mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
+                            @Override
+                            public void onUploadStart(String uploadId) {
+                            }
+
+                            @Override
+                            public void onUploadProgress(String anUploadId, int percentageProgress) {
+                            }
+
+                            @Override
+                            public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
+                                            mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                                                @Override
+                                                public void onSuccess(Void info) {
+                                                    Log.d(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update succeed");
+                                                    hideLoadingView(UPDATE_UI);
+                                                }
+
+                                                @Override
+                                                public void onNetworkError(Exception e) {
+                                                    Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - NetworkError");
+                                                    hideLoadingView(DO_NOT_UPDATE_UI);
+                                                }
+
+                                                @Override
+                                                public void onMatrixError(MatrixError e) {
+                                                    Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - MatrixError");
+                                                    hideLoadingView(DO_NOT_UPDATE_UI);
+                                                }
+
+                                                @Override
+                                                public void onUnexpectedError(Exception e) {
+                                                    Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - UnexpectedError");
+                                                    hideLoadingView(DO_NOT_UPDATE_UI);
+                                                }
+                                            });
+                                        } else {
+                                            hideLoadingView(DO_NOT_UPDATE_UI);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Display the loading view in the parent activity layout.
+     * This view is disabled/enabled to achieve a waiting screen.
+     */
+    private void displayLoadingView() {
+
+        Activity parentActivity = getActivity();
+        if(null != parentActivity) {
+            parentActivity.runOnUiThread(new Runnable() {
+                public void run() {
+
+                    // disable the fragment container view to disable preferences access
+                    enablePreferenceWidgets(false);
+
+                    // disable preference screen during server updates
+                    if(null != mParentFragmentContainerView)
+                        mParentFragmentContainerView.setEnabled(false);
+
+                    // display the loading progress bar screen
+                    if (null != mParentLoadingView) {
+                        mParentLoadingView.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Hide the loading progress bar screen and
+     * update the UI if required.
+     */
+    private void hideLoadingView(boolean aIsUiRefreshRequired) {
+        getActivity().runOnUiThread(new Runnable(){
+            public void run() {
+
+                // enable preference screen after server updates finished
+                if(null != mParentFragmentContainerView)
+                    mParentFragmentContainerView.setEnabled(true);
+
+                // enable preference widgets
+                enablePreferenceWidgets(true);
+
+                if (null != mParentLoadingView) {
+                    mParentLoadingView.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        if(aIsUiRefreshRequired){
+            updateUiOnUiThread();
+        }
+    }
+
+    private void enablePreferenceWidgets(boolean aIsEnabled){
+        if(null != mRoomPhotoAvatar) {
+            mRoomPhotoAvatar.setEnabled(aIsEnabled);
+            mRoomPhotoAvatar.setShouldDisableView(aIsEnabled);
+        }
+
+        if(null != mRoomNameEditTxt) {
+            mRoomNameEditTxt.setEnabled(aIsEnabled);
+            mRoomNameEditTxt.setShouldDisableView(aIsEnabled);
+        }
+
+        if(null != mRoomTopicEditTxt) {
+            mRoomTopicEditTxt.setEnabled(aIsEnabled);
+            mRoomTopicEditTxt.setShouldDisableView(aIsEnabled);
+        }
+
+        if(null != mRoomPrivacySwitch) {
+            mRoomPrivacySwitch.setEnabled(aIsEnabled);
+            mRoomPrivacySwitch.setShouldDisableView(aIsEnabled);
+        }
+
+        if(null != mRoomMuteNotificationsSwitch) {
+            mRoomMuteNotificationsSwitch.setEnabled(aIsEnabled);
+            mRoomMuteNotificationsSwitch.setShouldDisableView(aIsEnabled);
+        }
     }
 }
