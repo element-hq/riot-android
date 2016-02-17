@@ -127,6 +127,21 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     }
 
     /**
+     * Back key management
+     */
+    public void onBackPressed() {
+        boolean isTrapped = false;
+
+        if (mPeopleTabIndex == mCurrentTabIndex) {
+            isTrapped = mAddPeopleFragment.onBackPressed();
+        }
+
+        if (!isTrapped) {
+            super.onBackPressed();
+        }
+    }
+
+    /**
      * Update the tag of the tab with its the UI values
      *
      * @param aTabToUpdate the tab to be updated
@@ -145,7 +160,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // Bundle tabTag = (Bundle) aTabToRestore.getTag();
         // restore here context here
     }
-
 
     // =============================================================================================
     // Tabs logic implementation
@@ -238,6 +252,12 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
             mCurrentTabIndex = mSettingsTabIndex;
             Log.w(LOG_TAG, "## onTabSelected() unknown tab selected!!");
+        }
+
+        // reset the activity title
+        // some fragments update it (VectorRoomDetailsMembersFragment for example)
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(this.getResources().getString(R.string.room_details_title));
         }
     }
 

@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -66,7 +68,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private View mProgressView;
     private VectorAddParticipantsAdapter mAdapter;
 
-    private boolean mIsEditionMode;
+    private boolean mIsMultiSelectionMode;
     private MenuItem mRemoveMembersItem;
     private MenuItem mSwitchDeletionItem;
 
@@ -100,6 +102,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if (null != mRoom) {
             mRoom.removeEventListener(mEventListener);
         }
+
+        if (mIsMultiSelectionMode) {
+            toggleMultiSelectionMode();
+        }
     }
 
     @Override
@@ -116,6 +122,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             mAdapter.listOtherMembers();
             mAdapter.refresh();
         }
+
+        refreshMenuEntries();
     }
 
     @Override
@@ -126,7 +134,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         Activity activity = getActivity();
 
         if (activity instanceof MXCActionBarActivity) {
-            MXCActionBarActivity anActivity = (MXCActionBarActivity)activity;
+            MXCActionBarActivity anActivity = (MXCActionBarActivity) activity;
             mRoom = anActivity.getRoom();
             mSession = anActivity.getSession();
 
@@ -150,32 +158,122 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
+     * Trap the back key event.
+     * @return true if the back key event is trapped.
+     */
+    public boolean onBackPressed() {
+        if (mIsMultiSelectionMode) {
+            toggleMultiSelectionMode();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Refresh the menu entries according to the edition mode
      */
     private void refreshMenuEntries() {
         if (null != mRemoveMembersItem) {
-            mRemoveMembersItem.setVisible(mIsEditionMode);
+            mRemoveMembersItem.setVisible(mIsMultiSelectionMode);
         }
 
         if (null != mSwitchDeletionItem) {
-            mSwitchDeletionItem.setVisible(!mIsEditionMode);
+            mSwitchDeletionItem.setVisible(!mIsMultiSelectionMode);
         }
     }
+
+    /**
+     * Update the activity title
+     *
+     * @param title
+     */
+    private void setActivityTitle(String title) {
+        if (null != ((AppCompatActivity) getActivity()).getSupportActionBar()) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
+        }
+    }
+
+    /**
+     * Reset the activity title.
+     */
+    private void resetActivityTitle() {
+        mRemoveMembersItem.setEnabled(true);
+        mSwitchDeletionItem.setEnabled(true);
+
+        setActivityTitle(this.getResources().getString(R.string.room_details_title));
+    }
+
+    /**
+     * Enable / disable the multiselection mode
+     */
+    private void toggleMultiSelectionMode() {
+        resetActivityTitle();
+        mIsMultiSelectionMode = !mIsMultiSelectionMode;
+        mAdapter.setMultiSelectionMode(mIsMultiSelectionMode);
+        refreshMenuEntries();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Kick an user Ids list
+     * @param userids the user ids list
+     * @param index the start index
+     */
+    private void kickUsers(final  ArrayList<String> userids, final int index) {
+        if (index >= userids.size()) {
+            mProgressView.setVisibility(View.GONE);
+
+            if (mIsMultiSelectionMode) {
+                toggleMultiSelectionMode();
+                resetActivityTitle();
+            }
+            return;
+        }
+
+        mRemoveMembersItem.setEnabled(false);
+        mSwitchDeletionItem.setEnabled(false);
+
+        mProgressView.setVisibility(View.VISIBLE);
+
+        mRoom.kick(userids.get(index), new ApiCallback<Void>() {
+                    private void kickNext() {
+                        kickUsers(userids, index + 1);
+                    }
+
+                    @Override
+                    public void onSuccess(Void info) {
+                        kickNext();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        kickNext();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        kickNext();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        kickNext();
+                    }
+                }
+
+        );
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.ic_action_room_details_delete) {
-            // TODO do something here
-            mIsEditionMode = !mIsEditionMode;
-            refreshMenuEntries();
-
+            kickUsers(mAdapter.getSelectedUserIds(), 0);
         } else if (id ==  R.id.ic_action_room_details_edition_mode) {
-
-            // TODO do something here
-            mIsEditionMode = !mIsEditionMode;
-            refreshMenuEntries();
+            toggleMultiSelectionMode();
         }
 
         return super.onOptionsItemSelected(item);
@@ -189,7 +287,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         ListView participantsListView = (ListView)mViewHierarchy.findViewById(R.id.room_details_members_list);
-        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, mxMediasCache);
+        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
         participantsListView.setAdapter(mAdapter);
 
         participantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -239,6 +337,18 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         });
 
         mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+
+            @Override
+            public void onSelectUserId(String userId) {
+                ArrayList<String> userIds = mAdapter.getSelectedUserIds();
+
+                if (0 != userIds.size()) {
+                    setActivityTitle(userIds.size() + " " + getActivity().getResources().getString(R.string.room_details_selected));
+                } else {
+                    resetActivityTitle();
+                }
+            }
+
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
                 if (null == mRoom) {
@@ -255,32 +365,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
 
-                                    mProgressView.setVisibility(View.VISIBLE);
+                                    ArrayList<String> userIds = new ArrayList<String>();
+                                    userIds.add(participantItem.mUserId);
 
-                                    mRoom.kick(participantItem.mUserId, new ApiCallback<Void>() {
-                                        @Override
-                                        public void onSuccess(Void info) {
-                                            mProgressView.setVisibility(View.GONE);
-                                        }
-
-                                        @Override
-                                        public void onNetworkError(Exception e) {
-                                            mProgressView.setVisibility(View.GONE);
-                                            // display something
-                                        }
-
-                                        @Override
-                                        public void onMatrixError(MatrixError e) {
-                                            mProgressView.setVisibility(View.GONE);
-                                            // display something
-                                        }
-
-                                        @Override
-                                        public void onUnexpectedError(Exception e) {
-                                            mProgressView.setVisibility(View.GONE);
-                                            // display something
-                                        }
-                                    });
+                                    kickUsers(userIds, 0);
                                 }
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

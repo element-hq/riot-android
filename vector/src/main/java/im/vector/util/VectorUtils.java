@@ -203,7 +203,7 @@ public class VectorUtils {
     //==============================================================================================================
 
     // avatars cache
-    static LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<String, Bitmap>(2 * 1024 * 1024);
+    static LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<String, Bitmap>(20 * 1024 * 1024);
     // the avatars background color
     static ArrayList<Integer> mColorList = new ArrayList<Integer>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
 
@@ -234,7 +234,7 @@ public class VectorUtils {
      * @param text the text to display.
      * @return the generated bitmap
      */
-    private static Bitmap createAvatar(Context context, String text) {
+    private static Bitmap createAvatar(Context context, int backgroundColor, String text) {
         android.graphics.Bitmap.Config bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
 
         // the bitmap size
@@ -245,6 +245,8 @@ public class VectorUtils {
 
         Bitmap bitmap = Bitmap.createBitmap(side, side, bitmapConfig);
         Canvas canvas = new Canvas(bitmap);
+
+        canvas.drawColor(backgroundColor);
 
         // prepare the text drawing
         Paint textPaint = new Paint();
@@ -269,7 +271,7 @@ public class VectorUtils {
      * @param aText the text.
      * @return the avatar.
      */
-    public static Bitmap getAvatar(Context context, String aText) {
+    public static Bitmap getAvatar(Context context, int backgroundColor, String aText) {
         // ignore some characters
         if (!TextUtils.isEmpty(aText) && (aText.startsWith("@") || aText.startsWith("#"))) {
             aText = aText.substring(1);
@@ -281,12 +283,14 @@ public class VectorUtils {
             firstChar = aText.substring(0, 1).toUpperCase();
         }
 
+        String key = firstChar + "_" + backgroundColor;
+
         // check if the avatar is already defined
-        Bitmap thumbnail = mAvatarImageByKeyDict.get(firstChar);
+        Bitmap thumbnail = mAvatarImageByKeyDict.get(key);
 
         if (null == thumbnail) {
-            thumbnail = VectorUtils.createAvatar(context, firstChar);
-            mAvatarImageByKeyDict.put(firstChar, thumbnail);
+            thumbnail = VectorUtils.createAvatar(context, backgroundColor, firstChar);
+            mAvatarImageByKeyDict.put(key, thumbnail);
         }
 
         return thumbnail;
@@ -310,8 +314,7 @@ public class VectorUtils {
     public static void setMemberAvatar(ImageView imageView, String userId, String displayName) {
         // sanity checks
         if (null != imageView && !TextUtils.isEmpty(userId)) {
-            imageView.setBackgroundColor(VectorUtils.getAvatarcolor(userId));
-            imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), TextUtils.isEmpty(displayName) ? userId : displayName));
+            imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName));
         }
     }
 

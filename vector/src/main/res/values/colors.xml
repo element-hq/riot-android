@@ -59,6 +59,7 @@
     <!-- room members list -->
     <color name="vector_21_black">#FF212121</color>
     <color name="vector_80_gray">#FF808080</color>
+    <color name="vector_05_gray">#FFF2F2F2</color>
 
 
     <color name="vector_d8_gray">#FFD8D8D8</color>

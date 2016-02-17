@@ -25,6 +25,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,6 +67,12 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
          * The user taps on "Leave" button
          */
         void onLeaveClick();
+
+        /**
+         * The user selects / deselects a member.
+         * @param userId
+         */
+        void onSelectUserId(String userId);
     }
 
     //
@@ -79,6 +86,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private String mRoomId;
     private Room mRoom;
     private int mLayoutResourceId;
+
+    private boolean mIsMultiSelectionMode;
+    private ArrayList<String> mSelectedUserIds = new ArrayList<String>();
 
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
@@ -97,7 +107,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param roomId the room id.
      * @param mediasCache the medias cache.
      */
-    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, MXMediasCache mediasCache) {
+    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, boolean multiSelectionMode, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
 
         mContext = context;
@@ -119,6 +129,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             this.add(item);
             mCreationParticipantsList.add(item);
         }
+
+        // display check box to select multiple items
+        mIsMultiSelectionMode = multiSelectionMode;
     }
 
     /**
@@ -172,6 +185,21 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             mUnusedParticipants.add(participant);
             this.remove(participant);
         }
+    }
+
+    /**
+     * @return the list of selected user ids
+     */
+    public ArrayList<String> getSelectedUserIds() {
+        return mSelectedUserIds;
+    }
+
+    /**
+     * @param isMultiSelectionMode the new selection mode
+     */
+    public void setMultiSelectionMode(boolean isMultiSelectionMode) {
+        mIsMultiSelectionMode = isMultiSelectionMode;
+        mSelectedUserIds = new ArrayList<String>();
     }
 
     /**
@@ -349,7 +377,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         final ParticipantAdapterItem participant = getItem(position);
         boolean isSearchMode = !TextUtils.isEmpty(mPattern);
 
-        ImageView thumbView = (ImageView) convertView.findViewById(R.id.avatar_img);
+        ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
 
         VectorUtils.setMemberAvatar(thumbView, participant.mUserId, participant.mDisplayName);
 
@@ -532,6 +560,43 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
             });
         }
+
+        final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
+
+        int backgroundColor = mContext.getResources().getColor(android.R.color.white);
+
+        // multi selections mode
+        // do not display a checkbox for oneself
+        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUser().userId, participant.mUserId)) {
+            checkBox.setVisibility(View.VISIBLE);
+
+            checkBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
+
+            if (checkBox.isChecked()) {
+                backgroundColor = mContext.getResources().getColor(R.color.vector_05_gray);
+            }
+
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        mSelectedUserIds.add(participant.mUserId);
+                        cellLayout.setBackgroundColor(mContext.getResources().getColor(R.color.vector_05_gray));
+                    } else {
+                        mSelectedUserIds.remove(participant.mUserId);
+                        cellLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+                    }
+
+                    if (null != mOnParticipantsListener) {
+                        mOnParticipantsListener.onSelectUserId(participant.mUserId);
+                    }
+                }
+            });
+        } else {
+            checkBox.setVisibility(View.GONE);
+        }
+
+        cellLayout.setBackgroundColor(backgroundColor);
 
         return convertView;
     }
