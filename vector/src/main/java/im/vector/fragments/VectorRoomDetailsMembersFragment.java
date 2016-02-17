@@ -52,10 +52,10 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.MemberDetailsActivity;
 import im.vector.activity.VectorInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
-import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 
@@ -307,45 +307,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
         participantsListView.setAdapter(mAdapter);
 
-        participantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
-                    ParticipantAdapterItem participant = mAdapter.getItem(position);
-
-                    if (null != mRoom) {
-                        final ArrayList<String> userIDs = new ArrayList<String>();
-                        userIDs.add(participant.mUserId);
-
-                        mProgressView.setVisibility(View.VISIBLE);
-
-                        mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
-                            @Override
-                            public void onSuccess(Void info) {
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onMatrixError(final MatrixError e) {
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onUnexpectedError(final Exception e) {
-                                mProgressView.setVisibility(View.GONE);
-                            }
-                        });
-                    } else {
-                        mAdapter.addParticipant(participant);
-                    }
-                }
-            }
-        });
-
         mAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -354,6 +315,14 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         });
 
         mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+            @Override
+            public void onClick(int position) {
+                Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
+                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, mAdapter.getItem(position).mUserId);
+                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                startActivity(startRoomInfoIntent);
+            }
 
             @Override
             public void onSelectUserId(String userId) {

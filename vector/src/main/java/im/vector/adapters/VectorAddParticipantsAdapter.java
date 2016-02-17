@@ -73,6 +73,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
          * @param userId
          */
         void onSelectUserId(String userId);
+
+        /**
+         * The user taps on a cell.
+         * The standard onClickListener might not work because
+         * the upper view is scrollable.
+         * @param position
+         */
+        void onClick(int position);
     }
 
     //
@@ -505,6 +513,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             hideDisplayActionsMenu = (null == mRoom) && (0 == position);
         }
 
+        cellLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnParticipantsListener) {
+                    mOnParticipantsListener.onClick(fpos);
+                }
+            }
+        });
+
         // the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || hideDisplayActionsMenu) {
             cellLayout.setOnTouchListener(null);
@@ -516,10 +533,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 @Override
                 public boolean onTouch(final View v, MotionEvent event) {
                     final int hiddenViewWidth = hiddenView.getWidth();
+                    boolean isMotionTrapped = true;
 
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN: {
-
                             // cancel hidden view display
                             if (null != mSwipingCellView) {
                                 mSwipingCellView.setTranslationX(0);
@@ -540,23 +557,33 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP: {
                             float x = event.getX() + v.getTranslationX();
-                            float aa = hiddenViewWidth;
-                            float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
 
-                            if (deltaX > (hiddenViewWidth / 2)) {
-                                cellLayout.setTranslationX(-hiddenViewWidth);
+                            // assume it is a tap
+                            if (Math.abs(x - mStartX) < 3) {
+                                if (null != mOnParticipantsListener) {
+                                    mOnParticipantsListener.onClick(fpos);
+                                }
+                                isMotionTrapped = false;
                             } else {
-                                cellLayout.setTranslationX(0);
-                                mSwipingCellView = null;
+                                float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+
+
+                                if (deltaX > (hiddenViewWidth / 2)) {
+                                    cellLayout.setTranslationX(-hiddenViewWidth);
+                                } else {
+                                    cellLayout.setTranslationX(0);
+                                    mSwipingCellView = null;
+                                }
                             }
 
                             break;
                         }
 
                         default:
-                            return false;
+                            isMotionTrapped = false;
+
                     }
-                    return true;
+                    return isMotionTrapped;
                 }
             });
         }
