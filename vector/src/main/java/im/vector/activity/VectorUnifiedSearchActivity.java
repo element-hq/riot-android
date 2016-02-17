@@ -268,6 +268,15 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
                 alert.show();
             }
         }
+
+        if (null != mSearchInMessagesFragment) {
+            mSearchInMessagesFragment.onActivityResult(requestCode, resultCode, data);
+        }
+
+        if (null != mSearchInRoomNamesFragment) {
+            mSearchInRoomNamesFragment.onActivityResult(requestCode, resultCode, data);
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 

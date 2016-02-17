@@ -229,6 +229,19 @@
                 android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
+        <activity
+            android:name=".activity.VectorInviteMembersActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.VectorRoomDetailsActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+        </activity>
+
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

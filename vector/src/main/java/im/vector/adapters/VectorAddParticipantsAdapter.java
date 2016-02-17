@@ -604,7 +604,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     /**
      * @return the participant User Ids except oneself.
      */
-    public ArrayList<String> getUserIdsist() {
+    public ArrayList<String> getUserIdsList() {
         ArrayList<String> idsList = new ArrayList<String>();
 
         // the first item is always oneself

@@ -52,13 +52,17 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.VectorInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
+
+    private static final int INVITE_USER_REQUEST_CODE = 777;
 
     // class members
     private MXSession mSession;
@@ -285,6 +289,19 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private void finalizeInit() {
         MXMediasCache mxMediasCache = mSession.getMediasCache();
 
+        View addMembersButton = mViewHierarchy.findViewById(R.id.add_participants_create_view);
+
+        addMembersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // pop to the home activity
+                Intent intent = new Intent(getActivity(), VectorInviteMembersActivity.class);
+                intent.putExtra(VectorInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                intent.putExtra(VectorInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+            }
+        });
+
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         ListView participantsListView = (ListView)mViewHierarchy.findViewById(R.id.room_details_members_list);
         mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
@@ -437,6 +454,45 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      * @return the participant User Ids except oneself.
      */
     public ArrayList<String> getUserIdsList() {
-        return mAdapter.getUserIdsist();
+        return mAdapter.getUserIdsList();
+    }
+
+    /**
+     * Acivity result
+     * @param requestCode the request code
+     * @param resultCode teh result code
+     * @param data the returned data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
+            String userId = data.getStringExtra(VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID);
+
+            if (null != userId) {
+                mProgressView.setVisibility(View.VISIBLE);
+                ArrayList<String> userIDs = new ArrayList<String>();
+                userIDs.add(userId);
+                mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
+                    @Override
+                    public void onSuccess(Void info) {
+                        mProgressView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        mProgressView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onMatrixError(final MatrixError e) {
+                        mProgressView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onUnexpectedError(final Exception e) {
+                        mProgressView.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }
     }
 }
