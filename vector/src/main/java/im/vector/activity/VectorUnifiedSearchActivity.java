@@ -408,7 +408,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
-                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             } else {

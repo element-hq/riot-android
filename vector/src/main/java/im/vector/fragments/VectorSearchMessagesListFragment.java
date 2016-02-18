@@ -50,28 +50,28 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * @param layoutResId the used layout.
      * @return
      */
-    public static VectorSearchMessagesListFragment newInstance(String matrixId, int layoutResId) {
+    public static VectorSearchMessagesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchMessagesListFragment frag = new VectorSearchMessagesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
+
+        if (null != roomId) {
+            args.putString(ARG_ROOM_ID, roomId);
+        }
+
         frag.setArguments(args);
         return frag;
     }
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorSearchMessagesListAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoom), getMXMediasCache());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        // warn the activity that the current fragment is ready
-        if (getActivity() instanceof VectorUnifiedSearchActivity) {
-            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
-        }
     }
 
     /**

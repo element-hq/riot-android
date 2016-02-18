@@ -64,9 +64,13 @@ import java.util.List;
  */
 public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
-    public VectorSearchMessagesListAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
+    // display the room name in the result view
+    private boolean mDisplayRoomName;
+
+    public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName,  MXMediasCache mediasCache) {
         super(session, context, mediasCache);
         setNotifyOnChange(true);
+        mDisplayRoomName = displayRoomName;
     }
 
     @Override
@@ -78,8 +82,9 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         MessageRow row = getItem(position);
         Event event = row.getEvent();
 
+
         // retrieve the textViews
-        TextView timeTextView = (TextView) convertView.findViewById(R.id.searches_time);
+        /*TextView timeTextView = (TextView) convertView.findViewById(R.id.searches_time);
         TextView roomTextView = (TextView) convertView.findViewById(R.id.searches_room_name);
         TextView messageTextView = (TextView) convertView.findViewById(R.id.searches_message);
         View messageDivider =  convertView.findViewById(R.id.searches_message_divider);
@@ -145,7 +150,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
                 return false;
             }
-        });
+        });*/
 
         return convertView;
     }

@@ -86,11 +86,17 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_room_messages_search);
 
-        // the session should be passed in parameter
-        // but the current design does not describe how the multi accounts will be managed.
-        mSession = Matrix.getInstance(this).getDefaultSession();
+        Intent intent = getIntent();
+
+        mSession = getSession(intent);
         if (mSession == null) {
             Log.e(LOG_TAG, "No MXSession.");
+            finish();
+            return;
+        }
+
+        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
+            Log.e(LOG_TAG, "No room ID extra.");
             finish();
             return;
         }
@@ -105,7 +111,7 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
         mSearchInMessagesFragment = (VectorSearchMessagesListFragment) fm.findFragmentByTag(TAG_FRAGMENT_SEARCH_IN_MESSAGE);
 
         if (mSearchInMessagesFragment == null) {
-            mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, intent.getStringExtra(EXTRA_ROOM_ID), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.search_fragment_container, mSearchInMessagesFragment, TAG_FRAGMENT_SEARCH_IN_MESSAGE).commit();
         }
 
