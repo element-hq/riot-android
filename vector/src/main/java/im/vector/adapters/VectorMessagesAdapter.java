@@ -596,7 +596,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             TextView tsTextView = (TextView)rightTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
 
             if (null != tsTextView) {
-                tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.INVISIBLE);
+                tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
             }
         }
 
