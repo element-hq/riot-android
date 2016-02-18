@@ -41,6 +41,7 @@ import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.fragments.VectorRecentsListFragment;
+import im.vector.services.EventStreamService;
 import im.vector.util.VectorUtils;
 
 import java.util.Collection;
@@ -164,6 +165,18 @@ public class VectorHomeActivity extends AppCompatActivity {
             mRecentsListFragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
             fm.beginTransaction().add(R.id.home_recents_list_anchor, mRecentsListFragment, TAG_FRAGMENT_RECENTS_LIST).commit();
         }
+
+        // clear the notification if they are not anymore valid
+        // i.e the event has been read from another client
+        // or deleted
+        MXEventListener eventListener = new MXEventListener() {
+            @Override
+            public void onLiveEventsChunkProcessed() {
+                EventStreamService.checkDisplayedNotification();
+            }
+        };
+
+        mSession.getDataHandler().addListener(eventListener);
     }
 
     @Override

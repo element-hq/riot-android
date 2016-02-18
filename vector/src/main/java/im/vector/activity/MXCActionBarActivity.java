@@ -201,8 +201,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
             if (null != matrixInstance) {
                 matrixInstance.refreshPushRules();
             }
-
-            EventStreamService.cancelNotificationsForRoomId(null);
         }
 
         VectorApp.setCurrentActivity(this);

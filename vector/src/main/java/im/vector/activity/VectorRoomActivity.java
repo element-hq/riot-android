@@ -519,7 +519,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
-        EventStreamService.cancelNotificationsForRoomId(mRoom.getRoomId());
+        EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
 
         // reset the unread messages counter
         mRoom.sendReadReceipt();
