@@ -55,7 +55,7 @@
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/vector_upload"
+                    android:background="@drawable/ic_material_file"
                     android:id="@+id/button_attachments"
                     android:contentDescription="@string/more"/>
 
@@ -63,7 +63,7 @@
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/voice_call"
+                    android:background="@drawable/ic_material_call"
                     android:id="@+id/button_call"
                     android:contentDescription="@string/more"/>
 
