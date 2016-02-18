@@ -534,6 +534,15 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     }
 
     @Override
+    protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
+        if (shouldBeMerged) {
+            shouldBeMerged = null == headerMessage(position);
+        }
+
+        return shouldBeMerged;
+    }
+
+    @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
         MessageRow row = getItem(position);
         Event event = row.getEvent();
@@ -572,6 +581,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
                 headerText.setText(header);
                 headerLayout.setVisibility(View.VISIBLE);
+
+                View topHeaderMargin = headerLayout.findViewById(R.id.messagesAdapter_message_header_top_margin);
+                topHeaderMargin.setVisibility((0 == position) ? View.GONE : View.VISIBLE);
             } else {
                 headerLayout.setVisibility(View.GONE);
             }
