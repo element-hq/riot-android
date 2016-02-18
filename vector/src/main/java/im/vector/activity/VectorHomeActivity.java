@@ -40,8 +40,10 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.services.EventStreamService;
+import im.vector.util.RageShake;
 import im.vector.util.VectorUtils;
 
 import java.util.Collection;
@@ -190,6 +192,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         if (mSession.isActive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
+
+        VectorApp.setCurrentActivity(null);
     }
 
     @Override
@@ -218,6 +222,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         };
 
         mSession.getDataHandler().addListener(mEventsListener);
+
+        VectorApp.setCurrentActivity(this);
 
         refreshSlidingMenu();
     }
@@ -307,6 +313,11 @@ public class VectorHomeActivity extends AppCompatActivity {
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
                         settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
                         VectorHomeActivity.this.startActivity(settingsIntent);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_send_bug_report: {
+                        RageShake.getInstance().sendBugReport();
                         break;
                     }
 

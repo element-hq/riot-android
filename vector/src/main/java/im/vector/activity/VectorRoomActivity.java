@@ -18,10 +18,12 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -173,6 +175,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private int mScrollToIndex = -1;
 
     private Boolean mIgnoreTextUpdate = false;
+
+    private AlertDialog mImageSizesListDialog;
 
     private MXEventListener mEventListener = new MXEventListener() {
 
@@ -343,7 +347,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 };
 
 
-                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, VectorRoomActivity.this.getResources().getColor(R.color.vector_title_color));
+                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, VectorRoomActivity.this.getResources().getColor(R.color.vector_text_black_color));
                 fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                     @Override
                     public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -1286,54 +1290,43 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                             fragment.dismissAllowingStateLoss();
                         }
 
-                        final ArrayList<ImageCompressionDescription> textsList = new ArrayList<ImageCompressionDescription>();
+                        final ArrayList<String> textsList = new ArrayList<String>();
                         final ArrayList<ImageSize> sizesList = new ArrayList<ImageSize>();
 
-                        ImageCompressionDescription description = new ImageCompressionDescription();
-                        description.mCompressionText = getString(R.string.compression_opt_list_original);
-                        description.mCompressionInfoText = fullImageSize.mWidth + "x" + fullImageSize.mHeight + " (" + android.text.format.Formatter.formatFileSize(this, fileSize) + ")";
-
-                        textsList.add(description);
+                        textsList.add( getString(R.string.compression_opt_list_original) + ": " + android.text.format.Formatter.formatFileSize(this, fileSize) + "(" + fullImageSize.mWidth + "x" + fullImageSize.mHeight + ")");
                         sizesList.add(fullImageSize);
 
                         if (null != largeImageSize) {
                             int estFileSize = largeImageSize.mWidth * largeImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            description = new ImageCompressionDescription();
-                            description.mCompressionText = getString(R.string.compression_opt_list_large);
-                            description.mCompressionInfoText = largeImageSize.mWidth + "x" + largeImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(this, estFileSize) + ")";
-
-                            textsList.add(description);
+                            textsList.add( getString(R.string.compression_opt_list_large) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + largeImageSize.mWidth + "x" + largeImageSize.mHeight + ")");
                             sizesList.add(largeImageSize);
                         }
 
                         if (null != mediumImageSize) {
                             int estFileSize = mediumImageSize.mWidth * mediumImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            description = new ImageCompressionDescription();
-                            description.mCompressionText = getString(R.string.compression_opt_list_medium);
-                            description.mCompressionInfoText = mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(this, estFileSize) + ")";
-
-                            textsList.add(description);
+                            textsList.add( getString(R.string.compression_opt_list_medium) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + ")");
                             sizesList.add(mediumImageSize);
                         }
 
                         if (null != smallImageSize) {
                             int estFileSize = smallImageSize.mWidth * smallImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            description = new ImageCompressionDescription();
-                            description.mCompressionText = getString(R.string.compression_opt_list_small);
-                            description.mCompressionInfoText = smallImageSize.mWidth + "x" + smallImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(VectorRoomActivity.this, estFileSize) + ")";
-
-                            textsList.add(description);
+                            textsList.add(getString(R.string.compression_opt_list_small) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + smallImageSize.mWidth + "x" + smallImageSize.mHeight + ")");
                             sizesList.add(smallImageSize);
                         }
 
-                        fragment = ImageSizeSelectionDialogFragment.newInstance(textsList);
-                        fragment.setListener(new ImageSizeSelectionDialogFragment.ImageSizeListener() {
+                        String[] stringsArray = new String[textsList.size()];
+
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                        alert.setTitle(getString(im.vector.R.string.compression_options));
+                        alert.setSingleChoiceItems(textsList.toArray(stringsArray), -1, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onSelected(int pos) {
-                                final int fPos = pos;
+                            public void onClick(DialogInterface dialog, int which) {
+                                final int fPos = which;
+
+                                mImageSizesListDialog.dismiss();
 
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
@@ -1387,7 +1380,14 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                             }
                         });
 
-                        fragment.show(fm, TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
+                        mImageSizesListDialog = alert.show();
+                        mImageSizesListDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                mImageSizesListDialog = null;
+                            }
+                        });
+
                         sendMedia = false;
                     }
 
