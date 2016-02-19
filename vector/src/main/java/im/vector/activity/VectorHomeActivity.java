@@ -375,8 +375,6 @@ public class VectorHomeActivity extends AppCompatActivity {
         userIdTextView.setText(mSession.getMyUser().userId);
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
-        MyUser myUser = mSession.getMyUser();
-
-        VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, myUser.getAvatarUrl(), myUser.userId, myUser.displayname);
+        VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
     }
 }

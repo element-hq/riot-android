@@ -330,7 +330,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             imageView.setTag(null);
 
             if (null != member) {
-                VectorUtils.loadUserAvatar(mContext, mSession, imageView, member.avatarUrl, member.getUserId(), member.displayname);
+                VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
             } else {
                 // should never happen
                 VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);

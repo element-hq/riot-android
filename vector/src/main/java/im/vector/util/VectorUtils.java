@@ -49,6 +49,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -328,7 +329,43 @@ public class VectorUtils {
      * @return the download Id
      */
     public static String loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
-        return VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
+        if (null != room) {
+            return VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the room member avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param roomMember the room member
+     * @return
+     */
+    public static String loadRoomMemberAvatar(Context context, MXSession session, ImageView imageView, RoomMember roomMember) {
+        if (null != roomMember) {
+            return VectorUtils.loadUserAvatar(context, session, imageView, roomMember.avatarUrl, roomMember.getUserId(), roomMember.displayname);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the user avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param user the user
+     * @return
+     */
+    public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, User user) {
+        if (null != user) {
+            return VectorUtils.loadUserAvatar(context, session, imageView, user.getAvatarUrl(), user.userId, user.displayname);
+        }
+
+        return null;
     }
 
     /**
