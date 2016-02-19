@@ -18,7 +18,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="16dp"
-        android:background="#f00"
         android:layout_marginTop="@dimen/navigation_avatar_top_margin">
     </im.vector.view.VectorCircularImageView>
 

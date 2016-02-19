@@ -16,6 +16,7 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -374,8 +375,6 @@ public class VectorHomeActivity extends AppCompatActivity {
         userIdTextView.setText(mSession.getMyUser().userId);
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
-        String avatarUrl = mSession.getMyUser().getAvatarUrl();
-        VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-        mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+        VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
     }
 }

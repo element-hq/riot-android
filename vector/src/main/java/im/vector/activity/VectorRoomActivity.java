@@ -1451,10 +1451,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private void refreshSelfAvatar() {
         // sanity check
         if (null != mAvatarImageView) {
-            String avatarUrl = mSession.getMyUser().getAvatarUrl();
-            
-            VectorUtils.setMemberAvatar(mAvatarImageView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarImageView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
         }
     }
 

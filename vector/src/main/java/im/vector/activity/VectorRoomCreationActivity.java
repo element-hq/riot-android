@@ -45,6 +45,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -177,7 +178,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         });
 
-
         mPrivacyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -292,14 +292,27 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             mSingleAccountText.setVisibility(View.VISIBLE);
             mSession = sessions.get(0);
 
-            mSingleAccountText.setText(mSession.getMyUser().displayname + " (" + mSession.getMyUser().userId + ")");
+            MyUser myUser = mSession.getMyUser();
+
+            if (!TextUtils.isEmpty(myUser.displayname)) {
+                mSingleAccountText.setText(myUser.displayname + " (" + myUser.userId + ")");
+            } else {
+                mSingleAccountText.setText(myUser.userId);
+            }
+
         } else {
             mSingleAccountText.setVisibility(View.GONE);
             mAccountsSpinner.setVisibility(View.VISIBLE);
             ArrayList<String> sessionsTextsList = new ArrayList<String>();
 
             for(MXSession session : sessions) {
-                sessionsTextsList.add(session.getMyUser().displayname + " (" + session.getMyUser().userId + ")");
+                MyUser myUser = mSession.getMyUser();
+
+                if (!TextUtils.isEmpty(myUser.displayname)) {
+                    sessionsTextsList.add(myUser.displayname + " (" + myUser.userId + ")");
+                } else {
+                    sessionsTextsList.add(myUser.userId);
+                }
             }
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

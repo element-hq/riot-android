@@ -704,13 +704,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         // display the room avatar
         avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
         final String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, childRoom);
-        VectorUtils.setRoomVectorAvatar(avatarImageView, childRoom.getRoomId(), roomName);
-
-        String roomAvatarUrl = childRoom.getAvatarUrl();
-        if (null != roomAvatarUrl) {
-            int size = mContext.getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mMxSession.getMediasCache().loadAvatarThumbnail(mMxSession.getHomeserverConfig(), avatarImageView, roomAvatarUrl, size);
-        }
+        VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name
         roomNameTxtView.setText(roomName);

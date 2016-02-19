@@ -169,16 +169,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             url = member.avatarUrl;
         }
 
-        // define a default avatar
         if (null != member) {
-            VectorUtils.setMemberAvatar(avatarView, member.getUserId(), member.displayname);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), member.displayname);
         } else {
-            VectorUtils.setMemberAvatar(avatarView, userId, null);
-        }
-
-        if (!TextUtils.isEmpty(url)) {
-            int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), avatarView, url, size);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, null);
         }
     }
 
@@ -336,16 +330,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             imageView.setTag(null);
 
             if (null != member) {
-                VectorUtils.setMemberAvatar(imageView, member.getUserId(), member.displayname);
+                VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
             } else {
                 // should never happen
-                imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+                VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);
             }
-
-            if ((null != member) && (null != member.avatarUrl)) {
-                loadSmallAvatar(imageView, member.avatarUrl);
-            }
-
             // FIXME expected behaviour when the avatar is tapped.
         }
 
