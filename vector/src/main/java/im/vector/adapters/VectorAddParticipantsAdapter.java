@@ -387,13 +387,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
 
-        VectorUtils.setMemberAvatar(thumbView, participant.mUserId, participant.mDisplayName);
-
         if (null != participant.mAvatarBitmap) {
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
-            int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbView, participant.mAvatarUrl, size);
+            VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl,  participant.mUserId, participant.mDisplayName);
         }
 
         PowerLevels powerLevels = null;

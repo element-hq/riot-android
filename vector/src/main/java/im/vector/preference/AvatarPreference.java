@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.MyUser;
 
 import im.vector.R;
 import im.vector.util.VectorUtils;
@@ -65,11 +66,8 @@ public class AvatarPreference extends EditTextPreference {
 
     public void refreshAvatar() {
         if ((null !=  mAvatarView) && (null != mSession)) {
-            VectorUtils.setMemberAvatar(mAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-            // enable progress bar when downloading
-            enableProgressBar(true);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarView, mSession.getMyUser().getAvatarUrl(), mContext.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
-            enableProgressBar(false);
+            MyUser myUser = mSession.getMyUser();
+            VectorUtils.loadUserAvatar(mContext, mSession, mAvatarView, myUser.getAvatarUrl(), myUser.userId, myUser.displayname);
         }
     }
 

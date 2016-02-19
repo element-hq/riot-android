@@ -177,7 +177,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             }
         });
 
-
         mPrivacyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

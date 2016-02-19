@@ -297,21 +297,12 @@ public class VectorUtils {
     }
 
     /**
-     * Set the avatar for a text.
-     * @param imageView the imageView to set.
-     * @param text the text.
-     */
-    public static void setTextAvatar(ImageView imageView, String text) {
-        VectorUtils.setMemberAvatar(imageView, text, text);
-    }
-
-    /**
-     * Set the avatar for a member.
+     * Set the default vector avatar for a member.
      * @param imageView the imageView to set.
      * @param userId the member userId.
      * @param displayName the member display name.
      */
-    public static void setMemberAvatar(ImageView imageView, String userId, String displayName) {
+    public static void setDefaultMemberAvatar(ImageView imageView, String userId, String displayName) {
         // sanity checks
         if (null != imageView && !TextUtils.isEmpty(userId)) {
             imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName));
@@ -319,13 +310,40 @@ public class VectorUtils {
     }
 
     /**
-     * Set the room avatar.
+     * Set the default vector room avatar.
      * @param imageView the image view.
      * @param roomId the room id.
      * @param displayName the room displayname.
      */
     public static void setRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
-        VectorUtils.setMemberAvatar(imageView, roomId, displayName);
+        VectorUtils.setDefaultMemberAvatar(imageView, roomId, displayName);
+    }
+
+    /**
+     * Set the user avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param avatarUrl the avatar url
+     * @param userId the user id
+     * @param displayName the user displayname
+     * @return the download Id
+     */
+    public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, String avatarUrl, String userId, String displayName) {
+        // sanity check
+        if ((null == session) || (null == imageView)) {
+            return null;
+        }
+
+        String downloadId = session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+
+        // if there is no avatar URL
+        // or if the bitmap is not downloaded (loadAvatarThumbnail returns a download ID if the image is not downloaded
+        if (TextUtils.isEmpty(avatarUrl) || (null != downloadId)) {
+            setDefaultMemberAvatar(imageView, userId, displayName);
+        }
+
+        return downloadId;
     }
 
     //==============================================================================================================
