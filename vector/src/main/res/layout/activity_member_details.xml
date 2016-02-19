@@ -3,104 +3,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/room_background"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:background="@color/room_background">
 
     <RelativeLayout
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+          android:id="@+id/action_bar_header"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:visibility="visible"
+          android:background="@color/vector_green_color"
+          android:layout_marginTop="0dp">
 
-        <include layout="@layout/large_round_avatar"
-            android:background="@color/room_background"
-            android:id="@+id/memberDetails_roundAvatar"/>
+        <!-- the member avatar-->
+        <RelativeLayout
+          android:id="@+id/member_avatar_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/memberDetails_roundAvatar"
-            android:layout_alignParentRight="true" >
+          <include layout="@layout/vector_large_round_avatar"
+              android:id="@+id/memberDetails_roundAvatar"
+              android:layout_width="84dp"
+              android:layout_height="84dp"/>
+        </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView_matrixid"
+        <!-- the member name -->
+        <TextView
+          android:id="@+id/member_details_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:layout_below="@id/member_avatar_container"
+          android:singleLine="true"
+          android:ellipsize="end"
+          android:textSize="20sp"
+          android:textColor="@android:color/white"
+          android:text="member name"
+          android:layout_marginTop="14dp" />
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="An user name" />
+        <!-- the member presence -->
+        <TextView
+          android:id="@+id/member_details_presence"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:layout_below="@id/member_details_name"
+          android:maxLines="3"
+          android:ellipsize="end"
+          android:textSize="14sp"
+          android:textColor="@color/vector_0_54_black_color"
+          android:text="presence"
+          android:layout_marginBottom="16dp"
+          android:layout_marginTop="10dp"/>
 
-            <TextView
-                android:id="@+id/textView_lastPresence"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A presence here"
-            />
-        </LinearLayout>
+      </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/profile_mask"
-            android:layout_height="@dimen/profile_avatar_size"
-            android:layout_width="match_parent"
-            android:background="#99CCCCCC"
-            android:layout_alignParentLeft="true"
-            android:indeterminate="true" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:id="@+id/contact_button_1"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="button 1" />
-
-        <Button
-            android:id="@+id/contact_button_2"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="button 2" />
-        </LinearLayout>
-
-    <LinearLayout
+    <!-- the member actions list: start new room, Make admin, block.. -->
+    <ListView
+        android:id="@+id/member_details_actions_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="28dp"
+        android:dividerHeight="0dp"
+        android:divider="#00000000"/>
 
-        <Button
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:id="@+id/contact_button_3"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="button 3" />
-
-        <Button
-            android:id="@+id/contact_button_4"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="button 4"/>
-    </LinearLayout>
 </LinearLayout>
