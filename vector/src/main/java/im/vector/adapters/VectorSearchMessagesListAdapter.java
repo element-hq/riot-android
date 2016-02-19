@@ -82,7 +82,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         //  some items are always hidden
         convertView.findViewById(R.id.messagesAdapter_avatars_list).setVisibility(View.GONE);
-        convertView.findViewById(R.id.messagesAdapter_message_separator_layout).setVisibility(View.GONE);
+        convertView.findViewById(R.id.messagesAdapter_message_separator).setVisibility(View.GONE);
         convertView.findViewById(R.id.messagesAdapter_action_image).setVisibility(View.GONE);
         convertView.findViewById(R.id.messagesAdapter_top_margin_when_no_room_name).setVisibility(mDisplayRoomName ? View.GONE : View.VISIBLE);
 

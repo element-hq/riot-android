@@ -156,6 +156,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         } else if (id ==  R.id.ic_action_clear_search) {
             mPatternToSearchEditText.setText("");
+            onPatternUpdate();
         }
 
         return super.onOptionsItemSelected(item);

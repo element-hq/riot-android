@@ -149,12 +149,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         super.onDestroy();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        searchAccordingToTabHandler();
-    }
-
     // inherited from VectorBaseSearchActivity
     protected void onPatternUpdate() {
         searchAccordingToTabHandler();

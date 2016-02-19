@@ -72,6 +72,11 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     @Override
     public void onResume() {
         super.onResume();
+
+        // warn the activity that the current fragment is ready
+        if (getActivity() instanceof VectorUnifiedSearchActivity) {
+            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        }
     }
 
     /**
