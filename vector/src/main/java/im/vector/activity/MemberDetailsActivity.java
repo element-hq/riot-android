@@ -15,14 +15,12 @@
  */
 package im.vector.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,10 +39,11 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
-import im.vector.Matrix;
+
 import im.vector.R;
 import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
+import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,9 +68,10 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     private RoomMember mRoomMember; // room member corresponding to mMemberId
     private MXSession mSession;
     private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
+    private MemberDetailsAdapter mListViewAdapter;
 
     // UI widgets
-    private ImageView mThumbnailImageView;
+    private ImageView mMemberAvatarImageView;
     private TextView mMatrixIdTextView;
     private TextView mPresenceTextView;
     private ListView mActionItemsListView;
@@ -93,9 +93,8 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                             MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //
-                                    MemberDetailsActivity.this.refreshRoomMember();
-                                    MemberDetailsActivity.this.refresh();
+                                    updateRoomMember();
+                                    updateUi();
                                 }
                             });
                         }
@@ -111,7 +110,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updatePresenceInfo();
+                        updatePresenceInfoUi();
                     }
                 });
             }
@@ -125,7 +124,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
             MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updatePresenceInfo();
+                    updatePresenceInfoUi();
                 }
             });
         }
@@ -138,26 +137,27 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
             if (MatrixError.FORBIDDEN.equals(e.errcode)) {
                 Toast.makeText(MemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
             }
-            refresh();
+            updateUi();
         }
 
         @Override
         public void onSuccess(Void info) {
-            refresh();
+            updateUi();
         }
 
         @Override
         public void onNetworkError(Exception e) {
             Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-            refresh();
+            updateUi();
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
             Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-            refresh();
+            updateUi();
         }
     };
+
 
     // *********************************************************************************************
     // IEnablingActions interface implementation
@@ -173,14 +173,14 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         boolean retCode = false;
 
         if ((null != mRoom) && (null != mSession)) {
-            // Check user's power level before allowing an action (kick, ban, ...)
+            // get the PowerLevels object associated to the room and the user ID
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+            String currentUserId = mSession.getMyUser().userId;
 
-            String sessionUserId = mSession.getMyUser().userId;
             if(null != powerLevels) {
-                // get power levels from myself and from the member
+                // get power levels from myself and from the member of the room
                 int memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
-                int myPowerLevel = powerLevels.getUserPowerLevel(sessionUserId);
+                int myPowerLevel = powerLevels.getUserPowerLevel(currentUserId);
 
                 switch (aActionType) {
                     case ITEM_ACTION_START_NEW_ROOM:
@@ -188,7 +188,8 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                         break;
 
                     case ITEM_ACTION_MAKE_ADMIN:
-                        // I need to have the max power of the room
+                        // I need to have the max power of the room to enable admin action
+                        retCode = (myPowerLevel == powerLevels.getMaxPowerLevel());
                         break;
 
                     case ITEM_ACTION_REMOVE_FROM_ROOM:
@@ -200,6 +201,8 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                         break;
 
                     default:
+                        // unknown action
+                        retCode = false;
                         break;
                 }
             }
@@ -214,7 +217,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      */
     @Override
     public void performAction(int aActionType) {
-        if(null != mRoom) {
+        if((null != mRoom)&& (null != mRoomMember)) {
             switch (aActionType) {
 
                 case ITEM_ACTION_START_NEW_ROOM:
@@ -327,155 +330,25 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
             return;
         }
 
-        // find out the room member
-        Collection<RoomMember> members = mRoom.getMembers();
-        for(RoomMember member : members) {
-            if (member.getUserId().equals(mMemberId)) {
-                mRoomMember = member;
-                break;
-            }
-        }
-
-        // sanity checks
-        if (null == mRoomMember) {
-            Log.e(LOG_TAG, "The user " + mMemberId + " is not in the room " + mRoomId);
-            finish();
-            return;
-        }
+        // find out the room member to set mRoomMember field
+        // => pay attention that updateRoomMember() can also finish the activity
+        // if mRoomMember is not found in the members of the room
+        updateRoomMember();
 
         // bind UI widgets
-        mThumbnailImageView = (ImageView) findViewById(R.id.avatar_img);
+        mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
         mMatrixIdTextView = (TextView) findViewById(R.id.member_details_name);
         mPresenceTextView = (TextView)findViewById(R.id.member_details_presence);
         mActionItemsListView = (ListView)findViewById(R.id.member_details_actions_list_view);
 
         // setup the list view
         populateListViewItems();
-        MemberDetailsAdapter adapter = new MemberDetailsAdapter((Context)this, R.layout.vector_adapter_member_details_items, mActionItemsArrayList);
-        adapter.setActionListener(this);
-        mActionItemsListView.setAdapter(adapter);
+        mListViewAdapter = new MemberDetailsAdapter((Context)this, R.layout.vector_adapter_member_details_items, mActionItemsArrayList);
+        mListViewAdapter.setActionListener(this);
+        mActionItemsListView.setAdapter(mListViewAdapter);
 
-        /*mButtonsList = new ArrayList<Button>();
-        mButtonsList.add((Button)findViewById(R.id.contact_button_1));
-        mButtonsList.add((Button)findViewById(R.id.contact_button_2));
-        mButtonsList.add((Button)findViewById(R.id.contact_button_3));
-        mButtonsList.add((Button)findViewById(R.id.contact_button_4));
-
-        // set the click listener for each button
-        for(Button button : mButtonsList) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String text = (String)((Button)v).getText();
-
-                    final View refreshingView = findViewById(R.id.profile_mask);
-                    final ApiCallback callback2 = new SimpleApiCallback<Void>(MemberDetailsActivity.this) {
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            if (MatrixError.FORBIDDEN.equals(e.errcode)) {
-                                Toast.makeText(MemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
-                            }
-
-                            MemberDetailsActivity.this.refresh();
-                        }
-
-                        @Override
-                        public void onSuccess(Void info) {
-                            MemberDetailsActivity.this.refresh();
-                        }
-                    };
-
-                    // disable the buttons
-                    for(Button button : mButtonsList){
-                        button.setEnabled(false);
-                    }
-
-                    if (text.equals(getResources().getString(R.string.kick))) {
-                        refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.kick(mRoomMember.getUserId(), callback);
-                    } else  if (text.equals(getResources().getString(R.string.ban))) {
-                        refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.ban(mRoomMember.getUserId(), null, callback);
-                    } else  if (text.equals(getResources().getString(R.string.unban))) {
-                        refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.unban(mRoomMember.getUserId(), callback);
-                    } else  if (text.equals(getResources().getString(R.string.invite))) {
-                        refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.invite(mRoomMember.getUserId(), callback);
-                    } else  if (text.equals(getResources().getString(R.string.chat))) {
-                        refreshingView.setVisibility(View.VISIBLE);
-                        MemberDetailsActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                CommonActivityUtils.goToOneToOneRoom(mSession, mMemberId, MemberDetailsActivity.this, new SimpleApiCallback<Void>(MemberDetailsActivity.this) {
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        if (MatrixError.FORBIDDEN.equals(e.errcode)) {
-                                            Toast.makeText(MemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
-                                        }
-                                        MemberDetailsActivity.this.refresh();
-                                    }
-
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                        MemberDetailsActivity.this.refresh();
-                                    }
-
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                        MemberDetailsActivity.this.refresh();
-                                    }
-                                });
-                            }
-                        });
-                    } else  if (text.equals(getResources().getString(R.string.set_power_level))) {
-                        String title = getResources().getString(R.string.set_power_level);
-                        String initText =  mRoom.getLiveState().getPowerLevels().getUserPowerLevel(mMemberId) + "";
-
-                        final AlertDialog alert = CommonActivityUtils.createEditTextAlert(MemberDetailsActivity.this,title,null,initText,new CommonActivityUtils.OnSubmitListener() {
-                            @Override
-                            public void onSubmit(String text) {
-                                if (text.length() == 0) {
-                                    return;
-                                }
-
-                                int newPowerLevel = -1;
-
-                                try {
-                                    newPowerLevel = Integer.parseInt(text);
-                                }
-                                catch (Exception e) {
-                                }
-
-                                if (newPowerLevel >= 0) {
-                                    refreshingView.setVisibility(View.VISIBLE);
-                                    mRoom.updateUserPowerLevels(mRoomMember.getUserId(), newPowerLevel, callback);
-                                } else {
-                                    MemberDetailsActivity.this.refresh();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled() {
-                                MemberDetailsActivity.this.refresh();
-                            }
-                        });
-
-                        MemberDetailsActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                alert.show();
-                            }
-                        });
-                    }
-                }
-            });
-        }*/
-
-        // refresh the activity views
-        //refresh();
+        // update the UI
+        updateUi();
     }
 
     /**
@@ -494,10 +367,14 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     }
 
 
-    private void refreshRoomMember() {
-        mRoom = mSession.getDataHandler().getRoom(mRoomId);
-
+    /**
+     * Search if the member is present in the list of the members of
+     * the room
+     */
+    private void updateRoomMember(){
         if (null != mRoom){
+            // reset the value before any new search
+            mRoomMember = null;
             // find out the room member
             Collection<RoomMember> members = mRoom.getMembers();
             for (RoomMember member : members) {
@@ -506,94 +383,35 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                     break;
                 }
             }
+
+            // the member is not (anymore) present the room, just finish the activity
+            // and return. This can happen if the member has left the room in another
+            // client(ie. web client) and someone is looking at its details
+            if(null == mRoomMember) {
+                Log.e(LOG_TAG, "The user " + mMemberId + " is not in the room " + mRoomId);
+                finish();
+                return;
+            }
         }
     }
 
     /**
-     * refresh each activity views
+     * updateUi each activity views
      */
-    private void refresh() {
-
-        final View refreshingView = findViewById(R.id.profile_mask);
-        refreshingView.setVisibility(View.GONE);
-
-        mMatrixIdTextView.setText(mMemberId);
-        this.setTitle(mRoomMember.displayname);
-        this.refreshProfileThumbnail();
-
-        ArrayList<String> buttonTitles = new ArrayList<String>();
-
-        // Check user's power level before allowing an action (kick, ban, ...)
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-
-        String sessionUserId = mSession.getMyUser().userId;
-        int memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
-        int myPowerLevel = powerLevels.getUserPowerLevel(sessionUserId);
-
-        // Consider the case of the user himself
-        if (mMemberId.equals(sessionUserId)) {
-            buttonTitles.add(getResources().getString(R.string.leave));
-
-            if (memberPowerLevel >= powerLevels.stateDefault) {
-                buttonTitles.add(getResources().getString(R.string.set_power_level));
-            }
-        } else {
-
-            if ((RoomMember.MEMBERSHIP_JOIN.equals(mRoomMember.membership)) || (RoomMember.MEMBERSHIP_INVITE.equals(mRoomMember.membership))) {
-                // Check conditions to be able to kick someone
-                if ((myPowerLevel >= powerLevels.kick) && (myPowerLevel >= memberPowerLevel)) {
-                    buttonTitles.add(getResources().getString(R.string.kick));
-                }
-
-                // Check conditions to be able to ban someone
-                if ((myPowerLevel >= powerLevels.ban) && (myPowerLevel >= memberPowerLevel)) {
-                    buttonTitles.add(getResources().getString(R.string.ban));
-                }
-            } else if (RoomMember.MEMBERSHIP_LEAVE.equals(mRoomMember.membership)) {
-                // Check conditions to be able to invite someone
-                if (myPowerLevel >= powerLevels.invite) {
-                    buttonTitles.add(getResources().getString(R.string.invite));
-                }
-                // Check conditions to be able to ban someone
-                if (myPowerLevel >= powerLevels.ban) {
-                    buttonTitles.add(getResources().getString(R.string.ban));
-                }
-            } else if (RoomMember.MEMBERSHIP_BAN.equals(mRoomMember.membership)) {
-                // Check conditions to be able to invite someone
-                if (myPowerLevel >= powerLevels.ban) {
-                    buttonTitles.add(getResources().getString(R.string.unban));
-                }
-            }
-
-            // update power level
-            if (myPowerLevel >= powerLevels.stateDefault) {
-                buttonTitles.add(getResources().getString(R.string.set_power_level));
-            }
-
-            // allow to invite an user if the room has > 2 users
-            // else it will reopen this chat
-            if (mRoom.getMembers().size() > 2) {
-                buttonTitles.add(getResources().getString(R.string.chat));
-            }
+    private void updateUi() {
+        if((null != mMatrixIdTextView) && (null != mRoomMember)) {
+            mMatrixIdTextView.setText(mMemberId);
+            setTitle(mRoomMember.displayname); // TODO TBC
         }
+        updateMemberAvatarUi();
+        updatePresenceInfoUi();
 
-        // display the available buttons
-        /*int buttonIndex = 0;
-        for(; buttonIndex < buttonTitles.size(); buttonIndex++) {
-            Button button = mButtonsList.get(buttonIndex);
-            button.setVisibility(View.VISIBLE);
-            button.setEnabled(true);
-            button.setText(buttonTitles.get(buttonIndex));
+        if(null != mListViewAdapter){
+            mListViewAdapter.notifyDataSetChanged();
         }
-
-        for(;buttonIndex < mButtonsList.size(); buttonIndex++) {
-            Button button = mButtonsList.get(buttonIndex);
-            button.setVisibility(View.INVISIBLE);
-        }*/
-        updatePresenceInfo();
     }
 
-    private void updatePresenceInfo() {
+    private void updatePresenceInfoUi() {
         // update the presence ring
         IMXStore store = mSession.getDataHandler().getStore();
         User user = store.getUser(mMemberId);
@@ -631,14 +449,15 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     }
 
     /**
-     * refresh the profile thumbnail
+     * update the profile avatar
      */
-    private void refreshProfileThumbnail() {
-        mThumbnailImageView.setImageResource(R.drawable.ic_contact_picture_holo_light);
+    private void updateMemberAvatarUi() {
+        // set default image
+        VectorUtils.setMemberAvatar(mMemberAvatarImageView, mMemberId, mRoomMember.displayname);
 
         if (mRoomMember.avatarUrl != null) {
             int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-            Matrix.getInstance(this).getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mThumbnailImageView, mRoomMember.avatarUrl, size);
+            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mMemberAvatarImageView, mRoomMember.avatarUrl, size);
         }
     }
 
