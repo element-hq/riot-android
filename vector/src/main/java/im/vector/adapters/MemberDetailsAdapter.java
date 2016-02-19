@@ -61,6 +61,10 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
         public void performAction(int aActionType);
     }
 
+    /**
+     * List view data model class.
+     * The model consists of an icon, a text and the associated internal action type.
+     */
     static public class AdapterMemberActionItems {
         final public int mIconResourceId;
         final public String mActionDescText;
@@ -75,19 +79,29 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
 
 
     /**
-     * Construct an adapter to display a drawer adapter
-     * @param context the context
-     * @param aRowItemLayoutResourceId the entry layout id
+     * Construct an adapter where the items layout and the data model collection is provided
+     *
+     * @param aContext Android App context
+     * @param aRowItemLayoutResourceId the layout of the list view item (row)
+     * @param aListItemsDataModel the data model associated to the list view
      */
-    public MemberDetailsAdapter(Context context, int aRowItemLayoutResourceId, List<AdapterMemberActionItems> aListItems) {
-        super(context, aRowItemLayoutResourceId, aListItems);
-        mContext = context;
-        mActionListener = (IEnablingActions) context;
+    public MemberDetailsAdapter(Context aContext, int aRowItemLayoutResourceId, List<AdapterMemberActionItems> aListItemsDataModel) {
+        super(aContext, aRowItemLayoutResourceId, aListItemsDataModel);
+        mContext = aContext;
         mRowItemLayoutResourceId = aRowItemLayoutResourceId;
         mLayoutInflater = LayoutInflater.from(mContext);
-
-        //populateItemsList();
     }
+
+
+    public void setActionListener(IEnablingActions aActionListener){
+        try {
+            mActionListener = (IEnablingActions) aActionListener;
+        }
+        catch(ClassCastException e) {
+            throw new ClassCastException(aActionListener.toString() + " must implement IEnablingActions");
+        }
+    }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -100,23 +114,30 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
         TextView textView = (TextView) convertView.findViewById(R.id.adapter_member_details_action_text);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.adapter_member_details_icon);
 
-        // set the icon and the action text
-        final AdapterMemberActionItems entry = getItem(position);
-        textView.setText(entry.mActionDescText);
-        imageView.setImageResource(entry.mIconResourceId);
+        final AdapterMemberActionItems currentItem = getItem(position);
+        if(null != currentItem) {
+            // update the icon and the action text
+            textView.setText(currentItem.mActionDescText);
+            imageView.setImageResource(currentItem.mIconResourceId);
 
-        // set action listener and enable the view if it's allowed
-        final boolean isActionEnabled = mActionListener.isActionEnabled(entry.mActionType);
-        convertView.setEnabled(isActionEnabled);
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if ((null != mActionListener) && (isActionEnabled)) {
-                    mActionListener.performAction(entry.mActionType);
-                }
+            if (null != mActionListener) {
+                // is the action allowed according to the power levels?
+                final boolean isActionEnabled = mActionListener.isActionEnabled(currentItem.mActionType);
+                convertView.setEnabled(isActionEnabled);
+
+                // set the action associated to the item
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if ((null != mActionListener) && (isActionEnabled)) {
+                            mActionListener.performAction(currentItem.mActionType);
+                        }
+                    }
+                });
             }
-        });
+        }
 
         return convertView;
     }
+
 }

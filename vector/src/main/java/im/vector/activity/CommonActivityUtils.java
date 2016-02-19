@@ -30,10 +30,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -784,5 +786,21 @@ public class CommonActivityUtils {
         }
 
         return filePath;
+    }
+
+    public static void displayNotImplementedToast(Context aContext){
+        displayToast(aContext, (CharSequence) "Not implemented");
+    }
+
+    public static void displayNotImplementedSnack(View aTargetView){
+        displaySnack(aTargetView, (CharSequence) "Not implemented");
+    }
+
+    public static void displayToast(Context aContext, CharSequence aTextToDisplay){
+        Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void displaySnack(View aTargetView, CharSequence aTextToDisplay){
+        Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
     }
 }

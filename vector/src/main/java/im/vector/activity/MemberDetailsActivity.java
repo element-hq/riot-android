@@ -16,6 +16,7 @@
 package im.vector.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,31 +43,42 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.adapters.MemberDetailsAdapter;
+import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MemberDetailsActivity extends MXCActionBarActivity {
+public class MemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
 
     private static final String LOG_TAG = "MemberDetailsActivity";
 
     public static final String EXTRA_ROOM_ID = "MemberDetailsActivity.EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "MemberDetailsActivity.EXTRA_MEMBER_ID";
 
-    // info
+    // list view items associated actions
+    public static final int ITEM_ACTION_START_NEW_ROOM = 0;
+    public static final int ITEM_ACTION_MAKE_ADMIN = 1;
+    public static final int ITEM_ACTION_REMOVE_FROM_ROOM = 2;
+    public static final int ITEM_ACTION_BLOCK = 3;
+
+    // internal info
     private Room mRoom;
     private String mRoomId;
-    private String mMemberId;
-    private String mFromUserId;
-    private RoomMember mMember;
+    private String mMemberId;       // member whose details area displayed (provided in EXTRAS)
+    private RoomMember mRoomMember; // room member corresponding to mMemberId
     private MXSession mSession;
+    private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
 
-    // Views
+    // UI widgets
     private ImageView mThumbnailImageView;
     private TextView mMatrixIdTextView;
-    private ArrayList<Button>mButtonsList;
+    private TextView mPresenceTextView;
+    private ListView mActionItemsListView;
+    //private ArrayList<Button>mButtonsList;
 
-    private MXEventListener mEventListener = new MXEventListener() {
+    // MX event listener
+    private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             MemberDetailsActivity.this.runOnUiThread(new Runnable() {
@@ -118,10 +131,157 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         }
     };
 
+    // Room action listeners. Each time an action is detected the UI must be updated.
+    private final ApiCallback roomActionsListener = new SimpleApiCallback<Void>(this) {
+        @Override
+        public void onMatrixError(MatrixError e) {
+            if (MatrixError.FORBIDDEN.equals(e.errcode)) {
+                Toast.makeText(MemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
+            }
+            refresh();
+        }
+
+        @Override
+        public void onSuccess(Void info) {
+            refresh();
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            refresh();
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            refresh();
+        }
+    };
+
+    // *********************************************************************************************
+    // IEnablingActions interface implementation
+    /**
+     * Compute if the action is allowed or not, according to the
+     * power levels.
+     *
+     * @param aActionType the action associated to the list row
+     * @return true if the action must be enabled, false otherwise
+     */
+    @Override
+    public boolean isActionEnabled(int aActionType) {
+        boolean retCode = false;
+
+        if ((null != mRoom) && (null != mSession)) {
+            // Check user's power level before allowing an action (kick, ban, ...)
+            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+            String sessionUserId = mSession.getMyUser().userId;
+            if(null != powerLevels) {
+                // get power levels from myself and from the member
+                int memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
+                int myPowerLevel = powerLevels.getUserPowerLevel(sessionUserId);
+
+                switch (aActionType) {
+                    case ITEM_ACTION_START_NEW_ROOM:
+                        retCode = true;
+                        break;
+
+                    case ITEM_ACTION_MAKE_ADMIN:
+                        // I need to have the max power of the room
+                        break;
+
+                    case ITEM_ACTION_REMOVE_FROM_ROOM:
+                        retCode = (myPowerLevel >= powerLevels.kick) && (myPowerLevel >= memberPowerLevel);
+                        break;
+
+                    case ITEM_ACTION_BLOCK:
+                        retCode = (myPowerLevel >= powerLevels.ban) && (myPowerLevel >= memberPowerLevel);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+        return retCode;
+    }
+
+    /**
+     * Start the corresponding action given by aActionType value.
+     *
+     * @param aActionType the action associated to the list row
+     */
+    @Override
+    public void performAction(int aActionType) {
+        if(null != mRoom) {
+            switch (aActionType) {
+
+                case ITEM_ACTION_START_NEW_ROOM:
+                    MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CommonActivityUtils.goToOneToOneRoom(mSession, mMemberId, MemberDetailsActivity.this, roomActionsListener);
+                        }
+                    });
+                    break;
+
+                case ITEM_ACTION_MAKE_ADMIN:
+                    //CommonActivityUtils.displayNotImplementedToast((Context)this);
+                    break;
+
+                case ITEM_ACTION_REMOVE_FROM_ROOM:
+                    mRoom.kick(mRoomMember.getUserId(), roomActionsListener);
+                    break;
+
+                case ITEM_ACTION_BLOCK:
+                    mRoom.ban(mRoomMember.getUserId(), null, roomActionsListener);
+                    break;
+
+                default:
+                    // unknown action
+                    Log.w(LOG_TAG,"## performAction(): unknown action type = " + aActionType);
+                    break;
+            }
+        }
+    }
+    // *********************************************************************************************
+
+
+    /**
+     * Helper method to populate the list view items with AdapterMemberActionItems objects.
+     */
+    private void populateListViewItems(){
+        mActionItemsArrayList = new ArrayList<AdapterMemberActionItems>();
+
+        // build the "start new room" item
+        int imageResource = R.drawable.ic_person_add_black;
+        String actionText = getResources().getString(R.string.member_details_action_start_new_room);
+        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_NEW_ROOM));
+
+        // build the "make admin" item
+        imageResource = R.drawable.ic_verified_user_black;
+        actionText = getResources().getString(R.string.member_details_action_make_admin);
+        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MAKE_ADMIN));
+
+        // build the "remove from" item (ban)
+        imageResource = R.drawable.ic_remove_circle_outline_red;
+        actionText = getResources().getString(R.string.member_details_action_remove_from_room);
+        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_REMOVE_FROM_ROOM));
+
+        // build the "block" item (block)
+        imageResource = R.drawable.ic_block_black;
+        actionText = getResources().getString(R.string.member_details_action_block);
+        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BLOCK));
+    }
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (CommonActivityUtils.shouldRestartApp()) {
-            Log.e(LOG_TAG, "Restart the application.");
+            Log.e(LOG_TAG, "Restart the application");
             CommonActivityUtils.restartApp(this);
         }
 
@@ -130,30 +290,37 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
         Intent intent = getIntent();
         if (!intent.hasExtra(EXTRA_ROOM_ID)) {
-            Log.e(LOG_TAG, "No room ID extra.");
+            Log.e(LOG_TAG, "room ID missing in extra");
             finish();
             return;
         }
         mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
 
         if (!intent.hasExtra(EXTRA_MEMBER_ID)) {
-            Log.e(LOG_TAG, "No member ID extra.");
+            Log.e(LOG_TAG, "member ID missing in extra");
             finish();
             return;
         }
-
         mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID);
 
+        // get session
         mSession = getSession(intent);
-
         if (null == mSession) {
-            Log.e(LOG_TAG, "The no session");
+            Log.e(LOG_TAG, "Invalid session");
             finish();
             return;
         }
 
-        mRoom = mSession.getDataHandler().getRoom(mRoomId);
+        // check the case where the current logged user is asking its own details
+        // if it is the case, just abort the activity launch
+        if(isDetailsRequiredForMySelf(mSession, mMemberId)){
+            Log.w(LOG_TAG, "Cancel member details for user himself");
+            finish();
+            return;
+        }
 
+        // get room
+        mRoom = mSession.getDataHandler().getRoom(mRoomId);
         if (null == mRoom) {
             Log.e(LOG_TAG, "The room is not found");
             finish();
@@ -164,19 +331,31 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         Collection<RoomMember> members = mRoom.getMembers();
         for(RoomMember member : members) {
             if (member.getUserId().equals(mMemberId)) {
-                mMember = member;
+                mRoomMember = member;
                 break;
             }
         }
 
         // sanity checks
-        if (null == mMember) {
+        if (null == mRoomMember) {
             Log.e(LOG_TAG, "The user " + mMemberId + " is not in the room " + mRoomId);
             finish();
             return;
         }
 
-        mButtonsList = new ArrayList<Button>();
+        // bind UI widgets
+        mThumbnailImageView = (ImageView) findViewById(R.id.avatar_img);
+        mMatrixIdTextView = (TextView) findViewById(R.id.member_details_name);
+        mPresenceTextView = (TextView)findViewById(R.id.member_details_presence);
+        mActionItemsListView = (ListView)findViewById(R.id.member_details_actions_list_view);
+
+        // setup the list view
+        populateListViewItems();
+        MemberDetailsAdapter adapter = new MemberDetailsAdapter((Context)this, R.layout.vector_adapter_member_details_items, mActionItemsArrayList);
+        adapter.setActionListener(this);
+        mActionItemsListView.setAdapter(adapter);
+
+        /*mButtonsList = new ArrayList<Button>();
         mButtonsList.add((Button)findViewById(R.id.contact_button_1));
         mButtonsList.add((Button)findViewById(R.id.contact_button_2));
         mButtonsList.add((Button)findViewById(R.id.contact_button_3));
@@ -190,7 +369,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
                     String text = (String)((Button)v).getText();
 
                     final View refreshingView = findViewById(R.id.profile_mask);
-                    final ApiCallback callback = new SimpleApiCallback<Void>(MemberDetailsActivity.this) {
+                    final ApiCallback callback2 = new SimpleApiCallback<Void>(MemberDetailsActivity.this) {
                         @Override
                         public void onMatrixError(MatrixError e) {
                             if (MatrixError.FORBIDDEN.equals(e.errcode)) {
@@ -213,16 +392,16 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
                     if (text.equals(getResources().getString(R.string.kick))) {
                         refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.kick(mMember.getUserId(), callback);
+                        mRoom.kick(mRoomMember.getUserId(), callback);
                     } else  if (text.equals(getResources().getString(R.string.ban))) {
                         refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.ban(mMember.getUserId(), null, callback);
+                        mRoom.ban(mRoomMember.getUserId(), null, callback);
                     } else  if (text.equals(getResources().getString(R.string.unban))) {
                         refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.unban(mMember.getUserId(), callback);
+                        mRoom.unban(mRoomMember.getUserId(), callback);
                     } else  if (text.equals(getResources().getString(R.string.invite))) {
                         refreshingView.setVisibility(View.VISIBLE);
-                        mRoom.invite(mMember.getUserId(), callback);
+                        mRoom.invite(mRoomMember.getUserId(), callback);
                     } else  if (text.equals(getResources().getString(R.string.chat))) {
                         refreshingView.setVisibility(View.VISIBLE);
                         MemberDetailsActivity.this.runOnUiThread(new Runnable() {
@@ -272,7 +451,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
                                 if (newPowerLevel >= 0) {
                                     refreshingView.setVisibility(View.VISIBLE);
-                                    mRoom.updateUserPowerLevels(mMember.getUserId(), newPowerLevel, callback);
+                                    mRoom.updateUserPowerLevels(mRoomMember.getUserId(), newPowerLevel, callback);
                                 } else {
                                     MemberDetailsActivity.this.refresh();
                                 }
@@ -293,17 +472,27 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
                     }
                 }
             });
-        }
-
-        // load the thumbnail
-        mThumbnailImageView = (ImageView) findViewById(R.id.avatar_img);
-
-        // set the title
-        mMatrixIdTextView = (TextView) findViewById(R.id.textView_matrixid);
+        }*/
 
         // refresh the activity views
-        refresh();
+        //refresh();
     }
+
+    /**
+     * Test if the current user is requiring details for himself.
+     * @param aSession current uer session
+     * @param aMemberIdDetailsAsking
+     * @return true if the current user is asking details for himself, false otherwise
+     */
+    private boolean isDetailsRequiredForMySelf(MXSession aSession, String aMemberIdDetailsAsking) {
+        boolean retCode = true;
+        if((null != aSession) && (null != aMemberIdDetailsAsking)){
+            String sessionUserId = aSession.getMyUser().userId;
+            retCode = aMemberIdDetailsAsking.equals(sessionUserId);
+        }
+        return retCode;
+    }
+
 
     private void refreshRoomMember() {
         mRoom = mSession.getDataHandler().getRoom(mRoomId);
@@ -313,7 +502,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
             Collection<RoomMember> members = mRoom.getMembers();
             for (RoomMember member : members) {
                 if (member.getUserId().equals(mMemberId)) {
-                    mMember = member;
+                    mRoomMember = member;
                     break;
                 }
             }
@@ -329,7 +518,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         refreshingView.setVisibility(View.GONE);
 
         mMatrixIdTextView.setText(mMemberId);
-        this.setTitle(mMember.displayname);
+        this.setTitle(mRoomMember.displayname);
         this.refreshProfileThumbnail();
 
         ArrayList<String> buttonTitles = new ArrayList<String>();
@@ -337,29 +526,30 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         // Check user's power level before allowing an action (kick, ban, ...)
         PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-        int userPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
-        int myPowerLevel = powerLevels.getUserPowerLevel(mFromUserId);
+        String sessionUserId = mSession.getMyUser().userId;
+        int memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
+        int myPowerLevel = powerLevels.getUserPowerLevel(sessionUserId);
 
         // Consider the case of the user himself
-        if (mMemberId.equals(mFromUserId)) {
+        if (mMemberId.equals(sessionUserId)) {
             buttonTitles.add(getResources().getString(R.string.leave));
 
-            if (userPowerLevel >= powerLevels.stateDefault) {
+            if (memberPowerLevel >= powerLevels.stateDefault) {
                 buttonTitles.add(getResources().getString(R.string.set_power_level));
             }
         } else {
 
-            if ((RoomMember.MEMBERSHIP_JOIN.equals(mMember.membership)) || (RoomMember.MEMBERSHIP_INVITE.equals(mMember.membership))) {
+            if ((RoomMember.MEMBERSHIP_JOIN.equals(mRoomMember.membership)) || (RoomMember.MEMBERSHIP_INVITE.equals(mRoomMember.membership))) {
                 // Check conditions to be able to kick someone
-                if ((myPowerLevel >= powerLevels.kick) && (myPowerLevel >= userPowerLevel)) {
+                if ((myPowerLevel >= powerLevels.kick) && (myPowerLevel >= memberPowerLevel)) {
                     buttonTitles.add(getResources().getString(R.string.kick));
                 }
 
                 // Check conditions to be able to ban someone
-                if ((myPowerLevel >= powerLevels.ban) && (myPowerLevel >= userPowerLevel)) {
+                if ((myPowerLevel >= powerLevels.ban) && (myPowerLevel >= memberPowerLevel)) {
                     buttonTitles.add(getResources().getString(R.string.ban));
                 }
-            } else if (RoomMember.MEMBERSHIP_LEAVE.equals(mMember.membership)) {
+            } else if (RoomMember.MEMBERSHIP_LEAVE.equals(mRoomMember.membership)) {
                 // Check conditions to be able to invite someone
                 if (myPowerLevel >= powerLevels.invite) {
                     buttonTitles.add(getResources().getString(R.string.invite));
@@ -368,7 +558,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
                 if (myPowerLevel >= powerLevels.ban) {
                     buttonTitles.add(getResources().getString(R.string.ban));
                 }
-            } else if (RoomMember.MEMBERSHIP_BAN.equals(mMember.membership)) {
+            } else if (RoomMember.MEMBERSHIP_BAN.equals(mRoomMember.membership)) {
                 // Check conditions to be able to invite someone
                 if (myPowerLevel >= powerLevels.ban) {
                     buttonTitles.add(getResources().getString(R.string.unban));
@@ -388,7 +578,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         }
 
         // display the available buttons
-        int buttonIndex = 0;
+        /*int buttonIndex = 0;
         for(; buttonIndex < buttonTitles.size(); buttonIndex++) {
             Button button = mButtonsList.get(buttonIndex);
             button.setVisibility(View.VISIBLE);
@@ -399,7 +589,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         for(;buttonIndex < mButtonsList.size(); buttonIndex++) {
             Button button = mButtonsList.get(buttonIndex);
             button.setVisibility(View.INVISIBLE);
-        }
+        }*/
         updatePresenceInfo();
     }
 
@@ -407,39 +597,35 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         // update the presence ring
         IMXStore store = mSession.getDataHandler().getStore();
         User user = store.getUser(mMemberId);
+        String onlineStatus;
+        int onlineStatusColour = Color.BLACK;
 
-        ImageView presenceRingView = (ImageView)findViewById(R.id.imageView_presenceRing);
-
-        String presence = null;
-
-        if (null != user) {
-            presence = user.presence;
-        }
-
-        if (User.PRESENCE_ONLINE.equals(presence)) {
-            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_online));
-        } else if (User.PRESENCE_UNAVAILABLE.equals(presence)) {
-            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_unavailable));
-        } else if (User.PRESENCE_OFFLINE.equals(presence)) {
-            presenceRingView.setColorFilter(this.getResources().getColor(R.color.presence_unavailable));
-        } else {
-            presenceRingView.setColorFilter(android.R.color.transparent);
-        }
-
-        TextView presenceTextView = (TextView)findViewById(R.id.textView_lastPresence);
-
-        if ((user == null) || (user.lastActiveAgo == null)) {
-            presenceTextView.setVisibility(View.GONE);
-        }
-        else {
-            presenceTextView.setVisibility(View.VISIBLE);
-
-            if (User.PRESENCE_OFFLINE.equals(user.presence)) {
-                presenceTextView.setText(User.PRESENCE_OFFLINE);
-                presenceTextView.setTextColor(Color.RED);
+        // sanity check
+        if (null != mPresenceTextView) {
+            if ((user == null) || (user.lastActiveAgo == null)) {
+                mPresenceTextView.setVisibility(View.GONE);
             } else {
-                presenceTextView.setText(buildLastActiveDisplay(user.getRealLastActiveAgo()));
-                presenceTextView.setTextColor(Color.BLACK);
+                mPresenceTextView.setVisibility(View.VISIBLE);
+
+                // set the presence status text and its colour
+                /* further use
+                if (User.PRESENCE_ONLINE.equals(user.presence)) {
+                    onlineStatus = getResources().getString(R.string.presence_online);
+                }*/
+                if (User.PRESENCE_OFFLINE.equals(user.presence)) {
+                    onlineStatus = getResources().getString(R.string.presence_offline);
+                    onlineStatusColour = Color.RED;
+                } else if (User.PRESENCE_UNAVAILABLE.equals(user.presence)) {
+                    onlineStatus = getResources().getString(R.string.presence_unavailable);
+                } else if (User.PRESENCE_HIDDEN.equals(user.presence)) {
+                    onlineStatus = getResources().getString(R.string.presence_hidden);
+                } else {
+                    // online: display "last seen since.."
+                    onlineStatus = buildLastActiveDisplay(user.getRealLastActiveAgo());
+                }
+
+                mPresenceTextView.setText(onlineStatus);
+                mPresenceTextView.setTextColor(onlineStatusColour);
             }
         }
     }
@@ -450,9 +636,9 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
     private void refreshProfileThumbnail() {
         mThumbnailImageView.setImageResource(R.drawable.ic_contact_picture_holo_light);
 
-        if (mMember.avatarUrl != null) {
+        if (mRoomMember.avatarUrl != null) {
             int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-            Matrix.getInstance(this).getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mThumbnailImageView, mMember.avatarUrl, size);
+            Matrix.getInstance(this).getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mThumbnailImageView, mRoomMember.avatarUrl, size);
         }
     }
 
@@ -481,7 +667,6 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
         // add sanity check
         if ((null != mRoom) && (null != mEventListener)) {
             mRoom.removeEventListener(mEventListener);
-            mEventListener = null;
         }
     }
 }
