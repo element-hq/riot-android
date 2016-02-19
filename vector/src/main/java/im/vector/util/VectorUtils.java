@@ -315,8 +315,20 @@ public class VectorUtils {
      * @param roomId the room id.
      * @param displayName the room displayname.
      */
-    public static void setRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
+    public static void setDefaultRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
         VectorUtils.setDefaultMemberAvatar(imageView, roomId, displayName);
+    }
+
+    /**
+     * Set the room avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param room the room
+     * @return the download Id
+     */
+    public static String loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
+        return VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
     }
 
     /**

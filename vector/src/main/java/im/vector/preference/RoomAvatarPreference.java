@@ -53,8 +53,7 @@ public class RoomAvatarPreference extends AvatarPreference {
     @Override
     public void refreshAvatar() {
         if ((null !=  mAvatarView) && (null != mRoom)) {
-            VectorUtils.setRoomVectorAvatar(mAvatarView, mRoom.getRoomId(), VectorUtils.getRoomDisplayname(mContext,mSession, mRoom));
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarView, mRoom.getAvatarUrl(), mContext.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            VectorUtils.loadRoomAvatar(mContext, mSession, mAvatarView, mRoom);
         }
     }
 
