@@ -39,6 +39,13 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     // current public Rooms List
     private List<PublicRoom> mPublicRoomsList;
 
+
+    // pending requests
+    // a request might be called whereas the fragment is not initialized
+    // wait the resume to perform the search
+    private String mPendingPattern;
+    private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
+
     /**
      * Static constructor
      * @param matrixId the matrix id

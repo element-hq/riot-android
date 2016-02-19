@@ -162,9 +162,6 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private String mPendingMimeType;
     private String mPendingFilename;
 
-    private MenuItem mSearchMenuItem = null;
-    private MenuItem mSettingsMenuItem = null;
-
     private String mCallId = null;
 
     private static String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
@@ -608,21 +605,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_room, menu);
-
-        mSettingsMenuItem = menu.findItem(R.id.ic_action_room_settings);
-        mSearchMenuItem = menu.findItem(R.id.ic_action_search_in_room);
-
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        // restore the standard action bar
-        if (!mSearchMenuItem.isVisible()) {
-            hideTextSearchActionBar();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -630,7 +613,11 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.ic_action_search_in_room) {
-            showTextSearchActionBar();
+            // pop to the home activity
+            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
+            intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            VectorRoomActivity.this.startActivity(intent);
         } else if (id ==  R.id.ic_action_room_settings) {
             // pop to the home activity
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
@@ -1218,155 +1205,6 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     //================================================================================
-    // Search
-    //================================================================================
-
-    private void showTextSearchActionBar() {
-        // replace the action bar
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
-
-        android.support.v7.app.ActionBar.LayoutParams layout = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
-        actionBar.setCustomView(actionBarLayout, layout);
-
-        // display the search background
-        final View searchBackgroundView = findViewById(R.id.search_background_imageview);
-        searchBackgroundView.setVisibility(View.VISIBLE);
-
-        // hide the text edit
-        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
-        roomBottomLayout.setVisibility(View.GONE);
-
-        final View noResultTextView = findViewById(R.id.search_no_result_textview);
-        noResultTextView.setVisibility(View.GONE);
-
-        // and the vector specific items
-        View view = findViewById(R.id.bottom_separator);
-        view.setVisibility(View.GONE);
-        view = findViewById(R.id.room_notifications_area);
-        view.setVisibility(View.GONE);
-        view = findViewById(R.id.room_notification_separator);
-        view.setVisibility(View.GONE);
-
-        final View progressBackground =  findViewById(R.id.medias_processing_progress_background);
-        final View progress = findViewById(R.id.medias_processing_progress);
-
-        progressBackground.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
-
-        // the vector design expects that the result content is empty
-        // when there is no pattern.
-        // By default, the SDK displays all the messages
-        // so hide it until there is something to search
-        mVectorMessageListFragment.getView().setVisibility(View.INVISIBLE);
-
-        // add text listener
-        final EditText editText = (EditText) actionBarLayout.findViewById(R.id.room_action_bar_edit_text);
-
-        mEditText.clearFocus();
-
-        actionBarLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                editText.requestFocus();
-
-                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                im.showSoftInput(editText, 0);
-            }
-        }, 100);
-
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-                    progressBackground.setVisibility(View.VISIBLE);
-                    progress.setVisibility(View.VISIBLE);
-
-                    mVectorMessageListFragment.searchPattern(editText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
-                        @Override
-                        public void onSearchSucceed(int nbrMessages) {
-                            progressBackground.setVisibility(View.GONE);
-                            progress.setVisibility(View.GONE);
-
-                            // the background search is displayed until a search is triggered.
-                            mVectorMessageListFragment.getView().setVisibility((0 != nbrMessages) ? View.VISIBLE : View.INVISIBLE);
-                            searchBackgroundView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
-                            noResultTextView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
-                        }
-
-                        @Override
-                        public void onSearchFailed() {
-                            progressBackground.setVisibility(View.GONE);
-                            progress.setVisibility(View.GONE);
-
-                            // the background search is displayed until a search is triggered.
-                            searchBackgroundView.setVisibility(View.GONE);
-                            noResultTextView.setVisibility(View.VISIBLE);
-                            // TODO : what is it expected
-                        }
-                    });
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        if (null != mSettingsMenuItem) {
-            mSettingsMenuItem.setVisible(false);
-        }
-
-        if (null != mSearchMenuItem) {
-            mSearchMenuItem.setVisible(false);
-        }
-    }
-
-    public void hideTextSearchActionBar() {
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(false);
-        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_TITLE | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
-
-        if (null != mSettingsMenuItem) {
-            mSettingsMenuItem.setVisible(true);
-        }
-
-        if (null != mSearchMenuItem) {
-            mSearchMenuItem.setVisible(true);
-        }
-
-        // hide the search background
-        View searchBackgroundView = findViewById(R.id.search_background_imageview);
-        searchBackgroundView.setVisibility(View.GONE);
-
-        // show the text edit
-        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
-        roomBottomLayout.setVisibility(View.VISIBLE);
-
-        View noResultTextView = findViewById(R.id.search_no_result_textview);
-        noResultTextView.setVisibility(View.GONE);
-
-        // and the vector specific items
-        View view = findViewById(R.id.bottom_separator);
-        view.setVisibility(View.VISIBLE);
-        view = findViewById(R.id.room_notifications_area);
-        view.setVisibility(View.INVISIBLE);
-        view = findViewById(R.id.room_notification_separator);
-        view.setVisibility(View.VISIBLE);
-
-        mVectorMessageListFragment.getView().setVisibility(View.VISIBLE);
-
-        View progressBackground =  findViewById(R.id.medias_processing_progress_background);
-        View progress = findViewById(R.id.medias_processing_progress);
-        progressBackground.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
-
-        // there is no more searched pattern
-        mVectorMessageListFragment.searchPattern(null, null);
-    }
-
-    //================================================================================
     // Image resizing
     //================================================================================
 
@@ -1622,11 +1460,6 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
     private void onRoomTypings() {
         ArrayList<String> typingUsers = mRoom.getTypingUsers();
-
-        // if there is a penting search, hide/show the typing message
-        if (!mSearchMenuItem.isVisible()) {
-            return;
-        }
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             mTypingArea.setVisibility(View.VISIBLE);

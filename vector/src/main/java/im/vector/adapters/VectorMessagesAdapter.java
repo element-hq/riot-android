@@ -533,7 +533,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         });
     }
 
-    @Override
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         if (shouldBeMerged) {
             shouldBeMerged = null == headerMessage(position);

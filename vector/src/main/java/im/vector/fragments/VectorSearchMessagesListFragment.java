@@ -50,18 +50,23 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * @param layoutResId the used layout.
      * @return
      */
-    public static VectorSearchMessagesListFragment newInstance(String matrixId, int layoutResId) {
+    public static VectorSearchMessagesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchMessagesListFragment frag = new VectorSearchMessagesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
+
+        if (null != roomId) {
+            args.putString(ARG_ROOM_ID, roomId);
+        }
+
         frag.setArguments(args);
         return frag;
     }
 
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorSearchMessagesListAdapter(mSession, getActivity(), getMXMediasCache());
+        return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoom), getMXMediasCache());
     }
 
     @Override
@@ -163,7 +168,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         // in the search case, clear the list and hide it
         if (TextUtils.isEmpty(pattern)) {
             mPattern = null;
-            mAdapter.clear();
             mMessageListView.setVisibility(View.GONE);
 
             getActivity().runOnUiThread(new Runnable() {
@@ -183,6 +187,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             // start a search
             mAdapter.clear();
             mSearchingPattern = pattern;
+
+            ((VectorSearchMessagesListAdapter)mAdapter).setTextToHighlight(pattern);
 
             super.searchPattern(pattern, new OnSearchResultListener() {
                 @Override
