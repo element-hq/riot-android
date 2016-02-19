@@ -163,7 +163,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         // in the search case, clear the list and hide it
         if (TextUtils.isEmpty(pattern)) {
             mPattern = null;
-            mAdapter.clear();
             mMessageListView.setVisibility(View.GONE);
 
             getActivity().runOnUiThread(new Runnable() {
@@ -183,6 +182,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             // start a search
             mAdapter.clear();
             mSearchingPattern = pattern;
+
+            ((VectorSearchMessagesListAdapter)mAdapter).setTextToHighlight(pattern);
 
             super.searchPattern(pattern, new OnSearchResultListener() {
                 @Override

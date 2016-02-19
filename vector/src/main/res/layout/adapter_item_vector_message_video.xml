@@ -182,6 +182,8 @@
     <include layout="@layout/vector_message_receipts_list"
         android:id="@+id/messagesAdapter_avatars_list"/>
 
-    <include layout="@layout/message_separator"/>
+    <include
+        android:id="@+id/messagesAdapter_message_separator_layout"
+        layout="@layout/message_separator"/>
 
 </LinearLayout>

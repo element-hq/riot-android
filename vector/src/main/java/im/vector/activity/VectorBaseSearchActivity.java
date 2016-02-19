@@ -103,6 +103,12 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
         imm.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onPatternUpdate();
+    }
+
     /**
      * The search pattern has been updated
      */

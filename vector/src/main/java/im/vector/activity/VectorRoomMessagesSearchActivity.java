@@ -114,9 +114,9 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
             mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, intent.getStringExtra(EXTRA_ROOM_ID), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.search_fragment_container, mSearchInMessagesFragment, TAG_FRAGMENT_SEARCH_IN_MESSAGE).commit();
         }
-
         resetUi();
     }
+
 
     // inherited from VectorBaseSearchActivity
     protected void onPatternUpdate() {
@@ -158,7 +158,6 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
 
         String pattern = mPatternToSearchEditText.getText().toString();
         if (mSearchInMessagesFragment.isAdded())  {
-
             // display the "wait while searching" screen (progress bar)
             mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
 
