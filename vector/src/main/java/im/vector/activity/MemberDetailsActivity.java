@@ -189,7 +189,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
 
                     case ITEM_ACTION_MAKE_ADMIN:
                         // I need to have the max power of the room to enable admin action
-                        retCode = (myPowerLevel == powerLevels.getMaxPowerLevel());
+                        retCode = (myPowerLevel == getRoomMaxPowerLevel());
                         break;
 
                     case ITEM_ACTION_REMOVE_FROM_ROOM:
@@ -230,7 +230,9 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                     break;
 
                 case ITEM_ACTION_MAKE_ADMIN:
-                    //CommonActivityUtils.displayNotImplementedToast((Context)this);
+                    // update the member power with the max power level of the room
+                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                    powerLevels.setUserPowerLevel(mMemberId, getRoomMaxPowerLevel());
                     break;
 
                 case ITEM_ACTION_REMOVE_FROM_ROOM:
@@ -393,6 +395,25 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 return;
             }
         }
+    }
+
+    private int getRoomMaxPowerLevel() {
+        int maxPowerLevel = 0;
+
+        if (null != mRoom){
+            int tempPowerLevel = 0;
+            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+            // find out the room member
+            Collection<RoomMember> members = mRoom.getMembers();
+            for (RoomMember member : members) {
+                tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
+                if(tempPowerLevel > maxPowerLevel) {
+                    maxPowerLevel = tempPowerLevel;
+                }
+            }
+        }
+        return maxPowerLevel;
     }
 
     /**
