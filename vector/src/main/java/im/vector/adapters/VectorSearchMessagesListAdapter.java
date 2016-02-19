@@ -164,6 +164,29 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         // message separator is only displayed when a message is not the last message in a day section
         convertView.findViewById(R.id.messagesAdapter_search_separator_line).setVisibility(!TextUtils.isEmpty(headerMessage(position + 1)) ? View.GONE : View.VISIBLE);
 
+        final int fPosition = position;
+        
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mMessagesAdapterEventsListener) {
+                    mMessagesAdapterEventsListener.onContentClick(fPosition);
+                }
+            }
+        });
+
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (null != mMessagesAdapterEventsListener) {
+                    return mMessagesAdapterEventsListener.onContentLongClick(fPosition);
+                }
+
+                return false;
+            }
+        });
+
         return convertView;
     }
 }
