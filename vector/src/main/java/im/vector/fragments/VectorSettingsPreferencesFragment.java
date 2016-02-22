@@ -42,19 +42,27 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
+import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
 
 import java.util.HashMap;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.UserAvatarPreference;
+import im.vector.services.EventStreamService;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -69,6 +77,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // members
     private MXSession mSession;
     private View mLoadingView;
+
+    // events listener
+    MXEventListener mEventListener;
 
     // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId, HashMap<String, String> pushesRuleByResourceId) {
@@ -176,6 +187,42 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         refreshDisplay();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (null != mEventListener) {
+            mSession.getDataHandler().removeListener(mEventListener);
+            mEventListener = null;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mEventListener = new MXEventListener() {
+
+            @Override
+            public void onAccountInfoUpdate(MyUser myUser) {
+                // refresh the settings value
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(getResources().getString(R.string.settings_display_name), myUser.displayname);
+                editor.commit();
+
+                refreshDisplay();
+            }
+
+            @Override
+            public void onBingRulesUpdate() {
+                refreshDisplay();
+            }
+        };
+
+        mSession.getDataHandler().addListener(mEventListener);
+    }
+
     //==============================================================================================================
     // Display methods
     //==============================================================================================================
@@ -237,10 +284,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         // update the push rules
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        BingRuleSet rules = mSession.getDataHandler().pushRules();
+
         for(String resourceText : mPushesRuleByResourceId.keySet()) {
             SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
+                switchPreference.setEnabled(null != rules);
                 switchPreference.setChecked(preferences.getBoolean(resourceText, false));
             }
         }
