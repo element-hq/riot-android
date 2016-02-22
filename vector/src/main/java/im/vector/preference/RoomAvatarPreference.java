@@ -22,6 +22,7 @@ import android.util.AttributeSet;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.R;
 import im.vector.util.VectorUtils;
@@ -31,7 +32,7 @@ import im.vector.util.VectorUtils;
  * Based don the avatar preference class it redefines refreshAvatar() and
  * add the new method  setConfiguration().
  */
-public class RoomAvatarPreference extends AvatarPreference {
+public class RoomAvatarPreference extends UserAvatarPreference {
 
     private Room mRoom;
 

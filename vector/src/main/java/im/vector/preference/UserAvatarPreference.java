@@ -32,24 +32,24 @@ import org.matrix.androidsdk.data.MyUser;
 import im.vector.R;
 import im.vector.util.VectorUtils;
 
-public class AvatarPreference extends EditTextPreference {
+public class UserAvatarPreference extends EditTextPreference {
 
     protected Context mContext;
     protected ImageView mAvatarView;
     protected MXSession mSession;
     private ProgressBar mLoadingProgressBar;
 
-    public AvatarPreference(Context context) {
+    public UserAvatarPreference(Context context) {
         super(context);
         mContext = context;
     }
 
-    public AvatarPreference(Context context, AttributeSet attrs) {
+    public UserAvatarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
     }
 
-    public AvatarPreference(Context context, AttributeSet attrs, int defStyle) {
+    public UserAvatarPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
     }

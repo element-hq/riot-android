@@ -54,7 +54,7 @@ import java.util.HashMap;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.preference.AvatarPreference;
+import im.vector.preference.UserAvatarPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -95,7 +95,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         final PreferenceManager preferenceManager = getPreferenceManager();
 
-        AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference)preferenceManager.findPreference("matrixId");
         avatarPreference.setSession(mSession);
         avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -227,7 +227,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         PreferenceManager preferenceManager = getPreferenceManager();
 
         // refresh the avatar
-        AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference)preferenceManager.findPreference("matrixId");
         avatarPreference.refreshAvatar();
 
         // refresh the display name

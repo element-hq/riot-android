@@ -5,10 +5,10 @@
 
     <PreferenceCategory android:title="@string/settings_user_settings" >
 
-        <im.vector.preference.AvatarPreference
+        <im.vector.preference.UserAvatarPreference
             android:title="@string/settings_profile_picture"
             android:key="matrixId">
-        </im.vector.preference.AvatarPreference>
+        </im.vector.preference.UserAvatarPreference>
 
         <im.vector.preference.VectorEditTextPreference
             android:focusable="true"
