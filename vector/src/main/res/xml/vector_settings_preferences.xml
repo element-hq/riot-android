@@ -10,7 +10,7 @@
             android:key="matrixId">
         </im.vector.preference.UserAvatarPreference>
 
-        <im.vector.preference.VectorEditTextPreference
+        <EditTextPreference
             android:focusable="true"
             android:title="@string/settings_display_name"
             android:summary="@string/settings_display_name"

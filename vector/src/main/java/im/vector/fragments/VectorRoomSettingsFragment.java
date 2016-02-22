@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -50,7 +51,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.RoomAvatarPreference;
-import im.vector.preference.VectorEditTextPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -80,8 +80,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
-    private VectorEditTextPreference mRoomNameEditTxt;
-    private VectorEditTextPreference mRoomTopicEditTxt;
+    private EditTextPreference mRoomNameEditTxt;
+    private EditTextPreference mRoomTopicEditTxt;
     private SwitchPreference mRoomPrivacySwitch;
     private SwitchPreference mRoomMuteNotificationsSwitch;
     // for further use: private Preference mPrivacyInfoPreference;
@@ -155,8 +155,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // init preference fields
         mRoomPhotoAvatar = (RoomAvatarPreference)findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
-        mRoomNameEditTxt = (VectorEditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
-        mRoomTopicEditTxt = (VectorEditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
+        mRoomNameEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
+        mRoomTopicEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
         mRoomPrivacySwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_PRIVACY_SWITCH);
         //mPrivacyInfoPreference = (Preference)findPreference(PREF_KEY_ROOM_PRIVACY_INFO); further use
         mRoomMuteNotificationsSwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);

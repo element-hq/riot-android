@@ -9,12 +9,12 @@
             android:key="roomPhotoAvatar"
             android:title="@string/room_settings_room_photo"/>
 
-        <im.vector.preference.VectorEditTextPreference
+        <EditTextPreference
             android:key="roomNameEditText"
             android:focusable="true"
             android:title="@string/room_details_room_name" />
 
-        <im.vector.preference.VectorEditTextPreference
+        <EditTextPreference
             android:key="roomTopicEditText"
             android:focusable="true"
             android:title="@string/room_details_topic"/>
