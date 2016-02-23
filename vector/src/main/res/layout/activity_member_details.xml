@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,7 +40,7 @@
           android:textSize="20sp"
           android:textColor="@android:color/white"
           android:text="member name"
-          android:layout_marginTop="14dp" />
+          android:layout_marginTop="10dp" />
 
         <!-- the member presence -->
         <TextView
@@ -49,13 +49,12 @@
           android:layout_height="wrap_content"
           android:gravity="center_horizontal"
           android:layout_below="@id/member_details_name"
-          android:maxLines="3"
+          android:maxLines="1"
           android:ellipsize="end"
           android:textSize="14sp"
           android:textColor="@color/vector_0_54_black_color"
           android:text="presence"
-          android:layout_marginBottom="16dp"
-          android:layout_marginTop="10dp"/>
+          android:layout_marginBottom="16dp" />
 
       </RelativeLayout>
 
@@ -64,8 +63,16 @@
         android:id="@+id/member_details_actions_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/action_bar_header"
         android:layout_marginTop="28dp"
         android:dividerHeight="0dp"
         android:divider="#00000000"/>
 
-</LinearLayout>
+    <!-- progress bar view, displayed when an action in the list view is pressed -->
+    <include layout="@layout/progress_bar_view"
+        android:id="@+id/member_details_list_view_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+</RelativeLayout>

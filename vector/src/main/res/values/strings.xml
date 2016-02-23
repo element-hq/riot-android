@@ -111,7 +111,7 @@
     <string name="membership_leave">Left</string>
     <string name="membership_kick">Kicked</string>
     <string name="membership_ban">Banned</string>
-    <string name="member_details_action_start_new_room">Start a new room</string>
+    <string name="member_details_action_start_new_room">Start chat</string>
     <string name="member_details_action_make_admin">Make admin</string>
     <string name="member_details_action_remove_from_room">Remove from this room</string>
     <string name="member_details_action_block">Block</string>

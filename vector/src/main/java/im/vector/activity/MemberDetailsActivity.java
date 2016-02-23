@@ -45,18 +45,16 @@ import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
 import im.vector.util.VectorUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class MemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
-
     private static final String LOG_TAG = "MemberDetailsActivity";
 
     public static final String EXTRA_ROOM_ID = "MemberDetailsActivity.EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "MemberDetailsActivity.EXTRA_MEMBER_ID";
 
     // list view items associated actions
-    public static final int ITEM_ACTION_START_NEW_ROOM = 0;
+    public static final int ITEM_ACTION_START_CHAT = 0;
     public static final int ITEM_ACTION_MAKE_ADMIN = 1;
     public static final int ITEM_ACTION_REMOVE_FROM_ROOM = 2;
     public static final int ITEM_ACTION_BLOCK = 3;
@@ -66,8 +64,9 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     private String mRoomId;
     private String mMemberId;       // member whose details area displayed (provided in EXTRAS)
     private RoomMember mRoomMember; // room member corresponding to mMemberId
+    private boolean mIsMemberJoined;
     private MXSession mSession;
-    private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
+    //private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
     private MemberDetailsAdapter mListViewAdapter;
 
     // UI widgets
@@ -75,6 +74,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     private TextView mMatrixIdTextView;
     private TextView mPresenceTextView;
     private ListView mActionItemsListView;
+    private View mProgressBarView;
     //private ArrayList<Button>mButtonsList;
 
     // MX event listener
@@ -87,17 +87,18 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                     // check if the event is received for the current room
                     // check if there is a member update
                     if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type))) {
-
                         // update only if it is the current user
-                        if ((null != event.getSender()) && (event.getSender().equals(mMemberId))) {
-                            MemberDetailsActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateRoomMember();
+                        MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(checkRoomMemberStatus()) {
                                     updateUi();
+                                } else {
+                                    // exit from the activity
+                                    finish();
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 }
             });
@@ -130,7 +131,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         }
     };
 
-    // Room action listeners. Each time an action is detected the UI must be updated.
+    // Room action listeners. Every time an action is detected the UI must be updated.
     private final ApiCallback roomActionsListener = new SimpleApiCallback<Void>(this) {
         @Override
         public void onMatrixError(MatrixError e) {
@@ -158,21 +159,20 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         }
     };
 
-
     // *********************************************************************************************
     // IEnablingActions interface implementation
     /**
      * Compute if the action is allowed or not, according to the
      * power levels.
      *
-     * @param aActionType the action associated to the list row
+     * @param aActionType the action to be enabled/disabled
      * @return true if the action must be enabled, false otherwise
      */
     @Override
-    public boolean isActionEnabled(int aActionType) {
+    public boolean isItemActionEnabled(int aActionType) {
         boolean retCode = false;
 
-        if ((null != mRoom) && (null != mSession)) {
+        if ((null != mRoom) && (null != mSession) && (null != mRoomMember)) {
             // get the PowerLevels object associated to the room and the user ID
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
             String currentUserId = mSession.getMyUser().userId;
@@ -183,21 +183,34 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 int myPowerLevel = powerLevels.getUserPowerLevel(currentUserId);
 
                 switch (aActionType) {
-                    case ITEM_ACTION_START_NEW_ROOM:
-                        retCode = true;
+                    case ITEM_ACTION_START_CHAT:
+                        // enable action if more than two persons are present in the room
+                        if(mRoom.getActiveMembers().size()>2) {
+                            retCode = true;
+                        }
                         break;
 
                     case ITEM_ACTION_MAKE_ADMIN:
-                        // I need to have the max power of the room to enable admin action
-                        retCode = (myPowerLevel == getRoomMaxPowerLevel());
+                        // if the member is already admin, then disable the action
+                        int maxPowerLevel = getRoomMaxPowerLevel();
+                        if(memberPowerLevel == maxPowerLevel) {
+                            retCode = false;
+                        } else {
+                            // only an admin user (max power) can enable an admin action
+                            retCode = (myPowerLevel == maxPowerLevel);
+                        }
                         break;
 
                     case ITEM_ACTION_REMOVE_FROM_ROOM:
-                        retCode = (myPowerLevel >= powerLevels.kick) && (myPowerLevel >= memberPowerLevel);
+                        // action is enabled if: user power level is greater than the kick threshold and the member joins the room
+                        retCode = (myPowerLevel >= powerLevels.kick) && (myPowerLevel > memberPowerLevel) && mIsMemberJoined;
+                        Log.d(LOG_TAG,"## isItemActionEnabled() Remove action enabled? "+retCode);
                         break;
 
                     case ITEM_ACTION_BLOCK:
-                        retCode = (myPowerLevel >= powerLevels.ban) && (myPowerLevel >= memberPowerLevel);
+                        // "ban" action is enabled only if the member joins the room: isMemberJoined
+                        retCode = (myPowerLevel >= powerLevels.ban) && (myPowerLevel > memberPowerLevel) && mIsMemberJoined;
+                        Log.d(LOG_TAG,"## isItemActionEnabled() Block action enabled? "+retCode);
                         break;
 
                     default:
@@ -216,11 +229,13 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      * @param aActionType the action associated to the list row
      */
     @Override
-    public void performAction(int aActionType) {
+    public void performItemAction(int aActionType) {
         if((null != mRoom)&& (null != mRoomMember)) {
             switch (aActionType) {
 
-                case ITEM_ACTION_START_NEW_ROOM:
+                case ITEM_ACTION_START_CHAT:
+                    Log.d(LOG_TAG,"## performItemAction(): Start new room");
+                    CommonActivityUtils.displaySnack(mActionItemsListView, "Start new room");
                     MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -230,39 +245,44 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                     break;
 
                 case ITEM_ACTION_MAKE_ADMIN:
-                    // update the member power with the max power level of the room
+                    // update the member power with the max power level of the room to make him admin
                     PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
                     powerLevels.setUserPowerLevel(mMemberId, getRoomMaxPowerLevel());
+                    //CommonActivityUtils.displaySnack(mActionItemsListView, (CharSequence) mRoomMember.displayname+" is now Admin" );
+                    Log.d(LOG_TAG,"## performItemAction(): Make Admin");
                     break;
 
                 case ITEM_ACTION_REMOVE_FROM_ROOM:
+                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
                     mRoom.kick(mRoomMember.getUserId(), roomActionsListener);
+                    Log.d(LOG_TAG,"## performItemAction(): Remove from room (Kick)");
                     break;
 
                 case ITEM_ACTION_BLOCK:
+                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
                     mRoom.ban(mRoomMember.getUserId(), null, roomActionsListener);
+                    Log.d(LOG_TAG,"## performItemAction(): Block (Ban)");
                     break;
 
                 default:
                     // unknown action
-                    Log.w(LOG_TAG,"## performAction(): unknown action type = " + aActionType);
+                    Log.w(LOG_TAG,"## performItemAction(): unknown action type = " + aActionType);
                     break;
             }
         }
     }
     // *********************************************************************************************
 
-
     /**
      * Helper method to populate the list view items with AdapterMemberActionItems objects.
      */
-    private void populateListViewItems(){
+    /*private void populateListViewItems(){
         mActionItemsArrayList = new ArrayList<AdapterMemberActionItems>();
 
-        // build the "start new room" item
+        // build the "start chat" item
         int imageResource = R.drawable.ic_person_add_black;
         String actionText = getResources().getString(R.string.member_details_action_start_new_room);
-        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_NEW_ROOM));
+        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
 
         // build the "make admin" item
         imageResource = R.drawable.ic_verified_user_black;
@@ -278,80 +298,128 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         imageResource = R.drawable.ic_block_black;
         actionText = getResources().getString(R.string.member_details_action_block);
         mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BLOCK));
+    }*/
+
+    /**
+     * Update items actions list view.
+     * The item actions present in the list view are updated dynamically
+     * according to the power levels.
+     */
+    private void updateAdapterListViewItems() {
+        int imageResource;
+        String actionText;
+
+        // sanity check
+        if((null == mListViewAdapter)){
+            Log.w(LOG_TAG,"## updateListViewItemsContent(): list view adapter not initialized");
+        } else {
+            // reset action lists & allocate items list
+            mListViewAdapter.clear();
+
+            // build the "start chat" item
+            if (isItemActionEnabled(ITEM_ACTION_START_CHAT)) {
+                imageResource = R.drawable.ic_person_add_black;
+                actionText = getResources().getString(R.string.member_details_action_start_new_room);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
+            }
+
+            // build the "make admin" item
+            if (isItemActionEnabled(ITEM_ACTION_MAKE_ADMIN)) {
+                imageResource = R.drawable.ic_verified_user_black;
+                actionText = getResources().getString(R.string.member_details_action_make_admin);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MAKE_ADMIN));
+            }
+
+            // build the "remove from" item (ban)
+            if (isItemActionEnabled(ITEM_ACTION_REMOVE_FROM_ROOM)) {
+                imageResource = R.drawable.ic_remove_circle_outline_red;
+                actionText = getResources().getString(R.string.member_details_action_remove_from_room);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_REMOVE_FROM_ROOM));
+            }
+
+            // build the "block" item (block)
+            if (isItemActionEnabled(ITEM_ACTION_BLOCK)) {
+                imageResource = R.drawable.ic_block_black;
+                actionText = getResources().getString(R.string.member_details_action_block);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BLOCK));
+            }
+        }
     }
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application");
             CommonActivityUtils.restartApp(this);
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_details);
-
-        Intent intent = getIntent();
-        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
-            Log.e(LOG_TAG, "room ID missing in extra");
+        // retrieve the parameters contained extras and setup other
+        // internal state values such as the; session, room..
+        if(!initContextStateValues()){
+            // init failed, just return
+            Log.e(LOG_TAG, "## onCreate(): Parameters init failure");
             finish();
-            return;
         }
-        mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
-
-        if (!intent.hasExtra(EXTRA_MEMBER_ID)) {
-            Log.e(LOG_TAG, "member ID missing in extra");
+        // find out the room member to set mRoomMember field.
+        // if mRoomMember is not found among the members of the room, just finish the activity
+        else if(!checkRoomMemberStatus()){
+            Log.e(LOG_TAG, "## onCreate(): The user " + mMemberId + " is not in the room " + mRoomId);
             finish();
-            return;
+        } else {
+            // setup UI view and bind the widgets
+            setContentView(R.layout.activity_member_details);
+            mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
+            mMatrixIdTextView = (TextView) findViewById(R.id.member_details_name);
+            mPresenceTextView = (TextView) findViewById(R.id.member_details_presence);
+            mActionItemsListView = (ListView) findViewById(R.id.member_details_actions_list_view);
+            mProgressBarView = (View) findViewById(R.id.member_details_list_view_progress_bar);
+
+            // setup the list view
+            mListViewAdapter = new MemberDetailsAdapter((Context) this, R.layout.vector_adapter_member_details_items);
+            mListViewAdapter.setActionListener(this);
+            updateAdapterListViewItems();
+            mActionItemsListView.setAdapter(mListViewAdapter);
+
+            // update the UI
+            updateUi();
         }
-        mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID);
-
-        // get session
-        mSession = getSession(intent);
-        if (null == mSession) {
-            Log.e(LOG_TAG, "Invalid session");
-            finish();
-            return;
-        }
-
-        // check the case where the current logged user is asking its own details
-        // if it is the case, just abort the activity launch
-        if(isDetailsRequiredForMySelf(mSession, mMemberId)){
-            Log.w(LOG_TAG, "Cancel member details for user himself");
-            finish();
-            return;
-        }
-
-        // get room
-        mRoom = mSession.getDataHandler().getRoom(mRoomId);
-        if (null == mRoom) {
-            Log.e(LOG_TAG, "The room is not found");
-            finish();
-            return;
-        }
-
-        // find out the room member to set mRoomMember field
-        // => pay attention that updateRoomMember() can also finish the activity
-        // if mRoomMember is not found in the members of the room
-        updateRoomMember();
-
-        // bind UI widgets
-        mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
-        mMatrixIdTextView = (TextView) findViewById(R.id.member_details_name);
-        mPresenceTextView = (TextView)findViewById(R.id.member_details_presence);
-        mActionItemsListView = (ListView)findViewById(R.id.member_details_actions_list_view);
-
-        // setup the list view
-        populateListViewItems();
-        mListViewAdapter = new MemberDetailsAdapter((Context)this, R.layout.vector_adapter_member_details_items, mActionItemsArrayList);
-        mListViewAdapter.setActionListener(this);
-        mActionItemsListView.setAdapter(mListViewAdapter);
-
-        // update the UI
-        updateUi();
     }
+
+    /**
+     * Retrieve all the state values required to run the activity.
+     * If values are not provided in the intent extars or are some are
+     * null, then the activiy can not continue to run and must be finished
+     * @return true if init succeed, false otherwise
+     */
+    private boolean initContextStateValues(){
+        Intent intent = getIntent();
+        boolean isParamInitSucceed = false;
+
+        if(null != intent) {
+            if (null == (mRoomId = intent.getStringExtra(EXTRA_ROOM_ID))) {
+                Log.e(LOG_TAG, "room ID missing in extra");
+            } else if (null == (mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID))) {
+                Log.e(LOG_TAG, "member ID missing in extra");
+            } else if (null == (mSession = getSession(intent))) {
+                Log.e(LOG_TAG, "Invalid session");
+            } else if (isDetailsRequiredForMySelf(mSession, mMemberId)) {
+                // check the case where the current logged user is asking its own details
+                // if it is the case, just abort the activity launch
+                Log.w(LOG_TAG, "Cancel member details for user himself");
+            } else if (null == (mRoom = mSession.getDataHandler().getRoom(mRoomId))) {
+                Log.e(LOG_TAG, "The room is not found");
+            } else {
+                // Everything is OK
+                Log.d(LOG_TAG, "Parameters init succeed");
+                isParamInitSucceed = true;
+            }
+        }
+
+        return isParamInitSucceed;
+    }
+
 
     /**
      * Test if the current user is requiring details for himself.
@@ -372,11 +440,16 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     /**
      * Search if the member is present in the list of the members of
      * the room
+     * @return true if member was found in the room , false otherwise
      */
-    private void updateRoomMember(){
+    private boolean checkRoomMemberStatus() {
+        boolean isMemberPresent = false;
+
+        // reset output values, before re processing them
+        mIsMemberJoined= false;
+        mRoomMember = null;
+
         if (null != mRoom){
-            // reset the value before any new search
-            mRoomMember = null;
             // find out the room member
             Collection<RoomMember> members = mRoom.getMembers();
             for (RoomMember member : members) {
@@ -386,17 +459,29 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 }
             }
 
-            // the member is not (anymore) present the room, just finish the activity
-            // and return. This can happen if the member has left the room in another
-            // client(ie. web client) and someone is looking at its details
             if(null == mRoomMember) {
-                Log.e(LOG_TAG, "The user " + mMemberId + " is not in the room " + mRoomId);
-                finish();
-                return;
+                // The member is not (anymore) present in the room.
+                // This can happen if the member has left the room in another
+                // client(for any reason, kicked, left himself..) and its details are displayed
+                isMemberPresent = false;
+            } else if((RoomMember.MEMBERSHIP_LEAVE.equals(mRoomMember.membership))) {
+                isMemberPresent = false;
+            } else if((RoomMember.MEMBERSHIP_BAN.equals(mRoomMember.membership))) {
+                isMemberPresent = false;
+            } else {
+                isMemberPresent = true;
+                mIsMemberJoined = (RoomMember.MEMBERSHIP_JOIN.equals(mRoomMember.membership)) || (RoomMember.MEMBERSHIP_INVITE.equals(mRoomMember.membership));
             }
         }
+        return isMemberPresent;
     }
 
+    /**
+     * Helper method to retrieve the max power level cont&ined in the room.
+     * This value is used to indicate what is the power level value required
+     * to be admin of the room.
+     * @return max power level of the current room
+     */
     private int getRoomMaxPowerLevel() {
         int maxPowerLevel = 0;
 
@@ -417,17 +502,26 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     }
 
     /**
-     * updateUi each activity views
+     * Update the UI 
      */
     private void updateUi() {
         if((null != mMatrixIdTextView) && (null != mRoomMember)) {
             mMatrixIdTextView.setText(mMemberId);
             setTitle(mRoomMember.displayname); // TODO TBC
         }
+
+        // disable the progress bar
+        enableProgressBarView(CommonActivityUtils.UTILS_HIDE_PROGRESS_BAR);
+
+        // UI updates
         updateMemberAvatarUi();
         updatePresenceInfoUi();
 
-        if(null != mListViewAdapter){
+        // Update adapter list view:
+        // notify the list view to update the items that could
+        // have changed according to the new rights of the member
+        updateAdapterListViewItems();
+        if(null != mListViewAdapter) {
             mListViewAdapter.notifyDataSetChanged();
         }
     }
@@ -436,36 +530,38 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         // update the presence ring
         IMXStore store = mSession.getDataHandler().getStore();
         User user = store.getUser(mMemberId);
-        String onlineStatus;
+        String onlineStatus = "";
         int onlineStatusColour = Color.BLACK;
 
         // sanity check
         if (null != mPresenceTextView) {
-            if ((user == null) || (user.lastActiveAgo == null)) {
-                mPresenceTextView.setVisibility(View.GONE);
+            if ((null == user) || (null == user.presence)) {
+                onlineStatus = "";
             } else {
-                mPresenceTextView.setVisibility(View.VISIBLE);
-
-                // set the presence status text and its colour
-                /* further use
                 if (User.PRESENCE_ONLINE.equals(user.presence)) {
                     onlineStatus = getResources().getString(R.string.presence_online);
-                }*/
-                if (User.PRESENCE_OFFLINE.equals(user.presence)) {
-                    onlineStatus = getResources().getString(R.string.presence_offline);
-                    onlineStatusColour = Color.RED;
-                } else if (User.PRESENCE_UNAVAILABLE.equals(user.presence)) {
-                    onlineStatus = getResources().getString(R.string.presence_unavailable);
-                } else if (User.PRESENCE_HIDDEN.equals(user.presence)) {
-                    onlineStatus = getResources().getString(R.string.presence_hidden);
                 } else {
-                    // online: display "last seen since.."
-                    onlineStatus = buildLastActiveDisplay(user.getRealLastActiveAgo());
-                }
+                    // if different from online, add the "last active" info
+                    String lastActiveInfo = (null != user.lastActiveAgo)?buildLastActiveDisplay(user.getRealLastActiveAgo()):"";
+                    if (User.PRESENCE_OFFLINE.equals(user.presence)) {
+                        onlineStatus = getResources().getString(R.string.presence_offline);
+                        onlineStatusColour = Color.RED;
+                    } else if (User.PRESENCE_UNAVAILABLE.equals(user.presence)) {
+                        onlineStatus = getResources().getString(R.string.presence_unavailable);
+                    } else if (User.PRESENCE_HIDDEN.equals(user.presence)) {
+                        onlineStatus = getResources().getString(R.string.presence_hidden);
+                    } else {
+                        lastActiveInfo = "";
+                    }
 
-                mPresenceTextView.setText(onlineStatus);
-                mPresenceTextView.setTextColor(onlineStatusColour);
+                    // add "last active ago" info
+                    onlineStatus += " "+lastActiveInfo;
+                }
             }
+
+            // update presence UI
+            mPresenceTextView.setText(onlineStatus);
+            mPresenceTextView.setTextColor(onlineStatusColour);
         }
     }
 
@@ -473,39 +569,65 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      * update the profile avatar
      */
     private void updateMemberAvatarUi() {
-        // set default image
-        VectorUtils.setMemberAvatar(mMemberAvatarImageView, mMemberId, mRoomMember.displayname);
+        if((null != mMemberAvatarImageView) && (null != mRoomMember) && (null != mMemberId)) {
+            // set default image
+            VectorUtils.setMemberAvatar(mMemberAvatarImageView, mMemberId, mRoomMember.displayname);
 
-        if (mRoomMember.avatarUrl != null) {
-            int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mMemberAvatarImageView, mRoomMember.avatarUrl, size);
+            if (mRoomMember.avatarUrl != null) {
+                int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
+                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mMemberAvatarImageView, mRoomMember.avatarUrl, size);
+            }
         }
     }
 
-    private String buildLastActiveDisplay(final long lastActiveAgo) {
-        return RoomMembersAdapter.buildLastActiveDisplay(this, lastActiveAgo);
+    /**
+     * "last active" info formatter helper method.
+     * @param aLastActiveAgo time info
+     * @return a formatted string
+     */
+    private String buildLastActiveDisplay(final long aLastActiveAgo) {
+        return (RoomMembersAdapter.buildLastActiveDisplay(this, aLastActiveAgo) + " ago");
+    }
+
+    /**
+     * Halper method to enable/disable the progress bar view used when a
+     * remote server action is on progress.
+     *
+     * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
+     */
+    private void enableProgressBarView(boolean aIsProgressBarDisplayed){
+        if(null != mProgressBarView) {
+            if (aIsProgressBarDisplayed)
+                mProgressBarView.setVisibility(View.VISIBLE);
+            else
+                mProgressBarView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        mSession.getDataHandler().getRoom(mRoom.getRoomId()).removeEventListener(mEventListener);
+        if((null != mSession) && (null != mRoom)) {
+            mSession.getDataHandler().getRoom(mRoom.getRoomId()).removeEventListener(mEventListener);
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        mSession.getDataHandler().getRoom(mRoom.getRoomId()).addEventListener(mEventListener);
+        if((null != mSession) && (null != mRoom)) {
+            mSession.getDataHandler().getRoom(mRoom.getRoomId()).addEventListener(mEventListener);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        // add sanity check
-        if ((null != mRoom) && (null != mEventListener)) {
+        if (null != mRoom) {
             mRoom.removeEventListener(mEventListener);
         }
     }
