@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -33,7 +32,7 @@ import im.vector.adapters.VectorAddParticipantsAdapter;
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
-public class VectorInviteMembersActivity extends VectorBaseSearchActivity {
+public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
     // search in the room
@@ -129,11 +128,46 @@ public class VectorInviteMembersActivity extends VectorBaseSearchActivity {
     }
 
     /**
+     * Check if the userId format is valid with the matrix standard.
+     * It should start with a @ and ends with the home server suffix.
+     *
+     * @param userId           the userID to check
+     * @param homeServerSuffix the home server suffix
+     * @return the checked user ID
+     */
+    public String checkUserId(String userId, String homeServerSuffix) {
+        String res = userId;
+
+        if (res.length() > 0) {
+            res = res.trim();
+            if (!res.startsWith("@")) {
+                res = "@" + res;
+            }
+
+            if (res.indexOf(":") < 0) {
+                res += homeServerSuffix;
+            }
+        }
+
+        return res;
+    }
+
+
+    /**
      * The search pattern has been updated
      */
     protected void onPatternUpdate() {
         manageBackground();
-        mAdapter.setSearchedPattern(mPatternToSearchEditText.getText().toString());
+
+        String pattern = mPatternToSearchEditText.getText().toString();
+
+        ParticipantAdapterItem firstEntry = null;
+
+        if (!TextUtils.isEmpty(pattern)) {
+            firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
+        }
+
+        mAdapter.setSearchedPattern(pattern, firstEntry);
 
         mListView.post(new Runnable() {
             @Override

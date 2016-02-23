@@ -243,7 +243,7 @@
         </activity>
 
         <activity
-            android:name=".activity.VectorInviteMembersActivity"
+            android:name=".activity.VectorRoomInviteMembersActivity"
             android:label="Vector searches"
             android:parentActivityName="im.vector.activity.VectorRoomDetailsActivity"
             android:launchMode="singleTop"

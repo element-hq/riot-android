@@ -17,18 +17,16 @@
 package im.vector.adapters;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
@@ -41,18 +39,15 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.User;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
-import im.vector.util.UIUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
@@ -103,6 +98,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
 
+    ParticipantAdapterItem mFirstEntry;
+
     OnParticipantsListener mOnParticipantsListener = null;
 
     /**
@@ -142,17 +139,28 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         mIsMultiSelectionMode = multiSelectionMode;
     }
 
+
     /**
-     *  search management
+     * Search a pattern in the known members list.
+     * @param pattern the pattern to search
      */
     public void setSearchedPattern(String pattern) {
+        setSearchedPattern(pattern, null);
+    }
+
+    /**
+     * Search a pattern in the known members list.
+     * @param pattern the pattern to search
+     * @param firstEntry the entry to display in the results list.
+     */
+    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry) {
         if (null == pattern) {
             pattern = "";
         }
 
         if (!pattern.trim().equals(mPattern)) {
             mPattern = pattern.trim().toLowerCase();
-            refresh();
+            refresh(firstEntry);
         }
     }
 
@@ -315,9 +323,17 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     };
 
     /**
-     * refresh the list
+     * refresh the display
      */
     public void refresh() {
+        refresh(null);
+    }
+
+    /**
+     * Refrehs the display.
+     * @param firstEntry the first entry in the result.
+     */
+    public void refresh(ParticipantAdapterItem firstEntry) {
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -370,6 +386,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
 
             Collections.sort(nextMembersList, ParticipantAdapterItem.alphaComparator);
+
+            if (null != firstEntry) {
+                nextMembersList.add(0, firstEntry);
+
+                // avoid multiple definitions
+                for(int pos = 1; pos < nextMembersList.size(); pos++) {
+                    ParticipantAdapterItem item = nextMembersList.get(pos);
+
+                    if (TextUtils.equals(item.mUserId, firstEntry.mUserId)) {
+                        nextMembersList.remove(pos);
+                        break;
+                    }
+                }
+
+                mFirstEntry = firstEntry;
+            }
         }
 
         this.setNotifyOnChange(true);
@@ -390,7 +422,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         if (null != participant.mAvatarBitmap) {
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
-            VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl,  participant.mUserId, participant.mDisplayName);
+            if ((null != mFirstEntry) && (position == 0)) {
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@"));
+            } else {
+                VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl,  participant.mUserId, participant.mDisplayName);
+            }
         }
 
         PowerLevels powerLevels = null;
@@ -453,7 +489,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         }
                         else {
                             status = mContext.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
-                         }
+                        }
                     }
                 }
             }
@@ -514,7 +550,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             @Override
             public void onClick(View v) {
                 if (null != mOnParticipantsListener) {
-                    mOnParticipantsListener.onClick(fpos);
+                    String userId = participant.mUserId;
+
+                    // check if the userId is valid
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches() ||
+                            (userId.startsWith("@") && (userId.indexOf(":") > 1))) {
+                        mOnParticipantsListener.onClick(fpos);
+                    } else {
+                        Toast.makeText(mContext, R.string.malformed_id, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
