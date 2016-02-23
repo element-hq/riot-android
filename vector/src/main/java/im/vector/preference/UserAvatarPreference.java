@@ -67,7 +67,7 @@ public class UserAvatarPreference extends EditTextPreference {
     public void refreshAvatar() {
         if ((null !=  mAvatarView) && (null != mSession)) {
             MyUser myUser = mSession.getMyUser();
-            VectorUtils.loadUserAvatar(mContext, mSession, mAvatarView, myUser.getAvatarUrl(), myUser.userId, myUser.displayname);
+            VectorUtils.loadUserAvatar(mContext, mSession, mAvatarView, myUser.getAvatarUrl(), myUser.user_id, myUser.displayname);
         }
     }
 

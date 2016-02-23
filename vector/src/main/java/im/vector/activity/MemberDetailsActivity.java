@@ -93,7 +93,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity {
 
         @Override
         public void onPresenceUpdate(Event event, final User user) {
-            if (mMemberId.equals(user.userId)) {
+            if (mMemberId.equals(user.user_id)) {
                 // Someone's presence has changed, reprocess the whole list
                 MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override

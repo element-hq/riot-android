@@ -391,7 +391,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
             if (null == mSearchInRoomNamesFragment) {
-                mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
+                mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUserId(), R.layout.fragment_vector_recents_list);
                 ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
             } else {
@@ -402,7 +402,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
-                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             } else {

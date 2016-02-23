@@ -78,7 +78,7 @@ public class CommonActivityUtils {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
             ArrayList<String> matrixIds = new ArrayList<String>();
-            matrixIds.add(session.getMyUser().userId);
+            matrixIds.add(session.getMyUserId());
             eventStreamService.stopAccounts(matrixIds);
 
             // Publish to the server that we're now offline

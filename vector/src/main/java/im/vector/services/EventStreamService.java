@@ -346,7 +346,7 @@ public class EventStreamService extends Service {
 
             String roomName = null;
             if(session.getMyUser() != null) {
-                roomName = room.getName(session.getMyUser().userId);
+                roomName = room.getName(session.getMyUserId());
             }
 
             mNotificationSessionId = session.getCredentials().userId;

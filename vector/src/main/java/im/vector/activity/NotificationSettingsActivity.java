@@ -290,7 +290,7 @@ public class NotificationSettingsActivity extends MXCActionBarActivity {
             // per room
             if (null != mBingRuleSet.content) {
                 mPerRoomAdapter.addAll(mBingRuleSet.getRoomRules());
-                mPerRoomAdapter.setRooms(mxSession.getDataHandler().getStore().getRooms(), mxSession.getMyUser().userId);
+                mPerRoomAdapter.setRooms(mxSession.getDataHandler().getStore().getRooms(), mxSession.getMyUserId());
             }
             // dummy bing rule to add a new one
             mPerRoomAdapter.addAll(new BingRule(false));

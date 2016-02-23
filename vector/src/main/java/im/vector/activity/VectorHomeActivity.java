@@ -312,7 +312,7 @@ public class VectorHomeActivity extends AppCompatActivity {
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
-                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         VectorHomeActivity.this.startActivity(settingsIntent);
                         break;
                     }
@@ -372,7 +372,7 @@ public class VectorHomeActivity extends AppCompatActivity {
         displaynameTextView.setText(mSession.getMyUser().displayname);
 
         TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
-        userIdTextView.setText(mSession.getMyUser().userId);
+        userIdTextView.setText(mSession.getMyUserId());
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
         VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());

@@ -130,7 +130,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     Collection<MXSession> sessions = Matrix.getInstance(this).getSessions();
                     // search the session
                     for(MXSession session : sessions) {
-                        if (session.getMyUser().userId.equals(accountId)) {
+                        if (session.getMyUserId().equals(accountId)) {
                             mSession = session;
                             break;
                         }
@@ -295,9 +295,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             MyUser myUser = mSession.getMyUser();
 
             if (!TextUtils.isEmpty(myUser.displayname)) {
-                mSingleAccountText.setText(myUser.displayname + " (" + myUser.userId + ")");
+                mSingleAccountText.setText(myUser.displayname + " (" + myUser.user_id + ")");
             } else {
-                mSingleAccountText.setText(myUser.userId);
+                mSingleAccountText.setText(myUser.user_id);
             }
 
         } else {
@@ -309,9 +309,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 MyUser myUser = mSession.getMyUser();
 
                 if (!TextUtils.isEmpty(myUser.displayname)) {
-                    sessionsTextsList.add(myUser.displayname + " (" + myUser.userId + ")");
+                    sessionsTextsList.add(myUser.displayname + " (" + myUser.user_id + ")");
                 } else {
-                    sessionsTextsList.add(myUser.userId);
+                    sessionsTextsList.add(myUser.user_id);
                 }
             }
 

@@ -137,7 +137,7 @@ public class VectorUtils {
             return alias;
         }
 
-        String myUserId = session.getMyUser().userId;
+        String myUserId = session.getMyUserId();
 
         Collection<RoomMember> members = roomState.getMembers();
         ArrayList<RoomMember> othersActiveMembers = new ArrayList<RoomMember>();
@@ -362,7 +362,7 @@ public class VectorUtils {
      */
     public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, User user) {
         if (null != user) {
-            return VectorUtils.loadUserAvatar(context, session, imageView, user.getAvatarUrl(), user.userId, user.displayname);
+            return VectorUtils.loadUserAvatar(context, session, imageView, user.getAvatarUrl(), user.user_id, user.displayname);
         }
 
         return null;

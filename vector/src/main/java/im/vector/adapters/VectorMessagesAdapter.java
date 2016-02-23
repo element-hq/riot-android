@@ -372,7 +372,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } catch (Exception e) {
         }
 
-        boolean isSelfMessage = TextUtils.equals(event.getSender(), mSession.getMyUser().userId);
+        boolean isSelfMessage = TextUtils.equals(event.getSender(), mSession.getMyUserId());
 
         Menu menu = popup.getMenu();
 

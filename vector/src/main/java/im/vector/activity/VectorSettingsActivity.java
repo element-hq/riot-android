@@ -50,7 +50,7 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         setContentView(R.layout.activity_vector_settings);
 
         // display the fragment
-        mFragment = VectorSettingsPreferencesFragment.newInstance(mSession.getMyUser().userId);
+        mFragment = VectorSettingsPreferencesFragment.newInstance(mSession.getMyUserId());
         getFragmentManager().beginTransaction().replace(R.id.vector_settings_page, mFragment).commit();
     }
 

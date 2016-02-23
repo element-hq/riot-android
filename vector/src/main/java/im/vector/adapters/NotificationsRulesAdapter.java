@@ -302,7 +302,7 @@ public class NotificationsRulesAdapter extends ArrayAdapter<BingRule> {
                 String displayName = bingRule.ruleId;
 
                 if (null != room) {
-                    displayName = room.getName(mSession.getMyUser().userId);
+                    displayName = room.getName(mSession.getMyUserId());
                 }
 
                 notificationPattern.setText(mContext.getText(R.string.notification_settings_room) + displayName);

@@ -282,7 +282,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // cannot refresh if there is no valid session / room
         if ((null != mRoom) && (null != mSession)) {
             PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
-            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUser().userId);
+            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
             canUpdateAvatar = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
             canUpdateName = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
             canUpdateTopic = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
@@ -430,7 +430,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // get new and previous values
-        String previousName = mRoom.getName(mSession.getMyUser().userId);
+        String previousName = mRoom.getName(mSession.getMyUserId());
         String newName = mRoomNameEditTxt.getText();
         // update only, if values are different
         if (!TextUtils.equals(previousName, newName)) {

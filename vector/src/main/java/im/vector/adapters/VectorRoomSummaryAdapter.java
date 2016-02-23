@@ -224,7 +224,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             res = false;
 
             if (null != mSearchedPattern) {
-                String displayname = publicRoom.getDisplayName(mMxSession.getMyUser().userId);
+                String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
                 res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
 
                 if (res) {

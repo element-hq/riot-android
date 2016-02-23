@@ -213,6 +213,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         });
 
+        refreshPreferences();
         refreshDisplay();
     }
 
@@ -238,7 +239,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
 
-        //
+        // ensure that
+        refreshPreferences();
         refreshDisplay();
     }
 

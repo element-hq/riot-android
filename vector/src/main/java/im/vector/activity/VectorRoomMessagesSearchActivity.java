@@ -111,7 +111,7 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
         mSearchInMessagesFragment = (VectorSearchMessagesListFragment) fm.findFragmentByTag(TAG_FRAGMENT_SEARCH_IN_MESSAGE);
 
         if (mSearchInMessagesFragment == null) {
-            mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, intent.getStringExtra(EXTRA_ROOM_ID), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUserId(), intent.getStringExtra(EXTRA_ROOM_ID), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.search_fragment_container, mSearchInMessagesFragment, TAG_FRAGMENT_SEARCH_IN_MESSAGE).commit();
         }
         resetUi();

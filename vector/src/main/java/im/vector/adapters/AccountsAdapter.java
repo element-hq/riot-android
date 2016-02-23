@@ -70,11 +70,11 @@ public class AccountsAdapter extends ArrayAdapter<MXSession> {
         TextView matrixIdTextView  = (TextView)convertView.findViewById(R.id.accountAdapte_userId);
 
         if (TextUtils.isEmpty(myUser.displayname)) {
-            displayNameTextView.setText(myUser.userId);
+            displayNameTextView.setText(myUser.user_id);
             matrixIdTextView.setText("");
         } else {
             displayNameTextView.setText(myUser.displayname);
-            matrixIdTextView.setText(myUser.userId);
+            matrixIdTextView.setText(myUser.user_id);
         }
 
         ImageView avatarView = (ImageView)convertView.findViewById(R.id.avatar_img);

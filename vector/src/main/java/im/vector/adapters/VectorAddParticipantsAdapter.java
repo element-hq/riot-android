@@ -133,7 +133,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         if (null == mRoom) {
             MyUser myUser = mSession.getMyUser();
 
-            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.getAvatarUrl(), myUser.userId);
+            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.getAvatarUrl(), myUser.user_id);
             this.add(item);
             mCreationParticipantsList.add(item);
         }
@@ -266,9 +266,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         Collection<User> users = mSession.getDataHandler().getStore().getUsers();
         for(User user : users) {
             // accepted User ID or still active users
-            if (idsToIgnore.indexOf(user.userId) < 0) {
-                unusedParticipants.add(new ParticipantAdapterItem(user.userId, null, user.userId));
-                idsToIgnore.add(user.userId);
+            if (idsToIgnore.indexOf(user.user_id) < 0) {
+                unusedParticipants.add(new ParticipantAdapterItem(user.user_id, null, user.user_id));
+                idsToIgnore.add(user.user_id);
             }
         }
 
@@ -329,7 +329,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
 
                 Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
-                String myUserId = mSession.getMyUser().userId;
+                String myUserId = mSession.getMyUserId();
                 PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
                 for (RoomMember member : activeMembers) {
@@ -591,7 +591,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         // multi selections mode
         // do not display a checkbox for oneself
-        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUser().userId, participant.mUserId)) {
+        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUserId(), participant.mUserId)) {
             checkBox.setVisibility(View.VISIBLE);
 
             checkBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);

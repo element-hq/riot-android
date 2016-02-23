@@ -118,7 +118,7 @@ public class RageShake implements SensorEventListener {
                     profileIndex++;
 
                     MyUser mMyUser = session.getMyUser();
-                    message += "userId : "+ mMyUser.userId + "\n";
+                    message += "userId : "+ mMyUser.user_id + "\n";
                     message += "displayname : " + mMyUser.displayname + "\n";
                     message += "homeServer :" + session.getCredentials().homeServer + "\n";
                 }

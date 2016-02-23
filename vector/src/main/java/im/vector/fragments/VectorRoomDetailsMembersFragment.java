@@ -296,7 +296,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             public void onClick(View v) {
                 // pop to the home activity
                 Intent intent = new Intent(getActivity(), VectorInviteMembersActivity.class);
-                intent.putExtra(VectorInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                intent.putExtra(VectorInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                 intent.putExtra(VectorInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
                 getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
             }

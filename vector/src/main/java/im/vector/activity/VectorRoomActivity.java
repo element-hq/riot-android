@@ -1461,7 +1461,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             mTypingArea.setVisibility(View.VISIBLE);
 
-            String myUserId = mSession.getMyUser().userId;
+            String myUserId = mSession.getMyUserId();
 
             // get the room member names
             ArrayList<String> names = new ArrayList<String>();
