@@ -196,7 +196,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         setRetainInstance(true);
     }
 
-
     /**
      * This method expects a view with the id "settings_loading_layout",
      * that is present in the parent activity layout.
@@ -248,6 +247,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Refresh the preferences items.
+     */
     private void updateUi(){
         // configure the preferences that are allowed to be modified by the user
         updatePreferenceAccessFromPowerLevel();
@@ -256,6 +258,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         updatePreferenceUiValues();
     }
 
+    /**
+     * delayed refresh the preferences items.
+     */
     private void updateUiOnUiThread() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -265,6 +270,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         });
     }
 
+    /**
+     * Enable / disable preferences according to the power levels.
+     */
     private void updatePreferenceAccessFromPowerLevel(){
         boolean canUpdateAvatar = false;
         boolean canUpdateName = false;
@@ -380,6 +388,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Action when enabling / disabling the rooms notifications.
+     */
     private void onRoomMuteNotificationsPreferenceChanged(){
         // sanity check
         if((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)){
@@ -409,6 +420,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Action when updating the room name.
+     */
     private void onRoomNamePreferenceChanged(){
         // sanity check
         if((null == mRoom) || (null == mSession) || (null == mRoomNameEditTxt)){
@@ -449,6 +463,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Action when updating the room topic.
+     */
     private void onRoomTopicPreferenceChanged() {
         // sanity check
         if(null == mRoom){
@@ -520,6 +537,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Update the avatar from the data provided the medias picker.
+     * @param aResultCode the result code.
+     * @param aData the provided data.
+     */
     private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData){
         Uri thumbnailUri = null;
         ClipData clipData = null;
@@ -621,7 +643,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * This view is disabled/enabled to achieve a waiting screen.
      */
     private void displayLoadingView() {
-
         Activity parentActivity = getActivity();
         if(null != parentActivity) {
             parentActivity.runOnUiThread(new Runnable() {
@@ -669,7 +690,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
-    private void enablePreferenceWidgets(boolean aIsEnabled){
+    /**
+     * Enable / disable the widgets.
+     * @param aIsEnabled true to enable them all.
+     */
+    private void enablePreferenceWidgets(boolean aIsEnabled) {
+        aIsEnabled &= Matrix.getInstance(getActivity()).isConnected();
+
         if(null != mRoomPhotoAvatar) {
             mRoomPhotoAvatar.setEnabled(aIsEnabled);
             mRoomPhotoAvatar.setShouldDisableView(aIsEnabled);
