@@ -330,6 +330,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         // refresh the display name
         final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
+        displaynamePref.setText(mSession.getMyUser().displayname);
         displaynamePref.setEnabled(isConnected);
 
         // change password

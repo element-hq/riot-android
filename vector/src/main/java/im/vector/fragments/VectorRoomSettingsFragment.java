@@ -102,7 +102,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
-                        Log.d(LOG_TAG,"## onLiveEvent() event="+event.type);
+                        Log.d(LOG_TAG, "## onLiveEvent() event=" + event.type);
                         updateUi();
                     }
                 }
@@ -151,7 +151,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // load preference xml file
-        addPreferencesFromResource(R.xml.fragment_vector_room_settings);
+        addPreferencesFromResource(R.xml.vector_room_settings_preferences);
 
         // init preference fields
         mRoomPhotoAvatar = (RoomAvatarPreference)findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
@@ -166,11 +166,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomPhotoAvatar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if((null != mRoomPhotoAvatar) && mRoomPhotoAvatar.isEnabled()) {
+                if ((null != mRoomPhotoAvatar) && mRoomPhotoAvatar.isEnabled()) {
                     onRoomAvatarPreferenceChanged();
                     return true; //True if the click was handled.
-                }
-                else
+                } else
                     return false;
             }
         });
@@ -308,12 +307,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if(null != mRoomNameEditTxt) {
             value = VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom);
             mRoomNameEditTxt.setSummary(value);
+            mRoomNameEditTxt.setText(value);
         }
 
         // update the room topic preference
         if(null != mRoomTopicEditTxt) {
             value = mRoom.getTopic();
             mRoomTopicEditTxt.setSummary(value);
+            mRoomTopicEditTxt.setText(value);
         }
 
         // update the mute notifications preference
