@@ -102,9 +102,9 @@ public class RageShake implements SensorEventListener {
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 intent.setType("text/html");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@matrix.org"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Matrix bug report");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Vector bug report");
 
-                String message = "Something went wrong on my Matrix client : \n\n\n";
+                String message = "Something went wrong on my Vector client : \n\n\n";
                 message += "-----> my comments <-----\n\n\n";
                 message += "------------------------------\n";
 

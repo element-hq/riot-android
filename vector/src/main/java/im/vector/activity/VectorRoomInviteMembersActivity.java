@@ -128,32 +128,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     }
 
     /**
-     * Check if the userId format is valid with the matrix standard.
-     * It should start with a @ and ends with the home server suffix.
-     *
-     * @param userId           the userID to check
-     * @param homeServerSuffix the home server suffix
-     * @return the checked user ID
-     */
-    public String checkUserId(String userId, String homeServerSuffix) {
-        String res = userId;
-
-        if (res.length() > 0) {
-            res = res.trim();
-            if (!res.startsWith("@")) {
-                res = "@" + res;
-            }
-
-            if (res.indexOf(":") < 0) {
-                res += homeServerSuffix;
-            }
-        }
-
-        return res;
-    }
-
-
-    /**
      * The search pattern has been updated
      */
     protected void onPatternUpdate() {
