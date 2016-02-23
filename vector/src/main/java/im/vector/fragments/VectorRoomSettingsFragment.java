@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
@@ -50,7 +52,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.RoomAvatarPreference;
-import im.vector.preference.VectorEditTextPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -80,13 +81,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
-    private VectorEditTextPreference mRoomNameEditTxt;
-    private VectorEditTextPreference mRoomTopicEditTxt;
+    private EditTextPreference mRoomNameEditTxt;
+    private EditTextPreference mRoomTopicEditTxt;
     private SwitchPreference mRoomPrivacySwitch;
     private SwitchPreference mRoomMuteNotificationsSwitch;
     // for further use: private Preference mPrivacyInfoPreference;
     private View mParentLoadingView;
     private View mParentFragmentContainerView;
+
+    // disable some updates if there is
+    private IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            updateUi();
+        }
+    };
 
     // MX system events listener
     private final MXEventListener mEventListener = new MXEventListener() {
@@ -101,8 +110,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
-                        Log.d(LOG_TAG,"## onLiveEvent() event="+event.type);
+                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)
+                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)
+                            )
+                    {
+                        Log.d(LOG_TAG, "## onLiveEvent() event=" + event.type);
                         updateUi();
                     }
                 }
@@ -151,12 +163,12 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // load preference xml file
-        addPreferencesFromResource(R.xml.fragment_vector_room_settings);
+        addPreferencesFromResource(R.xml.vector_room_settings_preferences);
 
         // init preference fields
         mRoomPhotoAvatar = (RoomAvatarPreference)findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
-        mRoomNameEditTxt = (VectorEditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
-        mRoomTopicEditTxt = (VectorEditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
+        mRoomNameEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
+        mRoomTopicEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
         mRoomPrivacySwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_PRIVACY_SWITCH);
         //mPrivacyInfoPreference = (Preference)findPreference(PREF_KEY_ROOM_PRIVACY_INFO); further use
         mRoomMuteNotificationsSwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
@@ -166,11 +178,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomPhotoAvatar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if((null != mRoomPhotoAvatar) && mRoomPhotoAvatar.isEnabled()) {
+                if ((null != mRoomPhotoAvatar) && mRoomPhotoAvatar.isEnabled()) {
                     onRoomAvatarPreferenceChanged();
                     return true; //True if the click was handled.
-                }
-                else
+                } else
                     return false;
             }
         });
@@ -184,7 +195,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         setRetainInstance(true);
     }
-
 
     /**
      * This method expects a view with the id "settings_loading_layout",
@@ -221,6 +231,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         super.onPause();
 
         if (null != mRoom) {
+            Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
             mRoom.removeEventListener(mEventListener);
         }
     }
@@ -230,11 +241,15 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         super.onResume();
 
         if (null != mRoom) {
+            Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
             mRoom.addEventListener(mEventListener);
             updateUi();
         }
     }
 
+    /**
+     * Refresh the preferences items.
+     */
     private void updateUi(){
         // configure the preferences that are allowed to be modified by the user
         updatePreferenceAccessFromPowerLevel();
@@ -243,6 +258,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         updatePreferenceUiValues();
     }
 
+    /**
+     * delayed refresh the preferences items.
+     */
     private void updateUiOnUiThread() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -252,10 +270,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         });
     }
 
+    /**
+     * Enable / disable preferences according to the power levels.
+     */
     private void updatePreferenceAccessFromPowerLevel(){
         boolean canUpdateAvatar = false;
         boolean canUpdateName = false;
         boolean canUpdateTopic = false;
+        boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
 
         // cannot refresh if there is no valid session / room
         if ((null != mRoom) && (null != mSession)) {
@@ -270,13 +292,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         if(null != mRoomPhotoAvatar)
-            mRoomPhotoAvatar.setEnabled(canUpdateAvatar);
+            mRoomPhotoAvatar.setEnabled(canUpdateAvatar && isConnected);
 
         if(null != mRoomNameEditTxt)
-            mRoomNameEditTxt.setEnabled(canUpdateName);
+            mRoomNameEditTxt.setEnabled(canUpdateName && isConnected);
 
         if(null != mRoomTopicEditTxt)
-            mRoomTopicEditTxt.setEnabled(canUpdateTopic);
+            mRoomTopicEditTxt.setEnabled(canUpdateTopic && isConnected);
 
         // use the room name power to enable the privacy switch
         if(null != mRoomPrivacySwitch)
@@ -284,7 +306,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // use the room name power to enable the room notification mute setting
         if(null != mRoomMuteNotificationsSwitch)
-            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName);
+            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName && isConnected);
     }
 
 
@@ -308,12 +330,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         if(null != mRoomNameEditTxt) {
             value = VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom);
             mRoomNameEditTxt.setSummary(value);
+            mRoomNameEditTxt.setText(value);
         }
 
         // update the room topic preference
         if(null != mRoomTopicEditTxt) {
             value = mRoom.getTopic();
             mRoomTopicEditTxt.setSummary(value);
+            mRoomTopicEditTxt.setText(value);
         }
 
         // update the mute notifications preference
@@ -364,6 +388,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Action when enabling / disabling the rooms notifications.
+     */
     private void onRoomMuteNotificationsPreferenceChanged(){
         // sanity check
         if((null == mRoom) || (null == mBingRulesManager) || (null == mRoomMuteNotificationsSwitch)){
@@ -393,6 +420,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Action when updating the room name.
+     */
     private void onRoomNamePreferenceChanged(){
         // sanity check
         if((null == mRoom) || (null == mSession) || (null == mRoomNameEditTxt)){
@@ -433,6 +463,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Action when updating the room topic.
+     */
     private void onRoomTopicPreferenceChanged() {
         // sanity check
         if(null == mRoom){
@@ -504,6 +537,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * Update the avatar from the data provided the medias picker.
+     * @param aResultCode the result code.
+     * @param aData the provided data.
+     */
     private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData){
         Uri thumbnailUri = null;
         ClipData clipData = null;
@@ -605,7 +643,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * This view is disabled/enabled to achieve a waiting screen.
      */
     private void displayLoadingView() {
-
         Activity parentActivity = getActivity();
         if(null != parentActivity) {
             parentActivity.runOnUiThread(new Runnable() {
@@ -653,7 +690,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
-    private void enablePreferenceWidgets(boolean aIsEnabled){
+    /**
+     * Enable / disable the widgets.
+     * @param aIsEnabled true to enable them all.
+     */
+    private void enablePreferenceWidgets(boolean aIsEnabled) {
+        aIsEnabled &= Matrix.getInstance(getActivity()).isConnected();
+
         if(null != mRoomPhotoAvatar) {
             mRoomPhotoAvatar.setEnabled(aIsEnabled);
             mRoomPhotoAvatar.setShouldDisableView(aIsEnabled);

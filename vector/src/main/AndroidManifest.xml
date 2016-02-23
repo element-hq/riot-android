@@ -146,7 +146,7 @@
             android:label="@string/room_details_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="adjustResize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -156,7 +156,7 @@
         <activity
             android:name="im.vector.activity.VectorSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName="im.vector.activity.VectorHomeActivity">
 
             <meta-data

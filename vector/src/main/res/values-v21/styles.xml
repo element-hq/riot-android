@@ -56,6 +56,9 @@
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
+        <!-- android ui button -->
+        <item name="android:colorAccent">@color/vector_green_color</item>
+
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar</item>
         <item name="actionBarStyle">@style/Vector.Styled.ActionBar</item>
@@ -78,6 +81,11 @@
 
         <!-- no divider -->
         <item name="android:actionBarDivider">@null</item>
+
+        <!-- switch color -->
+        <item name="android:colorControlActivated">@color/vector_green_color</item>
+        <item name="colorControlActivated">@color/vector_green_color</item>
+
     </style>
 
     <!-- tabbar background -->

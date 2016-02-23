@@ -42,10 +42,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
+import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
 
@@ -54,27 +58,53 @@ import java.util.HashMap;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.preference.AvatarPreference;
+import im.vector.preference.UserAvatarPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // arguments indexes
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
-    private static final String ARG_RULES_MAP_ID = "VectorSettingsPreferencesFragment.ARG_RULES_MAP_ID";
-
-    // rule Id <-> preference name
-    private HashMap<String, String> mPushesRuleByResourceId = new HashMap<String, String>();
 
     // members
     private MXSession mSession;
     private View mLoadingView;
 
+    // rule Id <-> preference name
+    private static HashMap<String, String> mPushesRuleByResourceId = null;
+
+    // disable some updates if there is
+    private IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            refreshDisplay();
+        }
+    };
+
+    // events listener
+    private MXEventListener mEventsListener = new MXEventListener() {
+        @Override
+        public void onBingRulesUpdate() {
+            refreshPreferences();
+            refreshDisplay();
+        }
+
+        @Override
+        public void onAccountInfoUpdate(MyUser myUser) {
+            // refresh the settings value
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(getResources().getString(R.string.settings_display_name), myUser.displayname);
+            editor.commit();
+
+            refreshDisplay();
+        }
+    };
+
     // static constructor
-    public static VectorSettingsPreferencesFragment newInstance(String matrixId, HashMap<String, String> pushesRuleByResourceId) {
+    public static VectorSettingsPreferencesFragment newInstance(String matrixId) {
         VectorSettingsPreferencesFragment f = new VectorSettingsPreferencesFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_RULES_MAP_ID, pushesRuleByResourceId);
         args.putString(ARG_MATRIX_ID, matrixId);
         f.setArguments(args);
         return f;
@@ -88,14 +118,24 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         Bundle args = getArguments();
         String matrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
-        mPushesRuleByResourceId = (HashMap<String, String>)args.getSerializable(ARG_RULES_MAP_ID);
 
         // define the layout
         addPreferencesFromResource(R.xml.vector_settings_preferences);
 
+        if (null == mPushesRuleByResourceId) {
+            mPushesRuleByResourceId = new HashMap<String, String>();
+
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_my_display_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_my_user_name), BingRule.RULE_ID_CONTAIN_USER_NAME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_sent_to_me), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_invited_to_room), BingRule.RULE_ID_INVITE_ME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_call_invitations), BingRule.RULE_ID_CALL);
+        }
+
         final PreferenceManager preferenceManager = getPreferenceManager();
 
-        AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference)preferenceManager.findPreference("matrixId");
         avatarPreference.setSession(mSession);
         avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -176,6 +216,32 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         refreshDisplay();
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mSession.isActive()) {
+            mSession.getDataHandler().removeListener(mEventsListener);
+        }
+
+        Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mSession.isActive()) {
+            mSession.getDataHandler().addListener(mEventsListener);
+        }
+
+        Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
+
+        //
+        refreshDisplay();
+    }
+
     //==============================================================================================================
     // Display methods
     //==============================================================================================================
@@ -221,26 +287,66 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     }
 
     /**
+     * Refresh the known information about the account
+     */
+    private void refreshPreferences() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(this.getResources().getString(R.string.settings_display_name), mSession.getMyUser().displayname);
+        editor.putString(this.getResources().getString(R.string.settings_version), VectorUtils.getApplicationVersion(getActivity()));
+
+        BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
+
+        if (null != mBingRuleSet) {
+            for (String resourceText : mPushesRuleByResourceId.keySet()) {
+                String ruleId = mPushesRuleByResourceId.get(resourceText);
+
+                BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
+                Boolean isEnabled = ((null != rule) && rule.isEnabled);
+
+                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                    isEnabled = !isEnabled;
+                }
+
+                editor.putBoolean(resourceText, isEnabled);
+            }
+        }
+
+        editor.commit();
+    }
+
+    /**
      * Refresh the preferences.
      */
-    public void refreshDisplay() {
+    private void refreshDisplay() {
+        boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
         PreferenceManager preferenceManager = getPreferenceManager();
 
         // refresh the avatar
-        AvatarPreference avatarPreference = (AvatarPreference)preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference)preferenceManager.findPreference("matrixId");
         avatarPreference.refreshAvatar();
+        avatarPreference.setEnabled(isConnected);
 
         // refresh the display name
         final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
+        displaynamePref.setText(mSession.getMyUser().displayname);
+        displaynamePref.setEnabled(isConnected);
+
+        // change password
+        final EditTextPreference changePasswordPref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
+        changePasswordPref.setEnabled(isConnected);
 
         // update the push rules
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        BingRuleSet rules = mSession.getDataHandler().pushRules();
 
         for(String resourceText : mPushesRuleByResourceId.keySet()) {
             SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
+                switchPreference.setEnabled((null != rules) && isConnected);
                 switchPreference.setChecked(preferences.getBoolean(resourceText, false));
             }
         }
