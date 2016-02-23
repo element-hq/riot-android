@@ -38,6 +38,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
@@ -88,6 +89,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private View mParentLoadingView;
     private View mParentFragmentContainerView;
 
+    // disable some updates if there is
+    private IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            updateUi();
+        }
+    };
+
     // MX system events listener
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -101,7 +110,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
+                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)
+                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)
+                            )
+                    {
                         Log.d(LOG_TAG, "## onLiveEvent() event=" + event.type);
                         updateUi();
                     }
@@ -220,6 +232,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         super.onPause();
 
         if (null != mRoom) {
+            Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
             mRoom.removeEventListener(mEventListener);
         }
     }
@@ -229,6 +242,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         super.onResume();
 
         if (null != mRoom) {
+            Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
             mRoom.addEventListener(mEventListener);
             updateUi();
         }
@@ -255,6 +269,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         boolean canUpdateAvatar = false;
         boolean canUpdateName = false;
         boolean canUpdateTopic = false;
+        boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
 
         // cannot refresh if there is no valid session / room
         if ((null != mRoom) && (null != mSession)) {
@@ -269,13 +284,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         if(null != mRoomPhotoAvatar)
-            mRoomPhotoAvatar.setEnabled(canUpdateAvatar);
+            mRoomPhotoAvatar.setEnabled(canUpdateAvatar && isConnected);
 
         if(null != mRoomNameEditTxt)
-            mRoomNameEditTxt.setEnabled(canUpdateName);
+            mRoomNameEditTxt.setEnabled(canUpdateName && isConnected);
 
         if(null != mRoomTopicEditTxt)
-            mRoomTopicEditTxt.setEnabled(canUpdateTopic);
+            mRoomTopicEditTxt.setEnabled(canUpdateTopic && isConnected);
 
         // use the room name power to enable the privacy switch
         if(null != mRoomPrivacySwitch)
@@ -283,7 +298,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // use the room name power to enable the room notification mute setting
         if(null != mRoomMuteNotificationsSwitch)
-            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName);
+            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName && isConnected);
     }
 
 
