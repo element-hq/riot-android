@@ -213,7 +213,7 @@ public class VectorUtils {
      * @param text the text.
      * @return the color.
      */
-    private static int getAvatarcolor(String text) {
+    public static int getAvatarcolor(String text) {
         long colorIndex = 0;
 
         if (!TextUtils.isEmpty(text)) {

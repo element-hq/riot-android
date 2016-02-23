@@ -53,7 +53,7 @@ import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.MemberDetailsActivity;
-import im.vector.activity.VectorInviteMembersActivity;
+import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
@@ -295,9 +295,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // pop to the home activity
-                Intent intent = new Intent(getActivity(), VectorInviteMembersActivity.class);
-                intent.putExtra(VectorInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                intent.putExtra(VectorInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                Intent intent = new Intent(getActivity(), VectorRoomInviteMembersActivity.class);
+                intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
                 getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
             }
         });
@@ -434,7 +434,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-            String userId = data.getStringExtra(VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID);
+            String userId = data.getStringExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_USER_ID);
 
             if (null != userId) {
                 mProgressView.setVisibility(View.VISIBLE);
