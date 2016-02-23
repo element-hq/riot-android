@@ -27,6 +27,7 @@ import android.widget.ListView;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
 /**
@@ -90,9 +91,22 @@ public class VectorInviteMembersActivity extends VectorBaseSearchActivity {
         mAdapter = new VectorAddParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mRoomId, false, mSession.getMediasCache());
         mListView.setAdapter(mAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onRemoveClick(ParticipantAdapterItem participant) {
+            }
+
+            @Override
+            public void onLeaveClick() {
+            }
+
+            @Override
+            public void onSelectUserId(String userId) {
+
+            }
+
+            @Override
+            public void onClick(int position) {
                 // returns the selected user
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_SELECTED_USER_ID, mAdapter.getItem(position).mUserId);
@@ -100,6 +114,16 @@ public class VectorInviteMembersActivity extends VectorBaseSearchActivity {
                 finish();
             }
         });
+
+        /*
+        -> do not use the on click listener because the adapter manages scrollview inside the cell view
+        So the scrollview events must manage the click events.
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });*/
 
         manageBackground();
     }
