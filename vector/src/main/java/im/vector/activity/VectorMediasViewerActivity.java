@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.matrix.androidsdk.MXSession;
@@ -152,5 +154,26 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         // stop any playing video
         mAdapter.stopPlayingVideo();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.vector_medias_viewer, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.ic_action_share) {
+
+        } else if (id ==  R.id.ic_action_download) {
+            mAdapter.downloadMedia();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
