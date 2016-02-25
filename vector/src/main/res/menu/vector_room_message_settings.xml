@@ -38,7 +38,7 @@
         android:title="@string/copy"
         app:showAsAction="never" />
 
-    <!--item
+    <item
         android:id="@+id/ic_action_vector_share"
         android:icon="@drawable/ic_material_share"
         android:title="@string/share"
@@ -48,7 +48,7 @@
         android:id="@+id/ic_action_vector_forward"
         android:icon="@drawable/ic_material_forward"
         android:title="@string/forward"
-        app:showAsAction="never" /-->
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/ic_action_vector_save"

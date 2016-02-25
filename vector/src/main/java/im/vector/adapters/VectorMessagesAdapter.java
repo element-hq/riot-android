@@ -423,8 +423,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     Boolean supportShare = true;
                     Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
-                    String mediaUrl = null;
-                    String mediaMimeType = null;
+                    String mediaUrl;
+                    String mediaMimeType;
 
                     // check if the media has been downloaded
                     if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
@@ -455,8 +455,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     }
 
                     if (supportShare) {
-                        //menu.findItem(R.id.ic_action_vector_share).setVisible(true);
-                        //menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
+                        menu.findItem(R.id.ic_action_vector_share).setVisible(true);
+                        menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
                         if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
                             menu.findItem(R.id.ic_action_vector_save).setVisible(true);
                         }

@@ -197,7 +197,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     clipboard.setPrimaryClip(clip);
                 }
             });
-        } else if (/*(action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) ||*/ (action == R.id.ic_action_vector_save)) {
+        } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
             String mediaUrl = null;
             String mediaMimeType = null;
@@ -242,7 +242,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     }
                 });
 
-            } /*else {
+            } else {
                 final Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
 
@@ -269,7 +269,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         }
                     });
                 }
-            }*/
+            }
         }
     }
 
