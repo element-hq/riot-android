@@ -32,7 +32,7 @@ import im.vector.R;
 import im.vector.adapters.VectorMediasViewerAdapter;
 import im.vector.util.SlidableMediaInfo;
 
-public class VectorMediasViewerActivity extends FragmentActivity {
+public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";
@@ -110,7 +110,7 @@ public class VectorMediasViewerActivity extends FragmentActivity {
         final List<SlidableMediaInfo> mediasList = (List<SlidableMediaInfo>)intent.getSerializableExtra(KEY_INFO_LIST);
 
         setContentView(R.layout.activity_vector_medias_viewer);
-        mViewPager=(ViewPager) findViewById(R.id.view_pager);
+        mViewPager =(ViewPager) findViewById(R.id.view_pager);
 
         int position = intent.getIntExtra(KEY_INFO_LIST_INDEX, 0);
         int maxImageWidth = intent.getIntExtra(KEY_THUMBNAIL_WIDTH, 0);
@@ -121,6 +121,29 @@ public class VectorMediasViewerActivity extends FragmentActivity {
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(position);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
+
+        if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
+            VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mediasList.get(position).mFileName);
+        }
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (null != VectorMediasViewerActivity.this.getSupportActionBar()) {
+                    VectorMediasViewerActivity.this.getSupportActionBar().setTitle(mediasList.get(position).mFileName);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
