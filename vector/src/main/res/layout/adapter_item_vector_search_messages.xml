@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/adapter_item_vector_message_text"
+        <include layout="@layout/adapter_item_vector_message_text_emote_notice"
             android:id="@+id/messagesAdapter_search_body"/>
     </RelativeLayout>
 

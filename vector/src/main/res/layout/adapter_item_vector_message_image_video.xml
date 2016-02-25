@@ -61,54 +61,46 @@
 
                     <RelativeLayout
                         android:layout_gravity="right"
-                        android:id="@+id/messagesAdapter_file_layout"
+                        android:id="@+id/messagesAdapter_image_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        <!-- the media -->
+                        <ImageView
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_width="wrap_content"
+                            android:id="@+id/messagesAdapter_image"
+                            android:adjustViewBounds="true" />
 
-                            <!-- the upload / download information -->
+                        <!-- the media type -->
+                        <ImageView
+                            android:layout_width="@dimen/chat_avatar_keyboard_size"
+                            android:layout_height="@dimen/chat_avatar_keyboard_size"
+                            android:id="@+id/messagesAdapter_image_type"
+                            android:src="@drawable/filetype_image"/>
 
-                            <!-- download progress -->
-                            <org.matrix.androidsdk.view.PieFractionView
-                                android:id="@+id/content_download_piechart"
-                                android:layout_centerInParent="true"
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
+                        <!-- the upload / download information -->
+                        <!-- download progress -->
+                        <org.matrix.androidsdk.view.PieFractionView
+                            android:id="@+id/content_download_piechart"
+                            android:layout_centerInParent="true"
+                            android:layout_width="@dimen/chat_avatar_size"
+                            android:layout_height="@dimen/chat_avatar_size"/>
 
-                            <!-- upload progress -->
-                            <org.matrix.androidsdk.view.PieFractionView
-                                android:id="@+id/content_upload_piechart"
-                                android:layout_centerInParent="true"
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
+                        <!-- upload progress -->
+                        <org.matrix.androidsdk.view.PieFractionView
+                            android:id="@+id/content_upload_piechart"
+                            android:layout_centerInParent="true"
+                            android:layout_width="@dimen/chat_avatar_size"
+                            android:layout_height="@dimen/chat_avatar_size"/>
 
-                            <!-- the upload fails -->
-                            <ImageView
-                                android:id="@+id/upload_event_failed"
-                                android:src="@drawable/file_upload_failed"
-                                android:layout_alignParentBottom="true"
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
-
-                            <!-- the media type -->
-                            <ImageView
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"
-                                android:id="@+id/messagesAdapter_image_type"
-                                android:src="@drawable/filetype_image"/>
-
-                            <!-- the media -->
-                            <TextView
-                                android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"
-                                android:text= "A filename here"
-                                android:autoLink="none"
-                                android:id="@+id/messagesAdapter_filename"/>
-                        </LinearLayout>
+                        <!-- the upload fails -->
+                        <ImageView
+                            android:id="@+id/upload_event_failed"
+                            android:src="@drawable/file_upload_failed"
+                            android:layout_centerInParent="true"
+                            android:layout_width="@dimen/chat_avatar_size"
+                            android:layout_height="@dimen/chat_avatar_size"/>
 
                         <!-- the thumbnail has been uploaded : sending the message -->
                         <ProgressBar
@@ -116,7 +108,6 @@
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/chat_avatar_size"
                             android:layout_height="@dimen/chat_avatar_size"/>
-
                     </RelativeLayout>
                 </FrameLayout>
             </LinearLayout>

@@ -90,12 +90,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
-                R.layout.adapter_item_vector_message_text,
-                R.layout.adapter_item_vector_message_image,
-                R.layout.adapter_item_vector_message_notice,
-                R.layout.adapter_item_vector_message_emote,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_file,
-                R.layout.adapter_item_vector_message_video,
+                R.layout.adapter_item_vector_message_image_video,
                 mediasCache);
 
         // for dispatching data to add to the adapter we need to be on the main thread
