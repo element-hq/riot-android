@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -25,13 +26,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -73,7 +72,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
+
+    public interface IListFragmentEventListener{
+        void onListTouch();
+    }
+
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "TAG_FRAGMENT_RECEIPTS_DIALOG";
+    private IListFragmentEventListener mHostActivityListener;
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
@@ -83,6 +88,33 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         args.putString(ARG_MATRIX_ID, matrixId);
         f.setArguments(args);
         return f;
+    }
+
+    /**
+     * Called when a fragment is first attached to its activity.
+     * {@link #onCreate(Bundle)} will be called after this.
+     *
+     * @param aHostActivity parent activity
+     */
+    @Override
+    public void onAttach(Activity aHostActivity) {
+        super.onAttach(aHostActivity);
+        try {
+            mHostActivityListener = (IListFragmentEventListener) aHostActivity;
+        }
+        catch(ClassCastException e) {
+            throw new ClassCastException(aHostActivity.toString() + " must implement IListFragmentEventListener");
+        }
+    }
+
+    /**
+     * Called when the fragment is no longer attached to its activity.  This
+     * is called after {@link #onDestroy()}.
+     */
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mHostActivityListener = null;
     }
 
     @Override
@@ -115,6 +147,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mCheckSlideToHide = false;
             MXCActionBarActivity.dismissKeyboard(getActivity());
         }
+
+        // notify host activity
+        if(null != mHostActivityListener)
+            mHostActivityListener.onListTouch();
     }
 
     /**
@@ -728,7 +764,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     /**
      * Define the action to perform when the user performs a long tap on an avatar
      * @param userId the user ID
-     * @return true if the long clik event is managed
+     * @return true if the long click event is managed
      */
     public Boolean onAvatarLongClick(String userId) {
         return false;
