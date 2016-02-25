@@ -564,17 +564,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_IMAGE;
+                info.mFileName = imageMessage.body;
                 info.mMediaUrl = imageMessage.url;
                 info.mRotationAngle = imageMessage.getRotation();
                 info.mOrientation = imageMessage.getOrientation();
                 info.mMimeType = imageMessage.getMimeType();
-                info.midentifier = row.getEvent().eventId;
+                info.mIdentifier = row.getEvent().eventId;
                 res.add(info);
             } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 VideoMessage videoMessage = (VideoMessage)message;
-
                 info.mMessageType = Message.MSGTYPE_VIDEO;
+                info.mFileName = videoMessage.body;
                 info.mMediaUrl = videoMessage.url;
                 info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
                 info.mMimeType = videoMessage.getVideoMimeType();

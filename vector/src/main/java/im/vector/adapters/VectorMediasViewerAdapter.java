@@ -175,7 +175,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
      * @param position the item position
      * @param force true to do not check the auto playmode
      */
-    public void downloadVideo(final View view, final int position, Boolean force) {
+    public void downloadVideo(final View view, final int position, boolean force) {
         final VideoView videoView = (VideoView)view.findViewById(R.id.media_slider_videoview);
         final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
         final PieFractionView pieFractionView = (PieFractionView)view.findViewById(R.id.media_slider_piechart);
@@ -204,11 +204,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // else download it
-        final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
             pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
+            pieFractionView.setTag(downloadId);
+
             mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
                 @Override
                 public void onDownloadStart(String downloadId) {
@@ -225,14 +227,14 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
                 @Override
                 public void onDownloadProgress(String aDownloadId, int percentageProgress) {
-                    if (aDownloadId.equals(downloadId)) {
+                    if (aDownloadId.equals(pieFractionView.getTag())) {
                         pieFractionView.setFraction(percentageProgress);
                     }
                 }
 
                 @Override
                 public void onDownloadComplete(String aDownloadId) {
-                    if (aDownloadId.equals(downloadId)) {
+                    if (aDownloadId.equals(pieFractionView.getTag())) {
                         pieFractionView.setVisibility(View.GONE);
 
                         final File mediaFile = mMediasCache.mediaCacheFile(loadingUri, mediaInfo.mMimeType);
@@ -408,6 +410,46 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             loadVideo(position , view, mediaInfo.mThumbnailUrl, mediaUrl, mediaInfo.mMimeType);
             container.addView(view, 0);
         }
+
+        // check if the media is downloading
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaUrl, mediaInfo.mMimeType);
+
+        if (null != downloadId) {
+            pieFractionView.setVisibility(View.VISIBLE);
+            pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
+            pieFractionView.setTag(downloadId);
+
+            mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                @Override
+                public void onDownloadStart(String downloadId) {
+                }
+
+                @Override
+                public void onError(String downloadId, JsonElement jsonElement) {
+                    pieFractionView.setVisibility(View.GONE);
+                    MatrixError error = JsonUtils.toMatrixError(jsonElement);
+
+                    if ((null != error) && error.isSupportedErrorCode()) {
+                        Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                    if (aDownloadId.equals(pieFractionView.getTag())) {
+                        pieFractionView.setFraction(percentageProgress);
+                    }
+                }
+
+                @Override
+                public void onDownloadComplete(String aDownloadId) {
+                    if (aDownloadId.equals(pieFractionView.getTag())) {
+                        pieFractionView.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
 
         return view;
     }

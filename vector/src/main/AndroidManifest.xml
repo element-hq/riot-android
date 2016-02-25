@@ -194,13 +194,18 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"/>
 
-        <activity
-            android:name="im.vector.activity.ImageWebViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
             android:name="im.vector.activity.VectorMediasViewerActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:label="a filename"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorRoomActivity"/>
+        </activity>
 
         <activity
             android:name="im.vector.activity.CallViewActivity"
