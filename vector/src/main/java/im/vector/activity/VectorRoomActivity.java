@@ -17,7 +17,6 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipData;
@@ -36,15 +35,14 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -60,7 +58,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
-import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -75,7 +73,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.adapters.ImageCompressionDescription;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.services.EventStreamService;
@@ -90,6 +87,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -154,8 +152,21 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private EditText mEditText;
     private ImageView mAvatarImageView;
 
-    private View mTypingArea;
-    private TextView mTypingMessageTextView;
+    // notifications area
+    private View mNotificationsArea;
+    private View mTypingIcon;
+    private View mErrorIcon;
+    private TextView mNotificationsMessageTextView;
+    private TextView mErrorMessageTextView;
+    private String mLatestTypingMessage;
+
+    // network events
+    private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            refreshNotificationsArea();
+        }
+    };
 
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
@@ -246,6 +257,22 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 }
             });
         }
+
+        @Override
+        public void onSendingEvent(Event event) {
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void onSentEvent(Event event) {
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void onFailedSendingEvent(Event event) {
+            refreshNotificationsArea();
+        }
+
     };
 
     @Override
@@ -388,8 +415,12 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             }
         });
 
-        mTypingArea = findViewById(R.id.room_notifications_area);
-        mTypingMessageTextView = (TextView)findViewById(R.id.room_notification_message);
+        // notifications area
+        mNotificationsArea = findViewById(R.id.room_notifications_area);
+        mTypingIcon = findViewById(R.id.room_typing_animation);
+        mNotificationsMessageTextView = (TextView)findViewById(R.id.room_notification_message);
+        mErrorIcon = findViewById(R.id.room_error_icon);
+        mErrorMessageTextView = (TextView)findViewById(R.id.room_notification_error_message);
 
         mSession = getSession(intent);
 
@@ -497,6 +528,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         // listen for room name or topic changes
         mRoom.removeEventListener(mEventListener);
+
+        Matrix.getInstance(this).removeNetworkEventListener(mNetworkEventListener);
     }
 
     @Override
@@ -520,6 +553,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
+        Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
+
         EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
 
         // reset the unread messages counter
@@ -537,6 +572,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         manageSendMoreButtons();
 
         updateMenuEntries();
+
+        refreshNotificationsArea();
 
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
@@ -1455,12 +1492,75 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         }
     }
 
+    public void insertInTextEditor(String text) {
+        if (null != text) {
+            if (TextUtils.isEmpty(mEditText.getText())) {
+                mEditText.append(text + ": ");
+            } else {
+                mEditText.getText().insert(mEditText.getSelectionStart(), text);
+            }
+        }
+    }
+
+    //================================================================================
+    // Notifications management
+    //================================================================================
+
+    private void refreshNotificationsArea() {
+        boolean isAreaVisible = false;
+        boolean isTypingIconDisplayed = false;
+        boolean isErrorIconDisplayed = false;
+        SpannableString notificationsText = null;
+        SpannableString errorText = null;
+
+        //  no network
+        if (!Matrix.getInstance(this).isConnected()) {
+            isAreaVisible = true;
+            isErrorIconDisplayed = true;
+            errorText = new SpannableString(getResources().getString(R.string.room_offline_notification));
+            mErrorMessageTextView.setOnClickListener(null);
+        } else {
+            Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
+            if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
+                isAreaVisible = true;
+                isErrorIconDisplayed = true;
+
+                String part1 = getResources().getString(R.string.room_unsent_messages_notification);
+                String part2 = getResources().getString(R.string.room_prompt_resent);
+
+                errorText = new SpannableString(part1 + part2);
+                errorText.setSpan(new UnderlineSpan(), part1.length(), part1.length() + part2.length(), 0);
+
+                mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mRoom.resendEvents(mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId()));
+                    }
+                });
+            } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
+                isAreaVisible = true;
+                isTypingIconDisplayed = true;
+                notificationsText = new SpannableString(mLatestTypingMessage);
+            }
+        }
+
+        mNotificationsArea.setVisibility(isAreaVisible? View.VISIBLE : View.INVISIBLE);
+
+        // typing
+        mTypingIcon.setVisibility(isTypingIconDisplayed? View.VISIBLE : View.INVISIBLE);
+        mNotificationsMessageTextView.setText(notificationsText);
+
+        // error
+        mErrorIcon.setVisibility(isErrorIconDisplayed? View.VISIBLE : View.INVISIBLE);
+        mErrorMessageTextView.setText(errorText);
+    }
+
     private void onRoomTypings() {
+        mLatestTypingMessage = null;
+
         ArrayList<String> typingUsers = mRoom.getTypingUsers();
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
-            mTypingArea.setVisibility(View.VISIBLE);
-
             String myUserId = mSession.getMyUserId();
 
             // get the room member names
@@ -1470,38 +1570,24 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
 
                 // check if the user is known and not oneself
-                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) &&  (null != member.displayname)) {
+                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) && (null != member.displayname)) {
                     names.add(member.displayname);
                 }
             }
 
-            String text = "";
-
             // nothing to display ?
             if (0 == names.size()) {
-                mTypingArea.setVisibility(View.INVISIBLE);
+                mLatestTypingMessage = null;
             } else if (1 == names.size()) {
-                text = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
+                mLatestTypingMessage = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
             } else if (2 == names.size()) {
-                text = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+                mLatestTypingMessage = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
             } else if (names.size() > 2) {
-                text = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
-            }
-
-            mTypingMessageTextView.setText(text);
-        } else {
-            mTypingArea.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    public void insertInTextEditor(String text) {
-        if (null != text) {
-            if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.append(text + ": ");
-            } else {
-                mEditText.getText().insert(mEditText.getSelectionStart(), text);
+                mLatestTypingMessage = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
             }
         }
+
+        refreshNotificationsArea();
     }
 
     //================================================================================

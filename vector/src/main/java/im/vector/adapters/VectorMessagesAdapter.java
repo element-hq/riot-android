@@ -179,31 +179,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-
-        // display the undeliverable at the end of the history
-        this.setNotifyOnChange(false);
-        ArrayList<MessageRow> undeliverableEvents = null;
-
-        for(int i = 0; i < getCount(); i++) {
-            MessageRow row = getItem(i);
-
-            if ((null != row.getEvent()) && row.getEvent().isUndeliverable()) {
-                if (null == undeliverableEvents) {
-                    undeliverableEvents = new ArrayList<MessageRow>();
-                }
-                row.getEvent().setOriginServerTs(System.currentTimeMillis());
-                undeliverableEvents.add(row);
-                this.remove(row);
-                i--;
-            }
-        }
-
-        if (null != undeliverableEvents) {
-            this.addAll(undeliverableEvents);
-        }
-
-        this.setNotifyOnChange(true);
-
         //  do not refresh the room when the application is in background
         // on large rooms, it drains a lot of battery
         if (!VectorApp.isAppInBackground()) {
