@@ -99,7 +99,7 @@
         </activity>
         <activity
             android:name="im.vector.activity.VectorHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_home" >
         </activity>
         <activity
@@ -120,7 +120,7 @@
             android:label="@string/title_activity_room"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

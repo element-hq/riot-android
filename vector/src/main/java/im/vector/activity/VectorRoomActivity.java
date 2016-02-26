@@ -39,12 +39,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
@@ -54,8 +55,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.squareup.okhttp.internal.Util;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -102,7 +101,7 @@ import java.util.TimerTask;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity {
+public class VectorRoomActivity extends MXCActionBarActivity implements VectorMessageListFragment.IListFragmentEventListener {
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     private static final boolean SHOW_ACTION_BAR_HEADER = true;
@@ -146,6 +145,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private static final int LARGE_IMAGE_SIZE  = 2000;
     private static final int MEDIUM_IMAGE_SIZE = 1000;
     private static final int SMALL_IMAGE_SIZE  = 500;
+    private static final int KEYBOARD_THRESHOLD_VIEW_SIZE = 1000;
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
@@ -169,6 +169,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private TextView mActionBarHeaderActiveMembers;
     private TextView mActionBarHeaderRoomTopic;
     private ImageView mActionBarHeaderRoomAvatar;
+    private boolean mIsKeyboardDisplayed;
+    // keyboard listener to detect when the keyboard is displayed
+    private ViewTreeObserver.OnGlobalLayoutListener mKeyboardListener;
 
     private View mTypingArea;
     private TextView mTypingMessageTextView;
@@ -194,7 +197,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
     private AlertDialog mImageSizesListDialog;
 
-    private MXEventListener mEventListener = new MXEventListener() {
+    private final MXEventListener mEventListener = new MXEventListener() {
 
         @Override
         public void onLeaveRoom(String roomId) {
@@ -216,8 +219,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                     if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-                        setTitle(VectorUtils.getRoomDisplayname(VectorRoomActivity.this, mSession, mRoom));
-                        updateMenuEntries();
+                        setTitle();
+                        updateRoomHeaderMembersStatus();
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
                         Log.d(LOG_TAG, "Updating room topic.");
@@ -227,6 +230,11 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                     else if (Event.EVENT_TYPE_TYPING.equals(event.type)) {
                         Log.d(LOG_TAG, "on room typing");
                         onRoomTypings();
+                    }
+                    // header room specific
+                    else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)) {
+                        Log.d(LOG_TAG, "Event room avatar");
+                        updateRoomHeaderAvatar();
                     }
 
                     if (!VectorApp.isAppInBackground()) {
@@ -242,12 +250,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 @Override
                 public void run() {
                     // set general room information
-                    setTitle(VectorUtils.getRoomDisplayname(VectorRoomActivity.this, mSession, mRoom));
-                    setTopic(mRoom.getTopic());
-
                     mVectorMessageListFragment.onInitialMessagesLoaded();
-
-                    updateMenuEntries();
+                    updateActionBarTitleAndTopic();
                 }
             });
         }
@@ -257,12 +261,24 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updateMenuEntries();
+                    updateActionBarTitleAndTopic();
                     mVectorMessageListFragment.onBingRulesUpdate();
                 }
             });
         }
     };
+
+    // *********************************************************************************************
+    // IListFragmentEventListener implementation
+    /**
+     * Listener on the underlying fragment list view.
+     * When the list view is scrolled, the header room view must be hidden.
+     */
+    @Override
+    public void onListTouch() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+    }
+    // *********************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,8 +297,14 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mActionBarHeaderRoomName = (TextView)findViewById(R.id.action_bar_header_room_title);
         mActionBarHeaderActiveMembers = (TextView)findViewById(R.id.action_bar_header_room_members);
         mActionBarHeaderRoomAvatar = (ImageView) mRoomHeaderView.findViewById(R.id.avatar_img);
-        //mRoomHeaderView.setVisibility(View.GONE);
-
+        // hide the header room as soon as the bootom layout (text edit zone) is touched
+        findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                return false;
+            }
+        });
 
         // set the default custom action bar layout,
         // that will be displayed from the custom action bar layout
@@ -334,11 +356,21 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
 
+        // hide the header room as soon as the message input text area is touched
+        mEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+            }
+        });
+
         mSendButton = (ImageButton) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                // hide the header room
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 String body = mEditText.getText().toString();
                 sendMessage(body);
                 mEditText.setText("");
@@ -349,6 +381,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // hide the header room
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 // TODO implement a dedicated call activity
                 // we do not get any design by now
             }
@@ -359,6 +393,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
             @Override
             public void onClick(View view) {
+                // hide the header room
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
                 FragmentManager fm = getSupportFragmentManager();
                 IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
 
@@ -396,6 +433,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         });
 
         mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
             public void afterTextChanged(android.text.Editable s) {
                 MXLatestChatMessageCache latestChatMessageCache = VectorRoomActivity.this.mLatestChatMessageCache;
 
@@ -411,9 +449,11 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 manageSendMoreButtons();
             }
 
+            @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
+            @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
@@ -443,10 +483,6 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         }
-
-        // set general room information
-        setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
-        setTopic(mRoom.getTopic());
 
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
         mMediasCache = Matrix.getInstance(this).getMediasCache();
@@ -527,6 +563,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         // listen for room name or topic changes
         mRoom.removeEventListener(mEventListener);
+
+        // remove listener on keyboard display
+        enableKeyboardShownListener(false);
     }
 
     @Override
@@ -552,6 +591,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
 
+        // listen to keyboard display
+        enableKeyboardShownListener(true);
+
         // reset the unread messages counter
         mRoom.sendReadReceipt();
 
@@ -566,7 +608,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         manageSendMoreButtons();
 
-        updateMenuEntries();
+        updateActionBarTitleAndTopic();
 
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
@@ -622,13 +664,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         }
     }
 
-    /**
-     * Refresh the calls buttons
-     */
-    private void updateMenuEntries() {
-        // set general room information
-        setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
-        setTopic(mRoom.getTopic());
+    private void updateActionBarTitleAndTopic() {
+        setTitle();
+        setTopic();
     }
 
     @Override
@@ -643,11 +681,15 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.ic_action_search_in_room) {
-            // pop to the home activity
-            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
-            intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            VectorRoomActivity.this.startActivity(intent);
+            try {
+                // pop to the home activity
+                Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
+                intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                VectorRoomActivity.this.startActivity(intent);
+            } catch (Exception e){
+                Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
+            }
         } else if (id ==  R.id.ic_action_room_settings) {
             // pop to the home activity
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
@@ -1086,15 +1128,11 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
     }
 
-	private void writeMediaUrl(Uri destUri)
-	{
-		try{
-			ParcelFileDescriptor pfd =
-				this.getContentResolver().
-                		openFileDescriptor(destUri, "w");
+    private void writeMediaUrl(Uri destUri) {
+        try {
+            ParcelFileDescriptor pfd = this.getContentResolver().openFileDescriptor(destUri, "w");
 
-			FileOutputStream fileOutputStream =
-                           new FileOutputStream(pfd.getFileDescriptor());
+            FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
 
             File sourceFile = mMediasCache.mediaCacheFile(mPendingMediaUrl, mPendingMimeType);
 
@@ -1106,14 +1144,14 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 fileOutputStream.write(buffer, 0, len);
             }
 
-			fileOutputStream.close();
-			pfd.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            fileOutputStream.close();
+            pfd.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     //================================================================================
     // typing
@@ -1123,7 +1161,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
      * send a typing event notification
      * @param isTyping typing param
      */
-    void handleTypingNotification(boolean isTyping) {
+    private void handleTypingNotification(boolean isTyping) {
         int notificationTimeoutMS = -1;
         if (isTyping) {
             // Check whether a typing event has been already reported to server (We wait for the end of the local timout before considering this new event)
@@ -1216,7 +1254,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         });
     }
 
-    void cancelTypingNotification() {
+    private void cancelTypingNotification() {
         if (0 != mLastTypingDate) {
             if (mTypingTimerTask != null) {
                 mTypingTimerTask.cancel();
@@ -1239,8 +1277,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     //================================================================================
 
     private class ImageSize {
-        public int mWidth;
-        public int mHeight;
+        public final int mWidth;
+        public final int mHeight;
 
         public ImageSize(int width, int height) {
             mWidth = width;
@@ -1462,7 +1500,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     /**
-     *
+     * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
@@ -1472,19 +1510,31 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
-    private void setTopic(String topic) {
-        if(null != mActionBarCustomTopic) {
-            if(TextUtils.isEmpty(topic)) {
+    /**
+     * Set the topic value contained in the Room object.
+     */
+    private void setTopic() {
+        if (null != mRoom) {
+            String topicValue = mRoom.getTopic();
+            setTopic(topicValue);
+        }
+    }
+
+    private void setTopic(String aTopicValue){
+        // update the topic of the room header
+        updateRoomHeaderTopic();
+
+        // update the action bar topic anyway
+        mActionBarCustomTopic.setText(aTopicValue);
+
+        // set the visibility of topic on the custom action bar only
+        // if header room view is gone, otherwise skipp it
+        if (View.GONE == mRoomHeaderView.getVisibility()) {
+            // topic is only displayed if its content is not empty
+            if (TextUtils.isEmpty(aTopicValue))
                 mActionBarCustomTopic.setVisibility(View.GONE);
-            } else {
-                // update custom action bar layout
+            else
                 mActionBarCustomTopic.setVisibility(View.VISIBLE);
-                mActionBarCustomTopic.setText(topic);
-            }
-        } else {
-            if (null != this.getSupportActionBar()) {
-                this.getSupportActionBar().setSubtitle(topic);
-            }
         }
     }
 
@@ -1495,7 +1545,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         }
     }
 
-    private void refreshRoomHeaderAvatar() {
+    private void updateRoomHeaderAvatar() {
         VectorUtils.loadRoomAvatar(this, mSession, mActionBarHeaderRoomAvatar, mRoom);
     }
 
@@ -1555,7 +1605,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     /**
      * check if the text message is an IRC command.
      * If it is an IRC command, it is executed
-     * @param body
+     * @param body message to be parsed
      * @return true if body defines an IRC command
      */
     private boolean manageIRCCommand(String body) {
@@ -1673,8 +1723,21 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         return isIRCCmd;
     }
 
+    /**
+     * Create a custom action bar layout to process the room header view.
+     *
+     * This action bar layout will contain a title, a topic and an arrow.
+     * The arrow is updated (down/up) according to if the room header is
+     * displayed or not.
+     *
+     */
     private void setActionBarDefaultCustomLayout(){
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        // sanity check
+        if(null == actionBar){
+            return;
+        }
+
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
 
@@ -1687,15 +1750,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mActionBarCustomTitle = (TextView)findViewById(R.id.room_action_bar_title);
         mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
         mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
+        mIsKeyboardDisplayed = false;
 
-
-        // set the title with the room display name
-        if((null != mRoom) && (null != mSession)) {
-            setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
-            setTopic(mRoom.getTopic());
-        }
-
-        // add a click listener and the whole layout to toggle the header view display
+        // add click listener on custom action bar to display/hide the header view
         customLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1714,12 +1771,12 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             }
         });
 
+        // add touch listener on the header view itself
         if (null != mRoomHeaderView) {
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     // return value:  true if the listener has consumed the event, false otherwise.
-                    Log.w("VectorRoomActivity", "## setOnTouchListener() caught!");
                     enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                     return true;
                 }
@@ -1729,15 +1786,22 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     /**
-     * Wrapper around the custom action bar title.
-     * @param aNewTitle title to set
+     * Set the title value in the action bar and in the
+     * room header layout
      */
-    @Override
-    public void setTitle(CharSequence aNewTitle){
-        if(null != mActionBarCustomTitle) {
-            mActionBarCustomTitle.setText(aNewTitle);
-        } else {
-            super.setTitle(aNewTitle);
+    private void setTitle(){
+        if((null != mSession) && (null != mRoom)) {
+            String titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
+
+            // set action bar title
+            if (null != mActionBarCustomTitle) {
+                mActionBarCustomTitle.setText(titleToApply);
+            } else {
+                setTitle(titleToApply);
+            }
+            // set title in the room header (no matter if not displayed)
+            if (null != mActionBarHeaderRoomName)
+                mActionBarHeaderRoomName.setText(titleToApply);
         }
     }
 
@@ -1745,27 +1809,40 @@ public class VectorRoomActivity extends MXCActionBarActivity {
      * Update the UI content of the action bar header view
      */
     private void updateActionBarHeaderView() {
-        if((null == mRoom) || (null == mSession)) {
-            return;
-        }
-
         // update room avatar content
-        refreshRoomHeaderAvatar();
-        // update the room name and its topic
-        mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
-        String value = mRoom.getTopic();
-        if(TextUtils.isEmpty(mActionBarCustomTopic.getText())) {
-            mActionBarHeaderRoomTopic.setVisibility(View.GONE);
-        } else {
-            mActionBarHeaderRoomTopic.setVisibility(View.VISIBLE);
-            mActionBarHeaderRoomTopic.setText(value);
-        }
+        updateRoomHeaderAvatar();
 
-        // update the members status: "active members"/"members"
-        int members = mRoom.getMembers().size();
-        int activeMembers = mRoom.getActiveMembers().size();
-        value = this.getString(R.string.room_header_active_members, activeMembers, members);
-        mActionBarHeaderActiveMembers.setText(value);
+        // update the room name
+        mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
+
+        // update topic and members status
+        updateRoomHeaderTopic();
+        updateRoomHeaderMembersStatus();
+    }
+
+    private void updateRoomHeaderTopic() {
+        if((null != mActionBarCustomTopic) && (null != mRoom)) {
+            String value = mRoom.getTopic();
+
+            // if topic value is empty, just hide the topic TextView
+            if (TextUtils.isEmpty(value)) {
+                mActionBarHeaderRoomTopic.setVisibility(View.GONE);
+            } else {
+                mActionBarHeaderRoomTopic.setVisibility(View.VISIBLE);
+                mActionBarHeaderRoomTopic.setText(value);
+            }
+        }
+    }
+
+    private void updateRoomHeaderMembersStatus() {
+        String value;
+        if((null != mActionBarHeaderActiveMembers) && (null != mRoom)) {
+            // update the members status: "active members"/"members"
+            int members = mRoom.getMembers().size();
+            int activeMembers = mRoom.getActiveMembers().size();
+            value = getString(R.string.room_header_active_members, activeMembers, members);
+            mActionBarHeaderActiveMembers.setText(value);
+        }
     }
 
     /**
@@ -1773,8 +1850,12 @@ public class VectorRoomActivity extends MXCActionBarActivity {
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed){
-        if(SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
-            //mConsoleMessageListFragment.getView().setEnabled(false);
+
+        if(SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed){
+            if(true == mIsKeyboardDisplayed) {
+                Log.i(LOG_TAG, "## enableActionBarHeader(): action bar header canceled (keyboard is displayed)");
+                return;
+            }
 
             // hide the name and the topic in the action bar.
             // these items are hidden when the header view is opened
@@ -1789,17 +1870,47 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             mRoomHeaderView.setVisibility(View.VISIBLE);
 
         } else {
-            // show the name and the topic in the action bar.
-            mActionBarCustomTitle.setVisibility(View.VISIBLE);
-            // if the topic is empty, do not enable it
-            if(!TextUtils.isEmpty(mActionBarCustomTopic.getText())) {
-                mActionBarCustomTopic.setVisibility(View.VISIBLE);
-            }
+            // hide the room header only if it is displayed
+            if(View.VISIBLE== mRoomHeaderView.getVisibility()) {
+                // show the name and the topic in the action bar.
+                mActionBarCustomTitle.setVisibility(View.VISIBLE);
+                // if the topic is empty, do not show it
+                if (!TextUtils.isEmpty(mActionBarCustomTopic.getText())) {
+                    mActionBarCustomTopic.setVisibility(View.VISIBLE);
+                }
 
-            // hide the action bar header view and reset the arrow image (arrow reset to down)
-            mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
-            mRoomHeaderView.setVisibility(View.GONE);
+                // update title and topic (action bar)
+                updateActionBarTitleAndTopic();
+
+                // hide the action bar header view and reset the arrow image (arrow reset to down)
+                mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
+                mRoomHeaderView.setVisibility(View.GONE);
+            }
         }
+    }
+
+    private void enableKeyboardShownListener(boolean aIsListenerEnabled){
+        final View vectorActivityRoomView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);//findViewById(R.id.vector_room_root_layout);
+
+        if(null == mKeyboardListener) {
+            mKeyboardListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int rootHeight = vectorActivityRoomView.getRootView().getHeight();
+                    int height =  vectorActivityRoomView.getHeight();
+                    int heightDiff = rootHeight - height;
+                    if (heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE)
+                        mIsKeyboardDisplayed = true;
+                    else
+                        mIsKeyboardDisplayed = false;
+                }
+            };
+        }
+
+        if(aIsListenerEnabled)
+            vectorActivityRoomView.getViewTreeObserver().addOnGlobalLayoutListener(mKeyboardListener);
+        else
+            vectorActivityRoomView.getViewTreeObserver().removeOnGlobalLayoutListener(mKeyboardListener);
     }
 }
 

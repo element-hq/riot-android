@@ -142,6 +142,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     /**
      * Scroll the fragment to the bottom
      */
+    @Override
     public void scrollToBottom() {
         if (0 != mAdapter.getCount()) {
             mMessageListView.setSelection(mAdapter.getCount() - 1);
@@ -152,6 +153,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * Update the searched pattern.
      * @param pattern the pattern to find out. null to disable the search mode
      */
+    @Override
     public void searchPattern(final String pattern, final OnSearchResultListener onSearchResultListener) {
         // add the listener to list to warn when the search is done.
         if (null != onSearchResultListener) {
@@ -234,11 +236,13 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         }
     }
 
+    @Override
     public Boolean onRowLongClick(int position) {
         onContentClick(position);
         return true;
     }
 
+    @Override
     public void onContentClick(int position) {
         final MessageRow messageRow = mAdapter.getItem(position);
         final List<Integer> textIds = new ArrayList<>();
@@ -287,6 +291,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * @param position the cell position
      * @return true if managed
      */
+    @Override
     public Boolean onContentLongClick(int position) {
         return onRowLongClick(position);
     }

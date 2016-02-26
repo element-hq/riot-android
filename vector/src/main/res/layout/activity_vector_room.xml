@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/vector_room_root_layout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -169,6 +170,7 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
+
     <!-- room header displayed when the status bar title is pressed -->
     <!-- note: if the main parent layout is a FrameLayout, the action_bar_header
     layout will not intercept click events, and the underlying layout still
@@ -189,8 +191,8 @@
             android:layout_centerHorizontal="true">
 
             <include layout="@layout/vector_room_header_round_avatar"
-                android:layout_width="126dp"
-                android:layout_height="126dp"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
                 android:id="@+id/room_avatar"/>
         </RelativeLayout>
 
@@ -203,7 +205,8 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="20sp"
-            android:textColor="#FFFFFF"
+            android:text="a room name here"
+            android:textColor="@android:color/white"
             android:layout_marginTop="14dp" />
 
         <TextView
@@ -214,6 +217,7 @@
             android:layout_below="@id/action_bar_header_room_title"
             android:maxLines="3"
             android:ellipsize="end"
+            android:text="a topic here"
             android:textSize="14sp"
             android:textColor="#FFFFFF"
             android:layout_marginLeft="44dp"
@@ -228,12 +232,13 @@
             android:layout_below="@id/action_bar_header_room_topic"
             android:ellipsize="end"
             android:textSize="14sp"
-            android:textColor="#8b000000"
+            android:textColor="@color/vector_0_54_black_color"
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="19dp"/>
     </RelativeLayout>
+
 
     <ProgressBar
         android:id="@+id/loading_room_content_progress"
@@ -242,4 +247,5 @@
         android:layout_alignParentLeft="true"
         android:visibility="gone"
         android:indeterminate="true" />
+
 </RelativeLayout>
