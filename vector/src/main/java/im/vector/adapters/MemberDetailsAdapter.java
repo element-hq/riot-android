@@ -17,7 +17,6 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +24,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.MemberDetailsActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 
 /**
  * An adapter which can display room information.
@@ -138,7 +135,7 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
 
             // update the text colour: specific colour is required for the remove action
             int colourTxt = mContext.getResources().getColor(R.color.material_grey_900);
-            if(MemberDetailsActivity.ITEM_ACTION_REMOVE_FROM_ROOM == currentItem.mActionType) {
+            if(VectorMemberDetailsActivity.ITEM_ACTION_REMOVE_FROM_ROOM == currentItem.mActionType) {
                 colourTxt = mContext.getResources().getColor(R.color.vector_fuchsia_color);
             }
             viewHolder.mActionDescTextView.setTextColor(colourTxt);

@@ -47,8 +47,8 @@ import im.vector.util.VectorUtils;
 
 import java.util.Collection;
 
-public class MemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
-    private static final String LOG_TAG = "MemberDetailsActivity";
+public class VectorMemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
+    private static final String LOG_TAG = "VectorMemberDetailsActivity";
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
@@ -81,14 +81,14 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
-            MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+            VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     // check if the event is received for the current room
                     // check if there is a member update
                     if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type))) {
                         // update only if it is the current user
-                        MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if(checkRoomMemberStatus()) {
@@ -108,7 +108,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         public void onPresenceUpdate(Event event, final User user) {
             if (mMemberId.equals(user.user_id)) {
                 // Someone's presence has changed, reprocess the whole list
-                MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         updatePresenceInfoUi();
@@ -122,7 +122,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
          */
         @Override
         public void onPresencesSyncComplete() {
-            MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+            VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     updatePresenceInfoUi();
@@ -136,7 +136,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         @Override
         public void onMatrixError(MatrixError e) {
             if (MatrixError.FORBIDDEN.equals(e.errcode)) {
-                Toast.makeText(MemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
+                Toast.makeText(VectorMemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
             }
             updateUi();
         }
@@ -148,13 +148,13 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
 
         @Override
         public void onNetworkError(Exception e) {
-            Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             updateUi();
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
-            Toast.makeText(MemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             updateUi();
         }
     };
@@ -236,10 +236,10 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 case ITEM_ACTION_START_CHAT:
                     Log.d(LOG_TAG,"## performItemAction(): Start new room");
                     CommonActivityUtils.displaySnack(mActionItemsListView, "Start new room");
-                    MemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                    VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            CommonActivityUtils.goToOneToOneRoom(mSession, mMemberId, MemberDetailsActivity.this, roomActionsListener);
+                            CommonActivityUtils.goToOneToOneRoom(mSession, mMemberId, VectorMemberDetailsActivity.this, roomActionsListener);
                         }
                     });
                     break;

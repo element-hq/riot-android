@@ -44,7 +44,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.MemberDetailsActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.adapters.VectorRoomMembersAdapter;
 
 import java.util.Collection;
@@ -222,10 +222,10 @@ public class RoomMembersDialogFragment extends DialogFragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent startRoomInfoIntent = new Intent(activity, MemberDetailsActivity.class);
-                        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoomId);
-                        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, roomMember.getUserId());
-                        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        Intent startRoomInfoIntent = new Intent(activity, VectorMemberDetailsActivity.class);
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoomId);
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, roomMember.getUserId());
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         startActivity(startRoomInfoIntent);
                     }
                 });
