@@ -147,7 +147,7 @@
     <string name="choose_account">Choose account</string>
 
     <!-- image size selection -->
-    <string name="compression_options">What size should this be sent as?</string>
+    <string name="compression_options">Send as </string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Large</string>
     <string name="compression_opt_list_medium">Medium</string>
@@ -373,12 +373,15 @@
     <string name="room_details_room_name">Room Name</string>
     <string name="room_details_topic">Topic</string>
     <string name="room_details_people">People</string>
+    <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <string name="room_details_fail_to_update_topic">Fail to update the topic</string>
     <string name="room_details_fail_to_update_room_name">Fail to update the room name</string>
     <string name="room_details_with_updates">The updates will be lost : are you sure to leave ?</string>
     <string name="room_details_room_is_public">This room is public</string>
     <string name="room_details_room_is_private">This room is private</string>
+    <string name="room_details_selected">selected</string>
+    <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
 
     // Room display name
     <string name="room_displayname_invite_from">Invite from %s</string>
@@ -447,8 +450,10 @@
 
     <string name="settings_version">Version</string>
     <string name="settings_term_conditions">Terms &amp; conditions</string>
-    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy">Privacy</string>
     <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_room_privacy_label">Privacy</string>
+
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
@@ -460,6 +465,8 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
+    <string name="room_settings_pref_category">Room settings</string>
+    <string name="room_settings_room_photo">Room Photo</string>
 
     // Directory
     <string name="directory_title">Directory</string>

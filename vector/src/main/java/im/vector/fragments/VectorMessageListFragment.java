@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -72,6 +73,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
+    private static final String LOG_TAG = "VectorMessageListFragment";
 
     public interface IListFragmentEventListener{
         void onListTouch();
@@ -103,7 +105,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mHostActivityListener = (IListFragmentEventListener) aHostActivity;
         }
         catch(ClassCastException e) {
-            throw new ClassCastException(aHostActivity.toString() + " must implement IListFragmentEventListener");
+            // if host activity does not provide the implementation, just ignore it
+            Log.w(LOG_TAG,"## onAttach(): host activity does not implement IListFragmentEventListener");
+            mHostActivityListener = null;
         }
     }
 
@@ -600,17 +604,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_IMAGE;
+                info.mFileName = imageMessage.body;
                 info.mMediaUrl = imageMessage.url;
                 info.mRotationAngle = imageMessage.getRotation();
                 info.mOrientation = imageMessage.getOrientation();
                 info.mMimeType = imageMessage.getMimeType();
-                info.midentifier = row.getEvent().eventId;
+                info.mIdentifier = row.getEvent().eventId;
                 res.add(info);
             } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 VideoMessage videoMessage = (VideoMessage)message;
-
                 info.mMessageType = Message.MSGTYPE_VIDEO;
+                info.mFileName = videoMessage.body;
                 info.mMediaUrl = videoMessage.url;
                 info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
                 info.mMimeType = videoMessage.getVideoMimeType();

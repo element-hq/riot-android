@@ -13,8 +13,13 @@
             android:title="@string/room_sliding_menu_settings"/>
 
         <item
+            android:id="@+id/sliding_menu_send_bug_report"
+            android:icon="@drawable/ic_material_bug_report"
+            android:title="@string/send_bug_report"/>
+
+        <item
             android:id="@+id/sliding_menu_logout"
-            android:icon="@drawable/vector_leave_room"
+            android:icon="@drawable/ic_material_exit_to_app"
             android:title="@string/action_logout"/>
     </group>
 

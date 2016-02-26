@@ -410,7 +410,6 @@ public class CallViewActivity extends FragmentActivity {
             mCall.removeListener(mListener);
         }
         VectorApp.setCurrentActivity(null);
-
     }
 
     @Override

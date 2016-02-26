@@ -3,7 +3,9 @@ package im.vector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
@@ -14,6 +16,8 @@ import org.matrix.androidsdk.data.MXFileStore;
 import org.matrix.androidsdk.data.MXMemoryStore;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
@@ -40,12 +44,18 @@ public class Matrix {
 
     public boolean mHasBeenDisconnected = false;
 
+    // network event manager
+    private NetworkConnectivityReceiver mNetworkConnectivityReceiver;
+
     protected Matrix(Context appContext) {
         mAppContext = appContext.getApplicationContext();
         mLoginStorage = new LoginStorage(mAppContext);
         mMXSessions = new ArrayList<MXSession>();
         mGcmRegistrationManager = new GcmRegistrationManager(mAppContext);
         RageShake.getInstance().start(mAppContext);
+
+        mNetworkConnectivityReceiver = new NetworkConnectivityReceiver();
+        appContext.registerReceiver(mNetworkConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     public synchronized static Matrix getInstance(Context appContext) {
@@ -260,22 +270,10 @@ public class Matrix {
         return res;
     }
 
-    /**
-     * Refresh the sessions push rules.
-     */
-    public void refreshPushRules() {
-        ArrayList<MXSession> sessions = null;
 
-        synchronized (this) {
-            sessions = getSessions();
-        }
-
-        for(MXSession session : sessions) {
-            if (null != session.getDataHandler()) {
-                session.getDataHandler().refreshPushRules();
-            }
-        }
-    }
+    //==============================================================================================================
+    // Session management
+    //==============================================================================================================
 
     /**
      * Clear a session.
@@ -384,4 +382,55 @@ public class Matrix {
         return mGcmRegistrationManager;
     }
 
+    //==============================================================================================================
+    // Push rules management
+    //==============================================================================================================
+
+    /**
+     * Refresh the sessions push rules.
+     */
+    public void refreshPushRules() {
+        ArrayList<MXSession> sessions = null;
+
+        synchronized (this) {
+            sessions = getSessions();
+        }
+
+        for(MXSession session : sessions) {
+            if (null != session.getDataHandler()) {
+                session.getDataHandler().refreshPushRules();
+            }
+        }
+    }
+
+    //==============================================================================================================
+    // Network events manager
+    //==============================================================================================================
+
+    /**
+     * Add a network event listener.
+     * @param networkEventListener the event listener to add
+     */
+    public void addNetworkEventListener(final IMXNetworkEventListener networkEventListener) {
+        if ((null != mNetworkConnectivityReceiver) && (null != networkEventListener)) {
+            mNetworkConnectivityReceiver.addEventListener(networkEventListener);
+        }
+    }
+
+    /**
+     * Remove a network event listener.
+     * @param networkEventListener the event listener to remove
+     */
+    public void removeNetworkEventListener(final IMXNetworkEventListener networkEventListener) {
+        if ((null != mNetworkConnectivityReceiver) && (null != networkEventListener)) {
+            mNetworkConnectivityReceiver.removeEventListener(networkEventListener);
+        }
+    }
+
+    /**
+     * @return true if the device is connected to a data network
+     */
+    public boolean isConnected() {
+        return mNetworkConnectivityReceiver.isConnected();
+    }
 }

@@ -26,7 +26,25 @@
             android:layout_gravity="center_vertical"
             android:paddingBottom="5dp">
 
-            <include layout="@layout/vector_message_sender"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/vector_message_sender"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/vector_message_timestamp"
+                        android:id="@+id/message_timestamp_layout_right"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,9 +70,6 @@
                         android:id="@+id/messagesAdapter_body"/>
 
                 </FrameLayout>
-
-                <include layout="@layout/vector_message_timestamp"
-                    android:id="@+id/message_timestamp_layout_right"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

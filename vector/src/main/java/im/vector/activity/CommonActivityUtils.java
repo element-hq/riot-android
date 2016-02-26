@@ -78,7 +78,7 @@ public class CommonActivityUtils {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
             ArrayList<String> matrixIds = new ArrayList<String>();
-            matrixIds.add(session.getMyUser().userId);
+            matrixIds.add(session.getMyUserId());
             eventStreamService.stopAccounts(matrixIds);
 
             // Publish to the server that we're now offline
@@ -447,31 +447,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Check if the userId format is valid with the matrix standard.
-     * It should start with a @ and ends with the home server suffix.
-     *
-     * @param userId           the userID to check
-     * @param homeServerSuffix the home server suffix
-     * @return the checked user ID
-     */
-    public static String checkUserId(String userId, String homeServerSuffix) {
-        String res = userId;
-
-        if (res.length() > 0) {
-            res = res.trim();
-            if (!res.startsWith("@")) {
-                res = "@" + res;
-            }
-
-            if (res.indexOf(":") < 0) {
-                res += homeServerSuffix;
-            }
-        }
-
-        return res;
-    }
-
-    /**
      * Offer to send some dedicated intent data to an existing room
      * @param fromActivity the caller activity
      * @param intent the intent param
@@ -570,6 +545,31 @@ public class CommonActivityUtils {
                     }
                 });
         builderSingle.show();
+    }
+
+    /**
+     * Check if the userId format is valid with the matrix standard.
+     * It should start with a @ and ends with the home server suffix.
+     *
+     * @param userId           the userID to check
+     * @param homeServerSuffix the home server suffix
+     * @return the checked user ID
+     */
+    public static String checkUserId(String userId, String homeServerSuffix) {
+        String res = userId;
+
+        if (res.length() > 0) {
+            res = res.trim();
+            if (!res.startsWith("@")) {
+                res = "@" + res;
+            }
+
+            if (res.indexOf(":") < 0) {
+                res += homeServerSuffix;
+            }
+        }
+
+        return res;
     }
 
     /**

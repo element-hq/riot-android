@@ -16,6 +16,7 @@
 
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -40,7 +41,10 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.fragments.VectorRecentsListFragment;
+import im.vector.services.EventStreamService;
+import im.vector.util.RageShake;
 import im.vector.util.VectorUtils;
 
 import java.util.Collection;
@@ -164,6 +168,18 @@ public class VectorHomeActivity extends AppCompatActivity {
             mRecentsListFragment = VectorRecentsListFragment.newInstance(mSession.getCredentials().userId, R.layout.fragment_vector_recents_list);
             fm.beginTransaction().add(R.id.home_recents_list_anchor, mRecentsListFragment, TAG_FRAGMENT_RECENTS_LIST).commit();
         }
+
+        // clear the notification if they are not anymore valid
+        // i.e the event has been read from another client
+        // or deleted
+        MXEventListener eventListener = new MXEventListener() {
+            @Override
+            public void onLiveEventsChunkProcessed() {
+                EventStreamService.checkDisplayedNotification();
+            }
+        };
+
+        mSession.getDataHandler().addListener(eventListener);
     }
 
     @Override
@@ -177,6 +193,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         if (mSession.isActive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
+
+        VectorApp.setCurrentActivity(null);
     }
 
     @Override
@@ -205,6 +223,8 @@ public class VectorHomeActivity extends AppCompatActivity {
         };
 
         mSession.getDataHandler().addListener(mEventsListener);
+
+        VectorApp.setCurrentActivity(this);
 
         refreshSlidingMenu();
     }
@@ -292,8 +312,13 @@ public class VectorHomeActivity extends AppCompatActivity {
                     case R.id.sliding_menu_settings: {
                         // launch the settings activity
                         final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
-                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUser().userId);
+                        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         VectorHomeActivity.this.startActivity(settingsIntent);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_send_bug_report: {
+                        RageShake.getInstance().sendBugReport();
                         break;
                     }
 
@@ -347,11 +372,9 @@ public class VectorHomeActivity extends AppCompatActivity {
         displaynameTextView.setText(mSession.getMyUser().displayname);
 
         TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
-        userIdTextView.setText(mSession.getMyUser().userId);
+        userIdTextView.setText(mSession.getMyUserId());
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
-        String avatarUrl = mSession.getMyUser().getAvatarUrl();
-        VectorUtils.setMemberAvatar(mainAvatarView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-        mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mainAvatarView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+        VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
     }
 }

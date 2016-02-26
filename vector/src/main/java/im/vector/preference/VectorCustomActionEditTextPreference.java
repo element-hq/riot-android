@@ -20,14 +20,11 @@ import android.content.Context;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 
-import im.vector.R;
-
-public class VectorCustomActionEditTextPreference extends VectorEditTextPreference {
+// create an EditTextPreference with a dedicated click method
+// Android displays by an edit text dialog by default
+// With this class, a custom behaviour can be designed.
+public class VectorCustomActionEditTextPreference extends EditTextPreference {
 
     public VectorCustomActionEditTextPreference(Context context) {
         super(context);
@@ -43,7 +40,7 @@ public class VectorCustomActionEditTextPreference extends VectorEditTextPreferen
 
     public void performClick(PreferenceScreen preferenceScreen) {
         // call only the click listener
-        if (getOnPreferenceClickListener() != null && getOnPreferenceClickListener().onPreferenceClick(this)) {
+        if (getOnPreferenceClickListener() != null) {
             getOnPreferenceClickListener().onPreferenceClick(this);
         }
     }

@@ -90,12 +90,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
-                R.layout.adapter_item_vector_message_text,
-                R.layout.adapter_item_vector_message_image,
-                R.layout.adapter_item_vector_message_notice,
-                R.layout.adapter_item_vector_message_emote,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_image_video,
+                R.layout.adapter_item_vector_message_text_emote_notice,
+                R.layout.adapter_item_vector_message_text_emote_notice,
                 R.layout.adapter_item_vector_message_file,
-                R.layout.adapter_item_vector_message_video,
+                R.layout.adapter_item_vector_message_image_video,
                 mediasCache);
 
         // for dispatching data to add to the adapter we need to be on the main thread
@@ -169,16 +169,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             url = member.avatarUrl;
         }
 
-        // define a default avatar
         if (null != member) {
-            VectorUtils.setMemberAvatar(avatarView, member.getUserId(), member.displayname);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), member.displayname);
         } else {
-            VectorUtils.setMemberAvatar(avatarView, userId, null);
-        }
-
-        if (!TextUtils.isEmpty(url)) {
-            int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), avatarView, url, size);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, null);
         }
     }
 
@@ -336,16 +330,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             imageView.setTag(null);
 
             if (null != member) {
-                VectorUtils.setMemberAvatar(imageView, member.getUserId(), member.displayname);
+                VectorUtils.loadRoomMemberAvatar(mContext, mSession, imageView, member);
             } else {
                 // should never happen
-                imageView.setImageResource(org.matrix.androidsdk.R.drawable.ic_contact_picture_holo_light);
+                VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);
             }
-
-            if ((null != member) && (null != member.avatarUrl)) {
-                loadSmallAvatar(imageView, member.avatarUrl);
-            }
-
             // FIXME expected behaviour when the avatar is tapped.
         }
 
@@ -383,7 +372,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } catch (Exception e) {
         }
 
-        boolean isSelfMessage = TextUtils.equals(event.getSender(), mSession.getMyUser().userId);
+        boolean isSelfMessage = TextUtils.equals(event.getSender(), mSession.getMyUserId());
 
         Menu menu = popup.getMenu();
 
@@ -533,6 +522,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         });
     }
 
+    protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
+        if (shouldBeMerged) {
+            shouldBeMerged = null == headerMessage(position);
+        }
+
+        return shouldBeMerged;
+    }
+
     @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
         MessageRow row = getItem(position);
@@ -572,6 +569,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 TextView headerText = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_header_text);
                 headerText.setText(header);
                 headerLayout.setVisibility(View.VISIBLE);
+
+                View topHeaderMargin = headerLayout.findViewById(R.id.messagesAdapter_message_header_top_margin);
+                topHeaderMargin.setVisibility((0 == position) ? View.GONE : View.VISIBLE);
             } else {
                 headerLayout.setVisibility(View.GONE);
             }
@@ -584,7 +584,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             TextView tsTextView = (TextView)rightTsTextLayout.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
 
             if (null != tsTextView) {
-                tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.INVISIBLE);
+                tsTextView.setVisibility((((position + 1) == this.getCount()) || mIsSearchMode) ? View.VISIBLE : View.GONE);
             }
         }
 

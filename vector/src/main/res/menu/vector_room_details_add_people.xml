@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity">
+
+    <item android:id="@+id/ic_action_room_details_delete"
+        android:title="@string/delete"
+        android:icon="@drawable/ic_material_delete_white"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/ic_action_room_details_edition_mode"
+        android:title="@string/delete"
+        android:icon="@drawable/ic_material_create_white"
+        app:showAsAction="always"/>
+</menu>

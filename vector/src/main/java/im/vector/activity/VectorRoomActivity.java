@@ -18,10 +18,12 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -179,9 +181,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private String mPendingMimeType;
     private String mPendingFilename;
 
-    private MenuItem mSearchMenuItem = null;
-    private MenuItem mSettingsMenuItem = null;
-
     private String mCallId = null;
 
     private static String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
@@ -195,6 +194,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private int mScrollToIndex = -1;
 
     private Boolean mIgnoreTextUpdate = false;
+
+    private AlertDialog mImageSizesListDialog;
 
     private final MXEventListener mEventListener = new MXEventListener() {
 
@@ -230,7 +231,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                         Log.d(LOG_TAG, "on room typing");
                         onRoomTypings();
                     }
-                    // header room spcific
+                    // header room specific
                     else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)) {
                         Log.d(LOG_TAG, "Event room avatar");
                         updateRoomHeaderAvatar();
@@ -413,7 +414,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 };
 
 
-                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, VectorRoomActivity.this.getResources().getColor(R.color.vector_title_color));
+                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, VectorRoomActivity.this.getResources().getColor(R.color.vector_text_black_color));
                 fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                     @Override
                     public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -588,7 +589,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
-        EventStreamService.cancelNotificationsForRoomId(mRoom.getRoomId());
+        EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
 
         // listen to keyboard display
         enableKeyboardShownListener(true);
@@ -672,21 +673,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_room, menu);
-
-        mSettingsMenuItem = menu.findItem(R.id.ic_action_room_settings);
-        mSearchMenuItem = menu.findItem(R.id.ic_action_search_in_room);
-
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        // restore the standard action bar
-        if (!mSearchMenuItem.isVisible()) {
-            hideTextSearchActionBar();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -694,7 +681,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         int id = item.getItemId();
 
         if (id == R.id.ic_action_search_in_room) {
-            showTextSearchActionBar();
+            try {
+                // pop to the home activity
+                Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
+                intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                VectorRoomActivity.this.startActivity(intent);
+            } catch (Exception e){
+                Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
+            }
         } else if (id ==  R.id.ic_action_room_settings) {
             // pop to the home activity
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
@@ -1278,166 +1273,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     //================================================================================
-    // Search
-    //================================================================================
-
-    private void showTextSearchActionBar() {
-
-        // hide the action bar header, just in case..
-        if (null != mRoomHeaderView) {
-            mRoomHeaderView.setVisibility(View.GONE);
-        }
-        // replace the action bar
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        // sanity check
-        if(null == actionBar){
-            return;
-        }
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
-
-        android.support.v7.app.ActionBar.LayoutParams layout = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
-        actionBar.setCustomView(actionBarLayout, layout);
-
-        // display the search background
-        final View searchBackgroundView = findViewById(R.id.search_background_imageview);
-        searchBackgroundView.setVisibility(View.VISIBLE);
-
-        // hide the text edit
-        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
-        roomBottomLayout.setVisibility(View.GONE);
-
-        final View noResultTextView = findViewById(R.id.search_no_result_textview);
-        noResultTextView.setVisibility(View.GONE);
-
-        // and the vector specific items
-        View view = findViewById(R.id.bottom_separator);
-        view.setVisibility(View.GONE);
-        view = findViewById(R.id.room_notifications_area);
-        view.setVisibility(View.GONE);
-        view = findViewById(R.id.room_notification_separator);
-        view.setVisibility(View.GONE);
-
-        final View progressBackground =  findViewById(R.id.medias_processing_progress_background);
-        final View progress = findViewById(R.id.medias_processing_progress);
-
-        progressBackground.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
-
-        // the vector design expects that the result content is empty
-        // when there is no pattern.
-        // By default, the SDK displays all the messages
-        // so hide it until there is something to search
-        mVectorMessageListFragment.getView().setVisibility(View.INVISIBLE);
-
-        // add text listener
-        final EditText editText = (EditText) actionBarLayout.findViewById(R.id.room_action_bar_edit_text);
-
-        mEditText.clearFocus();
-
-        actionBarLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                editText.requestFocus();
-
-                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                im.showSoftInput(editText, 0);
-            }
-        }, 100);
-
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-                    progressBackground.setVisibility(View.VISIBLE);
-                    progress.setVisibility(View.VISIBLE);
-
-                    mVectorMessageListFragment.searchPattern(editText.getText().toString(), new MatrixMessageListFragment.OnSearchResultListener() {
-                        @Override
-                        public void onSearchSucceed(int nbrMessages) {
-                            progressBackground.setVisibility(View.GONE);
-                            progress.setVisibility(View.GONE);
-
-                            // the background search is displayed until a search is triggered.
-                            mVectorMessageListFragment.getView().setVisibility((0 != nbrMessages) ? View.VISIBLE : View.INVISIBLE);
-                            searchBackgroundView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
-                            noResultTextView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
-                        }
-
-                        @Override
-                        public void onSearchFailed() {
-                            progressBackground.setVisibility(View.GONE);
-                            progress.setVisibility(View.GONE);
-
-                            // the background search is displayed until a search is triggered.
-                            searchBackgroundView.setVisibility(View.GONE);
-                            noResultTextView.setVisibility(View.VISIBLE);
-                            // TODO : what is it expected
-                        }
-                    });
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        if (null != mSettingsMenuItem) {
-            mSettingsMenuItem.setVisible(false);
-        }
-
-        if (null != mSearchMenuItem) {
-            mSearchMenuItem.setVisible(false);
-        }
-    }
-
-    private void hideTextSearchActionBar() {
-        // set back the action bar custom layout
-        setActionBarDefaultCustomLayout();
-
-        if (null != mSettingsMenuItem) {
-            mSettingsMenuItem.setVisible(true);
-        }
-
-        if (null != mSearchMenuItem) {
-            mSearchMenuItem.setVisible(true);
-        }
-
-        // hide the search background
-        View searchBackgroundView = findViewById(R.id.search_background_imageview);
-        searchBackgroundView.setVisibility(View.GONE);
-
-        // show the text edit
-        View roomBottomLayout = findViewById(R.id.room_bottom_layout);
-        roomBottomLayout.setVisibility(View.VISIBLE);
-
-        View noResultTextView = findViewById(R.id.search_no_result_textview);
-        noResultTextView.setVisibility(View.GONE);
-
-        // and the vector specific items
-        View view = findViewById(R.id.bottom_separator);
-        view.setVisibility(View.VISIBLE);
-        view = findViewById(R.id.room_notifications_area);
-        view.setVisibility(View.INVISIBLE);
-        view = findViewById(R.id.room_notification_separator);
-        view.setVisibility(View.VISIBLE);
-
-        mVectorMessageListFragment.getView().setVisibility(View.VISIBLE);
-
-        View progressBackground =  findViewById(R.id.medias_processing_progress_background);
-        View progress = findViewById(R.id.medias_processing_progress);
-        progressBackground.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
-
-        // there is no more searched pattern
-        mVectorMessageListFragment.searchPattern(null, null);
-
-        updateActionBarTitleAndTopic();
-    }
-
-    //================================================================================
     // Image resizing
     //================================================================================
 
@@ -1523,54 +1358,43 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             fragment.dismissAllowingStateLoss();
                         }
 
-                        final ArrayList<ImageCompressionDescription> textsList = new ArrayList<ImageCompressionDescription>();
+                        final ArrayList<String> textsList = new ArrayList<String>();
                         final ArrayList<ImageSize> sizesList = new ArrayList<ImageSize>();
 
-                        ImageCompressionDescription description = new ImageCompressionDescription();
-                        description.mCompressionText = getString(R.string.compression_opt_list_original);
-                        description.mCompressionInfoText = fullImageSize.mWidth + "x" + fullImageSize.mHeight + " (" + android.text.format.Formatter.formatFileSize(this, fileSize) + ")";
-
-                        textsList.add(description);
+                        textsList.add( getString(R.string.compression_opt_list_original) + ": " + android.text.format.Formatter.formatFileSize(this, fileSize) + "(" + fullImageSize.mWidth + "x" + fullImageSize.mHeight + ")");
                         sizesList.add(fullImageSize);
 
                         if (null != largeImageSize) {
                             int estFileSize = largeImageSize.mWidth * largeImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            description = new ImageCompressionDescription();
-                            description.mCompressionText = getString(R.string.compression_opt_list_large);
-                            description.mCompressionInfoText = largeImageSize.mWidth + "x" + largeImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(this, estFileSize) + ")";
-
-                            textsList.add(description);
+                            textsList.add( getString(R.string.compression_opt_list_large) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + largeImageSize.mWidth + "x" + largeImageSize.mHeight + ")");
                             sizesList.add(largeImageSize);
                         }
 
                         if (null != mediumImageSize) {
                             int estFileSize = mediumImageSize.mWidth * mediumImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            description = new ImageCompressionDescription();
-                            description.mCompressionText = getString(R.string.compression_opt_list_medium);
-                            description.mCompressionInfoText = mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(this, estFileSize) + ")";
-
-                            textsList.add(description);
+                            textsList.add( getString(R.string.compression_opt_list_medium) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + ")");
                             sizesList.add(mediumImageSize);
                         }
 
                         if (null != smallImageSize) {
                             int estFileSize = smallImageSize.mWidth * smallImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            description = new ImageCompressionDescription();
-                            description.mCompressionText = getString(R.string.compression_opt_list_small);
-                            description.mCompressionInfoText = smallImageSize.mWidth + "x" + smallImageSize.mHeight + " (~" + android.text.format.Formatter.formatFileSize(VectorRoomActivity.this, estFileSize) + ")";
-
-                            textsList.add(description);
+                            textsList.add(getString(R.string.compression_opt_list_small) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + smallImageSize.mWidth + "x" + smallImageSize.mHeight + ")");
                             sizesList.add(smallImageSize);
                         }
 
-                        fragment = ImageSizeSelectionDialogFragment.newInstance(textsList);
-                        fragment.setListener(new ImageSizeSelectionDialogFragment.ImageSizeListener() {
+                        String[] stringsArray = new String[textsList.size()];
+
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                        alert.setTitle(getString(im.vector.R.string.compression_options));
+                        alert.setSingleChoiceItems(textsList.toArray(stringsArray), -1, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onSelected(int pos) {
-                                final int fPos = pos;
+                            public void onClick(DialogInterface dialog, int which) {
+                                final int fPos = which;
+
+                                mImageSizesListDialog.dismiss();
 
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
@@ -1624,7 +1448,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             }
                         });
 
-                        fragment.show(fm, TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
+                        mImageSizesListDialog = alert.show();
+                        mImageSizesListDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                mImageSizesListDialog = null;
+                            }
+                        });
+
                         sendMedia = false;
                     }
 
@@ -1710,29 +1541,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private void refreshSelfAvatar() {
         // sanity check
         if (null != mAvatarImageView) {
-            String avatarUrl = mSession.getMyUser().getAvatarUrl();
 
-            VectorUtils.setMemberAvatar(mAvatarImageView, mSession.getMyUser().userId, mSession.getMyUser().displayname);
-            mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mAvatarImageView, avatarUrl, getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
         }
     }
 
     private void updateRoomHeaderAvatar() {
-        VectorUtils.setRoomAvatar(mActionBarHeaderRoomAvatar, mSession, mRoom, this);
+        VectorUtils.loadRoomAvatar(this, mSession, mActionBarHeaderRoomAvatar, mRoom);
     }
 
     private void onRoomTypings() {
         ArrayList<String> typingUsers = mRoom.getTypingUsers();
 
-        // if there is a penting search, hide/show the typing message
-        if (!mSearchMenuItem.isVisible()) {
-            return;
-        }
-
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             mTypingArea.setVisibility(View.VISIBLE);
 
-            String myUserId = mSession.getMyUser().userId;
+            String myUserId = mSession.getMyUserId();
 
             // get the room member names
             ArrayList<String> names = new ArrayList<String>();
