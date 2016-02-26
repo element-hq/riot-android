@@ -17,17 +17,16 @@
 package im.vector.adapters;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
@@ -40,18 +39,15 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.User;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
-import im.vector.util.UIUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
@@ -66,6 +62,20 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
          * The user taps on "Leave" button
          */
         void onLeaveClick();
+
+        /**
+         * The user selects / deselects a member.
+         * @param userId
+         */
+        void onSelectUserId(String userId);
+
+        /**
+         * The user taps on a cell.
+         * The standard onClickListener might not work because
+         * the upper view is scrollable.
+         * @param position
+         */
+        void onClick(int position);
     }
 
     //
@@ -80,10 +90,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private Room mRoom;
     private int mLayoutResourceId;
 
+    private boolean mIsMultiSelectionMode;
+    private ArrayList<String> mSelectedUserIds = new ArrayList<String>();
+
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
     ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
+
+    ParticipantAdapterItem mFirstEntry;
 
     OnParticipantsListener mOnParticipantsListener = null;
 
@@ -97,7 +112,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param roomId the room id.
      * @param mediasCache the medias cache.
      */
-    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, MXMediasCache mediasCache) {
+    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId, boolean multiSelectionMode, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
 
         mContext = context;
@@ -115,23 +130,37 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         if (null == mRoom) {
             MyUser myUser = mSession.getMyUser();
 
-            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.getAvatarUrl(), myUser.userId);
+            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.getAvatarUrl(), myUser.user_id);
             this.add(item);
             mCreationParticipantsList.add(item);
         }
+
+        // display check box to select multiple items
+        mIsMultiSelectionMode = multiSelectionMode;
+    }
+
+
+    /**
+     * Search a pattern in the known members list.
+     * @param pattern the pattern to search
+     */
+    public void setSearchedPattern(String pattern) {
+        setSearchedPattern(pattern, null);
     }
 
     /**
-     *  search management
+     * Search a pattern in the known members list.
+     * @param pattern the pattern to search
+     * @param firstEntry the entry to display in the results list.
      */
-    public void setSearchedPattern(String pattern) {
+    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry) {
         if (null == pattern) {
             pattern = "";
         }
 
         if (!pattern.trim().equals(mPattern)) {
             mPattern = pattern.trim().toLowerCase();
-            refresh();
+            refresh(firstEntry);
         }
     }
 
@@ -172,6 +201,21 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             mUnusedParticipants.add(participant);
             this.remove(participant);
         }
+    }
+
+    /**
+     * @return the list of selected user ids
+     */
+    public ArrayList<String> getSelectedUserIds() {
+        return mSelectedUserIds;
+    }
+
+    /**
+     * @param isMultiSelectionMode the new selection mode
+     */
+    public void setMultiSelectionMode(boolean isMultiSelectionMode) {
+        mIsMultiSelectionMode = isMultiSelectionMode;
+        mSelectedUserIds = new ArrayList<String>();
     }
 
     /**
@@ -230,9 +274,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         Collection<User> users = mSession.getDataHandler().getStore().getUsers();
         for(User user : users) {
             // accepted User ID or still active users
-            if (idsToIgnore.indexOf(user.userId) < 0) {
-                unusedParticipants.add(new ParticipantAdapterItem(user.userId, null, user.userId));
-                idsToIgnore.add(user.userId);
+            if (idsToIgnore.indexOf(user.user_id) < 0) {
+                unusedParticipants.add(new ParticipantAdapterItem(user.user_id, null, user.user_id));
+                idsToIgnore.add(user.user_id);
             }
         }
 
@@ -279,9 +323,17 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     };
 
     /**
-     * refresh the list
+     * refresh the display
      */
     public void refresh() {
+        refresh(null);
+    }
+
+    /**
+     * Refrehs the display.
+     * @param firstEntry the first entry in the result.
+     */
+    public void refresh(ParticipantAdapterItem firstEntry) {
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -293,7 +345,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
 
                 Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
-                String myUserId = mSession.getMyUser().userId;
+                String myUserId = mSession.getMyUserId();
                 PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
                 for (RoomMember member : activeMembers) {
@@ -334,6 +386,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
 
             Collections.sort(nextMembersList, ParticipantAdapterItem.alphaComparator);
+
+            if (null != firstEntry) {
+                nextMembersList.add(0, firstEntry);
+
+                // avoid multiple definitions
+                for(int pos = 1; pos < nextMembersList.size(); pos++) {
+                    ParticipantAdapterItem item = nextMembersList.get(pos);
+
+                    if (TextUtils.equals(item.mUserId, firstEntry.mUserId)) {
+                        nextMembersList.remove(pos);
+                        break;
+                    }
+                }
+
+                mFirstEntry = firstEntry;
+            }
         }
 
         this.setNotifyOnChange(true);
@@ -349,15 +417,16 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         final ParticipantAdapterItem participant = getItem(position);
         boolean isSearchMode = !TextUtils.isEmpty(mPattern);
 
-        ImageView thumbView = (ImageView) convertView.findViewById(R.id.avatar_img);
-
-        VectorUtils.setMemberAvatar(thumbView, participant.mUserId, participant.mDisplayName);
+        ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
 
         if (null != participant.mAvatarBitmap) {
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
-            int size = getContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-            mMediasCache.loadAvatarThumbnail(mSession.getHomeserverConfig(), thumbView, participant.mAvatarUrl, size);
+            if ((null != mFirstEntry) && (position == 0)) {
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@"));
+            } else {
+                VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl,  participant.mUserId, participant.mDisplayName);
+            }
         }
 
         PowerLevels powerLevels = null;
@@ -420,7 +489,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         }
                         else {
                             status = mContext.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
-                         }
+                        }
                     }
                 }
             }
@@ -477,6 +546,23 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             hideDisplayActionsMenu = (null == mRoom) && (0 == position);
         }
 
+        cellLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mOnParticipantsListener) {
+                    String userId = participant.mUserId;
+
+                    // check if the userId is valid
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches() ||
+                            (userId.startsWith("@") && (userId.indexOf(":") > 1))) {
+                        mOnParticipantsListener.onClick(fpos);
+                    } else {
+                        Toast.makeText(mContext, R.string.malformed_id, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
         // the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || hideDisplayActionsMenu) {
             cellLayout.setOnTouchListener(null);
@@ -488,10 +574,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 @Override
                 public boolean onTouch(final View v, MotionEvent event) {
                     final int hiddenViewWidth = hiddenView.getWidth();
+                    boolean isMotionTrapped = true;
 
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN: {
-
                             // cancel hidden view display
                             if (null != mSwipingCellView) {
                                 mSwipingCellView.setTranslationX(0);
@@ -512,26 +598,73 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP: {
                             float x = event.getX() + v.getTranslationX();
-                            float aa = hiddenViewWidth;
-                            float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
 
-                            if (deltaX > (hiddenViewWidth / 2)) {
-                                cellLayout.setTranslationX(-hiddenViewWidth);
+                            // assume it is a tap
+                            if (Math.abs(x - mStartX) < 3) {
+                                if (null != mOnParticipantsListener) {
+                                    mOnParticipantsListener.onClick(fpos);
+                                }
+                                isMotionTrapped = false;
                             } else {
-                                cellLayout.setTranslationX(0);
-                                mSwipingCellView = null;
+                                float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
+
+
+                                if (deltaX > (hiddenViewWidth / 2)) {
+                                    cellLayout.setTranslationX(-hiddenViewWidth);
+                                } else {
+                                    cellLayout.setTranslationX(0);
+                                    mSwipingCellView = null;
+                                }
                             }
 
                             break;
                         }
 
                         default:
-                            return false;
+                            isMotionTrapped = false;
+
                     }
-                    return true;
+                    return isMotionTrapped;
                 }
             });
         }
+
+        final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
+
+        int backgroundColor = mContext.getResources().getColor(android.R.color.white);
+
+        // multi selections mode
+        // do not display a checkbox for oneself
+        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUserId(), participant.mUserId)) {
+            checkBox.setVisibility(View.VISIBLE);
+
+            checkBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
+
+            if (checkBox.isChecked()) {
+                backgroundColor = mContext.getResources().getColor(R.color.vector_05_gray);
+            }
+
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        mSelectedUserIds.add(participant.mUserId);
+                        cellLayout.setBackgroundColor(mContext.getResources().getColor(R.color.vector_05_gray));
+                    } else {
+                        mSelectedUserIds.remove(participant.mUserId);
+                        cellLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+                    }
+
+                    if (null != mOnParticipantsListener) {
+                        mOnParticipantsListener.onSelectUserId(participant.mUserId);
+                    }
+                }
+            });
+        } else {
+            checkBox.setVisibility(View.GONE);
+        }
+
+        cellLayout.setBackgroundColor(backgroundColor);
 
         return convertView;
     }
@@ -539,7 +672,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     /**
      * @return the participant User Ids except oneself.
      */
-    public ArrayList<String> getUserIdsist() {
+    public ArrayList<String> getUserIdsList() {
         ArrayList<String> idsList = new ArrayList<String>();
 
         // the first item is always oneself

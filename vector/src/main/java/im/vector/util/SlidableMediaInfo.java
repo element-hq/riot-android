@@ -20,11 +20,12 @@ import java.io.Serializable;
 public class SlidableMediaInfo implements Serializable {
 
     // Message.MSGTYPE_XXX
+    public String mFileName;
     public String mMessageType;
-    public String midentifier;
-    public String mMediaUrl = null;
-    public String mThumbnailUrl = null;
-    public String mMimeType = null;
+    public String mIdentifier;
+    public String mMediaUrl;
+    public String mThumbnailUrl;
+    public String mMimeType;
 
     // exif infos
     public int mRotationAngle = 0;

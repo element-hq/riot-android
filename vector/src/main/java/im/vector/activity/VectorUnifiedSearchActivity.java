@@ -56,10 +56,8 @@ import im.vector.fragments.VectorSearchMessagesListFragment;
 /**
  * Displays a generic activity search method
  */
-public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements TabListener {
+public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements TabListener {
     private static final String LOG_TAG = "VectorUniSrchActivity";
-
-    private static final int SPEECH_REQUEST_CODE = 1234;
 
     public static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
 
@@ -73,7 +71,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private int mSearchInPeopleTabIndex = -1;
     private int mSearchInFilesTabIndex = -1;
     private int mCurrentTabIndex = -1;
-    ActionBar mActionBar;
 
     // activity life cycle management:
     // - Bundle keys
@@ -100,11 +97,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     private TextView mNoResultsTxtView;
     private View mLoadOldestContentView;
     private View mWaitWhileSearchInProgressView;
-    private EditText mPatternToSearchEditText;
-
-    // Menu items
-    MenuItem mMicroMenuItem;
-    MenuItem mClearEditTextMenuItem;
 
     /**
      * Save the custom date for each tab
@@ -124,7 +116,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
@@ -147,46 +139,6 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         mNoResultsTxtView = (TextView)findViewById(R.id.search_no_result_textview);
         mWaitWhileSearchInProgressView = findViewById(R.id.search_in_progress_view);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
-        mActionBar = getSupportActionBar();
-
-        // customize the action bar with a custom view to contain the search input text
-        View actionBarView = customizeActionBar();
-
-        // add the search logic based on the text search input listener
-        mPatternToSearchEditText = (EditText) actionBarView.findViewById(R.id.room_action_bar_edit_text);
-        actionBarView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPatternToSearchEditText.requestFocus();
-                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                im.showSoftInput(mPatternToSearchEditText, 0);
-            }
-        }, 100);
-
-        mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(android.text.Editable s) {
-                VectorUnifiedSearchActivity.this.refreshMenuEntries();
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // start the search according to the current selected tab
-                    searchAccordingToTabHandler();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         // tab creation and restore tabs UI context
         createNavigationTabs(savedInstanceState);
@@ -197,103 +149,9 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
         super.onDestroy();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    // inherited from VectorBaseSearchActivity
+    protected void onPatternUpdate() {
         searchAccordingToTabHandler();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_searches, menu);
-
-        mMicroMenuItem = menu.findItem(R.id.ic_action_speak_to_search);
-        mClearEditTextMenuItem = menu.findItem(R.id.ic_action_clear_search);
-
-        refreshMenuEntries();
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.ic_action_speak_to_search) {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-
-        } else if (id ==  R.id.ic_action_clear_search) {
-            mPatternToSearchEditText.setText("");
-            searchAccordingToTabHandler();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Handle the results from the voice recognition activity.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if ((requestCode == SPEECH_REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-            // one matched items
-            if (matches.size() == 1) {
-                // use it
-                mPatternToSearchEditText.setText(matches.get(0));
-                searchAccordingToTabHandler();
-            } else if (matches.size() > 1) {
-                // if they are several matches, let the user chooses the right one.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                String[] mes = matches.toArray(new String[matches.size()]);
-
-                builder.setItems(mes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        mPatternToSearchEditText.setText(matches.get(item));
-                        VectorUnifiedSearchActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                searchAccordingToTabHandler();
-                            }
-                        });
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * @return true of the device supports speech recognizer.
-     */
-    private boolean supportSpeechRecognizer() {
-        PackageManager pm = getPackageManager();
-        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-
-        return (null != activities) && (activities.size() > 0);
-    }
-
-    /**
-     * Refresh the menu entries
-     */
-    private void refreshMenuEntries() {
-        boolean hasText = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
-
-        if (null != mMicroMenuItem) {
-            mMicroMenuItem.setVisible(!hasText && supportSpeechRecognizer());
-        }
-
-        if (null != mClearEditTextMenuItem) {
-            mClearEditTextMenuItem.setVisible(hasText);
-        }
     }
 
     /**
@@ -533,7 +391,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
             if (null == mSearchInRoomNamesFragment) {
-                mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUser().userId, R.layout.fragment_vector_recents_list);
+                mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUserId(), R.layout.fragment_vector_recents_list);
                 ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
             } else {
@@ -544,7 +402,7 @@ public class VectorUnifiedSearchActivity extends MXCActionBarActivity implements
 
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
-                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUser().userId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             } else {

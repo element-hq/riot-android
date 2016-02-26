@@ -70,7 +70,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
 
         // display the room avatar
         avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-        VectorUtils.setRoomVectorAvatar(avatarImageView, publicRoom.roomId, roomName);
+        VectorUtils.setDefaultRoomVectorAvatar(avatarImageView, publicRoom.roomId, roomName);
 
         // set the topic
         roomMessageTxtView.setText(publicRoom.topic);

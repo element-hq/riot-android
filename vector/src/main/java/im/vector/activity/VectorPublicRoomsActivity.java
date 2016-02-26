@@ -56,7 +56,7 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
         mVectorPublicRoomsListFragment = (VectorPublicRoomsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_PUBLIC_ROOMS_LIST);
 
         if (null == mVectorPublicRoomsListFragment) {
-            mVectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUser().userId, R.layout.fragment_vector_public_rooms_list, publicrooms);
+            mVectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, publicrooms);
             fm.beginTransaction().add(R.id.layout_public__rooms_list, mVectorPublicRoomsListFragment, TAG_FRAGMENT_PUBLIC_ROOMS_LIST).commit();
         }
     }

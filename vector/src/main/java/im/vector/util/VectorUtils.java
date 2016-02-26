@@ -49,6 +49,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -136,7 +137,7 @@ public class VectorUtils {
             return alias;
         }
 
-        String myUserId = session.getMyUser().userId;
+        String myUserId = session.getMyUserId();
 
         Collection<RoomMember> members = roomState.getMembers();
         ArrayList<RoomMember> othersActiveMembers = new ArrayList<RoomMember>();
@@ -203,7 +204,7 @@ public class VectorUtils {
     //==============================================================================================================
 
     // avatars cache
-    static LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<String, Bitmap>(2 * 1024 * 1024);
+    static LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<String, Bitmap>(20 * 1024 * 1024);
     // the avatars background color
     static ArrayList<Integer> mColorList = new ArrayList<Integer>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
 
@@ -212,7 +213,7 @@ public class VectorUtils {
      * @param text the text.
      * @return the color.
      */
-    private static int getAvatarcolor(String text) {
+    public static int getAvatarcolor(String text) {
         long colorIndex = 0;
 
         if (!TextUtils.isEmpty(text)) {
@@ -234,7 +235,7 @@ public class VectorUtils {
      * @param text the text to display.
      * @return the generated bitmap
      */
-    private static Bitmap createAvatar(Context context, String text) {
+    private static Bitmap createAvatar(Context context, int backgroundColor, String text) {
         android.graphics.Bitmap.Config bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
 
         // the bitmap size
@@ -245,6 +246,8 @@ public class VectorUtils {
 
         Bitmap bitmap = Bitmap.createBitmap(side, side, bitmapConfig);
         Canvas canvas = new Canvas(bitmap);
+
+        canvas.drawColor(backgroundColor);
 
         // prepare the text drawing
         Paint textPaint = new Paint();
@@ -269,7 +272,7 @@ public class VectorUtils {
      * @param aText the text.
      * @return the avatar.
      */
-    public static Bitmap getAvatar(Context context, String aText) {
+    public static Bitmap getAvatar(Context context, int backgroundColor, String aText) {
         // ignore some characters
         if (!TextUtils.isEmpty(aText) && (aText.startsWith("@") || aText.startsWith("#"))) {
             aText = aText.substring(1);
@@ -281,74 +284,115 @@ public class VectorUtils {
             firstChar = aText.substring(0, 1).toUpperCase();
         }
 
+        String key = firstChar + "_" + backgroundColor;
+
         // check if the avatar is already defined
-        Bitmap thumbnail = mAvatarImageByKeyDict.get(firstChar);
+        Bitmap thumbnail = mAvatarImageByKeyDict.get(key);
 
         if (null == thumbnail) {
-            thumbnail = VectorUtils.createAvatar(context, firstChar);
-            mAvatarImageByKeyDict.put(firstChar, thumbnail);
+            thumbnail = VectorUtils.createAvatar(context, backgroundColor, firstChar);
+            mAvatarImageByKeyDict.put(key, thumbnail);
         }
 
         return thumbnail;
     }
 
     /**
-     * Set the avatar for a text.
-     * @param imageView the imageView to set.
-     * @param text the text.
-     */
-    public static void setTextAvatar(ImageView imageView, String text) {
-        VectorUtils.setMemberAvatar(imageView, text, text);
-    }
-
-    /**
-     * Set the avatar for a member.
+     * Set the default vector avatar for a member.
      * @param imageView the imageView to set.
      * @param userId the member userId.
      * @param displayName the member display name.
      */
-    public static void setMemberAvatar(ImageView imageView, String userId, String displayName) {
+    public static void setDefaultMemberAvatar(ImageView imageView, String userId, String displayName) {
         // sanity checks
         if (null != imageView && !TextUtils.isEmpty(userId)) {
-            imageView.setBackgroundColor(VectorUtils.getAvatarcolor(userId));
-            imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), TextUtils.isEmpty(displayName) ? userId : displayName));
+            imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName));
         }
     }
 
     /**
-     * Set the room avatar.
+     * Set the default vector room avatar.
      * @param imageView the image view.
      * @param roomId the room id.
      * @param displayName the room displayname.
      */
-    public static void setRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
-        VectorUtils.setMemberAvatar(imageView, roomId, displayName);
+    public static void setDefaultRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
+        VectorUtils.setDefaultMemberAvatar(imageView, roomId, displayName);
     }
 
     /**
-     * Set the image view given in parameter with the corresponding
-     * room avatar. The avatar is initialized with its default value,
-     * then updated with the server content if any.
-     *
-     * @param[out] aAvatarImageView_out room avatar to be set
-     * @param aSession session
-     * @param aRoom room
-     * @param aContext Android App context
+     * Set the room avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param room the room
+     * @return the download Id
      */
-    public static void setRoomAvatar(ImageView aAvatarImageView_out, MXSession aSession, Room aRoom,  Context aContext) {
-        // sanity check
-        if ((null != aAvatarImageView_out) && (null != aSession) && (null != aRoom) && (null != aContext)) {
-            String  roomAvatarUrl = aRoom.getAvatarUrl();
-
-            // set default avatar
-            VectorUtils.setRoomVectorAvatar(aAvatarImageView_out, aRoom.getRoomId(), aSession.getMyUser().displayname);
-
-            if(!TextUtils.isEmpty(roomAvatarUrl)) {
-                // download avatar from server
-                int avatarSize = aContext.getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
-                im.vector.Matrix.getInstance(aContext).getMediasCache().loadAvatarThumbnail(aSession.getHomeserverConfig(), aAvatarImageView_out, roomAvatarUrl, avatarSize);
-            }
+    public static String loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
+        if (null != room) {
+            return VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
         }
+
+        return null;
+    }
+
+    /**
+     * Set the room member avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param roomMember the room member
+     * @return
+     */
+    public static String loadRoomMemberAvatar(Context context, MXSession session, ImageView imageView, RoomMember roomMember) {
+        if (null != roomMember) {
+            return VectorUtils.loadUserAvatar(context, session, imageView, roomMember.avatarUrl, roomMember.getUserId(), roomMember.displayname);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the user avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param user the user
+     * @return
+     */
+    public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, User user) {
+        if (null != user) {
+            return VectorUtils.loadUserAvatar(context, session, imageView, user.getAvatarUrl(), user.user_id, user.displayname);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the user avatar in an imageview.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param avatarUrl the avatar url
+     * @param userId the user id
+     * @param displayName the user displayname
+     * @return the download Id
+     */
+    public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, String avatarUrl, String userId, String displayName) {
+        // sanity check
+        if ((null == session) || (null == imageView)) {
+            return null;
+        }
+
+        String downloadId = session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+
+        // if there is no avatar URL
+        // or if the bitmap is not downloaded (loadAvatarThumbnail returns a download ID if the image is not downloaded
+        if (TextUtils.isEmpty(avatarUrl) || (null != downloadId)) {
+            setDefaultMemberAvatar(imageView, userId, displayName);
+        }
+
+        return downloadId;
     }
 
     //==============================================================================================================

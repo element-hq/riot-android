@@ -50,8 +50,8 @@ import java.util.Collection;
 public class MemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
     private static final String LOG_TAG = "MemberDetailsActivity";
 
-    public static final String EXTRA_ROOM_ID = "MemberDetailsActivity.EXTRA_ROOM_ID";
-    public static final String EXTRA_MEMBER_ID = "MemberDetailsActivity.EXTRA_MEMBER_ID";
+    public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
+    public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
 
     // list view items associated actions
     public static final int ITEM_ACTION_START_CHAT = 0;
@@ -71,7 +71,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
 
     // UI widgets
     private ImageView mMemberAvatarImageView;
-    private TextView mMatrixIdTextView;
+    private TextView mMemberNameTextView;
     private TextView mPresenceTextView;
     private ListView mActionItemsListView;
     private View mProgressBarView;
@@ -106,7 +106,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
 
         @Override
         public void onPresenceUpdate(Event event, final User user) {
-            if (mMemberId.equals(user.userId)) {
+            if (mMemberId.equals(user.user_id)) {
                 // Someone's presence has changed, reprocess the whole list
                 MemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -175,7 +175,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         if ((null != mRoom) && (null != mSession) && (null != mRoomMember)) {
             // get the PowerLevels object associated to the room and the user ID
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-            String currentUserId = mSession.getMyUser().userId;
+            String currentUserId = mSession.getMyUserId();
 
             if(null != powerLevels) {
                 // get power levels from myself and from the member of the room
@@ -247,8 +247,12 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 case ITEM_ACTION_MAKE_ADMIN:
                     // update the member power with the max power level of the room to make him admin
                     PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-                    powerLevels.setUserPowerLevel(mMemberId, getRoomMaxPowerLevel());
-                    //CommonActivityUtils.displaySnack(mActionItemsListView, (CharSequence) mRoomMember.displayname+" is now Admin" );
+                    if(null != powerLevels) {
+                        powerLevels.setUserPowerLevel(mMemberId, getRoomMaxPowerLevel());
+                    }
+                    else {
+                        Log.e(LOG_TAG, "## performItemAction(): Make Admin failure - getPowerLevels() returns null");
+                    }
                     Log.d(LOG_TAG,"## performItemAction(): Make Admin");
                     break;
 
@@ -272,33 +276,6 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
         }
     }
     // *********************************************************************************************
-
-    /**
-     * Helper method to populate the list view items with AdapterMemberActionItems objects.
-     */
-    /*private void populateListViewItems(){
-        mActionItemsArrayList = new ArrayList<AdapterMemberActionItems>();
-
-        // build the "start chat" item
-        int imageResource = R.drawable.ic_person_add_black;
-        String actionText = getResources().getString(R.string.member_details_action_start_new_room);
-        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
-
-        // build the "make admin" item
-        imageResource = R.drawable.ic_verified_user_black;
-        actionText = getResources().getString(R.string.member_details_action_make_admin);
-        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MAKE_ADMIN));
-
-        // build the "remove from" item (ban)
-        imageResource = R.drawable.ic_remove_circle_outline_red;
-        actionText = getResources().getString(R.string.member_details_action_remove_from_room);
-        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_REMOVE_FROM_ROOM));
-
-        // build the "block" item (block)
-        imageResource = R.drawable.ic_block_black;
-        actionText = getResources().getString(R.string.member_details_action_block);
-        mActionItemsArrayList.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BLOCK));
-    }*/
 
     /**
      * Update items actions list view.
@@ -371,7 +348,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
             // setup UI view and bind the widgets
             setContentView(R.layout.activity_member_details);
             mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
-            mMatrixIdTextView = (TextView) findViewById(R.id.member_details_name);
+            mMemberNameTextView = (TextView) findViewById(R.id.member_details_name);
             mPresenceTextView = (TextView) findViewById(R.id.member_details_presence);
             mActionItemsListView = (ListView) findViewById(R.id.member_details_actions_list_view);
             mProgressBarView = (View) findViewById(R.id.member_details_list_view_progress_bar);
@@ -430,7 +407,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
     private boolean isDetailsRequiredForMySelf(MXSession aSession, String aMemberIdDetailsAsking) {
         boolean retCode = true;
         if((null != aSession) && (null != aMemberIdDetailsAsking)){
-            String sessionUserId = aSession.getMyUser().userId;
+            String sessionUserId = aSession.getMyUserId();
             retCode = aMemberIdDetailsAsking.equals(sessionUserId);
         }
         return retCode;
@@ -443,8 +420,6 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      * @return true if member was found in the room , false otherwise
      */
     private boolean checkRoomMemberStatus() {
-        boolean isMemberPresent = false;
-
         // reset output values, before re processing them
         mIsMemberJoined= false;
         mRoomMember = null;
@@ -459,21 +434,11 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
                 }
             }
 
-            if(null == mRoomMember) {
-                // The member is not (anymore) present in the room.
-                // This can happen if the member has left the room in another
-                // client(for any reason, kicked, left himself..) and its details are displayed
-                isMemberPresent = false;
-            } else if((RoomMember.MEMBERSHIP_LEAVE.equals(mRoomMember.membership))) {
-                isMemberPresent = false;
-            } else if((RoomMember.MEMBERSHIP_BAN.equals(mRoomMember.membership))) {
-                isMemberPresent = false;
-            } else {
-                isMemberPresent = true;
+            if(null != mRoomMember) {
                 mIsMemberJoined = (RoomMember.MEMBERSHIP_JOIN.equals(mRoomMember.membership)) || (RoomMember.MEMBERSHIP_INVITE.equals(mRoomMember.membership));
             }
         }
-        return isMemberPresent;
+        return mIsMemberJoined;
     }
 
     /**
@@ -489,12 +454,14 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
             int tempPowerLevel = 0;
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-            // find out the room member
-            Collection<RoomMember> members = mRoom.getMembers();
-            for (RoomMember member : members) {
-                tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
-                if(tempPowerLevel > maxPowerLevel) {
-                    maxPowerLevel = tempPowerLevel;
+            if(null != powerLevels) {
+                // find out the room member
+                Collection<RoomMember> members = mRoom.getMembers();
+                for (RoomMember member : members) {
+                    tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
+                    if (tempPowerLevel > maxPowerLevel) {
+                        maxPowerLevel = tempPowerLevel;
+                    }
                 }
             }
         }
@@ -505,9 +472,15 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      * Update the UI 
      */
     private void updateUi() {
-        if((null != mMatrixIdTextView) && (null != mRoomMember)) {
-            mMatrixIdTextView.setText(mMemberId);
-            setTitle(mRoomMember.displayname); // TODO TBC
+        if((null != mMemberNameTextView) && (null != mRoomMember)) {
+
+            if(null != mRoomMember.displayname){
+                mMemberNameTextView.setText(mRoomMember.displayname);
+            } else {
+                mMemberNameTextView.setText(mMemberId);
+            }
+            // do not display the activity name in the action bar
+            setTitle("");
         }
 
         // disable the progress bar
@@ -570,13 +543,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      */
     private void updateMemberAvatarUi() {
         if((null != mMemberAvatarImageView) && (null != mRoomMember) && (null != mMemberId)) {
-            // set default image
-            VectorUtils.setMemberAvatar(mMemberAvatarImageView, mMemberId, mRoomMember.displayname);
-
-            if (mRoomMember.avatarUrl != null) {
-                int size = getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
-                mSession.getMediasCache().loadAvatarThumbnail(mSession.getHomeserverConfig(), mMemberAvatarImageView, mRoomMember.avatarUrl, size);
-            }
+            VectorUtils.loadRoomMemberAvatar(this, mSession, mMemberAvatarImageView, mRoomMember);
         }
     }
 
@@ -597,10 +564,7 @@ public class MemberDetailsActivity extends MXCActionBarActivity implements Membe
      */
     private void enableProgressBarView(boolean aIsProgressBarDisplayed){
         if(null != mProgressBarView) {
-            if (aIsProgressBarDisplayed)
-                mProgressBarView.setVisibility(View.VISIBLE);
-            else
-                mProgressBarView.setVisibility(View.GONE);
+            mProgressBarView.setVisibility(aIsProgressBarDisplayed?View.VISIBLE:View.GONE);
         }
     }
 

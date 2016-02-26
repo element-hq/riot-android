@@ -129,24 +129,24 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.VectorRoomCreationAddParticipantsActivity"
-            android:label="@string/room_participants_title"
-            android:parentActivityName="im.vector.activity.AccountCreationActivity"
+            android:name="im.vector.activity.VectorRoomMessagesSearchActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.AccountCreationActivity"/>
+                android:value="im.vector.activity.VectorRoomActivity"/>
         </activity>
-
 
         <activity
             android:name="im.vector.activity.VectorRoomDetailsActivity"
             android:label="@string/room_details_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="adjustResize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -156,7 +156,7 @@
         <activity
             android:name="im.vector.activity.VectorSettingsActivity"
             android:label="@string/title_activity_settings"
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName="im.vector.activity.VectorHomeActivity">
 
             <meta-data
@@ -194,13 +194,18 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"/>
 
-        <activity
-            android:name="im.vector.activity.ImageWebViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
             android:name="im.vector.activity.VectorMediasViewerActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:label="a filename"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorRoomActivity"/>
+        </activity>
 
         <activity
             android:name="im.vector.activity.CallViewActivity"
@@ -233,6 +238,19 @@
             android:name=".activity.VectorUnifiedSearchActivity"
             android:label="Vector searches"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".activity.VectorRoomInviteMembersActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.VectorRoomDetailsActivity"
             android:launchMode="singleTop"
             android:theme="@style/SearchesAppTheme"
             android:windowSoftInputMode="adjustResize">

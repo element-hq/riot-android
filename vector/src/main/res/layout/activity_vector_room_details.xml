@@ -1,89 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#FFF"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:id="@+id/selection_tabs"
-        android:orientation="horizontal"
+    <!-- tab framents container -->
+    <FrameLayout
+        android:id="@+id/room_details_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="44dp">
+        android:layout_height="match_parent"
+        android:background="@color/room_background"/>
 
-        <LinearLayout
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/room_details_people_text"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:text="@string/room_details_people"
-                android:textSize="17dp"
-                android:textColor="@color/vector_green_color"/>
-
-            <View
-                android:id="@+id/room_details_people_underscore"
-                android:layout_width="match_parent"
-                android:background="@color/vector_green_color"
-                android:layout_height="3dp"
-                android:visibility="invisible"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/room_details_settings_text"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:text="@string/room_details_settings"
-                android:textSize="17dp"
-                android:textColor="@color/vector_green_color"/>
-
-            <View
-                android:id="@+id/room_details_settings_underscore"
-                android:layout_width="match_parent"
-                android:background="@color/vector_green_color"
-                android:layout_height="3dp"
-                android:visibility="invisible"/>
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/room_details_fragments"
+    <!-- downloading progress bar -->
+    <FrameLayout
+        android:id="@+id/settings_loading_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#449D9D9D">
+        <ProgressBar
+            android:id="@+id/loading_settings_progress_bar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="visible"/>
+    </FrameLayout>
 
-        <!-- must have the same order as the tabs name-->
-        <fragment
-            android:name="im.vector.fragments.VectorAddParticipantsFragment"
-            android:id="@+id/room_details_add_participants_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_vector_add_participants"
-            android:visibility="gone"/>
-
-        <fragment
-            android:name="im.vector.fragments.VectorRoomSettingsFragment"
-            android:id="@+id/room_details_room_settings_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_vector_room_settings"
-            android:visibility="gone"/>
-    </RelativeLayout>
-
-</LinearLayout>
+</FrameLayout>

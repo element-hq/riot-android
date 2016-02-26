@@ -9,14 +9,6 @@
         android:paddingTop="0dp"
         android:paddingBottom="@dimen/activity_vertical_margin">
 
-        <ProgressBar
-            android:id="@+id/loading_room_content_progress"
-            android:layout_height="40dp"
-            android:layout_width="match_parent"
-            android:layout_alignParentLeft="true"
-            android:visibility="gone"
-            android:indeterminate="true" />
-
         <ImageView
             android:id="@+id/search_background_imageview"
             android:background="#FFFFFFFF"
@@ -55,7 +47,7 @@
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/vector_upload"
+                    android:background="@drawable/ic_material_file"
                     android:id="@+id/button_attachments"
                     android:contentDescription="@string/more"/>
 
@@ -63,7 +55,7 @@
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/voice_call"
+                    android:background="@drawable/ic_material_call"
                     android:id="@+id/button_call"
                     android:contentDescription="@string/more"/>
 
@@ -175,7 +167,6 @@
             android:layout_centerVertical="true"
             android:visibility="gone"
             android:indeterminate="true" />
-
     </RelativeLayout>
 
     <!-- room header displayed when the status bar title is pressed -->
@@ -244,5 +235,11 @@
             android:layout_marginBottom="19dp"/>
     </RelativeLayout>
 
-
+    <ProgressBar
+        android:id="@+id/loading_room_content_progress"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        android:indeterminate="true" />
 </RelativeLayout>

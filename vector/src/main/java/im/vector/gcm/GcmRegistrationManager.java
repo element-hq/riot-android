@@ -331,7 +331,7 @@ public final class GcmRegistrationManager {
      * @return the profile tag
      */
     private String computePushTag(final MXSession session) {
-        String tag =  mPusherBaseFileTag + "_" + Math.abs(session.getMyUser().userId.hashCode());
+        String tag =  mPusherBaseFileTag + "_" + Math.abs(session.getMyUserId().hashCode());
 
         // tag max length : 32 bytes
         if (tag.length() > 32) {
@@ -367,7 +367,7 @@ public final class GcmRegistrationManager {
                                 mUIHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(mContext, "fail to register " + session.getMyUser().userId + " (" + message + ")", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(mContext, "fail to register " + session.getMyUserId() + " (" + message + ")", Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -556,13 +556,13 @@ public final class GcmRegistrationManager {
         registerSession(session, (index > 0), new GcmSessionRegistration() {
             @Override
             public void onSessionRegistred() {
-                Log.d(LOG_TAG, "registerSessions : session " + session.getMyUser().userId + " is registred");
+                Log.d(LOG_TAG, "registerSessions : session " + session.getMyUserId() + " is registred");
                 registerSessions(sessions, index + 1);
             }
 
             @Override
             public void onSessionRegistrationFailed() {
-                Log.d(LOG_TAG, "registerSessions : onSessionRegistrationFailed " + session.getMyUser().userId);
+                Log.d(LOG_TAG, "registerSessions : onSessionRegistrationFailed " + session.getMyUserId());
 
                 mRegistrationState = RegistrationState.GCM_REGISTRED;
                 onSessionsRegistrationFailed();
@@ -604,7 +604,7 @@ public final class GcmRegistrationManager {
                                     mUIHandler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(mContext, "fail to unregister " + session.getMyUser().userId + " (" + message + ")", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(mContext, "fail to unregister " + session.getMyUserId() + " (" + message + ")", Toast.LENGTH_LONG).show();
                                         }
                                     });
 

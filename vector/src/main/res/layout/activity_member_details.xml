@@ -39,7 +39,6 @@
           android:ellipsize="end"
           android:textSize="20sp"
           android:textColor="@android:color/white"
-          android:text="member name"
           android:layout_marginTop="10dp" />
 
         <!-- the member presence -->
@@ -53,7 +52,6 @@
           android:ellipsize="end"
           android:textSize="14sp"
           android:textColor="@color/vector_0_54_black_color"
-          android:text="presence"
           android:layout_marginBottom="16dp" />
 
       </RelativeLayout>
@@ -64,7 +62,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/action_bar_header"
-        android:layout_marginTop="28dp"
         android:dividerHeight="0dp"
         android:divider="#00000000"/>
 
