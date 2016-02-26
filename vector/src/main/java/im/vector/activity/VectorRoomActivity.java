@@ -1541,8 +1541,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private void refreshSelfAvatar() {
         // sanity check
         if (null != mAvatarImageView) {
-
-            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
+ 			VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
         }
     }
 

@@ -58,7 +58,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
-import im.vector.activity.MemberDetailsActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
@@ -165,10 +165,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onEventAction(final Event event, final int action) {
         if (action == R.id.ic_action_vector_view_profile) {
             if (null != event.getSender()) {
-                Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
-                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
-                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                 getActivity().startActivity(startRoomInfoIntent);
             }
         } else if (action == R.id.ic_action_vector_direct_message) {
@@ -759,10 +759,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param userId the user ID
      */
     public void onAvatarClick(String userId) {
-        Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
         getActivity().startActivity(startRoomInfoIntent);
     }
 

@@ -177,7 +177,7 @@
 
 
         <activity
-            android:name="im.vector.activity.MemberDetailsActivity"
+            android:name="im.vector.activity.VectorMemberDetailsActivity"
             android:label="@string/title_activity_member_details"
             android:parentActivityName="im.vector.activity.VectorRoomActivity">
 

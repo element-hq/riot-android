@@ -232,7 +232,6 @@
             android:layout_below="@id/action_bar_header_room_topic"
             android:ellipsize="end"
             android:textSize="14sp"
-            android:text="a topic here"
             android:textColor="@color/vector_0_54_black_color"
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
