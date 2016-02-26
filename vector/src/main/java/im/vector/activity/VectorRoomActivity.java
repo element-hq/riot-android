@@ -39,9 +39,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -49,8 +51,11 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.okhttp.internal.Util;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -100,6 +105,8 @@ import java.util.TimerTask;
 public class VectorRoomActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
+    private static final boolean SHOW_ACTION_BAR_HEADER = true;
+    private static final boolean HIDE_ACTION_BAR_HEADER = false;
 
     // the room is launched but it expects to start the dedicated call activity
     public static final String EXTRA_START_CALL_ID = "EXTRA_START_CALL_ID";
@@ -153,6 +160,15 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private ImageButton mCallButton;
     private EditText mEditText;
     private ImageView mAvatarImageView;
+    // action bar header
+    private TextView mActionBarCustomTitle;
+    private TextView mActionBarCustomTopic;
+    private ImageView mActionBarCustomArrowImageView;
+    private RelativeLayout mRoomHeaderView;
+    private TextView mActionBarHeaderRoomName;
+    private TextView mActionBarHeaderActiveMembers;
+    private TextView mActionBarHeaderRoomTopic;
+    private ImageView mActionBarHeaderRoomAvatar;
 
     private View mTypingArea;
     private TextView mTypingMessageTextView;
@@ -257,6 +273,20 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_room);
+
+        // bind the widgets of the room header view. The room header view is displayed by
+        // clicking on the title of the action bar
+        mRoomHeaderView = (RelativeLayout) findViewById(R.id.action_bar_header);
+        mActionBarHeaderRoomTopic = (TextView)findViewById(R.id.action_bar_header_room_topic);
+        mActionBarHeaderRoomName = (TextView)findViewById(R.id.action_bar_header_room_title);
+        mActionBarHeaderActiveMembers = (TextView)findViewById(R.id.action_bar_header_room_members);
+        mActionBarHeaderRoomAvatar = (ImageView) mRoomHeaderView.findViewById(R.id.avatar_img);
+        //mRoomHeaderView.setVisibility(View.GONE);
+
+
+        // set the default custom action bar layout,
+        // that will be displayed from the custom action bar layout
+        setActionBarDefaultCustomLayout();
 
         Intent intent = getIntent();
         if (!intent.hasExtra(EXTRA_ROOM_ID)) {
@@ -1443,16 +1473,30 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     private void setTopic(String topic) {
-        if (null != this.getSupportActionBar()) {
-            this.getSupportActionBar().setSubtitle(topic);
+        if(null != mActionBarCustomTopic) {
+            if(TextUtils.isEmpty(topic)) {
+                mActionBarCustomTopic.setVisibility(View.GONE);
+            } else {
+                // update custom action bar layout
+                mActionBarCustomTopic.setVisibility(View.VISIBLE);
+                mActionBarCustomTopic.setText(topic);
+            }
+        } else {
+            if (null != this.getSupportActionBar()) {
+                this.getSupportActionBar().setSubtitle(topic);
+            }
         }
     }
 
     private void refreshSelfAvatar() {
         // sanity check
         if (null != mAvatarImageView) {
-            VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
+ 			VectorUtils.loadUserAvatar(this, mSession, mAvatarImageView, mSession.getMyUser());
         }
+    }
+
+    private void refreshRoomHeaderAvatar() {
+        VectorUtils.loadRoomAvatar(this, mSession, mActionBarHeaderRoomAvatar, mRoom);
     }
 
     private void onRoomTypings() {
@@ -1627,6 +1671,135 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         }
 
         return isIRCCmd;
+    }
+
+    private void setActionBarDefaultCustomLayout(){
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
+
+        // create the custom layout
+        android.support.v7.app.ActionBar.LayoutParams layout = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        View customLayout =  getLayoutInflater().inflate(R.layout.vector_message_action_bar_custo_layout, null);
+        actionBar.setCustomView(customLayout, layout);
+
+        // binding the widgets of the custom view
+        mActionBarCustomTitle = (TextView)findViewById(R.id.room_action_bar_title);
+        mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
+        mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
+
+
+        // set the title with the room display name
+        if((null != mRoom) && (null != mSession)) {
+            setTitle(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
+            setTopic(mRoom.getTopic());
+        }
+
+        // add a click listener and the whole layout to toggle the header view display
+        customLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != mRoomHeaderView) {
+                            if (View.GONE == mRoomHeaderView.getVisibility()) {
+                                enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
+                            } else {
+                                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        if (null != mRoomHeaderView) {
+            mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    // return value:  true if the listener has consumed the event, false otherwise.
+                    Log.w("VectorRoomActivity", "## setOnTouchListener() caught!");
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    return true;
+                }
+            });
+        }
+
+    }
+
+    /**
+     * Wrapper around the custom action bar title.
+     * @param aNewTitle title to set
+     */
+    @Override
+    public void setTitle(CharSequence aNewTitle){
+        if(null != mActionBarCustomTitle) {
+            mActionBarCustomTitle.setText(aNewTitle);
+        } else {
+            super.setTitle(aNewTitle);
+        }
+    }
+
+     /**
+     * Update the UI content of the action bar header view
+     */
+    private void updateActionBarHeaderView() {
+        if((null == mRoom) || (null == mSession)) {
+            return;
+        }
+
+        // update room avatar content
+        refreshRoomHeaderAvatar();
+        // update the room name and its topic
+        mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
+        String value = mRoom.getTopic();
+        if(TextUtils.isEmpty(mActionBarCustomTopic.getText())) {
+            mActionBarHeaderRoomTopic.setVisibility(View.GONE);
+        } else {
+            mActionBarHeaderRoomTopic.setVisibility(View.VISIBLE);
+            mActionBarHeaderRoomTopic.setText(value);
+        }
+
+        // update the members status: "active members"/"members"
+        int members = mRoom.getMembers().size();
+        int activeMembers = mRoom.getActiveMembers().size();
+        value = this.getString(R.string.room_header_active_members, activeMembers, members);
+        mActionBarHeaderActiveMembers.setText(value);
+    }
+
+    /**
+     * Show or hide the action bar header view according to aIsHeaderViewDisplayed
+     * @param aIsHeaderViewDisplayed true to show the header view, false to hide
+     */
+    private void enableActionBarHeader(boolean aIsHeaderViewDisplayed){
+        if(SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
+            //mConsoleMessageListFragment.getView().setEnabled(false);
+
+            // hide the name and the topic in the action bar.
+            // these items are hidden when the header view is opened
+            mActionBarCustomTitle.setVisibility(View.GONE);
+            mActionBarCustomTopic.setVisibility(View.GONE);
+
+            // update the UI content of the action bar header
+            updateActionBarHeaderView();
+            // set the arrow to up
+            mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_up_white);
+            // enable the header view to make it visible
+            mRoomHeaderView.setVisibility(View.VISIBLE);
+
+        } else {
+            // show the name and the topic in the action bar.
+            mActionBarCustomTitle.setVisibility(View.VISIBLE);
+            // if the topic is empty, do not enable it
+            if(!TextUtils.isEmpty(mActionBarCustomTopic.getText())) {
+                mActionBarCustomTopic.setVisibility(View.VISIBLE);
+            }
+
+            // hide the action bar header view and reset the arrow image (arrow reset to down)
+            mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
+            mRoomHeaderView.setVisibility(View.GONE);
+        }
     }
 }
 

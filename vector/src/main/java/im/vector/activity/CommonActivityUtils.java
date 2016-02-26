@@ -30,10 +30,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -72,6 +74,17 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  */
 public class CommonActivityUtils {
     private static final String LOG_TAG = "CommonActivityUtils";
+
+    // global helper constants:
+    /** The view is visible **/
+    public static final float UTILS_OPACITY_NO_OPACITY = 1f;
+    /** The view is half dimmed **/
+    public static final float UTILS_OPACITY_HALPH_OPACITY = 0.5f;
+    /** The view is hidden **/
+    public static final float UTILS_OPACITY_FULL_OPACITY = 0f;
+
+    public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
+    public static final boolean UTILS_HIDE_PROGRESS_BAR = false;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isActive()) {
@@ -784,5 +797,21 @@ public class CommonActivityUtils {
         }
 
         return filePath;
+    }
+
+    public static void displayNotImplementedToast(Context aContext){
+        displayToast(aContext, (CharSequence) "Not implemented");
+    }
+
+    public static void displayNotImplementedSnack(View aTargetView){
+        displaySnack(aTargetView, (CharSequence) "Not implemented");
+    }
+
+    public static void displayToast(Context aContext, CharSequence aTextToDisplay){
+        Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void displaySnack(View aTargetView, CharSequence aTextToDisplay){
+        Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
     }
 }
