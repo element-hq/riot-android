@@ -76,6 +76,13 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        cancelSearch();
+        mSearchingPattern = null;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
