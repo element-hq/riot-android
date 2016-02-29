@@ -283,7 +283,7 @@ public final class GcmRegistrationManager {
     public void setUseGCM(Boolean use) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
         editor.putBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), use);
-        editor.commit();
+        editor.apply();
     }
 
     public Boolean isGCMRegistred() {
@@ -718,7 +718,7 @@ public final class GcmRegistrationManager {
         Log.d(LOG_TAG, "Saving push key " + pushKey + " under key " + key);
         getSharedPreferences().edit()
                 .putString(key, pushKey)
-                .commit();
+                .apply();
     }
 
     private SharedPreferences getSharedPreferences() {

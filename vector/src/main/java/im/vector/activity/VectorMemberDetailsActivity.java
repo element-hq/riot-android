@@ -48,7 +48,7 @@ import im.vector.util.VectorUtils;
 import java.util.Collection;
 
 public class VectorMemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
-    private static final String LOG_TAG = "VectorMemberDetailsActivity";
+    private static final String LOG_TAG = "VectorMemberDetAct";
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
