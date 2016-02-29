@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -31,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -60,7 +62,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
-import im.vector.activity.MemberDetailsActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
@@ -73,11 +75,17 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
+    private static final String LOG_TAG = "VectorMessageListFrg";
+
+    public interface IListFragmentEventListener{
+        void onListTouch();
+    }
+
     private static final String TAG_FRAGMENT_RECEIPTS_DIALOG = "TAG_FRAGMENT_RECEIPTS_DIALOG";
+    private IListFragmentEventListener mHostActivityListener;
 
     // onMediaAction actions
     private static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
@@ -94,6 +102,35 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         args.putString(ARG_MATRIX_ID, matrixId);
         f.setArguments(args);
         return f;
+    }
+
+    /**
+     * Called when a fragment is first attached to its activity.
+     * {@link #onCreate(Bundle)} will be called after this.
+     *
+     * @param aHostActivity parent activity
+     */
+    @Override
+    public void onAttach(Activity aHostActivity) {
+        super.onAttach(aHostActivity);
+        try {
+            mHostActivityListener = (IListFragmentEventListener) aHostActivity;
+        }
+        catch(ClassCastException e) {
+            // if host activity does not provide the implementation, just ignore it
+            Log.w(LOG_TAG,"## onAttach(): host activity does not implement IListFragmentEventListener");
+            mHostActivityListener = null;
+        }
+    }
+
+    /**
+     * Called when the fragment is no longer attached to its activity.  This
+     * is called after {@link #onDestroy()}.
+     */
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mHostActivityListener = null;
     }
 
     @Override
@@ -126,6 +163,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mCheckSlideToHide = false;
             MXCActionBarActivity.dismissKeyboard(getActivity());
         }
+
+        // notify host activity
+        if(null != mHostActivityListener)
+            mHostActivityListener.onListTouch();
     }
 
     /**
@@ -136,10 +177,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onEventAction(final Event event, final int action) {
         if (action == R.id.ic_action_vector_view_profile) {
             if (null != event.getSender()) {
-                Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
-                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
-                startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                 getActivity().startActivity(startRoomInfoIntent);
             }
         } else if (action == R.id.ic_action_vector_direct_message) {
@@ -561,17 +602,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param userId the user ID
      */
     public void onAvatarClick(String userId) {
-        Intent startRoomInfoIntent = new Intent(getActivity(), MemberDetailsActivity.class);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-        startRoomInfoIntent.putExtra(MemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
         getActivity().startActivity(startRoomInfoIntent);
     }
 
     /**
      * Define the action to perform when the user performs a long tap on an avatar
      * @param userId the user ID
-     * @return true if the long clik event is managed
+     * @return true if the long click event is managed
      */
     public Boolean onAvatarLongClick(String userId) {
         return false;
