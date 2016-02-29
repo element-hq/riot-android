@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -29,14 +30,19 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.FileMessage;
+import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
+import im.vector.util.SlidableMediaInfo;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
 
@@ -244,46 +250,57 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     @Override
     public void onContentClick(int position) {
-        final MessageRow messageRow = mAdapter.getItem(position);
-        final List<Integer> textIds = new ArrayList<>();
-        final List<Integer> iconIds = new ArrayList<Integer>();
+        MessageRow row = mAdapter.getItem(position);
+        Event event = row.getEvent();
 
-        textIds.add(R.string.copy);
-        iconIds.add(R.drawable.ic_material_copy);
+        Message message = JsonUtils.toMessage(event.content);
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
+        // medias are managed by the mother class
+        if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
+            super.onContentClick(position);
+        } else {
 
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
-        }
+            final MessageRow messageRow = mAdapter.getItem(position);
+            final List<Integer> textIds = new ArrayList<>();
+            final List<Integer> iconIds = new ArrayList<Integer>();
 
-        Integer[] lIcons = iconIds.toArray(new Integer[iconIds.size()]);
-        Integer[] lTexts = textIds.toArray(new Integer[iconIds.size()]);
+            textIds.add(R.string.copy);
+            iconIds.add(R.drawable.ic_material_copy);
 
-        fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-            @Override
-            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                final Integer selectedVal = textIds.get(position);
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
 
-                if (selectedVal == R.string.copy) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            Event event = messageRow.getEvent();
-                            EventDisplay display = new EventDisplay(getActivity(), event, null);
-
-                            ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
-                            clipboard.setPrimaryClip(clip);
-                        }
-                    });
-                }
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
             }
-        });
 
-        fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
+            Integer[] lIcons = iconIds.toArray(new Integer[iconIds.size()]);
+            Integer[] lTexts = textIds.toArray(new Integer[iconIds.size()]);
+
+            fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                @Override
+                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                    final Integer selectedVal = textIds.get(position);
+
+                    if (selectedVal == R.string.copy) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                                Event event = messageRow.getEvent();
+                                EventDisplay display = new EventDisplay(getActivity(), event, null);
+
+                                ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        });
+                    }
+                }
+            });
+
+            fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
+        }
     }
 
     /**
