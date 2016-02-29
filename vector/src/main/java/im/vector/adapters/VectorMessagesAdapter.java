@@ -17,16 +17,11 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.text.style.ForegroundColorSpan;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import org.apache.http.client.utils.URIUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
@@ -44,21 +38,15 @@ import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 
-import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.R;
-import im.vector.db.VectorContentProvider;
 import im.vector.util.VectorUtils;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -88,6 +76,22 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     protected Date mReferenceDate = new Date();
     protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     protected Handler mUiHandler;
+
+    public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
+                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, MXMediasCache mediasCache) {
+
+        super(session, context,
+                textResLayoutId,
+                imageResLayoutId,
+                noticeResLayoutId,
+                emoteRestLayoutId,
+                fileResLayoutId,
+                videoResLayoutId,
+                mediasCache);
+
+        // for dispatching data to add to the adapter we need to be on the main thread
+        mUiHandler = new Handler(Looper.getMainLooper());
+    }
 
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
@@ -273,6 +277,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      */
     private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
         IMXStore store = mSession.getDataHandler().getStore();
+
+        // sanity check
+        if (null == roomState) {
+            avatarsListView.setVisibility(View.GONE);
+            return;
+        }
+
         List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
 
         // if there is no receipt to display
