@@ -49,6 +49,7 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.VideoMessage;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.Matrix;
@@ -178,31 +179,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-
-        // display the undeliverable at the end of the history
-        this.setNotifyOnChange(false);
-        ArrayList<MessageRow> undeliverableEvents = null;
-
-        for(int i = 0; i < getCount(); i++) {
-            MessageRow row = getItem(i);
-
-            if ((null != row.getEvent()) && row.getEvent().isUndeliverable()) {
-                if (null == undeliverableEvents) {
-                    undeliverableEvents = new ArrayList<MessageRow>();
-                }
-                row.getEvent().setOriginServerTs(System.currentTimeMillis());
-                undeliverableEvents.add(row);
-                this.remove(row);
-                i--;
-            }
-        }
-
-        if (null != undeliverableEvents) {
-            this.addAll(undeliverableEvents);
-        }
-
-        this.setNotifyOnChange(true);
-
         //  do not refresh the room when the application is in background
         // on large rooms, it drains a lot of battery
         if (!VectorApp.isAppInBackground()) {
@@ -420,46 +396,15 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
 
                 if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
-                    Boolean supportShare = true;
                     Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
-                    String mediaUrl = null;
-                    String mediaMimeType = null;
+                    // share / forward the message
+                    menu.findItem(R.id.ic_action_vector_share).setVisible(true);
+                    menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
 
-                    // check if the media has been downloaded
-                    if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
-                        if (message instanceof ImageMessage) {
-                            ImageMessage imageMessage = (ImageMessage) message;
-
-                            mediaUrl = imageMessage.url;
-                            mediaMimeType = imageMessage.getMimeType();
-                        } else {
-                            FileMessage fileMessage = (FileMessage) message;
-
-                            mediaUrl = fileMessage.url;
-                            mediaMimeType = fileMessage.getMimeType();
-                        }
-
-                        supportShare = false;
-                        MXMediasCache cache = Matrix.getInstance(mContext).getMediasCache();
-
-                        File mediaFile = cache.mediaCacheFile(mediaUrl, mediaMimeType);
-
-                        if (null != mediaFile) {
-                            try {
-                                VectorContentProvider.absolutePathToUri(mContext, mediaFile.getAbsolutePath());
-                                supportShare = true;
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-
-                    if (supportShare) {
-                        //menu.findItem(R.id.ic_action_vector_share).setVisible(true);
-                        //menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
-                        if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
-                            menu.findItem(R.id.ic_action_vector_save).setVisible(true);
-                        }
+                    // save the media in the downloads directory
+                    if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
+                        menu.findItem(R.id.ic_action_vector_save).setVisible(true);
                     }
                 }
             }

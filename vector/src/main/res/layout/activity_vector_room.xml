@@ -93,7 +93,10 @@
                 android:textSize="14dp"
                 android:hint="@string/room_message_placeholder"
                 android:id="@+id/editText_messageBox"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:theme="@style/SearchesAppTheme"
+                android:textColorHint="@color/vector_0_54_black_color"
+                />
 
         </RelativeLayout>
 
@@ -121,6 +124,14 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/vector_typing"/>
 
+            <ImageView
+                android:id="@+id/room_error_icon"
+                android:layout_marginLeft="25dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/error"/>
+
             <TextView
                 android:id="@+id/room_notification_message"
                 android:layout_width="wrap_content"
@@ -131,6 +142,15 @@
                 android:textColor="@color/vector_text_gray_color"
                 android:text="a text here " />
 
+            <TextView
+                android:id="@+id/room_notification_error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="73dp"
+                android:layout_marginRight="13dp"
+                android:textColor="@color/vector_fuchsia_color"
+                android:text="an error here " />
         </RelativeLayout>
 
         <View
