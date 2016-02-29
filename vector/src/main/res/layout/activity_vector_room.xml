@@ -92,7 +92,10 @@
                 android:textSize="14dp"
                 android:hint="@string/room_message_placeholder"
                 android:id="@+id/editText_messageBox"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:theme="@style/SearchesAppTheme"
+                android:textColorHint="@color/vector_0_54_black_color"
+                />
 
         </RelativeLayout>
 
