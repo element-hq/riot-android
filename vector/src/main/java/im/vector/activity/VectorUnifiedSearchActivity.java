@@ -50,6 +50,7 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.fragments.VectorSearchFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
 import im.vector.fragments.VectorSearchMessagesListFragment;
 
@@ -87,6 +88,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     // search fragments
     private VectorSearchMessagesListFragment mSearchInMessagesFragment;
     private VectorSearchRoomsListFragment mSearchInRoomNamesFragment;
+    private VectorSearchFilesListFragment mSearchInFilesFragment;
+
     // TODO implement dedicated fragments
     //private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
     //private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
@@ -260,7 +263,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                 });
             }
         }
-        else if((currentIndex == mSearchInMessagesTabIndex) && (null != mSearchInMessagesFragment)) {
+        else if ((currentIndex == mSearchInMessagesTabIndex) && (null != mSearchInMessagesFragment)) {
             if (mSearchInMessagesFragment.isAdded())  {
 
                 // display the "wait while searching" screen (progress bar)
@@ -275,6 +278,27 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                     @Override
                     public void onSearchFailed() {
                         onSearchEnd(mSearchInMessagesTabIndex, 0);
+                    }
+                });
+            } else {
+                mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+            }
+        }
+        else if ((currentIndex == mSearchInFilesTabIndex) && (null != mSearchInFilesFragment)) {
+            if (mSearchInFilesFragment.isAdded())  {
+
+                // display the "wait while searching" screen (progress bar)
+                mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+
+                mSearchInFilesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                    @Override
+                    public void onSearchSucceed(int nbrMessages) {
+                        onSearchEnd(mSearchInFilesTabIndex, nbrMessages);
+                    }
+
+                    @Override
+                    public void onSearchFailed() {
+                        onSearchEnd(mSearchInFilesTabIndex, 0);
                     }
                 });
             } else {
@@ -413,6 +437,15 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
             mCurrentTabIndex = mSearchInPeopleTabIndex;
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
+            if (null == mSearchInFilesFragment) {
+                mSearchInFilesFragment = VectorSearchFilesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                ft.replace(R.id.search_fragment_container, mSearchInFilesFragment, tabListenerHolder.mFragmentTag);
+                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
+            } else {
+                ft.attach(mSearchInMessagesFragment);
+                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
+            }
+
             mCurrentTabIndex = mSearchInFilesTabIndex;
         }
 

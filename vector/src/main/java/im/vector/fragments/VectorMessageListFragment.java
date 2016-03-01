@@ -88,10 +88,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private IListFragmentEventListener mHostActivityListener;
 
     // onMediaAction actions
-    private static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
-    private static final int ACTION_VECTOR_FORWARD = R.id.ic_action_vector_forward;
-    private static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
-    private static final int ACTION_VECTOR_OPEN = 123456;
+    protected static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
+    protected static final int ACTION_VECTOR_FORWARD = R.id.ic_action_vector_forward;
+    protected static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
+    protected static final int ACTION_VECTOR_OPEN = 123456;
 
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
@@ -303,7 +303,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param mediaMimeType the mime type
      * @param filename the filename
      */
-    private void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename) {
+    protected void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename) {
         MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
         File file = mediasCache.mediaCacheFile(mediaUrl, mediaMimeType);
 
@@ -467,7 +467,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     /**
      * @return the image and video messages list
      */
-    private ArrayList<SlidableMediaInfo> listSlidableMessages() {
+    protected ArrayList<SlidableMediaInfo> listSlidableMessages() {
         ArrayList<SlidableMediaInfo> res = new ArrayList<SlidableMediaInfo>();
 
         for(int position = 0; position < mAdapter.getCount(); position++) {
@@ -507,7 +507,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param mediaMessage the imageMessage
      * @return the imageMessage position. -1 if not found.
      */
-    private int getMediaMessagePosition(ArrayList<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
+    protected int getMediaMessagePosition(ArrayList<SlidableMediaInfo> mediaMessagesList, Message mediaMessage) {
         String url = null;
 
         if (mediaMessage instanceof ImageMessage) {
@@ -637,7 +637,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
 
-    private void save(final Message message, final String mediaUrl, final String mediaMimeType) {
+    /**
+     * Save the message the message content into a dedicated folder.
+     * @param message the message.
+     * @param mediaUrl the media url.
+     * @param mediaMimeType the media mimetype.
+     */
+    protected void save(final Message message, final String mediaUrl, final String mediaMimeType) {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 
         builderSingle.setTitle(getActivity().getText(R.string.save_files_in));

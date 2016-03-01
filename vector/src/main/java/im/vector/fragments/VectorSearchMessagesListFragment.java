@@ -19,7 +19,6 @@ package im.vector.fragments;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -30,7 +29,6 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -39,16 +37,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
-import im.vector.util.SlidableMediaInfo;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
 
     // parameters
     private String mSearchingPattern;
     private ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
+
+    // search only media files
+    protected boolean mMediaSearchOnly;
 
     /**
      * static constructor
@@ -203,9 +202,11 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             mAdapter.clear();
             mSearchingPattern = pattern;
 
-            ((VectorSearchMessagesListAdapter)mAdapter).setTextToHighlight(pattern);
+            if (mAdapter instanceof VectorSearchMessagesListAdapter) {
+                ((VectorSearchMessagesListAdapter) mAdapter).setTextToHighlight(pattern);
+            }
 
-            super.searchPattern(pattern, new OnSearchResultListener() {
+            super.searchPattern(pattern, mMediaSearchOnly,  new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
                     // the pattern has been updated while search
