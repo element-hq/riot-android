@@ -73,7 +73,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * @return the fragment tag to use to restore the matrix messages fragement
      */
     protected String getMatrixMessagesFragmentTag() {
-        return "im.vector.VectorSearchMessagesListFragment";
+        return "im.vector.VectorSearchMessagesListFragment.getMatrixMessagesFragmentTag";
     }
 
     @Override

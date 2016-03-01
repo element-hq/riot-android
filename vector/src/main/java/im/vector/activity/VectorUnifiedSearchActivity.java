@@ -51,6 +51,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.fragments.VectorSearchFilesListFragment;
+import im.vector.fragments.VectorSearchPeopleListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
 import im.vector.fragments.VectorSearchMessagesListFragment;
 
@@ -89,10 +90,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private VectorSearchMessagesListFragment mSearchInMessagesFragment;
     private VectorSearchRoomsListFragment mSearchInRoomNamesFragment;
     private VectorSearchFilesListFragment mSearchInFilesFragment;
-
-    // TODO implement dedicated fragments
-    //private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
-    //private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
+    private VectorSearchPeopleListFragment mSearchInPeopleFragment;
     private MXSession mSession;
 
     // UI items
@@ -305,6 +303,27 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                 mWaitWhileSearchInProgressView.setVisibility(View.GONE);
             }
         }
+        else if ((currentIndex == mSearchInPeopleTabIndex) && (null != mSearchInPeopleFragment)) {
+            if (mSearchInPeopleFragment.isAdded())  {
+
+                // display the "wait while searching" screen (progress bar)
+                mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+
+                mSearchInPeopleFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                    @Override
+                    public void onSearchSucceed(int nbrMessages) {
+                        onSearchEnd(mSearchInPeopleTabIndex, nbrMessages);
+                    }
+
+                    @Override
+                    public void onSearchFailed() {
+                        onSearchEnd(mSearchInPeopleTabIndex, 0);
+                    }
+                });
+            } else {
+                mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+            }
+        }
         else {
             onSearchEnd(currentIndex, 0);
             Toast.makeText(VectorUnifiedSearchActivity.this, NOT_IMPLEMENTED, Toast.LENGTH_SHORT).show();
@@ -434,8 +453,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                 Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             }
             mCurrentTabIndex = mSearchInMessagesTabIndex;
-        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
-            mCurrentTabIndex = mSearchInPeopleTabIndex;
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
             if (null == mSearchInFilesFragment) {
                 mSearchInFilesFragment = VectorSearchFilesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
@@ -447,6 +464,18 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             }
 
             mCurrentTabIndex = mSearchInFilesTabIndex;
+        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
+            mCurrentTabIndex = mSearchInPeopleTabIndex;
+            if (null == mSearchInPeopleFragment) {
+                mSearchInPeopleFragment = VectorSearchPeopleListFragment.newInstance(mSession.getMyUserId(), R.layout.fragment_vector_search_people_list);
+                ft.replace(R.id.search_fragment_container, mSearchInPeopleFragment, tabListenerHolder.mFragmentTag);
+                Log.d(LOG_TAG, "## onTabSelected() mSearchInPeopleFragment frag added");
+            } else {
+                ft.attach(mSearchInPeopleFragment);
+                Log.d(LOG_TAG, "## onTabSelected() mSearchInPeopleFragment frag added");
+            }
+
+            mCurrentTabIndex = mSearchInPeopleTabIndex;
         }
 
         if (-1 != mCurrentTabIndex) {
@@ -464,6 +493,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if(null != mSearchInMessagesFragment) {
+                mSearchInMessagesFragment.cancelCatchingRequests();
                 ft.detach(mSearchInMessagesFragment);
             }
         }
@@ -474,7 +504,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         }
         else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES) ){
             if(null != mSearchInFilesFragment) {
+                mSearchInFilesFragment.cancelCatchingRequests();
                 ft.detach(mSearchInFilesFragment);
+            }
+        }
+        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE) ){
+            if(null != mSearchInPeopleFragment) {
+                ft.detach(mSearchInPeopleFragment);
             }
         }
     }
