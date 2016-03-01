@@ -15,8 +15,11 @@
  */
 
 package im.vector.adapters;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -435,7 +438,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             powerLevels = mRoom.getLiveState().getPowerLevels();
         }
 
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
+        final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         String text = ((0 == position) && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
         if (!isSearchMode && (null != powerLevels)) {
@@ -510,7 +513,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // cancel any translation
         cellLayout.setTranslationX(0);
 
-        Boolean hideDisplayActionsMenu = false;
+        boolean hideDisplayActionsMenu;
 
         // during a room creation, there is no dedicated power level
         if (null != powerLevels) {
@@ -543,6 +546,26 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
             }
         });
+
+        View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", nameTextView.getText());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        };
+
+        // the cellLayout setOnLongClickListener might be trapped by the scroll management
+        // so add it to some UI items.
+        cellLayout.setOnLongClickListener(onLongClickListener);
+        nameTextView.setOnLongClickListener(onLongClickListener);
+        thumbView.setOnLongClickListener(onLongClickListener);
 
         // the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || hideDisplayActionsMenu) {

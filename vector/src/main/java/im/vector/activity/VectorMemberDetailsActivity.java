@@ -15,9 +15,10 @@
  */
 package im.vector.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,8 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.adapters.RoomMembersAdapter;
-import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -369,13 +368,44 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberNameTextView = (TextView) findViewById(R.id.member_details_name);
             mPresenceTextView = (TextView) findViewById(R.id.member_details_presence);
             mActionItemsListView = (ListView) findViewById(R.id.member_details_actions_list_view);
-            mProgressBarView = (View) findViewById(R.id.member_details_list_view_progress_bar);
+            mProgressBarView = findViewById(R.id.member_details_list_view_progress_bar);
 
             // setup the list view
-            mListViewAdapter = new MemberDetailsAdapter((Context) this, R.layout.vector_adapter_member_details_items);
+            mListViewAdapter = new MemberDetailsAdapter(this, R.layout.vector_adapter_member_details_items);
             mListViewAdapter.setActionListener(this);
             updateAdapterListViewItems();
             mActionItemsListView.setAdapter(mListViewAdapter);
+
+            // when clicking on the username
+            // switch member name <-> member id
+            mMemberNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    User user = mSession.getDataHandler().getUser(mMemberId);
+
+                    if (TextUtils.equals(mMemberNameTextView.getText(), mMemberId)) {
+                        if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
+                            mMemberNameTextView.setText(user.displayname);
+                        }
+                    } else {
+                        mMemberNameTextView.setText(mMemberId);
+                    }
+                }
+            });
+
+            // long tap : copy to the clipboard
+            mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("", mMemberNameTextView.getText());
+                    clipboard.setPrimaryClip(clip);
+
+                    Context context = VectorMemberDetailsActivity.this;
+                    Toast.makeText(context, context.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
 
             // update the UI
             updateUi();
@@ -393,6 +423,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         boolean isParamInitSucceed = false;
 
         if(null != intent) {
+            mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
+
             if (null == (mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID))) {
                 Log.e(LOG_TAG, "member ID missing in extra");
             } else if (null == (mSession = getSession(intent))) {

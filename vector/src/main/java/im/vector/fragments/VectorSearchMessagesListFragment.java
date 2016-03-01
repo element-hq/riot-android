@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
@@ -308,6 +309,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
                                 ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
                                 clipboard.setPrimaryClip(clip);
+
+                                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

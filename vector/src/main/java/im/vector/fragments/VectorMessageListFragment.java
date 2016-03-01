@@ -253,6 +253,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                     ClipData clip = ClipData.newPlainText("", text);
                     clipboard.setPrimaryClip(clip);
+
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+
                 }
             });
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {

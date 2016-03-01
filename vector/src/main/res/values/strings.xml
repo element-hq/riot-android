@@ -71,6 +71,7 @@
     <string name="action_drawer">Extras</string>
     <string name="action_resume_call">Resume call</string>
     <string name="about">About</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
