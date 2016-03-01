@@ -45,7 +45,6 @@ import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
@@ -102,6 +101,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         args.putString(ARG_MATRIX_ID, matrixId);
         f.setArguments(args);
         return f;
+    }
+
+    /**
+     * @return the fragment tag to use to restore the matrix messages fragement
+     */
+    protected String getMatrixMessagesFragmentTag() {
+        return "im.vector.VectorMessageListFragment";
     }
 
     /**

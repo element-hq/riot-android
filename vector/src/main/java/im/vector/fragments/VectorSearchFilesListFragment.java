@@ -59,6 +59,13 @@ public class VectorSearchFilesListFragment extends VectorSearchMessagesListFragm
         return frag;
     }
 
+    /**
+     * @return the fragment tag to use to restore the matrix messages fragement
+     */
+    protected String getMatrixMessagesFragmentTag() {
+        return "im.vector.VectorSearchFilesListFragment";
+    }
+
     @Override
     public MessagesAdapter createMessagesAdapter() {
         mMediaSearchOnly = true;

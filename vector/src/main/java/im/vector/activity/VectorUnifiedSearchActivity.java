@@ -440,10 +440,10 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             if (null == mSearchInFilesFragment) {
                 mSearchInFilesFragment = VectorSearchFilesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInFilesFragment, tabListenerHolder.mFragmentTag);
-                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
+                Log.d(LOG_TAG, "## onTabSelected() SearchInFiles frag added");
             } else {
-                ft.attach(mSearchInMessagesFragment);
-                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
+                ft.attach(mSearchInFilesFragment);
+                Log.d(LOG_TAG, "## onTabSelected() SearchInFiles frag added");
             }
 
             mCurrentTabIndex = mSearchInFilesTabIndex;
@@ -470,6 +470,11 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES) ){
             if(null != mSearchInRoomNamesFragment) {
                 ft.detach(mSearchInRoomNamesFragment);
+            }
+        }
+        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES) ){
+            if(null != mSearchInFilesFragment) {
+                ft.detach(mSearchInFilesFragment);
             }
         }
     }
