@@ -459,39 +459,20 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         } else if (null != participant.mUserId) {
             User user = null;
-
+            MXSession matchedSession = null;
             // retrieve the linked user
             ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
 
             for(MXSession session : sessions) {
-
                 if (null == user) {
+                    matchedSession = session;
                     user = session.getDataHandler().getUser(participant.mUserId);
                 }
             }
 
             // find a related user
             if (null != user) {
-                if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
-                    status = mContext.getString(R.string.room_participants_active);
-                } else {
-                    Long lastActiveMs = user.lastActiveAgo;
-
-                    if ((null != lastActiveMs) &&  (-1 != lastActiveMs)) {
-                        Long lastActivehour = lastActiveMs / 1000 / 60 / 60;
-                        Long lastActiveDays = lastActivehour / 24;
-
-                        if (lastActivehour < 1) {
-                            status = mContext.getString(R.string.room_participants_active_less_1_hour);
-                        }
-                        else if (lastActivehour < 24) {
-                            status = mContext.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
-                        }
-                        else {
-                            status = mContext.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
-                        }
-                    }
-                }
+                status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId);
             }
         }
 

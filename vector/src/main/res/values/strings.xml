@@ -345,6 +345,7 @@
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>
     <string name="presence_online">Online</string>
+    <string name="presence_online_now">Online now</string>
     <string name="presence_hidden">Hidden</string>
     <string name="presence_unavailable">Unavailable</string>
 

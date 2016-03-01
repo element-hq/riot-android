@@ -83,7 +83,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         mPeopleListView = (ListView)v.findViewById(R.id.search_people_list);
         mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null, false, mSession.getMediasCache());
         mPeopleListView.setAdapter(mAdapter);
-        
+
         mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
             @Override
             public void onRemoveClick(ParticipantAdapterItem participant) {
