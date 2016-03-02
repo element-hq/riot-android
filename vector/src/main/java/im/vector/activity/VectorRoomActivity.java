@@ -1458,19 +1458,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                                 if (null != resizeBitmapStream) {
                                                     String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
 
-
                                                     if (null != bitmapURL) {
                                                         mPendingMediaUrl = bitmapURL;
                                                     }
 
                                                     resizeBitmapStream.close();
-
-                                                    // try to apply exif rotation
-                                                    if (0 != rotationAngle) {
-                                                        // rotate the image content
-                                                        ImageUtils.rotateImage(VectorRoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
-                                                    }
                                                 }
+                                            }
+
+                                            // try to apply exif rotation
+                                            if (0 != rotationAngle) {
+                                                // rotate the image content
+                                                ImageUtils.rotateImage(VectorRoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
                                             }
                                         } catch (Exception e) {
                                             Log.e(LOG_TAG, "Onclick " + e.getMessage());
