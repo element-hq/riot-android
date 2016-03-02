@@ -3,26 +3,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- tab framents container -->
-    <FrameLayout
-        android:id="@+id/room_details_fragment_container"
+    <RelativeLayout
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/room_background"/>
+        android:layout_height="match_parent">
 
-    <!-- downloading progress bar -->
-    <FrameLayout
-        android:id="@+id/settings_loading_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#449D9D9D">
+        <ImageView
+            android:id="@+id/search_background_imageview"
+            android:background="#FFFFFFFF"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@drawable/vector_search_bg"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/search_no_result_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_no_results"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:visibility="gone"/>
+
+        <!-- tab framents container -->
+        <FrameLayout
+            android:id="@+id/room_details_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- downloading progress bar -->
+        <FrameLayout
+            android:id="@+id/settings_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@color/chat_encoding_background">
+            <ProgressBar
+                android:id="@+id/loading_settings_progress_bar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+        </FrameLayout>
+
         <ProgressBar
-            android:id="@+id/loading_settings_progress_bar"
-            android:layout_width="40dp"
+            android:id="@+id/search_load_oldest_progress"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:visibility="visible"/>
-    </FrameLayout>
+            android:layout_width="match_parent"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 </FrameLayout>

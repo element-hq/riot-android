@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.Message;
@@ -36,6 +37,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import im.vector.R;
 import im.vector.activity.VectorUnifiedSearchActivity;
@@ -44,9 +46,9 @@ import im.vector.adapters.VectorSearchMessagesListAdapter;
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
 
     // parameters
-    private String mPendingPattern;
-    private String mSearchingPattern;
-    private ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
+    protected String mPendingPattern;
+    protected String mSearchingPattern;
+    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
 
     // search only media files
     protected boolean mMediaSearchOnly;
@@ -206,14 +208,14 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             return;
         }
 
-        if (!allowSearch(mPattern)) {
+        if (!allowSearch(pattern)) {
             mPattern = null;
             mMessageListView.setVisibility(View.GONE);
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    for(OnSearchResultListener listener : mSearchListeners) {
+                    for (OnSearchResultListener listener : mSearchListeners) {
                         try {
                             listener.onSearchSucceed(0);
                         } catch (Exception e) {
@@ -348,5 +350,37 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     public Boolean onContentLongClick(int position) {
         return onRowLongClick(position);
     }
+
+    //==============================================================================================================
+    // rooms events management : ignore any update on the adapter while searching
+    //==============================================================================================================
+
+    @Override
+    public void onLiveEvent(final Event event, final RoomState roomState) {
+    }
+
+    @Override
+    public void onLiveEventsChunkProcessed() {
+    }
+
+    @Override
+    public void onBackEvent(final Event event, final RoomState roomState) {
+    }
+
+    @Override
+    public void onDeleteEvent(final Event event) {
+    }
+
+    @Override
+    public void onResendingEvent(final Event event) {
+    }
+
+    @Override
+    public void onResentEvent(final Event event) {
+    }
+
+    public void onReceiptEvent(List<String> senderIds){
+    }
+
 
 }
