@@ -18,6 +18,7 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,16 @@ public class VectorSearchFilesListFragment extends VectorSearchMessagesListFragm
      */
     protected String getMatrixMessagesFragmentTag() {
         return "im.vector.VectorSearchFilesListFragment.getMatrixMessagesFragmentTag";
+    }
+
+    /**
+     * Tell if the search is allowed for a dedicated pattern
+     * @param pattern the searched pattern.
+     * @return true if the search is allowed.
+     */
+    @Override
+    protected boolean allowSearch(String pattern) {
+        return (null != mRoom) || super.allowSearch(pattern) ;
     }
 
     @Override

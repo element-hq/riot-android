@@ -30,6 +30,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
+import im.vector.fragments.VectorSearchFilesListFragment;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.
@@ -55,6 +56,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     private int mCurrentTabIndex = -1;
     private ActionBar mActionBar;
     private VectorRoomDetailsMembersFragment mAddPeopleFragment;
+    private VectorSearchFilesListFragment mSearchFilesFragment;
     private VectorRoomSettingsFragment mRoomSettingsFragment;
 
     // activity life cycle management:
@@ -248,6 +250,19 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             onTabSelectSettingsFragment();
             mCurrentTabIndex = mSettingsTabIndex;
         }
+        else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+            if (null == mSearchFilesFragment) {
+                mSearchFilesFragment = VectorSearchFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
+                Log.d(LOG_TAG, "## onTabSelected() file frag added");
+            } else {
+                ft.attach(mSearchFilesFragment);
+                Log.d(LOG_TAG, "## onTabSelected() file frag attach");
+            }
+
+            mSearchFilesFragment.searchPattern("", null);
+            mCurrentTabIndex = mFileTabIndex;
+        }
         else {
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
             mCurrentTabIndex = mSettingsTabIndex;
@@ -286,6 +301,13 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabUnselectedSettingsFragment();
         }
+        else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+            if (null != mSearchFilesFragment) {
+                mSearchFilesFragment.cancelCatchingRequests();
+                ft.detach(mSearchFilesFragment);
+            }
+        }
+
         else {
             Log.w(LOG_TAG, "## onTabUnselected() unknown tab selected!!");
         }
@@ -316,7 +338,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     mRoomSettingsFragment = VectorRoomSettingsFragment.newInstance(mMatrixId, mRoomId);
                     getFragmentManager().beginTransaction().replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL).commit();
                     Log.d(LOG_TAG, "## onTabSelected() settings frag added");
-                } else {
+                }
+                else {
                     getFragmentManager().beginTransaction().attach(mRoomSettingsFragment).commit();
                     Log.d(LOG_TAG, "## onTabSelected() settings frag attach");
                 }

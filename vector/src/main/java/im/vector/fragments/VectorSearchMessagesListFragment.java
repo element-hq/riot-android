@@ -44,6 +44,7 @@ import im.vector.adapters.VectorSearchMessagesListAdapter;
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
 
     // parameters
+    private String mPendingPattern;
     private String mSearchingPattern;
     private ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
 
@@ -96,6 +97,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         // warn the activity that the current fragment is ready
         if (getActivity() instanceof VectorUnifiedSearchActivity) {
             ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        } else if (null != mPendingPattern) {
+            searchPattern(mPendingPattern, null);
         }
     }
 
@@ -170,6 +173,17 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     /**
+     * Tell if the search is allowed for a dedicated pattern
+     * @param pattern the searched pattern.
+     * @return true if the search is allowed.
+     */
+    protected boolean allowSearch(String pattern) {
+        // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
+        // in the search case, clear the list and hide it
+        return !TextUtils.isEmpty(pattern);
+    }
+
+    /**
      * Update the searched pattern.
      * @param pattern the pattern to find out. null to disable the search mode
      */
@@ -180,15 +194,19 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             mSearchListeners.add(onSearchResultListener);
         }
 
+        // wait that the fragment is displayed
+        if (null == mMessageListView) {
+            mPendingPattern = pattern;
+            return;
+        }
+
         // please wait
         if (TextUtils.equals(mSearchingPattern, pattern)) {
             mSearchListeners.add(onSearchResultListener);
             return;
         }
 
-        // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
-        // in the search case, clear the list and hide it
-        if (TextUtils.isEmpty(pattern)) {
+        if (!allowSearch(mPattern)) {
             mPattern = null;
             mMessageListView.setVisibility(View.GONE);
 
