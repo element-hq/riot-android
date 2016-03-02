@@ -569,7 +569,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 }
 
                 if (null != thumbnailUri) {
-                    thumbnailBitmap = VectorUtils.getBitmapFromuri(getActivity(), thumbnailUri);
+                    thumbnailBitmap = VectorUtils.getThumbnailBitmapFromUri(getActivity(), thumbnailUri, mSession.getMediasCache());
                 }
                 else {
                     // no thumbnail URI found, just abort here

@@ -47,9 +47,11 @@ import android.widget.TextView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -561,15 +563,33 @@ public class VectorUtils {
      * @param mediaUri the media URI.
      * @return the bitmap, null if it fails.
      */
-    public static Bitmap getBitmapFromuri(Context context, Uri mediaUri) {
+    public static Bitmap getThumbnailBitmapFromUri(Context context, Uri mediaUri, MXMediasCache mediasCache) {
         if (null != mediaUri) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+            try {
+                ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
 
-            // sanity checks
-            if ((null != resource) && (null != resource.contentStream)) {
-                return BitmapFactory.decodeStream(resource.contentStream, null, options);
+                // sanity check
+                if (null != resource) {
+                    if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
+                        InputStream stream = resource.contentStream;
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, mediaUri);
+
+                        String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
+                        mediaUri = Uri.parse(mediaUrl);
+
+                        resource = ResourceUtils.openResource(context, mediaUri);
+                    }
+                }
+
+                // sanity checks
+                if ((null != resource) && (null != resource.contentStream)) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    return BitmapFactory.decodeStream(resource.contentStream, null, options);
+                }
+
+            } catch (Exception e) {
+
             }
         }
 

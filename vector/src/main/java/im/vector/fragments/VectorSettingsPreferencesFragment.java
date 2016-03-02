@@ -580,7 +580,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 Bitmap thumbnail = null;
 
                 if (null != thumbnailUri) {
-                    thumbnail = VectorUtils.getBitmapFromuri(getActivity(), thumbnailUri);
+                    thumbnail = VectorUtils.getThumbnailBitmapFromUri(getActivity(), thumbnailUri, mSession.getMediasCache());
                 }
 
                 String thumbnailURL = mSession.getMediasCache().saveBitmap(thumbnail, null);
