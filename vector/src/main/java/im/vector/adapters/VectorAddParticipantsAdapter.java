@@ -83,6 +83,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         void onClick(int position);
     }
 
+    // search events listener
+    public interface OnParticipantsSearchListener {
+        /**
+         * The search is ended.
+         * @param count the number of matched user
+         */
+        void onSearchEnd(int count);
+    }
+
     //
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -149,8 +158,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * Search a pattern in the known members list.
      * @param pattern the pattern to search
      */
-    public void setSearchedPattern(String pattern) {
-        setSearchedPattern(pattern, null);
+    public void setSearchedPattern(String pattern, final OnParticipantsSearchListener searchListener) {
+        setSearchedPattern(pattern, null, searchListener);
     }
 
     /**
@@ -158,14 +167,16 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param pattern the pattern to search
      * @param firstEntry the entry to display in the results list.
      */
-    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry) {
+    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry, OnParticipantsSearchListener searchListener) {
         if (null == pattern) {
             pattern = "";
         }
 
         if (!pattern.trim().equals(mPattern)) {
             mPattern = pattern.trim().toLowerCase();
-            refresh(firstEntry);
+            refresh(firstEntry, searchListener);
+        } else if (null != searchListener) {
+            searchListener.onSearchEnd(getCount());
         }
     }
 
@@ -331,14 +342,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * refresh the display
      */
     public void refresh() {
-        refresh(null);
+        refresh(null, null);
     }
 
     /**
      * Refrehs the display.
      * @param firstEntry the first entry in the result.
      */
-    public void refresh(final ParticipantAdapterItem firstEntry) {
+    public void refresh(final ParticipantAdapterItem firstEntry, final OnParticipantsSearchListener searchListener) {
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -387,7 +398,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                refresh(firstEntry);
+                                refresh(firstEntry, searchListener);
                             }
                         });
                     }
@@ -425,6 +436,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
 
                 mFirstEntry = firstEntry;
+            }
+
+            if (null != searchListener) {
+                searchListener.onSearchEnd(nextMembersList.size());
             }
         }
 

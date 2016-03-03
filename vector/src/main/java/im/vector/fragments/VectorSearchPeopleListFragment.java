@@ -34,7 +34,6 @@ import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 
-import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
 
@@ -127,37 +126,34 @@ public class VectorSearchPeopleListFragment extends Fragment {
             return;
         }
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (TextUtils.isEmpty(pattern)) {
-                    mPeopleListView.setVisibility(View.GONE);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onSearchResultListener.onSearchSucceed(0);
-                        }
-                    });
-                } else {
-                    mAdapter.setSearchedPattern(pattern);
-
+        if (TextUtils.isEmpty(pattern)) {
+            mPeopleListView.setVisibility(View.GONE);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onSearchResultListener.onSearchSucceed(0);
+                }
+            });
+        } else {
+            mAdapter.setSearchedPattern(pattern, new VectorAddParticipantsAdapter.OnParticipantsSearchListener() {
+                @Override
+                public void onSearchEnd(final int count) {
                     mPeopleListView.post(new Runnable() {
                         @Override
                         public void run() {
-                            int count = mAdapter.getCount();
-
                             mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
                             onSearchResultListener.onSearchSucceed(count);
                         }
                     });
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mAdapter.setSearchedPattern(null, null, null);
     }
 
     @Override
