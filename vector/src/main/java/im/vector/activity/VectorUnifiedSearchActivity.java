@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,46 +17,32 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.fragments.VectorSearchPeopleListFragment;
+import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
 import im.vector.fragments.VectorSearchMessagesListFragment;
+
 
 /**
  * Displays a generic activity search method
  */
-public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements TabListener {
+public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements TabListener, VectorBaseSearchActivity.IVectorSearchActivity  {
     private static final String LOG_TAG = "VectorUniSrchActivity";
 
     public static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
@@ -75,21 +61,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     // activity life cycle management:
     // - Bundle keys
     private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
-    private static final String KEY_STATE_IS_BACKGROUND_ROOMS_TAB = "IS_BACKGROUND_ROOMS_TAB";
-    private static final String KEY_STATE_IS_BACKGROUND_MESSAGES_TAB = "IS_BACKGROUND_MESSAGES_TAB";
-    private static final String KEY_STATE_IS_BACKGROUND_PEOPLE_TAB = "IS_BACKGROUND_PEOPLE_TAB";
-    private static final String KEY_STATE_IS_BACKGROUND_FILES_TAB = "IS_BACKGROUND_FILES_TAB";
-    private static final String KEY_STATE_SEARCH_PATTERN_MESSAGES_TAB = "SEARCH_PATTERN_MESSAGES";
-    private static final String KEY_STATE_SEARCH_PATTERN_ROOMS_TAB = "SEARCH_PATTERN_ROOMS";
-    private static final String KEY_STATE_SEARCH_PATTERN_PEOPLE_TAB = "SEARCH_PATTERN_PEOPLE";
-    private static final String KEY_STATE_SEARCH_PATTERN_FILES_TAB = "SEARCH_PATTERN_FILES";
+    private static final String KEY_STATE_SEARCH_PATTERN = "SEARCH_PATTERN";
 
     // search fragments
     private VectorSearchMessagesListFragment mSearchInMessagesFragment;
     private VectorSearchRoomsListFragment mSearchInRoomNamesFragment;
-    // TODO implement dedicated fragments
-    //private VectorMessagesSearchResultsListFragment mSearchInFilesFragment;
-    //private VectorMessagesSearchResultsListFragment mSearchInPeopleFragment;
+    private VectorSearchRoomsFilesListFragment mSearchInFilesFragment;
+    private VectorSearchPeopleListFragment mSearchInPeopleFragment;
     private MXSession mSession;
 
     // UI items
@@ -98,22 +76,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private View mLoadOldestContentView;
     private View mWaitWhileSearchInProgressView;
 
-    /**
-     * Save the custom date for each tab
-     */
-    private static class TabListenerHolder {
-        public final String mFragmentTag;
-        public int mBackgroundVisibility;
-        public int mNoResultsTxtViewVisibility;
-        public String mSearchedPattern;
-
-        public TabListenerHolder(String aTabTag, int aBackgroundVisibility, int aNoResultsVisibility, String aSearchPattern) {
-            mFragmentTag = aTabTag;
-            mNoResultsTxtViewVisibility = aNoResultsVisibility;
-            mBackgroundVisibility = aBackgroundVisibility;
-            mSearchedPattern = aSearchPattern;
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -203,37 +165,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         }
     }
 
-    /**
-     * Called by the fragments when they are resumed.
-     * It is used to refresh the search while playing with the tab.
-     */
-    public void onSearchFragmentResume() {
-        searchAccordingToTabHandler();
-    }
-
-    /**
-     * Update the tag of the tab with its the UI values
-     * @param aTabToUpdate the tab to be updated
-     */
-    private void saveUiTabContext(ActionBar.Tab aTabToUpdate) {
-        TabListenerHolder tabTag = (TabListenerHolder) aTabToUpdate.getTag();
-        tabTag.mBackgroundVisibility = mBackgroundImageView.getVisibility();
-        tabTag.mNoResultsTxtViewVisibility = mNoResultsTxtView.getVisibility();
-        tabTag.mSearchedPattern = mPatternToSearchEditText.getText().toString();
-        aTabToUpdate.setTag(tabTag);
-    }
-
-    /**
-     * Restore the UI context associated with the tab
-     * @param aTabToRestore the tab to be restored
-     */
-    private void restoreUiTabContext(ActionBar.Tab aTabToRestore) {
-        TabListenerHolder tabTag = (TabListenerHolder) aTabToRestore.getTag();
-        mBackgroundImageView.setVisibility(tabTag.mBackgroundVisibility);
-        mNoResultsTxtView.setVisibility(tabTag.mNoResultsTxtViewVisibility);
-        mPatternToSearchEditText.setText(tabTag.mSearchedPattern);
-    }
-
     private void searchAccordingToTabHandler() {
         int currentIndex = mActionBar.getSelectedNavigationIndex();
 
@@ -242,68 +173,74 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         String pattern = mPatternToSearchEditText.getText().toString();
 
         if((currentIndex == mSearchInRoomNamesTabIndex) && (null != mSearchInRoomNamesFragment)) {
-            if (mSearchInRoomNamesFragment.isAdded()) {
+            // display the "wait while searching" screen (progress bar)
+            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
 
-                // display the "wait while searching" screen (progress bar)
-                mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+            mSearchInRoomNamesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                @Override
+                public void onSearchSucceed(int nbrMessages) {
+                    onSearchEnd(mSearchInRoomNamesTabIndex, nbrMessages);
+                }
 
-                mSearchInRoomNamesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
-                    @Override
-                    public void onSearchSucceed(int nbrMessages) {
-                        onSearchEnd(mSearchInRoomNamesTabIndex, nbrMessages);
-                    }
-
-                    @Override
-                    public void onSearchFailed() {
-                        onSearchEnd(mSearchInRoomNamesTabIndex, 0);
-                    }
-                });
-            }
+                @Override
+                public void onSearchFailed() {
+                    onSearchEnd(mSearchInRoomNamesTabIndex, 0);
+                }
+            });
         }
-        else if((currentIndex == mSearchInMessagesTabIndex) && (null != mSearchInMessagesFragment)) {
-            if (mSearchInMessagesFragment.isAdded())  {
+        else if ((currentIndex == mSearchInMessagesTabIndex) && (null != mSearchInMessagesFragment)) {
+            // display the "wait while searching" screen (progress bar)
+            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
 
-                // display the "wait while searching" screen (progress bar)
-                mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+            mSearchInMessagesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                @Override
+                public void onSearchSucceed(int nbrMessages) {
+                    onSearchEnd(mSearchInMessagesTabIndex, nbrMessages);
+                }
 
-                mSearchInMessagesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
-                    @Override
-                    public void onSearchSucceed(int nbrMessages) {
-                        onSearchEnd(mSearchInMessagesTabIndex, nbrMessages);
-                    }
+                @Override
+                public void onSearchFailed() {
+                    onSearchEnd(mSearchInMessagesTabIndex, 0);
+                }
+            });
+        }
+        else if ((currentIndex == mSearchInFilesTabIndex) && (null != mSearchInFilesFragment)) {
+            // display the "wait while searching" screen (progress bar)
+            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
 
-                    @Override
-                    public void onSearchFailed() {
-                        onSearchEnd(mSearchInMessagesTabIndex, 0);
-                    }
-                });
-            } else {
-                mWaitWhileSearchInProgressView.setVisibility(View.GONE);
-            }
+            mSearchInFilesFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                @Override
+                public void onSearchSucceed(int nbrMessages) {
+                    onSearchEnd(mSearchInFilesTabIndex, nbrMessages);
+                }
+
+                @Override
+                public void onSearchFailed() {
+                    onSearchEnd(mSearchInFilesTabIndex, 0);
+                }
+            });
+        }
+        else if ((currentIndex == mSearchInPeopleTabIndex) && (null != mSearchInPeopleFragment)) {
+            // display the "wait while searching" screen (progress bar)
+            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+
+            mSearchInPeopleFragment.searchPattern(pattern, new MatrixMessageListFragment.OnSearchResultListener() {
+                @Override
+                public void onSearchSucceed(int nbrMessages) {
+                    onSearchEnd(mSearchInPeopleTabIndex, nbrMessages);
+                }
+
+                @Override
+                public void onSearchFailed() {
+                    onSearchEnd(mSearchInPeopleTabIndex, 0);
+                }
+            });
         }
         else {
             onSearchEnd(currentIndex, 0);
             Toast.makeText(VectorUnifiedSearchActivity.this, NOT_IMPLEMENTED, Toast.LENGTH_SHORT).show();
         }
     }
-
-
-    /**
-     * Add a custom action bar with a view
-     * @return the action bar inflated view
-     */
-    private View customizeActionBar() {
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-
-        // add a custom action bar view containing an EditText to input the search text
-        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        View actionBarLayout =  getLayoutInflater().inflate(R.layout.vector_search_action_bar, null);
-        mActionBar.setCustomView(actionBarLayout, layout);
-
-        return actionBarLayout;
-    }
-
 
     //==============================================================================================================
     // Tabs logic implementation
@@ -316,8 +253,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private void createNavigationTabs(Bundle aSavedInstanceState) {
         int tabIndex = 0;
         int tabIndexToRestore;
-        int isBackroundDisplayed;
-        String searchPattern;
 
         // Set the tabs navigation mode
         mActionBar.setNavigationMode(android.support.v7.app.ActionBar.NAVIGATION_MODE_TABS);
@@ -327,9 +262,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         String tabTitle = getResources().getString(R.string.tab_title_search_rooms);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_ROOMS_TAB, View.VISIBLE):View.VISIBLE;
-        searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_ROOMS_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES, isBackroundDisplayed, View.GONE, searchPattern));
+        tabToBeadded.setTag(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES);
         mActionBar.addTab(tabToBeadded);
         mSearchInRoomNamesTabIndex = tabIndex++;
 
@@ -338,9 +271,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         tabTitle = getResources().getString(R.string.tab_title_search_messages);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_MESSAGES_TAB, View.VISIBLE):View.VISIBLE;
-        searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_MESSAGES_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_MESSAGE, isBackroundDisplayed, View.GONE, searchPattern));
+        tabToBeadded.setTag(TAG_FRAGMENT_SEARCH_IN_MESSAGE);
         mActionBar.addTab(tabToBeadded);
         mSearchInMessagesTabIndex = tabIndex++;
 
@@ -349,9 +280,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         tabTitle = getResources().getString(R.string.tab_title_search_people);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_PEOPLE_TAB, View.VISIBLE):View.VISIBLE;
-        searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_PEOPLE_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_PEOPLE, isBackroundDisplayed, View.GONE, searchPattern));
+        tabToBeadded.setTag(TAG_FRAGMENT_SEARCH_PEOPLE);
         mActionBar.addTab(tabToBeadded);
         mSearchInPeopleTabIndex = tabIndex++;
 
@@ -360,83 +289,112 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         tabTitle = getResources().getString(R.string.tab_title_search_files);
         tabToBeadded.setText(tabTitle);
         tabToBeadded.setTabListener(this);
-        isBackroundDisplayed = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_IS_BACKGROUND_FILES_TAB, View.VISIBLE):View.VISIBLE;
-        searchPattern = (null != aSavedInstanceState)?aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN_FILES_TAB,""):"";
-        tabToBeadded.setTag(new TabListenerHolder(TAG_FRAGMENT_SEARCH_IN_FILES, isBackroundDisplayed, View.GONE, searchPattern));
+        tabToBeadded.setTag(TAG_FRAGMENT_SEARCH_IN_FILES);
         mActionBar.addTab(tabToBeadded);
         mSearchInFilesTabIndex = tabIndex++;
 
         // set the default tab to be displayed
-        tabIndexToRestore = (null != aSavedInstanceState)?aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        tabIndexToRestore = (null != aSavedInstanceState)? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
         if(-1 == tabIndexToRestore) {
             // default value: display the search in rooms tab
             tabIndexToRestore = mSearchInRoomNamesTabIndex;
         }
         mCurrentTabIndex = tabIndexToRestore;
-
         // set the tab to display
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
+
+        // restore the searched pattern
+        mPatternToSearchEditText.setText((null != aSavedInstanceState) ? aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
     }
 
     @Override
     public void onTabSelected(android.support.v7.app.ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-        TabListenerHolder tabListenerHolder = (TabListenerHolder) tab.getTag();
-        Log.d(LOG_TAG, "## onTabSelected() FragTag=" + tabListenerHolder.mFragmentTag);
+        Log.d(LOG_TAG, "## onTabSelected() FragTag=" + tab.getTag());
 
         // clear any displayed windows
         resetUi();
 
-        // inter tab selection life cycle: restore tab UI
-        restoreUiTabContext(tab);
+        // attach / replace a fragment by tag
+        String tabTag = (String)tab.getTag();
+        Fragment fragment = null;
+        boolean replace = false;
 
-        if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
+        // search a room by name
+        if (TextUtils.equals(tabTag, TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
             if (null == mSearchInRoomNamesFragment) {
+                replace = true;
                 mSearchInRoomNamesFragment = VectorSearchRoomsListFragment.newInstance(mSession.getMyUserId(), R.layout.fragment_vector_recents_list);
-                ft.replace(R.id.search_fragment_container, mSearchInRoomNamesFragment, tabListenerHolder.mFragmentTag);
-                Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag added");
-            } else {
-                ft.attach(mSearchInRoomNamesFragment);
-                Log.d(LOG_TAG, "## onTabSelected() SearchInRoomNames frag attach");
             }
+            fragment = mSearchInRoomNamesFragment;
             mCurrentTabIndex = mSearchInRoomNamesTabIndex;
 
-        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
+        }
+        // search a message by its body
+        else if (TextUtils.equals((String)tab.getTag(), TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
             if (null == mSearchInMessagesFragment) {
+                replace = true;
                 mSearchInMessagesFragment = VectorSearchMessagesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
-                ft.replace(R.id.search_fragment_container, mSearchInMessagesFragment, tabListenerHolder.mFragmentTag);
-                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
-            } else {
-                ft.attach(mSearchInMessagesFragment);
-                Log.d(LOG_TAG, "## onTabSelected() SearchInMessages frag added");
             }
+            fragment = mSearchInMessagesFragment;
             mCurrentTabIndex = mSearchInMessagesTabIndex;
-        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_PEOPLE)) {
-            mCurrentTabIndex = mSearchInPeopleTabIndex;
-        } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
+        }
+        // search a file by name
+        else if (TextUtils.equals((String)tab.getTag(), TAG_FRAGMENT_SEARCH_IN_FILES)) {
+            if (null == mSearchInFilesFragment) {
+                replace = true;
+                mSearchInFilesFragment = VectorSearchRoomsFilesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            }
+            fragment = mSearchInFilesFragment;
             mCurrentTabIndex = mSearchInFilesTabIndex;
         }
-
-        if (-1 != mCurrentTabIndex) {
-            searchAccordingToTabHandler();
+        // search an user by name
+        else if (TextUtils.equals((String)tab.getTag(), TAG_FRAGMENT_SEARCH_PEOPLE)) {
+            if (null == mSearchInPeopleFragment) {
+                replace = true;
+                mSearchInPeopleFragment = VectorSearchPeopleListFragment.newInstance(mSession.getMyUserId(), R.layout.fragment_vector_search_people_list);
+            }
+            fragment = mSearchInPeopleFragment;
+            mCurrentTabIndex = mSearchInPeopleTabIndex;
         }
+
+        if (replace) {
+            ft.replace(R.id.search_fragment_container, fragment, tabTag);
+        } else {
+            ft.attach(fragment);
+        }
+
+        /*if (-1 != mCurrentTabIndex) {
+            searchAccordingToTabHandler();
+        }*/
+
+        resetUi();
     }
 
     @Override
     public void onTabUnselected(android.support.v7.app.ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-        TabListenerHolder tabListenerHolder = (TabListenerHolder) tab.getTag();
-        Log.d(LOG_TAG, "## onTabUnselected() FragTag=" + tabListenerHolder.mFragmentTag);
+        String tabTag = (String) tab.getTag();
+        Log.d(LOG_TAG, "## onTabUnselected() FragTag=" + tabTag);
 
-        // save tab UI context before leaving the tab...
-        saveUiTabContext(tab);
-
-        if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
-            if(null != mSearchInMessagesFragment) {
+        if (TextUtils.equals(tabTag, TAG_FRAGMENT_SEARCH_IN_MESSAGE)) {
+            if (null != mSearchInMessagesFragment) {
+                mSearchInMessagesFragment.cancelCatchingRequests();
                 ft.detach(mSearchInMessagesFragment);
             }
         }
-        else if(tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES) ){
-            if(null != mSearchInRoomNamesFragment) {
+        else if (TextUtils.equals(tabTag, TAG_FRAGMENT_SEARCH_IN_ROOM_NAMES)) {
+            if (null != mSearchInRoomNamesFragment) {
                 ft.detach(mSearchInRoomNamesFragment);
+            }
+        }
+        else if (TextUtils.equals(tabTag, TAG_FRAGMENT_SEARCH_IN_FILES)) {
+            if (null != mSearchInFilesFragment) {
+                mSearchInFilesFragment.cancelCatchingRequests();
+                ft.detach(mSearchInFilesFragment);
+            }
+        }
+        else if (TextUtils.equals(tabTag, TAG_FRAGMENT_SEARCH_PEOPLE)) {
+            if (null != mSearchInPeopleFragment) {
+                ft.detach(mSearchInPeopleFragment);
             }
         }
     }
@@ -459,25 +417,19 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         int currentIndex = mActionBar.getSelectedNavigationIndex();
         outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
 
-        // save background visibility for each tab (could be optimized)
-        int visibility = ((TabListenerHolder)mActionBar.getTabAt(mSearchInRoomNamesTabIndex).getTag()).mBackgroundVisibility;
-        outState.putInt(KEY_STATE_IS_BACKGROUND_ROOMS_TAB, visibility);
-        visibility = ((TabListenerHolder)mActionBar.getTabAt(mSearchInMessagesTabIndex).getTag()).mBackgroundVisibility;
-        outState.putInt(KEY_STATE_IS_BACKGROUND_MESSAGES_TAB, visibility);
-        visibility = ((TabListenerHolder)mActionBar.getTabAt(mSearchInPeopleTabIndex).getTag()).mBackgroundVisibility;
-        outState.putInt(KEY_STATE_IS_BACKGROUND_PEOPLE_TAB, visibility);
-        visibility = ((TabListenerHolder)mActionBar.getTabAt(mSearchInFilesTabIndex).getTag()).mBackgroundVisibility;
-        outState.putInt(KEY_STATE_IS_BACKGROUND_FILES_TAB, visibility);
+        String searchPattern = mPatternToSearchEditText.getText().toString();
 
-        // save search pattern for each tab (could be optimized)
-        String searchedPattern = ((TabListenerHolder)mActionBar.getTabAt(mSearchInRoomNamesTabIndex).getTag()).mSearchedPattern;
-        outState.putString(KEY_STATE_SEARCH_PATTERN_ROOMS_TAB, searchedPattern);
-        searchedPattern = ((TabListenerHolder)mActionBar.getTabAt(mSearchInMessagesTabIndex).getTag()).mSearchedPattern;
-        outState.putString(KEY_STATE_SEARCH_PATTERN_MESSAGES_TAB, searchedPattern);
-        searchedPattern = ((TabListenerHolder)mActionBar.getTabAt(mSearchInPeopleTabIndex).getTag()).mSearchedPattern;
-        outState.putString(KEY_STATE_SEARCH_PATTERN_PEOPLE_TAB, searchedPattern);
-        searchedPattern = ((TabListenerHolder)mActionBar.getTabAt(mSearchInFilesTabIndex).getTag()).mSearchedPattern;
-        outState.putString(KEY_STATE_SEARCH_PATTERN_FILES_TAB, searchedPattern);
+        if (!TextUtils.isEmpty(searchPattern)) {
+            outState.putString(KEY_STATE_SEARCH_PATTERN, searchPattern);
+        }
+    }
+
+    //==============================================================================================================
+    // VectorBaseSearchActivity.IVectorSearchActivity
+    //==============================================================================================================
+
+    public void refreshSearch() {
+        searchAccordingToTabHandler();
     }
 }
 

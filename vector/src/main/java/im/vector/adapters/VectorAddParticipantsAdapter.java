@@ -15,8 +15,13 @@
  */
 
 package im.vector.adapters;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,6 +81,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
          * @param position
          */
         void onClick(int position);
+    }
+
+    // search events listener
+    public interface OnParticipantsSearchListener {
+        /**
+         * The search is ended.
+         * @param count the number of matched user
+         */
+        void onSearchEnd(int count);
     }
 
     //
@@ -144,8 +158,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * Search a pattern in the known members list.
      * @param pattern the pattern to search
      */
-    public void setSearchedPattern(String pattern) {
-        setSearchedPattern(pattern, null);
+    public void setSearchedPattern(String pattern, final OnParticipantsSearchListener searchListener) {
+        setSearchedPattern(pattern, null, searchListener);
     }
 
     /**
@@ -153,14 +167,16 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param pattern the pattern to search
      * @param firstEntry the entry to display in the results list.
      */
-    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry) {
+    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry, OnParticipantsSearchListener searchListener) {
         if (null == pattern) {
             pattern = "";
         }
 
         if (!pattern.trim().equals(mPattern)) {
             mPattern = pattern.trim().toLowerCase();
-            refresh(firstEntry);
+            refresh(firstEntry, searchListener);
+        } else if (null != searchListener) {
+            searchListener.onSearchEnd(getCount());
         }
     }
 
@@ -326,14 +342,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * refresh the display
      */
     public void refresh() {
-        refresh(null);
+        refresh(null, null);
     }
 
     /**
      * Refrehs the display.
      * @param firstEntry the first entry in the result.
      */
-    public void refresh(ParticipantAdapterItem firstEntry) {
+    public void refresh(final ParticipantAdapterItem firstEntry, final OnParticipantsSearchListener searchListener) {
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -371,8 +387,27 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 nextMembersList = mCreationParticipantsList;
             }
         } else {
+            // the list members are refreshed in background to avoid UI locks
             if (null == mUnusedParticipants) {
-                listOtherMembers();
+                Thread t = new Thread(new Runnable() {
+                    public void run() {
+                        listOtherMembers();
+
+                        Handler handler = new Handler(Looper.getMainLooper());
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                refresh(firstEntry, searchListener);
+                            }
+                        });
+                    }
+                });
+
+                t.setPriority(Thread.MIN_PRIORITY);
+                t.start();
+
+                return;
             }
 
             // remove trailing spaces.
@@ -401,6 +436,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
 
                 mFirstEntry = firstEntry;
+            }
+
+            if (null != searchListener) {
+                searchListener.onSearchEnd(nextMembersList.size());
             }
         }
 
@@ -435,7 +474,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             powerLevels = mRoom.getLiveState().getPowerLevels();
         }
 
-        TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
+        final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         String text = ((0 == position) && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
         if (!isSearchMode && (null != powerLevels)) {
@@ -459,39 +498,20 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         } else if (null != participant.mUserId) {
             User user = null;
-
+            MXSession matchedSession = null;
             // retrieve the linked user
             ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
 
             for(MXSession session : sessions) {
-
                 if (null == user) {
+                    matchedSession = session;
                     user = session.getDataHandler().getUser(participant.mUserId);
                 }
             }
 
             // find a related user
             if (null != user) {
-                if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
-                    status = mContext.getString(R.string.room_participants_active);
-                } else {
-                    Long lastActiveMs = user.lastActiveAgo;
-
-                    if ((null != lastActiveMs) &&  (-1 != lastActiveMs)) {
-                        Long lastActivehour = lastActiveMs / 1000 / 60 / 60;
-                        Long lastActiveDays = lastActivehour / 24;
-
-                        if (lastActivehour < 1) {
-                            status = mContext.getString(R.string.room_participants_active_less_1_hour);
-                        }
-                        else if (lastActivehour < 24) {
-                            status = mContext.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
-                        }
-                        else {
-                            status = mContext.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
-                        }
-                    }
-                }
+                status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId);
             }
         }
 
@@ -529,7 +549,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // cancel any translation
         cellLayout.setTranslationX(0);
 
-        Boolean hideDisplayActionsMenu = false;
+        boolean hideDisplayActionsMenu;
 
         // during a room creation, there is no dedicated power level
         if (null != powerLevels) {
@@ -562,6 +582,26 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
             }
         });
+
+        View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", nameTextView.getText());
+                clipboard.setPrimaryClip(clip);
+
+
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        };
+
+        // the cellLayout setOnLongClickListener might be trapped by the scroll management
+        // so add it to some UI items.
+        cellLayout.setOnLongClickListener(onLongClickListener);
+        nameTextView.setOnLongClickListener(onLongClickListener);
+        thumbView.setOnLongClickListener(onLongClickListener);
 
         // the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || hideDisplayActionsMenu) {

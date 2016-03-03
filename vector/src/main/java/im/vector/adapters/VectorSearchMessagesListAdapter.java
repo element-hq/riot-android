@@ -50,7 +50,15 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
     private String mPattern;
 
     public VectorSearchMessagesListAdapter(MXSession session, Context context, boolean displayRoomName, MXMediasCache mediasCache) {
-        super(session, context, mediasCache);
+        super(session, context,
+                R.layout.adapter_item_vector_search_message_text_emote_notice,
+                R.layout.adapter_item_vector_search_message_image_video,
+                R.layout.adapter_item_vector_search_message_text_emote_notice,
+                R.layout.adapter_item_vector_search_message_text_emote_notice,
+                R.layout.adapter_item_vector_search_message_file,
+                R.layout.adapter_item_vector_search_message_image_video,
+                mediasCache);
+
         setNotifyOnChange(true);
         mDisplayRoomName = displayRoomName;
         searchHighlightColor = context.getResources().getColor(R.color.vector_green_color);
@@ -71,11 +79,21 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         return new ForegroundColorSpan(searchHighlightColor);
     }
 
+    /**
+     *
+     * @param event
+     * @param position
+     * @param shouldBeMerged
+     * @return
+     */
+    protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
+        return false;
+    }
+
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_search_messages, parent, false);
-        }
+    public View getView(int position, View convertView2, ViewGroup parent) {
+        View convertView = super.getView(position, convertView2, parent);
 
         MessageRow row = getItem(position);
         Event event = row.getEvent();
@@ -85,6 +103,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         convertView.findViewById(R.id.messagesAdapter_message_separator).setVisibility(View.GONE);
         convertView.findViewById(R.id.messagesAdapter_action_image).setVisibility(View.GONE);
         convertView.findViewById(R.id.messagesAdapter_top_margin_when_no_room_name).setVisibility(mDisplayRoomName ? View.GONE : View.VISIBLE);
+        convertView.findViewById(R.id.messagesAdapter_message_header).setVisibility(View.GONE);
 
         Room room = mSession.getDataHandler().getStore().getRoom(event.roomId);
 
@@ -144,7 +163,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         }
 
         // display the day
-        View dayLayout = convertView.findViewById(R.id.messagesAdapter_message_day_separator);
+        View dayLayout = convertView.findViewById(R.id.messagesAdapter_search_message_day_separator);
 
         // day separator
         String headerMessage = headerMessage(position);

@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -71,7 +72,7 @@ import im.vector.db.VectorContentProvider;
 public class VectorUtils {
 
     public static final String LOG_TAG = "VectorUtils";
-    
+
     public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
 
@@ -594,5 +595,62 @@ public class VectorUtils {
         }
 
         return null;
+    }
+
+    //==============================================================================================================
+    // User presence
+    //==============================================================================================================
+
+    /**
+     * Provide the user online status from his user Id.
+     * @param context the context.
+     * @param session the session.
+     * @param userId the userId.
+     * @return the online status desrcription.
+     */
+    public static String getUserOnlineStatus(Context context, MXSession session, String userId) {
+
+        // sanity checks
+        if ((null == session) || (null == userId)) {
+            return null;
+        }
+
+        User user = session.getDataHandler().getStore().getUser(userId);
+
+        // unknown user
+        if (null == user) {
+            return null;
+        }
+
+        String onlineStatus = "";
+
+        if (null == user.presence) {
+            onlineStatus = "";
+        } else if ((null != user.currently_active) && user.currently_active) {
+            onlineStatus = context.getResources().getString(R.string.presence_online_now);
+        } else if (User.PRESENCE_ONLINE.equals(user.presence)) {
+            onlineStatus = context.getResources().getString(R.string.room_participants_active);
+        } else {
+            Long lastActiveMs = user.lastActiveAgo;
+
+            if (null == lastActiveMs) {
+                lastActiveMs = (long) -1;
+            }
+
+            if (-1 != lastActiveMs) {
+                long lastActivehour = lastActiveMs / 1000 / 60 / 60;
+                long lastActiveDays = lastActivehour / 24;
+
+                if (lastActivehour < 1) {
+                    onlineStatus = context.getString(R.string.room_participants_active_less_1_hour);
+                } else if (lastActivehour < 24) {
+                    onlineStatus = context.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
+                } else {
+                    onlineStatus = context.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
+                }
+            }
+        }
+
+        return onlineStatus;
     }
 }

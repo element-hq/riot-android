@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -24,25 +25,34 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.EventDisplay;
+import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import im.vector.R;
+import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
 
     // parameters
-    private String mSearchingPattern;
-    private ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
+    protected String mPendingPattern;
+    protected String mSearchingPattern;
+    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
+
+    protected View mProgressView = null;
 
     /**
      * static constructor
@@ -70,13 +80,39 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        cancelSearch();
+
+        if (mIsMediaSearch) {
+            mSession.cancelSearchMediaName();
+        } else {
+            mSession.cancelSearchMessageText();
+        }
+        mSearchingPattern = null;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
-        // warn the activity that the current fragment is ready
-        if (getActivity() instanceof VectorUnifiedSearchActivity) {
-            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+        } else {
+            searchPattern(mPendingPattern, null);
         }
+    }
+
+    /**
+     * Called when a fragment is first attached to its activity.
+     * {@link #onCreate(Bundle)} will be called after this.
+     *
+     * @param aHostActivity parent activity
+     */
+    @Override
+    public void onAttach(Activity aHostActivity) {
+        super.onAttach(aHostActivity);
+        mProgressView = getActivity().findViewById(R.id.search_load_oldest_progress);
     }
 
     /**
@@ -102,19 +138,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      */
     @Override
     public void displayLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            });
+        if (null != mProgressView) {
+            mProgressView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -123,19 +148,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      */
     @Override
     public void dismissLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
+        if (null != mProgressView) {
+            mProgressView.setVisibility(View.GONE);
         }
     }
 
@@ -150,6 +164,17 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     /**
+     * Tell if the search is allowed for a dedicated pattern
+     * @param pattern the searched pattern.
+     * @return true if the search is allowed.
+     */
+    protected boolean allowSearch(String pattern) {
+        // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
+        // in the search case, clear the list and hide it
+        return !TextUtils.isEmpty(pattern);
+    }
+
+    /**
      * Update the searched pattern.
      * @param pattern the pattern to find out. null to disable the search mode
      */
@@ -160,22 +185,26 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             mSearchListeners.add(onSearchResultListener);
         }
 
+        // wait that the fragment is displayed
+        if (null == mMessageListView) {
+            mPendingPattern = pattern;
+            return;
+        }
+
         // please wait
         if (TextUtils.equals(mSearchingPattern, pattern)) {
             mSearchListeners.add(onSearchResultListener);
             return;
         }
 
-        // ConsoleMessageListFragment displays the list of unfiltered messages when there is no pattern
-        // in the search case, clear the list and hide it
-        if (TextUtils.isEmpty(pattern)) {
+        if (!allowSearch(pattern)) {
             mPattern = null;
             mMessageListView.setVisibility(View.GONE);
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    for(OnSearchResultListener listener : mSearchListeners) {
+                    for (OnSearchResultListener listener : mSearchListeners) {
                         try {
                             listener.onSearchSucceed(0);
                         } catch (Exception e) {
@@ -190,9 +219,11 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             mAdapter.clear();
             mSearchingPattern = pattern;
 
-            ((VectorSearchMessagesListAdapter)mAdapter).setTextToHighlight(pattern);
+            if (mAdapter instanceof VectorSearchMessagesListAdapter) {
+                ((VectorSearchMessagesListAdapter) mAdapter).setTextToHighlight(pattern);
+            }
 
-            super.searchPattern(pattern, new OnSearchResultListener() {
+            super.searchPattern(pattern, mIsMediaSearch,  new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
                     // the pattern has been updated while search
@@ -244,46 +275,59 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     @Override
     public void onContentClick(int position) {
-        final MessageRow messageRow = mAdapter.getItem(position);
-        final List<Integer> textIds = new ArrayList<>();
-        final List<Integer> iconIds = new ArrayList<Integer>();
+        MessageRow row = mAdapter.getItem(position);
+        Event event = row.getEvent();
 
-        textIds.add(R.string.copy);
-        iconIds.add(R.drawable.ic_material_copy);
+        Message message = JsonUtils.toMessage(event.content);
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
+        // medias are managed by the mother class
+        if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
+            super.onContentClick(position);
+        } else {
 
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
-        }
+            final MessageRow messageRow = mAdapter.getItem(position);
+            final List<Integer> textIds = new ArrayList<>();
+            final List<Integer> iconIds = new ArrayList<Integer>();
 
-        Integer[] lIcons = iconIds.toArray(new Integer[iconIds.size()]);
-        Integer[] lTexts = textIds.toArray(new Integer[iconIds.size()]);
+            textIds.add(R.string.copy);
+            iconIds.add(R.drawable.ic_material_copy);
 
-        fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-            @Override
-            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                final Integer selectedVal = textIds.get(position);
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
 
-                if (selectedVal == R.string.copy) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            Event event = messageRow.getEvent();
-                            EventDisplay display = new EventDisplay(getActivity(), event, null);
-
-                            ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
-                            clipboard.setPrimaryClip(clip);
-                        }
-                    });
-                }
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
             }
-        });
 
-        fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
+            Integer[] lIcons = iconIds.toArray(new Integer[iconIds.size()]);
+            Integer[] lTexts = textIds.toArray(new Integer[iconIds.size()]);
+
+            fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                @Override
+                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                    final Integer selectedVal = textIds.get(position);
+
+                    if (selectedVal == R.string.copy) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                                Event event = messageRow.getEvent();
+                                EventDisplay display = new EventDisplay(getActivity(), event, null);
+
+                                ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
+                                clipboard.setPrimaryClip(clip);
+
+                                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+
+            fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
+        }
     }
 
     /**
@@ -296,4 +340,35 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         return onRowLongClick(position);
     }
 
+    //==============================================================================================================
+    // rooms events management : ignore any update on the adapter while searching
+    //==============================================================================================================
+
+    @Override
+    public void onLiveEvent(final Event event, final RoomState roomState) {
+    }
+
+    @Override
+    public void onLiveEventsChunkProcessed() {
+    }
+
+    @Override
+    public void onBackEvent(final Event event, final RoomState roomState) {
+    }
+
+    @Override
+    public void onDeleteEvent(final Event event) {
+    }
+
+    @Override
+    public void onResendingEvent(final Event event) {
+    }
+
+    @Override
+    public void onResentEvent(final Event event) {
+    }
+
+    @Override
+    public void onReceiptEvent(List<String> senderIds){
+    }
 }

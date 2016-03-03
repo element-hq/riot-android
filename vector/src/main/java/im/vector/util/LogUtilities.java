@@ -72,6 +72,7 @@ public class LogUtilities {
             "View:S",
             "ListView:S",
             "Posix:S",
+            "chatty:S",
             "*:*"
     };
 

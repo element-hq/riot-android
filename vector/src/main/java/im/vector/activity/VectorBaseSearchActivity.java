@@ -45,6 +45,11 @@ import im.vector.R;
  * This class defines a base class to manage search in action bar
  */
 public class VectorBaseSearchActivity extends MXCActionBarActivity {
+
+    public interface IVectorSearchActivity {
+        void refreshSearch();
+    }
+
     private static final String LOG_TAG = "VectorBaseSearchAct";
 
     private static final int SPEECH_REQUEST_CODE = 1234;

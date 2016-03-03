@@ -141,15 +141,18 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
         }
 
-        mAdapter.setSearchedPattern(pattern, firstEntry);
-
-        mListView.post(new Runnable() {
+        mAdapter.setSearchedPattern(pattern, firstEntry, new VectorAddParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
-            public void run() {
-                boolean hasPattern = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
-                boolean hasResult = (0 != mAdapter.getCount());
-                
-                mNoResultView.setVisibility((hasPattern && !hasResult) ? View.VISIBLE : View.GONE);
+            public void onSearchEnd(final int count) {
+                mListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean hasPattern = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
+                        boolean hasResult = (0 != count);
+
+                        mNoResultView.setVisibility((hasPattern && !hasResult) ? View.VISIBLE : View.GONE);
+                    }
+                });
             }
         });
     }
