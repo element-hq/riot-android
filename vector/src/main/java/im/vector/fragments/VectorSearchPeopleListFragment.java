@@ -1,56 +1,59 @@
+/*
+ * Copyright 2016 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.PublicRoom;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorHomeActivity;
+
+import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorPublicRoomsActivity;
-import im.vector.activity.VectorRoomActivity;
+
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
-import im.vector.adapters.VectorRoomSummaryAdapter;
 
 
 public class VectorSearchPeopleListFragment extends Fragment {
-    // log tag
-    private static String LOG_TAG = "VectorSearchPeopleListFragment";
 
     public static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
     public static final String ARG_LAYOUT_ID = "VectorSearchPeopleListFragment.ARG_LAYOUT_ID";
 
     // the session
     private MXSession mSession;
-
     private ListView mPeopleListView;
-
     private VectorAddParticipantsAdapter mAdapter;
 
+    // pending requests
+    // a request might be called whereas the fragment is not initialized
+    // wait the resume to perform the search
+    private String mPendingPattern;
+    private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
 
     /**
      * Static constructor
@@ -118,25 +121,38 @@ public class VectorSearchPeopleListFragment extends Fragment {
      * @param onSearchResultListener
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
-        if (TextUtils.isEmpty(pattern)) {
-            mPeopleListView.setVisibility(View.GONE);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onSearchResultListener.onSearchSucceed(0);
-                }
-            });
-        } else {
-            mAdapter.setSearchedPattern(pattern);
-
-            mPeopleListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mPeopleListView.setVisibility(View.VISIBLE);
-                    onSearchResultListener.onSearchSucceed(1);
-                }
-            });
+        if (null == mPeopleListView) {
+            mPendingPattern = pattern;
+            mPendingSearchResultListener = onSearchResultListener;
+            return;
         }
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (TextUtils.isEmpty(pattern)) {
+                    mPeopleListView.setVisibility(View.GONE);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onSearchResultListener.onSearchSucceed(0);
+                        }
+                    });
+                } else {
+                    mAdapter.setSearchedPattern(pattern);
+
+                    mPeopleListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int count = mAdapter.getCount();
+
+                            mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
+                            onSearchResultListener.onSearchSucceed(count);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
@@ -148,9 +164,14 @@ public class VectorSearchPeopleListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // warn the activity that the current fragment is ready
-        if (getActivity() instanceof VectorUnifiedSearchActivity) {
-            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+        } else {
+            if (null != mPendingPattern) {
+                searchPattern(mPendingPattern, mPendingSearchResultListener);
+                mPendingPattern = null;
+                mPendingSearchResultListener = null;
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,30 +22,17 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 
-
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
-    // log tag
-    private static String LOG_TAG = "V_RoomsSearchResultsListFragment";
-
     // the session
     private MXSession mSession;
 
     // current public Rooms List
     private List<PublicRoom> mPublicRoomsList;
-
-
-    // pending requests
-    // a request might be called whereas the fragment is not initialized
-    // wait the resume to perform the search
-    private String mPendingPattern;
-    private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
 
     /**
      * Static constructor
@@ -141,7 +129,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             }
         });
 
-
         return v;
     }
 
@@ -161,7 +148,12 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
      * @param pattern
      * @param onSearchResultListener
      */
-    public void searchPattern(final String pattern,  final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
+    public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
+        // will be done while resuming
+        if (null == mRecentsListView) {
+            return;
+        }
+
         if (TextUtils.isEmpty(pattern)) {
             mRecentsListView.setVisibility(View.GONE);
             getActivity().runOnUiThread(new Runnable() {
@@ -210,9 +202,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     public void onResume() {
         super.onResume();
 
-        // warn the activity that the current fragment is ready
-        if (getActivity() instanceof VectorUnifiedSearchActivity) {
-            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
         }
     }
 }

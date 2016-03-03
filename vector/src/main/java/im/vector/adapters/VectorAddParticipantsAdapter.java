@@ -18,6 +18,8 @@ package im.vector.adapters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -336,7 +338,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * Refrehs the display.
      * @param firstEntry the first entry in the result.
      */
-    public void refresh(ParticipantAdapterItem firstEntry) {
+    public void refresh(final ParticipantAdapterItem firstEntry) {
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -374,8 +376,27 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 nextMembersList = mCreationParticipantsList;
             }
         } else {
+            // the list members are refreshed in background to avoid UI locks
             if (null == mUnusedParticipants) {
-                listOtherMembers();
+                Thread t = new Thread(new Runnable() {
+                    public void run() {
+                        listOtherMembers();
+
+                        Handler handler = new Handler(Looper.getMainLooper());
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                refresh(firstEntry);
+                            }
+                        });
+                    }
+                });
+
+                t.setPriority(Thread.MIN_PRIORITY);
+                t.start();
+
+                return;
             }
 
             // remove trailing spaces.

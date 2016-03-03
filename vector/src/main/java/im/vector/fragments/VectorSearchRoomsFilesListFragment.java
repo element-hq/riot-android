@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,6 @@ import im.vector.adapters.VectorSearchFilesListAdapter;
 import im.vector.util.SlidableMediaInfo;
 
 public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesListFragment {
-
     /**
      * static constructor
      * @param matrixId the session Id.
@@ -60,26 +58,9 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
         return frag;
     }
 
-    /**
-     * @return the fragment tag to use to restore the matrix messages fragement
-     */
-    protected String getMatrixMessagesFragmentTag() {
-        return "im.vector.VectorSearchFilesListFragment.getMatrixMessagesFragmentTag";
-    }
-
-    /**
-     * Tell if the search is allowed for a dedicated pattern
-     * @param pattern the searched pattern.
-     * @return true if the search is allowed.
-     */
-    @Override
-    protected boolean allowSearch(String pattern) {
-        return (null != mRoom) || super.allowSearch(pattern) ;
-    }
-
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        mMediaSearchOnly = true;
+        mIsMediaSearch = true;
         return new VectorSearchFilesListAdapter(mSession, getActivity(), (null == mRoom), getMXMediasCache());
     }
 

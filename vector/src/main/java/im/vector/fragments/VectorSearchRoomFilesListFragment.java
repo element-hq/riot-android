@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import im.vector.activity.VectorBaseSearchActivity;
+
 public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesListFragment {
 
     static final int MESSAGES_PAGINATION_LIMIT = 50;
@@ -82,7 +84,12 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
     @Override
     public void onResume() {
         super.onResume();
-        startFilesSearch(null);
+
+        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+        } else {
+            startFilesSearch(null);
+        }
     }
 
     /**

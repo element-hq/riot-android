@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Timer;
 
 import im.vector.R;
+import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
@@ -50,8 +52,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     protected String mSearchingPattern;
     protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
 
-    // search only media files
-    protected boolean mMediaSearchOnly;
+    protected View mProgressView = null;
 
     /**
      * static constructor
@@ -82,6 +83,12 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     public void onPause() {
         super.onPause();
         cancelSearch();
+
+        if (mIsMediaSearch) {
+            mSession.cancelSearchMediaName();
+        } else {
+            mSession.cancelSearchMessageText();
+        }
         mSearchingPattern = null;
     }
 
@@ -89,12 +96,23 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     public void onResume() {
         super.onResume();
 
-        // warn the activity that the current fragment is ready
-        if (getActivity() instanceof VectorUnifiedSearchActivity) {
-            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
-        } else if (null != mPendingPattern) {
+        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+        } else {
             searchPattern(mPendingPattern, null);
         }
+    }
+
+    /**
+     * Called when a fragment is first attached to its activity.
+     * {@link #onCreate(Bundle)} will be called after this.
+     *
+     * @param aHostActivity parent activity
+     */
+    @Override
+    public void onAttach(Activity aHostActivity) {
+        super.onAttach(aHostActivity);
+        mProgressView = getActivity().findViewById(R.id.search_load_oldest_progress);
     }
 
     /**
@@ -120,19 +138,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      */
     @Override
     public void displayLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            });
+        if (null != mProgressView) {
+            mProgressView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -141,19 +148,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      */
     @Override
     public void dismissLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
+        if (null != mProgressView) {
+            mProgressView.setVisibility(View.GONE);
         }
     }
 
@@ -227,7 +223,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                 ((VectorSearchMessagesListAdapter) mAdapter).setTextToHighlight(pattern);
             }
 
-            super.searchPattern(pattern, mMediaSearchOnly,  new OnSearchResultListener() {
+            super.searchPattern(pattern, mIsMediaSearch,  new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
                     // the pattern has been updated while search
