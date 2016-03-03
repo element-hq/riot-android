@@ -1,64 +1,35 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:layout_height="match_parent">
+
+    <SurfaceView
+        android:visibility="visible"
+        android:id="@+id/medias_picker_surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="vertical"
-        android:background="@color/vector_background">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp">
 
         <RelativeLayout
-            android:background="@color/vector_background"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.075">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/medias_picker_camera_title"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center_vertical"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:textColor="@color/vector_0_87_black_color"
-                android:text="@string/media_picker_picture_capture_title"/>
-
-            <ImageView
-                android:id="@+id/medias_picker_switch_camera"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_material_switch_camera"
-                />
-
-            <ImageView
-                android:id="@+id/medias_picker_recording_mode"
-                android:layout_toLeftOf="@+id/medias_picker_switch_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_material_camera"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@color/vector_background"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5">
-
+            <!--  SurfaceView is used to present a live camera preview
             <SurfaceView
                 android:visibility="gone"
                 android:id="@+id/medias_picker_surface_view"
                 android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+            -->
 
+            <!-- rendu video: mVideoView
             <VideoView
                 android:visibility="gone"
                 android:id="@+id/medias_picker_video_view"
@@ -67,71 +38,143 @@
                 android:layout_gravity="center"
                 android:layout_centerInParent="true"
                 />
+                 -->
 
+            <!-- preview
             <ImageView
                 android:background="@color/vector_background"
                 android:id="@+id/medias_picker_preview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_contact_picture_holo_light"/>
+                -->
 
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.075"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/medias_picker_retake_button"
-                android:layout_weight="0.3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textColor="#FFFFFFFF"
-                android:background="@color/vector_green_color"
-                android:text="@string/media_picker_retake"/>
-
+            <!-- "take picture" button -->
             <ImageView
                 android:id="@+id/medias_picker_camera_button"
-                android:src="@drawable/ic_material_camera"
-                android:layout_weight="0.4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/medias_picker_attach1_button"
-                android:layout_weight="0.3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textColor="#FFFFFFFF"
-                android:background="@color/vector_green_color"
-                android:text="@string/media_picker_attach"/>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:background="@color/vector_background"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.075">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_above="@+id/medias_picker_recents_scrollview"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:textColor="@color/vector_0_87_black_color"
-                android:text="@string/media_picker_choose_from_library"/>
+                android:src="@drawable/ic_take_picture_vector_green"/>
 
-        </RelativeLayout>
+            <!-- toggle button to swap between front/rear camera-->
+            <ImageView
+                android:id="@+id/medias_picker_switch_camera"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_switch_camera"
+                />
 
-        <HorizontalScrollView
-            android:id="@+id/medias_picker_recents_scrollview"
-            android:scrollbars="none"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="60dp">
+            <!-- Exit button: = back button -->
+            <ImageView
+                android:id="@+id/medias_picker_exit"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_exit_media_picker_vector_green"
+                />
+
+            <!-- layout container of the attach/cancel buttons once the
+            taken image is displayed as preview. This layout is only displayed
+             once a image was taken. -->
+            <LinearLayout
+                android:id="@+id/cancel_attach_picture_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:id="@+id/medias_picker_cancel_take_picture_imageview"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="30"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_material_clear_green_vector"/>
+
+                 <View
+                    android:layout_weight="40"
+                    android:layout_width="0dp"
+                    android:visibility="invisible"
+                    android:layout_height="match_parent"
+                    android:text=""/>
+
+                <ImageView
+                    android:id="@+id/medias_picker_attach_take_picture_imageview"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="30"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_material_check_green_vector"/>
+                <!--
+                <Button
+                    android:id="@+id/medias_picker_cancel_take_picture_button"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textColor="#FFFFFFFF"
+                    android:background="@color/vector_green_color"
+                    android:text="@string/cancel"/>
+
+                <Button
+                    android:id="@+id/medias_picker_attach_take_picture_button"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textColor="#FFFFFFFF"
+                    android:background="@color/vector_green_color"
+                    android:text="@string/media_picker_attach"/>
+-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/picture_gallery_menu_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true">
+
+                <Button
+                    android:id="@+id/medias_picker_library_button"
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    android:background="@color/vector_green_color"
+                    android:text="@string/media_picker_library"/>
+
+                <Button
+                    android:layout_weight="0.4"
+                    android:layout_width="0dp"
+                    android:visibility="invisible"
+                    android:layout_height="match_parent"
+                    android:text=""/>
+
+                <Button
+                    android:id="@+id/medias_picker_attach_library_button"
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    android:background="@color/vector_green_color"
+                    android:text="@string/media_picker_attach"/>
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/medias_picker_recents_scrollview"
+                android:scrollbars="none"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_above="@+id/picture_gallery_menu_layout">
 
                 <LinearLayout
                     android:id="@+id/medias_picker_recents_listview"
@@ -140,42 +183,12 @@
                     android:orientation="horizontal">
                 </LinearLayout>
 
-        </HorizontalScrollView>
+            </HorizontalScrollView>
 
-        <LinearLayout
-            android:background="@color/vector_background"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.075"
-            android:orientation="horizontal">
+        </RelativeLayout>
 
-            <Button
-                android:id="@+id/medias_picker_library_button"
-                android:layout_weight="0.3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textColor="#FFFFFFFF"
-                android:background="@color/vector_green_color"
-                android:text="@string/media_picker_library"/>
+        <!-- -buttons cancel/attach -->
 
-            <Button
-                android:layout_weight="0.4"
-                android:layout_width="0dp"
-                android:visibility="invisible"
-                android:layout_height="match_parent"
-                android:background="@color/vector_green_color"
-                android:textColor="@color/vector_title_color"
-                android:text=""/>
-
-            <Button
-                android:id="@+id/medias_picker_attach2_button"
-                android:layout_weight="0.3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textColor="#FFFFFFFF"
-                android:background="@color/vector_green_color"
-                android:text="@string/media_picker_attach"/>
-        </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+
+</RelativeLayout>
