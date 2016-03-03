@@ -8,24 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/search_background_imageview"
-            android:background="#FFFFFFFF"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@drawable/vector_search_bg"
-            android:visibility="visible" />
-
-        <TextView
-            android:id="@+id/search_no_result_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search_no_results"
-            android:textStyle="bold"
-            android:textSize="17dp"
-            android:visibility="gone"/>
-
         <!-- tab framents container -->
         <FrameLayout
             android:id="@+id/room_details_fragment_container"

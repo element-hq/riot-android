@@ -18,9 +18,7 @@ package im.vector.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.RoomState;
@@ -35,12 +33,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import im.vector.R;
+public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesListFragment {
 
-public class VectorSearchRoomFilesListFragment extends VectorSearchFilesListFragment {
-
-    static final int MESSAGES_PAGINATION_LIMIT = 100;
-    static final String LOG_TAG = "VectorSearchMedias";
+    static final int MESSAGES_PAGINATION_LIMIT = 50;
+    static final String LOG_TAG = "SearchRoomFilesListFrag";
 
     // set to false when there is no more available message in the room history
     private boolean mCanPaginateBack = true;
@@ -66,76 +62,27 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchFilesListFrag
     }
 
     /**
-     * @return the fragment tag to use to restore the matrix messages fragement
-     */
-    protected String getMatrixMessagesFragmentTag() {
-        return "im.vector.VectorSearchRoomFilesListFragment.getMatrixMessagesFragmentTag";
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        return view;
-    }
-
-    /**
      * Cancel the catching requests.
      */
     public void cancelCatchingRequests() {
         super.cancelCatchingRequests();
+        mIsCatchingUp = false;
         mCanPaginateBack = true;
+        mRoom.cancelRemoteHistoryRequest();
         mNextBatch = mRoom.getLiveState().getToken();
+    }
+
+    @Override
+    public void onPause() {
+        super.onResume();
+        cancelCatchingRequests();
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-
-        cancelCatchingRequests();
         startFilesSearch(null);
-    }
-
-    /**
-     * Display a global spinner or any UI item to warn the user that there are some pending actions.
-     */
-    @Override
-    public void displayLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    /**
-     * Dismiss any global spinner.
-     */
-    @Override
-    public void dismissLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.search_load_oldest_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
-        }
     }
 
     /**
@@ -147,18 +94,18 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchFilesListFrag
             return;
         }
 
-        mIsCatchingUp = true;
-
         // add the listener to list to warn when the search is done.
         if (null != onSearchResultListener) {
             mSearchListeners.add(onSearchResultListener);
         }
 
         // will be called when resumed
+        // onCreateView is not yet called
         if (null == mMessageListView) {
             return;
         }
 
+        mIsCatchingUp = true;
         mMessageListView.setVisibility(View.GONE);
 
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
@@ -334,7 +281,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchFilesListFrag
      * @param callback the result callback
      */
     private void remoteRoomHistoryRequest(final ArrayList<Event> events, final ApiCallback<ArrayList<Event>> callback) {
-        mRoom.remoteRoomHistoryRequest(mNextBatch, MESSAGES_PAGINATION_LIMIT, new ApiCallback<TokensChunkResponse<Event>>() {
+        mRoom.requestServerRoomHistory(mNextBatch, MESSAGES_PAGINATION_LIMIT, new ApiCallback<TokensChunkResponse<Event>>() {
             @Override
             public void onSuccess(TokensChunkResponse<Event> eventsChunk) {
                 if ((null == mNextBatch) || TextUtils.equals(eventsChunk.start, mNextBatch)) {

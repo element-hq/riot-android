@@ -73,13 +73,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         return frag;
     }
 
-    /**
-     * @return the fragment tag to use to restore the matrix messages fragement
-     */
-    protected String getMatrixMessagesFragmentTag() {
-        return "im.vector.VectorSearchMessagesListFragment.getMatrixMessagesFragmentTag";
-    }
-
     @Override
     public MessagesAdapter createMessagesAdapter() {
         return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoom), getMXMediasCache());
@@ -379,8 +372,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     public void onResentEvent(final Event event) {
     }
 
+    @Override
     public void onReceiptEvent(List<String> senderIds){
     }
-
-
 }

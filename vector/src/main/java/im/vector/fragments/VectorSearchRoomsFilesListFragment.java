@@ -38,7 +38,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchFilesListAdapter;
 import im.vector.util.SlidableMediaInfo;
 
-public class VectorSearchFilesListFragment extends VectorSearchMessagesListFragment {
+public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesListFragment {
 
     /**
      * static constructor
@@ -46,8 +46,8 @@ public class VectorSearchFilesListFragment extends VectorSearchMessagesListFragm
      * @param layoutResId the used layout.
      * @return
      */
-    public static VectorSearchFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
-        VectorSearchFilesListFragment frag = new VectorSearchFilesListFragment();
+    public static VectorSearchRoomsFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
+        VectorSearchRoomsFilesListFragment frag = new VectorSearchRoomsFilesListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);

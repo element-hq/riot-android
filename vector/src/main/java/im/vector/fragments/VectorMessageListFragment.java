@@ -107,7 +107,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @return the fragment tag to use to restore the matrix messages fragement
      */
     protected String getMatrixMessagesFragmentTag() {
-        return "im.vector.VectorMessageListFragment.getMatrixMessagesFragmentTag";
+        return getClass().getName() + ".MATRIX_MESSAGE_FRAGMENT_TAG";
     }
 
     /**

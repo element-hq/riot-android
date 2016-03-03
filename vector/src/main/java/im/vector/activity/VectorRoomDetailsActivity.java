@@ -36,7 +36,6 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
-import im.vector.fragments.VectorSearchFilesListFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
 
 /**
@@ -71,8 +70,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
 
     // UI items
-    private ImageView mBackgroundImageView;
-    private TextView mNoResultsTxtView;
     private View mLoadOldestContentView;
     private View mWaitWhileSearchInProgressView;
 
@@ -113,8 +110,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         setContentView(R.layout.activity_vector_room_details);
 
         // UI widgets binding & init fields
-        mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
-        mNoResultsTxtView = (TextView)findViewById(R.id.search_no_result_textview);
         mWaitWhileSearchInProgressView = findViewById(R.id.settings_loading_layout);
         mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
@@ -199,15 +194,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         // stop "wait while searching" screen
         if (null != mWaitWhileSearchInProgressView) {
             mWaitWhileSearchInProgressView.setVisibility(View.GONE);
-        }
-
-        // display the background
-        if (null != mBackgroundImageView) {
-            mBackgroundImageView.setVisibility(View.VISIBLE);
-        }
-
-        if (null != mNoResultsTxtView) {
-            mNoResultsTxtView.setVisibility(View.GONE);
         }
 
         if (null != mLoadOldestContentView) {
@@ -322,11 +308,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             Log.w(LOG_TAG, "## onTabSelected() unknown tab selected!!");
         }
 
-        // display the background
-        if (null != mBackgroundImageView) {
-            mBackgroundImageView.setVisibility((mCurrentTabIndex == mFileTabIndex) ? View.VISIBLE : View.GONE);
-        }
-
         // reset the activity title
         // some fragments update it (VectorRoomDetailsMembersFragment for example)
         if (null != getSupportActionBar()) {
@@ -361,16 +342,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
             // stop "wait while searching" screen
             mWaitWhileSearchInProgressView.setVisibility(View.GONE);
-
-            // display the background only if there is no result
-            if (0 == nbrMessages) {
-                mBackgroundImageView.setVisibility(View.VISIBLE);
-            } else {
-                mBackgroundImageView.setVisibility(View.GONE);
-            }
-
-            // display the "no result" text only if the researched text is not empty
-            mNoResultsTxtView.setVisibility((0 == nbrMessages) ? View.VISIBLE : View.GONE);
         }
     }
 

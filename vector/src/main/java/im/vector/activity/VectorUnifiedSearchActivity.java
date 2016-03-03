@@ -33,8 +33,8 @@ import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.fragments.VectorSearchFilesListFragment;
 import im.vector.fragments.VectorSearchPeopleListFragment;
+import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
 import im.vector.fragments.VectorSearchMessagesListFragment;
 
@@ -72,7 +72,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     // search fragments
     private VectorSearchMessagesListFragment mSearchInMessagesFragment;
     private VectorSearchRoomsListFragment mSearchInRoomNamesFragment;
-    private VectorSearchFilesListFragment mSearchInFilesFragment;
+    private VectorSearchRoomsFilesListFragment mSearchInFilesFragment;
     private VectorSearchPeopleListFragment mSearchInPeopleFragment;
     private MXSession mSession;
 
@@ -438,7 +438,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             mCurrentTabIndex = mSearchInMessagesTabIndex;
         } else if (tabListenerHolder.mFragmentTag.equals(TAG_FRAGMENT_SEARCH_IN_FILES)) {
             if (null == mSearchInFilesFragment) {
-                mSearchInFilesFragment = VectorSearchFilesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                mSearchInFilesFragment = VectorSearchRoomsFilesListFragment.newInstance(mSession.getMyUserId(), null, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.search_fragment_container, mSearchInFilesFragment, tabListenerHolder.mFragmentTag);
                 Log.d(LOG_TAG, "## onTabSelected() SearchInFiles frag added");
             } else {
