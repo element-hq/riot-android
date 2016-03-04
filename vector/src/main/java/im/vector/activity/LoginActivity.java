@@ -102,6 +102,7 @@ public class LoginActivity extends MXCActionBarActivity {
             Log.e(LOG_TAG, "goToSplash because the credentials are already provided.");
             goToSplash();
             finish();
+            return;
         }
 
         // bind UI widgets
