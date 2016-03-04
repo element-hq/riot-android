@@ -74,6 +74,7 @@ import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
@@ -210,6 +211,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private Boolean mIgnoreTextUpdate = false;
 
     private AlertDialog mImageSizesListDialog;
+
+    private final MXEventListener mPresenceEventListener = new MXEventListener() {
+        @Override
+        public void onPresenceUpdate(Event event, User user) {
+            // the header displays active members
+            updateRoomHeaderMembersStatus();
+        }
+    };
 
     private final MXEventListener mEventListener = new MXEventListener() {
 
@@ -601,6 +610,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         Matrix.getInstance(this).removeNetworkEventListener(mNetworkEventListener);
 
+        mSession.getDataHandler().removeListener(mPresenceEventListener);
+
         // remove listener on keyboard display
         enableKeyboardShownListener(false);
     }
@@ -626,6 +637,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
+        mSession.getDataHandler().addListener(mPresenceEventListener);
+
         Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
 
         EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
@@ -650,6 +663,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         updateActionBarTitleAndTopic();
 
         refreshNotificationsArea();
+
+        updateRoomHeaderMembersStatus();
 
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
@@ -1958,13 +1973,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     private void updateRoomHeaderMembersStatus() {
-        String value;
-        if((null != mActionBarHeaderActiveMembers) && (null != mRoom)) {
-            // update the members status: "active members"/"members"
-            int members = mRoom.getMembers().size();
-            int activeMembers = mRoom.getActiveMembers().size();
-            value = getString(R.string.room_header_active_members, activeMembers, members);
-            mActionBarHeaderActiveMembers.setText(value);
+        if ((null != mActionBarHeaderActiveMembers) && (null != mRoom)) {
+            // refresh only if the action bar is hidden
+            if (mActionBarCustomTitle.getVisibility() == View.GONE) {
+
+                // update the members status: "active members"/"members"
+                int joinedMembersCount = 0;
+                int activeMembersCount = 0;
+
+                Collection<RoomMember> members = mRoom.getMembers();
+
+                for (RoomMember member : members) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                        joinedMembersCount++;
+
+                        User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+
+                        if ((null != user) && user.isActive()) {
+                            activeMembersCount++;
+                        }
+                    }
+                }
+
+                String value = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                mActionBarHeaderActiveMembers.setText(value);
+            }
         }
     }
 
