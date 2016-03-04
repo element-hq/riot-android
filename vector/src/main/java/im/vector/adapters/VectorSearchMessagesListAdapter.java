@@ -17,7 +17,9 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
@@ -76,7 +78,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
      * Highlight text style
      */
     protected CharacterStyle getHighLightTextStyle() {
-        return new ForegroundColorSpan(searchHighlightColor);
+        return new BackgroundColorSpan(searchHighlightColor);
     }
 
     /**
@@ -141,7 +143,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         CharSequence text = display.getTextualDisplay();
 
         try {
-            highlightPattern(bodyTextView, text, mPattern);
+            highlightPattern(bodyTextView, new SpannableString(text), mPattern);
         } catch (Exception e) {
             // an exception might be triggered with HTML content
             // Indeed, the formatting can fail because of the single line display.

@@ -469,7 +469,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         CommonActivityUtils.logout(VectorMessageListFragment.this.getActivity());
     }
 
-    public Boolean onRowLongClick(int position) {
+    public boolean onRowLongClick(int position) {
         return false;
     }
 
@@ -602,7 +602,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param position the cell position
      * @return true if managed
      */
-    public Boolean onContentLongClick(int position) {
+    public boolean onContentLongClick(int position) {
         return onRowLongClick(position);
     }
 
@@ -623,7 +623,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param userId the user ID
      * @return true if the long click event is managed
      */
-    public Boolean onAvatarLongClick(String userId) {
+    public boolean onAvatarLongClick(String userId) {
         return false;
     }
 

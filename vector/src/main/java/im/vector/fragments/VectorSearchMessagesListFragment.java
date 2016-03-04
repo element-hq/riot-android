@@ -268,7 +268,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
-    public Boolean onRowLongClick(int position) {
+    public boolean onRowLongClick(int position) {
         onContentClick(position);
         return true;
     }
@@ -336,7 +336,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * @return true if managed
      */
     @Override
-    public Boolean onContentLongClick(int position) {
+    public boolean onContentLongClick(int position) {
         return onRowLongClick(position);
     }
 
