@@ -16,12 +16,15 @@
 
 package im.vector.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -339,8 +342,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      * @param event the selected event.
      * @param anchorView the popup anchor.
      */
+    @SuppressLint("NewApi")
     private void onMessageClick(final Event event, final View anchorView) {
-        final PopupMenu popup = new PopupMenu(mContext, anchorView);
+        final PopupMenu popup = (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(mContext, anchorView, Gravity.END) : new PopupMenu(mContext, anchorView);
+
         popup.getMenuInflater().inflate(R.menu.vector_room_message_settings, popup.getMenu());
 
         // force to display the icons
@@ -474,6 +479,17 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 } else {
                     onEventTap(eventId);
                 }
+            }
+        });
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    return true;
+                }
+                return false;
             }
         });
     }
