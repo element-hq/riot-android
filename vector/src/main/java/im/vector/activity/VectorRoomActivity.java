@@ -308,6 +308,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public void onListTouch() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
+
     // *********************************************************************************************
 
     @Override
@@ -759,11 +760,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void sendMedias(final ArrayList<Uri> mediaUris) {
 
-        final View progressBackground =  findViewById(R.id.medias_processing_progress_background);
-        final View progress = findViewById(R.id.medias_processing_progress);
+        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
 
-        progressBackground.setVisibility(View.VISIBLE);
-        progress.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
 
         final HandlerThread handlerThread = new HandlerThread("MediasEncodingThread");
         handlerThread.start();
@@ -823,8 +822,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         @Override
                                         public void run() {
                                             handlerThread.quit();
-                                            progressBackground.setVisibility(View.GONE);
-                                            progress.setVisibility(View.GONE);
+                                            progressLayout.setVisibility(View.GONE);
 
                                             Toast.makeText(VectorRoomActivity.this,
                                                     getString(R.string.message_failed_to_upload),
@@ -1012,6 +1010,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                                         }
                                                     });
                                                 } else {
+
+                                                    // apply a rotation
+                                                    if (null != fThumbnailURL) {
+                                                        // check if the media could be resized
+                                                        if ("image/jpeg".equals(fMimeType)) {
+
+                                                            System.gc();
+
+                                                            try {
+                                                                Uri uri = Uri.parse(fMediaUrl);
+
+                                                                final int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorRoomActivity.this, uri);
+
+                                                                // try to apply exif rotation
+                                                                if (0 != rotationAngle) {
+                                                                    // rotate the image content
+                                                                    ImageUtils.rotateImage(VectorRoomActivity.this, fMediaUrl, rotationAngle, mMediasCache);
+                                                                }
+
+                                                            } catch (Exception e) {
+                                                            }
+                                                        }
+                                                    }
+
                                                     mVectorMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, fFilename, fMimeType);
                                                 }
                                             }
@@ -1042,8 +1064,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             @Override
                             public void run() {
                                 handlerThread.quit();
-                                progressBackground.setVisibility(View.GONE);
-                                progress.setVisibility(View.GONE);
+                                progressLayout.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -1352,11 +1373,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     options.outWidth = -1;
                     options.outHeight = -1;
 
-                    // get the full size bitmap
-                    Bitmap fullSizeBitmap = null;
-
+                    // retrieve the image size
                     try {
-                        fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
+                        BitmapFactory.decodeStream(imageStream, null, options);
                     } catch (OutOfMemoryError e) {
                         Log.e(LOG_TAG, "Onclick BitmapFactory.decodeStream : " + e.getMessage());
                     }
@@ -1439,49 +1458,65 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        try {
-                                            // pos == 0 -> original
-                                            if (0 != fPos) {
-                                                FileInputStream imageStream = new FileInputStream(new File(filename));
+                                        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+                                        progressLayout.setVisibility(View.VISIBLE);
 
-                                                ImageSize imageSize = sizesList.get(fPos);
-                                                InputStream resizeBitmapStream = null;
-
+                                        Thread thread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
                                                 try {
-                                                    resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
-                                                } catch (OutOfMemoryError ex) {
-                                                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
-                                                } catch (Exception e) {
-                                                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
-                                                }
+                                                    // pos == 0 -> original
+                                                    if (0 != fPos) {
+                                                        FileInputStream imageStream = new FileInputStream(new File(filename));
 
-                                                if (null != resizeBitmapStream) {
-                                                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
+                                                        ImageSize imageSize = sizesList.get(fPos);
+                                                        InputStream resizeBitmapStream = null;
 
-                                                    if (null != bitmapURL) {
-                                                        mPendingMediaUrl = bitmapURL;
+                                                        try {
+                                                            resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
+                                                        } catch (OutOfMemoryError ex) {
+                                                            Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
+                                                        } catch (Exception e) {
+                                                            Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
+                                                        }
+
+                                                        if (null != resizeBitmapStream) {
+                                                            String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
+
+                                                            if (null != bitmapURL) {
+                                                                mPendingMediaUrl = bitmapURL;
+                                                            }
+
+                                                            resizeBitmapStream.close();
+                                                        }
                                                     }
 
-                                                    resizeBitmapStream.close();
+                                                    // try to apply exif rotation
+                                                    if (0 != rotationAngle) {
+                                                        // rotate the image content
+                                                        ImageUtils.rotateImage(VectorRoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
+                                                    }
+                                                } catch (Exception e) {
+                                                    Log.e(LOG_TAG, "Onclick " + e.getMessage());
                                                 }
-                                            }
 
-                                            // try to apply exif rotation
-                                            if (0 != rotationAngle) {
-                                                // rotate the image content
-                                                ImageUtils.rotateImage(VectorRoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
+                                                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        progressLayout.setVisibility(View.GONE);
+                                                        mVectorMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
+                                                        mPendingThumbnailUrl = null;
+                                                        mPendingMediaUrl = null;
+                                                        mPendingMimeType = null;
+                                                        mPendingFilename = null;
+                                                        manageSendMoreButtons();
+                                                    }
+                                                });
                                             }
-                                        } catch (Exception e) {
-                                            Log.e(LOG_TAG, "Onclick " + e.getMessage());
-                                        }
+                                        });
 
-                                        //
-                                        mVectorMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
-                                        mPendingThumbnailUrl = null;
-                                        mPendingMediaUrl = null;
-                                        mPendingMimeType = null;
-                                        mPendingFilename = null;
-                                        manageSendMoreButtons();
+                                        thread.setPriority(Thread.MIN_PRIORITY);
+                                        thread.start();
                                     }
                                 });
                             }
