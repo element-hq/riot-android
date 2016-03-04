@@ -636,7 +636,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * Compute the View that should be used to render the child,
      * given its position and its group’s position
      */
-    @SuppressLint("NewApi")
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // sanity check
@@ -753,90 +752,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup;
+                    displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
+                }
+            });
 
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor), Gravity.END);
-                    } else {
-                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
-                    }
-                    popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
-
-                    MenuItem item;
-
-                    final BingRulesManager bingRulesManager = mMxSession.getDataHandler().getBingRulesManager();
-
-                    if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
-                        item = popup.getMenu().getItem(0);
-                        item.setIcon(null);
-                    }
-
-                    if (!isFavorite) {
-                        item = popup.getMenu().getItem(1);
-                        item.setIcon(null);
-                    }
-
-                    if (!isLowPrior) {
-                        item = popup.getMenu().getItem(2);
-                        item.setIcon(null);
-                    }
-
-                    item = popup.getMenu().getItem(3);
-                    SpannableString s = new SpannableString(item.getTitle());
-                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
-                    item.setTitle(s);
-
-                    // force to display the icon
-                    try {
-                        Field[] fields = popup.getClass().getDeclaredFields();
-                        for (Field field : fields) {
-                            if ("mPopup".equals(field.getName())) {
-                                field.setAccessible(true);
-                                Object menuPopupHelper = field.get(popup);
-                                Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
-                                Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
-                                setForceIcons.invoke(menuPopupHelper, true);
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                    }
-
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(final MenuItem item) {
-
-                            switch (item.getItemId()) {
-                                case R.id.ic_action_select_notifications: {
-                                    mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
-                                    break;
-                                }
-                                case R.id.ic_action_select_fav: {
-                                    if (isFavorite) {
-                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
-                                    } else {
-                                        mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
-                                    }
-                                    break;
-                                }
-                                case R.id.ic_action_select_deprioritize: {
-                                    if (isLowPrior) {
-                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
-                                    } else {
-                                        mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
-                                    }
-                                    break;
-                                }
-                                case R.id.ic_action_select_remove: {
-                                    mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
-                                    break;
-                                }
-                            }
-                            return false;
-                        }
-                    });
-
-                    popup.show();
+            timestampTxtView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
                 }
             });
         }
@@ -845,6 +768,102 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         separatorGroupView.setVisibility((isLastChild && ((groupPosition + 1) < getGroupCount())) ? View.VISIBLE : View.GONE);
 
         return convertView;
+    }
+
+    /**
+     * Display the recents action popup.
+     * @param childRoom the room in which the actions should be triggered in.
+     * @param actionView the anchor view.
+     * @param isFavorite true if it is a favorite room
+     * @param isLowPrior true it it is a low priority room
+     */
+    @SuppressLint("NewApi")
+    private void displayPopupMenu(final Room childRoom, final View actionView, final boolean isFavorite, final boolean isLowPrior) {
+        PopupMenu popup;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor), Gravity.END);
+        } else {
+            popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
+        }
+        popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
+
+        MenuItem item;
+
+        final BingRulesManager bingRulesManager = mMxSession.getDataHandler().getBingRulesManager();
+
+        if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
+            item = popup.getMenu().getItem(0);
+            item.setIcon(null);
+        }
+
+        if (!isFavorite) {
+            item = popup.getMenu().getItem(1);
+            item.setIcon(null);
+        }
+
+        if (!isLowPrior) {
+            item = popup.getMenu().getItem(2);
+            item.setIcon(null);
+        }
+
+        item = popup.getMenu().getItem(3);
+        SpannableString s = new SpannableString(item.getTitle());
+        s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
+        item.setTitle(s);
+
+        // force to display the icon
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(final MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.ic_action_select_notifications: {
+                        mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
+                        break;
+                    }
+                    case R.id.ic_action_select_fav: {
+                        if (isFavorite) {
+                            mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                        } else {
+                            mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
+                        }
+                        break;
+                    }
+                    case R.id.ic_action_select_deprioritize: {
+                        if (isLowPrior) {
+                            mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                        } else {
+                            mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
+                        }
+                        break;
+                    }
+                    case R.id.ic_action_select_remove: {
+                        mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
+
+        popup.show();
+
     }
 
     /**
