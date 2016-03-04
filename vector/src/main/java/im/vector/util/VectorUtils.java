@@ -15,8 +15,10 @@
  */
 package im.vector.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +32,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.util.LruCache;
 import android.text.Html;
@@ -560,37 +563,50 @@ public class VectorUtils {
     //==============================================================================================================
 
     /**
-     * return the bitmap from a resource.
-     * @param mediaUri the media URI.
-     * @return the bitmap, null if it fails.
+     * Return a selected bitmap from an intent.
+     * @param intent the intent
+     * @return the bitmap uri
      */
-    public static Bitmap getThumbnailBitmapFromUri(Context context, Uri mediaUri, MXMediasCache mediasCache) {
-        if (null != mediaUri) {
-            try {
-                ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+    @SuppressLint("NewApi")
+    public static Uri getThumbnailUriFromIntent(Context context, final Intent intent, MXMediasCache mediasCache) {
+        // sanity check
+        if ((null != intent) && (null != context) && (null != mediasCache)) {
+            Uri thumbnailUri = null;
+            ClipData clipData = null;
 
-                // sanity check
-                if (null != resource) {
-                    if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
-                        InputStream stream = resource.contentStream;
-                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, mediaUri);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                clipData = intent.getClipData();
+            }
 
-                        String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
-                        mediaUri = Uri.parse(mediaUrl);
+            // multiple data
+            if (null != clipData) {
+                if (clipData.getItemCount() > 0) {
+                    thumbnailUri = clipData.getItemAt(0).getUri();
+                }
+            } else if (null != intent.getData()) {
+                thumbnailUri = intent.getData();
+            }
 
-                        resource = ResourceUtils.openResource(context, mediaUri);
+            if (null != thumbnailUri) {
+                try {
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri);
+
+                    // sanity check
+                    if (null != resource) {
+                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
+                            InputStream stream = resource.contentStream;
+                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
+
+                            String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
+                            thumbnailUri = Uri.parse(mediaUrl);
+                        }
                     }
+
+                    return thumbnailUri;
+
+                } catch (Exception e) {
+
                 }
-
-                // sanity checks
-                if ((null != resource) && (null != resource.contentStream)) {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    return BitmapFactory.decodeStream(resource.contentStream, null, options);
-                }
-
-            } catch (Exception e) {
-
             }
         }
 

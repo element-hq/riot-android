@@ -59,6 +59,7 @@ import java.util.Collection;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.ResourceUtils;
+import im.vector.util.VectorUtils;
 
 public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
@@ -403,24 +404,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             return;
         }
 
-        mThumbnailUri = null;
-
-        if (null != data) {
-            ClipData clipData = null;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                clipData = data.getClipData();
-            }
-
-            // multiple data
-            if (null != clipData) {
-                if (clipData.getItemCount() > 0) {
-                    mThumbnailUri = clipData.getItemAt(0).getUri();
-                }
-            } else if (null != data.getData()) {
-                mThumbnailUri = data.getData();
-            }
-        }
+        mThumbnailUri = VectorUtils.getThumbnailUriFromIntent(this, data, mSession.getMediasCache());
 
         if (null != mThumbnailUri) {
             mThumbnail = getBitmap(mThumbnailUri);
