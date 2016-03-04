@@ -155,6 +155,11 @@
     <style name="LoginAppTheme" parent="AppTheme.NoActionBar">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
+
+        <!-- android ui button -->
+        <item name="android:colorAccent">?attr/editTextColor</item>
+        <item name="colorAccent">?attr/editTextColor</item>
+
     </style>
 
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
