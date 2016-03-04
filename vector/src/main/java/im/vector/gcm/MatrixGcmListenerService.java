@@ -49,17 +49,28 @@ public class MatrixGcmListenerService extends GcmListenerService {
         mUIhandler.post(new Runnable() {
             @Override
             public void run() {
-        for (String key : data.keySet()) {
-            Log.e(LOG_TAG, " >>> " + key + " : " + data.get(key));
-        }
-        // check if the application has been launched once
-        // the first GCM event could have been triggered whereas the application is not yet launched.
-        // so it is required to create the sessions and to start/resume event stream
-        if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
+                for (String key : data.keySet()) {
+                    Log.e(LOG_TAG, " >>> " + key + " : " + data.get(key));
+                }
+
+                int unreadCount = 0;
+
+                Object unreadCounterAsVoid = data.get("unread");
+                if (unreadCounterAsVoid instanceof String) {
+                    unreadCount = Integer.parseInt((String) unreadCounterAsVoid);
+                }
+
+                // update the badge counter
+                CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
+
+                // check if the application has been launched once
+                // the first GCM event could have been triggered whereas the application is not yet launched.
+                // so it is required to create the sessions and to start/resume event stream
+                if (!mCheckLaunched && (null != Matrix.getInstance(getApplicationContext()).getDefaultSession())) {
                     CommonActivityUtils.startEventStreamService(MatrixGcmListenerService.this);
-            mCheckLaunched = true;
-        }
-        
+                    mCheckLaunched = true;
+                }
+
                 CommonActivityUtils.catchupEventStream(MatrixGcmListenerService.this);
             }
         });

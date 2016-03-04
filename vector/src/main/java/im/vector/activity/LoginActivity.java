@@ -217,6 +217,9 @@ public class LoginActivity extends MXCActionBarActivity {
         });
 
         refreshHomeServerTextDisplay();
+
+        // reset the badge counter
+        CommonActivityUtils.updateBadgeCount(this, 0);
     }
 
     @Override

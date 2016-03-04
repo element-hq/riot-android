@@ -239,13 +239,6 @@ public class CommonActivityUtils {
         }
     }
 
-    public static void updateUnreadMessagesBadge(Context context, int badgeValue) {
-        try {
-            ShortcutBadger.setBadge(context, badgeValue);
-        } catch (Exception e) {
-        }
-    }
-
     public interface OnSubmitListener {
         void onSubmit(String text);
 
@@ -813,5 +806,32 @@ public class CommonActivityUtils {
 
     public static void displaySnack(View aTargetView, CharSequence aTextToDisplay){
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
+    }
+
+
+    //==============================================================================================================
+    // Application badge (displayed in the launcher)
+    //==============================================================================================================
+
+    private static int mBadgeValue = 0;
+
+    /**
+     * Update the application badge value.
+     * @param context the context
+     * @param badgeValue the new badge value
+     */
+    public static void updateBadgeCount(Context context, int badgeValue) {
+        try {
+            mBadgeValue = badgeValue;
+            ShortcutBadger.setBadge(context, badgeValue);
+        } catch (Exception e) {
+        }
+    }
+
+    /**
+     * @return the bagde value
+     */
+    public static int getBadgeCount() {
+        return mBadgeValue;
     }
 }
