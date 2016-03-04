@@ -502,18 +502,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             if (null != line) {
                 line.setBackgroundColor(Color.TRANSPARENT);
             }
-
-            String nextUserId = null;
-
-            if ((position + 1) < this.getCount()) {
-                MessageRow nextRow = getItem(position + 1);
-
-                if (null != nextRow)  {
-                    nextUserId = nextRow.getEvent().getSender();
-                }
-            }
-
-            view.setVisibility(((null != nextUserId) && (nextUserId.equals(event.getSender())) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
         // display the day separator
