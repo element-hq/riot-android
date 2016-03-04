@@ -19,6 +19,7 @@ package im.vector.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
@@ -646,8 +647,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
         }
 
-        int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
-        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_recents_bing_gray_color);
+        int roomNameBlack = mContext.getResources().getColor(R.color.vector_text_black_color);
+        int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
+        int vectorDarkGreyColor = mContext.getResources().getColor(R.color.vector_4d_gray);
         int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
 
         // retrieve the UI items
@@ -706,17 +708,46 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name
+        int roomNameTextColor;
+        if (childRoomSummary.isHighlighted()) {
+            roomNameTextColor = fushiaColor;
+        } else if (0 != unreadMsgCount) {
+            roomNameTextColor = vectorDarkGreyColor;
+        } else {
+            roomNameTextColor = roomNameBlack;
+        }
         roomNameTxtView.setText(roomName);
+        roomNameTxtView.setTextColor(roomNameTextColor);
+        roomNameTxtView.setTypeface(null, (roomNameTextColor != roomNameBlack) ? Typeface.BOLD : Typeface.NORMAL);
 
         // display the last message
         roomMsgTxtView.setText(lastMsgToDisplay);
 
         // set the timestamp
+        // bing view
+        int timestampTextColor;
+        if (childRoomSummary.isHighlighted()) {
+            timestampTextColor = fushiaColor;
+        } else if (0 != unreadMsgCount) {
+            timestampTextColor = vectorDarkGreyColor;
+        } else {
+            timestampTextColor = vectorDefaultTimeStampColor;
+        }
+
         timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
-        timestampTxtView.setTextColor(childRoomSummary.isHighlighted() ? vectorGreenColor : vectorDefaultTimeStampColor);
+        timestampTxtView.setTextColor(timestampTextColor);
+        timestampTxtView.setTypeface(null, (timestampTextColor != vectorDefaultTimeStampColor) ? Typeface.BOLD : Typeface.NORMAL);
 
         // bing view
-        bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
+        int bingUnreadColor;
+        if (childRoomSummary.isHighlighted()) {
+            bingUnreadColor = fushiaColor;
+        } else if ((0 != unreadMsgCount) && !childRoom.getLiveState().isPublic()) {
+            bingUnreadColor = vectorDarkGreyColor;
+        } else {
+            bingUnreadColor = Color.TRANSPARENT;
+        }
+        bingUnreadMsgView.setBackgroundColor(bingUnreadColor);
 
         // some items are shown
         bingUnreadMsgView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
