@@ -14,12 +14,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:text="@string/room_info_room_name"/>
 
         <EditText
             android:id="@+id/editText_name"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/room_info_room_name_hint"
@@ -34,14 +34,14 @@
 
         <TextView
             android:layout_width="0dp"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/room_info_room_topic"/>
 
         <EditText
             android:id="@+id/editText_topic"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/room_info_room_topic_hint"
@@ -55,14 +55,14 @@
 
         <TextView
             android:layout_width="0dp"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/room_info_room_canonical_alias"/>
 
         <EditText
             android:id="@+id/editText_canonical"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/room_info_room_canonical_hint"

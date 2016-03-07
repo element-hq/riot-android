@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:layout_width="0dp"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:text="@string/room_creation_room_name"
             />
 
@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:lines="1"
             android:maxLines="1"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:hint="@string/room_creation_room_name_hint"
             android:id="@+id/editText_roomName"/>
         />
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="0.05"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:text="#"
             />
 
@@ -78,7 +78,7 @@
             android:layout_weight="0.65"
             android:lines="1"
             android:maxLines="1"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:hint="@string/room_creation_room_alias_hint"
             android:id="@+id/editText_roomAlias"/>
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="0.3"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:text=":homeserver"
             android:id="@+id/textView_homeServer"/>
 
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:layout_width="0dp"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:text="@string/room_creation_participants"
             />
 
@@ -114,7 +114,7 @@
             android:layout_width="0dp"
             android:lines="1"
             android:maxLines="1"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:hint="@string/room_creation_participants_hint"
             android:id="@+id/editText_participants"/>
             />

@@ -17,7 +17,7 @@
         android:text = "A Section Title here"
         android:textColor="?android:attr/textColorPrimary"
         android:background="?android:attr/listDivider"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold" />
 
 
