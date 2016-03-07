@@ -83,6 +83,10 @@ public class RecentMediaLayout extends RelativeLayout {
      * @param isVideo true to display the view type thumbnail
      */
     public void setIsVideo(Boolean isVideo) {
-        mTypeView.setImageResource(isVideo ? R.drawable.ic_material_movie  : R.drawable.ic_material_photo);
+        mTypeView.setImageResource(isVideo ? R.drawable.ic_material_movie : R.drawable.ic_material_photo);
+    }
+
+    public void enableMediaTypeDisplay(Boolean aIsTypeDisplayed) {
+        mTypeView.setVisibility(aIsTypeDisplayed?View.VISIBLE:View.GONE);
     }
 }

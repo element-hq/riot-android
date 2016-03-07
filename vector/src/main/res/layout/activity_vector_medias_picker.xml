@@ -2,62 +2,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- SurfaceView is used to present a live camera preview -->
     <SurfaceView
-        android:visibility="visible"
         android:id="@+id/medias_picker_surface_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 
-    <LinearLayout
+    <!-- image view used to display the preview from the gallery -->
+    <ImageView
+        android:id="@+id/medias_picker_gallery_preview_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp">
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
 
         <RelativeLayout
+            android:id="@+id/relative_layout_main_container1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!--  SurfaceView is used to present a live camera preview
-            <SurfaceView
-                android:visibility="gone"
-                android:id="@+id/medias_picker_surface_view"
-                android:layout_centerInParent="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            -->
-
-            <!-- rendu video: mVideoView
-            <VideoView
-                android:visibility="gone"
-                android:id="@+id/medias_picker_video_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_centerInParent="true"
-                />
-                 -->
-
-            <!-- preview
-            <ImageView
-                android:background="@color/vector_background"
-                android:id="@+id/medias_picker_preview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_contact_picture_holo_light"/>
-                -->
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
 
             <!-- "take picture" button -->
             <ImageView
                 android:id="@+id/medias_picker_camera_button"
-                android:layout_above="@+id/medias_picker_recents_scrollview"
+                android:layout_above="@+id/medias_picker_recents_container"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:src="@drawable/ic_take_picture_vector_green"/>
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_take_picture_vector_green" />
 
             <!-- toggle button to swap between front/rear camera-->
             <ImageView
@@ -79,11 +60,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:src="@drawable/ic_exit_media_picker_vector_green"
+                android:onClick="onExitButton"
                 />
 
-            <!-- layout container of the attach/cancel buttons once the
-            taken image is displayed as preview. This layout is only displayed
-             once a image was taken. -->
+            <!-- layout containing the attach/redo buttons associated with the
+            preview of the taken image -->
             <LinearLayout
                 android:id="@+id/cancel_attach_picture_layout"
                 android:layout_width="match_parent"
@@ -92,103 +73,65 @@
                 android:visibility="visible"
                 android:layout_alignParentBottom="true">
 
+                <!-- REDO button: cancel the image preview -->
                 <ImageView
                     android:id="@+id/medias_picker_cancel_take_picture_imageview"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:gravity="center_vertical"
-                    android:src="@drawable/ic_material_clear_green_vector"/>
+                    android:src="@drawable/ic_material_redo_green_vector" />
 
-                 <View
+                <Space
                     android:layout_weight="40"
                     android:layout_width="0dp"
                     android:visibility="invisible"
                     android:layout_height="match_parent"
-                    android:text=""/>
+                    />
 
+                <!-- CHECK button: attach the image preview -->
                 <ImageView
                     android:id="@+id/medias_picker_attach_take_picture_imageview"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="30"
                     android:gravity="center_vertical"
-                    android:src="@drawable/ic_material_check_green_vector"/>
-                <!--
-                <Button
-                    android:id="@+id/medias_picker_cancel_take_picture_button"
-                    android:layout_weight="50"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:textColor="#FFFFFFFF"
-                    android:background="@color/vector_green_color"
-                    android:text="@string/cancel"/>
-
-                <Button
-                    android:id="@+id/medias_picker_attach_take_picture_button"
-                    android:layout_weight="50"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:textColor="#FFFFFFFF"
-                    android:background="@color/vector_green_color"
-                    android:text="@string/media_picker_attach"/>
--->
+                    android:src="@drawable/ic_material_check_green_vector" />
             </LinearLayout>
 
+            <!-- container for the horizontal gallery area -->
             <LinearLayout
-                android:id="@+id/picture_gallery_menu_layout"
+                android:id="@+id/medias_picker_recents_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:orientation="horizontal"
-                android:layout_alignParentBottom="true">
+                android:gravity="center">
 
-                <Button
-                    android:id="@+id/medias_picker_library_button"
-                    android:layout_weight="0.3"
+                <HorizontalScrollView
+                    android:id="@+id/medias_picker_recents_scrollview"
+                    android:scrollbars="none"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:textColor="@android:color/white"
-                    android:background="@color/vector_green_color"
-                    android:text="@string/media_picker_library"/>
+                    android:layout_height="75dp"
+                    android:layout_weight="85">
 
-                <Button
-                    android:layout_weight="0.4"
-                    android:layout_width="0dp"
-                    android:visibility="invisible"
-                    android:layout_height="match_parent"
-                    android:text=""/>
+                    <LinearLayout
+                        android:id="@+id/medias_picker_recents_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"/>
 
-                <Button
-                    android:id="@+id/medias_picker_attach_library_button"
-                    android:layout_weight="0.3"
+                </HorizontalScrollView>
+
+                <ImageView
+                    android:id="@+id/medias_picker_attach_from_library_imageview"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:textColor="@android:color/white"
-                    android:background="@color/vector_green_color"
-                    android:text="@string/media_picker_attach"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="15"
+                    android:src="@drawable/ic_material_folder_green_vector" />
+
             </LinearLayout>
 
-            <HorizontalScrollView
-                android:id="@+id/medias_picker_recents_scrollview"
-                android:scrollbars="none"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_above="@+id/picture_gallery_menu_layout">
-
-                <LinearLayout
-                    android:id="@+id/medias_picker_recents_listview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                </LinearLayout>
-
-            </HorizontalScrollView>
-
         </RelativeLayout>
-
-        <!-- -buttons cancel/attach -->
-
-    </LinearLayout>
 
 </RelativeLayout>
