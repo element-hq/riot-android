@@ -89,7 +89,7 @@
     <string name="create">Create:</string>
     <string name="sign_in">Sign in</string>
     <string name="username">Username</string>
-    <string name="email_address">Email address</string>
+    <string name="email_address">User name</string>
     <string name="password">Password</string>
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Log in</string>
