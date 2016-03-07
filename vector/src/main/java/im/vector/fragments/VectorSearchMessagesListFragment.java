@@ -98,8 +98,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
         if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
             ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        } else {
-            searchPattern(mPendingPattern, null);
         }
     }
 
