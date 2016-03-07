@@ -163,12 +163,12 @@
     </style>
 
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="LoginButtonStyle" parent="@android:style/Widget.Button">
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

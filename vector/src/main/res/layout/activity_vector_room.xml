@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="@string/search_no_results"
             android:textStyle="bold"
-            android:textSize="17dp"
+            android:textSize="17sp"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:hint="@string/room_message_placeholder"
                 android:id="@+id/editText_messageBox"
                 android:layout_centerVertical="true"
@@ -225,7 +225,7 @@
             android:layout_below="@id/room_avatar_container"
             android:singleLine="true"
             android:ellipsize="end"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:text="a room name here"
             android:textColor="@android:color/white"
             android:layout_marginTop="14dp" />
@@ -239,7 +239,7 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:text="a topic here"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textColor="#FFFFFF"
             android:layout_marginLeft="44dp"
             android:layout_marginRight="44dp"
@@ -252,7 +252,7 @@
             android:gravity="center_horizontal"
             android:layout_below="@id/action_bar_header_room_topic"
             android:ellipsize="end"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textColor="@color/vector_0_54_black_color"
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"

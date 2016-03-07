@@ -37,7 +37,7 @@
           android:layout_below="@id/member_avatar_container"
           android:singleLine="true"
           android:ellipsize="end"
-          android:textSize="20dp"
+          android:textSize="20sp"
           android:textColor="@android:color/white"
           android:layout_marginTop="10dp" />
 
@@ -50,7 +50,7 @@
           android:layout_below="@id/member_details_name"
           android:maxLines="1"
           android:ellipsize="end"
-          android:textSize="14dp"
+          android:textSize="14sp"
           android:textColor="@color/vector_0_54_black_color"
           android:layout_marginBottom="16dp" />
 

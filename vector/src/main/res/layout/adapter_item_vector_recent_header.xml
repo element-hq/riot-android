@@ -16,7 +16,7 @@
             android:text = "Header"
             android:fontFamily="sans-serif-medium"
             android:layout_marginLeft="18dp"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textColor="@color/vector_text_black_color"/>
 
         <ImageView
