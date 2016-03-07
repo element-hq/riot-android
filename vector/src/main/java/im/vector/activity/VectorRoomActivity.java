@@ -764,6 +764,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private void sendMessage(String body) {
         if (!TextUtils.isEmpty(body)) {
             if (!manageIRCCommand(body)) {
+                mVectorMessageListFragment.cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body);
             }
         }
@@ -774,9 +775,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * @param mediaUris the media URIs
      */
     private void sendMedias(final ArrayList<Uri> mediaUris) {
+        mVectorMessageListFragment.cancelSelectionMode();
 
         final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
-
         progressLayout.setVisibility(View.VISIBLE);
 
         final HandlerThread handlerThread = new HandlerThread("MediasEncodingThread");

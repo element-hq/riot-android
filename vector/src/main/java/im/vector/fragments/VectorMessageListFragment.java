@@ -65,6 +65,7 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
+import im.vector.adapters.VectorRoomMembersAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
 
@@ -173,6 +174,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         // notify host activity
         if(null != mHostActivityListener)
             mHostActivityListener.onListTouch();
+    }
+
+    /**
+     * Cancel the messages selection mode.
+     */
+    public void cancelSelectionMode() {
+        ((VectorMessagesAdapter)mAdapter).cancelSelectionMode();
     }
 
     /**

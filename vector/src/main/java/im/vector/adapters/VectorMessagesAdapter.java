@@ -127,6 +127,16 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     }
 
     /**
+     * Cancel the message selection mode
+     */
+    public void cancelSelectionMode() {
+        if (null != mHighlightedEventId) {
+            mHighlightedEventId = null;
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
      * @return true if there is a selected item.
      */
     public boolean isInSelectionMode() {
