@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,7 +54,7 @@ import java.util.Collection;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity {
+public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener{
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
@@ -376,5 +377,26 @@ public class VectorHomeActivity extends AppCompatActivity {
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
         VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
+    }
+
+    // warn the user scrolls up
+    public void onRecentsListScrollUp() {
+        if (mRoomCreationView.getVisibility() != View.VISIBLE) {
+            mRoomCreationView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // warn when the user scrolls downs
+    public void onRecentsListScrollDown() {
+        if (mRoomCreationView.getVisibility() != View.GONE) {
+            mRoomCreationView.setVisibility(View.GONE);
+        }
+    }
+
+    // warn when the list content can be fully displayed without scrolling
+    public void onRecentsListFitsScreen() {
+        if (mRoomCreationView.getVisibility() != View.VISIBLE) {
+            mRoomCreationView.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -23,6 +23,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -46,6 +48,19 @@ import im.vector.adapters.VectorRoomSummaryAdapter;
 import java.util.List;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener {
+
+    /**
+     * warns the activity when there is a scroll in the recents
+     */
+    public interface IVectorRecentsScrollEventListener {
+        // warn the user scrolls up
+        void onRecentsListScrollUp();
+        // warn when the user scrolls downs
+        void onRecentsListScrollDown();
+        // warn when the list content can be fully displayed without scrolling
+        void onRecentsListFitsScreen();
+    }
+
     private static final String LOG_TAG = "VectorRecentsListFrg";
 
     public static final String ARG_LAYOUT_ID = "VectorRecentsListFragment.ARG_LAYOUT_ID";
@@ -67,7 +82,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected VectorRoomSummaryAdapter mAdapter;
     protected View mWaitingView = null;
 
+    protected int mFirstVisibleIndex = 0;
+
     protected boolean mIsPaused = false;
+
+
 
     // set to true to force refresh when an events chunk has been processed.
     protected boolean refreshOnChunkEnd = false;
@@ -122,6 +141,43 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 // click is handled
                 return true;
+            }
+        });
+
+        mRecentsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    //int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    //int childPosition = ExpandableListView.getPackedPositionChild(id);
+                    // TODO manage drag and drop
+
+                }
+
+                return false;
+            }
+        });
+
+        mRecentsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (getActivity() instanceof IVectorRecentsScrollEventListener) {
+                    IVectorRecentsScrollEventListener listener = (IVectorRecentsScrollEventListener) getActivity();
+
+                    if ((0 == firstVisibleItem) && (totalItemCount <= visibleItemCount)) {
+                        listener.onRecentsListFitsScreen();
+                    } else if (firstVisibleItem < mFirstVisibleIndex) {
+                        mFirstVisibleIndex = firstVisibleItem;
+                        listener.onRecentsListScrollUp();
+                    } else if (firstVisibleItem > mFirstVisibleIndex) {
+                        mFirstVisibleIndex = firstVisibleItem;
+                        listener.onRecentsListScrollDown();
+                    }
+                }
             }
         });
 
