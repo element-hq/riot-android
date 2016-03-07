@@ -355,18 +355,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     }
 
     @Override
-    public void onDeleteEvent(final Event event) {
-    }
-
-    @Override
-    public void onResendingEvent(final Event event) {
-    }
-
-    @Override
-    public void onResentEvent(final Event event) {
-    }
-
-    @Override
     public void onReceiptEvent(List<String> senderIds){
     }
 }

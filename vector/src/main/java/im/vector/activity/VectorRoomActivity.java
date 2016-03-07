@@ -291,11 +291,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         @Override
-        public void onSendingEvent(Event event) {
-            refreshNotificationsArea();
-        }
-
-        @Override
         public void onSentEvent(Event event) {
             refreshNotificationsArea();
         }
@@ -1681,7 +1676,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mRoom.resendEvents(mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId()));
+                        mVectorMessageListFragment.resendUnsent();
+                        refreshNotificationsArea();
                     }
                 });
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
