@@ -89,16 +89,13 @@
     <string name="create">Create:</string>
     <string name="sign_in">Sign in</string>
     <string name="username">Username</string>
-    <string name="email_address">User name</string>
-    <string name="password">Password</string>
+    <string name="create_account">Register</string>
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Log in</string>
-    <string name="create_account">Register</string>
-    <string name="forgot_password">Forgot password?</string>
     <string name="hs_url">Home Server URL</string>
+    <string name="identity_url">Identity Server URL</string>
     <string name="user">user</string>
     <string name="users">users</string>
-    <string name="advanced_server_options">Advanced server options</string>
 
     <string name="create_room_set_alias">Set room alias</string>
     <string name="create_room_alias_hint">room-alias</string>
@@ -133,6 +130,19 @@
     <string name="option_send_files">Send files</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_attach_video">Attach video</string>
+
+    <!-- Authentication -->
+    <string name="auth_login">Log in</string>
+    <string name="auth_register">Register</string>
+    <string name="auth_user_id_placeholder">Email or user name</string>
+    <string name="auth_password_placeholder">Password</string>
+    <string name="auth_user_name_placeholder">Your name</string>
+    <string name="auth_email_placeholder">Email address</string>
+    <string name="auth_repeat_password_placeholder">"Repeat password</string>
+    <string name="auth_forgot_password">"Forgot password?</string>
+    <string name="auth_use_server_options">"Use custom server options (advanced)</string>
+    <string name="auth_home_server">"Home Server:"</string>
+    <string name="auth_identity_server">"Identity Server:</string>
 
     <!-- Login Screen -->
     <string name="login_error_already_logged_in">Already logged in</string>
