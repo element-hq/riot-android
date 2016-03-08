@@ -709,9 +709,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // display the room name
         int roomNameTextColor;
-        if (childRoomSummary.isHighlighted()) {
+        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
             roomNameTextColor = fushiaColor;
-        } else if (0 != unreadMsgCount) {
+        } else if ((0 != childRoom.getNotificationCount()) || (0 != unreadMsgCount)) {
             roomNameTextColor = vectorDarkGreyColor;
         } else {
             roomNameTextColor = roomNameBlack;
@@ -726,9 +726,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         // set the timestamp
         // bing view
         int timestampTextColor;
-        if (childRoomSummary.isHighlighted()) {
+        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
             timestampTextColor = fushiaColor;
-        } else if (0 != unreadMsgCount) {
+        } else if ((0 != childRoom.getNotificationCount()) || (0 != unreadMsgCount)) {
             timestampTextColor = vectorDarkGreyColor;
         } else {
             timestampTextColor = vectorDefaultTimeStampColor;
@@ -740,9 +740,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // bing view
         int bingUnreadColor;
-        if (childRoomSummary.isHighlighted()) {
+        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
             bingUnreadColor = fushiaColor;
-        } else if ((0 != unreadMsgCount) && !childRoom.getLiveState().isPublic()) {
+        } else if (0 != childRoom.getNotificationCount()) {
             bingUnreadColor = vectorDarkGreyColor;
         } else {
             bingUnreadColor = Color.TRANSPARENT;
