@@ -16,19 +16,15 @@
 
 package im.vector.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +32,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 
 import im.vector.Matrix;
@@ -48,6 +47,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.RageShake;
 import im.vector.util.VectorUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -276,6 +276,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 VectorHomeActivity.this.startActivity(searchIntent);
                 break;
 
+            // search in rooms content
+            case R.id.ic_action_mark_all_as_read:
+                markAllMessagesAsRead();
+                break;
+
             default:
                 // not handled item, return the super class implementation value
                 retCode = super.onOptionsItemSelected(item);
@@ -288,6 +293,33 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private void showWaitingView() {
         mWaitingView.setVisibility(View.VISIBLE);
     }
+
+    /**
+     * Send a read receipt for each room
+     */
+    private void markAllMessagesAsRead() {
+        // flush the summaries
+        ArrayList<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(this));
+
+        for (int index = 0; index < sessions.size(); index++) {
+            MXSession session = sessions.get(index);
+
+            IMXStore store = session.getDataHandler().getStore();
+
+            ArrayList<RoomSummary> summaries = new ArrayList<RoomSummary>(store.getSummaries());
+
+            for(RoomSummary summary : summaries) {
+                summary.setHighlighted(false);
+
+                Room room = store.getRoom(summary.getRoomId());
+
+                if (null != room) {
+                    room.sendReadReceipt();
+                }
+            }
+        }
+    }
+
 
     //==============================================================================================================
     // Sliding menu management
