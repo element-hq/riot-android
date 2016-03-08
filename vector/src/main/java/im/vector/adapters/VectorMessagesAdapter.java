@@ -335,15 +335,26 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 // should never happen
                 VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);
             }
-            // FIXME expected behaviour when the avatar is tapped.
         }
 
-        // FIXME expected behaviour when this text is tapped.
         moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
         moreText.setText(receipts.size() - imageViews.size() + "+");
 
         for(; index < imageViews.size(); index++) {
             imageViews.get(index).setVisibility(View.INVISIBLE);
+        }
+
+        if (receipts.size() > 0) {
+            avatarsListView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mMessagesAdapterEventsListener) {
+                        mMessagesAdapterEventsListener.onMoreReadReceiptClick(eventId);
+                    }
+                }
+            });
+        } else {
+            avatarsListView.setOnClickListener(null);
         }
     }
 

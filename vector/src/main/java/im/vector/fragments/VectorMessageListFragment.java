@@ -734,38 +734,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         builderSingle.show();
     }
 
-    public void onReadReceiptClick(String eventId, String userId, ReceiptData receipt) {
-        RoomMember member = mRoom.getMember(userId);
-
-        // sanity check
-        if (null != member) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-
-            SpannableStringBuilder body = new SpannableStringBuilder(getActivity().getString(R.string.read_receipt) + " : " + dateFormat.format(new Date(receipt.originServerTs)));
-            body.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, getActivity().getString(R.string.read_receipt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                    .setTitle(member.getName())
-                    .setMessage(body)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
-        }
-    }
-
     public void onMoreReadReceiptClick(String eventId) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
 
-        ReadReceiptsDialogFragment fragment = (ReadReceiptsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_RECEIPTS_DIALOG);
+        VectorReadReceiptsDialogFragment fragment = (VectorReadReceiptsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_RECEIPTS_DIALOG);
         if (fragment != null) {
             fragment.dismissAllowingStateLoss();
         }
-        fragment = ReadReceiptsDialogFragment.newInstance(mSession, mRoom.getRoomId(), eventId);
+        fragment = VectorReadReceiptsDialogFragment.newInstance(mSession, mRoom.getRoomId(), eventId);
         fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
     }
 }
