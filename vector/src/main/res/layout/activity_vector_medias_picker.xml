@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,7 +8,7 @@
         android:id="@+id/medias_picker_surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <!-- image view used to display the preview from the gallery -->
     <ImageView
@@ -70,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_alignParentBottom="true">
 
                 <!-- REDO button: cancel the image preview -->
@@ -112,7 +113,7 @@
                     android:id="@+id/medias_picker_recents_scrollview"
                     android:scrollbars="none"
                     android:layout_width="0dp"
-                    android:layout_height="75dp"
+                    android:layout_height="90dp"
                     android:layout_weight="85">
 
                     <LinearLayout
