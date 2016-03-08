@@ -306,7 +306,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // use the room name power to enable the room notification mute setting
         if(null != mRoomMuteNotificationsSwitch)
-            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName && isConnected);
+            mRoomMuteNotificationsSwitch.setEnabled(isConnected);
     }
 
 
