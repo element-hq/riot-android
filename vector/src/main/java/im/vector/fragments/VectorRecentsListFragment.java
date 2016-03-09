@@ -483,7 +483,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             mDestGroupPosition = mOriginGroupPosition = groupPos;
             mDestChildPosition = mOriginChildPosition = childPos;
 
-            onCellMove(mRecentsListView.getTouchedY(), groupPos, childPos);
+            onTouchMove(mRecentsListView.getTouchedY(), groupPos, childPos);
         }
     }
 
@@ -493,7 +493,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      * @param groupPosition the touched group position
      * @param childPosition the touched child position
      */
-    public void onCellMove(int y, int groupPosition, int childPosition) {
+    public void onTouchMove(int y, int groupPosition, int childPosition) {
         // check if the recents list is drag & drop mode
         if ((null != mDraggedView) && (!mIgnoreScrollEvent)){
 
@@ -590,7 +590,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     /**
      * The drag ends.
      */
-    public void onDragEnd() {
+    public void onDrop() {
         // check if the list wad in drag & drop mode
         if (null != mDraggedView) {
 

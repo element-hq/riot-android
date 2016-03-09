@@ -34,12 +34,12 @@ public class RecentsExpandableListView extends ExpandableListView {
          * @param groupPosition the child view group position
          * @param childPosition the child view child position
          */
-        void onCellMove(int y, int groupPosition, int childPosition);
+        void onTouchMove(int y, int groupPosition, int childPosition);
 
         /**
          * The user ends the move
          */
-        void onDragEnd();
+        void onDrop();
     }
 
     // the touched child view
@@ -78,13 +78,13 @@ public class RecentsExpandableListView extends ExpandableListView {
         switch (action) {
             case MotionEvent.ACTION_MOVE:
                 if (null != mDragAndDropEventsListener) {
-                    mDragAndDropEventsListener.onCellMove(mCurrentY, mTouchedGroupPosition, mTouchedChildPosition);
+                    mDragAndDropEventsListener.onTouchMove(mCurrentY, mTouchedGroupPosition, mTouchedChildPosition);
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 if (null != mDragAndDropEventsListener) {
-                    mDragAndDropEventsListener.onDragEnd();
+                    mDragAndDropEventsListener.onDrop();
                 }
             default:
                 break;
