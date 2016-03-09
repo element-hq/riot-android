@@ -61,7 +61,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         String roomName = !TextUtils.isEmpty(publicRoom.name) ? publicRoom.name : VectorUtils.getPublicRoomDisplayName(publicRoom);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
 

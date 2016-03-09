@@ -692,8 +692,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_results, mMatchedPublicRooms.size(), mSearchedPattern));
             }
 
-            avatarImageView.setBackgroundColor(mContext.getResources().getColor(R.color.vector_green_color));
-            avatarImageView.setImageBitmap(null);
+            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null));
             return convertView;
         }
 
