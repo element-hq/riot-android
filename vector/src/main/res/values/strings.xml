@@ -380,6 +380,7 @@
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
+    <string name="ssl_do_not_trust">Do not trust</string>
     <string name="ssl_logout_account">Logout</string>
     <string name="ssl_remain_offline">Ignore</string>
     <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
