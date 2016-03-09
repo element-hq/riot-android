@@ -96,6 +96,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected int mOriginChildPosition = -1;
     protected int mDestGroupPosition = -1;
     protected int mDestChildPosition = -1;
+    protected boolean mIsWaitingTagOrderEcho;
 
     protected int mFirstVisibleIndex = 0;
 
@@ -274,7 +275,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     @Override
                     public void run() {
                         Log.d(LOG_TAG, "onLiveEventsChunkProcessed");
-                        if (!mIsPaused && refreshOnChunkEnd) {
+                        if (!mIsPaused && refreshOnChunkEnd && !mIsWaitingTagOrderEcho) {
                             mAdapter.notifyDataSetChanged();
                         }
 
@@ -325,6 +326,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             @Override
             public void onRoomTagEvent(String roomId) {
+                mIsWaitingTagOrderEcho = false;
                 refreshOnChunkEnd = true;
             }
 
@@ -451,11 +453,17 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     // Tag management
     //==============================================================================================================
 
+    protected boolean isDrapAndDropSupported() {
+        return true;
+    }
+
     /**
      * Start the drag and drop mode
      */
     private void startDragAndDrop() {
-        if (groupIsMovable(mRecentsListView.getTouchedGroupPosition())) {
+        mIsWaitingTagOrderEcho = false;
+
+        if (isDrapAndDropSupported() && groupIsMovable(mRecentsListView.getTouchedGroupPosition())) {
             // enable the drag and drop mode
             mAdapter.setIsDragAndDropMode(true);
             mSession.getDataHandler().removeListener(mEventsListener);
@@ -466,7 +474,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
             mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
             mDraggedView.setAlpha(0.3f);
-
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
@@ -613,7 +620,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 String dstRoomTag = roomTagAt(mDestGroupPosition);
 
                 // compute the new tag order
-                int oldPos = (mOriginGroupPosition == mDestGroupPosition) ? mDestChildPosition : Integer.MAX_VALUE;
+                int oldPos = (mOriginGroupPosition == mDestGroupPosition) ? mOriginChildPosition : Integer.MAX_VALUE;
                 Double tagOrder = mSession.tagOrderToBeAtIndex(mDestChildPosition, oldPos, dstRoomTag);
 
                 updateRoomTag(mSession, roomSummary.getRoomId(), tagOrder, dstRoomTag);
@@ -630,7 +637,9 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         if (mAdapter.isInDragAndDropMode()) {
             mSession.getDataHandler().addListener(mEventsListener);
             mAdapter.setIsDragAndDropMode(false);
-            mAdapter.notifyDataSetChanged();
+            if (!mIsWaitingTagOrderEcho) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -675,6 +684,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 @Override
                 public void onSuccess(Void info) {
+                    mIsWaitingTagOrderEcho = true;
                     onReplaceDone();
                 }
 

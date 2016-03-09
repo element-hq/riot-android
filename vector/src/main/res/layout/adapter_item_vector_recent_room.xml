@@ -21,22 +21,19 @@
             android:layout_alignParentLeft="true" />
 
         <!-- Avatar -->
-        <RelativeLayout
-            android:id="@+id/avatar_parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/room_avatar_image_view"
+            android:layout_width="@dimen/chat_avatar_size"
+            android:layout_height="@dimen/chat_avatar_size"
             android:layout_toRightOf="@id/bing_indicator_unread_message"
-            android:layout_centerVertical="true">
-
-            <include layout="@layout/round_avatar_vector"/>
-        </RelativeLayout>
+            android:layout_centerVertical="true" />
 
         <!-- Room name - note margins values in each side (right/left) -->
         <TextView
             android:id="@+id/roomSummaryAdapter_roomName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/avatar_parent"
+            android:layout_toRightOf="@id/room_avatar_image_view"
             android:layout_toLeftOf="@id/roomSummaryAdapter_ts"
             android:layout_marginTop="12dp"
             android:singleLine="true"
@@ -51,7 +48,7 @@
         <TextView
             android:id="@+id/roomSummaryAdapter_roomMessage"
             android:layout_alignLeft="@id/roomSummaryAdapter_roomName"
-            android:layout_alignBottom="@id/avatar_parent"
+            android:layout_alignBottom="@id/room_avatar_image_view"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

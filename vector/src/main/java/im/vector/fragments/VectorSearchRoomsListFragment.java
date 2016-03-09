@@ -207,4 +207,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
         }
     }
+
+    protected boolean isDrapAndDropSupported() {
+        return false;
+    }
 }

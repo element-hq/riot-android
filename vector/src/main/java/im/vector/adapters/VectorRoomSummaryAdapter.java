@@ -657,7 +657,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
