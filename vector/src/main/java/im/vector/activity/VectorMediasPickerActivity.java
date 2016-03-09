@@ -22,8 +22,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,20 +32,17 @@ import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -62,17 +57,22 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // medias folder
     private static final int REQUEST_MEDIAS = 54;
     private static final String LOG_TAG = "VectorMedPicker";
-    public static final String SQL_IMAGE_MAX_LIMIT = "12";
 
+    // public keys
     public static final String EXTRA_SINGLE_IMAGE_MODE = "EXTRA_SINGLE_IMAGE_MODE";
-    public static final String KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED = "IS_TAKEN_IMAGE_DISPLAYED";
-    public static final String KEY_EXTRA_TAKEN_IMAGE_ORIGIN = "TAKEN_IMAGE_ORIGIN";
-    public static final String KEY_EXTRA_TAKEN_IMAGE_URI = "TAKEN_IMAGE_URI";
 
-    private static final int IMAGE_ORIGIN_CAMERA = 1;
-    private static final int IMAGE_ORIGIN_GALLERY = 2;
-    private static final boolean UI_SHOW_TAKEN_IMAGE = true;
-    private static final boolean UI_SHOW_CAMERA_PREVIEW = false;
+    // internal keys
+    private static final String KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED = "IS_TAKEN_IMAGE_DISPLAYED";
+    private static final String KEY_EXTRA_TAKEN_IMAGE_ORIGIN = "TAKEN_IMAGE_ORIGIN";
+    private static final String KEY_EXTRA_TAKEN_IMAGE_URI = "TAKEN_IMAGE_URI";
+
+    private final int IMAGE_ORIGIN_CAMERA = 1;
+    private final int IMAGE_ORIGIN_GALLERY = 2;
+    private final boolean UI_SHOW_TAKEN_IMAGE = true;
+    private final boolean UI_SHOW_CAMERA_PREVIEW = false;
+    private final int GALLERY_COLUMN_COUNT = 4;
+    private final int GALLERY_RAW_COUNT = 3;
+    private final int GALLERY_TABLE_ITEM_SIZE = (GALLERY_COLUMN_COUNT * GALLERY_RAW_COUNT);
 
     /**
      * define a recent media
@@ -80,55 +80,43 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private class RecentMedia {
         public Uri mFileUri;
         public long mCreationTime;
-        public Bitmap mThumbnail = null;
-        public Boolean mIsvideo = false;
-        public RecentMediaLayout mRecentMediaLayout = null;
+        public Bitmap mThumbnail;
+        public Boolean mIsVideo;
+        public RecentMediaLayout mRecentMediaLayout;
     }
 
     // recents medias list
-    private ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
-    private ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
+    private final ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
+    private final ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
 
     // camera object
-    private Camera mCamera = null;
-    // start with back camera
+    private Camera mCamera;
     private int mCameraId;
+    private int mCameraOrientation = 0;
 
     // graphical items
-    ImageView mSwitchCameraImageView = null;
-    ImageView mExitActivityImageView;
+    private ImageView mSwitchCameraImageView;
+    private ImageView mExitActivityImageView;
 
-    ImageView mTakeImageView = null;
-    SurfaceHolder mCameraSurfaceHolder = null;
-    SurfaceView mCameraSurfaceView = null;
-    Button mAttachImageButton = null;
-    ImageView mOpenLibraryImageView = null;
-    LinearLayout mGalleryImagesListLayout = null;
-    LinearLayout mGalleryRecentImagesLayout = null;
-    ImageView mGalleryImagePreviewImageView;
-    LinearLayout mCancelAndAttachImageLayout;
-    private ImageView mCancelTakenImageImageView;
-    private ImageView mAttachTakenImageImageView;
+    private ImageView mTakeImageView;
+    private SurfaceHolder mCameraSurfaceHolder;
+    private SurfaceView mCameraSurfaceView;
+    private TableLayout mGalleryTableLayout;
+    private ImageView mGalleryImagePreviewImageView;
+    private LinearLayout mCancelAndAttachImageLayout;
 
     // lifecycle management variable
     private boolean mIsTakenImageDisplayed;
     private int mTakenImageOrigin;
 
-    //MediaRecorder mMediaRecorder = null;
-
-    private String mShootedPicturePath = null;
+    private String mShootedPicturePath;
     private Boolean mIsPreviewStarted = false;
-
-    static private Boolean mIsSingleImageMode = false; // TODO keep it for further use?
-    static private Boolean mIsPhotoMode = true;
-
-    int mCameraOrientation = 0;
 
     /**
      * The recent requests are performed in a dedicated thread
      */
-    private HandlerThread mHandlerThread = null;
-    private android.os.Handler mFileHandler = null;
+    private HandlerThread mHandlerThread;
+    private android.os.Handler mFileHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,13 +136,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // live camera layout: take image, then attach or cancel (redo)
         mCancelAndAttachImageLayout = (LinearLayout) findViewById(R.id.cancel_attach_picture_layout);
-        mCancelTakenImageImageView = (ImageView) findViewById(R.id.medias_picker_cancel_take_picture_imageview);
-        mAttachTakenImageImageView = (ImageView) findViewById(R.id.medias_picker_attach_take_picture_imageview);
+        ImageView mCancelTakenImageImageView = (ImageView) findViewById(R.id.medias_picker_cancel_take_picture_imageview);
+        ImageView mAttachTakenImageImageView = (ImageView) findViewById(R.id.medias_picker_attach_take_picture_imageview);
         mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
 
-        mOpenLibraryImageView = (ImageView) findViewById(R.id.medias_picker_attach_from_library_imageview);
-        mGalleryImagesListLayout = (LinearLayout) findViewById(R.id.medias_picker_recents_layout);
-        mGalleryRecentImagesLayout = (LinearLayout) findViewById(R.id.medias_picker_recents_container);
+        //mOpenLibraryImageView = (ImageView) findViewById(R.id.medias_picker_attach_from_library_imageview);
+        //mGalleryImagesListLayout = (LinearLayout) findViewById(R.id.medias_picker_recents_layout);
+        //mGalleryRecentImagesLayout = (LinearLayout) findViewById(R.id.medias_picker_recents_container);
+        mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
 
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +170,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mAttachTakenImageImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(0 == mSelectedRecents.size())
+                if (0 == mSelectedRecents.size())
                     VectorMediasPickerActivity.this.attachImageFrom(IMAGE_ORIGIN_CAMERA);
                 else
                     VectorMediasPickerActivity.this.attachImageFrom(IMAGE_ORIGIN_GALLERY);
@@ -189,12 +178,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         });
 
         // to choose an image from the media system folder
-        mOpenLibraryImageView.setOnClickListener(new View.OnClickListener() {
+/*        mOpenLibraryImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VectorMediasPickerActivity.this.openFileExplorer();
             }
-        });
+        });*/
 
         // setup separate thread for image gallery update
         mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
@@ -207,8 +196,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
 
     /**
-     * mExitActivityImageView handler
-     * @param aView
+     * mExitActivityImageView handler. The activity is finished.
+     * @param aView view
      */
     public void onExitButton(View aView) {
         finish();
@@ -222,15 +211,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mHandlerThread.quit();
             mHandlerThread = null;
         }
-    }
-
-    /**
-     * Enable user interactivity
-     * @param view the view
-     */
-    private void enableView(View view) {
-        view.setEnabled(true);
-        view.setAlpha(1.0f);
     }
 
     /**
@@ -256,11 +236,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     private int getCarouselItemWidth() {
-        HorizontalScrollView galleryHorizScrollView = (HorizontalScrollView)findViewById(R.id.medias_picker_recents_scrollview);
+        /*HorizontalScrollView galleryHorizScrollView = (HorizontalScrollView)findViewById(R.id.medias_picker_recents_scrollview);
         int scrollHOrizWidth = galleryHorizScrollView.getWidth();
         int scrollHOrizHeight= galleryHorizScrollView.getHeight();
         int scrollHOrizWidth2 = galleryHorizScrollView.getLayoutParams().width;
-        int scrollHOrizHeight2 = galleryHorizScrollView.getLayoutParams().height;
+        int scrollHOrizHeight2 = galleryHorizScrollView.getLayoutParams().height;*/
 
         RelativeLayout rootRelativeLayout = (RelativeLayout)findViewById(R.id.layout_root_container);
         int rootWidth0 = rootRelativeLayout.getLayoutParams().width;
@@ -270,12 +250,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int width50 = rootViewGroup.getWidth();
         int width50Bis = rootViewGroup.getLayoutParams().width;
 
-        int width1 = ((RelativeLayout)findViewById(R.id.relative_layout_main_container1)).getLayoutParams().width;
-        int width2 = mGalleryRecentImagesLayout.getLayoutParams().width;
-        int galleryHeight = mGalleryRecentImagesLayout.getLayoutParams().height;
-        int galleryHeight2 = mGalleryRecentImagesLayout.getHeight();
+        int width1 = (findViewById(R.id.relative_layout_main_container1)).getLayoutParams().width;
+        //int width2 = mGalleryRecentImagesLayout.getLayoutParams().width;
+        //int galleryHeight = mGalleryRecentImagesLayout.getLayoutParams().height;
+        //int galleryHeight2 = mGalleryRecentImagesLayout.getHeight();
 
-        return galleryHeight;
+        return -2;//galleryHeight;
     }
 
     private void startCameraPreview() {
@@ -352,9 +332,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Result handler associated to {@Link #openFileExplorer()} request.
      * This method returns the selected image to the calling activity.
      *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode request ID
+     * @param resultCode operation status
+     * @param data data passed from the called activity
      */
     @SuppressLint("NewApi")
     @Override
@@ -391,7 +371,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     projection, // Which columns to return
                     null,       // Return all rows
                     null,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ SQL_IMAGE_MAX_LIMIT);
+                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "addImagesThumbnails" + e.getLocalizedMessage());
         }
@@ -404,7 +384,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 do {
                     try {
                         RecentMedia recentMedia = new RecentMedia();
-                        recentMedia.mIsvideo = false;
+                        recentMedia.mIsVideo = false;
 
                         String id = thumbnailsCursor.getString(idIndex);
                         String dateAsString = thumbnailsCursor.getString(timeIndex);
@@ -430,64 +410,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * List the existing video thumbnails
-     * @param maxLifetime the max image lifetime
-     */
-    private void addVideoThumbnails(long maxLifetime) {
-        final String[] projection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN};
-        Cursor thumbnailsCursor = null;
-
-
-        try {
-            thumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    projection, // Which columns to return
-                    null,       // Return all rows
-                    null,
-                    MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC");
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "addVideoThumbnails" + e.getLocalizedMessage());
-        }
-
-        if (null != thumbnailsCursor) {
-            int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN);
-            int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Video.VideoColumns._ID);
-
-            if (thumbnailsCursor.moveToFirst()) {
-                do {
-                    try {
-                        RecentMedia recentMedia = new RecentMedia();
-                        recentMedia.mIsvideo = true;
-
-                        String id = thumbnailsCursor.getString(idIndex);
-                        String dateAsString = thumbnailsCursor.getString(timeIndex);
-                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
-
-                        if ((maxLifetime > 0) && ((System.currentTimeMillis() - recentMedia.mCreationTime) > maxLifetime)) {
-                            break;
-                        }
-                        recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MICRO_KIND, null);
-                        recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
-
-                        if (null != recentMedia.mThumbnail) {
-                            mRecentsMedias.add(recentMedia);
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "addVideoThumbnails 2" + e.getLocalizedMessage());
-                    }
-                } while (thumbnailsCursor.moveToNext());
-            }
-            thumbnailsCursor.close();
-        }
-    }
-
-    /**
      * Populate the gallery view with the image/video contents.
      */
     private void refreshRecentsMediasList() {
         // the last 30 days
         final long maxLifetime = 1000L * 60L * 60L * 24L * 30L; // tt
 
-        mGalleryImagesListLayout.removeAllViews();
+        //mGalleryImagesListLayout.removeAllViews();
         mRecentsMedias.clear();
 
         // run away from the UI thread
@@ -512,120 +441,91 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        buildGalleryImageLayout();
-                    }
-                });
-
-                // test build tablelayout
-                // update the UI part
-                /*VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
                         buildGalleryImageTableLayout();
                     }
-                });*/
+                });
             }
         });
     }
 
-    private void buildGalleryImageLayout() {
-        int itemWidth = getCarouselItemWidth();
 
-        for (RecentMedia recentMedia : mRecentsMedias) {
-            final RecentMediaLayout recentMediaLayout = new RecentMediaLayout(VectorMediasPickerActivity.this);
-
-            recentMediaLayout.setThumbnail(recentMedia.mThumbnail);
-            recentMediaLayout.enableMediaTypeDisplay(false);
-
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
-            recentMediaLayout.setLayoutParams(params);
-
-            // build the gallery layout by adding a new layout
-            recentMedia.mRecentMediaLayout = recentMediaLayout;
-            mGalleryImagesListLayout.addView(recentMediaLayout, params);
-
-            final RecentMedia fRecentMedia = recentMedia;
-
-            // add the listener handler: display the selected image in fullscreen preview
-            recentMediaLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickGalleryImage(fRecentMedia);
-                }
-            });
-        }
-    }
-
-
+    /**
+     * Build the image gallery widget programmatically.
+     */
     private void buildGalleryImageTableLayout() {
-        final int CELL_PADD = 0, CELL_MARG = 1;
-        final int COLUMN_COUNT = 4, RAW_COUNT = 3;
+        final int CELL_MARGIN = 2;
         TableRow tableRow = null;
         ImageView imageView = null;
-        TableLayout tableLayout= (TableLayout)findViewById(R.id.action_bar_title); //R.id.gallery_table_layout
-        int tableLayoutHeight = tableLayout.getLayoutParams().height;
-        int rawHeight = tableLayoutHeight / 3;
-        int rawWidth = rawHeight;
+        int tableLayoutWidth = 0;
+        int cellWidth = 0;
+        int cellHeight = 0;
         int itemIndex = 0;
-
+        TableRow.LayoutParams rawLayoutParams = null;
         TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
-        TableRow.LayoutParams rawLayoutParams = new TableRow.LayoutParams(100, 100);
-        //TableRow.LayoutParams rawLayoutParams = new TableRow.LayoutParams(400,400);
-        rawLayoutParams.setMargins(CELL_MARG, CELL_MARG, CELL_MARG, CELL_MARG);
-        rawLayoutParams.weight = 1;
+        //TableRow.LayoutParams rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        for(int rawIdx=0;rawIdx<RAW_COUNT;rawIdx++) {
-            tableRow = new TableRow(this);
+        if(null != mGalleryTableLayout) {
+            mGalleryTableLayout.setBackgroundColor(Color.WHITE);
+            tableLayoutWidth = mGalleryTableLayout.getWidth();
+            //mGalleryTableLayout.setDividerPadding(50);
 
-            for (int i = 0; i < COLUMN_COUNT; i++) {
+            // raw layout configuration
+            cellWidth = tableLayoutWidth / GALLERY_COLUMN_COUNT;
+            cellHeight = cellWidth;
+            rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
+            rawLayoutParams.setMargins(CELL_MARGIN, 0, CELL_MARGIN, 0);
+            rawLayoutParams.weight = 1;
+
+            for (final RecentMedia recentMedia : mRecentsMedias) {
+                // detect raw is complete
+                if (0 == (itemIndex % GALLERY_COLUMN_COUNT)) {
+                    if (null != tableRow) {
+                        mGalleryTableLayout.addView(tableRow/*, tableLayoutParams*/);
+                    }
+                    tableRow = new TableRow(this);
+                }
+
+                // add first cell: set the folder icon to allow image browsing
+                if (0 == itemIndex) {
+                    ImageView iconFolderImageView = new ImageView(this);
+                    iconFolderImageView.setImageResource(R.drawable.ic_material_folder_green_vector);
+                    iconFolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    iconFolderImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openFileExplorer();
+                        }
+                    });
+
+                    tableRow.addView(iconFolderImageView, rawLayoutParams);
+                    itemIndex++;
+                }
+
+                // build the image image view in the raw
                 imageView = new ImageView(this);
-                //imageView.setAdjustViewBounds(false);
-                //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                //imageView.setPadding(CELL_PADD, CELL_PADD, CELL_PADD, CELL_PADD);
-                imageView.setImageResource(R.drawable.ic_material_folder_green_vector);
-                // imageView.setLayoutParams(new TableLayout.LayoutParams(500, 500)); ignored!
-
-                //******************************************************
-                // size is used here:
-                //TableRow.LayoutParams rawLayoutParams = new TableRow.LayoutParams(500,500);
-                //TableRow.LayoutParams rawLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-                //******************************************************
-
+                imageView.setImageBitmap(recentMedia.mThumbnail);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onClickGalleryImage(recentMedia);
+                    }
+                });
                 tableRow.addView(imageView, rawLayoutParams);
-            }
-            tableLayout.addView(tableRow, tableLayoutParams);
-        }
-        int itemWidth = getCarouselItemWidth();
 
-        for (final RecentMedia recentMedia : mRecentsMedias) {
-            if(0 == itemIndex%COLUMN_COUNT){
-                if(null != tableRow){
-                    tableLayout.addView(tableRow, tableLayoutParams);
+                if (++itemIndex >= GALLERY_TABLE_ITEM_SIZE) {
+                    break;
                 }
-                tableRow = new TableRow(this);
             }
 
-            imageView = new ImageView(this);
-            imageView.setImageBitmap(recentMedia.mThumbnail);
-            //imageView.setAdjustViewBounds(false);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//FIT_CENTER
-            //ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+            // do not forget to add last row
+            if (null != tableRow) {
+                mGalleryTableLayout.addView(tableRow/*, tableLayoutParams*/);
+            }
 
-            // add the listener handler: display the selected image in fullscreen preview
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickGalleryImage(recentMedia);
-                }
-            });
-
-            tableRow.addView(imageView, rawLayoutParams);
-            itemIndex++;
-        }
-
-        // add last row
-        if(null != tableRow){
-            tableLayout.addView(tableRow, tableLayoutParams);
+            mGalleryTableLayout.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_in_left));
+        } else {
+            Log.w(LOG_TAG,"## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
         }
     }
 
@@ -709,13 +609,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             final RecentMediaLayout recentMediaLayout = new RecentMediaLayout(VectorMediasPickerActivity.this);
 
             recentMediaLayout.setThumbnail(recentMedia.mThumbnail);
-            recentMediaLayout.setIsVideo(recentMedia.mIsvideo);
+            recentMediaLayout.setIsVideo(recentMedia.mIsVideo);
 
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
             recentMediaLayout.setLayoutParams(params);
 
             recentMedia.mRecentMediaLayout = recentMediaLayout;
-            mGalleryImagesListLayout.addView(recentMediaLayout, params);
+            //mGalleryImagesListLayout.addView(recentMediaLayout, params);
 
             final RecentMedia frecentMedia = recentMedia;
 
@@ -727,7 +627,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         mSelectedRecents.remove(frecentMedia);
                     } else {
                         // single image mode : disable any previously selected image
-                        if ((mIsSingleImageMode || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) && (mSelectedRecents.size() > 0)) {
+                        if (((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) && (mSelectedRecents.size() > 0)) {
                             mSelectedRecents.get(0).mRecentMediaLayout.setIsSelected(false);
                             mSelectedRecents.clear();
                         }
@@ -746,7 +646,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Take a picture of the current preview
      */
-    void takeImage() {
+    private void takeImage() {
         if (null != mCamera) {
             mCamera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
@@ -787,9 +687,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     } finally {
                         // Close resources
                         try {
-                            if (inputStream != null) inputStream.close();
-                            if (outputStream != null) outputStream.close();
+                            if (inputStream != null)
+                                inputStream.close();
+
+                            if (outputStream != null)
+                                outputStream.close();
                         } catch (Exception e) {
+                            Log.e(LOG_TAG,"## takeImage(): EXCEPTION Msg="+e.getMessage());
                         }
                     }
                 }
@@ -833,7 +737,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
 
         // gallery widgets: hide it when the taken image is displayed
-        mGalleryRecentImagesLayout.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
+        //mGalleryRecentImagesLayout.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
+        mGalleryTableLayout.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
 
         if(false == aIsTakenImageDisplayed) {
             // clear the selected image from the gallery (if any)
@@ -851,29 +756,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    @SuppressLint("NewApi")
-    private void refreshVideoThumbnail(boolean show) {
-        BitmapDrawable bitmapDrawable = null;
-
-        notImplementedFeature("refreshVideoThumbnail()");
-        /*
-        if (show && (null != mRecordedVideoPath)) {
-            Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mRecordedVideoPath, MediaStore.Images.Thumbnails.MINI_KIND);
-            bitmapDrawable = new BitmapDrawable(VectorMediasPickerActivity.this.getResources(), thumb);
-        }
-        // display the video thumbnail
-        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
-            mVideoView.setBackground(bitmapDrawable);
-        } else {
-            mVideoView.setBackgroundDrawable(bitmapDrawable);
-        }*/
-    }
-
     /**
      * Cancel the current image preview, and setup the UI to
      * start a new image capture.
      */
-    void reTakeImage() {
+    private void reTakeImage() {
         mShootedPicturePath = null;
         //mRecordedVideoPath = null;
         //manageButtons();
@@ -886,7 +773,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      *
      * @param aImageOrigin camera, otherwise gallery
      */
-    void attachImageFrom(int aImageOrigin) {
+    private void attachImageFrom(int aImageOrigin) {
         if(IMAGE_ORIGIN_CAMERA == aImageOrigin){
             attachImageFromCamera();
         }
@@ -902,7 +789,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Return the taken image from the camera to the calling activity.
      * This method returns to the calling activity.
      */
-    void attachImageFromCamera() {
+    private void attachImageFromCamera() {
 
         try {
             String uriString = null;
@@ -947,7 +834,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * This method returns to the calling activity.
      */
     @SuppressLint("NewApi")
-    void attachImageFrommGallery() {
+    private void attachImageFrommGallery() {
 
         Bundle conData = new Bundle();
         Intent intent = new Intent();
@@ -975,7 +862,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Switch camera (front <-> back)
      */
-    void switchCamera() {
+    private void switchCamera() {
         if (null != mCameraSurfaceHolder) {
             mCamera.stopPreview();
         }
@@ -994,6 +881,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mCamera.setPreviewDisplay(mCameraSurfaceHolder);
         } catch (IOException e) {
+            Log.e(LOG_TAG,"## switchCamera(): setPreviewDisplay EXCEPTION Msg="+e.getMessage());
         }
         mCamera.startPreview();
     }
@@ -1134,7 +1022,4 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
     // *********************************************************************************************
 
-    private void notImplementedFeature(String aErrorMsg){
-        Log.e("EXCEP","## Unexpected code for "+aErrorMsg);
-    }
 }

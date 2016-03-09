@@ -20,119 +20,91 @@
         android:scaleType="centerCrop"
         android:visibility="gone" />
 
+    <!-- container for the "take picture", swap cameras (front/rear) and exit buttons -->
+    <RelativeLayout
+        android:id="@+id/relative_layout_main_container1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <RelativeLayout
-            android:id="@+id/relative_layout_main_container1"
+        <!-- "take picture" button -->
+        <ImageView
+            android:id="@+id/medias_picker_camera_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/gallery_table_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_take_picture_vector_green" />
+
+        <!-- toggle button to swap between front/rear camera-->
+        <ImageView
+            android:id="@+id/medias_picker_switch_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_switch_camera" />
+
+        <!-- Exit button: = back button -->
+        <ImageView
+            android:id="@+id/medias_picker_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:onClick="onExitButton"
+            android:src="@drawable/ic_exit_media_picker_vector_green" />
+
+        <!-- layout containing the attach/redo buttons associated with the
+        preview of the taken image -->
+        <LinearLayout
+            android:id="@+id/cancel_attach_picture_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-            <!-- "take picture" button -->
+            <!-- REDO button: cancel the image preview -->
             <ImageView
-                android:id="@+id/medias_picker_camera_button"
-                android:layout_above="@+id/medias_picker_recents_container"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
+                android:id="@+id/medias_picker_cancel_take_picture_imageview"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="30"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_take_picture_vector_green" />
+                android:src="@drawable/ic_material_redo_green_vector" />
 
-            <!-- toggle button to swap between front/rear camera-->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:visibility="invisible" />
+
+            <!-- CHECK button: attach the image preview -->
             <ImageView
-                android:id="@+id/medias_picker_switch_camera"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
+                android:id="@+id/medias_picker_attach_take_picture_imageview"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="30"
                 android:gravity="center_vertical"
-                android:src="@drawable/ic_switch_camera"
-                />
+                android:src="@drawable/ic_material_check_green_vector" />
+        </LinearLayout>
 
-            <!-- Exit button: = back button -->
-            <ImageView
-                android:id="@+id/medias_picker_exit"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_exit_media_picker_vector_green"
-                android:onClick="onExitButton"
-                />
+        <!-- gallery area container -->
+        <TableLayout
+            android:id="@+id/gallery_table_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal" />
 
-            <!-- layout containing the attach/redo buttons associated with the
-            preview of the taken image -->
-            <LinearLayout
-                android:id="@+id/cancel_attach_picture_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_alignParentBottom="true">
-
-                <!-- REDO button: cancel the image preview -->
-                <ImageView
-                    android:id="@+id/medias_picker_cancel_take_picture_imageview"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/ic_material_redo_green_vector" />
-
-                <Space
-                    android:layout_weight="40"
-                    android:layout_width="0dp"
-                    android:visibility="invisible"
-                    android:layout_height="match_parent"
-                    />
-
-                <!-- CHECK button: attach the image preview -->
-                <ImageView
-                    android:id="@+id/medias_picker_attach_take_picture_imageview"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="30"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/ic_material_check_green_vector" />
-            </LinearLayout>
-
-            <!-- container for the horizontal gallery area -->
-            <LinearLayout
-                android:id="@+id/medias_picker_recents_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <HorizontalScrollView
-                    android:id="@+id/medias_picker_recents_scrollview"
-                    android:scrollbars="none"
-                    android:layout_width="0dp"
-                    android:layout_height="90dp"
-                    android:layout_weight="85">
-
-                    <LinearLayout
-                        android:id="@+id/medias_picker_recents_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"/>
-
-                </HorizontalScrollView>
-
-                <ImageView
-                    android:id="@+id/medias_picker_attach_from_library_imageview"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="15"
-                    android:src="@drawable/ic_material_folder_green_vector" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
