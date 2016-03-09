@@ -21,7 +21,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -103,6 +102,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // the listener
     private RoomEventListener mListener = null;
+
+    // drap and drop mode
+    private boolean mIsDragAndDropMode = false;
 
     /**
      * Constructor
@@ -450,7 +452,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
         }
         else {
-            Log.w(DBG_CLASS_NAME,"## resetUnreadCounts(): section "+aSection +" was not found in the sections summary list");
+            Log.w(DBG_CLASS_NAME, "## resetUnreadCounts(): section " + aSection + " was not found in the sections summary list");
         }
 
         return retCode;
@@ -562,7 +564,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        refreshSummariesList();
+        if (!mIsDragAndDropMode) {
+            refreshSummariesList();
+        }
         super.notifyDataSetChanged();
     }
 
@@ -653,7 +657,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
@@ -986,5 +990,77 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     public void setPublicRoomsList(List<PublicRoom> publicRoomsList) {
         mPublicRooms = publicRoomsList;
+    }
+
+    /**
+     * @return true if the adapter is in drag and drop mode.
+     */
+    public boolean isInDragAndDropMode() {
+        return mIsDragAndDropMode;
+    }
+
+    /**
+     * Set the drag and drop mode i.e. there is no automatic room summaries lists refresh.
+     * @param isDragAndDropMode the drag and drop mode
+     */
+    public void setIsDragAndDropMode(boolean isDragAndDropMode) {
+        mIsDragAndDropMode = isDragAndDropMode;
+    }
+
+    /**
+     * Move a childview in the roomSummary dir tree
+     * @param fromGroupPosition the group position origin
+     * @param fromChildPosition the child position origin
+     * @param toGroupPosition the group position destination
+     * @param toChildPosition the child position destination
+     */
+    public void moveChildView(int fromGroupPosition, int fromChildPosition, int toGroupPosition, int toChildPosition) {
+        ArrayList<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
+        ArrayList<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
+
+        RoomSummary summary = fromList.get(fromChildPosition);
+        fromList.remove(fromChildPosition);
+
+        if (toChildPosition >= toList.size()) {
+            toList.add(summary);
+        } else {
+            toList.add(toChildPosition, summary);
+        }
+    }
+
+    /**
+     * Tell if a group position is the invited one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the invited one.
+     */
+    public boolean isInvitedRoomPosition(int groupPos) {
+        return mInvitedGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the favourite one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the favourite one.
+     */
+    public boolean isFavouriteRoomPosition(int groupPos) {
+        return mFavouritesGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the no tag one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the no tag one.
+     */
+    public boolean isNoTagRoomPosition(int groupPos) {
+        return mNoTagGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the low priority one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the low priority one.
+     */
+    public boolean isLowPriorityRoomPosition(int groupPos) {
+        return mLowPriorGroupPosition == groupPos;
     }
 }
