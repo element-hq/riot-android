@@ -26,6 +26,7 @@ import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
+import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     // the session
@@ -61,7 +62,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mRecentsListView = (ExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter

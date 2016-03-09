@@ -16,6 +16,9 @@
 
 package im.vector.fragments;
 
+import android.app.ActionBar;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,6 +29,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -44,10 +49,11 @@ import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.adapters.VectorRoomSummaryAdapter;
+import im.vector.view.RecentsExpandableListView;
 
 import java.util.List;
 
-public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener {
+public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
 
     /**
      * warns the activity when there is a scroll in the recents
@@ -78,18 +84,84 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected String mMatrixId;
     protected MXSession mSession;
     protected MXEventListener mEventsListener;
-    protected ExpandableListView mRecentsListView;
+    protected RecentsExpandableListView mRecentsListView;
     protected VectorRoomSummaryAdapter mAdapter;
     protected View mWaitingView = null;
+
+    protected RelativeLayout mSelectedCellLayout;
+    protected View mDraggedView;
+    protected boolean mIgnoreScrollEvent;
 
     protected int mFirstVisibleIndex = 0;
 
     protected boolean mIsPaused = false;
 
-
-
     // set to true to force refresh when an events chunk has been processed.
     protected boolean refreshOnChunkEnd = false;
+
+    /**
+     * The cell move up
+     * @param y
+     */
+    public void onCellMove(int y) {
+        if ((null != mDraggedView) && (!mIgnoreScrollEvent)){
+
+            if (mSelectedCellLayout.getVisibility() != View.VISIBLE) {
+                mSelectedCellLayout.setVisibility(View.VISIBLE);
+            }
+
+            int nextFirstVisiblePosition = -1;
+
+            // scroll over the screen top
+            if (y < 0) {
+                // scroll up
+                if ((mRecentsListView.getFirstVisiblePosition() > 0)) {
+                    nextFirstVisiblePosition = mRecentsListView.getFirstVisiblePosition() - 1;
+                }
+
+                y = 0;
+            }
+
+            // scroll over the screen bottom
+            if ((y + mSelectedCellLayout.getHeight()) > mRecentsListView.getHeight()) {
+
+                // scroll down
+                if (mRecentsListView.getLastVisiblePosition() < mRecentsListView.getCount()) {
+                    nextFirstVisiblePosition = mRecentsListView.getFirstVisiblePosition() + 2;
+                }
+
+                y = mRecentsListView.getHeight() - mSelectedCellLayout.getHeight();
+            }
+
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(mSelectedCellLayout.getLayoutParams());
+            layoutParams.topMargin = y;
+            mSelectedCellLayout.setLayoutParams(layoutParams);
+
+            if (-1 != nextFirstVisiblePosition) {
+                mIgnoreScrollEvent = true;
+
+                mRecentsListView.setSelection(nextFirstVisiblePosition);
+
+                mRecentsListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mIgnoreScrollEvent = false;
+                    }
+                }, 100);
+            }
+        }
+    }
+
+    public void onDragEnd() {
+        if (null != mDraggedView) {
+            ViewGroup viewParent = (ViewGroup) mDraggedView.getParent();
+            viewParent.removeView(mDraggedView);
+            mDraggedView = null;
+
+            mSelectedCellLayout.setVisibility(View.GONE);
+            mSession.getDataHandler().addListener(mEventsListener);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,13 +176,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mRecentsListView = (ExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
         mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
 
         mRecentsListView.setAdapter(mAdapter);
+
+        mSelectedCellLayout = (RelativeLayout)v.findViewById(R.id.fragment_recents_selected_cell_layout);
+        mRecentsListView.mDragAndDropEventsListener = this;
 
         // Set rooms click listener:
         // - reset the unread count
@@ -147,14 +222,24 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         mRecentsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    //int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-                    //int childPosition = ExpandableListView.getPackedPositionChild(id);
-                    // TODO manage drag and drop
 
-                }
+                mSession.getDataHandler().removeListener(mEventsListener);
 
-                return false;
+                int groupPos = mRecentsListView.mSelectedGroupPosition;
+                int childPos = mRecentsListView.mSelectedChildPosition;
+
+                mDraggedView= mAdapter.getChildView(groupPos, childPos, false, null, null);
+                mDraggedView.setAlpha(0.5f);
+
+
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+                mSelectedCellLayout.addView(mDraggedView, params);
+
+                onCellMove(mRecentsListView.getCellY());
+
+                return true;
             }
         });
 
