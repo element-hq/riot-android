@@ -88,16 +88,14 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected VectorRoomSummaryAdapter mAdapter;
     protected View mWaitingView = null;
 
+    // drag and drop management
     protected RelativeLayout mSelectedCellLayout;
     protected View mDraggedView;
     protected boolean mIgnoreScrollEvent;
-
-    protected int mSelectedGroupPosition = -1;
-    protected int mSelectedChildPosition = -1;
-
-    protected int mCurrentGroupPosition = -1;
-    protected int mCurrentChildPosition = -1;
-
+    protected int mOriginGroupPosition = -1;
+    protected int mOriginChildPosition = -1;
+    protected int mDestGroupPosition = -1;
+    protected int mDestChildPosition = -1;
 
     protected int mFirstVisibleIndex = 0;
 
@@ -105,103 +103,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     // set to true to force refresh when an events chunk has been processed.
     protected boolean refreshOnChunkEnd = false;
-
-    /**
-     * The cell move up
-     * @param y
-     */
-    public void onCellMove(int y, int groupPosition, int childPosition) {
-        if ((null != mDraggedView) && (!mIgnoreScrollEvent)){
-
-            if (mSelectedCellLayout.getVisibility() != View.VISIBLE) {
-                mSelectedCellLayout.setVisibility(View.VISIBLE);
-            }
-
-            int nextFirstVisiblePosition = -1;
-
-            // scroll over the screen top
-            if (y < 0) {
-                // scroll up
-                if ((mRecentsListView.getFirstVisiblePosition() > 0)) {
-                    nextFirstVisiblePosition = mRecentsListView.getFirstVisiblePosition() - 1;
-                }
-
-                y = 0;
-            }
-
-            // scroll over the screen bottom
-            if ((y + mSelectedCellLayout.getHeight()) > mRecentsListView.getHeight()) {
-
-                // scroll down
-                if (mRecentsListView.getLastVisiblePosition() < mRecentsListView.getCount()) {
-                    nextFirstVisiblePosition = mRecentsListView.getFirstVisiblePosition() + 2;
-                }
-
-                y = mRecentsListView.getHeight() - mSelectedCellLayout.getHeight();
-            }
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(mSelectedCellLayout.getLayoutParams());
-            layoutParams.topMargin = y;
-            mSelectedCellLayout.setLayoutParams(layoutParams);
-
-            if ((groupPosition != mCurrentGroupPosition) || (childPosition != mCurrentChildPosition)) {
-                mAdapter.move(mCurrentGroupPosition, mCurrentChildPosition, groupPosition, childPosition);
-                mAdapter.notifyDataSetChanged();
-
-                mCurrentGroupPosition = groupPosition;
-                mCurrentChildPosition = childPosition;
-            }
-
-            if (-1 != nextFirstVisiblePosition) {
-                mIgnoreScrollEvent = true;
-
-                mRecentsListView.setSelection(nextFirstVisiblePosition);
-
-                mRecentsListView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mIgnoreScrollEvent = false;
-                    }
-                }, 100);
-            }
-        }
-    }
-
-    private String roomTagAt(int groupPosition) {
-        if (mAdapter.isFavouriteRoomPosition(groupPosition)) {
-            return RoomTag.ROOM_TAG_FAVOURITE;
-        } else if (mAdapter.isLowPriorityRoomPosition(groupPosition)) {
-            return RoomTag.ROOM_TAG_LOW_PRIORITY;
-        }
-
-        return null;
-    }
-
-    public void onDragEnd() {
-        if (null != mDraggedView) {
-            ViewGroup viewParent = (ViewGroup) mDraggedView.getParent();
-            viewParent.removeView(mDraggedView);
-            mDraggedView = null;
-
-            mSelectedCellLayout.setVisibility(View.GONE);
-            mSession.getDataHandler().addListener(mEventsListener);
-
-            RoomSummary roomSummary = mAdapter.getRoomSummaryAt(mSelectedGroupPosition, mSelectedChildPosition);
-
-            String dstRoomTag = roomTagAt(mCurrentGroupPosition);
-
-            int oldPos = (mSelectedGroupPosition == mCurrentGroupPosition) ? mSelectedChildPosition : Integer.MAX_VALUE;
-
-            Double tagOrder = mSession.tagOrderToBeAtIndex(mCurrentChildPosition, oldPos, dstRoomTag);
-
-            updateRoomTag(mSession, roomSummary.getRoomId(), tagOrder, dstRoomTag);
-
-
-            // TODO add actions here
-            mAdapter.mIsDragAndDropMode = false;
-            mAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -262,29 +163,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         mRecentsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                mAdapter.mIsDragAndDropMode = true;
-
-                mSession.getDataHandler().removeListener(mEventsListener);
-
-                int groupPos = mRecentsListView.mSelectedGroupPosition;
-                int childPos = mRecentsListView.mSelectedChildPosition;
-
-                mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
-                mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
-                mDraggedView.setAlpha(0.3f);
-
-
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-                params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-                mSelectedCellLayout.addView(mDraggedView, params);
-
-                mSelectedGroupPosition = mCurrentGroupPosition = groupPos;
-                mSelectedChildPosition = mCurrentChildPosition = childPos;
-
-                onCellMove(mRecentsListView.getCellY(), groupPos, childPos);
-
+                startDragAndDrop();
                 return true;
             }
         });
@@ -568,18 +447,214 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
+    //==============================================================================================================
+    // Tag management
+    //==============================================================================================================
+
+    /**
+     * Start the drag and drop mode
+     */
+    private void startDragAndDrop() {
+        if (groupIsMovable(mRecentsListView.getTouchedGroupPosition())) {
+            // enable the drag and drop mode
+            mAdapter.setIsDragAndDropMode(true);
+            mSession.getDataHandler().removeListener(mEventsListener);
+
+            int groupPos = mRecentsListView.getTouchedGroupPosition();
+            int childPos = mRecentsListView.getTouchedChildPosition();
+
+            mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
+            mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
+            mDraggedView.setAlpha(0.3f);
+
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+            mSelectedCellLayout.addView(mDraggedView, params);
+
+            mDestGroupPosition = mOriginGroupPosition = groupPos;
+            mDestChildPosition = mOriginChildPosition = childPos;
+
+            onCellMove(mRecentsListView.getTouchedY(), groupPos, childPos);
+        }
+    }
+
+    /**
+     * Drag and drop managemnt
+     * @param y the touch Y position
+     * @param groupPosition the touched group position
+     * @param childPosition the touched child position
+     */
+    public void onCellMove(int y, int groupPosition, int childPosition) {
+        // check if the recents list is drag & drop mode
+        if ((null != mDraggedView) && (!mIgnoreScrollEvent)){
+
+            // display the cell if it is not yet visible
+            if (mSelectedCellLayout.getVisibility() != View.VISIBLE) {
+                mSelectedCellLayout.setVisibility(View.VISIBLE);
+            }
+
+            // compute the next first cell postion
+            int nextFirstVisiblePosition = -1;
+
+            // scroll over the screen top
+            if (y < 0) {
+                // scroll up
+                if ((mRecentsListView.getFirstVisiblePosition() > 0)) {
+                    nextFirstVisiblePosition = mRecentsListView.getFirstVisiblePosition() - 1;
+                }
+
+                y = 0;
+            }
+
+            // scroll over the screen bottom
+            if ((y + mSelectedCellLayout.getHeight()) > mRecentsListView.getHeight()) {
+
+                // scroll down
+                if (mRecentsListView.getLastVisiblePosition() < mRecentsListView.getCount()) {
+                    nextFirstVisiblePosition = mRecentsListView.getFirstVisiblePosition() + 2;
+                }
+
+                y = mRecentsListView.getHeight() - mSelectedCellLayout.getHeight();
+            }
+
+            // move the overlay child view with the y position
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(mSelectedCellLayout.getLayoutParams());
+            layoutParams.topMargin = y;
+            mSelectedCellLayout.setLayoutParams(layoutParams);
+
+            // virtually insert the moving cell in the recents list
+            if ((groupPosition != mDestGroupPosition) || (childPosition != mDestChildPosition)) {
+
+                // move cell
+                mAdapter.moveChildView(mDestGroupPosition, mDestChildPosition, groupPosition, childPosition);
+                // refresh
+                mAdapter.notifyDataSetChanged();
+
+                // backup
+                mDestGroupPosition = groupPosition;
+                mDestChildPosition = childPosition;
+            }
+
+            // the first selected position has been updated
+            if (-1 != nextFirstVisiblePosition) {
+                mIgnoreScrollEvent = true;
+
+                mRecentsListView.setSelection(nextFirstVisiblePosition);
+
+                // avoid moving to quickly i.e moving only each 100ms
+                mRecentsListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mIgnoreScrollEvent = false;
+                    }
+                }, 100);
+            }
+        }
+    }
+
+    /**
+     * Retrieves the RoomTag.ROOM_TAG.XX value from the group position
+     * @param groupPosition
+     * @return
+     */
+    private String roomTagAt(int groupPosition) {
+        if (mAdapter.isFavouriteRoomPosition(groupPosition)) {
+            return RoomTag.ROOM_TAG_FAVOURITE;
+        } else if (mAdapter.isLowPriorityRoomPosition(groupPosition)) {
+            return RoomTag.ROOM_TAG_LOW_PRIORITY;
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if a group is movable.
+     * @param groupPosition the group position
+     * @return true if the group is movable.
+     */
+    private boolean groupIsMovable(int groupPosition) {
+        return mAdapter.isNoTagRoomPosition(groupPosition) ||
+                mAdapter.isFavouriteRoomPosition(groupPosition) ||
+                mAdapter.isLowPriorityRoomPosition(groupPosition);
+    }
+
+    /**
+     * The drag ends.
+     */
+    public void onDragEnd() {
+        // check if the list wad in drag & drop mode
+        if (null != mDraggedView) {
+
+            // remove the overlay child view
+            ViewGroup viewParent = (ViewGroup) mDraggedView.getParent();
+            viewParent.removeView(mDraggedView);
+            mDraggedView = null;
+
+            // hide the overlay layout
+            mSelectedCellLayout.setVisibility(View.GONE);
+
+            // same place, nothing to do
+            if ((mOriginGroupPosition == mDestGroupPosition) && (mOriginChildPosition == mDestChildPosition)) {
+                stopDragAndDropMode();
+            }
+            // move in no tag sections
+            else if (mAdapter.isNoTagRoomPosition(mOriginGroupPosition) && mAdapter.isNoTagRoomPosition(mDestGroupPosition)) {
+                // nothing to do, there is no other
+                stopDragAndDropMode();
+            } else if (!groupIsMovable(mDestGroupPosition)) {
+                // cannot move in the expected group
+                stopDragAndDropMode();
+            } else {
+                // retrieve the moved summary
+                RoomSummary roomSummary = mAdapter.getRoomSummaryAt(mDestGroupPosition, mDestChildPosition);
+                // its tag
+                String dstRoomTag = roomTagAt(mDestGroupPosition);
+
+                // compute the new tag order
+                int oldPos = (mOriginGroupPosition == mDestGroupPosition) ? mDestChildPosition : Integer.MAX_VALUE;
+                Double tagOrder = mSession.tagOrderToBeAtIndex(mDestChildPosition, oldPos, dstRoomTag);
+
+                updateRoomTag(mSession, roomSummary.getRoomId(), tagOrder, dstRoomTag);
+            }
+        }
+    }
+
+    /**
+     * Stop the drag and drop mode.
+     */
+    private void stopDragAndDropMode() {
+        // in drag and drop mode
+        // the events listener is unplugged while playing with the cell
+        if (mAdapter.isInDragAndDropMode()) {
+            mSession.getDataHandler().addListener(mEventsListener);
+            mAdapter.setIsDragAndDropMode(false);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Update the room tag.
+     * @param session the session
+     * @param roomId the room id.
+     * @param tagOrder the tag order.
+     * @param newtag the new tag.
+     */
     private void updateRoomTag(MXSession session, String roomId, Double tagOrder, String newtag) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
             String oldTag = null;
 
+            // retrieve the tag from the room info
             RoomAccountData accountData = room.getAccountData();
 
             if ((null != accountData) && accountData.hasTags()) {
                 oldTag = accountData.getKeys().iterator().next();
             }
 
+            // if the tag order is not provided, compute it
             if (null == tagOrder) {
                  tagOrder = 0.0;
 
@@ -588,30 +663,37 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 }
             }
 
+            // show a spinner
             showWaitingView();
 
+            // and work
             room.replaceTag(oldTag, newtag, tagOrder, new ApiCallback<Void>() {
+                private void onReplaceDone() {
+                    hideWaitingView();
+                    stopDragAndDropMode();
+                }
+
                 @Override
                 public void onSuccess(Void info) {
-                    hideWaitingView();
+                    onReplaceDone();
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
                     // TODO display a message ?
-                    hideWaitingView();
+                    onReplaceDone();
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
                     // TODO display a message ?
-                    hideWaitingView();
+                    onReplaceDone();
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
                     // TODO display a message ?
-                    hideWaitingView();
+                    onReplaceDone();
                 }
             });
         }
