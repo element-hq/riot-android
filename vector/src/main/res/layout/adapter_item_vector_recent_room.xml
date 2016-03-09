@@ -7,7 +7,6 @@
 
     <RelativeLayout
         android:id="@+id/internal_container"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="74dp">
 
@@ -118,7 +117,6 @@
     <!-- invitation section -->
     <RelativeLayout
         android:id="@+id/recents_groups_invitation_group"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginBottom="20dp">

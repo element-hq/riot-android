@@ -92,6 +92,13 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected View mDraggedView;
     protected boolean mIgnoreScrollEvent;
 
+    protected int mSelectedGroupPosition = -1;
+    protected int mSelectedChildPosition = -1;
+
+    protected int mCurrentGroupPosition = -1;
+    protected int mCurrentChildPosition = -1;
+
+
     protected int mFirstVisibleIndex = 0;
 
     protected boolean mIsPaused = false;
@@ -103,7 +110,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      * The cell move up
      * @param y
      */
-    public void onCellMove(int y) {
+    public void onCellMove(int y, int groupPosition, int childPosition) {
         if ((null != mDraggedView) && (!mIgnoreScrollEvent)){
 
             if (mSelectedCellLayout.getVisibility() != View.VISIBLE) {
@@ -137,6 +144,14 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             layoutParams.topMargin = y;
             mSelectedCellLayout.setLayoutParams(layoutParams);
 
+            if ((groupPosition != mCurrentGroupPosition) || (childPosition != mCurrentChildPosition)) {
+                mAdapter.move(mCurrentGroupPosition, mCurrentChildPosition, groupPosition, childPosition);
+                mAdapter.notifyDataSetChanged();
+
+                mCurrentGroupPosition = groupPosition;
+                mCurrentChildPosition = childPosition;
+            }
+
             if (-1 != nextFirstVisiblePosition) {
                 mIgnoreScrollEvent = true;
 
@@ -152,6 +167,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
+    private String roomTagAt(int groupPosition) {
+        if (mAdapter.isFavouriteRoomPosition(groupPosition)) {
+            return RoomTag.ROOM_TAG_FAVOURITE;
+        } else if (mAdapter.isLowPriorityRoomPosition(groupPosition)) {
+            return RoomTag.ROOM_TAG_LOW_PRIORITY;
+        }
+
+        return null;
+    }
+
     public void onDragEnd() {
         if (null != mDraggedView) {
             ViewGroup viewParent = (ViewGroup) mDraggedView.getParent();
@@ -160,6 +185,21 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             mSelectedCellLayout.setVisibility(View.GONE);
             mSession.getDataHandler().addListener(mEventsListener);
+
+            RoomSummary roomSummary = mAdapter.getRoomSummaryAt(mSelectedGroupPosition, mSelectedChildPosition);
+
+            String dstRoomTag = roomTagAt(mCurrentGroupPosition);
+
+            int oldPos = (mSelectedGroupPosition == mCurrentGroupPosition) ? mSelectedChildPosition : Integer.MAX_VALUE;
+
+            Double tagOrder = mSession.tagOrderToBeAtIndex(mCurrentChildPosition, oldPos, dstRoomTag);
+
+            updateRoomTag(mSession, roomSummary.getRoomId(), tagOrder, dstRoomTag);
+
+
+            // TODO add actions here
+            mAdapter.mIsDragAndDropMode = false;
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -223,13 +263,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+                mAdapter.mIsDragAndDropMode = true;
+
                 mSession.getDataHandler().removeListener(mEventsListener);
 
                 int groupPos = mRecentsListView.mSelectedGroupPosition;
                 int childPos = mRecentsListView.mSelectedChildPosition;
 
-                mDraggedView= mAdapter.getChildView(groupPos, childPos, false, null, null);
-                mDraggedView.setAlpha(0.5f);
+                mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
+                mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
+                mDraggedView.setAlpha(0.3f);
 
 
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -237,7 +280,10 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
                 mSelectedCellLayout.addView(mDraggedView, params);
 
-                onCellMove(mRecentsListView.getCellY());
+                mSelectedGroupPosition = mCurrentGroupPosition = groupPos;
+                mSelectedChildPosition = mCurrentChildPosition = childPos;
+
+                onCellMove(mRecentsListView.getCellY(), groupPos, childPos);
 
                 return true;
             }
@@ -522,7 +568,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
-    private void updateRoomTag(MXSession session, String roomId, String newtag) {
+    private void updateRoomTag(MXSession session, String roomId, Double tagOrder, String newtag) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -534,10 +580,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 oldTag = accountData.getKeys().iterator().next();
             }
 
-            Double tagOrder = 0.0;
+            if (null == tagOrder) {
+                 tagOrder = 0.0;
 
-            if (null != newtag) {
-                tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newtag);
+                if (null != newtag) {
+                    tagOrder = session.tagOrderToBeAtIndex(0, Integer.MAX_VALUE, newtag);
+                }
             }
 
             showWaitingView();
@@ -571,16 +619,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public void moveToConversations(MXSession session, String roomId) {
-        updateRoomTag(session, roomId, null);
+        updateRoomTag(session, roomId, null, null);
     }
 
     @Override
     public void moveToFavorites(MXSession session, String roomId) {
-        updateRoomTag(session, roomId, RoomTag.ROOM_TAG_FAVOURITE);
+        updateRoomTag(session, roomId, null, RoomTag.ROOM_TAG_FAVOURITE);
     }
 
     @Override
     public void moveToLowPriority(MXSession session, String roomId) {
-        updateRoomTag(session, roomId, RoomTag.ROOM_TAG_LOW_PRIORITY);
+        updateRoomTag(session, roomId, null, RoomTag.ROOM_TAG_LOW_PRIORITY);
     }
 }

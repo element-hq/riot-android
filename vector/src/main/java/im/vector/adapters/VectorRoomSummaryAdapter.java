@@ -104,6 +104,28 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     // the listener
     private RoomEventListener mListener = null;
 
+    public boolean mIsDragAndDropMode = false;
+    private int mDragGroupPos = -1;
+    private int mDragChildPos = -1;
+
+    public boolean isInvitedRoomPosition(int groupPos) {
+        return mInvitedGroupPosition == groupPos;
+    }
+
+    public boolean isFavouriteRoomPosition(int groupPos) {
+        return mFavouritesGroupPosition == groupPos;
+    }
+
+    public boolean isNoTagRoomPosition(int groupPos) {
+        return mNoTagGroupPosition == groupPos;
+    }
+
+    public boolean isLowPriorityRoomPosition(int groupPos) {
+        return mLowPriorGroupPosition == groupPos;
+    }
+
+
+
     /**
      * Constructor
      * @param aContext the context.
@@ -562,8 +584,27 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        refreshSummariesList();
+        if (!mIsDragAndDropMode) {
+            refreshSummariesList();
+        }
         super.notifyDataSetChanged();
+    }
+
+    public void move(int fromGroupPosition, int fromChildPosition, int toGroupPosition, int toChildPosition) {
+        ArrayList<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
+        ArrayList<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
+
+        RoomSummary summary = fromList.get(fromChildPosition);
+        fromList.remove(fromChildPosition);
+
+        if (toChildPosition >= toList.size()) {
+            toList.add(summary);
+        } else {
+            toList.add(toChildPosition, summary);
+        }
+
+        mDragGroupPos = toGroupPosition;
+        mDragChildPos = toChildPosition;
     }
 
     @Override

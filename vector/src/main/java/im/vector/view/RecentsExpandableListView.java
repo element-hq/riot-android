@@ -39,10 +39,8 @@ public class RecentsExpandableListView extends ExpandableListView {
 
     public interface DragAndDropEventsListener {
         /**
-         * The cell move up
-         * @param y
          */
-        void onCellMove(int y);
+        void onCellMove(int y, int groupPosition, int childPosition);
 
         void onDragEnd();
     }
@@ -76,7 +74,7 @@ public class RecentsExpandableListView extends ExpandableListView {
         int childPosition = ExpandableListView.getPackedPositionChild(packagedPosition);
 
         mSelectedGroupPosition = groupPosition;
-        mSelectedChildPosition = childPosition;
+        mSelectedChildPosition = Math.max(childPosition, 0);
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -84,7 +82,7 @@ public class RecentsExpandableListView extends ExpandableListView {
             case MotionEvent.ACTION_MOVE:
 
                 if (null != mDragAndDropEventsListener) {
-                    mDragAndDropEventsListener.onCellMove(mLastY);
+                    mDragAndDropEventsListener.onCellMove(mLastY, mSelectedGroupPosition, mSelectedChildPosition);
                 }
 
                 break;

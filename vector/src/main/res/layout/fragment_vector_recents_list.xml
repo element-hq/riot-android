@@ -12,7 +12,6 @@
 
     <RelativeLayout
         android:id="@+id/fragment_recents_selected_cell_layout"
-        android:background="#f00"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
