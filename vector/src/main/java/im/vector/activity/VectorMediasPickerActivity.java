@@ -242,9 +242,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int scrollHOrizWidth2 = galleryHorizScrollView.getLayoutParams().width;
         int scrollHOrizHeight2 = galleryHorizScrollView.getLayoutParams().height;*/
 
-        RelativeLayout rootRelativeLayout = (RelativeLayout)findViewById(R.id.layout_root_container);
+        /*RelativeLayout rootRelativeLayout = (RelativeLayout)findViewById(R.id.layout_root_container);
         int rootWidth0 = rootRelativeLayout.getLayoutParams().width;
-        int rootWidth0_ = rootRelativeLayout.getWidth();
+        int rootWidth0_ = rootRelativeLayout.getWidth();*/
 
         ViewGroup rootViewGroup = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
         int width50 = rootViewGroup.getWidth();
@@ -460,6 +460,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int cellWidth = 0;
         int cellHeight = 0;
         int itemIndex = 0;
+        ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
         TableRow.LayoutParams rawLayoutParams = null;
         TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
         //TableRow.LayoutParams rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -472,8 +473,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // raw layout configuration
             cellWidth = tableLayoutWidth / GALLERY_COLUMN_COUNT;
             cellHeight = cellWidth;
-            rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
-            rawLayoutParams.setMargins(CELL_MARGIN, 0, CELL_MARGIN, 0);
+            if(0 == tableLayoutWidth) {
+                // fall back
+                scaleType = ImageView.ScaleType.FIT_XY;
+                rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            } else {
+                scaleType = ImageView.ScaleType.FIT_CENTER;
+                rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
+            }
+            rawLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
             rawLayoutParams.weight = 1;
 
             for (final RecentMedia recentMedia : mRecentsMedias) {
@@ -489,7 +497,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 if (0 == itemIndex) {
                     ImageView iconFolderImageView = new ImageView(this);
                     iconFolderImageView.setImageResource(R.drawable.ic_material_folder_green_vector);
-                    iconFolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    iconFolderImageView.setScaleType(scaleType);
                     iconFolderImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -504,7 +512,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 // build the image image view in the raw
                 imageView = new ImageView(this);
                 imageView.setImageBitmap(recentMedia.mThumbnail);
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setScaleType(scaleType);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

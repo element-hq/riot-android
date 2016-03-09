@@ -1,16 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_root_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- SurfaceView is used to present a live camera preview -->
-    <SurfaceView
-        android:id="@+id/medias_picker_surface_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <!-- image view used to display the preview from the gallery -->
+<?xml version="1.0" encoding="utf-8"?><!-- image view used to display the preview from the gallery
     <ImageView
         android:id="@+id/medias_picker_gallery_preview_image_view"
         android:layout_width="match_parent"
@@ -18,93 +6,194 @@
         android:layout_centerInParent="true"
         android:gravity="center_vertical"
         android:scaleType="centerCrop"
-        android:visibility="gone" />
+        android:visibility="visible" />
+-->
 
-    <!-- container for the "take picture", swap cameras (front/rear) and exit buttons -->
-    <RelativeLayout
-        android:id="@+id/relative_layout_main_container1"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:orientation="vertical">
 
-        <!-- "take picture" button -->
-        <ImageView
-            android:id="@+id/medias_picker_camera_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/gallery_table_layout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
-            android:src="@drawable/ic_take_picture_vector_green" />
-
-        <!-- toggle button to swap between front/rear camera-->
-        <ImageView
-            android:id="@+id/medias_picker_switch_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center_vertical"
-            android:src="@drawable/ic_switch_camera" />
-
-        <!-- Exit button: = back button -->
-        <ImageView
-            android:id="@+id/medias_picker_exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center_vertical"
-            android:onClick="onExitButton"
-            android:src="@drawable/ic_exit_media_picker_vector_green" />
-
-        <!-- layout containing the attach/redo buttons associated with the
-        preview of the taken image -->
-        <LinearLayout
-            android:id="@+id/cancel_attach_picture_layout"
+        <RelativeLayout
+            android:id="@+id/frame_layout_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
-            <!-- REDO button: cancel the image preview -->
+            <!-- SurfaceView is used to present a live camera preview -->
+            <SurfaceView
+                android:id="@+id/medias_picker_surface_view"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:layout_centerHorizontal="true"
+                android:visibility="visible" />
+
+            <!-- image view used to display the preview from the gallery -->
             <ImageView
-                android:id="@+id/medias_picker_cancel_take_picture_imageview"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_material_redo_green_vector" />
-
-            <Space
-                android:layout_width="0dp"
+                android:id="@+id/medias_picker_gallery_preview_image_view"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="40"
-                android:visibility="invisible" />
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
 
-            <!-- CHECK button: attach the image preview -->
-            <ImageView
-                android:id="@+id/medias_picker_attach_take_picture_imageview"
-                android:layout_width="0dp"
+            <!-- container for swap cameras (front/rear) and exit buttons -->
+            <RelativeLayout
+                android:id="@+id/relative_layout_main_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_material_check_green_vector" />
-        </LinearLayout>
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:layout_alignParentTop="true">
 
-        <!-- gallery area container -->
-        <TableLayout
-            android:id="@+id/gallery_table_layout"
+                <!-- toggle button to swap between front/rear camera-->
+                <ImageView
+                    android:id="@+id/medias_picker_switch_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_switch_camera" />
+
+                <!-- Exit button: = back button -->
+                <ImageView
+                    android:id="@+id/medias_picker_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onExitButton"
+                    android:src="@drawable/ic_exit_media_picker_vector_green" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/medias_picker_camera_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_take_picture_vector_green" />
+
+            <!-- layout containing the attach/redo buttons associated with the
+            preview of the taken image -->
+            <LinearLayout
+                android:id="@+id/cancel_attach_picture_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <!-- REDO button: cancel the image preview -->
+                <ImageView
+                    android:id="@+id/medias_picker_cancel_take_picture_imageview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_material_redo_green_vector" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="40"
+                    android:visibility="invisible" />
+
+                <!-- CHECK button: attach the image preview -->
+                <ImageView
+                    android:id="@+id/medias_picker_attach_take_picture_imageview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_material_check_green_vector" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/container_main1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center_horizontal" />
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+            <!--
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"/>
+            -->
+            <!-- gallery area container -->
+            <TableLayout
+                android:id="@+id/gallery_table_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal">
+                <!--
+                                    <TableRow
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_horizontal">
+                                        <ImageView
+                                            android:id="@+id/imageView1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                        <ImageView
+                                            android:id="@+id/imageView2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                        <ImageView
+                                            android:id="@+id/imageView3"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                        <ImageView
+                                            android:id="@+id/imageView4"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                    </TableRow>
 
-    </RelativeLayout>
+                                    <TableRow
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_horizontal">
+                                        <ImageView
+                                            android:id="@+id/imageView5"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                        <ImageView
+                                            android:id="@+id/imageView6"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                        <ImageView
+                                            android:id="@+id/imageView7"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                        <ImageView
+                                            android:id="@+id/imageView8"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:src="@drawable/ic_material_folder_green_vector"/>
+                                    </TableRow>
+                                    -->
+            </TableLayout>
 
-</RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
