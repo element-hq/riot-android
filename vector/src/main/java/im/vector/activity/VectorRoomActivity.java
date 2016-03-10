@@ -261,7 +261,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     }
 
                     if (!VectorApp.isAppInBackground()) {
-                        mRoom.sendReadReceipt();
+                        // do not send read receipt for the typing events
+                        // they are ephemeral ones.
+                        if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
+                            mRoom.sendReadReceipt();
+                        }
                     }
                 }
             });

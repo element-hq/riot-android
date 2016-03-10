@@ -280,6 +280,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
     }
 
+    @Override
+    protected void onTypingUsersUpdate() {
+        // the typing users are now displayed in a dedicated area in the activity
+    }
+
     /**
      * Display the read receipts within the dedicated vector layout.
      * Console application displays them on the message side.
