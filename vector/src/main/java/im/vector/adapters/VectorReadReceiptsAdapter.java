@@ -91,9 +91,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         }
 
         TextView tsTextView = (TextView) convertView.findViewById(R.id.read_receipt_ts);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        final String ts = dateFormat.format(new Date(receipt.originServerTs));
+        final String ts = AdapterUtils.tsToString(mContext, receipt.originServerTs, false);
 
         SpannableStringBuilder body = new SpannableStringBuilder(mContext.getString(im.vector.R.string.read_receipt) + " : " + ts);
         body.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, mContext.getString(im.vector.R.string.read_receipt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
