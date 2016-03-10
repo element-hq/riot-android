@@ -49,11 +49,10 @@ public class NotificationUtils {
         builder.setContentText(context.getString(R.string.call_in_progress));
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.ic_menu_small_matrix);
+            builder.setSmallIcon(R.drawable.logo);
         } else {
-            builder.setSmallIcon(R.drawable.ic_menu_small_matrix_transparent);
+            builder.setSmallIcon(R.drawable.logo_transparent);
         }
-
 
         // Build the pending intent for when the notification is clicked
         Intent roomIntent = new Intent(context, VectorRoomActivity.class);
@@ -87,13 +86,15 @@ public class NotificationUtils {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
 
-        if (null != from) {
+        if (!TextUtils.isEmpty(from)) {
             // don't display the room name for 1:1 room notifications.
             if (!TextUtils.isEmpty(roomName) && !roomName.equals(from)) {
                 builder.setContentTitle(from + " (" + roomName + ")");
             } else {
                 builder.setContentTitle(from);
             }
+        } else {
+            builder.setContentTitle(roomName);
         }
 
         builder.setContentText(body);
