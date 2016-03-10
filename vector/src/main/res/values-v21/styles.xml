@@ -23,9 +23,8 @@
     <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
-        <item name="android:windowBackground">@android:color/holo_blue_bright</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-
 
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">

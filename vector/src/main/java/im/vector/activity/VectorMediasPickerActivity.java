@@ -31,6 +31,7 @@ import im.vector.view.RecentMediaLayout;
 import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -98,12 +99,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private ImageView mSwitchCameraImageView;
     private ImageView mExitActivityImageView;
 
+
+    // camera preview and gallery selection layout
+    private View mPreviewScrollView;
     private ImageView mTakeImageView;
     private SurfaceHolder mCameraSurfaceHolder;
     private SurfaceView mCameraSurfaceView;
     private TableLayout mGalleryTableLayout;
+
+    private View mShootedImagePreviewLayout;
     private ImageView mGalleryImagePreviewImageView;
-    private LinearLayout mCancelAndAttachImageLayout;
 
     // lifecycle management variable
     private boolean mIsTakenImageDisplayed;
@@ -128,21 +133,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         setContentView(R.layout.activity_vector_medias_picker);
         mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
-        // retrieving item from UI
+        // camera preview
+        mPreviewScrollView = findViewById(R.id.medias_picker_scrollView);
         mSwitchCameraImageView = (ImageView) findViewById(R.id.medias_picker_switch_camera);
         mExitActivityImageView = (ImageView) findViewById(R.id.medias_picker_exit);
         mCameraSurfaceView = (SurfaceView) findViewById(R.id.medias_picker_surface_view);
+
+        // image preview
+        mShootedImagePreviewLayout = findViewById(R.id.medias_picker_preview);
         mGalleryImagePreviewImageView = (ImageView) findViewById(R.id.medias_picker_gallery_preview_image_view);
-
-        // live camera layout: take image, then attach or cancel (redo)
-        mCancelAndAttachImageLayout = (LinearLayout) findViewById(R.id.cancel_attach_picture_layout);
-        ImageView mCancelTakenImageImageView = (ImageView) findViewById(R.id.medias_picker_cancel_take_picture_imageview);
-        ImageView mAttachTakenImageImageView = (ImageView) findViewById(R.id.medias_picker_attach_take_picture_imageview);
         mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
-
-        //mOpenLibraryImageView = (ImageView) findViewById(R.id.medias_picker_attach_from_library_imageview);
-        //mGalleryImagesListLayout = (LinearLayout) findViewById(R.id.medias_picker_recents_layout);
-        //mGalleryRecentImagesLayout = (LinearLayout) findViewById(R.id.medias_picker_recents_container);
         mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
 
         // click action
@@ -160,14 +160,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
 
-        mCancelTakenImageImageView.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.medias_picker_cancel_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VectorMediasPickerActivity.this.reTakeImage();
             }
         });
 
-        mAttachTakenImageImageView.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.medias_picker_attach_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (0 == mSelectedRecents.size())
@@ -177,13 +178,24 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
 
-        // to choose an image from the media system folder
-/*        mOpenLibraryImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VectorMediasPickerActivity.this.openFileExplorer();
-            }
-        });*/
+        // fix the surfaceView size and its container size
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenHeight = metrics.heightPixels;
+        int screenWidth = metrics.widthPixels;
+
+        int cameraPreviewHeight = (screenHeight * 95 / 100);
+
+        RelativeLayout previewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
+        ViewGroup.LayoutParams previewLayoutParams = previewLayout.getLayoutParams();
+        previewLayoutParams.height = cameraPreviewHeight;
+        previewLayout.setLayoutParams(previewLayoutParams);
+
+        RelativeLayout previewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
+        ViewGroup.LayoutParams previewAndGalleryLayoutParams = previewAndGalleryLayout.getLayoutParams();
+        previewAndGalleryLayoutParams.height = cameraPreviewHeight + (3 * screenWidth / 4);
+        previewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
+
 
         // setup separate thread for image gallery update
         mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
@@ -250,7 +262,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int width50 = rootViewGroup.getWidth();
         int width50Bis = rootViewGroup.getLayoutParams().width;
 
-        int width1 = (findViewById(R.id.relative_layout_main_container1)).getLayoutParams().width;
+        //int width1 = (findViewById(R.id.relative_layout_main_container1)).getLayoutParams().width;
         //int width2 = mGalleryRecentImagesLayout.getLayoutParams().width;
         //int galleryHeight = mGalleryRecentImagesLayout.getLayoutParams().height;
         //int galleryHeight2 = mGalleryRecentImagesLayout.getHeight();
@@ -533,7 +545,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
             mGalleryTableLayout.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_in_left));
         } else {
-            Log.w(LOG_TAG,"## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
+            Log.w(LOG_TAG, "## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
         }
     }
 
@@ -685,6 +697,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         mShootedPicturePath = dstFile.getAbsolutePath();
                         //manageButtons();
 
+                        mGalleryImagePreviewImageView.setImageURI(Uri.fromFile(new File(mShootedPicturePath)));
+
+
                         // force to stop preview:
                         // some devices do not stop preview after the picture was taken (ie. G6 edge)
                         mCamera.stopPreview();
@@ -723,44 +738,28 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param aImageOrigin IMAGE_ORIGIN_CAMERA or IMAGE_ORIGIN_GALLERY
      */
     private void updateUiConfiguration(boolean aIsTakenImageDisplayed, int aImageOrigin){
-        
         // save current configuration for lifecyle management
         mIsTakenImageDisplayed = aIsTakenImageDisplayed;
         mTakenImageOrigin = aImageOrigin;
-                
-        // "cancel & attach" buttons of the picture taken: show it, only if
-        // an picture has been taken. These buttons allow the
-        // user dismiss the current picture or to send it to the room
-        mCancelAndAttachImageLayout.setVisibility(aIsTakenImageDisplayed ? View.VISIBLE : View.GONE);
 
-        // "take image" button: hide it when the taken image is displayed
-        mTakeImageView.setVisibility(aIsTakenImageDisplayed ? View.INVISIBLE : View.VISIBLE);
-
-        // "camera switch & exit" buttons: hide it when the taken image is displayed
-        mExitActivityImageView.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
-        mSwitchCameraImageView.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
         // if more than two cameras are available, just disable the "switch camera" capability
         if (2 > Camera.getNumberOfCameras()) {
             disableView(mSwitchCameraImageView);
         }
 
-        // gallery widgets: hide it when the taken image is displayed
-        //mGalleryRecentImagesLayout.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
-        mGalleryTableLayout.setVisibility(aIsTakenImageDisplayed ? View.GONE : View.VISIBLE);
-
-        if(false == aIsTakenImageDisplayed) {
+        if (false == aIsTakenImageDisplayed) {
             // clear the selected image from the gallery (if any)
             mSelectedRecents.clear();
         }
 
-        if((IMAGE_ORIGIN_GALLERY == aImageOrigin) && (aIsTakenImageDisplayed)){
-            mGalleryImagePreviewImageView.setVisibility(View.VISIBLE);
-            //mCameraSurfaceView.setVisibility(View.GONE);
+        if (aIsTakenImageDisplayed) {
+            mShootedImagePreviewLayout.setVisibility(View.VISIBLE);
+            mPreviewScrollView.setVisibility(View.GONE);
         }
         else {
             // the default UI: hide gallery preview, show the surface view
-            mGalleryImagePreviewImageView.setVisibility(View.GONE);
-            mCameraSurfaceView.setVisibility(View.VISIBLE);
+            mPreviewScrollView.setVisibility(View.VISIBLE);
+            mShootedImagePreviewLayout.setVisibility(View.GONE);
         }
     }
 
