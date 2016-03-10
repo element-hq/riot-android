@@ -259,13 +259,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_MAKE_ADMIN:
                 if (null != mRoom) {
-                    // update the member power with the max power level of the room to make him admin
-                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-                    if (null != powerLevels) {
-                        powerLevels.setUserPowerLevel(mMemberId, getRoomMaxPowerLevel());
-                    } else {
-                        Log.e(LOG_TAG, "## performItemAction(): Make Admin failure - getPowerLevels() returns null");
-                    }
+                    mRoom.updateUserPowerLevels(mMemberId, getRoomMaxPowerLevel(), roomActionsListener);
                     Log.d(LOG_TAG, "## performItemAction(): Make Admin");
                 }
                 break;
