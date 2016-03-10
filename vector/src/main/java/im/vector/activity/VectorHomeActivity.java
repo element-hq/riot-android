@@ -227,6 +227,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         VectorApp.setCurrentActivity(this);
 
+        mRoomCreationView.setVisibility(View.VISIBLE);
+
         refreshSlidingMenu();
     }
 
