@@ -28,12 +28,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
@@ -75,6 +80,21 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     private String mRoomId;
     private String mMatrixId;
+
+    private final MXEventListener mEventListener = new MXEventListener() {
+        @Override
+        public void onLeaveRoom(String roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // pop to the home activity
+                    Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
+                    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    VectorRoomDetailsActivity.this.startActivity(intent);
+                }
+            });
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,8 +178,20 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        // listen for room leave event
+        mRoom.removeEventListener(mEventListener);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
+        // listen for room leave event
+        mRoom.addEventListener(mEventListener);
+
         // start the file search if the selected tab is the file one
         startFileSearch();
     }
