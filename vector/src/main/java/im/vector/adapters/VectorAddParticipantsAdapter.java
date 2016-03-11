@@ -41,6 +41,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.RoomThirdPartyInvite;
 import org.matrix.androidsdk.rest.model.User;
 
 
@@ -377,11 +378,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                     }
                 }
 
+                // add 3rd party invite
+                Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getLiveState().thirdPartyInvites();
+
+                for(RoomThirdPartyInvite invite: thirdPartyInvites) {
+                    // If the home server has converted the 3pid invite into a room member, do no show it
+                    if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
+                        otherMembers.add(new ParticipantAdapterItem(invite.display_name, "", null));
+                    }
+                }
+
                 Collections.sort(admins, ParticipantAdapterItem.alphaComparator);
                 nextMembersList.addAll(admins);
 
                 Collections.sort(otherMembers, ParticipantAdapterItem.alphaComparator);
                 nextMembersList.addAll(otherMembers);
+
                 mUnusedParticipants = null;
             } else {
                 nextMembersList = mCreationParticipantsList;
@@ -464,7 +476,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             if ((null != mFirstEntry) && (position == 0)) {
                 thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@"));
             } else {
-                VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl,  participant.mUserId, participant.mDisplayName);
+                if (TextUtils.isEmpty(participant.mUserId)) {
+                    VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
+                } else {
+                    VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
+                }
             }
         }
 
@@ -496,6 +512,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_BAN)) {
                 status = mContext.getString(R.string.room_participants_ban);
             }
+        } else if (null == participant.mRoomMember) {
+            // 3rd party invitation
+            status = mContext.getString(R.string.room_participants_invite);
         } else if (null != participant.mUserId) {
             User user = null;
             MXSession matchedSession = null;
@@ -570,14 +589,16 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             @Override
             public void onClick(View v) {
                 if (null != mOnParticipantsListener) {
-                    String userId = participant.mUserId;
+                    if (!TextUtils.isEmpty(participant.mUserId)) {
+                        String userId = participant.mUserId;
 
-                    // check if the userId is valid
-                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches() ||
-                            (userId.startsWith("@") && (userId.indexOf(":") > 1))) {
-                        mOnParticipantsListener.onClick(fpos);
-                    } else {
-                        Toast.makeText(mContext, R.string.malformed_id, Toast.LENGTH_LONG).show();
+                        // check if the userId is valid
+                        if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches() ||
+                                (userId.startsWith("@") && (userId.indexOf(":") > 1))) {
+                            mOnParticipantsListener.onClick(fpos);
+                        } else {
+                            Toast.makeText(mContext, R.string.malformed_id, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
@@ -604,7 +625,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         thumbView.setOnLongClickListener(onLongClickListener);
 
         // the swipe should be enabled when there is no search and the user can kick other members
-        if (isSearchMode || hideDisplayActionsMenu) {
+        if (isSearchMode || hideDisplayActionsMenu || (null == participant.mRoomMember)) {
             cellLayout.setOnTouchListener(null);
         } else {
             final View hiddenView = convertView.findViewById(R.id.filtered_list_actions);
@@ -675,7 +696,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         // multi selections mode
         // do not display a checkbox for oneself
-        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUserId(), participant.mUserId)) {
+        if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUserId(), participant.mUserId) && (null != participant.mRoomMember)) {
             checkBox.setVisibility(View.VISIBLE);
 
             checkBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
