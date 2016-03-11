@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- scrollview containing the sufaceview and the gallery -->
     <ScrollView
         android:id="@+id/medias_picker_scrollView"
         android:layout_width="match_parent"
@@ -67,13 +68,14 @@
                 android:id="@+id/gallery_table_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@id/medias_picker_camera_preview_layout"
                 android:layout_gravity="center_horizontal">
             </TableLayout>
 
         </RelativeLayout>
     </ScrollView>
 
+    <!-- preview container -->
     <RelativeLayout
         android:id="@+id/medias_picker_preview"
         android:visibility="gone"
@@ -115,6 +117,7 @@
                 android:visibility="invisible" />
 
             <!-- CHECK button: attach the image preview -->
+
             <ImageView
                 android:id="@+id/medias_picker_attach_take_picture_imageview"
                 android:layout_width="0dp"
@@ -124,5 +127,23 @@
                 android:src="@drawable/ic_material_check_green_vector" />
         </LinearLayout>
     </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/medias_preview_progress_bar_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- downloading progress bar -->
+        <ProgressBar
+            android:id="@+id/medias_preview_progress_bar"
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
 </FrameLayout>
 

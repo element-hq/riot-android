@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -63,6 +64,8 @@ public class VectorApp extends Application {
     private static VectorApp instance = null;
 
     private EventEmitter<Activity> mOnActivityDestroyedListener;
+
+    private static Bitmap mSavedPickerImagePreview = null;
 
     @Override
     public void onCreate() {
@@ -263,6 +266,14 @@ public class VectorApp extends Application {
                 }
             });
         }
+    }
+
+    public static Bitmap getSavedPickerImagePreview(){
+        return mSavedPickerImagePreview;
+    }
+
+    public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview){
+        mSavedPickerImagePreview = aSavedCameraImagePreview;
     }
 }
 
