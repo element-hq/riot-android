@@ -220,9 +220,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
 
-        mGalleryMediaStorageUriMap = getHashMapInPreference(KEY_EXTRA_GALLERY_URI_MAP);
+        //getHashMapInPreference(KEY_EXTRA_GALLERY_URI_MAP);
 
         if(false == restoreInstanceState(savedInstanceState)){
+            mGalleryMediaStorageUriMap =  new HashMap<Uri, Uri>();
             // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
         }
@@ -338,7 +339,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         outState.putBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED, mIsTakenImageDisplayed);
         outState.putInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN, mTakenImageOrigin);
         outState.putInt(KEY_EXTRA_CAMERA_SIDE, mCameraId);
-        putHashMapInPreference(KEY_EXTRA_GALLERY_URI_MAP, mGalleryMediaStorageUriMap);
+        //putHashMapInPreference(KEY_EXTRA_GALLERY_URI_MAP, mGalleryMediaStorageUriMap);
+        outState.putSerializable(KEY_EXTRA_GALLERY_URI_MAP, mGalleryMediaStorageUriMap);
 
         // save the image reference
         if (mIsTakenImageDisplayed) {
@@ -384,6 +386,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
             // general data to be restored
             mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
+            mGalleryMediaStorageUriMap = (HashMap<Uri,Uri>)savedInstanceState.getSerializable(KEY_EXTRA_GALLERY_URI_MAP);
         }
         return isRestoredInstance;
     }
@@ -1252,54 +1255,49 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
     // *********************************************************************************************
 
-
-    public void onAccountInfoUpdate() {
-        // refresh the settings value
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        //editor.put   (KEY_EXTRA_GALLERY_URI_MAP, mGalleryMediaStorageUriMap) ;
-        //editor.put
-        editor.commit();
-
-    }
-
-    private HashMap<Uri, Uri> getHashMapInPreference(String aMapKey/* KEY_EXTRA_GALLERY_URI_MAP */) {
-        HashMap<Uri,Uri> wrapperRetValue = null;
+    private HashMap getHashMapInPreference(String aMapKey/* KEY_EXTRA_GALLERY_URI_MAP */) {
+        HashMap wrapperRetValue = null;
         Gson gson = new Gson();
+
+        // get saved JSON value from preference
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String hashMapString = preferences.getString(aMapKey, null);
 
+        // convert JSON to map
         if(null != hashMapString) {
-            HashMapWrapper<Uri> wrapper = gson.fromJson(hashMapString, HashMapWrapper.class);
+            HashMapWrapper wrapper = gson.fromJson(hashMapString, HashMapWrapper.class);
             wrapperRetValue = wrapper.getMap();
         }
+        // if null, create it (should be the first time)
         if(null == wrapperRetValue) {
-            wrapperRetValue = new HashMap<Uri, Uri>();
+            wrapperRetValue = new HashMap<String, String>();
         }
         return wrapperRetValue;
     }
 
-    private void putHashMapInPreference(String aMapKey, HashMap<Uri, Uri> aGalleryMediaStorageUriMap) {
+    private void putHashMapInPreference(String aMapKey, HashMap<String, String> aGalleryMediaStorageUriMap) {
         Gson gson = new Gson();
-        HashMapWrapper<Uri> wrapper = new HashMapWrapper<Uri>();
+        HashMapWrapper wrapper = new HashMapWrapper();
+
+        // convert Map to JSON
         wrapper.setMap(aGalleryMediaStorageUriMap);
         String serializedHashMap = gson.toJson(wrapper);
 
-        // save serialized map in shared preference as a string
+        // save serialized map in preference as a string
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(aMapKey, serializedHashMap) ;
         editor.commit();
     }
 
-    private static class HashMapWrapper<T> {
-        private HashMap<T, T> mMap;
+    public class HashMapWrapper {
+        private HashMap<String, String> mMap;
 
-        public HashMap<T, T> getMap() {
+        public HashMap<String, String> getMap() {
             return mMap;
         }
 
-        public void setMap(HashMap<T, T> aMyMap) {
+        public void setMap(HashMap<String, String> aMyMap) {
             mMap = aMyMap;
         }
     }
