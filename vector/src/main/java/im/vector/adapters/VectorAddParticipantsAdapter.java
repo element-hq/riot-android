@@ -265,6 +265,18 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         }
 
+
+        // check from any other known users
+        // because theirs presence have been received
+        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
+        for(User user : users) {
+            // accepted User ID or still active users
+            if (idsToIgnore.indexOf(user.user_id) < 0) {
+                unusedParticipants.add(new ParticipantAdapterItem(user));
+                idsToIgnore.add(user.user_id);
+            }
+        }
+
         // checks for each room
         Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
 
@@ -283,17 +295,6 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         idsToIgnore.add(member.getUserId());
                     }
                 }
-            }
-        }
-
-        // check from any other known users
-        // because theirs presence have been received
-        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
-        for(User user : users) {
-            // accepted User ID or still active users
-            if (idsToIgnore.indexOf(user.user_id) < 0) {
-                unusedParticipants.add(new ParticipantAdapterItem(user.user_id, null, user.user_id));
-                idsToIgnore.add(user.user_id);
             }
         }
 
@@ -479,6 +480,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 if (TextUtils.isEmpty(participant.mUserId)) {
                     VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
                 } else {
+
+                    // try to provide a better display for a participant when the user is known.
+                    if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
+                        User user = mSession.getDataHandler().getStore().getUser(participant.mUserId);
+
+                        if (null != user) {
+                            if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
+                                participant.mDisplayName = user.displayname;
+                            }
+
+                            if (null == participant.mAvatarUrl) {
+                                participant.mAvatarUrl = user.avatar_url;
+                            }
+                        }
+                    }
+
                     VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
                 }
             }
@@ -512,7 +529,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_BAN)) {
                 status = mContext.getString(R.string.room_participants_ban);
             }
-        } else if (null == participant.mRoomMember) {
+        } else if ((null == participant.mUserId) && (null == participant.mRoomMember) && (!isSearchMode))  {
             // 3rd party invitation
             status = mContext.getString(R.string.room_participants_invite);
         } else if (null != participant.mUserId) {

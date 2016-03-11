@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 
 import java.util.Comparator;
 
@@ -51,6 +52,13 @@ public class ParticipantAdapterItem {
         mRoomMember = member;
         mContact = null;
 
+        initSearchByPatternFields();
+    }
+
+    public ParticipantAdapterItem(User user) {
+        mDisplayName = TextUtils.isEmpty(user.displayname) ? user.user_id : user.displayname;
+        mUserId = user.user_id;
+        mAvatarUrl = user.getAvatarUrl();
         initSearchByPatternFields();
     }
 

@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.matrix.androidsdk.MXSession;
@@ -296,7 +295,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                 Event.EVENT_TYPE_TAGS.equals(event.type) ||
                                 Event.EVENT_TYPE_REDACTION.equals(event.type) ||
                                 Event.EVENT_TYPE_RECEIPT.equals(event.type) ||
-                                Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type);
+                                Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type) ||
+                                Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type);
 
                         // highlight notified messages
                         // the SDK only highlighted invitation messages
