@@ -18,7 +18,9 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,10 +32,12 @@ import android.os.Bundle;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.ResourceUtils;
 import im.vector.view.RecentMediaLayout;
 
 import android.hardware.Camera;
 import android.os.HandlerThread;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -49,6 +53,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.util.ImageUtils;
 
@@ -61,6 +67,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements SurfaceHolder.Callback {
     // medias folder
@@ -76,6 +83,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_EXTRA_TAKEN_IMAGE_URI = "TAKEN_IMAGE_GALLERY_URI";
     private static final String KEY_EXTRA_TAKEN_IMAGE_URL = "TAKEN_IMAGE_CAMERA_URL";
     private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
+    private static final String KEY_EXTRA_GALLERY_URI_MAP = "KEY_EXTRA_GALLERY_URI_MAP";
 
     private final int IMAGE_ORIGIN_CAMERA = 1;
     private final int IMAGE_ORIGIN_GALLERY = 2;
@@ -100,6 +108,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // recents medias list
     private final ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
     private final ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
+    HashMap<Uri, Uri> mGalleryMediaStorageUriMap = null;
 
     // camera object
     private Camera mCamera;
@@ -211,7 +220,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
 
-        restoreInstanceState(savedInstanceState);
+        mGalleryMediaStorageUriMap = getHashMapInPreference(KEY_EXTRA_GALLERY_URI_MAP);
+
+        if(false == restoreInstanceState(savedInstanceState)){
+            // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
+            updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
+        }
     }
 
     /**
@@ -225,6 +239,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        // clean foot print in App
+        VectorApp.setSavedCameraImagePreview(null);
 
         if (null != mHandlerThread) {
             mHandlerThread.quit();
@@ -321,6 +338,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         outState.putBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED, mIsTakenImageDisplayed);
         outState.putInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN, mTakenImageOrigin);
         outState.putInt(KEY_EXTRA_CAMERA_SIDE, mCameraId);
+        putHashMapInPreference(KEY_EXTRA_GALLERY_URI_MAP, mGalleryMediaStorageUriMap);
 
         // save the image reference
         if (mIsTakenImageDisplayed) {
@@ -336,31 +354,38 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    private void restoreInstanceState(Bundle savedInstanceState) {
-        if (null == savedInstanceState) {
-            // init default UI: "take picture" button is displayed and the cancel & attach buttons are hidden
-            updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
-        } else if (savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED)) {
-            // restore UI preview context
-            mIsTakenImageDisplayed = true;
+    private boolean restoreInstanceState(Bundle savedInstanceState) {
+        boolean isRestoredInstance = false;
+        if(null != savedInstanceState){
+            isRestoredInstance = true;
+            mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
             mShootedPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_URL);
             mTakenImageOrigin = savedInstanceState.getInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN);
+
+            // restore gallery image preview (the image can be saved from the preview even after rotation)
             Uri uriImage = (Uri) savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_IMAGE_URI);
             mGalleryImagePreviewImageView.setTag(uriImage);
-            mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
 
-            Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
-            if (null != savedBitmap) {
-                mGalleryImagePreviewImageView.setImageBitmap(savedBitmap);
-                updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, mTakenImageOrigin);
-            } else {
-                displayAndRotatePreviewImageAsync(mShootedPicturePath, uriImage, mTakenImageOrigin);
+            // restore the taken image preview is needed
+            if(mIsTakenImageDisplayed) {
+                Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
+                if (null != savedBitmap) {
+                    // image preview from camera
+                    mGalleryImagePreviewImageView.setImageBitmap(savedBitmap);
+                    updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, mTakenImageOrigin);
+                } else {
+                    // image preview from gallery
+                    displayAndRotatePreviewImageAsync(mShootedPicturePath, uriImage, mTakenImageOrigin);
+                }
             }
-        } else {
-            // init default UI: "take picture" button is displayed and the cancel & attach buttons are hidden
-            updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
+
+            // restore UI display
+            updateUiConfiguration(mIsTakenImageDisplayed, mTakenImageOrigin);
+
+            // general data to be restored
             mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
         }
+        return isRestoredInstance;
     }
 
     /**
@@ -414,7 +439,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (null != thumbnailsCursor) {
             int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
             int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
-
+            Uri mediaStorageUri = null;
             if (thumbnailsCursor.moveToFirst()) {
                 do {
                     try {
@@ -430,13 +455,22 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         }
 
                         recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MICRO_KIND, null);
-                        recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+                        mediaStorageUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+
+                        // test if present in cache
+                        if(mGalleryMediaStorageUriMap.containsKey(mediaStorageUri)){
+                            recentMedia.mFileUri = mGalleryMediaStorageUriMap.get(mediaStorageUri);
+                        } else  {
+                            // convert media store Uri to be usable to display the thumbnail (takes some time)
+                            recentMedia.mFileUri = getThumbnailUriFromMediaStorage(mediaStorageUri);
+                            mGalleryMediaStorageUriMap.put(mediaStorageUri, recentMedia.mFileUri);
+                        }
 
                         if (null != recentMedia.mThumbnail) {
                             mRecentsMedias.add(recentMedia);
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "addImagesThumbnails 2" + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## addImagesThumbnails(): Msg=" + e.getMessage());
                     }
                 } while (thumbnailsCursor.moveToNext());
             }
@@ -519,7 +553,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 scaleType = ImageView.ScaleType.FIT_XY;
                 rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             } else {
-                scaleType = ImageView.ScaleType.FIT_CENTER;
+                scaleType = ImageView.ScaleType.FIT_XY;
                 rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
             }
             rawLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
@@ -546,7 +580,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 //                Bitmap rotatedBitmap = rotateImageFromUrlToBitmap(recentMedia.mFileUri.toString());
 //                imageView.setImageBitmap(rotatedBitmap);
                 if(null != recentMedia) {
-                    imageView.setImageBitmap(recentMedia.mThumbnail);
+                    imageView.setImageURI(recentMedia.mFileUri);
                     imageView.setScaleType(scaleType);
                     final RecentMedia finalRecentMedia = recentMedia;
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -583,63 +617,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             Log.w(LOG_TAG, "## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
         }
     }
-
-
-    /*private void createTableLayout() {
-        String[] rowList = {"ROW1", "ROW2", "Row3", "Row4", "Row 5", "Row 6", "Row 7"};
-        String[] columnList = {"COLUMN1", "COLUMN2", "COLUMN3", "COLUMN4",  "COLUMN5", "COLUMN6"};
-        int rowCount = rowList.length;
-        int columnCount = columnList.length;
-
-        // 1) Create a tableLayout and its params
-        //TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
-        TableLayout tableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
-        tableLayout.setBackgroundColor(getResources().getColor(R.color.error_color));
-
-        // 2) create tableRow params
-        TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
-        tableRowParams.setMargins(1, 1, 1, 1);
-        tableRowParams.weight = 1;
-
-        for (int i = 0; i <= rowCount; i++) {
-            // 3) create tableRow
-            TableRow tableRow = new TableRow(this);
-            tableRow.setBackgroundColor(Color.BLACK);
-
-            for (int j= 0; j <= columnCount; j++) {
-                // 4) create textView
-                TextView textView = new TextView(this);
-                //  textView.setText(String.valueOf(j));
-                textView.setBackgroundColor(Color.WHITE);
-                textView.setGravity(Gravity.CENTER);
-
-                String s1 = Integer.toString(i);
-                String s2 = Integer.toString(j);
-                String s3 = s1 + s2;
-                int id = Integer.parseInt(s3);
-
-                if (i ==0 && j==0){
-                    textView.setText("0==0");
-                } else if(i==0){
-                    textView.setText(columnList[j-1]);
-                }else if( j==0){
-                    textView.setText(rowList[i-1]);
-                }else {
-                    textView.setText(""+id);
-                    // check id=23
-                    if(id==23){
-                        textView.setText("ID=23");
-                    }
-                }
-
-                // 5) add textView to tableRow
-                tableRow.addView(textView, tableRowParams);
-            }
-
-            // 6) add tableRow to tableLayout
-            tableLayout.addView(tableRow, tableLayoutParams);
-        }
-    }*/
 
     private void onClickGalleryImage(final RecentMedia aMediaItem){
         mCamera.stopPreview();
@@ -690,7 +667,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                     // set the new selection display as the opposite of the previous selection state
                     recentMediaLayout.setIsSelected(!recentMediaLayout.isSelected());
-                    //VectorMediasPickerActivity.this.manageButtons();
                 }
             });
         }
@@ -809,15 +785,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         return bitmapRetValue;
     }
 
-    private Bitmap rotateImageFromUriToBitmap(final Uri aImageUri) {
+    private Bitmap rotateImageFromUriToBitmap(final Uri aMediaStoreImageUri) {
         //mGalleryImagePreviewImageView.setImageURI(Uri.fromFile(new File(mShootedPicturePath)));
-        final String mimeType = "image/jpeg";
         Bitmap bitmapRetValue = null;
 
-        if (null != aImageUri) {
-            MXMediasCache mediasCache = Matrix.getInstance(VectorMediasPickerActivity.this).getMediasCache();
+        if (null != aMediaStoreImageUri) {
 
-            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, aImageUri);
+            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, aMediaStoreImageUri);
+            Uri imageUri = getThumbnailUriFromMediaStorage(aMediaStoreImageUri);
             if (0 != rotationAngle) {
                 try {
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -828,7 +803,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     // decode the bitmap
                     Bitmap bitmap = null;
 
-                    final String filename = aImageUri.getPath();
+                    final String filename = imageUri.getPath();
                     FileInputStream imageStream = new FileInputStream(new File(filename));
                     bitmap = BitmapFactory.decodeStream(imageStream, null, options);
                     imageStream.close();
@@ -850,6 +825,88 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         return bitmapRetValue;
     }
 
+    public Uri getThumbnailUriFromMediaStorage(Uri thumbnailMediaStorageUri) {
+        MXMediasCache mediasCache = Matrix.getInstance(VectorMediasPickerActivity.this).getMediasCache();
+        Uri thumbnailUriRetValue = null;
+
+            if ((null != thumbnailMediaStorageUri) && (null != mediasCache)){
+                try {
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(VectorMediasPickerActivity.this, thumbnailMediaStorageUri);
+
+                    // sanity check
+                    if (null != resource) {
+                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
+                            InputStream stream = resource.contentStream;
+                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, thumbnailMediaStorageUri);
+
+                            String mediaUrl = ImageUtils.scaleAndRotateImage(VectorMediasPickerActivity.this, stream, resource.mimeType, 512, rotationAngle, mediasCache);
+                            thumbnailUriRetValue = Uri.parse(mediaUrl);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG,"## getThumbnailUriFromMediaStorage(): EXCEPTION Msg="+e.getMessage());
+                }
+            }
+
+        return thumbnailUriRetValue;
+    }
+
+
+    public static Uri getThumbnailUriFromIntent(Context context, final Intent intent, MXMediasCache mediasCache) {
+        // sanity check
+        if ((null != intent) && (null != context) && (null != mediasCache)) {
+            Uri thumbnailUri = null;
+            ClipData clipData = null;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                clipData = intent.getClipData();
+            }
+
+            // multiple data
+            if (null != clipData) {
+                if (clipData.getItemCount() > 0) {
+                    thumbnailUri = clipData.getItemAt(0).getUri();
+                }
+            } else if (null != intent.getData()) {
+                thumbnailUri = intent.getData();
+            }
+
+            if (null != thumbnailUri) {
+                try {
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri);
+
+                    // sanity check
+                    if (null != resource) {
+                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
+                            InputStream stream = resource.contentStream;
+                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
+
+                            String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
+                            thumbnailUri = Uri.parse(mediaUrl);
+                        }
+                    }
+
+                    return thumbnailUri;
+
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Display and prepare the image image preview. If the image has been rotated when saved
+     * (ie. Samsung devices), the rotation is canceled before display.
+     *
+     * need to be rotated and some devices (ie. Samsung) as a preview
+     * @param aCameraImageUrl
+     * @param aGalleryImageUri
+     * @param aOrigin
+     */
     private void displayAndRotatePreviewImageAsync(final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
         final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
         progressBar.setVisibility(View.VISIBLE);
@@ -861,15 +918,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mFileHandler.post(new Runnable() {
             Bitmap newBitmap = null;
             Uri defaultUri = null;
+
             @Override
             public void run() {
-                if(IMAGE_ORIGIN_CAMERA == aOrigin) {
+                if (IMAGE_ORIGIN_CAMERA == aOrigin) {
                     newBitmap = rotateImageFromUrlToBitmap(aCameraImageUrl);
                     defaultUri = Uri.fromFile(new File(aCameraImageUrl));
                 } else {
-                    newBitmap = rotateImageFromUriToBitmap(aGalleryImageUri); // TODO returns null
-                    defaultUri = aGalleryImageUri;
+                    // in gallery
+                    defaultUri = getThumbnailUriFromMediaStorage(aGalleryImageUri);
                 }
+
+                // save bitmap to speed up UI restore (life cycle)
                 VectorApp.setSavedCameraImagePreview(newBitmap);
 
                 // update the UI part
@@ -881,7 +941,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         mTakeImageView.setEnabled(true);
                         updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
                         progressBar.setVisibility(View.GONE);
-                        if(null != newBitmap)
+                        if (null != newBitmap)
                             mGalleryImagePreviewImageView.setImageBitmap(newBitmap);
                         else
                             mGalleryImagePreviewImageView.setImageURI(defaultUri);
@@ -1191,5 +1251,57 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCamera = null;
     }
     // *********************************************************************************************
+
+
+    public void onAccountInfoUpdate() {
+        // refresh the settings value
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        //editor.put   (KEY_EXTRA_GALLERY_URI_MAP, mGalleryMediaStorageUriMap) ;
+        //editor.put
+        editor.commit();
+
+    }
+
+    private HashMap<Uri, Uri> getHashMapInPreference(String aMapKey/* KEY_EXTRA_GALLERY_URI_MAP */) {
+        HashMap<Uri,Uri> wrapperRetValue = null;
+        Gson gson = new Gson();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String hashMapString = preferences.getString(aMapKey, null);
+
+        if(null != hashMapString) {
+            HashMapWrapper<Uri> wrapper = gson.fromJson(hashMapString, HashMapWrapper.class);
+            wrapperRetValue = wrapper.getMap();
+        }
+        if(null == wrapperRetValue) {
+            wrapperRetValue = new HashMap<Uri, Uri>();
+        }
+        return wrapperRetValue;
+    }
+
+    private void putHashMapInPreference(String aMapKey, HashMap<Uri, Uri> aGalleryMediaStorageUriMap) {
+        Gson gson = new Gson();
+        HashMapWrapper<Uri> wrapper = new HashMapWrapper<Uri>();
+        wrapper.setMap(aGalleryMediaStorageUriMap);
+        String serializedHashMap = gson.toJson(wrapper);
+
+        // save serialized map in shared preference as a string
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(aMapKey, serializedHashMap) ;
+        editor.commit();
+    }
+
+    private static class HashMapWrapper<T> {
+        private HashMap<T, T> mMap;
+
+        public HashMap<T, T> getMap() {
+            return mMap;
+        }
+
+        public void setMap(HashMap<T, T> aMyMap) {
+            mMap = aMyMap;
+        }
+    }
 
 }

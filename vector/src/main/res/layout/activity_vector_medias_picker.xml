@@ -27,10 +27,11 @@
                 <!-- SurfaceView is used to present a live camera preview -->
                 <SurfaceView
                     android:id="@+id/medias_picker_surface_view"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="visible" />
 
+                <!-- button to take the picture -->
                 <ImageView
                     android:id="@+id/medias_picker_camera_button"
                     android:layout_width="wrap_content"
@@ -67,8 +68,8 @@
             <TableLayout
                 android:id="@+id/gallery_table_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/medias_picker_camera_preview_layout"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal">
             </TableLayout>
 
