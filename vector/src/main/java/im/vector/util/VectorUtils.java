@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
@@ -43,7 +44,10 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -507,6 +511,29 @@ public class VectorUtils {
                 dialog.show();
             }
         });
+    }
+
+    /**
+     * Display the privacy policy.
+     * @param activity the activity
+     */
+    public static void displayPrivacyPolicy(final Activity activity) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+
+        WebView wv = new WebView(activity);
+        wv.loadUrl("https://vector.im/privacy.html");
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+
+                return true;
+            }
+        });
+
+        alert.setView(wv);
+        alert.setPositiveButton(android.R.string.ok, null);
+        alert.show();
     }
 
     /**

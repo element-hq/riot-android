@@ -365,6 +365,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                     case R.id.sliding_menu_terms: {
                         VectorUtils.displayLicense(VectorHomeActivity.this);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_privacy_policy: {
+                        VectorUtils.displayPrivacyPolicy(VectorHomeActivity.this);
+                        break;
                     }
                 }
 

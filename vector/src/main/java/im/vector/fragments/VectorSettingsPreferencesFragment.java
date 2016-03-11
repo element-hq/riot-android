@@ -173,6 +173,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             });
         }
 
+        // terms & conditions
+        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_privacy_policy));
+
+        if (null != termConditionsPreference) {
+            privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    VectorUtils.displayPrivacyPolicy(getActivity());
+                    return false;
+                }
+            });
+        }
+
         // clear cache
         EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
 
