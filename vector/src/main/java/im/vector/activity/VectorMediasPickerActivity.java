@@ -24,7 +24,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -607,7 +610,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 scaleType = ImageView.ScaleType.FIT_XY;
                 rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             } else {
-                scaleType = ImageView.ScaleType.CENTER_INSIDE;
+                scaleType = ImageView.ScaleType.FIT_CENTER;
                 rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
             }
             rawLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
@@ -808,6 +811,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         return bitmapRetValue;
     }
 
+//
+//    int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
+//
+//    if (0 != rotationAngle) {
+//        android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+//        bitmapMatrix.postRotate(rotationAngle);
+//        recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
+//    }
+
+
     /**
      * Display and prepare the image image preview. If the image has been rotated when saved
      * (ie. Samsung devices), the rotation is canceled before display.
@@ -858,6 +871,33 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
     }
+
+
+    private Bitmap captureBitmapFriomSurfaceView(){
+        Bitmap screen=null;
+        try {
+            int surfaceViewWidth = mCameraSurfaceView.getWidth();
+            int surfaceViewHeight = mCameraSurfaceView.getHeight();
+            Bitmap.Config conf = Bitmap.Config.RGB_565;
+            Bitmap image = Bitmap.createBitmap(surfaceViewWidth, surfaceViewHeight, conf);
+
+            Canvas canvas = mCameraSurfaceHolder.lockCanvas();
+            int canvasWidth = canvas.getWidth();
+            int canvasHeight = canvas.getHeight();
+            canvas.setBitmap(image);
+            Paint backgroundPaint = new Paint();
+            backgroundPaint.setARGB(255, 40, 40, 40);
+            canvas.drawRect(0, 0, canvasWidth, canvasHeight, backgroundPaint);
+            mCameraSurfaceView.draw(canvas);
+
+            screen = Bitmap.createBitmap(image, 0, 0, surfaceViewWidth, surfaceViewHeight);
+
+        } catch (Exception e){
+
+        }
+        return screen;
+    }
+
 
     /**
      * Update the UI according to camera action. Two UIs are displayed:
@@ -1069,6 +1109,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCamera. setParameters(params);
     }
 
+    private void playShutterSound(){
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
+    }
 
     private void initCameraSettings() {
 
