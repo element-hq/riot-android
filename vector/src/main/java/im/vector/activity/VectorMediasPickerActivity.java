@@ -587,7 +587,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 scaleType = ImageView.ScaleType.FIT_XY;
                 rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             } else {
-                scaleType = ImageView.ScaleType.FIT_XY;
+                scaleType = ImageView.ScaleType.CENTER_INSIDE;
                 rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
             }
             rawLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
@@ -619,7 +619,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         imageView.setImageURI(recentMedia.mFileUri);
                     }
 
-
+                    imageView.setBackgroundColor(getResources().getColor(android.R.color.black));
                     imageView.setScaleType(scaleType);
                     final RecentMedia finalRecentMedia = recentMedia;
                     imageView.setOnClickListener(new View.OnClickListener() {
