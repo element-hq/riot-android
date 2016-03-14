@@ -110,9 +110,6 @@
     <string name="membership_kick">Kicked</string>
     <string name="membership_ban">Banned</string>
     <string name="member_details_action_start_new_room">Start chat</string>
-    <string name="member_details_action_make_admin">Make admin</string>
-    <string name="member_details_action_remove_from_room">Remove from this room</string>
-    <string name="member_details_action_block">Block</string>
 
     <plurals name="num_members">
         <item quantity="one">%1$s user</item>
@@ -352,6 +349,18 @@
     <string name="room_participants_active_less_x_hours">Active less %d hours ago</string>
     <string name="room_participants_active_less_x_days">Active less %d days ago</string>
     <string name="you">You</string>
+
+    <string name="room_participants_action_invite">Invite</string>
+    <string name="room_participants_action_leave">Leave this room</string>
+    <string name="room_participants_action_remove">Remove from this room</string>
+    <string name="room_participants_action_ban">Block</string>
+    <string name="room_participants_action_unban">Unblock</string>
+    <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
+    <string name="room_participants_action_set_moderator">Make moderator</string>
+    <string name="room_participants_action_set_admin">Make admin</string>
+    <string name="room_participants_action_start_chat">Start chat</string>
+    <string name="room_participants_action_start_voice_call">Start voice call</string>
+    <string name="room_participants_action_start_video_call">Start video call</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>

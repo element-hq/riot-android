@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMemberDetailsActivity;
 
 /**
  * An adapter which can display room information.
  */
 public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.AdapterMemberActionItems> {
-
-    private static final int NUM_ROW_TYPES = 2;
-
-    private static final int ROW_TYPE_HEADER = 0;
-    private static final int ROW_TYPE_ENTRY = 1;
 
     private LayoutInflater mLayoutInflater;
     private int mRowItemLayoutResourceId;
@@ -48,17 +42,9 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
      */
     public interface IEnablingActions {
         /**
-         * Indicate if the row associated with the aActionType must be enabled.
-         * @param aActionType the action type
-         * @return true if the corresponding row is enabled, false otherwise
-         */
-        public boolean isItemActionEnabled(int aActionType);
-
-        /**
-         *
          * @param aActionType the action type
          */
-        public void performItemAction(int aActionType);
+        void performItemAction(int aActionType);
     }
 
     /**
@@ -103,13 +89,12 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
+    /**
+     * Set the action listener
+     * @param aActionListener the action listenet
+     */
     public void setActionListener(IEnablingActions aActionListener){
-        try {
-            mActionListener = (IEnablingActions) aActionListener;
-        }
-        catch(ClassCastException e) {
-            throw new ClassCastException(aActionListener.toString() + " must implement IEnablingActions");
-        }
+        mActionListener = aActionListener;
     }
 
     @Override
@@ -122,58 +107,38 @@ public class MemberDetailsAdapter extends ArrayAdapter<MemberDetailsAdapter.Adap
             convertView.setTag(viewHolder);
         }
         else {
-            // recylce previous view..
+            // recycle previous view..
             viewHolder = (MemberDetailsViewHolder)convertView.getTag();
         }
 
         // get current item
         final AdapterMemberActionItems currentItem = getItem(position);
-        if(null != currentItem) {
+
+        if (null != currentItem) {
             // update the icon and the action text
             viewHolder.mActionDescTextView.setText(currentItem.mActionDescText);
             viewHolder.mActionImageView.setImageResource(currentItem.mIconResourceId);
 
             // update the text colour: specific colour is required for the remove action
             int colourTxt = mContext.getResources().getColor(R.color.material_grey_900);
-            if(VectorMemberDetailsActivity.ITEM_ACTION_REMOVE_FROM_ROOM == currentItem.mActionType) {
+
+            if (VectorMemberDetailsActivity.ITEM_ACTION_KICK == currentItem.mActionType) {
                 colourTxt = mContext.getResources().getColor(R.color.vector_fuchsia_color);
             }
+
             viewHolder.mActionDescTextView.setTextColor(colourTxt);
 
-            // set the listener
-            if (null != mActionListener) {
-                // is the action allowed according to the power levels?
-                //final boolean isActionEnabled = mActionListener.isItemActionEnabled(currentItem.mActionType);
-                //setEnabledItem(viewHolder.mActionDescTextView, isActionEnabled);
-
-                // set the action associated to the item
-                convertView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (null != mActionListener) {
-                            mActionListener.performItemAction(currentItem.mActionType);
-                        }
+            // set the action associated to the item
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (null != mActionListener) {
+                        mActionListener.performItemAction(currentItem.mActionType);
                     }
-                });
-            }
+                }
+            });
         }
 
         return convertView;
-    }
-
-    /**
-     * Enable a view according to the aIsViewEnabled value. If aIsViewEnabled
-     * is set to false the view is disabled and its opacity is half transparent.
-     * If set to true, the view is enabled and its opacity is not set (full tranparent).
-     *
-     * @param aView the view to disa/enable
-     * @param aIsViewEnabled enabling state value
-     */
-    private void setEnabledItem(View aView, boolean aIsViewEnabled) {
-        if(null != aView){
-            aView.setEnabled(aIsViewEnabled);
-            float opacity = aIsViewEnabled?CommonActivityUtils.UTILS_OPACITY_NO_OPACITY :CommonActivityUtils.UTILS_OPACITY_HALPH_OPACITY;
-            aView.setAlpha(opacity);
-        }
     }
 }

@@ -261,7 +261,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         );
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
