@@ -142,6 +142,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     private String mShootedPicturePath;
     private Boolean mIsPreviewStarted = false;
+    private int mCameraPreviewHeight = 0;
 
     /**
      * The recent requests are performed in a dedicated thread
@@ -207,12 +208,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mScreenHeight = metrics.heightPixels;
         mScreenWidth = metrics.widthPixels;
 
-        int cameraPreviewHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+        mCameraPreviewHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
 
         // the eight of the relative layout containing the surfaceview
         mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
         ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
-        previewLayoutParams.height = cameraPreviewHeight;
+        previewLayoutParams.height = mCameraPreviewHeight;
         mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
         // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
@@ -236,13 +237,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * number of the raws of the table.
      */
     private void computeGalleryHeight() {
-        // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
-        int cameraPreviewHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
         mGalleryRawCount = getGalleryRowsCount();
 
         if(null != mPreviewAndGalleryLayout) {
             ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
-            previewAndGalleryLayoutParams.height = cameraPreviewHeight + (mGalleryRawCount * mScreenWidth / GALLERY_COLUMN_COUNT);
+            previewAndGalleryLayoutParams.height = mCameraPreviewHeight + (mGalleryRawCount * mScreenWidth / GALLERY_COLUMN_COUNT);
             mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
         }
     }
@@ -306,6 +305,29 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         } else {
             mCamera.startPreview();
         }
+
+        // adjust the scroll height
+        mCameraSurfaceView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams  params = mCameraSurfaceView.getLayoutParams();
+
+                if (params.height < mCameraPreviewHeight) {
+                    mCameraPreviewHeight = params.height;
+
+                    // the eight of the relative layout containing the surfaceview
+                    mCameraPreviewLayout = (RelativeLayout) findViewById(R.id.medias_picker_camera_preview_layout);
+                    ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
+                    previewLayoutParams.height = params.height;
+                    mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+
+                    // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
+                    mPreviewAndGalleryLayout = (RelativeLayout) findViewById(R.id.medias_picker_preview_gallery_layout);
+
+                    computeGalleryHeight();
+                }
+            }
+        }, 50);
     }
 
     @Override
