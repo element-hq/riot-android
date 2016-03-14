@@ -520,7 +520,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
-        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALPH_OPACITY);
+        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
 
         mRecentsMedias.clear();
 
@@ -549,7 +549,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         buildGalleryImageTableLayout();
                         progressBar.setVisibility(View.GONE);
                         mTakeImageView.setEnabled(true);
-                        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NO_OPACITY);
+                        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
                     }
                 });
             }
