@@ -28,7 +28,8 @@
                 <SurfaceView
                     android:id="@+id/medias_picker_surface_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:visibility="visible" />
 
                 <!-- button to take the picture -->
@@ -80,6 +81,7 @@
     <RelativeLayout
         android:id="@+id/medias_picker_preview"
         android:visibility="gone"
+        android:background="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
