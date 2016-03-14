@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements SurfaceHolder.Callback {
     // medias folder
@@ -424,12 +425,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void addImagesThumbnails() {
         final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN};
         Cursor thumbnailsCursor = null;
-        String where = MediaStore.Images.ImageColumns.MIME_TYPE +" = 'image/jpeg'";//'image/jpeg'
+        String where = MediaStore.Images.ImageColumns.MIME_TYPE + " = 'image/jpeg'";
 
         try {
             thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     projection, // Which columns to return
-                    where,       // Return all rows
+                    where,      // Return all jpeg files
                     null,
                     MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
@@ -439,7 +440,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (null != thumbnailsCursor) {
             int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
             int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
-            Uri mediaStorageUri = null;
+
             if (thumbnailsCursor.moveToFirst()) {
                 do {
                     try {
@@ -450,36 +451,34 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         String dateAsString = thumbnailsCursor.getString(timeIndex);
                         recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
-                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MICRO_KIND, null);
-                        mediaStorageUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
-                        // test if present in cache
-                        if(mGalleryMediaStorageUriMap.containsKey(mediaStorageUri)){
-                            recentMedia.mFileUri = mGalleryMediaStorageUriMap.get(mediaStorageUri);
-                        } else  {
-                            // rotate the jpeg file before display:
-                            // convert media store Uri to be usable to display the thumbnail (only jpeg is supported)
-                            recentMedia.mFileUri = getThumbnailUriFromMediaStorage(mediaStorageUri);
-                            mGalleryMediaStorageUriMap.put(mediaStorageUri, recentMedia.mFileUri);
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
+
+                        if (0 != rotationAngle) {
+                            android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                            bitmapMatrix.postRotate(rotationAngle);
+                            recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
                         }
 
                         // Note: getThumbnailUriFromMediaStorage() can return null for non jpeg images (ie png).
                         // We could then use the bitmap(mThumbnail)) that is never null, but with no rotation applied
                         mRecentsMedias.add(recentMedia);
-
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## addImagesThumbnails(): Msg=" + e.getMessage());
                     }
                 } while (thumbnailsCursor.moveToNext());
             }
-            thumbnailsCursor.close();
         }
+
+        Log.e(LOG_TAG, "## addImagesThumbnails(): " + mRecentsMedias.size());
     }
 
     private int getMediaStoreImageCount(){
         int retValue = 0;
         Cursor thumbnailsCursor = null;
-        String where = MediaStore.Images.ImageColumns.MIME_TYPE +" = 'image/jpeg'";//"image/jpeg" {
+        String where = MediaStore.Images.ImageColumns.MIME_TYPE + " = 'image/jpeg'";
 
         try {
             thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -613,10 +612,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 // build the image image view in the raw
                 if(null != recentMedia) {
                     imageView = new ImageView(this);
-                    if(null != recentMedia.mFileUri) // jpeg files
-                        imageView.setImageURI(recentMedia.mFileUri);
-                    else // non jpeg files (ie png)
+
+                    if (null != recentMedia.mThumbnail) {
                         imageView.setImageBitmap(recentMedia.mThumbnail);
+                    } else {
+                        imageView.setImageURI(recentMedia.mFileUri);
+                    }
+
+
                     imageView.setScaleType(scaleType);
                     final RecentMedia finalRecentMedia = recentMedia;
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -664,15 +667,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mSelectedRecents.add(aMediaItem);
 
         // display the image as preview
-        if(null != aMediaItem.mFileUri) {
-            displayAndRotatePreviewImageAsync(null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
-            mImagePreviewImageView.setTag(aMediaItem.mFileUri);
-        } else {
+        if (null != aMediaItem.mThumbnail) {
             // non jpeg flow (ie png)
             updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_GALLERY);
             mImagePreviewImageView.setImageBitmap(aMediaItem.mThumbnail);
             // save bitmap to speed up UI restore (life cycle)
             VectorApp.setSavedCameraImagePreview(aMediaItem.mThumbnail);
+        } else if(null != aMediaItem.mFileUri) {
+            displayAndRotatePreviewImageAsync(null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
+            mImagePreviewImageView.setTag(aMediaItem.mFileUri);
         }
     }
 
@@ -725,7 +728,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         // set the UI preview
                         // must be done in displayAndRotatePreviewImageAsync: updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_CAMERA);
                     } catch (Exception e) {
-                        Toast.makeText(VectorMediasPickerActivity.this, "Exception takeImage(): "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VectorMediasPickerActivity.this, "Exception takeImage(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     } finally {
                         // Close resources
                         try {
@@ -735,7 +738,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             if (outputStream != null)
                                 outputStream.close();
                         } catch (Exception e) {
-                            Log.e(LOG_TAG,"## takeImage(): EXCEPTION Msg="+e.getMessage());
+                            Log.e(LOG_TAG, "## takeImage(): EXCEPTION Msg=" + e.getMessage());
                         }
                     }
                 }
@@ -762,33 +765,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
 
         return bitmapRetValue;
-    }
-
-    private Uri getThumbnailUriFromMediaStorage(Uri thumbnailMediaStorageUri) {
-        MXMediasCache mediasCache = Matrix.getInstance(VectorMediasPickerActivity.this).getMediasCache();
-        Uri thumbnailUriRetValue = null;
-
-            if ((null != thumbnailMediaStorageUri) && (null != mediasCache)){
-                try {
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(VectorMediasPickerActivity.this, thumbnailMediaStorageUri);
-
-                    // sanity check
-                    if (null != resource) {
-                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
-                            InputStream stream = resource.contentStream;
-                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, thumbnailMediaStorageUri);
-
-                            String mediaUrl = ImageUtils.scaleAndRotateImage(VectorMediasPickerActivity.this, stream, resource.mimeType, 512, rotationAngle, mediasCache);
-                            thumbnailUriRetValue = Uri.parse(mediaUrl);
-                        }
-                    }
-
-                } catch (Exception e) {
-                    Log.e(LOG_TAG,"## getThumbnailUriFromMediaStorage(): EXCEPTION Msg="+e.getMessage());
-                }
-            }
-
-        return thumbnailUriRetValue;
     }
 
     /**
@@ -1059,6 +1035,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // fall back: the camera initialisation failed
         if (null == mCamera) {
             mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
+        }
+
+        Camera.Parameters params = mCamera.getParameters();
+        List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
+
+        if (supportedSizes.size() > 0) {
+            Camera.Size sizePicture = supportedSizes.get(0);
+            params.setPictureSize(sizePicture.width, sizePicture.height);
         }
 
         // cannot start the cam
