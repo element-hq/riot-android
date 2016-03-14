@@ -1595,7 +1595,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         boolean hasText = mEditText.getText().length() > 0;
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-        mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+        // TODO manage Call support
+        mCallButton.setVisibility(View.GONE);
+        //mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
