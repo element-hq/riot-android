@@ -172,6 +172,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
         mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
 
+        //
+        mSwitchCameraImageView.setVisibility((Camera.getNumberOfCameras() > 1) ? View.VISIBLE : View.GONE);
+
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,15 +267,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    /**
-     * Disable user interactivity
-     * @param view the view
-     */
-    private void disableView(View view) {
-        view.setEnabled(false);
-        view.setAlpha(0.5f);
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -282,8 +276,34 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (null != mCamera) {
             mCamera.stopPreview();
             mIsPreviewStarted = false;
-            //manageButtons();
         }
+    }
+
+    private void initScrollViewSize() {
+        // adjust the scroll height
+        mCameraSurfaceView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams params = mCameraSurfaceView.getLayoutParams();
+
+                mCameraPreviewHeight = (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+
+                if (params.height < mCameraPreviewHeight) {
+                    mCameraPreviewHeight = params.height;
+
+                    // the eight of the relative layout containing the surfaceview
+                    mCameraPreviewLayout = (RelativeLayout) findViewById(R.id.medias_picker_camera_preview_layout);
+                    ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
+                    previewLayoutParams.height = params.height;
+                    mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+
+                    // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
+                    mPreviewAndGalleryLayout = (RelativeLayout) findViewById(R.id.medias_picker_preview_gallery_layout);
+
+                    computeGalleryHeight();
+                }
+            }
+        }, 50);
     }
 
     private void startCameraPreview() {
@@ -306,28 +326,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCamera.startPreview();
         }
 
-        // adjust the scroll height
-        mCameraSurfaceView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.LayoutParams  params = mCameraSurfaceView.getLayoutParams();
-
-                if (params.height < mCameraPreviewHeight) {
-                    mCameraPreviewHeight = params.height;
-
-                    // the eight of the relative layout containing the surfaceview
-                    mCameraPreviewLayout = (RelativeLayout) findViewById(R.id.medias_picker_camera_preview_layout);
-                    ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
-                    previewLayoutParams.height = params.height;
-                    mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
-
-                    // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
-                    mPreviewAndGalleryLayout = (RelativeLayout) findViewById(R.id.medias_picker_preview_gallery_layout);
-
-                    computeGalleryHeight();
-                }
-            }
-        }, 50);
+        initScrollViewSize();
     }
 
     @Override
@@ -350,8 +349,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Uri uriImage = null;
-        String uriString = null;
+        Uri uriImage;
 
         // save camera UI configuration
         outState.putBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED, mIsTakenImageDisplayed);
@@ -858,11 +856,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mIsTakenImageDisplayed = aIsTakenImageDisplayed;
         mTakenImageOrigin = aImageOrigin;
 
-        // if more than two cameras are available, just disable the "switch camera" capability
-        if (2 > Camera.getNumberOfCameras()) {
-            disableView(mSwitchCameraImageView);
-        }
-
         if (false == aIsTakenImageDisplayed) {
             // clear the selected image from the gallery (if any)
             mSelectedRecents.clear();
@@ -989,27 +982,35 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Switch camera (front <-> back)
      */
     private void onSwitchCamera() {
-        if (null != mCameraSurfaceHolder) {
-            mCamera.stopPreview();
+        // can only switch if the device has more than two camera
+        if (Camera.getNumberOfCameras() >= 2) {
+            if (null != mCameraSurfaceHolder) {
+                mCamera.stopPreview();
+            }
+            mCamera.release();
+
+            if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+            } else {
+                mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+            }
+
+            mCamera = Camera.open(mCameraId);
+
+            setCameraDisplayOrientation();
+
+            try {
+                mCamera.setPreviewDisplay(mCameraSurfaceHolder);
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewDisplay EXCEPTION Msg=" + e.getMessage());
+            }
+
+            initCameraSettings();
+
+            mCamera.startPreview();
+
+            initScrollViewSize();
         }
-        mCamera.release();
-
-        if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
-            mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-        } else {
-            mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-        }
-
-        mCamera = Camera.open(mCameraId);
-
-        setCameraDisplayOrientation();
-
-        try {
-            mCamera.setPreviewDisplay(mCameraSurfaceHolder);
-        } catch (IOException e) {
-            Log.e(LOG_TAG,"## onSwitchCamera(): setPreviewDisplay EXCEPTION Msg="+e.getMessage());
-        }
-        mCamera.startPreview();
     }
 
     /**
@@ -1048,6 +1049,17 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
 
+    private void initCameraSettings() {
+
+        Camera.Parameters params = mCamera.getParameters();
+        List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
+
+        if (supportedSizes.size() > 0) {
+            Camera.Size sizePicture = supportedSizes.get(0);
+            params.setPictureSize(sizePicture.width, sizePicture.height);
+        }
+    }
+
     // *********************************************************************************************
     // SurfaceHolder.Callback implementation
     @Override
@@ -1059,13 +1071,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
         }
 
-        Camera.Parameters params = mCamera.getParameters();
-        List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
 
-        if (supportedSizes.size() > 0) {
-            Camera.Size sizePicture = supportedSizes.get(0);
-            params.setPictureSize(sizePicture.width, sizePicture.height);
-        }
+        initCameraSettings();
 
         // cannot start the cam
         if (null == mCamera) {
