@@ -441,7 +441,8 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory results</string>
-    <string name="directory_search_results">%1$d results found for %2$s</string>
+    <string name="directory_search_result">%1$d results found</string>
+    <string name="directory_search_result_for">%1$d results found for %2$s</string>
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
     <string name="splash_screen_display_text">Vector</string>

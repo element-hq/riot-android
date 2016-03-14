@@ -205,7 +205,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (mIsSearchMode) {
             res = false;
 
-            if (null != mSearchedPattern) {
+            if (!TextUtils.isEmpty(mSearchedPattern)) {
                 String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, room);
                 res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().indexOf(mSearchedPattern) >= 0));
             }
@@ -223,17 +223,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         boolean res = true;
 
         // test only in search
-        if (mIsSearchMode) {
-            res = false;
+        if (mIsSearchMode && !TextUtils.isEmpty(mSearchedPattern)) {
+            String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
 
-            if (null != mSearchedPattern) {
-                String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
-                res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
-
-                if (res) {
-                    res = true;
-                }
-            }
+            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
         }
 
         return res;
@@ -689,7 +682,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (null == mPublicRooms) {
                 roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
             } else {
-                roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_results, mMatchedPublicRooms.size(), mSearchedPattern));
+                if (TextUtils.isEmpty(mSearchedPattern)) {
+                    roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result, mMatchedPublicRooms.size()));
+                } else {
+                    roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                }
             }
 
             avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null));

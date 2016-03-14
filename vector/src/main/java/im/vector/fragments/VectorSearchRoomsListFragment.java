@@ -155,41 +155,31 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             return;
         }
 
-        if (TextUtils.isEmpty(pattern)) {
-            mRecentsListView.setVisibility(View.GONE);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onSearchResultListener.onSearchSucceed(0);
-                }
-            });
-        } else {
-            mAdapter.setPublicRoomsList(mPublicRoomsList);
-            mAdapter.setSearchPattern(pattern);
+        mAdapter.setPublicRoomsList(mPublicRoomsList);
+        mAdapter.setSearchPattern(pattern);
 
-            mRecentsListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mRecentsListView.setVisibility(View.VISIBLE);
-                    expandsAllSections();
-                    onSearchResultListener.onSearchSucceed(1);
-                }
-            });
-
-            // the public rooms have not yet been retrieved
-            if (null == mPublicRoomsList) {
-                // use any session to get the public rooms list
-                mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
-                    @Override
-                    public void onSuccess(List<PublicRoom> publicRooms) {
-                        if (null != publicRooms) {
-                            mPublicRoomsList = publicRooms;
-                            mAdapter.setPublicRoomsList(mPublicRoomsList);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
+        mRecentsListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecentsListView.setVisibility(View.VISIBLE);
+                expandsAllSections();
+                onSearchResultListener.onSearchSucceed(1);
             }
+        });
+
+        // the public rooms have not yet been retrieved
+        if (null == mPublicRoomsList) {
+            // use any session to get the public rooms list
+            mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
+                @Override
+                public void onSuccess(List<PublicRoom> publicRooms) {
+                    if (null != publicRooms) {
+                        mPublicRoomsList = publicRooms;
+                        mAdapter.setPublicRoomsList(mPublicRoomsList);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
         }
     }
 
