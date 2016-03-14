@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="1000dp">
 
-            <!-- the height will be computed programmatically-->
+            <!-- surfaceview: the height will be computed programmatically-->
             <RelativeLayout
                 android:id="@+id/medias_picker_camera_preview_layout"
                 android:layout_height="500dp"
@@ -76,7 +76,7 @@
         </RelativeLayout>
     </ScrollView>
 
-    <!-- preview container -->
+    <!-- preview container: imageview + redo and cancel buttons -->
     <RelativeLayout
         android:id="@+id/medias_picker_preview"
         android:visibility="gone"
@@ -129,7 +129,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-
+    <!-- progress bar -->
     <RelativeLayout
         android:id="@+id/medias_preview_progress_bar_layout"
         android:visibility="gone"
