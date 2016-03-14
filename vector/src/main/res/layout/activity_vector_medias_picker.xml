@@ -83,16 +83,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- image view used to display the preview from the gallery -->
+        <!-- image view used to display the image preview (from gallery or camera) -->
         <ImageView
-            android:id="@+id/medias_picker_gallery_preview_image_view"
+            android:id="@+id/medias_picker_preview_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:scaleType="centerCrop"
             android:visibility="visible" />
 
-        <!-- layout containing the attach/redo buttons associated with the
+        <!-- layout containing the attach/redo buttons associated with the android:scaleType="centerCrop"
         preview of the taken image -->
         <LinearLayout
             android:id="@+id/cancel_attach_picture_layout"
