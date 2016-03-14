@@ -71,6 +71,7 @@
     <string name="action_drawer">Extras</string>
     <string name="action_resume_call">Resume call</string>
     <string name="about">About</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
@@ -88,16 +89,13 @@
     <string name="create">Create:</string>
     <string name="sign_in">Sign in</string>
     <string name="username">Username</string>
-    <string name="email_address">Email address</string>
-    <string name="password">Password</string>
+    <string name="create_account">Register</string>
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Log in</string>
-    <string name="create_account">Register</string>
-    <string name="forgot_password">Forgot password?</string>
     <string name="hs_url">Home Server URL</string>
+    <string name="identity_url">Identity Server URL</string>
     <string name="user">user</string>
     <string name="users">users</string>
-    <string name="advanced_server_options">Advanced server options</string>
 
     <string name="create_room_set_alias">Set room alias</string>
     <string name="create_room_alias_hint">room-alias</string>
@@ -112,9 +110,6 @@
     <string name="membership_kick">Kicked</string>
     <string name="membership_ban">Banned</string>
     <string name="member_details_action_start_new_room">Start chat</string>
-    <string name="member_details_action_make_admin">Make admin</string>
-    <string name="member_details_action_remove_from_room">Remove from this room</string>
-    <string name="member_details_action_block">Block</string>
 
     <plurals name="num_members">
         <item quantity="one">%1$s user</item>
@@ -132,6 +127,19 @@
     <string name="option_send_files">Send files</string>
     <string name="option_take_photo">Take photo</string>
     <string name="option_attach_video">Attach video</string>
+
+    <!-- Authentication -->
+    <string name="auth_login">Log in</string>
+    <string name="auth_register">Register</string>
+    <string name="auth_user_id_placeholder">Email or user name</string>
+    <string name="auth_password_placeholder">Password</string>
+    <string name="auth_user_name_placeholder">Your name</string>
+    <string name="auth_email_placeholder">Email address</string>
+    <string name="auth_repeat_password_placeholder">"Repeat password</string>
+    <string name="auth_forgot_password">"Forgot password?</string>
+    <string name="auth_use_server_options">"Use custom server options (advanced)</string>
+    <string name="auth_home_server">"Home Server:"</string>
+    <string name="auth_identity_server">"Identity Server:</string>
 
     <!-- Login Screen -->
     <string name="login_error_already_logged_in">Already logged in</string>
@@ -342,9 +350,22 @@
     <string name="room_participants_active_less_x_days">Active less %d days ago</string>
     <string name="you">You</string>
 
+    <string name="room_participants_action_invite">Invite</string>
+    <string name="room_participants_action_leave">Leave this room</string>
+    <string name="room_participants_action_remove">Remove from this room</string>
+    <string name="room_participants_action_ban">Block</string>
+    <string name="room_participants_action_unban">Unblock</string>
+    <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
+    <string name="room_participants_action_set_moderator">Make moderator</string>
+    <string name="room_participants_action_set_admin">Make admin</string>
+    <string name="room_participants_action_start_chat">Start chat</string>
+    <string name="room_participants_action_start_voice_call">Start voice call</string>
+    <string name="room_participants_action_start_video_call">Start video call</string>
+
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>
     <string name="presence_online">Online</string>
+    <string name="presence_online_now">Online now</string>
     <string name="presence_hidden">Hidden</string>
     <string name="presence_unavailable">Unavailable</string>
 
@@ -362,9 +383,13 @@
     <string name="room_two_users_are_typing">%1$s &#038; %2$s are typing...</string>
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing...</string>
     <string name="room_message_placeholder">Type a message...</string>
+    <string name="room_offline_notification">Connectivity to the server has been lost.</string>
+    <string name="room_unsent_messages_notification">Messages not sent.</string>
+    <string name="room_prompt_resent">Resend now?</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
+    <string name="ssl_do_not_trust">Do not trust</string>
     <string name="ssl_logout_account">Logout</string>
     <string name="ssl_remain_offline">Ignore</string>
     <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
@@ -416,7 +441,8 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory results</string>
-    <string name="directory_search_results">%1$d results found for %2$s</string>
+    <string name="directory_search_result">%1$d results found</string>
+    <string name="directory_search_result_for">%1$d results found for %2$s</string>
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
     <string name="splash_screen_display_text">Vector</string>

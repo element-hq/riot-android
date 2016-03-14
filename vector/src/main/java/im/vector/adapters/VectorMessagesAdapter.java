@@ -16,16 +16,14 @@
 
 package im.vector.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import org.apache.http.client.utils.URIUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
@@ -44,20 +41,15 @@ import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.JsonUtils;
 
-import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.R;
-import im.vector.db.VectorContentProvider;
 import im.vector.util.VectorUtils;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -88,6 +80,22 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     protected Handler mUiHandler;
 
+    public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
+                                 int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, MXMediasCache mediasCache) {
+
+        super(session, context,
+                textResLayoutId,
+                imageResLayoutId,
+                noticeResLayoutId,
+                emoteRestLayoutId,
+                fileResLayoutId,
+                videoResLayoutId,
+                mediasCache);
+
+        // for dispatching data to add to the adapter we need to be on the main thread
+        mUiHandler = new Handler(Looper.getMainLooper());
+    }
+
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
@@ -114,6 +122,16 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             } else {
                 mHighlightedEventId = null;
             }
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Cancel the message selection mode
+     */
+    public void cancelSelectionMode() {
+        if (null != mHighlightedEventId) {
+            mHighlightedEventId = null;
             notifyDataSetChanged();
         }
     }
@@ -178,31 +196,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-
-        // display the undeliverable at the end of the history
-        this.setNotifyOnChange(false);
-        ArrayList<MessageRow> undeliverableEvents = null;
-
-        for(int i = 0; i < getCount(); i++) {
-            MessageRow row = getItem(i);
-
-            if ((null != row.getEvent()) && row.getEvent().isUndeliverable()) {
-                if (null == undeliverableEvents) {
-                    undeliverableEvents = new ArrayList<MessageRow>();
-                }
-                row.getEvent().setOriginServerTs(System.currentTimeMillis());
-                undeliverableEvents.add(row);
-                this.remove(row);
-                i--;
-            }
-        }
-
-        if (null != undeliverableEvents) {
-            this.addAll(undeliverableEvents);
-        }
-
-        this.setNotifyOnChange(true);
-
         //  do not refresh the room when the application is in background
         // on large rooms, it drains a lot of battery
         if (!VectorApp.isAppInBackground()) {
@@ -287,6 +280,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
     }
 
+    @Override
+    protected void onTypingUsersUpdate() {
+        // the typing users are now displayed in a dedicated area in the activity
+    }
+
     /**
      * Display the read receipts within the dedicated vector layout.
      * Console application displays them on the message side.
@@ -297,6 +295,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      */
     private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
         IMXStore store = mSession.getDataHandler().getStore();
+
+        // sanity check
+        if (null == roomState) {
+            avatarsListView.setVisibility(View.GONE);
+            return;
+        }
+
         List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
 
         // if there is no receipt to display
@@ -335,15 +340,26 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 // should never happen
                 VectorUtils.loadUserAvatar(mContext, mSession, imageView, null, r.userId, r.userId);
             }
-            // FIXME expected behaviour when the avatar is tapped.
         }
 
-        // FIXME expected behaviour when this text is tapped.
         moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
         moreText.setText(receipts.size() - imageViews.size() + "+");
 
         for(; index < imageViews.size(); index++) {
             imageViews.get(index).setVisibility(View.INVISIBLE);
+        }
+
+        if (receipts.size() > 0) {
+            avatarsListView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mMessagesAdapterEventsListener) {
+                        mMessagesAdapterEventsListener.onMoreReadReceiptClick(eventId);
+                    }
+                }
+            });
+        } else {
+            avatarsListView.setOnClickListener(null);
         }
     }
 
@@ -352,8 +368,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      * @param event the selected event.
      * @param anchorView the popup anchor.
      */
+    @SuppressLint("NewApi")
     private void onMessageClick(final Event event, final View anchorView) {
-        final PopupMenu popup = new PopupMenu(mContext, anchorView);
+        final PopupMenu popup = (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(mContext, anchorView, Gravity.END) : new PopupMenu(mContext, anchorView);
+
         popup.getMenuInflater().inflate(R.menu.vector_room_message_settings, popup.getMenu());
 
         // force to display the icons
@@ -420,46 +438,15 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
 
                 if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
-                    Boolean supportShare = true;
                     Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
-                    String mediaUrl = null;
-                    String mediaMimeType = null;
+                    // share / forward the message
+                    menu.findItem(R.id.ic_action_vector_share).setVisible(true);
+                    menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
 
-                    // check if the media has been downloaded
-                    if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
-                        if (message instanceof ImageMessage) {
-                            ImageMessage imageMessage = (ImageMessage) message;
-
-                            mediaUrl = imageMessage.url;
-                            mediaMimeType = imageMessage.getMimeType();
-                        } else {
-                            FileMessage fileMessage = (FileMessage) message;
-
-                            mediaUrl = fileMessage.url;
-                            mediaMimeType = fileMessage.getMimeType();
-                        }
-
-                        supportShare = false;
-                        MXMediasCache cache = Matrix.getInstance(mContext).getMediasCache();
-
-                        File mediaFile = cache.mediaCacheFile(mediaUrl, mediaMimeType);
-
-                        if (null != mediaFile) {
-                            try {
-                                VectorContentProvider.absolutePathToUri(mContext, mediaFile.getAbsolutePath());
-                                supportShare = true;
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-
-                    if (supportShare) {
-                        //menu.findItem(R.id.ic_action_vector_share).setVisible(true);
-                        //menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
-                        if ((message instanceof ImageMessage) || (message instanceof FileMessage)) {
-                            menu.findItem(R.id.ic_action_vector_save).setVisible(true);
-                        }
+                    // save the media in the downloads directory
+                    if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
+                        menu.findItem(R.id.ic_action_vector_save).setVisible(true);
                     }
                 }
             }
@@ -520,6 +507,17 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 }
             }
         });
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
@@ -546,18 +544,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             if (null != line) {
                 line.setBackgroundColor(Color.TRANSPARENT);
             }
-
-            String nextUserId = null;
-
-            if ((position + 1) < this.getCount()) {
-                MessageRow nextRow = getItem(position + 1);
-
-                if (null != nextRow)  {
-                    nextUserId = nextRow.getEvent().getSender();
-                }
-            }
-
-            view.setVisibility(((null != nextUserId) && (nextUserId.equals(event.getSender())) || ((position + 1) == this.getCount())) ? View.GONE : View.VISIBLE);
         }
 
         // display the day separator
@@ -614,7 +600,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     }
 
     public int highlightMessageColor(Context context) {
-        return context.getResources().getColor(R.color.vector_green_color);
+        return context.getResources().getColor(R.color.vector_fuchsia_color);
     }
 
     public int searchHighlightMessageColor(Context context) {

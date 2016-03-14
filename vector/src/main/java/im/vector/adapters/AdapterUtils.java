@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -130,14 +131,6 @@ public class AdapterUtils {
         return mLocale;
     }
 
-    // month day time
-    private static SimpleDateFormat mLongDateFormat = null;
-    // day_name time
-    private static SimpleDateFormat mMediumDateFormat = null;
-    // today / yesterday time
-    private static SimpleDateFormat mShortDateFormat = null;
-    private static long mFormatterRawOffset = 1234;
-
     /**
      * Convert a time since epoch date to a string.
      * @param context the context.
@@ -147,31 +140,23 @@ public class AdapterUtils {
      */
     public static String tsToString(Context context, long ts, boolean timeOnly) {
         long daysDiff = (new Date().getTime() - zeroTimeDate(new Date(ts)).getTime()) / MS_IN_DAY;
-        long timeZoneOffset = TimeZone.getDefault().getRawOffset();
 
-
-        // the formatter must be updated if the timezone has been updated
-        // else the formatted string are wrong (does not use the current timezone)
-        if ((null == mLongDateFormat) || (mFormatterRawOffset != timeZoneOffset)) {
-            Locale locale = getLocale(context);
-
-            mLongDateFormat = new SimpleDateFormat("MMM d HH:mm", locale);
-            mMediumDateFormat = new SimpleDateFormat("ccc HH:mm", locale);
-            mShortDateFormat = new SimpleDateFormat("HH:mm", locale);
-
-            mFormatterRawOffset = timeZoneOffset;
-        }
+        String res;
 
         if (timeOnly) {
-            return mShortDateFormat.format(new Date(ts));
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME);
         } else if (0 == daysDiff) {
-            return context.getString(R.string.today) + " " + mShortDateFormat.format(new Date(ts));
+            res = context.getString(R.string.today) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME);
         } else if (1 == daysDiff) {
-            return context.getString(R.string.yesterday) + " " + mShortDateFormat.format(new Date(ts));
+            res = context.getString(R.string.yesterday) + " " + DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME);
         } else if (7 > daysDiff) {
-            return mMediumDateFormat.format(new Date(ts));
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_ALL);
+        } else if (365 > daysDiff) {
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_DATE);
         } else {
-            return mLongDateFormat.format(new Date(ts));
+            res = DateUtils.formatDateTime(context, ts, DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
         }
+
+        return res;
     }
 }

@@ -57,6 +57,7 @@ public class LoginActivity extends MXCActionBarActivity {
     private static final String SAVED_PASSWORD_ADDRESS = "SAVED_PASSWORD_ADDRESS";
     private static final String SAVED_IS_SERVER_URL_EXPANDED = "SAVED_IS_SERVER_URL_EXPANDED";
     private static final String SAVED_HOMESERVERURL = "SAVED_HOMESERVERURL";
+    private static final String SAVED_IDENTITY_SERVERURL = "SAVED_IDENTITY_SERVERURL";
 
     // graphical items
     // login button
@@ -77,11 +78,15 @@ public class LoginActivity extends MXCActionBarActivity {
     // the home server text
     private EditText mHomeServerText;
 
+    // the identity server text
+    private EditText mIdentityServerText;
+
     // used to display a UI mask on the screen
     private RelativeLayout mLoginMaskView;
 
     private boolean mIsHomeServerUrlIsDisplayed;
     private View mDisplayHomeServerUrlView;
+    private View mHomeServerUrlsLayout;
     private ImageView mExpandImageView;
 
     String mHomeServerUrl = null;
@@ -102,17 +107,20 @@ public class LoginActivity extends MXCActionBarActivity {
             Log.e(LOG_TAG, "goToSplash because the credentials are already provided.");
             goToSplash();
             finish();
+            return;
         }
 
         // bind UI widgets
         mLoginMaskView = (RelativeLayout)findViewById(R.id.flow_ui_mask_login);
         mEmailTextView = (EditText) findViewById(R.id.login_user_name);
         mHomeServerText = (EditText) findViewById(R.id.login_matrix_server_url);
+        mIdentityServerText = (EditText) findViewById(R.id.login_identity_url);
         mPasswordTextView = (EditText) findViewById(R.id.editText_password);
         mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
         mLoginButton = (Button)findViewById(R.id.button_login);
         mRegisterButton = (Button)findViewById(R.id.button_register);
         mDisplayHomeServerUrlView = findViewById(R.id.display_server_url_layout);
+        mHomeServerUrlsLayout =  findViewById(R.id.login_matrix_server_options_layout);
         mExpandImageView = (ImageView)findViewById(R.id.display_server_url_expand_icon);
 
         if (null != savedInstanceState) {
@@ -132,6 +140,10 @@ public class LoginActivity extends MXCActionBarActivity {
             if (savedInstanceState.containsKey(SAVED_HOMESERVERURL)) {
                 mHomeServerText.setText(savedInstanceState.getString(SAVED_HOMESERVERURL));
             }
+
+            if (savedInstanceState.containsKey(SAVED_IDENTITY_SERVERURL)) {
+                mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVERURL));
+            }
         }
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +152,8 @@ public class LoginActivity extends MXCActionBarActivity {
                 String username = mEmailTextView.getText().toString().trim();
                 String password = mPasswordTextView.getText().toString().trim();
                 String serverUrl = mHomeServerText.getText().toString().trim();
-                onLoginClick(serverUrl, username, password);
+                String identityServerUrl = mIdentityServerText.getText().toString().trim();
+                onLoginClick(serverUrl, identityServerUrl, username, password);
             }
         });
 
@@ -217,6 +230,9 @@ public class LoginActivity extends MXCActionBarActivity {
         });
 
         refreshHomeServerTextDisplay();
+
+        // reset the badge counter
+        CommonActivityUtils.updateBadgeCount(this, 0);
     }
 
     @Override
@@ -254,11 +270,11 @@ public class LoginActivity extends MXCActionBarActivity {
      * Refresh the visibility of mHomeServerText
      */
     private void refreshHomeServerTextDisplay() {
-        mHomeServerText.setVisibility(mIsHomeServerUrlIsDisplayed ? View.VISIBLE : View.GONE);
+        mHomeServerUrlsLayout.setVisibility(mIsHomeServerUrlIsDisplayed ? View.VISIBLE : View.GONE);
         mExpandImageView.setImageResource(mIsHomeServerUrlIsDisplayed ? R.drawable.ic_material_arrow_drop_down_black : R.drawable.ic_material_arrow_drop_up_black);
     }
 
-    private void onLoginClick(String hsUrlString, String username, String password) {
+    private void onLoginClick(String hsUrlString, String identityUrlString, String username, String password) {
         // --------------------- sanity tests for input values.. ---------------------
         if (!hsUrlString.startsWith("http")) {
             Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
@@ -273,10 +289,17 @@ public class LoginActivity extends MXCActionBarActivity {
         if (!hsUrlString.startsWith("http://") && !hsUrlString.startsWith("https://")) {
             hsUrlString = "https://" + hsUrlString;
         }
+
+        if (!identityUrlString.startsWith("http://") && !identityUrlString.startsWith("https://")) {
+            identityUrlString = "https://" + identityUrlString;
+        }
+
         // ---------------------------------------------------------------------------
 
         Uri hsUrl = Uri.parse(hsUrlString);
         final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(hsUrl);
+
+        hsConfig.setIdentityServerUri(Uri.parse(identityUrlString));
 
         // disable UI actions
         setFlowsMaskEnabled(true);

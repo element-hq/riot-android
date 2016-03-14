@@ -94,8 +94,6 @@ public class EventStreamService extends Service {
     private String mNotifiedCallId = null;
 
     private Boolean mIsForegound = false;
-    private int mUnreadMessagesCounter = 0;
-    private HashMap<String, HashMap<String, Integer>> mUnreadMessagesMapByRoomId = new HashMap<String, HashMap<String, Integer>>();
 
     private Notification mLatestNotification = null;
 
@@ -295,29 +293,6 @@ public class EventStreamService extends Service {
                 body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
             }
 
-            int unreadNotifForThisUser = 0;
-
-            // update the badge
-            if (VectorApp.isAppInBackground()) {
-                CommonActivityUtils.updateUnreadMessagesBadge(getApplicationContext(), ++mUnreadMessagesCounter);
-
-                HashMap<String, Integer> countByUserIds = null;
-
-                if (mUnreadMessagesMapByRoomId.containsKey(roomId)) {
-                    countByUserIds = mUnreadMessagesMapByRoomId.get(roomId);
-                } else {
-                    countByUserIds = new HashMap<String, Integer>();
-                    mUnreadMessagesMapByRoomId.put(roomId, countByUserIds);
-                }
-
-                if (countByUserIds.containsKey(senderID)) {
-                    unreadNotifForThisUser = countByUserIds.get(senderID);
-                }
-
-                unreadNotifForThisUser++;
-                countByUserIds.put(senderID, unreadNotifForThisUser);
-            }
-
             String from = "";
             Bitmap largeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_contact_picture_holo_light);
 
@@ -366,8 +341,8 @@ public class EventStreamService extends Service {
                     mNotifiedCallId,
                     Matrix.getMXSessions(getApplicationContext()).size() > 1,
                     largeBitmap,
-                    mUnreadMessagesCounter,
-                    unreadNotifForThisUser,
+                    CommonActivityUtils.getBadgeCount(),
+                    CommonActivityUtils.getBadgeCount(),
                     body,
                     event.roomId,
                     roomName,
@@ -413,15 +388,6 @@ public class EventStreamService extends Service {
                     catchup();
                 }
             }
-        }
-
-
-        @Override
-        public void onResendingEvent(Event event) {
-        }
-
-        @Override
-        public void onResentEvent(Event event) {
         }
     };
 
@@ -524,13 +490,6 @@ public class EventStreamService extends Service {
     }
 
     private void start() {
-        // reset the badge counter when resuming the application
-        if (0 != mUnreadMessagesCounter) {
-            mUnreadMessagesCounter = 0;
-            CommonActivityUtils.updateUnreadMessagesBadge(this, mUnreadMessagesCounter);
-            mUnreadMessagesMapByRoomId = new HashMap<String, HashMap<String, Integer>>();
-        }
-
         if (mState == StreamAction.START) {
             Log.e(LOG_TAG, "Already started.");
             return;

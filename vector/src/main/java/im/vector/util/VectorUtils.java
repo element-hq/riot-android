@@ -1,12 +1,12 @@
-/* 
+/*
  * Copyright 2016 OpenMarket Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,10 +15,13 @@
  */
 package im.vector.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
@@ -30,6 +33,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.util.LruCache;
 import android.text.Html;
@@ -40,22 +44,27 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -69,7 +78,7 @@ import im.vector.db.VectorContentProvider;
 public class VectorUtils {
 
     public static final String LOG_TAG = "VectorUtils";
-    
+
     public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
 
@@ -505,6 +514,29 @@ public class VectorUtils {
     }
 
     /**
+     * Display the privacy policy.
+     * @param activity the activity
+     */
+    public static void displayPrivacyPolicy(final Activity activity) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+
+        WebView wv = new WebView(activity);
+        wv.loadUrl("https://vector.im/privacy.html");
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+
+                return true;
+            }
+        });
+
+        alert.setView(wv);
+        alert.setPositiveButton(android.R.string.ok, null);
+        alert.show();
+    }
+
+    /**
      * Display third party licenses
      * @param activity the activity
      */
@@ -557,22 +589,110 @@ public class VectorUtils {
     //==============================================================================================================
 
     /**
-     * return the bitmap from a resource.
-     * @param mediaUri the media URI.
-     * @return the bitmap, null if it fails.
+     * Return a selected bitmap from an intent.
+     * @param intent the intent
+     * @return the bitmap uri
      */
-    public static Bitmap getBitmapFromuri(Context context, Uri mediaUri) {
-        if (null != mediaUri) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+    @SuppressLint("NewApi")
+    public static Uri getThumbnailUriFromIntent(Context context, final Intent intent, MXMediasCache mediasCache) {
+        // sanity check
+        if ((null != intent) && (null != context) && (null != mediasCache)) {
+            Uri thumbnailUri = null;
+            ClipData clipData = null;
 
-            // sanity checks
-            if ((null != resource) && (null != resource.contentStream)) {
-                return BitmapFactory.decodeStream(resource.contentStream, null, options);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                clipData = intent.getClipData();
+            }
+
+            // multiple data
+            if (null != clipData) {
+                if (clipData.getItemCount() > 0) {
+                    thumbnailUri = clipData.getItemAt(0).getUri();
+                }
+            } else if (null != intent.getData()) {
+                thumbnailUri = intent.getData();
+            }
+
+            if (null != thumbnailUri) {
+                try {
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri);
+
+                    // sanity check
+                    if (null != resource) {
+                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
+                            InputStream stream = resource.contentStream;
+                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
+
+                            String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
+                            thumbnailUri = Uri.parse(mediaUrl);
+                        }
+                    }
+
+                    return thumbnailUri;
+
+                } catch (Exception e) {
+
+                }
             }
         }
 
         return null;
+    }
+
+    //==============================================================================================================
+    // User presence
+    //==============================================================================================================
+
+    /**
+     * Provide the user online status from his user Id.
+     * @param context the context.
+     * @param session the session.
+     * @param userId the userId.
+     * @return the online status desrcription.
+     */
+    public static String getUserOnlineStatus(Context context, MXSession session, String userId) {
+
+        // sanity checks
+        if ((null == session) || (null == userId)) {
+            return null;
+        }
+
+        User user = session.getDataHandler().getStore().getUser(userId);
+
+        // unknown user
+        if (null == user) {
+            return null;
+        }
+
+        String onlineStatus = "";
+
+        if (null == user.presence) {
+            onlineStatus = "";
+        } else if ((null != user.currently_active) && user.currently_active) {
+            onlineStatus = context.getResources().getString(R.string.presence_online_now);
+        } else if (User.PRESENCE_ONLINE.equals(user.presence)) {
+            onlineStatus = context.getResources().getString(R.string.room_participants_active);
+        } else {
+            Long lastActiveMs = user.lastActiveAgo;
+
+            if (null == lastActiveMs) {
+                lastActiveMs = (long) -1;
+            }
+
+            if (-1 != lastActiveMs) {
+                long lastActivehour = lastActiveMs / 1000 / 60 / 60;
+                long lastActiveDays = lastActivehour / 24;
+
+                if (lastActivehour < 1) {
+                    onlineStatus = context.getString(R.string.room_participants_active_less_1_hour);
+                } else if (lastActivehour < 24) {
+                    onlineStatus = context.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
+                } else {
+                    onlineStatus = context.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
+                }
+            }
+        }
+
+        return onlineStatus;
     }
 }

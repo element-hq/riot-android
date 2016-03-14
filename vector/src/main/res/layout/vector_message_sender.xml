@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-bold"
         android:textStyle="bold"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_gravity="left"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"

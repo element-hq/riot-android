@@ -35,7 +35,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:text="@string/room_details_photo"/>
 
                 <RelativeLayout
@@ -66,7 +66,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:text="@string/room_details_room_name"
                     android:id="@+id/room_settings_room_name_label"
                     />
@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A room name"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
@@ -102,7 +102,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="12dp"
                     android:layout_marginLeft="15dp"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:text="@string/room_details_topic"
                     android:id="@+id/room_settings_room_topic_label"
                     />
@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A room topic"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
@@ -138,7 +138,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:text="public or private"
                     android:id="@+id/room_settings_room_status" />
             </RelativeLayout>
@@ -159,7 +159,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:text="@string/room_details_mute_notifs" />
 
                 <CheckBox

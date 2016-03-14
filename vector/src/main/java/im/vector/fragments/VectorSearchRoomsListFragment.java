@@ -1,5 +1,6 @@
 package im.vector.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,30 +22,18 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
-
+import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
-    // log tag
-    private static String LOG_TAG = "V_RoomsSearchResultsListFragment";
-
     // the session
     private MXSession mSession;
 
     // current public Rooms List
     private List<PublicRoom> mPublicRoomsList;
-
-
-    // pending requests
-    // a request might be called whereas the fragment is not initialized
-    // wait the resume to perform the search
-    private String mPendingPattern;
-    private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
 
     /**
      * Static constructor
@@ -73,7 +62,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mRecentsListView = (ExpandableListView)v.findViewById(R.id.fragment_recents_list);
+        mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
@@ -141,7 +130,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             }
         });
 
-
         return v;
     }
 
@@ -161,42 +149,37 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
      * @param pattern
      * @param onSearchResultListener
      */
-    public void searchPattern(final String pattern,  final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
-        if (TextUtils.isEmpty(pattern)) {
-            mRecentsListView.setVisibility(View.GONE);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onSearchResultListener.onSearchSucceed(0);
-                }
-            });
-        } else {
-            mAdapter.setPublicRoomsList(mPublicRoomsList);
-            mAdapter.setSearchPattern(pattern);
+    public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
+        // will be done while resuming
+        if (null == mRecentsListView) {
+            return;
+        }
 
-            mRecentsListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mRecentsListView.setVisibility(View.VISIBLE);
-                    expandsAllSections();
-                    onSearchResultListener.onSearchSucceed(1);
-                }
-            });
+        mAdapter.setPublicRoomsList(mPublicRoomsList);
+        mAdapter.setSearchPattern(pattern);
 
-            // the public rooms have not yet been retrieved
-            if (null == mPublicRoomsList) {
-                // use any session to get the public rooms list
-                mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
-                    @Override
-                    public void onSuccess(List<PublicRoom> publicRooms) {
-                        if (null != publicRooms) {
-                            mPublicRoomsList = publicRooms;
-                            mAdapter.setPublicRoomsList(mPublicRoomsList);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
+        mRecentsListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecentsListView.setVisibility(View.VISIBLE);
+                expandsAllSections();
+                onSearchResultListener.onSearchSucceed(1);
             }
+        });
+
+        // the public rooms have not yet been retrieved
+        if (null == mPublicRoomsList) {
+            // use any session to get the public rooms list
+            mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
+                @Override
+                public void onSuccess(List<PublicRoom> publicRooms) {
+                    if (null != publicRooms) {
+                        mPublicRoomsList = publicRooms;
+                        mAdapter.setPublicRoomsList(mPublicRoomsList);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
         }
     }
 
@@ -210,9 +193,12 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     public void onResume() {
         super.onResume();
 
-        // warn the activity that the current fragment is ready
-        if (getActivity() instanceof VectorUnifiedSearchActivity) {
-            ((VectorUnifiedSearchActivity)getActivity()).onSearchFragmentResume();
+        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
         }
+    }
+
+    protected boolean isDrapAndDropSupported() {
+        return false;
     }
 }

@@ -17,7 +17,7 @@
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="9dp"
+                android:textSize="9sp"
                 android:id="@+id/message_more_than_expected"
                 android:text="+999" />
 

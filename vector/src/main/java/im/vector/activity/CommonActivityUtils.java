@@ -81,11 +81,11 @@ public class CommonActivityUtils {
 
     // global helper constants:
     /** The view is visible **/
-    public static final float UTILS_OPACITY_NO_OPACITY = 1f;
+    public static final float UTILS_OPACITY_NONE = 1f;
     /** The view is half dimmed **/
-    public static final float UTILS_OPACITY_HALPH_OPACITY = 0.5f;
+    public static final float UTILS_OPACITY_HALF = 0.5f;
     /** The view is hidden **/
-    public static final float UTILS_OPACITY_FULL_OPACITY = 0f;
+    public static final float UTILS_OPACITY_FULL = 0f;
 
     public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
     public static final boolean UTILS_HIDE_PROGRESS_BAR = false;
@@ -243,13 +243,6 @@ public class CommonActivityUtils {
         }
     }
 
-    public static void updateUnreadMessagesBadge(Context context, int badgeValue) {
-        try {
-            ShortcutBadger.setBadge(context, badgeValue);
-        } catch (Exception e) {
-        }
-    }
-
     public interface OnSubmitListener {
         void onSubmit(String text);
 
@@ -353,6 +346,24 @@ public class CommonActivityUtils {
         goToOneToOneRoom(Matrix.getMXSession(fromActivity, matrixId), otherUserId, fromActivity, callback);
     }
 
+    public static Room findOneToOneRoom(final MXSession aSession, final String otherUserId) {
+        Collection<Room> rooms = aSession.getDataHandler().getStore().getRooms();
+
+        for (Room room : rooms) {
+            Collection<RoomMember> members = room.getMembers();
+
+            if (members.size() == 2) {
+                for (RoomMember member : members) {
+                    if (member.getUserId().equals(otherUserId)) {
+                        return room;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
         // sanity check
         if (null == otherUserId) {
@@ -374,27 +385,11 @@ public class CommonActivityUtils {
         }
 
         final MXSession fSession = session;
-
-        // so, list the existing room, and search the 2 users room with this other users
-        String roomId = null;
-        Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
-
-        for (Room room : rooms) {
-            Collection<RoomMember> members = room.getMembers();
-
-            if (members.size() == 2) {
-                for (RoomMember member : members) {
-                    if (member.getUserId().equals(otherUserId)) {
-                        roomId = room.getRoomId();
-                        break;
-                    }
-                }
-            }
-        }
+        Room room = findOneToOneRoom(session, otherUserId);
 
         // the room already exists -> switch to it
-        if (null != roomId) {
-            CommonActivityUtils.goToRoomPage(session, roomId, fromActivity, null);
+        if (null != room) {
+            CommonActivityUtils.goToRoomPage(session, room.getRoomId(), fromActivity, null);
 
             // everything is ok
             if (null != callback) {
@@ -817,5 +812,32 @@ public class CommonActivityUtils {
 
     public static void displaySnack(View aTargetView, CharSequence aTextToDisplay){
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
+    }
+
+
+    //==============================================================================================================
+    // Application badge (displayed in the launcher)
+    //==============================================================================================================
+
+    private static int mBadgeValue = 0;
+
+    /**
+     * Update the application badge value.
+     * @param context the context
+     * @param badgeValue the new badge value
+     */
+    public static void updateBadgeCount(Context context, int badgeValue) {
+        try {
+            mBadgeValue = badgeValue;
+            ShortcutBadger.setBadge(context, badgeValue);
+        } catch (Exception e) {
+        }
+    }
+
+    /**
+     * @return the bagde value
+     */
+    public static int getBadgeCount() {
+        return mBadgeValue;
     }
 }

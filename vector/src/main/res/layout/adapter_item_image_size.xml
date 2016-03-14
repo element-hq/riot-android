@@ -18,8 +18,7 @@
         android:text="A text here"
         android:layout_weight="1"
         android:textStyle="bold"
-        android:id="@+id/ImageSizesAdapter_format"
-        />
+        android:id="@+id/ImageSizesAdapter_format"/>
 
      <TextView
             android:paddingLeft="5dp"

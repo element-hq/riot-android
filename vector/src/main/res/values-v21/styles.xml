@@ -162,15 +162,20 @@
     <style name="LoginAppTheme" parent="AppTheme.NoActionBar">
         <item name="android:editTextStyle">@style/LoginEditTextStyle</item>
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
+
+        <!-- android ui button -->
+        <item name="android:colorAccent">?attr/editTextColor</item>
+        <item name="colorAccent">?attr/editTextColor</item>
+
     </style>
 
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="LoginButtonStyle" parent="@android:style/Widget.Button">
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:id="@+id/editText_username"
-            android:hint="@string/username"/>
+            android:hint="@string/auth_user_id_placeholder"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/editText_password"
-            android:hint="@string/password"/>
+            android:hint="@string/auth_password_placeholder"/>
 
         <EditText
             android:layout_width="match_parent"

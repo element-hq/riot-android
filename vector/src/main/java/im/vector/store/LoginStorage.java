@@ -139,7 +139,7 @@ public class LoginStorage {
             Log.d(LOG_TAG, "Storing " + serialized.size() + " credentials");
 
             editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -177,7 +177,7 @@ public class LoginStorage {
             Log.d(LOG_TAG, "Storing " + serialized.size() + " credentials");
 
             editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -215,7 +215,7 @@ public class LoginStorage {
             Log.d(LOG_TAG, "Storing " + serialized.size() + " credentials");
 
             editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -226,6 +226,6 @@ public class LoginStorage {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(PREFS_KEY_CONNECTION_CONFIGS);
-        editor.commit();
+        editor.apply();
     }
 }

@@ -91,9 +91,6 @@ public class VectorApp extends Application {
 
         initGoogleAnalytics();
 
-        // reset the application badge at application launch
-        CommonActivityUtils.updateUnreadMessagesBadge(this, 0);
-
         // get the contact update at application launch
         ContactsManager.refreshLocalContactsSnapshot(this);
     }
@@ -131,11 +128,6 @@ public class VectorApp extends Application {
     }
 
     private void startActivityTransitionTimer() {
-
-        // reset the application badge when displaying a new activity
-        // when the user taps on a notification, it is the first called method.
-        CommonActivityUtils.updateUnreadMessagesBadge(this, 0);
-
         this.mActivityTransitionTimer = new Timer();
         this.mActivityTransitionTimerTask = new TimerTask() {
             public void run() {

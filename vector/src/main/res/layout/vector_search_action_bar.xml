@@ -12,7 +12,7 @@
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:fontFamily="sans-serif-medium"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:focusable="true"
         android:hint="@string/search_hint"
         android:textColorHint="@color/vector_search_hint_color"

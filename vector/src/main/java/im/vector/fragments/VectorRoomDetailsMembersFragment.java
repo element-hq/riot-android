@@ -74,7 +74,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type)) {
                         mAdapter.listOtherMembers();
                         mAdapter.refresh();
                     }
@@ -261,7 +261,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         );
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -430,9 +429,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             if (null != userId) {
                 mProgressView.setVisibility(View.VISIBLE);
-                ArrayList<String> userIDs = new ArrayList<String>();
-                userIDs.add(userId);
-                mRoom.invite(userIDs, new SimpleApiCallback<Void>(getActivity()) {
+                SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>(getActivity()) {
                     @Override
                     public void onSuccess(Void info) {
                         mProgressView.setVisibility(View.GONE);
@@ -452,7 +449,15 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                     public void onUnexpectedError(final Exception e) {
                         mProgressView.setVisibility(View.GONE);
                     }
-                });
+                };
+
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
+                    mRoom.inviteByEmail(userId, callback);
+                } else {
+                    ArrayList<String> userIDs = new ArrayList<String>();
+                    userIDs.add(userId);
+                    mRoom.invite(userIDs, callback);
+                }
             }
         }
     }

@@ -19,8 +19,8 @@ package im.vector.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -102,6 +102,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // the listener
     private RoomEventListener mListener = null;
+
+    // drap and drop mode
+    private boolean mIsDragAndDropMode = false;
 
     /**
      * Constructor
@@ -202,7 +205,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (mIsSearchMode) {
             res = false;
 
-            if (null != mSearchedPattern) {
+            if (!TextUtils.isEmpty(mSearchedPattern)) {
                 String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, room);
                 res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().indexOf(mSearchedPattern) >= 0));
             }
@@ -220,17 +223,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         boolean res = true;
 
         // test only in search
-        if (mIsSearchMode) {
-            res = false;
+        if (mIsSearchMode && !TextUtils.isEmpty(mSearchedPattern)) {
+            String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
 
-            if (null != mSearchedPattern) {
-                String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
-                res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
-
-                if (res) {
-                    res = true;
-                }
-            }
+            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
         }
 
         return res;
@@ -449,7 +445,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
         }
         else {
-            Log.w(DBG_CLASS_NAME,"## resetUnreadCounts(): section "+aSection +" was not found in the sections summary list");
+            Log.w(DBG_CLASS_NAME, "## resetUnreadCounts(): section " + aSection + " was not found in the sections summary list");
         }
 
         return retCode;
@@ -561,7 +557,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        refreshSummariesList();
+        if (!mIsDragAndDropMode) {
+            refreshSummariesList();
+        }
         super.notifyDataSetChanged();
     }
 
@@ -636,7 +634,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * Compute the View that should be used to render the child,
      * given its position and its group’s position
      */
-    @SuppressLint("NewApi")
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // sanity check
@@ -647,12 +644,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
         }
 
-        int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
-        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_recents_bing_gray_color);
+        int roomNameBlack = mContext.getResources().getColor(R.color.vector_text_black_color);
+        int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
+        int vectorDarkGreyColor = mContext.getResources().getColor(R.color.vector_4d_gray);
         int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
 
         // retrieve the UI items
-        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.avatar_img_vector);
+        ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMsgTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
         View bingUnreadMsgView = convertView.findViewById(R.id.bing_indicator_unread_message);
@@ -684,11 +682,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (null == mPublicRooms) {
                 roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
             } else {
-                roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_results, mMatchedPublicRooms.size(), mSearchedPattern));
+                if (TextUtils.isEmpty(mSearchedPattern)) {
+                    roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result, mMatchedPublicRooms.size()));
+                } else {
+                    roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                }
             }
 
-            avatarImageView.setBackgroundColor(mContext.getResources().getColor(R.color.vector_green_color));
-            avatarImageView.setImageBitmap(null);
+            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null));
             return convertView;
         }
 
@@ -707,17 +708,46 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name
+        int roomNameTextColor;
+        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
+            roomNameTextColor = fushiaColor;
+        } else if ((0 != childRoom.getNotificationCount()) || (0 != unreadMsgCount)) {
+            roomNameTextColor = vectorDarkGreyColor;
+        } else {
+            roomNameTextColor = roomNameBlack;
+        }
         roomNameTxtView.setText(roomName);
+        roomNameTxtView.setTextColor(roomNameTextColor);
+        roomNameTxtView.setTypeface(null, (roomNameTextColor != roomNameBlack) ? Typeface.BOLD : Typeface.NORMAL);
 
         // display the last message
         roomMsgTxtView.setText(lastMsgToDisplay);
 
         // set the timestamp
+        // bing view
+        int timestampTextColor;
+        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
+            timestampTextColor = fushiaColor;
+        } else if ((0 != childRoom.getNotificationCount()) || (0 != unreadMsgCount)) {
+            timestampTextColor = vectorDarkGreyColor;
+        } else {
+            timestampTextColor = vectorDefaultTimeStampColor;
+        }
+
         timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
-        timestampTxtView.setTextColor(childRoomSummary.isHighlighted() ? vectorGreenColor : vectorDefaultTimeStampColor);
+        timestampTxtView.setTextColor(timestampTextColor);
+        timestampTxtView.setTypeface(null, (timestampTextColor != vectorDefaultTimeStampColor) ? Typeface.BOLD : Typeface.NORMAL);
 
         // bing view
-        bingUnreadMsgView.setBackgroundColor(childRoomSummary.isHighlighted() ? vectorGreenColor : ((0 != unreadMsgCount) ? vectorSilverColor : Color.TRANSPARENT));
+        int bingUnreadColor;
+        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
+            bingUnreadColor = fushiaColor;
+        } else if (0 != childRoom.getNotificationCount()) {
+            bingUnreadColor = vectorDarkGreyColor;
+        } else {
+            bingUnreadColor = Color.TRANSPARENT;
+        }
+        bingUnreadMsgView.setBackgroundColor(bingUnreadColor);
 
         // some items are shown
         bingUnreadMsgView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
@@ -753,90 +783,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             actionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup;
+                    displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
+                }
+            });
 
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor), Gravity.END);
-                    } else {
-                        popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
-                    }
-                    popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
-
-                    MenuItem item;
-
-                    final BingRulesManager bingRulesManager = mMxSession.getDataHandler().getBingRulesManager();
-
-                    if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
-                        item = popup.getMenu().getItem(0);
-                        item.setIcon(null);
-                    }
-
-                    if (!isFavorite) {
-                        item = popup.getMenu().getItem(1);
-                        item.setIcon(null);
-                    }
-
-                    if (!isLowPrior) {
-                        item = popup.getMenu().getItem(2);
-                        item.setIcon(null);
-                    }
-
-                    item = popup.getMenu().getItem(3);
-                    SpannableString s = new SpannableString(item.getTitle());
-                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
-                    item.setTitle(s);
-
-                    // force to display the icon
-                    try {
-                        Field[] fields = popup.getClass().getDeclaredFields();
-                        for (Field field : fields) {
-                            if ("mPopup".equals(field.getName())) {
-                                field.setAccessible(true);
-                                Object menuPopupHelper = field.get(popup);
-                                Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
-                                Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
-                                setForceIcons.invoke(menuPopupHelper, true);
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                    }
-
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(final MenuItem item) {
-
-                            switch (item.getItemId()) {
-                                case R.id.ic_action_select_notifications: {
-                                    mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
-                                    break;
-                                }
-                                case R.id.ic_action_select_fav: {
-                                    if (isFavorite) {
-                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
-                                    } else {
-                                        mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
-                                    }
-                                    break;
-                                }
-                                case R.id.ic_action_select_deprioritize: {
-                                    if (isLowPrior) {
-                                        mListener.moveToConversations(mMxSession, childRoom.getRoomId());
-                                    } else {
-                                        mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
-                                    }
-                                    break;
-                                }
-                                case R.id.ic_action_select_remove: {
-                                    mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
-                                    break;
-                                }
-                            }
-                            return false;
-                        }
-                    });
-
-                    popup.show();
+            timestampTxtView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
                 }
             });
         }
@@ -845,6 +799,102 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         separatorGroupView.setVisibility((isLastChild && ((groupPosition + 1) < getGroupCount())) ? View.VISIBLE : View.GONE);
 
         return convertView;
+    }
+
+    /**
+     * Display the recents action popup.
+     * @param childRoom the room in which the actions should be triggered in.
+     * @param actionView the anchor view.
+     * @param isFavorite true if it is a favorite room
+     * @param isLowPrior true it it is a low priority room
+     */
+    @SuppressLint("NewApi")
+    private void displayPopupMenu(final Room childRoom, final View actionView, final boolean isFavorite, final boolean isLowPrior) {
+        PopupMenu popup;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor), Gravity.END);
+        } else {
+            popup = new PopupMenu(VectorRoomSummaryAdapter.this.mContext, actionView.findViewById(R.id.roomSummaryAdapter_action_anchor));
+        }
+        popup.getMenuInflater().inflate(R.menu.vector_home_room_settings, popup.getMenu());
+
+        MenuItem item;
+
+        final BingRulesManager bingRulesManager = mMxSession.getDataHandler().getBingRulesManager();
+
+        if (bingRulesManager.isRoomNotificationsDisabled(childRoom)) {
+            item = popup.getMenu().getItem(0);
+            item.setIcon(null);
+        }
+
+        if (!isFavorite) {
+            item = popup.getMenu().getItem(1);
+            item.setIcon(null);
+        }
+
+        if (!isLowPrior) {
+            item = popup.getMenu().getItem(2);
+            item.setIcon(null);
+        }
+
+        item = popup.getMenu().getItem(3);
+        SpannableString s = new SpannableString(item.getTitle());
+        s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
+        item.setTitle(s);
+
+        // force to display the icon
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(final MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.ic_action_select_notifications: {
+                        mListener.onToggleRoomNotifications(mMxSession, childRoom.getRoomId());
+                        break;
+                    }
+                    case R.id.ic_action_select_fav: {
+                        if (isFavorite) {
+                            mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                        } else {
+                            mListener.moveToFavorites(mMxSession, childRoom.getRoomId());
+                        }
+                        break;
+                    }
+                    case R.id.ic_action_select_deprioritize: {
+                        if (isLowPrior) {
+                            mListener.moveToConversations(mMxSession, childRoom.getRoomId());
+                        } else {
+                            mListener.moveToLowPriority(mMxSession, childRoom.getRoomId());
+                        }
+                        break;
+                    }
+                    case R.id.ic_action_select_remove: {
+                        mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
+
+        popup.show();
+
     }
 
     /**
@@ -936,5 +986,77 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     public void setPublicRoomsList(List<PublicRoom> publicRoomsList) {
         mPublicRooms = publicRoomsList;
+    }
+
+    /**
+     * @return true if the adapter is in drag and drop mode.
+     */
+    public boolean isInDragAndDropMode() {
+        return mIsDragAndDropMode;
+    }
+
+    /**
+     * Set the drag and drop mode i.e. there is no automatic room summaries lists refresh.
+     * @param isDragAndDropMode the drag and drop mode
+     */
+    public void setIsDragAndDropMode(boolean isDragAndDropMode) {
+        mIsDragAndDropMode = isDragAndDropMode;
+    }
+
+    /**
+     * Move a childview in the roomSummary dir tree
+     * @param fromGroupPosition the group position origin
+     * @param fromChildPosition the child position origin
+     * @param toGroupPosition the group position destination
+     * @param toChildPosition the child position destination
+     */
+    public void moveChildView(int fromGroupPosition, int fromChildPosition, int toGroupPosition, int toChildPosition) {
+        ArrayList<RoomSummary> fromList = mSummaryListByGroupPosition.get(fromGroupPosition);
+        ArrayList<RoomSummary> toList = mSummaryListByGroupPosition.get(toGroupPosition);
+
+        RoomSummary summary = fromList.get(fromChildPosition);
+        fromList.remove(fromChildPosition);
+
+        if (toChildPosition >= toList.size()) {
+            toList.add(summary);
+        } else {
+            toList.add(toChildPosition, summary);
+        }
+    }
+
+    /**
+     * Tell if a group position is the invited one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the invited one.
+     */
+    public boolean isInvitedRoomPosition(int groupPos) {
+        return mInvitedGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the favourite one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the favourite one.
+     */
+    public boolean isFavouriteRoomPosition(int groupPos) {
+        return mFavouritesGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the no tag one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the no tag one.
+     */
+    public boolean isNoTagRoomPosition(int groupPos) {
+        return mNoTagGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the low priority one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the low priority one.
+     */
+    public boolean isLowPriorityRoomPosition(int groupPos) {
+        return mLowPriorGroupPosition == groupPos;
     }
 }

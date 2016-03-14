@@ -21,15 +21,27 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
+import im.vector.fragments.VectorSearchRoomFilesListFragment;
 
 /**
  * This class implements the room details screen, using a tab UI pattern.
@@ -55,14 +67,34 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     private int mCurrentTabIndex = -1;
     private ActionBar mActionBar;
     private VectorRoomDetailsMembersFragment mAddPeopleFragment;
+    private VectorSearchRoomFilesListFragment mSearchFilesFragment;
     private VectorRoomSettingsFragment mRoomSettingsFragment;
 
     // activity life cycle management:
     // - Bundle keys
     private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
 
+    // UI items
+    private View mLoadOldestContentView;
+    private View mWaitWhileSearchInProgressView;
+
     private String mRoomId;
     private String mMatrixId;
+
+    private final MXEventListener mEventListener = new MXEventListener() {
+        @Override
+        public void onLeaveRoom(String roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // pop to the home activity
+                    Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
+                    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    VectorRoomDetailsActivity.this.startActivity(intent);
+                }
+            });
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +128,10 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         mRoom = mSession.getDataHandler().getRoom(mRoomId);
 
         setContentView(R.layout.activity_vector_room_details);
+
+        // UI widgets binding & init fields
+        mWaitWhileSearchInProgressView = findViewById(R.id.settings_loading_layout);
+        mLoadOldestContentView = findViewById(R.id.search_load_oldest_progress);
 
         // tab creation and restore tabs UI context
         mActionBar = getSupportActionBar();
@@ -141,6 +177,25 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // listen for room leave event
+        mRoom.removeEventListener(mEventListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // listen for room leave event
+        mRoom.addEventListener(mEventListener);
+
+        // start the file search if the selected tab is the file one
+        startFileSearch();
+    }
+
     /**
      * Update the tag of the tab with its the UI values
      *
@@ -159,6 +214,23 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     private void restoreUiTabContext(ActionBar.Tab aTabToRestore) {
         // Bundle tabTag = (Bundle) aTabToRestore.getTag();
         // restore here context here
+    }
+
+    /**
+     * Reset the UI to its init state:
+     * - "waiting while searching" screen disabled
+     * - background image visible
+     * - no results message disabled
+     */
+    private void resetUi() {
+        // stop "wait while searching" screen
+        if (null != mWaitWhileSearchInProgressView) {
+            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+        }
+
+        if (null != mLoadOldestContentView) {
+            mLoadOldestContentView.setVisibility(View.GONE);
+        }
     }
 
     // =============================================================================================
@@ -232,6 +304,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // inter tab selection life cycle: restore tab UI
         restoreUiTabContext(tab);
+        resetUi();
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
             if (null == mAddPeopleFragment) {
@@ -248,6 +321,19 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             onTabSelectSettingsFragment();
             mCurrentTabIndex = mSettingsTabIndex;
         }
+        else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+            if (null == mSearchFilesFragment) {
+                mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
+                Log.d(LOG_TAG, "## onTabSelected() file frag added");
+            } else {
+                ft.attach(mSearchFilesFragment);
+                Log.d(LOG_TAG, "## onTabSelected() file frag attach");
+            }
+
+            mCurrentTabIndex = mFileTabIndex;
+            startFileSearch();
+        }
         else {
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
             mCurrentTabIndex = mSettingsTabIndex;
@@ -261,6 +347,35 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         }
     }
 
+    private void startFileSearch() {
+        if (mCurrentTabIndex == mFileTabIndex) {
+            mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
+            mSearchFilesFragment.startFilesSearch(new MatrixMessageListFragment.OnSearchResultListener() {
+                @Override
+                public void onSearchSucceed(int nbrMessages) {
+                    onSearchEnd(mFileTabIndex, nbrMessages);
+                }
+
+                @Override
+                public void onSearchFailed() {
+                    onSearchEnd(mFileTabIndex, 0);
+                }
+            });
+        }
+    }
+
+    /**
+     * The search is done.
+     * @param tabIndex the tab index
+     * @param nbrMessages the number of found messages.
+     */
+    private void onSearchEnd(int tabIndex, int nbrMessages) {
+        if (mCurrentTabIndex == tabIndex) {
+            Log.d(LOG_TAG, "## onSearchEnd() nbrMsg=" + nbrMessages);
+            // stop "wait while searching" screen
+            mWaitWhileSearchInProgressView.setVisibility(View.GONE);
+        }
+    }
 
     /**
      * Called when a tab exits the selected state.
@@ -280,12 +395,20 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         saveUiTabContext(tab);
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
-            if (null != mAddPeopleFragment)
+            if (null != mAddPeopleFragment) {
                 ft.detach(mAddPeopleFragment);
+            }
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabUnselectedSettingsFragment();
         }
+        else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+            if (null != mSearchFilesFragment) {
+                mSearchFilesFragment.cancelCatchingRequests();
+                ft.detach(mSearchFilesFragment);
+            }
+        }
+
         else {
             Log.w(LOG_TAG, "## onTabUnselected() unknown tab selected!!");
         }
@@ -316,7 +439,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     mRoomSettingsFragment = VectorRoomSettingsFragment.newInstance(mMatrixId, mRoomId);
                     getFragmentManager().beginTransaction().replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL).commit();
                     Log.d(LOG_TAG, "## onTabSelected() settings frag added");
-                } else {
+                }
+                else {
                     getFragmentManager().beginTransaction().attach(mRoomSettingsFragment).commit();
                     Log.d(LOG_TAG, "## onTabSelected() settings frag attach");
                 }

@@ -306,7 +306,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // use the room name power to enable the room notification mute setting
         if(null != mRoomMuteNotificationsSwitch)
-            mRoomMuteNotificationsSwitch.setEnabled(canUpdateName && isConnected);
+            mRoomMuteNotificationsSwitch.setEnabled(isConnected);
     }
 
 
@@ -542,98 +542,70 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * @param aResultCode the result code.
      * @param aData the provided data.
      */
-    private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData){
-        Uri thumbnailUri = null;
-        ClipData clipData = null;
-        Bitmap thumbnailBitmap = null;
-
+    private void onActivityResultRoomAvatarUpdate(int aResultCode, final Intent aData) {
         // sanity check
         if(null == mSession){
             return;
         }
 
         if (aResultCode == Activity.RESULT_OK) {
-            if (null != aData) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    clipData = aData.getClipData();
-                }
+            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), aData, mSession.getMediasCache());
 
-                // get thumbnail URI
-                if (null != clipData) { // multiple data
-                    if (clipData.getItemCount() > 0) {
-                        thumbnailUri = clipData.getItemAt(0).getUri();
-                    }
-                }
-                else if (null != aData.getData()) {
-                    thumbnailUri = aData.getData();
-                }
+            if (null != thumbnailUri) {
+                displayLoadingView();
 
-                if (null != thumbnailUri) {
-                    thumbnailBitmap = VectorUtils.getBitmapFromuri(getActivity(), thumbnailUri);
-                }
-                else {
-                    // no thumbnail URI found, just abort here
-                    return;
-                }
+                // save the bitmap URL on the server
+                ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri);
+                if(null != resource) {
+                    mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
+                        @Override
+                        public void onUploadStart(String uploadId) {
+                        }
 
-                // save the bitmap into the cache and retrieve its URL
-                String thumbnailUrl = mSession.getMediasCache().saveBitmap(thumbnailBitmap, null);
+                        @Override
+                        public void onUploadProgress(String anUploadId, int percentageProgress) {
+                        }
 
-                if (null != thumbnailUrl) {
-                    displayLoadingView();
+                        @Override
+                        public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
+                                        mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void info) {
+                                                Log.d(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update succeed");
+                                                hideLoadingView(UPDATE_UI);
+                                            }
 
-                    // save the bitmap URL on the server
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailUrl));
-                    if(null != resource) {
-                        mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
-                            @Override
-                            public void onUploadStart(String uploadId) {
-                            }
+                                            @Override
+                                            public void onNetworkError(Exception e) {
+                                                Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - NetworkError");
+                                                hideLoadingView(DO_NOT_UPDATE_UI);
+                                            }
 
-                            @Override
-                            public void onUploadProgress(String anUploadId, int percentageProgress) {
-                            }
+                                            @Override
+                                            public void onMatrixError(MatrixError e) {
+                                                Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - MatrixError");
+                                                hideLoadingView(DO_NOT_UPDATE_UI);
+                                            }
 
-                            @Override
-                            public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                            mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
-                                                @Override
-                                                public void onSuccess(Void info) {
-                                                    Log.d(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update succeed");
-                                                    hideLoadingView(UPDATE_UI);
-                                                }
-
-                                                @Override
-                                                public void onNetworkError(Exception e) {
-                                                    Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - NetworkError");
-                                                    hideLoadingView(DO_NOT_UPDATE_UI);
-                                                }
-
-                                                @Override
-                                                public void onMatrixError(MatrixError e) {
-                                                    Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - MatrixError");
-                                                    hideLoadingView(DO_NOT_UPDATE_UI);
-                                                }
-
-                                                @Override
-                                                public void onUnexpectedError(Exception e) {
-                                                    Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - UnexpectedError");
-                                                    hideLoadingView(DO_NOT_UPDATE_UI);
-                                                }
-                                            });
-                                        } else {
-                                            hideLoadingView(DO_NOT_UPDATE_UI);
-                                        }
+                                            @Override
+                                            public void onUnexpectedError(Exception e) {
+                                                Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - UnexpectedError");
+                                                hideLoadingView(DO_NOT_UPDATE_UI);
+                                            }
+                                        });
+                                    } else {
+                                        hideLoadingView(DO_NOT_UPDATE_UI);
                                     }
-                                });
-                            }
-                        });
-                    }
+                                }
+                            });
+                        }
+                    });
                 }
+
             }
         }
     }

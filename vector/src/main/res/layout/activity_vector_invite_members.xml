@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/search_no_results"
         android:textStyle="bold"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:visibility="gone"/>
 
     <ListView

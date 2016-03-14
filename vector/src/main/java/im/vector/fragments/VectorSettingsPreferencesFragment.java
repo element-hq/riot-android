@@ -173,6 +173,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             });
         }
 
+        // terms & conditions
+        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_privacy_policy));
+
+        if (null != termConditionsPreference) {
+            privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    VectorUtils.displayPrivacyPolicy(getActivity());
+                    return false;
+                }
+            });
+        }
+
         // clear cache
         EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
 
@@ -557,84 +570,58 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (null != data) {
-                Uri thumbnailUri = null;
+            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
 
-                if (null != data) {
-                    ClipData clipData = null;
+            if (null != thumbnailUri) {
+                displayLoadingView();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        clipData = data.getClipData();
+                ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri);
+
+                mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
+                    @Override
+                    public void onUploadStart(String uploadId) {
                     }
 
-                    // multiple data
-                    if (null != clipData) {
-                        if (clipData.getItemCount() > 0) {
-                            thumbnailUri = clipData.getItemAt(0).getUri();
-                        }
-                    } else if (null != data.getData()) {
-                        thumbnailUri = data.getData();
+                    @Override
+                    public void onUploadProgress(String anUploadId, int percentageProgress) {
                     }
-                }
 
-                Bitmap thumbnail = null;
+                    @Override
+                    public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
+                                    mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            hideLoadingView(true);
+                                        }
 
-                if (null != thumbnailUri) {
-                    thumbnail = VectorUtils.getBitmapFromuri(getActivity(), thumbnailUri);
-                }
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            hideLoadingView(false);
+                                        }
 
-                String thumbnailURL = mSession.getMediasCache().saveBitmap(thumbnail, null);
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            hideLoadingView(false);
+                                        }
 
-                if (null != thumbnailURL) {
-                    displayLoadingView();
-
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), Uri.parse(thumbnailURL));
-
-                    mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
-                        @Override
-                        public void onUploadStart(String uploadId) {
-                        }
-
-                        @Override
-                        public void onUploadProgress(String anUploadId, int percentageProgress) {
-                        }
-
-                        @Override
-                        public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                        mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
-                                            @Override
-                                            public void onSuccess(Void info) {
-                                                hideLoadingView(true);
-                                            }
-
-                                            @Override
-                                            public void onNetworkError(Exception e) {
-                                                hideLoadingView(false);
-                                            }
-
-                                            @Override
-                                            public void onMatrixError(MatrixError e) {
-                                                hideLoadingView(false);
-                                            }
-
-                                            @Override
-                                            public void onUnexpectedError(Exception e) {
-                                                hideLoadingView(false);
-                                            }
-                                        });
-                                    } else {
-                                        hideLoadingView(false);
-                                    }
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            hideLoadingView(false);
+                                        }
+                                    });
+                                } else {
+                                    hideLoadingView(false);
                                 }
-                            });
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
+                });
             }
         }
+
     }
 }

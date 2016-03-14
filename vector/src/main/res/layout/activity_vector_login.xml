@@ -30,7 +30,7 @@
             android:layout_height="36dp"
             android:background="@color/vector_green_color"
             android:textColor="@android:color/white"
-            android:text="@string/login"/>
+            android:text="@string/auth_login"/>
 
         <Button
             android:id="@+id/button_register"
@@ -40,7 +40,7 @@
             android:layout_height="36dp"
             android:textColor="@color/vector_green_color"
             android:background="@android:color/white"
-            android:text="@string/create_account"/>
+            android:text="@string/auth_register"/>
     </RelativeLayout>
 
     <!-- the main body is defined in a scroll view to avoid split items -->
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:hint="@string/email_address"
+                    android:hint="@string/auth_user_id_placeholder"
                     android:layout_alignParentTop="true"/>
 
                 <EditText
@@ -92,7 +92,7 @@
                     android:singleLine="true"
                     android:inputType="textPassword"
                     android:ems="10"
-                    android:hint="@string/password"
+                    android:hint="@string/auth_password_placeholder"
                     android:layout_marginTop="10dp" />
 
                 <LinearLayout
@@ -107,7 +107,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/advanced_server_options"/>
+                        android:text="@string/auth_use_server_options"/>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -123,25 +123,54 @@
                     </RelativeLayout>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/login_matrix_server_url"
-                    android:layout_below="@id/display_server_url_layout"
+                <LinearLayout
+                    android:id="@+id/login_matrix_server_options_layout"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:hint="@string/hs_url"
-                    android:text="https://matrix.org"
-                    android:layout_marginTop="6dp" />
+                    android:layout_below="@id/display_server_url_layout">
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_home_server"/>
+
+                    <EditText
+                        android:id="@+id/login_matrix_server_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/hs_url"
+                        android:text="https://matrix.org" />
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_identity_server"/>
+
+                    <EditText
+                        android:id="@+id/login_identity_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/identity_url"
+                        android:text="https://vector.im"/>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/login_forgot_password"
-                    android:layout_below="@id/login_matrix_server_url"
+                    android:layout_below="@+id/login_matrix_server_options_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textSize="14dp"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="14sp"
                     android:textColor="@color/vector_green_color"
-                    android:text="@string/forgot_password"/>
+                    android:text="@string/auth_forgot_password"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

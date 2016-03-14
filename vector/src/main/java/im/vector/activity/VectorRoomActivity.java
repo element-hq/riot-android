@@ -17,7 +17,6 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipData;
@@ -36,10 +35,12 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -64,7 +65,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
-import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -73,13 +74,13 @@ import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
-import im.vector.adapters.ImageCompressionDescription;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.services.EventStreamService;
@@ -94,6 +95,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -173,8 +175,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     // keyboard listener to detect when the keyboard is displayed
     private ViewTreeObserver.OnGlobalLayoutListener mKeyboardListener;
 
-    private View mTypingArea;
-    private TextView mTypingMessageTextView;
+    // notifications area
+    private View mNotificationsArea;
+    private View mTypingIcon;
+    private View mErrorIcon;
+    private TextView mNotificationsMessageTextView;
+    private TextView mErrorMessageTextView;
+    private String mLatestTypingMessage;
+
+    // network events
+    private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            refreshNotificationsArea();
+        }
+    };
 
     private String mPendingThumbnailUrl;
     private String mPendingMediaUrl;
@@ -196,6 +211,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private Boolean mIgnoreTextUpdate = false;
 
     private AlertDialog mImageSizesListDialog;
+
+    private final MXEventListener mPresenceEventListener = new MXEventListener() {
+        @Override
+        public void onPresenceUpdate(Event event, User user) {
+            // the header displays active members
+            updateRoomHeaderMembersStatus();
+        }
+    };
 
     private final MXEventListener mEventListener = new MXEventListener() {
 
@@ -238,7 +261,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     }
 
                     if (!VectorApp.isAppInBackground()) {
-                        mRoom.sendReadReceipt();
+                        // do not send read receipt for the typing events
+                        // they are ephemeral ones.
+                        if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
+                            mRoom.sendReadReceipt();
+                        }
                     }
                 }
             });
@@ -266,6 +293,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 }
             });
         }
+
+        @Override
+        public void onSentEvent(Event event) {
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void onFailedSendingEvent(Event event) {
+            refreshNotificationsArea();
+        }
+
     };
 
     // *********************************************************************************************
@@ -278,6 +316,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public void onListTouch() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
+
     // *********************************************************************************************
 
     @Override
@@ -458,8 +497,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         });
 
-        mTypingArea = findViewById(R.id.room_notifications_area);
-        mTypingMessageTextView = (TextView)findViewById(R.id.room_notification_message);
+        // notifications area
+        mNotificationsArea = findViewById(R.id.room_notifications_area);
+        mTypingIcon = findViewById(R.id.room_typing_animation);
+        mNotificationsMessageTextView = (TextView)findViewById(R.id.room_notification_message);
+        mErrorIcon = findViewById(R.id.room_error_icon);
+        mErrorMessageTextView = (TextView)findViewById(R.id.room_notification_error_message);
 
         mSession = getSession(intent);
 
@@ -564,6 +607,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         // listen for room name or topic changes
         mRoom.removeEventListener(mEventListener);
 
+        Matrix.getInstance(this).removeNetworkEventListener(mNetworkEventListener);
+
+        mSession.getDataHandler().removeListener(mPresenceEventListener);
+
         // remove listener on keyboard display
         enableKeyboardShownListener(false);
     }
@@ -589,6 +636,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
+        mSession.getDataHandler().addListener(mPresenceEventListener);
+
+        Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
+
         EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
 
         // listen to keyboard display
@@ -609,6 +660,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         manageSendMoreButtons();
 
         updateActionBarTitleAndTopic();
+
+        refreshNotificationsArea();
+
+        updateRoomHeaderMembersStatus();
 
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
@@ -708,6 +763,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private void sendMessage(String body) {
         if (!TextUtils.isEmpty(body)) {
             if (!manageIRCCommand(body)) {
+                mVectorMessageListFragment.cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body);
             }
         }
@@ -718,12 +774,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * @param mediaUris the media URIs
      */
     private void sendMedias(final ArrayList<Uri> mediaUris) {
+        mVectorMessageListFragment.cancelSelectionMode();
 
-        final View progressBackground =  findViewById(R.id.medias_processing_progress_background);
-        final View progress = findViewById(R.id.medias_processing_progress);
-
-        progressBackground.setVisibility(View.VISIBLE);
-        progress.setVisibility(View.VISIBLE);
+        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+        progressLayout.setVisibility(View.VISIBLE);
 
         final HandlerThread handlerThread = new HandlerThread("MediasEncodingThread");
         handlerThread.start();
@@ -783,8 +837,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         @Override
                                         public void run() {
                                             handlerThread.quit();
-                                            progressBackground.setVisibility(View.GONE);
-                                            progress.setVisibility(View.GONE);
+                                            progressLayout.setVisibility(View.GONE);
 
                                             Toast.makeText(VectorRoomActivity.this,
                                                     getString(R.string.message_failed_to_upload),
@@ -972,6 +1025,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                                         }
                                                     });
                                                 } else {
+
+                                                    // apply a rotation
+                                                    if (null != fThumbnailURL) {
+                                                        // check if the media could be resized
+                                                        if ("image/jpeg".equals(fMimeType)) {
+
+                                                            System.gc();
+
+                                                            try {
+                                                                Uri uri = Uri.parse(fMediaUrl);
+
+                                                                final int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorRoomActivity.this, uri);
+
+                                                                // try to apply exif rotation
+                                                                if (0 != rotationAngle) {
+                                                                    // rotate the image content
+                                                                    ImageUtils.rotateImage(VectorRoomActivity.this, fMediaUrl, rotationAngle, mMediasCache);
+                                                                }
+
+                                                            } catch (Exception e) {
+                                                            }
+                                                        }
+                                                    }
+
                                                     mVectorMessageListFragment.uploadImageContent(fThumbnailURL, fMediaUrl, fFilename, fMimeType);
                                                 }
                                             }
@@ -1002,8 +1079,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             @Override
                             public void run() {
                                 handlerThread.quit();
-                                progressBackground.setVisibility(View.GONE);
-                                progress.setVisibility(View.GONE);
+                                progressLayout.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -1312,11 +1388,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     options.outWidth = -1;
                     options.outHeight = -1;
 
-                    // get the full size bitmap
-                    Bitmap fullSizeBitmap = null;
-
+                    // retrieve the image size
                     try {
-                        fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
+                        BitmapFactory.decodeStream(imageStream, null, options);
                     } catch (OutOfMemoryError e) {
                         Log.e(LOG_TAG, "Onclick BitmapFactory.decodeStream : " + e.getMessage());
                     }
@@ -1399,50 +1473,65 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        try {
-                                            // pos == 0 -> original
-                                            if (0 != fPos) {
-                                                FileInputStream imageStream = new FileInputStream(new File(filename));
+                                        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+                                        progressLayout.setVisibility(View.VISIBLE);
 
-                                                ImageSize imageSize = sizesList.get(fPos);
-                                                InputStream resizeBitmapStream = null;
-
+                                        Thread thread = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
                                                 try {
-                                                    resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
-                                                } catch (OutOfMemoryError ex) {
-                                                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
-                                                } catch (Exception e) {
-                                                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
-                                                }
+                                                    // pos == 0 -> original
+                                                    if (0 != fPos) {
+                                                        FileInputStream imageStream = new FileInputStream(new File(filename));
 
-                                                if (null != resizeBitmapStream) {
-                                                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
+                                                        ImageSize imageSize = sizesList.get(fPos);
+                                                        InputStream resizeBitmapStream = null;
 
+                                                        try {
+                                                            resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
+                                                        } catch (OutOfMemoryError ex) {
+                                                            Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
+                                                        } catch (Exception e) {
+                                                            Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
+                                                        }
 
-                                                    if (null != bitmapURL) {
-                                                        mPendingMediaUrl = bitmapURL;
+                                                        if (null != resizeBitmapStream) {
+                                                            String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
+
+                                                            if (null != bitmapURL) {
+                                                                mPendingMediaUrl = bitmapURL;
+                                                            }
+
+                                                            resizeBitmapStream.close();
+                                                        }
                                                     }
-
-                                                    resizeBitmapStream.close();
 
                                                     // try to apply exif rotation
                                                     if (0 != rotationAngle) {
                                                         // rotate the image content
                                                         ImageUtils.rotateImage(VectorRoomActivity.this, mPendingMediaUrl, rotationAngle, mMediasCache);
                                                     }
+                                                } catch (Exception e) {
+                                                    Log.e(LOG_TAG, "Onclick " + e.getMessage());
                                                 }
-                                            }
-                                        } catch (Exception e) {
-                                            Log.e(LOG_TAG, "Onclick " + e.getMessage());
-                                        }
 
-                                        //
-                                        mVectorMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
-                                        mPendingThumbnailUrl = null;
-                                        mPendingMediaUrl = null;
-                                        mPendingMimeType = null;
-                                        mPendingFilename = null;
-                                        manageSendMoreButtons();
+                                                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        progressLayout.setVisibility(View.GONE);
+                                                        mVectorMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
+                                                        mPendingThumbnailUrl = null;
+                                                        mPendingMediaUrl = null;
+                                                        mPendingMimeType = null;
+                                                        mPendingFilename = null;
+                                                        manageSendMoreButtons();
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                        thread.setPriority(Thread.MIN_PRIORITY);
+                                        thread.start();
                                     }
                                 });
                             }
@@ -1506,7 +1595,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         boolean hasText = mEditText.getText().length() > 0;
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-        mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+        // TODO manage Call support
+        mCallButton.setVisibility(View.GONE);
+        //mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
@@ -1549,12 +1640,76 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         VectorUtils.loadRoomAvatar(this, mSession, mActionBarHeaderRoomAvatar, mRoom);
     }
 
+    public void insertInTextEditor(String text) {
+        if (null != text) {
+            if (TextUtils.isEmpty(mEditText.getText())) {
+                mEditText.append(text + ": ");
+            } else {
+                mEditText.getText().insert(mEditText.getSelectionStart(), text);
+            }
+        }
+    }
+
+    //================================================================================
+    // Notifications management
+    //================================================================================
+
+    private void refreshNotificationsArea() {
+        boolean isAreaVisible = false;
+        boolean isTypingIconDisplayed = false;
+        boolean isErrorIconDisplayed = false;
+        SpannableString notificationsText = null;
+        SpannableString errorText = null;
+
+        //  no network
+        if (!Matrix.getInstance(this).isConnected()) {
+            isAreaVisible = true;
+            isErrorIconDisplayed = true;
+            errorText = new SpannableString(getResources().getString(R.string.room_offline_notification));
+            mErrorMessageTextView.setOnClickListener(null);
+        } else {
+            Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
+            if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
+                isAreaVisible = true;
+                isErrorIconDisplayed = true;
+
+                String part1 = getResources().getString(R.string.room_unsent_messages_notification);
+                String part2 = getResources().getString(R.string.room_prompt_resent);
+
+                errorText = new SpannableString(part1 + part2);
+                errorText.setSpan(new UnderlineSpan(), part1.length(), part1.length() + part2.length(), 0);
+
+                mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mVectorMessageListFragment.resendUnsent();
+                        refreshNotificationsArea();
+                    }
+                });
+            } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
+                isAreaVisible = true;
+                isTypingIconDisplayed = true;
+                notificationsText = new SpannableString(mLatestTypingMessage);
+            }
+        }
+
+        mNotificationsArea.setVisibility(isAreaVisible? View.VISIBLE : View.INVISIBLE);
+
+        // typing
+        mTypingIcon.setVisibility(isTypingIconDisplayed? View.VISIBLE : View.INVISIBLE);
+        mNotificationsMessageTextView.setText(notificationsText);
+
+        // error
+        mErrorIcon.setVisibility(isErrorIconDisplayed? View.VISIBLE : View.INVISIBLE);
+        mErrorMessageTextView.setText(errorText);
+    }
+
     private void onRoomTypings() {
+        mLatestTypingMessage = null;
+
         ArrayList<String> typingUsers = mRoom.getTypingUsers();
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
-            mTypingArea.setVisibility(View.VISIBLE);
-
             String myUserId = mSession.getMyUserId();
 
             // get the room member names
@@ -1564,38 +1719,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
 
                 // check if the user is known and not oneself
-                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) &&  (null != member.displayname)) {
+                if ((null != member) && !TextUtils.equals(myUserId, member.getUserId()) && (null != member.displayname)) {
                     names.add(member.displayname);
                 }
             }
 
-            String text = "";
-
             // nothing to display ?
             if (0 == names.size()) {
-                mTypingArea.setVisibility(View.INVISIBLE);
+                mLatestTypingMessage = null;
             } else if (1 == names.size()) {
-                text = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
+                mLatestTypingMessage = String.format(this.getString(R.string.room_one_user_is_typing), names.get(0));
             } else if (2 == names.size()) {
-                text = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
+                mLatestTypingMessage = String.format(this.getString(R.string.room_two_users_are_typing), names.get(0), names.get(1));
             } else if (names.size() > 2) {
-                text = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
-            }
-
-            mTypingMessageTextView.setText(text);
-        } else {
-            mTypingArea.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    public void insertInTextEditor(String text) {
-        if (null != text) {
-            if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.append(text + ": ");
-            } else {
-                mEditText.getText().insert(mEditText.getSelectionStart(), text);
+                mLatestTypingMessage = String.format(this.getString(R.string.room_many_users_are_typing), names.get(0), names.get(1));
             }
         }
+
+        refreshNotificationsArea();
     }
 
     //================================================================================
@@ -1835,13 +1976,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     private void updateRoomHeaderMembersStatus() {
-        String value;
-        if((null != mActionBarHeaderActiveMembers) && (null != mRoom)) {
-            // update the members status: "active members"/"members"
-            int members = mRoom.getMembers().size();
-            int activeMembers = mRoom.getActiveMembers().size();
-            value = getString(R.string.room_header_active_members, activeMembers, members);
-            mActionBarHeaderActiveMembers.setText(value);
+        if ((null != mActionBarHeaderActiveMembers) && (null != mRoom)) {
+            // refresh only if the action bar is hidden
+            if (mActionBarCustomTitle.getVisibility() == View.GONE) {
+
+                // update the members status: "active members"/"members"
+                int joinedMembersCount = 0;
+                int activeMembersCount = 0;
+
+                Collection<RoomMember> members = mRoom.getMembers();
+
+                for (RoomMember member : members) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                        joinedMembersCount++;
+
+                        User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+
+                        if ((null != user) && user.isActive()) {
+                            activeMembersCount++;
+                        }
+                    }
+                }
+
+                String value = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                mActionBarHeaderActiveMembers.setText(value);
+            }
         }
     }
 
