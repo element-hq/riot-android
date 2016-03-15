@@ -718,36 +718,24 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     // Copy source file to destination
                     FileOutputStream outputStream = null;
                     try {
-                        // create only the
-                        if (!dstFile.exists()) {
-                            dstFile.createNewFile();
 
-                            outputStream = new FileOutputStream(dstFile);
+                        dstFile.createNewFile();
 
-                            byte[] buffer = new byte[1024 * 10];
-                            int len;
-                            while ((len = inputStream.read(buffer)) != -1) {
-                                outputStream.write(buffer, 0, len);
-                            }
+                        outputStream = new FileOutputStream(dstFile);
+
+                        byte[] buffer = new byte[1024 * 10];
+                        int len;
+                        while ((len = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, len);
                         }
 
                         mShootedPicturePath = dstFile.getAbsolutePath();
-
-                        // display the preview
-                        //Uri newRotatedImageUri = rotateImageFromBufferToUri(data, mShootedPicturePath);
-                        //mImagePreviewImageView.setImageURI(newRotatedImageUri);
-                        // or
-                        //Bitmap imageToDisplay = rotateImageFromUrlToBitmap(mShootedPicturePath);
-                        //mImagePreviewImageView.setImageBitmap(imageToDisplay);
-                        // or async way
                         displayAndRotatePreviewImageAsync(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
 
                         // force to stop preview:
                         // some devices do not stop preview after the picture was taken (ie. G6 edge)
                         mCamera.stopPreview();
-                        // set the UI preview
-                        // must be done in displayAndRotatePreviewImageAsync: updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_CAMERA);
-                    } catch (Exception e) {
+                   } catch (Exception e) {
                         Toast.makeText(VectorMediasPickerActivity.this, "Exception takeImage(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     } finally {
                         // Close resources
@@ -766,21 +754,54 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    private Bitmap rotateImageFromUrlToBitmap(final String aImageUrl){
-        final String mimeType ="image/jpeg";
+    /**
+     * Create a thumbnail from an image URL if there are some exif metadata which implies to rotate
+     * the image.
+     * @param aImageUrl the image url
+     * @return a thumbnail if the exif metadata implies to rotate the image.
+     */
+    private Bitmap createPhotoThumbnail(final String aImageUrl) {
         Bitmap bitmapRetValue = null;
 
-        if(null != aImageUrl){
-            Uri imageUri = Uri.fromFile(new File(aImageUrl));
-            MXMediasCache mediasCache = Matrix.getInstance(VectorMediasPickerActivity.this).getMediasCache();
+        // sanity check
+        if(null != aImageUrl) {
 
+            Uri imageUri = Uri.fromFile(new File(aImageUrl));
             int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, imageUri);
-            if(0 != rotationAngle) {
-                bitmapRetValue = ImageUtils.rotateImage(VectorMediasPickerActivity.this, aImageUrl, rotationAngle, mediasCache);
-            }
-            else {
-                //bitmapRetValue = BitmapFactory.decodeFile(aImageUrl);
-                bitmapRetValue = null;
+
+            // the exif metadata implies a rotation
+            if (0 != rotationAngle) {
+                // create a thumbnail
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                options.outWidth = -1;
+                options.outHeight = -1;
+
+                try {
+                    final String filename = imageUri.getPath();
+                    FileInputStream imageStream = new FileInputStream(new File(filename));
+
+                    // create a thumbnail
+                    InputStream stream = ImageUtils.resizeImage(imageStream, 1024, 0, 100);
+                    imageStream.close();
+
+                    Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
+
+                    // apply a rotation
+                    android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                    bitmapMatrix.postRotate(rotationAngle);
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), bitmapMatrix, false);
+
+                    bitmapRetValue = bitmap;
+
+                    System.gc();
+
+                } catch (OutOfMemoryError e) {
+                    Log.e(LOG_TAG, "createThumbnail : out of memory");
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "createThumbnail " + e.getMessage());
+                }
             }
         }
 
@@ -808,7 +829,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             @Override
             public void run() {
                 if (IMAGE_ORIGIN_CAMERA == aOrigin) {
-                    newBitmap = rotateImageFromUrlToBitmap(aCameraImageUrl);
+                    newBitmap = createPhotoThumbnail(aCameraImageUrl);
                     defaultUri = Uri.fromFile(new File(aCameraImageUrl));
                 } else {
                     // in gallery
