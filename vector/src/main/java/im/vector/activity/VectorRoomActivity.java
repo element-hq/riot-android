@@ -609,7 +609,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         Matrix.getInstance(this).removeNetworkEventListener(mNetworkEventListener);
 
-        mSession.getDataHandler().removeListener(mPresenceEventListener);
+        if (mSession.isActive()) {
+            mSession.getDataHandler().removeListener(mPresenceEventListener);
+        }
 
         // remove listener on keyboard display
         enableKeyboardShownListener(false);
