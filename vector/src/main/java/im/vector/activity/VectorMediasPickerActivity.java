@@ -46,6 +46,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -103,7 +104,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         public long mCreationTime;
         public Bitmap mThumbnail;
         public Boolean mIsVideo;
-        public RecentMediaLayout mRecentMediaLayout;
     }
 
     // recents medias list
@@ -205,6 +205,24 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
 
+        initCameraLayout();
+
+        // setup separate thread for image gallery update
+        mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
+        mHandlerThread.start();
+        mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
+
+        if(false == restoreInstanceState(savedInstanceState)){
+            mGalleryMediaStorageUriMap =  new HashMap<Uri, Uri>();
+            // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
+            updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
+        }
+    }
+
+    /**
+     * Init the camera layout to fill the screen size.
+     */
+    private void initCameraLayout() {
         // fix the surfaceView size and its container size
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -222,17 +240,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
         mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
         computeGalleryHeight();
-
-        // setup separate thread for image gallery update
-        mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
-        mHandlerThread.start();
-        mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
-
-        if(false == restoreInstanceState(savedInstanceState)){
-            mGalleryMediaStorageUriMap =  new HashMap<Uri, Uri>();
-            // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
-            updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
-        }
     }
 
     /**
@@ -279,7 +286,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    private void initScrollViewSize() {
+    /**
+     * Adjust the scrollview height to fit to the camera preview height.
+     */
+    private void adjustScrollViewSize() {
         // adjust the scroll height
         mCameraSurfaceView.postDelayed(new Runnable() {
             @Override
@@ -293,12 +303,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                     // the eight of the relative layout containing the surfaceview
                     mCameraPreviewLayout = (RelativeLayout) findViewById(R.id.medias_picker_camera_preview_layout);
-                    ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
+                    RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams)mCameraPreviewLayout.getLayoutParams();
                     previewLayoutParams.height = params.height;
+
                     mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
                     // define the gallery height: eight of the surfaceview + eight of the gallery (total sum > screen height to allow scrolling)
                     mPreviewAndGalleryLayout = (RelativeLayout) findViewById(R.id.medias_picker_preview_gallery_layout);
+
 
                     computeGalleryHeight();
                 }
@@ -307,7 +319,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     private void startCameraPreview() {
-
         // should always be true
         if (null == mCamera) {
             // check if the device has at least camera
@@ -326,7 +337,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCamera.startPreview();
         }
 
-        initScrollViewSize();
+        adjustScrollViewSize();
     }
 
     @Override
@@ -735,7 +746,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         // force to stop preview:
                         // some devices do not stop preview after the picture was taken (ie. G6 edge)
                         mCamera.stopPreview();
-                   } catch (Exception e) {
+                    } catch (Exception e) {
                         Toast.makeText(VectorMediasPickerActivity.this, "Exception takeImage(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     } finally {
                         // Close resources
@@ -1005,6 +1016,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void onSwitchCamera() {
         // can only switch if the device has more than two camera
         if (Camera.getNumberOfCameras() >= 2) {
+
+            // stop camera
             if (null != mCameraSurfaceHolder) {
                 mCamera.stopPreview();
             }
@@ -1016,9 +1029,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
             }
 
+            initCameraLayout();
+
             mCamera = Camera.open(mCameraId);
 
-            setCameraDisplayOrientation();
+            initCameraSettings();
 
             try {
                 mCamera.setPreviewDisplay(mCameraSurfaceHolder);
@@ -1026,18 +1041,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewDisplay EXCEPTION Msg=" + e.getMessage());
             }
 
-            initCameraSettings();
-
             mCamera.startPreview();
 
-            initScrollViewSize();
+            adjustScrollViewSize();
         }
     }
 
     /**
      * Define the camera rotation (preview and recording).
      */
-    private void setCameraDisplayOrientation() {
+    private void initCameraSettings() {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(mCameraId, info);
 
@@ -1064,21 +1077,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCamera.setDisplayOrientation(previewRotation);
 
         Camera.Parameters params = mCamera.getParameters();
+
+        // apply the rotation
         params.setRotation(imageRotation);
-        // TODO set the best picture size/quality
-        mCamera. setParameters(params);
-    }
 
-
-    private void initCameraSettings() {
-
-        Camera.Parameters params = mCamera.getParameters();
+        // set the best quality
         List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
-
         if (supportedSizes.size() > 0) {
             Camera.Size sizePicture = supportedSizes.get(0);
             params.setPictureSize(sizePicture.width, sizePicture.height);
         }
+
+        // TODO autofocus
+
+        mCamera.setParameters(params);
     }
 
     // *********************************************************************************************
@@ -1091,9 +1103,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (null == mCamera) {
             mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
         }
-
-
-        initCameraSettings();
 
         // cannot start the cam
         if (null == mCamera) {
@@ -1118,7 +1127,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             try {
                 mCameraSurfaceHolder = holder;
                 mCamera.setPreviewDisplay(mCameraSurfaceHolder);
-                setCameraDisplayOrientation();
+                initCameraSettings();
 
                 Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
                 android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
