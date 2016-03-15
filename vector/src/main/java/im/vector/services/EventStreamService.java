@@ -308,7 +308,7 @@ public class EventStreamService extends Service {
 
                 from = member.getName();
 
-                int size = getApplicationContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+                int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
 
                 File f = session.getMediasCache().thumbnailCacheFile(member.avatarUrl, size);
 
