@@ -47,6 +47,7 @@ import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.util.NotificationUtils;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -294,7 +295,7 @@ public class EventStreamService extends Service {
             }
 
             String from = "";
-            Bitmap largeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_contact_picture_holo_light);
+            Bitmap largeBitmap = null;
 
             // when the event is an invitation one
             // don't check if the sender ID is known because the members list are not yet downloaded
@@ -317,6 +318,10 @@ public class EventStreamService extends Service {
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
                 }
+            }
+
+            if (null == largeBitmap) {
+                largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarcolor(senderID), TextUtils.isEmpty(from) ? senderID : from);
             }
 
             String roomName = null;

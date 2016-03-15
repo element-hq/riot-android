@@ -80,6 +80,43 @@ public class NotificationUtils {
         return n;
     }
 
+    private static Bitmap createSquareBitmap(Bitmap bitmap) {
+        Bitmap resizedBitmap = null;
+
+        if (null != bitmap) {
+            // convert the bitmap to a square bitmap
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            if (width == height) {
+                resizedBitmap = bitmap;
+            }
+            // larger than high
+            else if (width > height) {
+                resizedBitmap = Bitmap.createBitmap(
+                        bitmap,
+                        (width - height) / 2,
+                        0,
+                        height,
+                        height
+                );
+
+            }
+            // higher than large
+            else {
+                resizedBitmap = Bitmap.createBitmap(
+                        bitmap,
+                        0,
+                        (height - width) / 2,
+                        width,
+                        width
+                );
+            }
+        }
+
+        return resizedBitmap;
+    }
+
     public static Notification buildMessageNotification(
             Context context, String from, String matrixId, String callId, Boolean displayMatrixId, Bitmap largeIcon, int globalUnseen, int memberUnseen, String body, String roomId, String roomName,
             boolean shouldPlaySound) {
@@ -107,6 +144,8 @@ public class NotificationUtils {
         }
 
         if (null != largeIcon) {
+            largeIcon = createSquareBitmap(largeIcon);
+
         	// add a bubble in the top right
             if (0 != memberUnseen) {
                 try {
@@ -129,7 +168,7 @@ public class NotificationUtils {
                     int bitmapWidth = largeIcon.getWidth();
                     int bitmapHeight = largeIcon.getHeight();
 
-                    float scale = Math.max((float) canvas.getWidth() / (float) bitmapWidth, (float) canvas.getHeight() / (float) bitmapHeight);
+                    float scale = Math.min((float) canvas.getWidth() / (float) bitmapWidth, (float) canvas.getHeight() / (float) bitmapHeight);
 
                     int scaledWidth = (int) (bitmapWidth * scale);
                     int scaledHeight = (int) (bitmapHeight * scale);
