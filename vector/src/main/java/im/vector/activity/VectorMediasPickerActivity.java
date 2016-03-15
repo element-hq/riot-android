@@ -101,7 +101,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // recents medias list
     private final ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
     private final ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
-    private HashMap<Uri, Uri> mGalleryMediaStorageUriMap = null;
+    private HashMap<Uri, Uri> mGalleryMediaStorageUriMap = null; // TODO remove asap not used
 
     // camera object
     private Camera mCamera;
@@ -358,7 +358,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 if (null != savedBitmap) {
                     // image preview from camera
                     mImagePreviewImageView.setImageBitmap(savedBitmap);
-                    updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, mTakenImageOrigin);
+                    updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, mTakenImageOrigin); // TODO remove, duplicated here below
                 } else {
                     // image preview from gallery
                     displayAndRotatePreviewImageAsync(mShootedPicturePath, uriImage, mTakenImageOrigin);
@@ -555,14 +555,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int cellWidth = 0;
         int cellHeight = 0;
         int itemIndex = 0;
-        boolean isIconFolderAdded= false;
         ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
         TableRow.LayoutParams rawLayoutParams = null;
+        TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
 
         if(null != mGalleryTableLayout) {
             mGalleryTableLayout.removeAllViews();
             mGalleryTableLayout.setBackgroundColor(Color.WHITE);
-            tableLayoutWidth = mGalleryTableLayout.getWidth();
 
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -579,7 +578,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 scaleType = ImageView.ScaleType.FIT_CENTER;
                 rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
             }
-            rawLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
+            rawLayoutParams.setMargins(CELL_MARGIN, 0, CELL_MARGIN, 0);
+            tableLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
+
 
             RecentMedia recentMedia;
             // loop to produce full raws filled in, with an icon folder in last cell
@@ -593,7 +594,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 // detect raw is complete
                 if (0 == (itemIndex % GALLERY_COLUMN_COUNT)) {
                     if (null != tableRow) {
-                        mGalleryTableLayout.addView(tableRow);
+                        mGalleryTableLayout.addView(tableRow, tableLayoutParams);
                     }
                     tableRow = new TableRow(this);
                 }
@@ -608,7 +609,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         imageView.setImageURI(recentMedia.mFileUri);
                     }
 
-                    imageView.setBackgroundColor(getResources().getColor(android.R.color.black));
+                    imageView.setBackgroundColor(Color.BLACK);
                     imageView.setScaleType(scaleType);
                     final RecentMedia finalRecentMedia = recentMedia;
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -640,7 +641,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
             // do not forget to add last row
             if (null != tableRow) {
-                mGalleryTableLayout.addView(tableRow/*, tableLayoutParams*/);
+                mGalleryTableLayout.addView(tableRow, tableLayoutParams);
             }
 
             mGalleryTableLayout.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_in_left));
@@ -657,7 +658,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // display the image as preview
         if (null != aMediaItem.mThumbnail) {
-            // non jpeg flow (ie png)
             updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_GALLERY);
             mImagePreviewImageView.setImageBitmap(aMediaItem.mThumbnail);
             // save bitmap to speed up UI restore (life cycle)
@@ -737,6 +737,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     private Bitmap createPhotoThumbnail(final String aImageUrl) {
         Bitmap bitmapRetValue = null;
+        final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
 
         // sanity check
         if(null != aImageUrl) {
@@ -758,7 +759,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     FileInputStream imageStream = new FileInputStream(new File(filename));
 
                     // create a thumbnail
-                    InputStream stream = ImageUtils.resizeImage(imageStream, 1024, 0, 100);
+                    InputStream stream = ImageUtils.resizeImage(imageStream, MAX_SIZE, SAMPLE_SIZE, QUALITY);
                     imageStream.close();
 
                     Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
@@ -766,9 +767,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     // apply a rotation
                     android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
                     bitmapMatrix.postRotate(rotationAngle);
-                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), bitmapMatrix, false);
-
-                    bitmapRetValue = bitmap;
+                    bitmapRetValue = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), bitmapMatrix, false);
 
                     System.gc();
 
@@ -787,7 +786,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Display and prepare the image image preview. If the image has been rotated when saved
      * (ie. Samsung devices), the rotation is canceled before display.
      *
-     * @param aCameraImageUrl image ref
+     * @param aCameraImageUrl image from camera
      * @param aGalleryImageUri image ref as an Uri
      * @param aOrigin CAMERA or GALLERY
      */
