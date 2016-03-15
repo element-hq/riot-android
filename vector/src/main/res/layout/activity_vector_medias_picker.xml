@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="1000dp">
 
-            <!-- surfaceview: the height will be computed programmatically-->
+            <!-- texture view the height will be computed programmatically-->
             <RelativeLayout
                 android:id="@+id/medias_picker_camera_preview_layout"
                 android:layout_height="500dp"
@@ -25,8 +25,8 @@
                 android:layout_centerHorizontal="true">
 
                 <!-- SurfaceView is used to present a live camera preview -->
-                <SurfaceView
-                    android:id="@+id/medias_picker_surface_view"
+                <TextureView
+                    android:id="@+id/medias_picker_texture_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -47,7 +47,7 @@
                     android:id="@+id/medias_picker_switch_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/medias_picker_surface_view"
+                    android:layout_alignRight="@+id/medias_picker_texture_view"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
