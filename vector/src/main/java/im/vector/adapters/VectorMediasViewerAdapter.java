@@ -370,6 +370,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (mediaInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
             imageWebView.setVisibility(View.VISIBLE);
+            imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            imageWebView.getSettings().setJavaScriptEnabled(true);
+            imageWebView.getSettings().setLoadWithOverviewMode(true);
+            imageWebView.getSettings().setUseWideViewPort(true);
+            imageWebView.getSettings().setBuiltInZoomControls(true);
+
             videoLayout.setVisibility(View.GONE);
 
             final int rotationAngle = mediaInfo.mRotationAngle;
@@ -397,13 +403,6 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
             String css = computeCss(mediaUri, mMaxImageWidth, mMaxImageHeight, rotationAngle);
             final String viewportContent = "width=640";
-
-            imageWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            imageWebView.getSettings().setJavaScriptEnabled(true);
-            imageWebView.getSettings().setLoadWithOverviewMode(true);
-            imageWebView.getSettings().setUseWideViewPort(true);
-            imageWebView.getSettings().setBuiltInZoomControls(true);
-
             loadImage(imageWebView, Uri.parse(mediaUri), viewportContent, css);
             container.addView(view, 0);
         } else {
