@@ -47,8 +47,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -182,6 +180,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private TextView mNotificationsMessageTextView;
     private TextView mErrorMessageTextView;
     private String mLatestTypingMessage;
+
+    private MenuItem mResendUnsentMenuItem;
+    private MenuItem mResendDeleteMenuItem;
 
     // network events
     private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -730,6 +731,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_room, menu);
+
+        mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
+        mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+
         return true;
     }
 
@@ -747,12 +752,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             } catch (Exception e){
                 Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
             }
-        } else if (id ==  R.id.ic_action_room_settings) {
+        } else if (id == R.id.ic_action_room_settings) {
             // pop to the home activity
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
             VectorRoomActivity.this.startActivity(intent);
+        } else if (id == R.id.ic_action_room_resend_unsent) {
+            mVectorMessageListFragment.resendUnsentMessages();
+            refreshNotificationsArea();
+        } else if (id == R.id.ic_action_room_delete_unsent) {
+            mVectorMessageListFragment.deleteUnsentMessages();
+            refreshNotificationsArea();
         }
 
         return super.onOptionsItemSelected(item);
@@ -1662,6 +1673,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         boolean isErrorIconDisplayed = false;
         SpannableString notificationsText = null;
         SpannableString errorText = null;
+        boolean hasUnsentEvent = false;
 
         //  no network
         if (!Matrix.getInstance(this).isConnected()) {
@@ -1672,6 +1684,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         } else {
             Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
             if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
+                hasUnsentEvent = true;
                 isAreaVisible = true;
                 isErrorIconDisplayed = true;
 
@@ -1684,7 +1697,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mVectorMessageListFragment.resendUnsent();
+                        mVectorMessageListFragment.resendUnsentMessages();
                         refreshNotificationsArea();
                     }
                 });
@@ -1704,6 +1717,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         // error
         mErrorIcon.setVisibility(isErrorIconDisplayed? View.VISIBLE : View.INVISIBLE);
         mErrorMessageTextView.setText(errorText);
+
+        //
+        if (null != mResendUnsentMenuItem) {
+            mResendUnsentMenuItem.setVisible(hasUnsentEvent);
+        }
+
+        if (null != mResendDeleteMenuItem) {
+            mResendDeleteMenuItem.setVisible(hasUnsentEvent);
+        }
     }
 
     private void onRoomTypings() {

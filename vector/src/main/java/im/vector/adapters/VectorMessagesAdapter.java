@@ -159,7 +159,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      */
     @Override
     protected String getFormattedTimestamp(Event event) {
-        return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
+        if (event.isValidOriginServerTs()) {
+            return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
+        } else {
+            return " ";
+        }
     }
 
     @Override
@@ -202,13 +206,43 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             super.notifyDataSetChanged();
         }
 
+        // the event with invalid timestamp must be pushed at the end of the history
+        this.setNotifyOnChange(false);
+        ArrayList<MessageRow> undeliverableEvents = null;
+
+        for(int i = 0; i < getCount(); i++) {
+            MessageRow row = getItem(i);
+
+            if ((null != row.getEvent()) && !row.getEvent().isValidOriginServerTs()) {
+                if (null == undeliverableEvents) {
+                    undeliverableEvents = new ArrayList<MessageRow>();
+                }
+                undeliverableEvents.add(row);
+                this.remove(row);
+                i--;
+            }
+        }
+
+        if (null != undeliverableEvents) {
+            this.addAll(undeliverableEvents);
+        }
+
+        this.setNotifyOnChange(true);
+
         // build messages timestamps
         ArrayList<Date> dates = new ArrayList<Date>();
 
+        Date latestDate = AdapterUtils.zeroTimeDate(new Date());
+
         for(int index = 0; index < this.getCount(); index++) {
             MessageRow row = getItem(index);
-            Event msg = row.getEvent();
-            dates.add(AdapterUtils.zeroTimeDate(new Date(msg.getOriginServerTs())));
+            Event event = row.getEvent();
+
+            if (event.isValidOriginServerTs()) {
+                latestDate = AdapterUtils.zeroTimeDate(new Date(event.getOriginServerTs()));
+            }
+
+            dates.add(latestDate);
         }
 
         synchronized (this) {

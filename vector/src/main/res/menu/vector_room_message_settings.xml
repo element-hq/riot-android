@@ -22,7 +22,7 @@
 
     <item
         android:id="@+id/ic_action_vector_resend_message"
-        android:icon="@drawable/ic_material_send"
+        android:icon="@drawable/ic_material_send_black"
         android:title="@string/resend"
         app:showAsAction="never" />
 

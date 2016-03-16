@@ -8,6 +8,16 @@
         android:icon="@drawable/ic_material_search_white"
         app:showAsAction="always" />
 
+    <item android:id="@+id/ic_action_room_resend_unsent"
+        android:title="@string/room_resend_unsent_messages"
+        android:icon="@drawable/ic_material_send_black"
+        app:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/ic_action_room_delete_unsent"
+        android:title="@string/room_delete_unsent_messages"
+        android:icon="@drawable/ic_material_delete"
+        app:showAsAction="collapseActionView" />
+
     <item android:id="@+id/ic_action_room_settings"
         android:title="@string/room_details_title"
         android:icon="@drawable/ic_material_settings_small"
