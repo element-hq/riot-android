@@ -16,9 +16,6 @@
 
 package im.vector.fragments;
 
-import android.app.ActionBar;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
