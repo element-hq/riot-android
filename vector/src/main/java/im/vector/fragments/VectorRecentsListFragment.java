@@ -30,6 +30,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -675,35 +676,42 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             // show a spinner
             showWaitingView();
 
+            // restore the listener because the room tag event could be sent before getting the replaceTag response.
+            mIsWaitingTagOrderEcho = true;
+            mSession.getDataHandler().addListener(mEventsListener);
+
             // and work
             room.replaceTag(oldTag, newtag, tagOrder, new ApiCallback<Void>() {
-                private void onReplaceDone() {
+
+                @Override
+                public void onSuccess(Void info) {
                     hideWaitingView();
                     stopDragAndDropMode();
                 }
 
-                @Override
-                public void onSuccess(Void info) {
-                    mIsWaitingTagOrderEcho = true;
-                    onReplaceDone();
+                private void onReplaceFails(String errorMessage) {
+                    mIsWaitingTagOrderEcho = false;
+                    hideWaitingView();
+                    stopDragAndDropMode();
+
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    // TODO display a message ?
-                    onReplaceDone();
+                    onReplaceFails(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    // TODO display a message ?
-                    onReplaceDone();
+                    onReplaceFails(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    // TODO display a message ?
-                    onReplaceDone();
+                    onReplaceFails(e.getLocalizedMessage());
                 }
             });
         }
