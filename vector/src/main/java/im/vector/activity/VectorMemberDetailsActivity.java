@@ -145,19 +145,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 });
             }
         }
-
-        /**
-         * User presences was synchronized..
-         */
-        @Override
-        public void onPresencesSyncComplete() {
-            VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    updatePresenceInfoUi();
-                }
-            });
-        }
     };
 
     // Room action listeners. Every time an action is detected the UI must be updated.
