@@ -665,6 +665,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
 
         View showMoreView = convertView.findViewById(R.id.roomSummaryAdapter_show_more_layout);
+        View actionClickArea = convertView.findViewById(R.id.roomSummaryAdapter_action_click_area);
 
         // directory management
         if (mDirectoryGroupPosition == groupPosition) {
@@ -676,6 +677,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             separatorView.setVisibility(View.GONE);
             separatorGroupView.setVisibility(View.VISIBLE);
             showMoreView.setVisibility(View.VISIBLE);
+            actionClickArea.setVisibility(View.GONE);
 
             roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
@@ -758,6 +760,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         final String fRoomId = childRoom.getRoomId();
 
         if (childRoom.isInvited()) {
+            actionClickArea.setVisibility(View.GONE);
+
             joinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -780,14 +784,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             final boolean isFavorite = groupPosition == mFavouritesGroupPosition;
             final boolean isLowPrior = groupPosition == mLowPriorGroupPosition;
 
-            actionView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
-                }
-            });
-
-            timestampTxtView.setOnClickListener(new View.OnClickListener() {
+            actionClickArea.setVisibility(View.VISIBLE);
+            actionClickArea.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
