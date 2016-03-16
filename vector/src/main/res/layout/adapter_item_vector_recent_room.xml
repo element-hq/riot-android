@@ -51,8 +51,7 @@
             android:layout_marginLeft="17dp"
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/room_avatar_image_view"
-            android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout"
-            >
+            android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -128,6 +127,12 @@
             </RelativeLayout>
 
         </LinearLayout>
+
+        <View
+            android:id="@+id/roomSummaryAdapter_action_click_area"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
     <!-- invitation section -->

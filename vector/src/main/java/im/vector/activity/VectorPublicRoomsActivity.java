@@ -34,9 +34,10 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
     private static final String TAG_FRAGMENT_PUBLIC_ROOMS_LIST = "VectorPublicRoomsActivity.TAG_FRAGMENT_PUBLIC_ROOMS_LIST";
 
-    public static final String EXTRA_PUBLIC_ROOMS_LIST_ID = "VectorPublicRoomsActivity.EXTRA_PUBLIC_ROOMS_LIST_ID";
-
     private VectorPublicRoomsListFragment mVectorPublicRoomsListFragment;
+
+    // cannot send the public rooms list in parameters because it might trigger a stackoverflow
+    public static ArrayList<PublicRoom> mPublicRooms = new ArrayList<PublicRoom>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +51,21 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
         Intent intent = getIntent();
 
         MXSession session = getSession(intent);
-        ArrayList<PublicRoom> publicrooms =(ArrayList<PublicRoom>)intent.getSerializableExtra(EXTRA_PUBLIC_ROOMS_LIST_ID) ;
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorPublicRoomsListFragment = (VectorPublicRoomsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_PUBLIC_ROOMS_LIST);
 
         if (null == mVectorPublicRoomsListFragment) {
-            mVectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, publicrooms);
+            mVectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, mPublicRooms);
             fm.beginTransaction().add(R.id.layout_public__rooms_list, mVectorPublicRoomsListFragment, TAG_FRAGMENT_PUBLIC_ROOMS_LIST).commit();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // reset the list to reduce memory usage
+        mPublicRooms = new ArrayList<PublicRoom>();
     }
 }
 
