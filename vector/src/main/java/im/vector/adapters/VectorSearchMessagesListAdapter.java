@@ -142,6 +142,10 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         EventDisplay display = new EventDisplay(mContext, event, (null != room) ? room.getLiveState() : null);
         CharSequence text = display.getTextualDisplay();
 
+        if (null == text) {
+            text = "";
+        }
+
         try {
             highlightPattern(bodyTextView, new SpannableString(text), mPattern);
         } catch (Exception e) {
