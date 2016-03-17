@@ -19,10 +19,12 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.media.MediaActionSound;
 import android.net.Uri;
@@ -35,7 +37,9 @@ import im.vector.view.RecentMediaLayout;
 
 import android.hardware.Camera;
 import android.os.HandlerThread;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
@@ -56,10 +60,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
@@ -76,6 +81,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI = "TAKEN_IMAGE_GALLERY_URI";
     private static final String KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL = "TAKEN_IMAGE_CAMERA_URL";
     private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
+    private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
 
     private final int IMAGE_ORIGIN_CAMERA = 1;
     private final int IMAGE_ORIGIN_GALLERY = 2;
@@ -101,8 +107,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     // recents medias list
-    private final ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
-    private final ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
+    private final ArrayList<RecentMedia> mMediaStoreImagesList = new ArrayList<>();
+    private final ArrayList<RecentMedia> mSelectedGalleryItemsList = new ArrayList<>();
 
     // camera object
     private Camera mCamera;
@@ -111,7 +117,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     // graphical items
     private ImageView mSwitchCameraImageView;
-    private ImageView mExitActivityImageView;
 
     // camera preview and gallery selection layout
     private View mPreviewScrollView;
@@ -121,12 +126,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private TextureView mCameraTextureView;
     private SurfaceTexture mSurfaceTexture;
 
-    private View mShootedImagePreviewLayout;
+    private View mImagePreviewLayout;
     private ImageView mImagePreviewImageView;
     private RelativeLayout mPreviewAndGalleryLayout;
-    private int mGalleryRawCount;
     private int mGalleryImageCount;
-    private int mScreenHeight;
     private int mScreenWidth;
 
     // lifecycle management variable
@@ -155,12 +158,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // camera preview
         mPreviewScrollView = findViewById(R.id.medias_picker_scrollView);
         mSwitchCameraImageView = (ImageView) findViewById(R.id.medias_picker_switch_camera);
-        mExitActivityImageView = (ImageView) findViewById(R.id.medias_picker_exit);
         mCameraTextureView =  (TextureView) findViewById(R.id.medias_picker_texture_view);
         mCameraTextureView.setSurfaceTextureListener(this);
 
         // image preview
-        mShootedImagePreviewLayout = findViewById(R.id.medias_picker_preview);
+        mImagePreviewLayout = findViewById(R.id.medias_picker_preview);
         mImagePreviewImageView = (ImageView) findViewById(R.id.medias_picker_preview_image_view);
         mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
         mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
@@ -179,7 +181,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.takeImage();
+                VectorMediasPickerActivity.this.onClickTakeImage();
             }
         });
 
@@ -187,7 +189,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         findViewById(R.id.medias_picker_cancel_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.reTakeImage();
+                VectorMediasPickerActivity.this.cancelTakeImage();
             }
         });
 
@@ -205,58 +207,58 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
 
-        if(false == restoreInstanceState(savedInstanceState)){
+        if(!restoreInstanceState(savedInstanceState)){
             // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
         }
     }
 
     /**
-     * Init the camera layout to fill the screen size.
+     * Init the camera layout to make the surface texture + the gallery layout, both
+     * enough large to enable scrolling.
      */
     private void initCameraLayout() {
-        // fix the surfaceView size and its container size
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mScreenHeight = metrics.heightPixels;
+        int screenHeight = metrics.heightPixels;
         mScreenWidth = metrics.widthPixels;
 
-        mCameraPreviewHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+        mCameraPreviewHeight = (int)(screenHeight * SURFACE_VIEW_HEIGHT_RATIO);
 
-        // the height of the relative layout containing the texture view
+        // set the height of the relative layout containing the texture view
         mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
         ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
         previewLayoutParams.height = mCameraPreviewHeight;
         mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
-        // define the gallery height: height of the surfaceview + height of the gallery (total sum > screen height to allow scrolling)
+        // set the height of the layout including the texture view and the gallery (total sum > screen height to allow scrolling)
         mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
-        computeGalleryHeight();
+        computePreviewAndGalleryHeight();
     }
 
     /**
-     * Compute the height of the view containing the texture view and the table layout.
+     * Compute the height of the view containing the texture and the table layout.
      * This height is the sum of mCameraPreviewHeight + gallery height.
-     *
+     * The gallery height depends of the number of the gallery rows {@link #getGalleryRowsCount()}).
      */
-    private void computeGalleryHeight() {
-        mGalleryRawCount = getGalleryRowsCount();
+    private void computePreviewAndGalleryHeight() {
+        int galleryRowsCount = getGalleryRowsCount();
 
         if(null != mPreviewAndGalleryLayout) {
             ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
-            int galleryHeight = (mGalleryRawCount * mScreenWidth / GALLERY_COLUMN_COUNT);
+            int galleryHeight = (galleryRowsCount * mScreenWidth / GALLERY_COLUMN_COUNT);
             previewAndGalleryLayoutParams.height = mCameraPreviewHeight + galleryHeight;
             mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
         }
         else
-            Log.w(LOG_TAG, "## computeGalleryHeight(): GalleryTable height not set");
+            Log.w(LOG_TAG, "## computePreviewAndGalleryHeight(): GalleryTable height not set");
     }
 
     /**
-     * mExitActivityImageView handler. The activity is finished.
+     * Exit activity handler.
      * @param aView view
      */
-    public void onExitButton(View aView) {
+    public void onExitButton(@SuppressWarnings("UnusedParameters") View aView) {
         finish();
     }
 
@@ -287,12 +289,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // update the gallery height, to follow
         // the content of the device gallery
-        computeGalleryHeight();
+        computePreviewAndGalleryHeight();
 
         // update gallery content
         refreshRecentsMediasList();
 
-        //
         startCameraPreview();
     }
 
@@ -333,7 +334,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     mImagePreviewImageView.setImageBitmap(savedBitmap);
                 } else {
                     // image preview from gallery or camera (mShootedPicturePath)
-                    displayAndRotatePreviewImageAsync(mShootedPicturePath, uriImage, mTakenImageOrigin);
+                    displayImagePreview(mShootedPicturePath, uriImage, mTakenImageOrigin);
                 }
             }
 
@@ -347,7 +348,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * Result handler associated to {@Link #openFileExplorer()} request.
+     * Result handler associated to {@link #openFileExplorer()} request.
      * This method returns the selected image to the calling activity.
      *
      * @param requestCode request ID
@@ -362,7 +363,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_MEDIAS) {
                 // provide the Uri
-                //Bundle conData = new Bundle();
                 Intent intent = new Intent();
                 intent.setData(data.getData());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -379,8 +379,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * Populate mRecentsMedias with the images retrieved from the MediaStore.
-     * Max number of retrieved images is set to 12.
+     * Populate mMediaStoreImagesList with the images retrieved from the MediaStore.
+     * Max number of retrieved images is set to GALLERY_TABLE_ITEM_SIZE.
      */
     private void addImagesThumbnails() {
         final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
@@ -425,15 +425,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                         // Note: getThumbnailUriFromMediaStorage() can return null for non jpeg images (ie png).
                         // We could then use the bitmap(mThumbnail)) that is never null, but with no rotation applied
-                        mRecentsMedias.add(recentMedia);
+                        mMediaStoreImagesList.add(recentMedia);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## addImagesThumbnails(): Msg=" + e.getMessage());
                     }
                 } while (thumbnailsCursor.moveToNext());
             }
+            thumbnailsCursor.close();
         }
 
-        Log.d(LOG_TAG, "## addImagesThumbnails(): Added count=" + mRecentsMedias.size());
+        Log.d(LOG_TAG, "## addImagesThumbnails(): Added count=" + mMediaStoreImagesList.size());
     }
 
     private int getMediaStoreImageCount(){
@@ -447,11 +448,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     null,
                     MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "addImagesThumbnails" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getLocalizedMessage());
         }
 
         if (null != thumbnailsCursor) {
             retValue = thumbnailsCursor.getCount();
+            thumbnailsCursor.close();
         }
 
         return retValue;
@@ -481,7 +483,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setEnabled(false);
         mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
 
-        mRecentsMedias.clear();
+        mMediaStoreImagesList.clear();
 
         // run away from the UI thread
         mFileHandler.post(new Runnable() {
@@ -490,7 +492,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 // populate the image thumbnails from multimedia store
                 addImagesThumbnails();
 
-                Collections.sort(mRecentsMedias, new Comparator<RecentMedia>() {
+                Collections.sort(mMediaStoreImagesList, new Comparator<RecentMedia>() {
                     @Override
                     public int compare(RecentMedia r1, RecentMedia r2) {
                         long t1 = r1.mCreationTime;
@@ -557,7 +559,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // loop to produce full raws filled in, with an icon folder in last cell
             for(itemIndex=0; itemIndex<mGalleryImageCount; itemIndex++) {
                 try {
-                    recentMedia = mRecentsMedias.get(itemIndex);
+                    recentMedia = mMediaStoreImagesList.get(itemIndex);
                 } catch (IndexOutOfBoundsException e) {
                     recentMedia = null;
                 }
@@ -595,7 +597,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     recentImageView.enableMediaTypeLogoImage(!MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
                     recentImageView.setIsVideo(recentMedia.mMimeType.contains(MIME_TYPE_IMAGE));
 
-                    tableRow.addView(recentImageView, rawLayoutParams);
+                    if(null != tableRow)
+                        tableRow.addView(recentImageView, rawLayoutParams);
                 }
             }
 
@@ -614,12 +617,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 tableRow = new TableRow(this);
             }
 
-            tableRow.addView(recentImageView, rawLayoutParams);
+            if(null != tableRow)
+                tableRow.addView(recentImageView, rawLayoutParams);
 
             // do not forget to add last row
-            if (null != tableRow) {
+            if (null != tableRow)
                 mGalleryTableLayout.addView(tableRow, tableLayoutParams);
-            }
 
         } else {
             Log.w(LOG_TAG, "## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
@@ -630,7 +633,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCamera.stopPreview();
 
         // add the selected image to be returned by the activity
-        mSelectedRecents.add(aMediaItem);
+        mSelectedGalleryItemsList.add(aMediaItem);
 
         // display the image as preview
         if (null != aMediaItem.mThumbnail) {
@@ -640,7 +643,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             VectorApp.setSavedCameraImagePreview(aMediaItem.mThumbnail);
         } else if(null != aMediaItem.mFileUri) {
             // fall back in case bitmap is not available (unlikely..)
-            displayAndRotatePreviewImageAsync(null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
+            displayImagePreview(null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
         } else {
             Log.e(LOG_TAG, "## onClickGalleryImage(): no image to display");
         }
@@ -652,7 +655,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Take a picture of the current preview
      */
-    private void takeImage() {
+    private void onClickTakeImage() {
         if (null != mCamera) {
             mCamera.autoFocus(new Camera.AutoFocusCallback() {
                 public void onAutoFocus(boolean success, Camera camera) {
@@ -662,12 +665,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             @Override
                             public void onPictureTaken(byte[] data, Camera camera) {
                                 ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-                                File dstFile = new File(getCacheDir().getAbsolutePath(), "edited.jpg");
+                                File dstFile = null;
+                                String fileName = getSavedImageName();
 
                                 // remove any previously saved image
-                                if (dstFile.exists()) {
-                                    dstFile.delete();
+                                if(!TextUtils.isEmpty(fileName)){
+                                    dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+                                    if (dstFile.exists()) {
+                                        dstFile.delete();
+                                    }
                                 }
+
+                                // get new name
+                                fileName = buildNewImageName();
+                                dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
 
                                 // Copy source file to destination
                                 FileOutputStream outputStream = null;
@@ -684,7 +695,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                                     }
 
                                     mShootedPicturePath = dstFile.getAbsolutePath();
-                                    displayAndRotatePreviewImageAsync(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
+                                    displayImagePreview(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
 
                                     // force to stop preview:
                                     // some devices do not stop preview after the picture was taken (ie. G6 edge)
@@ -692,6 +703,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                                 } catch (Exception e) {
                                     Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 } finally {
+
                                     // Close resources
                                     try {
                                         if (inputStream != null)
@@ -709,6 +721,31 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 }
             });
         }
+    }
+
+
+    private String buildNewImageName(){
+        String nameRetValue = null;
+
+        // build name based on the date
+        //String fileSufixTime = DateFormat.getDateTimeInstance().format(new Date());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hhmmss") ;
+        String fileSufixTime = dateFormat.format(new Date());
+        //fileSufixTime += "_"+ (SystemClock.uptimeMillis()/1000);
+        nameRetValue = "VectorImage_"+fileSufixTime+".jpg";
+
+        // save new name in preference
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, nameRetValue);
+        editor.commit();
+
+        return nameRetValue;
+    }
+
+    private String getSavedImageName(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, null);
     }
 
     /**
@@ -771,7 +808,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param aGalleryImageUri image ref as an Uri
      * @param aOrigin CAMERA or GALLERY
      */
-    private void displayAndRotatePreviewImageAsync(final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
+    private void displayImagePreview(final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
         final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
@@ -826,19 +863,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mIsTakenImageDisplayed = aIsTakenImageDisplayed;
         mTakenImageOrigin = aImageOrigin;
 
-        if (false == aIsTakenImageDisplayed) {
+        if (!aIsTakenImageDisplayed) {
             // clear the selected image from the gallery (if any)
-            mSelectedRecents.clear();
+            mSelectedGalleryItemsList.clear();
         }
 
         if (aIsTakenImageDisplayed) {
-            mShootedImagePreviewLayout.setVisibility(View.VISIBLE);
+            mImagePreviewLayout.setVisibility(View.VISIBLE);
             mPreviewScrollView.setVisibility(View.GONE);
         }
         else {
             // the default UI: hide gallery preview, show the surface view
             mPreviewScrollView.setVisibility(View.VISIBLE);
-            mShootedImagePreviewLayout.setVisibility(View.GONE);
+            mImagePreviewLayout.setVisibility(View.GONE);
         }
     }
 
@@ -846,8 +883,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Start the camera preview
      */
     private void startCameraPreview() {
-        if (null != mCamera) {
-            mCamera.startPreview();
+        try {
+            if (null != mCamera) {
+                mCamera.startPreview();
+            }
+        } catch (Exception ex){
+            Log.w(LOG_TAG,"## startCameraPreview(): Exception Msg="+ ex.getMessage());
         }
     }
 
@@ -855,9 +896,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Cancel the current image preview, and setup the UI to
      * start a new image capture.
      */
-    private void reTakeImage() {
+    private void cancelTakeImage() {
         mShootedPicturePath = null;
-        mSelectedRecents.clear();
+        mSelectedGalleryItemsList.clear();
         VectorApp.setSavedCameraImagePreview(null);
 
         startCameraPreview();
@@ -930,16 +971,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Bundle conData = new Bundle();
         Intent intent = new Intent();
 
-        if ((mSelectedRecents.size() == 1) || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) {
+        if ((mSelectedGalleryItemsList.size() == 1) || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) {
             // provide the Uri
-            intent.setData(mSelectedRecents.get(0).mFileUri);
-        } else if (mSelectedRecents.size() > 0) {
-            ClipData.Item firstUri = new ClipData.Item(null, null, null, mSelectedRecents.get(0).mFileUri);
+            intent.setData(mSelectedGalleryItemsList.get(0).mFileUri);
+        } else if (mSelectedGalleryItemsList.size() > 0) {
+            ClipData.Item firstUri = new ClipData.Item(null, null, null, mSelectedGalleryItemsList.get(0).mFileUri);
             String[] mimeType = { "*/*" };
             ClipData clipData = new ClipData("", mimeType, firstUri);
 
-            for(int index = 1; index < mSelectedRecents.size(); index++) {
-                ClipData.Item item = new ClipData.Item(null, null, null, mSelectedRecents.get(index).mFileUri);
+            for(int index = 1; index < mSelectedGalleryItemsList.size(); index++) {
+                ClipData.Item item = new ClipData.Item(null, null, null, mSelectedGalleryItemsList.get(index).mFileUri);
                 clipData.addItem(item);
             }
             intent.setClipData(clipData);
@@ -1065,6 +1106,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // set jpeg quality
         try {
+            params.setPictureFormat(ImageFormat.JPEG);
             params.setJpegQuality(JPEG_QUALITY_MAX);
             mCamera.setParameters(params);
         } catch (Exception e) {
@@ -1088,7 +1130,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // cannot start the cam
         if (null == mCamera) {
-            Log.w(LOG_TAG,"## surfaceCreated() camera creation failed");
+            Log.w(LOG_TAG,"## onSurfaceTextureAvailable() camera creation failed");
             return;
         }
 
@@ -1098,7 +1140,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             initCameraSettings();
 
             Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
-            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 
             //  Valid values are 0, 90, 180, and 270 (0 = landscape)
             if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
@@ -1130,20 +1171,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 layout.height = newHeight;
                 mCameraTextureView.setLayoutParams(layout);
 
-
                 if (layout.height < mCameraPreviewHeight) {
                     mCameraPreviewHeight = layout.height;
 
-                    // the height of the relative layout containing the texture view
-                    mCameraPreviewLayout = (RelativeLayout) findViewById(R.id.medias_picker_camera_preview_layout);
-                    RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams) mCameraPreviewLayout.getLayoutParams();
-                    previewLayoutParams.height = mCameraPreviewHeight;
-
-                    mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+                    // set the height of the relative layout containing the texture view
+                    if(null != mCameraPreviewLayout) {
+                        RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams)mCameraPreviewLayout.getLayoutParams();
+                        previewLayoutParams.height = mCameraPreviewHeight;
+                        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+                    }
 
                     // define the gallery height: height of the texture view + height of the gallery (total sum > screen height to allow scrolling)
-                    mPreviewAndGalleryLayout = (RelativeLayout) findViewById(R.id.medias_picker_preview_gallery_layout);
-                    computeGalleryHeight();
+                    computePreviewAndGalleryHeight();
                 }
             }
 
