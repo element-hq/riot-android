@@ -12,12 +12,22 @@
         android:adjustViewBounds="true"/>
 
     <ImageView
+        android:id="@+id/media_gif_type_view"
+        android:background="@android:color/white"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/filetype_gif"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"/>
+
+    <ImageView
         android:background="#FFF"
         android:id="@+id/media_type_view"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
 
     <View
         android:layout_width="1dp"

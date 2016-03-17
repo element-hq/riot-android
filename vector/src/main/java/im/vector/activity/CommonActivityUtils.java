@@ -75,6 +75,10 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 public class CommonActivityUtils {
     private static final String LOG_TAG = "CommonActivityUtils";
 
+    /** Mime types **/
+    public static final  String MIME_TYPE_IMAGE_ALL = "image/*";
+    public static final  String MIME_TYPE_ALL_CONTENT = "*/*";
+
     // global helper constants:
     /** The view is visible **/
     public static final float UTILS_OPACITY_NONE = 1f;

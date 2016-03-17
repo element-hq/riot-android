@@ -19,6 +19,23 @@
         <item name="android:windowBackground">@color/vector_activity_background_color</item>
     </style>
 
+
+    <!-- NoActionBar + FullScreen -->
+    <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <!-- activities background -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- ActionBar + FullScreen -->
+    <style name="AppTheme.ActionBar.FullScreen" parent="@style/AppTheme.NoActionBar.FullScreen">
+        <!-- show the action bar -->
+        <item name="android:windowActionBar">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <!-- toolbar styles-->
     <style name="VectorToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/vector_actionbar_background</item>

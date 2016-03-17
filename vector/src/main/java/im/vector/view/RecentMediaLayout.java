@@ -17,6 +17,7 @@ package im.vector.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,9 +27,10 @@ import im.vector.R;
 
 public class RecentMediaLayout extends RelativeLayout {
 
-    ImageView mThumbnailView;
-    ImageView mTypeView;
-    View mSelectedItemView;
+    private ImageView mThumbnailView;
+    private ImageView mTypeView;
+    private View mSelectedItemView;
+    private ImageView mGifLogoImageView;
 
     public RecentMediaLayout(Context context) {
         super(context);
@@ -51,6 +53,7 @@ public class RecentMediaLayout extends RelativeLayout {
 
         mThumbnailView = (ImageView)findViewById(R.id.media_thumbnail_view);
         mTypeView = (ImageView)findViewById(R.id.media_type_view);
+        mGifLogoImageView = (ImageView)findViewById(R.id.media_gif_type_view);
         mSelectedItemView = findViewById(R.id.media_selected_mask_view);
         mSelectedItemView.setVisibility(View.GONE);
     }
@@ -72,10 +75,22 @@ public class RecentMediaLayout extends RelativeLayout {
 
     /**
      * Update the layout thumbnail.
-     * @param thumnail the thumbnail
+     * @param thumbnail the thumbnail
      */
-    public void setThumbnail(Bitmap thumnail) {
-        mThumbnailView.setImageBitmap(thumnail);
+    public void setThumbnail(Bitmap thumbnail) {
+        mThumbnailView.setImageBitmap(thumbnail);
+    }
+
+    public void setThumbnailByUri(Uri aThumbnailUri) {
+        mThumbnailView.setImageURI(aThumbnailUri);
+    }
+
+    public void setThumbnailByResource(int aThumbnailResource) {
+        mThumbnailView.setImageResource(aThumbnailResource);
+    }
+
+    public void setThumbnailScaleType(ImageView.ScaleType aScaleType) {
+        mThumbnailView.setScaleType(aScaleType);
     }
 
     /**
@@ -83,6 +98,28 @@ public class RecentMediaLayout extends RelativeLayout {
      * @param isVideo true to display the view type thumbnail
      */
     public void setIsVideo(Boolean isVideo) {
-        mTypeView.setImageResource(isVideo ? R.drawable.ic_material_movie  : R.drawable.ic_material_photo);
+        mTypeView.setImageResource(isVideo ? R.drawable.ic_material_movie : R.drawable.ic_material_photo);
+    }
+
+    public void enableMediaTypeLogoImage(Boolean aIsTypeDisplayed) {
+        mTypeView.setVisibility(aIsTypeDisplayed ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * Enable the display of the gif logo
+     * @param aIsGifImage true to display the logo, false otherwise
+     * @return the value of aIsGifImage
+     */
+    public boolean enableGifLogoImage(Boolean aIsGifImage) {
+        mGifLogoImageView.setVisibility(aIsGifImage ? View.VISIBLE : View.GONE);
+        return aIsGifImage;
+    }
+
+    /**
+     * Return the gif logo presence information.
+     * @return true if the logo gif is displayed, false otherwise
+     */
+    public boolean isGifImage() {
+        return (mGifLogoImageView.getVisibility()==View.VISIBLE)?true:false;
     }
 }

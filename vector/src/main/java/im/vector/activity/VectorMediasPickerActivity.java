@@ -19,50 +19,81 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.CamcorderProfile;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
-import android.media.ThumbnailUtils;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ImageFormat;
+import android.graphics.SurfaceTexture;
+import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.view.RecentMediaLayout;
 
 import android.hardware.Camera;
 import android.os.HandlerThread;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.Toast;
-import android.widget.VideoView;
+
+import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
-public class VectorMediasPickerActivity extends MXCActionBarActivity implements SurfaceHolder.Callback {
+public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
     // medias folder
-    private static final int REQUEST_MEDIAS = 0;
+    private static final int REQUEST_MEDIAS = 54;
     private static final String LOG_TAG = "VectorMedPicker";
 
-    public static final String EXTRA_SINGLE_IMAGE_MODE = "im.vector.activity.VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE";
+    // public keys
+    public static final String EXTRA_SINGLE_IMAGE_MODE = "EXTRA_SINGLE_IMAGE_MODE";
+
+    // internal keys
+    private static final String KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED = "IS_TAKEN_IMAGE_DISPLAYED";
+    private static final String KEY_EXTRA_TAKEN_IMAGE_ORIGIN = "TAKEN_IMAGE_ORIGIN";
+    private static final String KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI = "TAKEN_IMAGE_GALLERY_URI";
+    private static final String KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL = "TAKEN_IMAGE_CAMERA_URL";
+    private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
+    private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
+
+    private final int IMAGE_ORIGIN_CAMERA = 1;
+    private final int IMAGE_ORIGIN_GALLERY = 2;
+    private final boolean UI_SHOW_TAKEN_IMAGE = true;
+    private final boolean UI_SHOW_CAMERA_PREVIEW = false;
+    private final int GALLERY_COLUMN_COUNT = 4;
+    private final int GALLERY_RAW_COUNT = 3;
+    private final double SURFACE_VIEW_HEIGHT_RATIO = 0.95;
+    private final int GALLERY_TABLE_ITEM_SIZE = (GALLERY_COLUMN_COUNT * GALLERY_RAW_COUNT);
+    private final int JPEG_QUALITY_MAX = 100;
+    private final String MIME_TYPE_IMAGE_GIF = "image/gif";
+    private final String MIME_TYPE_IMAGE = "image";
 
     /**
      * define a recent media
@@ -70,54 +101,49 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private class RecentMedia {
         public Uri mFileUri;
         public long mCreationTime;
-        public Bitmap mThumbnail = null;
-        public Boolean mIsvideo = false;
-        public RecentMediaLayout mRecentMediaLayout = null;
+        public Bitmap mThumbnail;
+        public Boolean mIsVideo;
+        public String mMimeType = "";
     }
 
     // recents medias list
-    private ArrayList<RecentMedia> mRecentsMedias = new ArrayList<RecentMedia>();
-    private ArrayList<RecentMedia> mSelectedRecents = new ArrayList<RecentMedia>();
+    private final ArrayList<RecentMedia> mMediaStoreImagesList = new ArrayList<>();
+    private final ArrayList<RecentMedia> mSelectedGalleryItemsList = new ArrayList<>();
 
     // camera object
-    private Camera mCamera = null;
-    // start with back camera
-    private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private Camera mCamera;
+    private int mCameraId;
+    private int mCameraOrientation = 0;
 
     // graphical items
-    ImageView mSwitchCameraImageView = null;
-    ImageView mRecordModeImageView = null;
+    private ImageView mSwitchCameraImageView;
 
-    TextView mCaptureTitleTextView = null;
-    ImageView mTakePhotoImageView = null;
-    SurfaceHolder mCameraSurfaceHolder = null;
-    SurfaceView mCameraSurfaceView = null;
-    ImageView mCameraDefaultView = null;
-    Button mRetakeButton = null;
-    Button mAttachImageButton = null;
-    Button mOpenLibraryButton = null;
-    Button mUseImagesListButton = null;
-    LinearLayout mRecentsListView = null;
-    HorizontalScrollView mRecentsScrollView = null;
-    VideoView mVideoView = null;
+    // camera preview and gallery selection layout
+    private View mPreviewScrollView;
+    private ImageView mTakeImageView;
+    private TableLayout mGalleryTableLayout;
+    private RelativeLayout mCameraPreviewLayout;
+    private TextureView mCameraTextureView;
+    private SurfaceTexture mSurfaceTexture;
 
-    //
-    MediaRecorder mMediaRecorder = null;
+    private View mImagePreviewLayout;
+    private ImageView mImagePreviewImageView;
+    private RelativeLayout mPreviewAndGalleryLayout;
+    private int mGalleryImageCount;
+    private int mScreenWidth;
 
-    private String mShootedPicturePath = null;
-    private String mRecordedVideoPath = null;
-    private Boolean mIsPreviewStarted = false;
+    // lifecycle management variable
+    private boolean mIsTakenImageDisplayed;
+    private int mTakenImageOrigin;
 
-    static private Boolean mIsSingleImageMode = false;
-    static private Boolean mIsPhotoMode = true;
-
-    int mCameraOrientation = 0;
+    private String mShootedPicturePath;
+    private int mCameraPreviewHeight = 0;
 
     /**
      * The recent requests are performed in a dedicated thread
      */
-    private HandlerThread mHandlerThread = null;
-    private android.os.Handler mFileHandler = null;
+    private HandlerThread mHandlerThread;
+    private android.os.Handler mFileHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,91 +153,118 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_medias_picker);
+        mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
-        // retrieving item from UI
+        // camera preview
+        mPreviewScrollView = findViewById(R.id.medias_picker_scrollView);
         mSwitchCameraImageView = (ImageView) findViewById(R.id.medias_picker_switch_camera);
-        mCameraSurfaceView = (SurfaceView) findViewById(R.id.medias_picker_surface_view);
-        mCameraDefaultView = (ImageView) findViewById(R.id.medias_picker_preview);
-        mRetakeButton = (Button) findViewById(R.id.medias_picker_retake_button);
-        mTakePhotoImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
-        mAttachImageButton = (Button) findViewById(R.id.medias_picker_attach1_button);
-        mOpenLibraryButton = (Button) findViewById(R.id.medias_picker_library_button);
-        mUseImagesListButton = (Button) findViewById(R.id.medias_picker_attach2_button);
-        mRecentsListView = (LinearLayout) findViewById(R.id.medias_picker_recents_listview);
-        mRecentsScrollView = (HorizontalScrollView) findViewById(R.id.medias_picker_recents_scrollview);
-        mRecordModeImageView = (ImageView) findViewById(R.id.medias_picker_recording_mode);
-        mVideoView = (VideoView) findViewById(R.id.medias_picker_video_view);
-        mCaptureTitleTextView = (TextView) findViewById(R.id.medias_picker_camera_title);
+        mCameraTextureView =  (TextureView) findViewById(R.id.medias_picker_texture_view);
+        mCameraTextureView.setSurfaceTextureListener(this);
 
-        Intent intent = getIntent();
-        mIsSingleImageMode = intent.hasExtra(EXTRA_SINGLE_IMAGE_MODE);
+        // image preview
+        mImagePreviewLayout = findViewById(R.id.medias_picker_preview);
+        mImagePreviewImageView = (ImageView) findViewById(R.id.medias_picker_preview_image_view);
+        mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
+        mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
 
-        if (mIsSingleImageMode) {
-            mRecordModeImageView.setVisibility(View.INVISIBLE);
-        }
+        //
+        mSwitchCameraImageView.setVisibility((Camera.getNumberOfCameras() > 1) ? View.VISIBLE : View.GONE);
 
         // click action
         mSwitchCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.switchCamera();
+                VectorMediasPickerActivity.this.onSwitchCamera();
             }
         });
 
-        mTakePhotoImageView.setOnClickListener(new View.OnClickListener() {
+        mTakeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.takePicture();
+                VectorMediasPickerActivity.this.onClickTakeImage();
             }
         });
 
-        mRetakeButton.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.medias_picker_cancel_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.retake();
+                VectorMediasPickerActivity.this.cancelTakeImage();
             }
         });
 
-        mAttachImageButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.medias_picker_attach_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.attachImage();
+                VectorMediasPickerActivity.this.attachImageFrom(mTakenImageOrigin);
             }
         });
 
-        mOpenLibraryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VectorMediasPickerActivity.this.openFileExplorer();
-            }
-        });
+        initCameraLayout();
 
-        mUseImagesListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VectorMediasPickerActivity.this.attachCarouselMedias();
-            }
-        });
-
-        mRecordModeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsPhotoMode = !mIsPhotoMode;
-                VectorMediasPickerActivity.this.manageButtons();
-            }
-        });
-
+        // setup separate thread for image gallery update
         mHandlerThread = new HandlerThread("VectorMediasPickerActivityThread");
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
+
+        if(!restoreInstanceState(savedInstanceState)){
+            // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
+            updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
+        }
+    }
+
+    /**
+     * Init the camera layout to make the surface texture + the gallery layout, both
+     * enough large to enable scrolling.
+     */
+    private void initCameraLayout() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenHeight = metrics.heightPixels;
+        mScreenWidth = metrics.widthPixels;
+
+        mCameraPreviewHeight = (int)(screenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+
+        // set the height of the relative layout containing the texture view
+        mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
+        ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
+        previewLayoutParams.height = mCameraPreviewHeight;
+        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+
+        // set the height of the layout including the texture view and the gallery (total sum > screen height to allow scrolling)
+        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
+        computePreviewAndGalleryHeight();
+    }
+
+    /**
+     * Compute the height of the view containing the texture and the table layout.
+     * This height is the sum of mCameraPreviewHeight + gallery height.
+     * The gallery height depends of the number of the gallery rows {@link #getGalleryRowsCount()}).
+     */
+    private void computePreviewAndGalleryHeight() {
+        int galleryRowsCount = getGalleryRowsCount();
+
+        if(null != mPreviewAndGalleryLayout) {
+            ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
+            int galleryHeight = (galleryRowsCount * mScreenWidth / GALLERY_COLUMN_COUNT);
+            previewAndGalleryLayoutParams.height = mCameraPreviewHeight + galleryHeight;
+            mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
+        }
+        else
+            Log.w(LOG_TAG, "## computePreviewAndGalleryHeight(): GalleryTable height not set");
+    }
+
+    /**
+     * Exit activity handler.
+     * @param aView view
+     */
+    public void onExitButton(@SuppressWarnings("UnusedParameters") View aView) {
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        stopVideoPlayer();
-        stopVideoRecord();
 
         if (null != mHandlerThread) {
             mHandlerThread.quit();
@@ -219,150 +272,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    /**
-     * Enable user interactivity
-     * @param view the view
-     */
-    private void enableView(View view) {
-        view.setEnabled(true);
-        view.setAlpha(1.0f);
-    }
-
-    /**
-     * Disable user interactivity
-     * @param view the view
-     */
-    private void disableView(View view) {
-        view.setEnabled(false);
-        view.setAlpha(0.5f);
-    }
-
-    /**
-     * Manage the buttons status
-     */
-    private void manageButtons() {
-
-        // avoid having an empty area
-        if ((null == mCamera) && (null == mRecordedVideoPath)) {
-            mCameraDefaultView.setVisibility(View.VISIBLE);
-            mCameraSurfaceView.setVisibility(View.GONE);
-            mVideoView.setVisibility(View.GONE);
-        } else if (null != mRecordedVideoPath) {
-            mCameraSurfaceView.setVisibility(View.GONE);
-            mVideoView.setVisibility(View.VISIBLE);
-        } else {
-            mCameraDefaultView.setVisibility(View.GONE);
-            mCameraSurfaceView.setVisibility(View.VISIBLE);
-            mVideoView.setVisibility(View.GONE);
-        }
-
-        // no camera
-        if ((null == mCamera) && (null == mRecordedVideoPath)) {
-            disableView(mRecordModeImageView);
-            disableView(mTakePhotoImageView);
-            disableView(mRetakeButton);
-            disableView(mAttachImageButton);
-            disableView(mSwitchCameraImageView);
-        } else if (null != mMediaRecorder)  {
-            enableView(mTakePhotoImageView);
-            disableView(mRetakeButton);
-            disableView(mAttachImageButton);
-            disableView(mSwitchCameraImageView);
-            disableView(mRecordModeImageView);
-        } else if (null != mRecordedVideoPath) {
-            enableView(mTakePhotoImageView);
-            enableView(mRetakeButton);
-            enableView(mAttachImageButton);
-            enableView(mSwitchCameraImageView);
-            enableView(mRecordModeImageView);
-        } else if (null == mShootedPicturePath) {
-            enableView(mTakePhotoImageView);
-            disableView(mRetakeButton);
-            disableView(mAttachImageButton);
-            enableView(mSwitchCameraImageView);
-            enableView(mRecordModeImageView);
-        } else {
-            disableView(mTakePhotoImageView);
-            enableView(mRetakeButton);
-            enableView(mAttachImageButton);
-            disableView(mSwitchCameraImageView);
-            disableView(mSwitchCameraImageView);
-        }
-
-        // must have more than 2 cameras
-        if (2 > Camera.getNumberOfCameras()) {
-            disableView(mSwitchCameraImageView);
-        }
-
-        // selection from the media list
-        if (mSelectedRecents.size() > 0)  {
-            enableView(mUseImagesListButton);
-        } else {
-            disableView(mUseImagesListButton);
-        }
-
-        // manage the take picture button
-        if (mIsPhotoMode) {
-            mRecordModeImageView.setImageResource(R.drawable.ic_material_camera);
-            mTakePhotoImageView.setImageResource(R.drawable.ic_material_camera);
-            mCaptureTitleTextView.setText(R.string.media_picker_picture_capture_title);
-        } else {
-            mCaptureTitleTextView.setText(R.string.media_picker_video_capture_title);
-            mRecordModeImageView.setImageResource(R.drawable.ic_material_videocam);
-            // playing mode
-            if (mVideoView.getVisibility() == View.VISIBLE) {
-                if (mVideoView.isPlaying()) {
-                    mTakePhotoImageView.setImageResource(R.drawable.ic_material_stop);
-                } else {
-                    mTakePhotoImageView.setImageResource(R.drawable.ic_material_play_circle);
-                }
-            } else if (null != mMediaRecorder) {
-                // stop the record
-                mTakePhotoImageView.setImageResource(R.drawable.ic_material_stop);
-            } else {
-                // wait that the user start the video recording
-                mTakePhotoImageView.setImageResource(R.drawable.ic_material_videocam);
-            }
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
-        stopVideoPlayer();
 
         // cancel the camera use
         // to avoid locking it
         if (null != mCamera) {
             mCamera.stopPreview();
-            mIsPreviewStarted = false;
-            manageButtons();
-        }
-    }
-
-    private int getCarouselItemWidth() {
-        return mRecentsScrollView.getLayoutParams().height;
-    }
-
-    private void startCameraPreview() {
-        // should always be true
-        if (null == mCamera) {
-            // check if the device has at least camera
-            if (Camera.getNumberOfCameras() > 0) {
-                mVideoView.setVisibility(View.GONE);
-                mCameraDefaultView.setVisibility(View.GONE);
-                mCameraSurfaceView.setVisibility(View.VISIBLE);
-
-                if (null == mCameraSurfaceHolder) {
-                    mCameraSurfaceHolder = mCameraSurfaceView.getHolder();
-                    mCameraSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-                    mCameraSurfaceHolder.setSizeFromLayout();
-                    mCameraSurfaceHolder.addCallback(VectorMediasPickerActivity.this);
-                }
-            }
-        } else {
-            mCamera.startPreview();
-            manageButtons();
         }
     }
 
@@ -370,33 +287,74 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     protected void onResume() {
         super.onResume();
 
-        if (0 == mRecentsMedias.size()) {
-            refreshRecentsMediasList();
-        }
+        // update the gallery height, to follow
+        // the content of the device gallery
+        computePreviewAndGalleryHeight();
 
-        // should always be true
-        if (null == mCamera) {
-            startCameraPreview();
-        } else {
-            if ((null == mShootedPicturePath) && (null == mRecordedVideoPath)) {
-                try {
-                    mCamera.startPreview();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "mCamera.startPreview failed " + e.getLocalizedMessage());
+        // update gallery content
+        refreshRecentsMediasList();
 
-                    // the preview cannot be resumed close this activity
-                    VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            VectorMediasPickerActivity.this.finish();
-                        }
-                    });
-                }
-            }
-            manageButtons();
-        }
+        startCameraPreview();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save camera UI configuration
+        outState.putBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED, mIsTakenImageDisplayed);
+        outState.putInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN, mTakenImageOrigin);
+        outState.putInt(KEY_EXTRA_CAMERA_SIDE, mCameraId);
+
+        // save image preview that may be currently displayed:
+        // -camera flow
+        outState.putString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL, mShootedPicturePath);
+        // -gallery flow
+        Uri uriImage = (Uri) mImagePreviewImageView.getTag();
+        outState.putParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI, uriImage);
+    }
+
+    private boolean restoreInstanceState(Bundle savedInstanceState) {
+        boolean isRestoredInstance = false;
+        if(null != savedInstanceState){
+            isRestoredInstance = true;
+            mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
+            mShootedPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL);
+            mTakenImageOrigin = savedInstanceState.getInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN);
+
+            // restore gallery image preview (the image can be saved from the preview even after rotation)
+            Uri uriImage = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI);
+            mImagePreviewImageView.setTag(uriImage);
+
+            // display a preview image?
+            if(mIsTakenImageDisplayed) {
+                Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
+                if (null != savedBitmap) {
+                    // image preview from camera only
+                    mImagePreviewImageView.setImageBitmap(savedBitmap);
+                } else {
+                    // image preview from gallery or camera (mShootedPicturePath)
+                    displayImagePreview(mShootedPicturePath, uriImage, mTakenImageOrigin);
+                }
+            }
+
+            // restore UI display
+            updateUiConfiguration(mIsTakenImageDisplayed, mTakenImageOrigin);
+
+            // general data to be restored
+            mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
+        }
+        return isRestoredInstance;
+    }
+
+    /**
+     * Result handler associated to {@link #openFileExplorer()} request.
+     * This method returns the selected image to the calling activity.
+     *
+     * @param requestCode request ID
+     * @param resultCode operation status
+     * @param data data passed from the called activity
+     */
     @SuppressLint("NewApi")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -405,13 +363,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_MEDIAS) {
                 // provide the Uri
-                Bundle conData = new Bundle();
                 Intent intent = new Intent();
                 intent.setData(data.getData());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     intent.setClipData(data.getClipData());
                 }
-                intent.putExtras(conData);
+                // clean footprint in App
+                VectorApp.setSavedCameraImagePreview(null);
+
+                //intent.putExtras(conData);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -419,19 +379,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * List the existing images thumbnails
-     * @param maxLifetime the max image lifetime
+     * Populate mMediaStoreImagesList with the images retrieved from the MediaStore.
+     * Max number of retrieved images is set to GALLERY_TABLE_ITEM_SIZE.
      */
-    private void addImagesThumbnails(long maxLifetime) {
-        final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN};
+    private void addImagesThumbnails() {
+        final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
         Cursor thumbnailsCursor = null;
 
         try {
             thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     projection, // Which columns to return
-                    null,       // Return all rows
+                    null,       // Return all image files
                     null,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
             Log.e(LOG_TAG, "addImagesThumbnails" + e.getLocalizedMessage());
         }
@@ -439,157 +399,118 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if (null != thumbnailsCursor) {
             int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
             int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+            int mimeTypeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
 
             if (thumbnailsCursor.moveToFirst()) {
                 do {
                     try {
                         RecentMedia recentMedia = new RecentMedia();
-                        recentMedia.mIsvideo = false;
+                        recentMedia.mIsVideo = false;
 
                         String id = thumbnailsCursor.getString(idIndex);
                         String dateAsString = thumbnailsCursor.getString(timeIndex);
+                        recentMedia.mMimeType = thumbnailsCursor.getString(mimeTypeIndex);
                         recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
-                        if ((maxLifetime > 0) && ((System.currentTimeMillis() - recentMedia.mCreationTime) > maxLifetime)) {
-                            break;
-                        }
-
-                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MICRO_KIND, null);
+                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
                         recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
-                        if (null != recentMedia.mThumbnail) {
-                            mRecentsMedias.add(recentMedia);
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
+
+                        if (0 != rotationAngle) {
+                            android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                            bitmapMatrix.postRotate(rotationAngle);
+                            recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
                         }
+
+                        // Note: getThumbnailUriFromMediaStorage() can return null for non jpeg images (ie png).
+                        // We could then use the bitmap(mThumbnail)) that is never null, but with no rotation applied
+                        mMediaStoreImagesList.add(recentMedia);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "addImagesThumbnails 2" + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "## addImagesThumbnails(): Msg=" + e.getMessage());
                     }
                 } while (thumbnailsCursor.moveToNext());
             }
             thumbnailsCursor.close();
         }
+
+        Log.d(LOG_TAG, "## addImagesThumbnails(): Added count=" + mMediaStoreImagesList.size());
     }
 
-    /**
-     * List the existing video thumbnails
-     * @param maxLifetime the max image lifetime
-     */
-    private void addVideoThumbnails(long maxLifetime) {
-        final String[] projection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN};
+    private int getMediaStoreImageCount(){
+        int retValue = 0;
         Cursor thumbnailsCursor = null;
 
-
         try {
-            thumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    projection, // Which columns to return
-                    null,       // Return all rows
+            thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    null, // no projection
                     null,
-                    MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC");
+                    null,
+                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "addVideoThumbnails" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getLocalizedMessage());
         }
 
         if (null != thumbnailsCursor) {
-            int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN);
-            int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Video.VideoColumns._ID);
-
-            if (thumbnailsCursor.moveToFirst()) {
-                do {
-                    try {
-                        RecentMedia recentMedia = new RecentMedia();
-                        recentMedia.mIsvideo = true;
-
-                        String id = thumbnailsCursor.getString(idIndex);
-                        String dateAsString = thumbnailsCursor.getString(timeIndex);
-                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
-
-                        if ((maxLifetime > 0) && ((System.currentTimeMillis() - recentMedia.mCreationTime) > maxLifetime)) {
-                            break;
-                        }
-                        recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MICRO_KIND, null);
-                        recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
-
-                        if (null != recentMedia.mThumbnail) {
-                            mRecentsMedias.add(recentMedia);
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "addVideoThumbnails 2" + e.getLocalizedMessage());
-                    }
-                } while (thumbnailsCursor.moveToNext());
-            }
+            retValue = thumbnailsCursor.getCount();
             thumbnailsCursor.close();
         }
+
+        return retValue;
+    }
+
+    private int getGalleryRowsCount() {
+        int rowsCountRetVal = 0;
+
+        mGalleryImageCount = getMediaStoreImageCount();
+        if((0==mGalleryImageCount) || (0 != (mGalleryImageCount%GALLERY_COLUMN_COUNT))) {
+            rowsCountRetVal = (mGalleryImageCount/GALLERY_COLUMN_COUNT) +1;
+        } else {
+            rowsCountRetVal = mGalleryImageCount/GALLERY_COLUMN_COUNT;
+            mGalleryImageCount--; // save one cell for the folder icon
+        }
+
+        return rowsCountRetVal;
     }
 
     /**
-     * Refresh the recent medias
+     * Populate the gallery view with the image/video contents.
      */
     private void refreshRecentsMediasList() {
-        // the last 30 days
-        final long maxLifetime = 1000L * 60L * 60L * 24L * 30L;
+        // start the pregress bar and disable the take button
+        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
+        progressBar.setVisibility(View.VISIBLE);
+        mTakeImageView.setEnabled(false);
+        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
 
-        mRecentsListView.removeAllViews();
-        mRecentsMedias.clear();
+        mMediaStoreImagesList.clear();
 
+        // run away from the UI thread
         mFileHandler.post(new Runnable() {
             @Override
             public void run() {
-                addImagesThumbnails(maxLifetime);
+                // populate the image thumbnails from multimedia store
+                addImagesThumbnails();
 
-                if (!mIsSingleImageMode) {
-                    addVideoThumbnails(maxLifetime);
+                Collections.sort(mMediaStoreImagesList, new Comparator<RecentMedia>() {
+                    @Override
+                    public int compare(RecentMedia r1, RecentMedia r2) {
+                        long t1 = r1.mCreationTime;
+                        long t2 = r2.mCreationTime;
 
-                    Collections.sort(mRecentsMedias, new Comparator<RecentMedia>() {
-                        @Override
-                        public int compare(RecentMedia r1, RecentMedia r2) {
-                            long t1 = r1.mCreationTime;
-                            long t2 = r2.mCreationTime;
+                        // sort from the most recent
+                        return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
+                    }
+                });
 
-                            // sort from the most recent
-                            return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
-                        }
-                    });
-                }
-
+                // update the UI part
                 VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int itemWidth = getCarouselItemWidth();
-
-                        for (RecentMedia recentMedia : mRecentsMedias) {
-                            final RecentMediaLayout recentMediaLayout = new RecentMediaLayout(VectorMediasPickerActivity.this);
-
-                            recentMediaLayout.setThumbnail(recentMedia.mThumbnail);
-                            recentMediaLayout.setIsVideo(recentMedia.mIsvideo);
-
-                            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(itemWidth, ViewGroup.LayoutParams.MATCH_PARENT);
-                            recentMediaLayout.setLayoutParams(params);
-
-                            recentMedia.mRecentMediaLayout = recentMediaLayout;
-                            mRecentsListView.addView(recentMediaLayout, params);
-
-                            final RecentMedia frecentMedia = recentMedia;
-
-                            recentMediaLayout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // unselect it ?
-                                    if (recentMediaLayout.isSelected()) {
-                                        mSelectedRecents.remove(frecentMedia);
-                                    } else {
-                                        // single image mode : disable any previously selected image
-                                        if ((mIsSingleImageMode || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) && (mSelectedRecents.size() > 0)) {
-                                            mSelectedRecents.get(0).mRecentMediaLayout.setIsSelected(false);
-                                            mSelectedRecents.clear();
-                                        }
-
-                                        mSelectedRecents.add(frecentMedia);
-                                    }
-
-                                    recentMediaLayout.setIsSelected(!recentMediaLayout.isSelected());
-                                    VectorMediasPickerActivity.this.manageButtons();
-                                }
-                            });
-                        }
+                        buildGalleryImageTableLayout();
+                        progressBar.setVisibility(View.GONE);
+                        mTakeImageView.setEnabled(true);
+                        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
                     }
                 });
             }
@@ -597,213 +518,420 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * Stop the video player
+     * Build the image gallery widget programmatically.
      */
-    private void stopVideoPlayer() {
-        if ((null != mVideoView) && mVideoView.isPlaying()) {
-            mVideoView.stopPlayback();
+    private void buildGalleryImageTableLayout() {
+        final int CELL_MARGIN = 2;
+        TableRow tableRow = null;
+        RecentMediaLayout recentImageView = null;
+        int tableLayoutWidth = 0;
+        int cellWidth = 0;
+        int cellHeight = 0;
+        int itemIndex = 0;
+        ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
+        TableRow.LayoutParams rawLayoutParams = null;
+        TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
+
+        if(null != mGalleryTableLayout) {
+            mGalleryTableLayout.removeAllViews();
+            mGalleryTableLayout.setBackgroundColor(Color.WHITE);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            tableLayoutWidth = metrics.widthPixels;
+
+            // raw layout configuration
+            cellWidth = tableLayoutWidth / GALLERY_COLUMN_COUNT;
+            cellHeight = cellWidth;
+            if(0 == tableLayoutWidth) {
+                // fall back
+                scaleType = ImageView.ScaleType.FIT_XY;
+                rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            } else {
+                scaleType = ImageView.ScaleType.FIT_CENTER;
+                rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
+            }
+            rawLayoutParams.setMargins(CELL_MARGIN, 0, CELL_MARGIN, 0);
+            tableLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
+
+
+            RecentMedia recentMedia;
+            // loop to produce full raws filled in, with an icon folder in last cell
+            for(itemIndex=0; itemIndex<mGalleryImageCount; itemIndex++) {
+                try {
+                    recentMedia = mMediaStoreImagesList.get(itemIndex);
+                } catch (IndexOutOfBoundsException e) {
+                    recentMedia = null;
+                }
+
+                // detect raw is complete
+                if (0 == (itemIndex % GALLERY_COLUMN_COUNT)) {
+                    if (null != tableRow) {
+                        mGalleryTableLayout.addView(tableRow, tableLayoutParams);
+                    }
+                    tableRow = new TableRow(this);
+                }
+
+                // build the content layout for each cell
+                if(null != recentMedia) {
+                    recentImageView = new RecentMediaLayout(this);
+
+                    if (null != recentMedia.mThumbnail) {
+                        recentImageView.setThumbnail(recentMedia.mThumbnail);
+                    } else {
+                        recentImageView.setThumbnailByUri(recentMedia.mFileUri);
+                    }
+
+                    recentImageView.setBackgroundColor(Color.BLACK);
+                    recentImageView.setThumbnailScaleType(scaleType);
+                    final RecentMedia finalRecentMedia = recentMedia;
+                    recentImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onClickGalleryImage(finalRecentMedia);
+                        }
+                    });
+
+                    // set image logo: gif, image or video
+                    recentImageView.enableGifLogoImage(MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
+                    recentImageView.enableMediaTypeLogoImage(!MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
+                    recentImageView.setIsVideo(recentMedia.mMimeType.contains(MIME_TYPE_IMAGE));
+
+                    if(null != tableRow)
+                        tableRow.addView(recentImageView, rawLayoutParams);
+                }
+            }
+
+            // add the icon folder in last cell
+            recentImageView = new RecentMediaLayout(this);
+            recentImageView.setThumbnailScaleType(scaleType);
+            recentImageView.setThumbnailByResource(R.drawable.ic_material_folder_green_vector);
+            recentImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openFileExplorer();
+                }
+            });
+
+            if(0 == itemIndex) {
+                tableRow = new TableRow(this);
+            }
+
+            if(null != tableRow)
+                tableRow.addView(recentImageView, rawLayoutParams);
+
+            // do not forget to add last row
+            if (null != tableRow)
+                mGalleryTableLayout.addView(tableRow, tableLayoutParams);
+
+        } else {
+            Log.w(LOG_TAG, "## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
         }
     }
 
-    /**
-     * Stop the video recorder
-     */
-    private void stopVideoRecord() {
-        if (null != mMediaRecorder) {
-            try {
-                mMediaRecorder.stop();
-                mMediaRecorder.reset();
-            } catch (Exception e) {
-            }
+    private void onClickGalleryImage(final RecentMedia aMediaItem){
+        mCamera.stopPreview();
+
+        // add the selected image to be returned by the activity
+        mSelectedGalleryItemsList.add(aMediaItem);
+
+        // display the image as preview
+        if (null != aMediaItem.mThumbnail) {
+            updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_GALLERY);
+            mImagePreviewImageView.setImageBitmap(aMediaItem.mThumbnail);
+            // save bitmap to speed up UI restore (life cycle)
+            VectorApp.setSavedCameraImagePreview(aMediaItem.mThumbnail);
+        } else if(null != aMediaItem.mFileUri) {
+            // fall back in case bitmap is not available (unlikely..)
+            displayImagePreview(null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
+        } else {
+            Log.e(LOG_TAG, "## onClickGalleryImage(): no image to display");
         }
 
-        mMediaRecorder = null;
+        // save the uri to be accessible for life cycle management
+        mImagePreviewImageView.setTag(aMediaItem.mFileUri);
     }
 
     /**
      * Take a picture of the current preview
      */
-    void takePicture() {
-        // a video is recorded
-        if (null != mRecordedVideoPath) {
-            // play
-            if (mVideoView.isPlaying()) {
-                mVideoView.stopPlayback();
-                refreshVideoThumbnail(true);
-            } else {
-                refreshVideoThumbnail(false);
-                mVideoView.start();
+    private void onClickTakeImage() {
+        if (null != mCamera) {
+            mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                public void onAutoFocus(boolean success, Camera camera) {
+                    if (success) {
+                        playShutterSound();
+                        mCamera.takePicture(null, null, new Camera.PictureCallback() {
+                            @Override
+                            public void onPictureTaken(byte[] data, Camera camera) {
+                                ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+                                File dstFile = null;
+                                String fileName = getSavedImageName();
 
-                mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        if (null != mRecordedVideoPath) {
-                            manageButtons();
-                            refreshVideoThumbnail(true);
-                        }
-                    }
-                });
-            }
-            manageButtons();
-        } else if (null != mCamera) {
-            if (mIsPhotoMode) {
-                mCamera.takePicture(null, null, new Camera.PictureCallback() {
-                    @Override
-                    public void onPictureTaken(byte[] data, Camera camera) {
-                        ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-                        File dstFile = new File(getCacheDir().getAbsolutePath(), "edited.jpg");
-
-                        // remove any previously saved image
-                        if (dstFile.exists()) {
-                            dstFile.delete();
-                        }
-
-                        // Copy source file to destination
-                        FileOutputStream outputStream = null;
-                        try {
-                            // create only the
-                            if (!dstFile.exists()) {
-                                dstFile.createNewFile();
-
-                                outputStream = new FileOutputStream(dstFile);
-
-                                byte[] buffer = new byte[1024 * 10];
-                                int len;
-                                while ((len = inputStream.read(buffer)) != -1) {
-                                    outputStream.write(buffer, 0, len);
-                                }
-                            }
-                            mShootedPicturePath = dstFile.getAbsolutePath();
-                            manageButtons();
-                        } catch (Exception e) {
-                            Toast.makeText(VectorMediasPickerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            // Close resources
-                            try {
-                                if (inputStream != null) inputStream.close();
-                                if (outputStream != null) outputStream.close();
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-                });
-            } else {
-                // video mode
-                File videoFile = new File(getCacheDir().getAbsolutePath(), "EditedVideo.mp4");
-
-                // not yet started
-                if (null == mMediaRecorder) {
-                    if (videoFile.exists()) {
-                        videoFile.delete();
-                    }
-
-                    try {
-                        mCamera.lock();
-                        mCamera.unlock();
-
-                        mMediaRecorder = new MediaRecorder();
-                        mMediaRecorder.setCamera(mCamera);
-                        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-                        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
-                        mMediaRecorder.setProfile(cpHigh);
-                        mMediaRecorder.setOrientationHint(mCameraOrientation);
-                        mMediaRecorder.setPreviewDisplay(mCameraSurfaceHolder.getSurface());
-                        mMediaRecorder.setOutputFile(videoFile.getAbsolutePath());
-                    } catch (Exception e) {
-                        stopVideoRecord();
-                        Toast.makeText(VectorMediasPickerActivity.this, "Cannot start the record" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e(LOG_TAG, "Cannot start the record" + e.getLocalizedMessage());
-                    }
-
-                    // the media recorder has been created
-                    if (null != mMediaRecorder) {
-                        try {
-                            mMediaRecorder.prepare();
-
-                            VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        mMediaRecorder.start();
-                                        manageButtons();
-                                    } catch (Exception e) {
-                                        stopVideoRecord();
-                                        Toast.makeText(VectorMediasPickerActivity.this, "Cannot start the record" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                        Log.e(LOG_TAG, "Cannot start the record" + e.getLocalizedMessage());
+                                // remove any previously saved image
+                                if(!TextUtils.isEmpty(fileName)){
+                                    dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+                                    if (dstFile.exists()) {
+                                        dstFile.delete();
                                     }
                                 }
-                            });
-                        } catch (Exception e) {
-                            stopVideoRecord();
-                            Toast.makeText(VectorMediasPickerActivity.this, "Cannot start the record" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e(LOG_TAG, "Cannot start the record" + e.getLocalizedMessage());
-                        }
-                    }
-                } else {
-                    stopVideoRecord();
 
-                    if (videoFile.exists()) {
-                        mRecordedVideoPath = videoFile.getAbsolutePath();
-                        mVideoView.setVideoPath(mRecordedVideoPath);
-                        manageButtons();
-                        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            public void onPrepared(MediaPlayer mp) {
-                                refreshVideoThumbnail(true);
+                                // get new name
+                                fileName = buildNewImageName();
+                                dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+
+                                // Copy source file to destination
+                                FileOutputStream outputStream = null;
+                                try {
+
+                                    dstFile.createNewFile();
+
+                                    outputStream = new FileOutputStream(dstFile);
+
+                                    byte[] buffer = new byte[1024 * 10];
+                                    int len;
+                                    while ((len = inputStream.read(buffer)) != -1) {
+                                        outputStream.write(buffer, 0, len);
+                                    }
+
+                                    mShootedPicturePath = dstFile.getAbsolutePath();
+                                    displayImagePreview(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
+
+                                    // force to stop preview:
+                                    // some devices do not stop preview after the picture was taken (ie. G6 edge)
+                                    mCamera.stopPreview();
+                                } catch (Exception e) {
+                                    Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                } finally {
+
+                                    // Close resources
+                                    try {
+                                        if (inputStream != null)
+                                            inputStream.close();
+
+                                        if (outputStream != null)
+                                            outputStream.close();
+                                    } catch (Exception e) {
+                                        Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
+                                    }
+                                }
                             }
                         });
                     }
                 }
-            }
+            });
         }
     }
 
-    @SuppressLint("NewApi")
-    private void refreshVideoThumbnail(boolean show) {
-        BitmapDrawable bitmapDrawable = null;
 
-        if (show && (null != mRecordedVideoPath)) {
-            Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mRecordedVideoPath, MediaStore.Images.Thumbnails.MINI_KIND);
-            bitmapDrawable = new BitmapDrawable(VectorMediasPickerActivity.this.getResources(), thumb);
+    private String buildNewImageName(){
+        String nameRetValue = null;
+
+        // build name based on the date
+        //String fileSufixTime = DateFormat.getDateTimeInstance().format(new Date());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hhmmss") ;
+        String fileSufixTime = dateFormat.format(new Date());
+        //fileSufixTime += "_"+ (SystemClock.uptimeMillis()/1000);
+        nameRetValue = "VectorImage_"+fileSufixTime+".jpg";
+
+        // save new name in preference
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, nameRetValue);
+        editor.commit();
+
+        return nameRetValue;
+    }
+
+    private String getSavedImageName(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, null);
+    }
+
+    /**
+     * Create a thumbnail bitmap from an image URL if there is some exif metadata which implies to rotate
+     * the image. This method is used to process the image taken by the from the camera.
+     * @param aImageUrl the image url
+     * @return a thumbnail if the exif metadata implies to rotate the image.
+     */
+    private Bitmap createPhotoThumbnail(final String aImageUrl) {
+        Bitmap bitmapRetValue = null;
+        final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
+
+        // sanity check
+        if(null != aImageUrl) {
+
+            Uri imageUri = Uri.fromFile(new File(aImageUrl));
+            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, imageUri);
+
+            // the exif metadata implies a rotation
+            if (0 != rotationAngle) {
+                // create a thumbnail
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                options.outWidth = -1;
+                options.outHeight = -1;
+
+                try {
+                    final String filename = imageUri.getPath();
+                    FileInputStream imageStream = new FileInputStream(new File(filename));
+
+                    // create a thumbnail
+                    InputStream stream = ImageUtils.resizeImage(imageStream, MAX_SIZE, SAMPLE_SIZE, QUALITY);
+                    imageStream.close();
+
+                    Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
+
+                    // apply a rotation
+                    android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                    bitmapMatrix.postRotate(rotationAngle);
+                    bitmapRetValue = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), bitmapMatrix, false);
+
+                    System.gc();
+
+                } catch (OutOfMemoryError e) {
+                    Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
+                }
+            }
         }
-        // display the video thumbnail
-        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
-            mVideoView.setBackground(bitmapDrawable);
+
+        return bitmapRetValue;
+    }
+
+    /**
+     * Display the image preview.
+     *
+     * @param aCameraImageUrl image from camera
+     * @param aGalleryImageUri image ref as an Uri
+     * @param aOrigin CAMERA or GALLERY
+     */
+    private void displayImagePreview(final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
+        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
+        progressBar.setVisibility(View.VISIBLE);
+        mTakeImageView.setEnabled(false);
+
+        Bitmap newBitmap = null;
+        Uri defaultUri = null;
+
+        if (IMAGE_ORIGIN_CAMERA == aOrigin) {
+            newBitmap = mCameraTextureView.getBitmap();
+            if (null == newBitmap) {
+                newBitmap = createPhotoThumbnail(aCameraImageUrl);
+            }
+            defaultUri = Uri.fromFile(new File(aCameraImageUrl));
         } else {
-            mVideoView.setBackgroundDrawable(bitmapDrawable);
+            // in gallery
+            defaultUri = aGalleryImageUri;
+        }
+
+        // save bitmap to speed up UI restore (life cycle)
+        VectorApp.setSavedCameraImagePreview(newBitmap);
+
+        // update the UI part
+        if (null != newBitmap) {// from camera
+            mImagePreviewImageView.setImageBitmap(newBitmap);
+        } else {
+            if(null != defaultUri) {
+                mImagePreviewImageView.setImageURI(defaultUri);
+            }
+        }
+
+        mTakeImageView.setEnabled(true);
+        updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
+        progressBar.setVisibility(View.GONE);
+    }
+
+
+    /**
+     * Update the UI according to camera action. Two UIs are displayed:
+     * the camera real time preview (default configuration) or the taken picture.
+     * (the taken picture comes from the camera or from the gallery)
+     *
+     * When the taken image is displayed, only two buttons are displayed: "attach"
+     * the current image or "re take"(cancel) another image with the camera.
+     * We also have to distinguish the origin of the taken image: from the camera
+     * or from the gallery.
+     *
+     * @param aIsTakenImageDisplayed true to display the taken image, false to show the camera preview
+     * @param aImageOrigin IMAGE_ORIGIN_CAMERA or IMAGE_ORIGIN_GALLERY
+     */
+    private void updateUiConfiguration(boolean aIsTakenImageDisplayed, int aImageOrigin){
+        // save current configuration for lifecyle management
+        mIsTakenImageDisplayed = aIsTakenImageDisplayed;
+        mTakenImageOrigin = aImageOrigin;
+
+        if (!aIsTakenImageDisplayed) {
+            // clear the selected image from the gallery (if any)
+            mSelectedGalleryItemsList.clear();
+        }
+
+        if (aIsTakenImageDisplayed) {
+            mImagePreviewLayout.setVisibility(View.VISIBLE);
+            mPreviewScrollView.setVisibility(View.GONE);
+        }
+        else {
+            // the default UI: hide gallery preview, show the surface view
+            mPreviewScrollView.setVisibility(View.VISIBLE);
+            mImagePreviewLayout.setVisibility(View.GONE);
         }
     }
 
     /**
-     * Cancel the taken image
+     * Start the camera preview
      */
-    void retake() {
-        stopVideoPlayer();
+    private void startCameraPreview() {
+        try {
+            if (null != mCamera) {
+                mCamera.startPreview();
+            }
+        } catch (Exception ex){
+            Log.w(LOG_TAG,"## startCameraPreview(): Exception Msg="+ ex.getMessage());
+        }
+    }
+
+    /**
+     * Cancel the current image preview, and setup the UI to
+     * start a new image capture.
+     */
+    private void cancelTakeImage() {
         mShootedPicturePath = null;
-        mRecordedVideoPath = null;
-        manageButtons();
+        mSelectedGalleryItemsList.clear();
+        VectorApp.setSavedCameraImagePreview(null);
 
         startCameraPreview();
+        // reset UI ot default: "take picture" button screen
+        updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
     }
 
     /**
-     * The taken image is accepted
+     * "attach image" dispatcher.
+     *
+     * @param aImageOrigin camera, otherwise gallery
      */
-    void attachImage() {
-        stopVideoPlayer();
+    private void attachImageFrom(int aImageOrigin) {
+        if(IMAGE_ORIGIN_CAMERA == aImageOrigin){
+            attachImageFromCamera();
+        }
+        else if(IMAGE_ORIGIN_GALLERY == aImageOrigin){
+            attachImageFrommGallery();
+        }
+        else {
+            Log.w(LOG_TAG,"## attachImageFrom(): unknown image origin");
+        }
+    }
 
+    /**
+     * Return the taken image from the camera to the calling activity.
+     * This method returns to the calling activity.
+     */
+    private void attachImageFromCamera() {
         try {
-            String uriString;
-
-            if (null != mShootedPicturePath) {
-                uriString = CommonActivityUtils.saveImageIntoGallery(this, new File(mShootedPicturePath));
-            } else {
-                uriString = CommonActivityUtils.saveIntoMovies(this, new File(mRecordedVideoPath));
-            }
-
             // sanity check
-            if (null != uriString) {
-                Uri uri = Uri.fromFile(new File(uriString));
+            if (null != mShootedPicturePath) {
+                Uri uri = Uri.fromFile(new File(mShootedPicturePath));
 
                 // provide the Uri
                 Bundle conData = new Bundle();
@@ -811,82 +939,103 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 intent.setData(uri);
                 intent.putExtras(conData);
                 setResult(RESULT_OK, intent);
-                finish();
             }
         } catch (Exception e) {
             setResult(RESULT_CANCELED, null);
+
+        } finally {
+            // clean footprint in App
+            VectorApp.setSavedCameraImagePreview(null);
             finish();
         }
     }
 
-    void openFileExplorer() {
-        stopVideoPlayer();
+    private void openFileExplorer() {
+        Intent fileIntent = new Intent(Intent.ACTION_PICK);
 
-        Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
-        // did not find a way to filter image and video files
-        fileIntent.setType(mIsSingleImageMode ? "image/*" : "*/*");
+        // no mime type filter to allow any kind of content
+        fileIntent.setType(CommonActivityUtils.MIME_TYPE_ALL_CONTENT);
         startActivityForResult(fileIntent, REQUEST_MEDIAS);
     }
 
+    /**
+     * Return the taken image from the gallery to the calling activity.
+     * This method returns to the calling activity.
+     */
     @SuppressLint("NewApi")
-    void attachCarouselMedias() {
+    private void attachImageFrommGallery() {
 
         Bundle conData = new Bundle();
         Intent intent = new Intent();
 
-        if ((mSelectedRecents.size() == 1) || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) {
+        if ((mSelectedGalleryItemsList.size() == 1) || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) {
             // provide the Uri
-            intent.setData(mSelectedRecents.get(0).mFileUri);
-        } else if (mSelectedRecents.size() > 0) {
-            ClipData.Item firstUri = new ClipData.Item(null, null, null, mSelectedRecents.get(0).mFileUri);
+            intent.setData(mSelectedGalleryItemsList.get(0).mFileUri);
+        } else if (mSelectedGalleryItemsList.size() > 0) {
+            ClipData.Item firstUri = new ClipData.Item(null, null, null, mSelectedGalleryItemsList.get(0).mFileUri);
             String[] mimeType = { "*/*" };
             ClipData clipData = new ClipData("", mimeType, firstUri);
 
-            for(int index = 1; index < mSelectedRecents.size(); index++) {
-                ClipData.Item item = new ClipData.Item(null, null, null, mSelectedRecents.get(index).mFileUri);
+            for(int index = 1; index < mSelectedGalleryItemsList.size(); index++) {
+                ClipData.Item item = new ClipData.Item(null, null, null, mSelectedGalleryItemsList.get(index).mFileUri);
                 clipData.addItem(item);
             }
             intent.setClipData(clipData);
+        } else {
+            // attach after a screen rotation, the file uri must was saved in the tag
+            Uri uriSavedFromLifeCycle = (Uri) mImagePreviewImageView.getTag();
+            if(null != uriSavedFromLifeCycle)
+                intent.setData(uriSavedFromLifeCycle);
         }
 
         intent.putExtras(conData);
         setResult(RESULT_OK, intent);
+        // clean footprint in App
+        VectorApp.setSavedCameraImagePreview(null);
         finish();
     }
 
     /**
      * Switch camera (front <-> back)
      */
-    void switchCamera() {
-        if (null != mCameraSurfaceHolder) {
-            mCamera.stopPreview();
+    private void onSwitchCamera() {
+        // can only switch if the device has more than two camera
+        if (Camera.getNumberOfCameras() >= 2) {
+
+            // stop camera
+            if (null != mCameraTextureView) {
+                mCamera.stopPreview();
+            }
+            mCamera.release();
+
+            if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+            } else {
+                mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+            }
+
+            mCamera = Camera.open(mCameraId);
+
+            // set the full quality picture, rotation angle
+            initCameraSettings();
+
+            try {
+                mCamera.setPreviewTexture(mSurfaceTexture);
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewTexture EXCEPTION Msg=" + e.getMessage());
+            }
+
+            mCamera.startPreview();
         }
-        mCamera.release();
-
-        if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
-            mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-        } else {
-            mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-        }
-
-        mCamera = Camera.open(mCameraId);
-
-        setCameraDisplayOrientation();
-
-        try {
-            mCamera.setPreviewDisplay(mCameraSurfaceHolder);
-        } catch (IOException e) {
-        }
-        mCamera.startPreview();
     }
 
     /**
      * Define the camera rotation (preview and recording).
      */
-    private void setCameraDisplayOrientation() {
+    private void initCameraSettings() {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(mCameraId, info);
 
@@ -913,105 +1062,159 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCamera.setDisplayOrientation(previewRotation);
 
         Camera.Parameters params = mCamera.getParameters();
+
+        // apply the rotation
         params.setRotation(imageRotation);
-        mCamera.setParameters(params);
+
+        // set the best quality
+        List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
+        if (supportedSizes.size() > 0) {
+
+            // search the highest image quality
+            // they are not always sorted in the same order (sometimes it is asc sort ..)
+            Camera.Size maxSizePicture = supportedSizes.get(0);
+            long mult = maxSizePicture.width * maxSizePicture.height;
+
+            for(int i = 1; i < supportedSizes.size(); i++) {
+                Camera.Size curSizePicture = supportedSizes.get(i);
+                long curMult = curSizePicture.width * curSizePicture.height;
+
+                if (curMult > mult) {
+                    mult = curMult;
+                    maxSizePicture = curSizePicture;
+                }
+            }
+
+            // and use it.
+            params.setPictureSize(maxSizePicture.width, maxSizePicture.height);
+        }
+
+        try {
+            mCamera.setParameters(params);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
+        }
+
+
+        // set auto focus
+        try {
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            mCamera.setParameters(params);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage());
+        }
+
+        // set jpeg quality
+        try {
+            params.setPictureFormat(ImageFormat.JPEG);
+            params.setJpegQuality(JPEG_QUALITY_MAX);
+            mCamera.setParameters(params);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
+        }
     }
 
+    private void playShutterSound() {
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
+    }
 
-    // SurfaceHolder.Callback
-    public void surfaceCreated(SurfaceHolder holder) {
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mCamera = Camera.open(mCameraId);
 
-        // the camera initialisation failed
+        // fall back: the camera initialisation failed
         if (null == mCamera) {
-            mCamera = Camera.open((
-                    Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
+            mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
         }
 
         // cannot start the cam
         if (null == mCamera) {
-            manageButtons();
+            Log.w(LOG_TAG,"## onSurfaceTextureAvailable() camera creation failed");
+            return;
         }
-    }
 
-    /**
-     * This is called immediately after any structural changes (format or
-     * size) have been made to the surface.  You should at this point update
-     * the imagery in the surface.  This method is always called at least
-     * once, after {@link #surfaceCreated}.
-     *
-     * @param holder The SurfaceHolder whose surface has changed.
-     * @param format The new PixelFormat of the surface.
-     * @param width The new width of the surface.
-     * @param height The new height of the surface.
-     */
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        if ((null != mCamera) && !mIsPreviewStarted) {
-            try {
-                mCameraSurfaceHolder = holder;
-                mCamera.setPreviewDisplay(mCameraSurfaceHolder);
-                setCameraDisplayOrientation();
+        try {
+            mSurfaceTexture = surface;
+            mCamera.setPreviewTexture(surface);
+            initCameraSettings();
 
-                Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
-                android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+            Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
 
-                if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
-                    int tmp = previewSize.width;
-                    previewSize.width = previewSize.height;
-                    previewSize.height = tmp;
+            //  Valid values are 0, 90, 180, and 270 (0 = landscape)
+            if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
+                int tmp = previewSize.width;
+                previewSize.width = previewSize.height;
+                previewSize.height = tmp;
+            }
+
+            // check that the aspect ratio is kept
+            int sourceRatio = previewSize.height * 100 / previewSize.width;
+            int dstRatio = height * 100 / width;
+
+            // the camera preview size must fit the size provided by the surface texture
+            if (sourceRatio != dstRatio) {
+                int newWidth;
+                int newHeight;
+
+                newHeight = height;
+                newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
+
+                if (newWidth > width) {
+                    newWidth = width;
+                    newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
                 }
 
-                // check that the aspect ratio is kept
-                int sourceRatio = previewSize.height * 100 / previewSize.width;
-                int dstRatio = height * 100 / width;
+                // apply the size provided by the texture to the texture layout
+                ViewGroup.LayoutParams layout = mCameraTextureView.getLayoutParams();
+                layout.width = newWidth;
+                layout.height = newHeight;
+                mCameraTextureView.setLayoutParams(layout);
 
-                if (sourceRatio != dstRatio) {
-                    int newWidth;
-                    int newHeight;
+                if (layout.height < mCameraPreviewHeight) {
+                    mCameraPreviewHeight = layout.height;
 
-                    newHeight = height;
-                    newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
-
-                    if (newWidth > width) {
-                        newWidth = width;
-                        newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
+                    // set the height of the relative layout containing the texture view
+                    if(null != mCameraPreviewLayout) {
+                        RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams)mCameraPreviewLayout.getLayoutParams();
+                        previewLayoutParams.height = mCameraPreviewHeight;
+                        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
                     }
 
-                    ViewGroup.LayoutParams layout = mCameraSurfaceView.getLayoutParams();
-                    layout.width = newWidth;
-                    layout.height = newHeight;
-                    mCameraSurfaceView.setLayoutParams(layout);
-                }
-                mCamera.startPreview();
-                mIsPreviewStarted = true;
-
-            } catch (Exception e) {
-                if (null != mCamera) {
-                    mCamera.stopPreview();
-                    mCamera.release();
-                    mCamera = null;
+                    // define the gallery height: height of the texture view + height of the gallery (total sum > screen height to allow scrolling)
+                    computePreviewAndGalleryHeight();
                 }
             }
 
-            manageButtons();
+            mCamera.startPreview();
+
+        } catch (Exception e) {
+            if (null != mCamera) {
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+            }
         }
     }
 
-    /**
-     * This is called immediately before a surface is being destroyed. After
-     * returning from this call, you should no longer try to access this
-     * surface.  If you have a rendering thread that directly accesses
-     * the surface, you must ensure that thread is no longer touching the
-     * Surface before returning from this function.
-     *
-     * @param holder The SurfaceHolder whose surface is being destroyed.
-     */
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        mIsPreviewStarted = false;
-        stopVideoRecord();
-        mCameraSurfaceHolder = null;
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width="+width+" height="+height);
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         mCamera.stopPreview();
         mCamera.release();
+        mSurfaceTexture = null;
         mCamera = null;
+        return true;
     }
+
+    // *********************************************************************************************
 }

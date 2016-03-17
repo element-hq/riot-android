@@ -215,7 +215,8 @@
             android:label="@string/media_picker_both_capture_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
