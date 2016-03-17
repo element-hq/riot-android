@@ -116,7 +116,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
         catch(ClassCastException e) {
             // if host activity does not provide the implementation, just ignore it
-            Log.w(LOG_TAG,"## onAttach(): host activity does not implement IListFragmentEventListener");
+            Log.w(LOG_TAG,"## onAttach(): host activity does not implement IListFragmentEventListener " + aHostActivity);
             mHostActivityListener = null;
         }
     }
