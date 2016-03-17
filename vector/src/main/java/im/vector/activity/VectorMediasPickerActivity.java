@@ -230,7 +230,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
         // define the gallery height: height of the surfaceview + height of the gallery (total sum > screen height to allow scrolling)
-        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_and_gallery_layout);
+        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
         computeGalleryHeight();
     }
 
