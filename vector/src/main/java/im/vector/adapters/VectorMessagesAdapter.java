@@ -187,6 +187,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String url) {
+        if (!mSession.isActive()) {
+            return;
+        }
+
         if ((member != null) && (null == url)) {
             url = member.avatarUrl;
         }
@@ -328,6 +332,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      * @param roomState the room state.
      */
     private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
+        if (!mSession.isActive()) {
+            return;
+        }
+
         IMXStore store = mSession.getDataHandler().getStore();
 
         // sanity check
