@@ -735,6 +735,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
         mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
 
+        // hide / show the unsent / resend all entries.
+        refreshNotificationsArea();
+
         return true;
     }
 
