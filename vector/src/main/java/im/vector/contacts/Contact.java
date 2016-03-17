@@ -107,9 +107,11 @@ public class Contact {
             return false;
         }
 
-        Boolean matched = false;
+        boolean matched = false;
 
-        matched = (mDisplayName.toLowerCase().indexOf(pattern) >= 0);
+        if (!TextUtils.isEmpty(mDisplayName)) {
+            matched = (mDisplayName.toLowerCase().indexOf(pattern) >= 0);
+        }
 
         if (!matched) {
             for(String email : mEmails) {
@@ -131,9 +133,11 @@ public class Contact {
             return false;
         }
 
-        Boolean matched = false;
+        boolean matched = false;
 
-        matched = mDisplayName.matches(aRegEx);
+        if (!TextUtils.isEmpty(mDisplayName)) {
+            matched = mDisplayName.matches(aRegEx);
+        }
 
         if (!matched) {
             for(String email : mEmails) {

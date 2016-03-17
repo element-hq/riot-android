@@ -332,7 +332,7 @@ public class Matrix {
      * @param hsConfig The HomeserverConnectionConfig to create a session from.
      * @return The session.
      */
-    public MXSession createSession(Context context, HomeserverConnectionConfig hsConfig) {
+    public MXSession createSession(final Context context, HomeserverConnectionConfig hsConfig) {
         IMXStore store;
 
         Credentials credentials = hsConfig.getCredentials();
@@ -343,7 +343,14 @@ public class Matrix {
             store = new MXMemoryStore(hsConfig.getCredentials());
         }
 
-        return new MXSession(hsConfig, new MXDataHandler(store, credentials), mAppContext);
+        return new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {
+            @Override
+            public void onTokenCorrupted() {
+                if (null != VectorApp.getCurrentActivity()) {
+                    CommonActivityUtils.logout(VectorApp.getCurrentActivity());
+                }
+            }
+        }), mAppContext);
     }
 
     /**

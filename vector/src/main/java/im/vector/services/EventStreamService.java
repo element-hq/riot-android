@@ -24,12 +24,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
@@ -47,6 +50,7 @@ import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.util.NotificationUtils;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -167,6 +171,9 @@ public class EventStreamService extends Service {
             }
         }
     }
+
+    // this imageView is used to preload the avatar thumbnail
+    static private ImageView mDummyImageView;
 
     private MXEventListener mListener = new MXEventListener() {
         /**
@@ -294,7 +301,7 @@ public class EventStreamService extends Service {
             }
 
             String from = "";
-            Bitmap largeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_contact_picture_holo_light);
+            Bitmap largeBitmap = null;
 
             // when the event is an invitation one
             // don't check if the sender ID is known because the members list are not yet downloaded
@@ -308,15 +315,27 @@ public class EventStreamService extends Service {
 
                 from = member.getName();
 
-                int size = getApplicationContext().getResources().getDimensionPixelSize(org.matrix.androidsdk.R.dimen.chat_avatar_size);
+                // is there any avatar url
+                if (!TextUtils.isEmpty(member.avatarUrl)) {
+                    int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.profile_avatar_size);
 
-                File f = session.getMediasCache().thumbnailCacheFile(member.avatarUrl, size);
+                    // check if the thumbnail is already downloaded
+                    File f = session.getMediasCache().thumbnailCacheFile(member.avatarUrl, size);
 
-                if (null != f) {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                    if (null != f) {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                        largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                    } else {
+                        // else load it
+                        mDummyImageView = new ImageView(getApplicationContext());
+                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), mDummyImageView, member.avatarUrl, size);
+                    }
                 }
+            }
+
+            if (null == largeBitmap) {
+                largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarcolor(senderID), TextUtils.isEmpty(from) ? senderID : from);
             }
 
             String roomName = null;

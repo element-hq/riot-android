@@ -386,6 +386,8 @@
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
     <string name="room_unsent_messages_notification">Messages not sent.</string>
     <string name="room_prompt_resent">Resend now?</string>
+    <string name="room_resend_unsent_messages">Resend unsent messages</string>
+    <string name="room_delete_unsent_messages">Delete unsent messages</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
