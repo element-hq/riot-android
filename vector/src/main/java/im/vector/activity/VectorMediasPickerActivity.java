@@ -223,29 +223,33 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         mCameraPreviewHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
 
-        // the height of the relative layout containing the surfaceview
+        // the height of the relative layout containing the texture view
         mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
         ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
         previewLayoutParams.height = mCameraPreviewHeight;
         mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
         // define the gallery height: height of the surfaceview + height of the gallery (total sum > screen height to allow scrolling)
-        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
+        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_and_gallery_layout);
         computeGalleryHeight();
     }
 
     /**
-     * Compute the height of the gallery tablelayout. This height is based on the
-     * number of the raws of the table.
+     * Compute the height of the view containing the texture view and the table layout.
+     * This height is the sum of mCameraPreviewHeight + gallery height.
+     *
      */
     private void computeGalleryHeight() {
         mGalleryRawCount = getGalleryRowsCount();
 
         if(null != mPreviewAndGalleryLayout) {
             ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
-            previewAndGalleryLayoutParams.height = mCameraPreviewHeight + (mGalleryRawCount * mScreenWidth / GALLERY_COLUMN_COUNT);
+            int galleryHeight = (mGalleryRawCount * mScreenWidth / GALLERY_COLUMN_COUNT);
+            previewAndGalleryLayoutParams.height = mCameraPreviewHeight + galleryHeight;
             mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
         }
+        else
+            Log.w(LOG_TAG, "## computeGalleryHeight(): GalleryTable height not set");
     }
 
     /**
@@ -325,11 +329,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if(mIsTakenImageDisplayed) {
                 Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
                 if (null != savedBitmap) {
-                    // image preview from camera
+                    // image preview from camera only
                     mImagePreviewImageView.setImageBitmap(savedBitmap);
-                    //updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, mTakenImageOrigin); // TODO remove, duplicated here below
                 } else {
-                    // image preview from gallery
+                    // image preview from gallery or camera (mShootedPicturePath)
                     displayAndRotatePreviewImageAsync(mShootedPicturePath, uriImage, mTakenImageOrigin);
                 }
             }
@@ -687,7 +690,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                                     // some devices do not stop preview after the picture was taken (ie. G6 edge)
                                     mCamera.stopPreview();
                                 } catch (Exception e) {
-                                    Toast.makeText(VectorMediasPickerActivity.this, "Exception takeImage(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 } finally {
                                     // Close resources
                                     try {
@@ -697,7 +700,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                                         if (outputStream != null)
                                             outputStream.close();
                                     } catch (Exception e) {
-                                        Log.e(LOG_TAG, "## takeImage(): EXCEPTION Msg=" + e.getMessage());
+                                        Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
                                     }
                                 }
                             }
@@ -751,9 +754,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     System.gc();
 
                 } catch (OutOfMemoryError e) {
-                    Log.e(LOG_TAG, "createThumbnail : out of memory");
+                    Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "createThumbnail " + e.getMessage());
+                    Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
                 }
             }
         }
@@ -1108,6 +1111,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             int sourceRatio = previewSize.height * 100 / previewSize.width;
             int dstRatio = height * 100 / width;
 
+            // the camera preview size must fit the size provided by the surface texture
             if (sourceRatio != dstRatio) {
                 int newWidth;
                 int newHeight;
@@ -1120,12 +1124,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
                 }
 
+                // apply the size provided by the texture to the texture layout
                 ViewGroup.LayoutParams layout = mCameraTextureView.getLayoutParams();
                 layout.width = newWidth;
                 layout.height = newHeight;
                 mCameraTextureView.setLayoutParams(layout);
 
-                mCameraPreviewHeight = (int) (mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
 
                 if (layout.height < mCameraPreviewHeight) {
                     mCameraPreviewHeight = layout.height;
@@ -1156,6 +1160,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width="+width+" height="+height);
     }
 
     @Override
