@@ -636,6 +636,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
+        // check if the room has been left from another client.
+        if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+            VectorRoomActivity.this.finish();
+            return;
+        }
+
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
