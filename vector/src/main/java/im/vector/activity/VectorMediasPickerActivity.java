@@ -541,7 +541,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             tableLayoutWidth = metrics.widthPixels;
 
             // raw layout configuration
-            cellWidth = tableLayoutWidth / GALLERY_COLUMN_COUNT;
+            cellWidth = (tableLayoutWidth -(GALLERY_COLUMN_COUNT * CELL_MARGIN)) / GALLERY_COLUMN_COUNT;
             cellHeight = cellWidth;
             if(0 == tableLayoutWidth) {
                 // fall back
