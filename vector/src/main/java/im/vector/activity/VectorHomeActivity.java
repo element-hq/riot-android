@@ -187,7 +187,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSession.getDataHandler().removeListener(mLiveEventListener);
+        if (mSession.isActive()) {
+            mSession.getDataHandler().removeListener(mLiveEventListener);
+        }
     }
 
     @Override
