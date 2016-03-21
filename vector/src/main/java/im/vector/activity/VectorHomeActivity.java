@@ -74,6 +74,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private View mRoomCreationView = null;
 
     private MXEventListener mEventsListener;
+    private MXEventListener mLiveEventListener;
 
     private VectorRecentsListFragment mRecentsListFragment;
 
@@ -173,19 +174,20 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // clear the notification if they are not anymore valid
         // i.e the event has been read from another client
         // or deleted
-        MXEventListener eventListener = new MXEventListener() {
+        mLiveEventListener = new MXEventListener() {
             @Override
             public void onLiveEventsChunkProcessed() {
                 EventStreamService.checkDisplayedNotification();
             }
         };
 
-        mSession.getDataHandler().addListener(eventListener);
+        mSession.getDataHandler().addListener(mLiveEventListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mSession.getDataHandler().removeListener(mLiveEventListener);
     }
 
     @Override
