@@ -636,6 +636,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
+        // check if the room has been left from another client.
+        if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+            VectorRoomActivity.this.finish();
+            return;
+        }
+
         // listen for room name or topic changes
         mRoom.addEventListener(mEventListener);
 
@@ -734,6 +740,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
         mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+
+        // hide / show the unsent / resend all entries.
+        refreshNotificationsArea();
 
         return true;
     }
@@ -1917,22 +1926,32 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
         mIsKeyboardDisplayed = false;
 
+
+        // custom header
+        View headerTextsContainer = customLayout.findViewById(R.id.header_texts_container);
+        View openChatHeaderArrow = customLayout.findViewById(R.id.open_chat_header_arrow);
+
         // add click listener on custom action bar to display/hide the header view
-        customLayout.setOnClickListener(new View.OnClickListener() {
+        openChatHeaderArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != mRoomHeaderView) {
-                            if (View.GONE == mRoomHeaderView.getVisibility()) {
-                                enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
-                            } else {
-                                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                            }
-                        }
+                if (null != mRoomHeaderView) {
+                    if (View.GONE == mRoomHeaderView.getVisibility()) {
+                        enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
+                    } else {
+                        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                     }
-                });
+                }
+            }
+        });
+
+        headerTextsContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+                intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                VectorRoomActivity.this.startActivity(intent);
             }
         });
 
@@ -1941,8 +1960,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    // return value:  true if the listener has consumed the event, false otherwise.
-                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    VectorRoomActivity.this.startActivity(intent);
                     return true;
                 }
             });

@@ -29,17 +29,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#FFF"/>
-
-    <View
-        android:layout_alignParentRight="true"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#FFF"/>
-
     <RelativeLayout
         android:id="@+id/media_selected_mask_view"
         android:layout_width="match_parent"

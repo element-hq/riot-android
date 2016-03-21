@@ -225,7 +225,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         };
 
-        mSession.getDataHandler().addListener(mEventsListener);
+        if (mSession.isActive()) {
+            mSession.getDataHandler().addListener(mEventsListener);
+        }
 
         VectorApp.setCurrentActivity(this);
 

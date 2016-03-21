@@ -372,6 +372,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     }
                 }
             }
+        } else if (!TextUtils.isEmpty(mMemberId)) {
+            supportedActions.add(ITEM_ACTION_START_CHAT);
         }
 
         return supportedActions;
