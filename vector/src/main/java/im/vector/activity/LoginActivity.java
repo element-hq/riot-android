@@ -124,7 +124,6 @@ public class LoginActivity extends MXCActionBarActivity {
         mExpandImageView = (ImageView)findViewById(R.id.display_server_url_expand_icon);
 
         if (null != savedInstanceState) {
-
             if (savedInstanceState.containsKey(SAVED_EMAIL_ADDRESS)) {
                 mEmailTextView.setText(savedInstanceState.getString(SAVED_EMAIL_ADDRESS));
             }
@@ -145,6 +144,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVERURL));
             }
         }
+
+        // TODO implement the forgot password
+        mPasswordForgottenTxtView.setVisibility(View.GONE);
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
