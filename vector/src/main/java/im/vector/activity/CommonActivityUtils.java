@@ -26,6 +26,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -149,7 +150,15 @@ public class CommonActivityUtils {
         }
 
         // clear the preferences
-        PreferenceManager.getDefaultSharedPreferences(activity).edit().clear().commit();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
+        String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.putString(LoginActivity.PASSWORD_PREF, passwordVal);
+        editor.putString(LoginActivity.LOGIN_PREF, loginVal);
+        editor.commit();
 
         // reset the GCM
         Matrix.getInstance(activity).getSharedGcmRegistrationManager().reset();

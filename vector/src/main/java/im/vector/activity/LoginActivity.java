@@ -17,9 +17,13 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -51,6 +55,10 @@ public class LoginActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = "LoginActivity";
     static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
     static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
+
+    public static final String LOGIN_PREF = "vector_login";
+    public static final String PASSWORD_PREF = "vector_password";
+
 
     // saved parameters index
     private static final String SAVED_EMAIL_ADDRESS = "SAVED_EMAIL_ADDRESS";
@@ -143,6 +151,11 @@ public class LoginActivity extends MXCActionBarActivity {
             if (savedInstanceState.containsKey(SAVED_IDENTITY_SERVERURL)) {
                 mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVERURL));
             }
+        } else {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+
+            mEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
+            mPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
         }
 
         // TODO implement the forgot password
@@ -235,6 +248,47 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // reset the badge counter
         CommonActivityUtils.updateBadgeCount(this, 0);
+
+        mEmailTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(LOGIN_PREF, mEmailTextView.getText().toString());
+                editor.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mPasswordTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(PASSWORD_PREF, mPasswordTextView.getText().toString());
+                editor.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
