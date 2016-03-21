@@ -954,10 +954,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         Intent fileIntent = new Intent(Intent.ACTION_PICK);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         }
         // no mime type filter to allow any kind of content
-        fileIntent.setType(CommonActivityUtils.MIME_TYPE_ALL_CONTENT);
+        fileIntent.setType(CommonActivityUtils.MIME_TYPE_IMAGE_ALL);
         startActivityForResult(fileIntent, REQUEST_MEDIAS);
     }
 
