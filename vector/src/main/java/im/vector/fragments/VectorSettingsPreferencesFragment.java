@@ -199,23 +199,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             });
         }
 
-        // push rules
-        for(String resourceText : mPushesRuleByResourceId.keySet()) {
-            final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
-
-            if (null != switchPreference) {
-                final String fResourceText = resourceText;
-
-                switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        onPushRuleClick(fResourceText);
-                        return false;
-                    }
-                });
-            }
-        }
-
         final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -225,6 +208,27 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 return false;
             }
         });
+
+        // push rules
+        for(String resourceText : mPushesRuleByResourceId.keySet()) {
+            final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
+
+            if (null != switchPreference) {
+                final String fResourceText = resourceText;
+
+                switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
+                        // on some old android APIs,
+                        // the callback is called even if there is no user interaction
+                        // so the value will be checked to ensure there is really no update.
+                        onPushRuleClick(fResourceText, (boolean)newValueAsVoid);
+                        return true;
+                    }
+                });
+            }
+        }
+
 
         refreshPreferences();
         refreshDisplay();
@@ -477,47 +481,57 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     /**
      * Update a push rule.
      */
-    private void onPushRuleClick(final String fResourceText) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                final String ruleId = mPushesRuleByResourceId.get(fResourceText);
-                BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
+    private void onPushRuleClick(final String fResourceText, final boolean newValue) {
+        final String ruleId = mPushesRuleByResourceId.get(fResourceText);
+        BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
 
-                if (null != rule) {
-                    displayLoadingView();
-                    mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
+        // check if there is an update
+        boolean curValue = ((null != rule) && rule.isEnabled);
 
-                        private void onDone() {
-                            hideLoadingView();
+        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+            curValue = !curValue;
+        }
 
-                            BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-                            Boolean isEnabled = ((null != rule) && rule.isEnabled);
+        // on some old android APIs,
+        // the callback is called even if there is no user interaction
+        // so the value will be checked to ensure there is really no update.
+        onPushRuleClick(fResourceText, newValue);
+        if (newValue == curValue) {
+            return;
+        }
 
-                            if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
-                                isEnabled = !isEnabled;
-                            }
+        if (null != rule) {
+            displayLoadingView();
+            mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
 
-                            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean(fResourceText, isEnabled);
-                            editor.commit();
-                            hideLoadingView(true);
-                        }
+                private void onDone() {
+                    hideLoadingView();
 
-                        @Override
-                        public void onBingRuleUpdateSuccess() {
-                            onDone();
-                        }
+                    BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
+                    Boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-                        @Override
-                        public void onBingRuleUpdateFailure(String errorMessage) {
-                            onDone();
-                        }
-                    });
+                    if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                        isEnabled = !isEnabled;
+                    }
+
+                    final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(fResourceText, isEnabled);
+                    editor.commit();
+                    hideLoadingView(true);
                 }
-            }
-        });
+
+                @Override
+                public void onBingRuleUpdateSuccess() {
+                    onDone();
+                }
+
+                @Override
+                public void onBingRuleUpdateFailure(String errorMessage) {
+                    onDone();
+                }
+            });
+        }
     }
 
     /**
