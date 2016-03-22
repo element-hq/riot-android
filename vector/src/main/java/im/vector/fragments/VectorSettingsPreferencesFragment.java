@@ -495,7 +495,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         // on some old android APIs,
         // the callback is called even if there is no user interaction
         // so the value will be checked to ensure there is really no update.
-        onPushRuleClick(fResourceText, newValue);
         if (newValue == curValue) {
             return;
         }
