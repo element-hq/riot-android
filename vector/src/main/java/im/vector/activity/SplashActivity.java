@@ -223,6 +223,7 @@ public class SplashActivity extends MXCActionBarActivity {
         for(MXSession session : sessions) {
             if (session.isActive()) {
                 session.getDataHandler().removeListener(mDoneListeners.get(session));
+                session.setFailureCallback(null);
             }
         }
     }
