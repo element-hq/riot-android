@@ -20,6 +20,8 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -29,20 +31,28 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.EventTimeline;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 
 import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
+import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorRoomMessagesContextActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
@@ -335,7 +345,19 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      */
     @Override
     public boolean onContentLongClick(int position) {
-        return onRowLongClick(position);
+        Event event = mAdapter.getItem(position).getEvent();
+
+        // pop to the home activity
+        Intent intent = new Intent(getActivity(), VectorRoomMessagesContextActivity.class);
+        intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_ROOM_ID, event.roomId);
+        intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_EVENT_ID, event.eventId);
+
+        getActivity().startActivity(intent);
+        return true;
+
+
+        //return onRowLongClick(position);
     }
 
     //==============================================================================================================

@@ -141,6 +141,17 @@
         </activity>
 
         <activity
+            android:name="im.vector.activity.VectorRoomMessagesContextActivity"
+            android:label="Vector Context"
+            android:parentActivityName="im.vector.activity.VectorUnifiedSearchActivity"
+            android:launchMode="singleTop"
+>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorUnifiedSearchActivity"/>
+        </activity>
+
+        <activity
             android:name="im.vector.activity.VectorRoomDetailsActivity"
             android:label="@string/room_details_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
