@@ -68,7 +68,6 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorRoomMessageContextFragment extends Fragment {
-
     private static String LOG_TAG = "RoomMessageContextFrag";
 
     public static final String ARG_ROOM_ID = "VectorRoomMessageContextFragment.ARG_ROOM_ID";
@@ -76,27 +75,66 @@ public class VectorRoomMessageContextFragment extends Fragment {
     public static final String ARG_LAYOUT_ID = "VectorRoomMessageContextFragment.ARG_LAYOUT_ID";
     public static final String ARG_EVENT_ID = "VectorRoomMessageContextFragment.ARG_EVENT_ID";
 
+    /**
+     * Listeners to manage UI items
+     */
+    public interface IContextEventsListener {
+        /**
+         * Show a spinner when a back pagination is started.
+         */
+        void showBackPaginationSpinner();
 
-    private String mEventId;
+        /**
+         * Hide a spinner when a back pagination is ended.
+         */
+        void hideBackPaginationSpinner();
 
-    private EventTimeline mEventTimeline;
-    private Handler mUiHandler;
+        /**
+         * Show a spinner when a foward pagination is started.
+         */
+        void showForwardPaginationSpinner();
 
+        /**
+         * Hide a spinner when a foward pagination is started.
+         */
+        void hideForwardPaginationSpinner();
+
+        /**
+         * Display a spinner when the global initialization is started.
+         */
+        void showGlobalInitpinner();
+
+        /**
+         * Hide a spinner when the global initialization is done.
+         */
+        void hideGlobalInitpinner();
+    }
+
+    // parameters
     private String mMatrixId;
     private MXSession mSession;
     private Room mRoom;
+    private String mEventId;
 
+    // the class which provides the backward / forward pagaintation methods
+    private EventTimeline mEventTimeline;
+
+    // initialization status
     private boolean mIsInitialized;
 
-    protected VectorMessagesAdapter mAdapter;
-    public ListView mMessageListView;
+    // the messages listView
+    private ListView mMessageListView;
 
-    public boolean mIsBackPaginating;
-    public boolean mIsFwdPaginating;
+    // the adapter
+    private VectorMessagesAdapter mAdapter;
 
+    // pagination statuses
+    private boolean mIsBackPaginating;
+    private boolean mIsFwdPaginating;
+
+    private IContextEventsListener mAppContextListener;
 
     private IMXEventListener mEventsListenener = new MXEventListener() {
-
         /**
          * A live room event was received.
          * @param event the event
@@ -122,6 +160,8 @@ public class VectorRoomMessageContextFragment extends Fragment {
          }
     };
 
+    // scroll events listener
+    // use to detect when a backward / forward pagination must be started
     private AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -132,22 +172,19 @@ public class VectorRoomMessageContextFragment extends Fragment {
                 int count = mMessageListView.getCount();
 
                 if ((lastVisibleRow + 10) >= count) {
-                    fwdPaginate();
+                    forwardPaginate();
                 }  else if (firstVisibleRow < 2) {
-                    backpaginate();
+                    backwardPaginate();
                 }
             }
         }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            // If we scroll to the top, load more history
-            // so not load history if there is an initial sync progress
-            // or the whole room content fits in a single page
             if (firstVisibleItem < 2) {
-                backpaginate();
+                backwardPaginate();
             } else if ((firstVisibleItem + visibleItemCount + 10) >= totalItemCount) {
-                fwdPaginate();
+                forwardPaginate();
             }
         }
     };
@@ -178,12 +215,20 @@ public class VectorRoomMessageContextFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Activity aHostActivity) {
+        super.onAttach(aHostActivity);
+
+        try {
+            mAppContextListener = (IContextEventsListener)aHostActivity;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, aHostActivity + " does not implement  IContextEventsListener");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Bundle args = getArguments();
-
-        // for dispatching data to add to the adapter we need to be on the main thread
-        mUiHandler = new Handler(Looper.getMainLooper());
 
         mMatrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(mMatrixId);
@@ -246,91 +291,28 @@ public class VectorRoomMessageContextFragment extends Fragment {
     }
 
     /**
-     * Initialize the timeline to fill the screen
+     * Start a backward pagination
      */
-    private void initializeTimeline() {
-        mEventTimeline.resetPaginationAroundInitialEvent(new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                Event event = mEventTimeline.mStore.getEvent(mEventId, mRoom.getRoomId());
-                mAdapter.add(new MessageRow(event, mEventTimeline.getState()), false);
-                mEventTimeline.backPaginate(new ApiCallback<Integer>() {
-                    @Override
-                    public void onSuccess(final Integer countBefore) {
-                        mEventTimeline.forwardPaginate(new ApiCallback<Integer>() {
-                            @Override
-                            public void onSuccess(final Integer countAfter) {
-                                mMessageListView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // search the event pos in the adapter
-                                        // some events are not displayed so the added events count cannot be used.
-                                        int eventPos = 0;
-                                        for (; eventPos < mAdapter.getCount(); eventPos++) {
-                                            if (TextUtils.equals(mAdapter.getItem(eventPos).getEvent().eventId, mEventId)) {
-                                                break;
-                                            }
-                                        }
-
-                                        View parentView = (View) mMessageListView.getParent();
-
-                                        mAdapter.notifyDataSetChanged();
-                                        // center the message in the
-                                        mMessageListView.setSelectionFromTop(eventPos, parentView.getHeight() / 2);
-
-                                        mIsInitialized = true;
-                                        mMessageListView.setOnScrollListener(mScrollListener);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                            }
-
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                            }
-
-                            @Override
-                            public void onUnexpectedError(Exception e) {
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                    }
-                });
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-            }
-        });
-    }
-
-    private void backpaginate() {
+    private void backwardPaginate() {
         if (!mIsBackPaginating) {
             final int countBeforeUpdate = mAdapter.getCount();
 
             mIsBackPaginating = mEventTimeline.backPaginate(new ApiCallback<Integer>() {
+                /**
+                 * the back pagination is ended.
+                 */
+                private void onEndOfPagination(String errorMessage) {
+                    if (null != errorMessage) {
+                        Log.e(LOG_TAG, "backwardPaginate fails : " + errorMessage);
+                    }
+
+                    mIsBackPaginating = false;
+
+                    if (null != mAppContextListener) {
+                        mAppContextListener.hideBackPaginationSpinner();
+                    }
+                }
+
                 @Override
                 public void onSuccess(Integer info) {
                     // Scroll the list down to where it was before adding rows to the top
@@ -352,32 +334,60 @@ public class VectorRoomMessageContextFragment extends Fragment {
                                 mMessageListView.setSelection(mMessageListView.getFirstVisiblePosition() + countDiff);
                             }
 
-                            mIsBackPaginating = false;
+                            mMessageListView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onEndOfPagination(null);
+                                }
+                            });
                         }
                     });
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-
+                    onEndOfPagination(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-
+                    onEndOfPagination(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-
+                    onEndOfPagination(e.getLocalizedMessage());
                 }
             });
+
+            if (mIsBackPaginating && (null != mAppContextListener)) {
+                mAppContextListener.showBackPaginationSpinner();
+            }
         }
     }
 
-    private void fwdPaginate() {
+    /**
+     * Start a forward pagination
+     */
+    private void forwardPaginate() {
         if (!mIsFwdPaginating) {
+
             mIsFwdPaginating = mEventTimeline.forwardPaginate(new ApiCallback<Integer>() {
+                /**
+                 * the forward pagination is ended.
+                 */
+                private void onEndOfPagination(String errorMessage) {
+                    if (null != errorMessage) {
+                        Log.e(LOG_TAG, "forwardPaginate fails : " + errorMessage);
+                    }
+
+                    mIsFwdPaginating = false;
+
+                    if (null != mAppContextListener) {
+                        mAppContextListener.hideForwardPaginationSpinner();
+                    }
+                }
+
                 @Override
                 public void onSuccess(Integer info) {
                     final int firstPos = mMessageListView.getFirstVisiblePosition();
@@ -392,11 +402,14 @@ public class VectorRoomMessageContextFragment extends Fragment {
                             mMessageListView.post(new Runnable() {
                                 @Override
                                 public void run() {
+
+                                    // check if the selected item is the right one
+                                    // it sometimes fails
                                     if (mMessageListView.getFirstVisiblePosition() != firstPos) {
                                         mMessageListView.setSelection(firstPos);
                                     }
 
-                                    mIsFwdPaginating = false;
+                                    onEndOfPagination(null);
                                 }
                             });
                         }
@@ -405,19 +418,23 @@ public class VectorRoomMessageContextFragment extends Fragment {
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    mIsFwdPaginating = false;
+                    onEndOfPagination(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    mIsFwdPaginating = false;
+                    onEndOfPagination(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    mIsFwdPaginating = false;
+                    onEndOfPagination(e.getLocalizedMessage());
                 }
             });
+
+            if (mIsFwdPaginating && (null != mAppContextListener)) {
+                mAppContextListener.showForwardPaginationSpinner();
+            }
         }
     }
 
@@ -443,14 +460,119 @@ public class VectorRoomMessageContextFragment extends Fragment {
         }
     }
 
+    //==============================================================================================================
+    // Initialization methods
+    //==============================================================================================================
+
     /**
-     * Called when a fragment is first attached to its activity.
-     * {@link #onCreate(Bundle)} will be called after this.
-     *
-     * @param aHostActivity parent activity
+     * The timeline fails to be initialized.
+     * @param description the error description
      */
-    @Override
-    public void onAttach(Activity aHostActivity) {
-        super.onAttach(aHostActivity);
+    private void onGlobalInitFailed(String description) {
+        Log.e(LOG_TAG, "onGlobalInitFailed " + description);
+        Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT);
+        getActivity().finish();
+    }
+
+    /**
+     * Initialize the timeline to fill the screen
+     */
+    private void initializeTimeline() {
+        if (null != mAppContextListener) {
+            mAppContextListener.showGlobalInitpinner();
+        }
+        mEventTimeline.resetPaginationAroundInitialEvent(new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                Event event = mEventTimeline.mStore.getEvent(mEventId, mRoom.getRoomId());
+                mAdapter.add(new MessageRow(event, mEventTimeline.getState()), false);
+                mEventTimeline.backPaginate(new ApiCallback<Integer>() {
+                    @Override
+                    public void onSuccess(final Integer countBefore) {
+                        mEventTimeline.forwardPaginate(new ApiCallback<Integer>() {
+                            @Override
+                            public void onSuccess(final Integer countAfter) {
+                                if (null != mAppContextListener) {
+                                    mAppContextListener.hideGlobalInitpinner();
+                                }
+
+                                mMessageListView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // search the event pos in the adapter
+                                        // some events are not displayed so the added events count cannot be used.
+                                        int eventPos = 0;
+                                        for (; eventPos < mAdapter.getCount(); eventPos++) {
+                                            if (TextUtils.equals(mAdapter.getItem(eventPos).getEvent().eventId, mEventId)) {
+                                                break;
+                                            }
+                                        }
+
+                                        View parentView = (View) mMessageListView.getParent();
+
+                                        mAdapter.notifyDataSetChanged();
+                                        // center the message in the
+                                        mMessageListView.setSelectionFromTop(eventPos, parentView.getHeight() / 2);
+
+                                        mMessageListView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mIsInitialized = true;
+                                                mMessageListView.setOnScrollListener(mScrollListener);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onGlobalInitFailed(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onGlobalInitFailed(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onGlobalInitFailed(e.getLocalizedMessage());
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onGlobalInitFailed(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onGlobalInitFailed(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onGlobalInitFailed(e.getLocalizedMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onGlobalInitFailed(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onGlobalInitFailed(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onGlobalInitFailed(e.getLocalizedMessage());
+            }
+        });
     }
 }
