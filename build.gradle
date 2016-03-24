@@ -17,3 +17,11 @@ allprojects {
         jcenter()
     }
 }
+
+ext {
+    compileSdkVersion = 23
+    buildToolsVersion = '22.0.1'
+
+    sdkVersion = "23.2.1"
+    gmsVersion = "8.4.0"
+}
