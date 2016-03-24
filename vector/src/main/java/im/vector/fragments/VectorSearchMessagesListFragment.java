@@ -365,7 +365,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     //==============================================================================================================
 
     @Override
-    public void onEvent(final Event event, final Room.EventDirection direction, final RoomState roomState) {
+    public void onEvent(final Event event, final EventTimeline.Direction direction, final RoomState roomState) {
     }
 
     @Override

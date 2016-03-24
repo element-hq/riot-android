@@ -40,7 +40,7 @@ public class CarBroadcastReceiver extends BroadcastReceiver {
             message.msgtype = Message.MSGTYPE_TEXT;
 
             Event event = new Event(message, session.getCredentials().userId, room.getRoomId());
-            room.storeLiveRoomEvent(event);
+            room.storeOutgoingEvent(event);
             room.sendEvent(event, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(final Void info) {

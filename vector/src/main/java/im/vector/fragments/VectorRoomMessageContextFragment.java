@@ -136,8 +136,8 @@ public class VectorRoomMessageContextFragment extends Fragment {
 
     private EventTimeline.EventTimelineListener mEventsListenener = new EventTimeline.EventTimelineListener() {
         @Override
-        public void onEvent(Event event, Room.EventDirection direction, RoomState roomState) {
-            if (direction == Room.EventDirection.FORWARDS) {
+        public void onEvent(Event event, EventTimeline.Direction direction, RoomState roomState) {
+            if (direction == EventTimeline.Direction.FORWARDS) {
                 if (Event.EVENT_TYPE_REDACTION.equals(event.type)) {
                     mAdapter.removeEventById(event.getRedacts());
                 } else {
