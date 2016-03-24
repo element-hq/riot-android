@@ -309,6 +309,7 @@ public class VectorRoomMessageContextFragment extends Fragment {
                         @Override
                         public void run() {
                             int countDiff = mAdapter.getCount() - countBeforeUpdate;
+                            int expectedFirstPos = mMessageListView.getFirstVisiblePosition();
 
                             // check if some messages have been added
                             // do not refresh the UI if no message have been added
@@ -320,12 +321,21 @@ public class VectorRoomMessageContextFragment extends Fragment {
 
                                 // do not use count because some messages are not displayed
                                 // so we compute the new pos
-                                mMessageListView.setSelection(mMessageListView.getFirstVisiblePosition() + countDiff);
+                                expectedFirstPos = mMessageListView.getFirstVisiblePosition() + countDiff;
+                                mMessageListView.setSelection(expectedFirstPos);
                             }
+
+                            final int fExpectedFirstPos = expectedFirstPos;
 
                             mMessageListView.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    // ensure that the pos is the expected one
+                                    // it sometimes fails to select the right one.
+                                    if (fExpectedFirstPos != mMessageListView.getFirstVisiblePosition()) {
+                                        mMessageListView.setSelection(fExpectedFirstPos);
+                                    }
+
                                     onEndOfPagination(null);
                                 }
                             });
@@ -466,80 +476,38 @@ public class VectorRoomMessageContextFragment extends Fragment {
         if (null != mAppContextListener) {
             mAppContextListener.showGlobalInitpinner();
         }
-        mEventTimeline.resetPaginationAroundInitialEvent(new ApiCallback<Void>() {
+        mEventTimeline.resetPaginationAroundInitialEvent(20 * 2, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                Event event = mEventTimeline.mStore.getEvent(mEventId, mRoom.getRoomId());
-                mAdapter.add(new MessageRow(event, mEventTimeline.getState()), false);
-                mEventTimeline.backPaginate(new ApiCallback<Integer>() {
+                if (null != mAppContextListener) {
+                    mAppContextListener.hideGlobalInitpinner();
+                }
+
+                mMessageListView.post(new Runnable() {
                     @Override
-                    public void onSuccess(final Integer countBefore) {
-                        mEventTimeline.forwardPaginate(new ApiCallback<Integer>() {
-                            @Override
-                            public void onSuccess(final Integer countAfter) {
-                                if (null != mAppContextListener) {
-                                    mAppContextListener.hideGlobalInitpinner();
-                                }
-
-                                mMessageListView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // search the event pos in the adapter
-                                        // some events are not displayed so the added events count cannot be used.
-                                        int eventPos = 0;
-                                        for (; eventPos < mAdapter.getCount(); eventPos++) {
-                                            if (TextUtils.equals(mAdapter.getItem(eventPos).getEvent().eventId, mEventId)) {
-                                                break;
-                                            }
-                                        }
-
-                                        View parentView = (View) mMessageListView.getParent();
-
-                                        mAdapter.notifyDataSetChanged();
-                                        // center the message in the
-                                        mMessageListView.setSelectionFromTop(eventPos, parentView.getHeight() / 2);
-
-                                        mMessageListView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                mIsInitialized = true;
-                                                mMessageListView.setOnScrollListener(mScrollListener);
-                                            }
-                                        });
-                                    }
-                                });
+                    public void run() {
+                        // search the event pos in the adapter
+                        // some events are not displayed so the added events count cannot be used.
+                        int eventPos = 0;
+                        for (; eventPos < mAdapter.getCount(); eventPos++) {
+                            if (TextUtils.equals(mAdapter.getItem(eventPos).getEvent().eventId, mEventId)) {
+                                break;
                             }
+                        }
 
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                onGlobalInitFailed(e.getLocalizedMessage());
-                            }
+                        View parentView = (View) mMessageListView.getParent();
 
-                            @Override
-                            public void onMatrixError(MatrixError e) {
-                                onGlobalInitFailed(e.getLocalizedMessage());
-                            }
+                        mAdapter.notifyDataSetChanged();
+                        // center the message in the
+                        mMessageListView.setSelectionFromTop(eventPos, parentView.getHeight() / 2);
 
+                        mMessageListView.post(new Runnable() {
                             @Override
-                            public void onUnexpectedError(Exception e) {
-                                onGlobalInitFailed(e.getLocalizedMessage());
+                            public void run() {
+                                mIsInitialized = true;
+                                mMessageListView.setOnScrollListener(mScrollListener);
                             }
                         });
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onGlobalInitFailed(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onGlobalInitFailed(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onGlobalInitFailed(e.getLocalizedMessage());
                     }
                 });
             }
