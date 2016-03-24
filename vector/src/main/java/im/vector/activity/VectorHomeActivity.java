@@ -17,6 +17,7 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -428,11 +429,23 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     // warn the user scrolls up
     public void onRecentsListScrollUp() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbar.animate()
+                    .translationZ(0)
+                    .start();
+        }
+
         mRoomCreationView.show();
     }
 
     // warn when the user scrolls downs
     public void onRecentsListScrollDown() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbar.animate()
+                    .translationZ(16)
+                    .start();
+        }
+
         mRoomCreationView.hide();
     }
 
