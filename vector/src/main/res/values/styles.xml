@@ -10,6 +10,7 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
+        <item name="colorPrimary">@color/vector_actionbar_background</item>
         <item name="colorPrimaryDark">@color/vector_statusbar_color</item>
 
         <!-- fonts -->
