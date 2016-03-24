@@ -416,6 +416,16 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             aboutMenuItem.setTitle(version);
         }
 
+        mNavigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // launch the settings activity
+                final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
+                settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                startActivity(settingsIntent);
+            }
+        });
+
         // init the main menu
         TextView displaynameTextView = (TextView)  mNavigationView.getHeaderView(0).findViewById(R.id.home_menu_main_displayname);
         displaynameTextView.setText(mSession.getMyUser().displayname);
