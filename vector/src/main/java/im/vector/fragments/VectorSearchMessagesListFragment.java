@@ -365,15 +365,11 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     //==============================================================================================================
 
     @Override
-    public void onLiveEvent(final Event event, final RoomState roomState) {
+    public void onEvent(final Event event, final Room.EventDirection direction, final RoomState roomState) {
     }
 
     @Override
     public void onLiveEventsChunkProcessed() {
-    }
-
-    @Override
-    public void onBackEvent(final Event event, final RoomState roomState) {
     }
 
     @Override

@@ -134,30 +134,19 @@ public class VectorRoomMessageContextFragment extends Fragment {
 
     private IContextEventsListener mAppContextListener;
 
-    private IMXEventListener mEventsListenener = new MXEventListener() {
-        /**
-         * A live room event was received.
-         * @param event the event
-         * @param roomState the room state right before the event
-         */
+    private EventTimeline.EventTimelineListener mEventsListenener = new EventTimeline.EventTimelineListener() {
         @Override
-        public void onLiveEvent(final Event event, final RoomState roomState) {
-            if (Event.EVENT_TYPE_REDACTION.equals(event.type)) {
-                mAdapter.removeEventById(event.getRedacts());
+        public void onEvent(Event event, Room.EventDirection direction, RoomState roomState) {
+            if (direction == Room.EventDirection.FORWARDS) {
+                if (Event.EVENT_TYPE_REDACTION.equals(event.type)) {
+                    mAdapter.removeEventById(event.getRedacts());
+                } else {
+                    mAdapter.add(new MessageRow(event, roomState), false);
+                }
             } else {
-                mAdapter.add(new MessageRow(event, roomState), false);
+                mAdapter.addToFront(event, roomState);
             }
         }
-
-        /**
-         * A back room event was received.
-         * @param event the event
-         * @param roomState the room state right before the even
-         */
-         @Override
-         public void onBackEvent(Event event, RoomState roomState) {
-             mAdapter.addToFront(event, roomState);
-         }
     };
 
     // scroll events listener
@@ -282,9 +271,9 @@ public class VectorRoomMessageContextFragment extends Fragment {
             });
         }
 
-        mRoom.addEventListener(mEventsListenener);
-
         mEventTimeline = new EventTimeline(mSession.getDataHandler(), roomId, mEventId);
+        mEventTimeline.addEventTimelineListener(mEventsListenener);
+
         initializeTimeline();
 
         return v;
@@ -442,18 +431,14 @@ public class VectorRoomMessageContextFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        if (null != mRoom) {
-            mRoom.removeEventListener(mEventsListenener);
+        if (null != mEventTimeline) {
+            mEventTimeline.removeEventTimelineListener(mEventsListenener);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (null != mRoom) {
-            mRoom.addEventListener(mEventsListenener);
-        }
 
         if (mIsInitialized) {
             mMessageListView.setOnScrollListener(mScrollListener);
