@@ -102,6 +102,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'io.pristine:libjingle:9690@aar'
-    compile 'com.github.matrix-org:matrix-android-sdk:v0.4.4'
+    compile 'com.github.matrix-org:matrix-android-sdk:develop-SNAPSHOT'
 }
 

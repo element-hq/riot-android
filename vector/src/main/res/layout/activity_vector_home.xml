@@ -21,7 +21,7 @@
             style="@style/VectorToolbarStyle"/>
 
         <!-- The main content view -->
-        <RelativeLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="org.matrix.vector.activity.VectorHomeActivity">
@@ -35,10 +35,8 @@
                 android:id="@+id/listView_create_room_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/floating_action_button_margin"
-                android:layout_marginBottom="@dimen/floating_action_button_margin"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="@dimen/floating_action_button_margin"
                 app:backgroundTint="@color/vector_fuchsia_color"
                 android:src="@drawable/ic_add_white"
                 app:borderWidth="0dp"
@@ -58,7 +56,7 @@
                     android:layout_centerVertical="true"
                     android:visibility="visible"/>
             </RelativeLayout>
-        </RelativeLayout>
+        </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
