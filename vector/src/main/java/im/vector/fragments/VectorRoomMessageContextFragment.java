@@ -132,6 +132,10 @@ public class VectorRoomMessageContextFragment extends Fragment {
     private boolean mIsBackPaginating;
     private boolean mIsFwdPaginating;
 
+    // lock the pagination while refreshing the list view to avoid having twice or thrice refreshes sequence.
+    private boolean mLockBackPagination;
+    private boolean mLockFwdPagination;
+
     private IContextEventsListener mAppContextListener;
 
     private EventTimeline.EventTimelineListener mEventsListenener = new EventTimeline.EventTimelineListener() {
@@ -253,10 +257,6 @@ public class VectorRoomMessageContextFragment extends Fragment {
             }
         }
 
-        // sanity check
-        if (null != mRoom) {
-            mAdapter.setTypingUsers(mRoom.getTypingUsers());
-        }
         mMessageListView.setAdapter(mAdapter);
 
         if (-1 != selectionIndex) {
@@ -271,10 +271,11 @@ public class VectorRoomMessageContextFragment extends Fragment {
             });
         }
 
-        mEventTimeline = new EventTimeline(mSession.getDataHandler(), roomId, mEventId);
-        mEventTimeline.addEventTimelineListener(mEventsListenener);
-
-        initializeTimeline();
+        if (null == mEventTimeline) {
+            mEventTimeline = new EventTimeline(mSession.getDataHandler(), roomId, mEventId);
+            mEventTimeline.addEventTimelineListener(mEventsListenener);
+            initializeTimeline();
+        }
 
         return v;
     }
@@ -283,6 +284,11 @@ public class VectorRoomMessageContextFragment extends Fragment {
      * Start a backward pagination
      */
     private void backwardPaginate() {
+        if (mLockBackPagination) {
+            Log.d(LOG_TAG, "The back pagination is locked.");
+            return;
+        }
+
         if (!mIsBackPaginating) {
             final int countBeforeUpdate = mAdapter.getCount();
 
@@ -308,6 +314,8 @@ public class VectorRoomMessageContextFragment extends Fragment {
                     mMessageListView.post(new Runnable() {
                         @Override
                         public void run() {
+                            mLockFwdPagination = true;
+
                             int countDiff = mAdapter.getCount() - countBeforeUpdate;
                             int expectedFirstPos = mMessageListView.getFirstVisiblePosition();
 
@@ -323,22 +331,34 @@ public class VectorRoomMessageContextFragment extends Fragment {
                                 // so we compute the new pos
                                 expectedFirstPos = mMessageListView.getFirstVisiblePosition() + countDiff;
                                 mMessageListView.setSelection(expectedFirstPos);
-                            }
 
-                            final int fExpectedFirstPos = expectedFirstPos;
+                                final int fExpectedFirstPos = expectedFirstPos;
 
-                            mMessageListView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // ensure that the pos is the expected one
-                                    // it sometimes fails to select the right one.
-                                    if (fExpectedFirstPos != mMessageListView.getFirstVisiblePosition()) {
-                                        mMessageListView.setSelection(fExpectedFirstPos);
+                                mMessageListView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // ensure that the pos is the expected one
+                                        // it sometimes fails to select the right one.
+                                        if (Math.abs(fExpectedFirstPos - mMessageListView.getFirstVisiblePosition()) > 1) {
+                                            Log.d(LOG_TAG, "Backscroll : first " + mMessageListView.getFirstVisiblePosition() + " instead of " + fExpectedFirstPos);
+                                            mMessageListView.setSelection(fExpectedFirstPos);
+
+                                            mMessageListView.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    onEndOfPagination(null);
+                                                    mLockFwdPagination = false;
+                                                }
+                                            });
+                                        } else {
+                                            onEndOfPagination(null);
+                                            mLockFwdPagination = false;
+                                        }
                                     }
-
-                                    onEndOfPagination(null);
-                                }
-                            });
+                                });
+                            } else {
+                                mLockFwdPagination = false;
+                            }
                         }
                     });
                 }
@@ -369,8 +389,12 @@ public class VectorRoomMessageContextFragment extends Fragment {
      * Start a forward pagination
      */
     private void forwardPaginate() {
-        if (!mIsFwdPaginating) {
+        if (mLockFwdPagination) {
+            Log.d(LOG_TAG, "The forward pagination is locked.");
+            return;
+        }
 
+        if (!mIsFwdPaginating) {
             mIsFwdPaginating = mEventTimeline.forwardPaginate(new ApiCallback<Integer>() {
                 /**
                  * the forward pagination is ended.
@@ -395,20 +419,31 @@ public class VectorRoomMessageContextFragment extends Fragment {
                     mMessageListView.post(new Runnable() {
                         @Override
                         public void run() {
+                            mLockBackPagination = true;
+
                             mMessageListView.setSelection(firstPos);
                             mAdapter.notifyDataSetChanged();
 
                             mMessageListView.post(new Runnable() {
                                 @Override
                                 public void run() {
-
                                     // check if the selected item is the right one
                                     // it sometimes fails
-                                    if (mMessageListView.getFirstVisiblePosition() != firstPos) {
+                                    if (Math.abs(firstPos - mMessageListView.getFirstVisiblePosition()) > 1) {
                                         mMessageListView.setSelection(firstPos);
-                                    }
+                                        Log.d(LOG_TAG, "forward scroll : first " + mMessageListView.getFirstVisiblePosition() + " instead of " + firstPos);
 
-                                    onEndOfPagination(null);
+                                        mMessageListView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onEndOfPagination(null);
+                                                mLockBackPagination = false;
+                                            }
+                                        });
+                                    } else {
+                                        onEndOfPagination(null);
+                                        mLockBackPagination = false;
+                                    }
                                 }
                             });
                         }
@@ -443,6 +478,19 @@ public class VectorRoomMessageContextFragment extends Fragment {
 
         if (null != mEventTimeline) {
             mEventTimeline.removeEventTimelineListener(mEventsListenener);
+
+            // cancel any pending request
+            mEventTimeline.cancelPaginationRequest();
+            mIsBackPaginating = false;
+            mIsFwdPaginating = false;
+
+            mLockBackPagination = true;
+            mLockFwdPagination = true;
+
+            if (null != mAppContextListener) {
+                mAppContextListener.hideBackPaginationSpinner();
+                mAppContextListener.hideForwardPaginationSpinner();
+            }
         }
     }
 
@@ -451,7 +499,35 @@ public class VectorRoomMessageContextFragment extends Fragment {
         super.onResume();
 
         if (mIsInitialized) {
-            mMessageListView.setOnScrollListener(mScrollListener);
+            // plug the scroll events listener only when the rendering is done
+            // to avoid unexpected pagination requests.
+            mMessageListView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mLockBackPagination = false;
+                    mLockFwdPagination = false;
+                    mMessageListView.setOnScrollListener(mScrollListener);
+                }
+            }, 300);
+        } else {
+            mLockBackPagination = false;
+            mLockFwdPagination = false;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (null != mMessageListView) {
+            int selected = mMessageListView.getFirstVisiblePosition();
+
+            // ListView always returns the previous index while filling from bottom
+            if (selected > 0) {
+                selected++;
+            }
+
+            outState.putInt("FIRST_VISIBLE_ROW", selected);
         }
     }
 
