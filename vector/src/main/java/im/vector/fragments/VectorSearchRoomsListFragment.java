@@ -199,7 +199,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         }
     }
 
-    protected boolean isDrapAndDropSupported() {
+    protected boolean isDragAndDropSupported() {
         return false;
     }
 }
