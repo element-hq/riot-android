@@ -26,6 +26,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:textColor="@color/vector_silver_color"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:text="@string/splash_screen_copyright" />
 
 </RelativeLayout>

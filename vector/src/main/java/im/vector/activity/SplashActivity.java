@@ -18,6 +18,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.IMXEventListener;
@@ -197,6 +198,14 @@ public class SplashActivity extends MXCActionBarActivity {
         } else if (mGcmRegistrationManager.useGCM()) {
             mGcmRegistrationManager.reregisterSessions(SplashActivity.this, null);
         }
+
+        TextView copyrightTextView = (TextView) findViewById(R.id.copyright_txt_view);
+        String copyright = getResources().getText(R.string.splash_screen_copyright).toString();
+        String year = getResources().getString(R.string.git_revision_date).split(" ")[0]
+                .split("\\-")[0];
+        copyright = String.format(copyright, year);
+        copyrightTextView.setText(copyright);
+
 
         boolean noUpdate;
 

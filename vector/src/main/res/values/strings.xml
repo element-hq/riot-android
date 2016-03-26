@@ -461,7 +461,7 @@
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
     <string name="splash_screen_display_text">Vector</string>
-    <string name="splash_screen_copyright">Copyright (c) 2016 vector.im. All rights reserved.</string>
+    <string name="splash_screen_copyright">Copyright © %s vector.im. All rights reserved.</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifications</string>
