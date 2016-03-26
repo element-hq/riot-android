@@ -483,20 +483,20 @@
     <string name="settings_title_config">Configuration</string>
 
     <string name="settings_sign_out">Sign Out</string>
-    <string name="settings_profile_picture">Profile Picture</string>
-    <string name="settings_display_name">Display Name</string>
-    <string name="settings_first_name">First Name</string>
+    <string name="settings_profile_picture">Profile picture</string>
+    <string name="settings_display_name">Display name</string>
+    <string name="settings_first_name">First name</string>
     <string name="settings_surname">Surname</string>
-    <string name="settings_email_address">Email Address</string>
-    <string name="settings_phone_number">Phone Number</string>
-    <string name="settings_night_mode">Night Mode</string>
+    <string name="settings_email_address">Email address</string>
+    <string name="settings_phone_number">Phone number</string>
+    <string name="settings_night_mode">Night mode</string>
 
     <string name="settings_enable_all_notif">Enable all notifications</string>
     <string name="settings_general_messages">General messages</string>
-    <string name="settings_messages_my_display_name">Msg containing my display name</string>
-    <string name="settings_messages_my_user_name">Msg containing my user name</string>
+    <string name="settings_messages_my_display_name">Mentions by display name</string>
+    <string name="settings_messages_my_user_name">Mentions by user name</string>
     <string name="settings_messages_sent_to_me">Messages sent to me</string>
-    <string name="settings_invited_to_room">When i m invited to a room</string>
+    <string name="settings_invited_to_room">Room invitations</string>
     <string name="settings_call_invitations">Call invitations</string>
 
     <string name="settings_version">Version</string>
