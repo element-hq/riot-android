@@ -3,8 +3,7 @@
     android:id="@+id/member_details_activity_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/room_background">
+    android:orientation="vertical">
 
     <RelativeLayout
           android:id="@+id/action_bar_header"

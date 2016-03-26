@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="theme_readables">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>System Theme</item>
+        <item>Auto Mode</item>
+    </string-array>
+    <string-array name="theme_codes">
+        <item>light</item>
+        <item>dark</item>
+        <item>system</item>
+        <item>auto</item>
+    </string-array>
+
     <string name="resouces_language">en</string>
     <string name="resouces_country">UK</string>
 
@@ -508,5 +521,6 @@
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
+    <string name="settings_theme">Theme</string>
 
 </resources>

@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <TextView
@@ -11,10 +12,10 @@
         android:fontFamily="sans-serif-bold"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textColor="@color/vector_0_54_black_color"
-        android:text="SENDER"
+        android:textColor="@color/textColorSecondary"
+        tools:text="Sender"
         android:id="@+id/messagesAdapter_sender"/>
 </LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColorPrimary">@android:color/primary_text_dark</color>
+    <color name="textColorSecondary">@android:color/secondary_text_dark</color>
+
+
+    <color name="vector_statusbar_color">#00695c</color>
+    <color name="vector_actionbar_background">#009688</color>
+
+    <color name="backgroundPrimary">@android:color/background_dark</color>
+    <color name="backgroundSecondary">#444</color>
+</resources>

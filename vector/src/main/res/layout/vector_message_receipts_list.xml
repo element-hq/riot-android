@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="2dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -19,7 +19,7 @@
                 android:gravity="center"
                 android:textSize="9sp"
                 android:id="@+id/message_more_than_expected"
-                android:text="+999" />
+                tools:text="+999" />
 
             <include layout="@layout/vector_receipt_round_avatar"
                 android:id="@+id/message_avatar_receipt_5"/>

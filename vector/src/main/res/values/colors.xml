@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="textColorPrimary">@android:color/primary_text_light</color>
+    <color name="textColorSecondary">@android:color/secondary_text_light</color>
+
+    <color name="backgroundPrimary">@android:color/background_light</color>
+    <color name="backgroundSecondary">#ddd</color>
+
+
     <color name="room_background">#FFFFFFFF</color>
 
     <color name="presence_online">#38af00</color>

@@ -17,10 +17,13 @@
 package im.vector;
 import android.app.Activity;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -40,6 +43,7 @@ import im.vector.util.LogUtilities;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -93,6 +97,8 @@ public class VectorApp extends Application {
 
         // get the contact update at application launch
         ContactsManager.refreshLocalContactsSnapshot(this);
+
+        setTheme();
     }
 
     public static VectorApp getInstance() {
@@ -266,6 +272,24 @@ public class VectorApp extends Application {
 
     public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview){
         mSavedPickerImagePreview = aSavedCameraImagePreview;
+    }
+
+    private void setTheme() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String mode = sp.getString(getResources().getString(R.string.settings_theme), null);
+        String [] codes = getResources().getStringArray(R.array.theme_codes);
+        // TODO better way of keeping this in sync?
+        int [] modeIds = {
+                AppCompatDelegate.MODE_NIGHT_NO,
+                AppCompatDelegate.MODE_NIGHT_YES,
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                AppCompatDelegate.MODE_NIGHT_AUTO
+        };
+
+        int index = Arrays.binarySearch(codes, mode);
+        int modeId = modeIds[index >= 0 && index < modeIds.length ? index : modeIds[modeIds.length - 1]];
+
+        AppCompatDelegate.setDefaultNightMode(modeId);
     }
 }
 
