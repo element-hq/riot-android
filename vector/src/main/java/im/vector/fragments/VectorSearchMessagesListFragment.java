@@ -50,6 +50,7 @@ import java.util.Timer;
 import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorRoomMessagesContextActivity;
 import im.vector.activity.VectorUnifiedSearchActivity;
 import im.vector.adapters.VectorMessagesAdapter;
@@ -348,10 +349,15 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         Event event = mAdapter.getItem(position).getEvent();
 
         // pop to the home activity
-        Intent intent = new Intent(getActivity(), VectorRoomMessagesContextActivity.class);
+     /*   Intent intent = new Intent(getActivity(), VectorRoomMessagesContextActivity.class);
         intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_ROOM_ID, event.roomId);
-        intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_EVENT_ID, event.eventId);
+        intent.putExtra(VectorRoomMessagesContextActivity.EXTRA_EVENT_ID, event.eventId);*/
+
+        Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, event.roomId);
+        intent.putExtra(VectorRoomActivity.EXTRA_EVENT_ID, event.eventId);
 
         getActivity().startActivity(intent);
         return true;

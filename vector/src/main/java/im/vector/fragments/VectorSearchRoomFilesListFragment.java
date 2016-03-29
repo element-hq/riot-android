@@ -68,7 +68,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      */
     public void cancelCatchingRequests() {
         super.cancelCatchingRequests();
-        mIsCatchingUp = false;
+        mIsBackPaginating = false;
         mCanPaginateBack = true;
         mRoom.cancelRemoteHistoryRequest();
         mNextBatch = mRoom.getLiveState().getToken();
@@ -97,7 +97,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      */
     public void startFilesSearch(final OnSearchResultListener onSearchResultListener) {
         // please wait
-        if (mIsCatchingUp) {
+        if (mIsBackPaginating) {
             return;
         }
 
@@ -112,7 +112,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             return;
         }
 
-        mIsCatchingUp = true;
+        mIsBackPaginating = true;
         mMessageListView.setVisibility(View.GONE);
 
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
@@ -141,7 +141,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     }
                 }
 
-                mIsCatchingUp = false;
+                mIsBackPaginating = false;
                 mSearchListeners.clear();
             }
 
@@ -158,7 +158,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     }
                 }
 
-                mIsCatchingUp = false;
+                mIsBackPaginating = false;
                 mSearchListeners.clear();
             }
 
@@ -182,13 +182,13 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
     /**
      * Search the pattern on a pagination server side.
      */
-    public void requestHistory() {
+    public void backPaginate() {
         // please wait
-        if (mIsCatchingUp || !mCanPaginateBack) {
+        if (mIsBackPaginating || !mCanPaginateBack) {
             return;
         }
 
-        mIsCatchingUp = true;
+        mIsBackPaginating = true;
 
         final int firstPos = mMessageListView.getFirstVisiblePosition();
         final int countBeforeUpdate = mAdapter.getCount();
@@ -222,13 +222,12 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                     // do not use count because some messages are not displayed
                                     // so we compute the new pos
                                     mMessageListView.setSelection(firstPos + (mAdapter.getCount() - countBeforeUpdate));
-                                    mIsCatchingUp = false;
+                                    mIsBackPaginating = false;
                                 }
                             });
                         } else {
-                            mIsCatchingUp = false;
+                            mIsBackPaginating = false;
                         }
-
                         VectorSearchRoomFilesListFragment.this.dismissLoadingBackProgress();
 
                     }
@@ -237,7 +236,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             }
 
             private void onError() {
-                mIsCatchingUp = false;
+                mIsBackPaginating = false;
                 VectorSearchRoomFilesListFragment.this.dismissLoadingBackProgress();
             }
 
