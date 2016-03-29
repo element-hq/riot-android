@@ -1,18 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/vector_room_root_layout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/room_background"
         android:paddingTop="0dp"
         android:paddingBottom="@dimen/activity_vertical_margin">
 
         <ImageView
             android:id="@+id/search_background_imageview"
-            android:background="#FFFFFFFF"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
@@ -150,7 +149,7 @@
                 android:layout_marginLeft="73dp"
                 android:layout_marginRight="13dp"
                 android:textColor="@color/vector_fuchsia_color"
-                android:text="an error here " />
+                tools:text="an error here " />
         </RelativeLayout>
 
         <View
@@ -169,7 +168,8 @@
             android:id="@+id/anchor_fragment_messages"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
-            android:accessibilityLiveRegion="polite"/>
+            android:accessibilityLiveRegion="polite"
+            tools:targetApi="kitkat" />
 
         <RelativeLayout
             android:id="@+id/medias_processing_progress_layout_background"
@@ -226,8 +226,8 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="20sp"
-            android:text="a room name here"
-            android:textColor="@android:color/white"
+            tools:text="a room name here"
+            android:textColor="@color/textColorPrimary"
             android:layout_marginTop="14dp" />
 
         <TextView
@@ -238,9 +238,9 @@
             android:layout_below="@id/action_bar_header_room_title"
             android:maxLines="3"
             android:ellipsize="end"
-            android:text="a topic here"
+            tools:text="a topic here"
             android:textSize="14sp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textColorPrimary"
             android:layout_marginLeft="44dp"
             android:layout_marginRight="44dp"
             android:layout_marginTop="10dp" />

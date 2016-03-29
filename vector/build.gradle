@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -69,6 +69,7 @@ android {
     }
 }
 
+
 def gitRevision() {
     def cmd = "git rev-parse --short HEAD"
     return cmd.execute().text.trim()
@@ -89,18 +90,18 @@ dependencies {
 
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:cardview-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.google.android.gms:play-services-gcm:8.1.0'
-    compile 'com.google.android.gms:play-services-analytics:8.1.0'
+    compile "com.android.support:appcompat-v7:$sdkVersion"
+    compile "com.android.support:design:$sdkVersion"
+    compile "com.android.support:cardview-v7:$sdkVersion"
+    compile "com.android.support:recyclerview-v7:$sdkVersion"
+    compile "com.google.android.gms:play-services-gcm:$gmsVersion"
+    compile "com.google.android.gms:play-services-analytics:$gmsVersion"
 
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'io.pristine:libjingle:9690@aar'
-    compile(name: 'matrix-sdk', ext: 'aar')
+    compile 'com.github.matrix-org:matrix-android-sdk:develop-SNAPSHOT'
 }
 

@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -65,12 +66,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/roomSummaryAdapter_ts"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/textColorPrimary"
                     android:singleLine="true"
-                    android:textSize="16sp"
                     android:fontFamily="sans-serif-regular"
-                    android:textColor="@color/vector_text_black_color"
                     android:layout_alignParentBottom="true"
-                    android:text="Room Name" />
+                    tools:text="Room Name" />
 
                 <!-- Message timestamp -->
                 <TextView
@@ -78,19 +79,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:text="Jan 1 00:00"
+                    tools:text="Jan 1 00:00"
                     android:fontFamily="sans-serif-light"
-                    android:textColor="@color/vector_0_54_black_color"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginRight="25dp"/>
+                    android:layout_marginRight="25dp"
+                    android:layout_marginEnd="25dp"/>
 
                 <ImageView
                     android:id="@+id/roomSummaryAdapter_action_image"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
                     android:src="@drawable/vector_actions_9b"/>
 
@@ -99,6 +103,7 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@android:color/transparent">
 
                     <View
@@ -122,8 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:textSize="14sp"
-                    android:textColor="@color/vector_0_54_black_color"
-                    android:text="last room message" />
+                    tools:text="last room message" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -147,7 +151,6 @@
 
             <View
                 android:id="@+id/recents_invite_sep1"
-                android:background="@android:color/white"
                 android:layout_weight="0.20"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
@@ -160,7 +163,6 @@
                 android:fontFamily="sans-serif-medium"
                 android:textSize="14sp"
                 android:background="@color/vector_green_color"
-                android:textColor="@android:color/white"
                 android:text="@string/join"/>
 
             <View

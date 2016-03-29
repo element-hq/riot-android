@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="theme_readables">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>System Theme</item>
+        <item>Auto Mode</item>
+    </string-array>
+    <string-array name="theme_codes">
+        <item>light</item>
+        <item>dark</item>
+        <item>system</item>
+        <item>auto</item>
+    </string-array>
+
     <string name="resouces_language">en</string>
     <string name="resouces_country">UK</string>
 
@@ -448,7 +461,7 @@
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
     <string name="splash_screen_display_text">Vector</string>
-    <string name="splash_screen_copyright">Copyright (c) 2016 vector.im. All rights reserved.</string>
+    <string name="splash_screen_copyright">Copyright © %s vector.im. All rights reserved.</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifications</string>
@@ -470,20 +483,20 @@
     <string name="settings_title_config">Configuration</string>
 
     <string name="settings_sign_out">Sign Out</string>
-    <string name="settings_profile_picture">Profile Picture</string>
-    <string name="settings_display_name">Display Name</string>
-    <string name="settings_first_name">First Name</string>
+    <string name="settings_profile_picture">Profile picture</string>
+    <string name="settings_display_name">Display name</string>
+    <string name="settings_first_name">First name</string>
     <string name="settings_surname">Surname</string>
-    <string name="settings_email_address">Email Address</string>
-    <string name="settings_phone_number">Phone Number</string>
-    <string name="settings_night_mode">Night Mode</string>
+    <string name="settings_email_address">Email address</string>
+    <string name="settings_phone_number">Phone number</string>
+    <string name="settings_night_mode">Night mode</string>
 
     <string name="settings_enable_all_notif">Enable all notifications</string>
     <string name="settings_general_messages">General messages</string>
-    <string name="settings_messages_my_display_name">Msg containing my display name</string>
-    <string name="settings_messages_my_user_name">Msg containing my user name</string>
+    <string name="settings_messages_my_display_name">Mentions by display name</string>
+    <string name="settings_messages_my_user_name">Mentions by user name</string>
     <string name="settings_messages_sent_to_me">Messages sent to me</string>
-    <string name="settings_invited_to_room">When i m invited to a room</string>
+    <string name="settings_invited_to_room">Room invitations</string>
     <string name="settings_call_invitations">Call invitations</string>
 
     <string name="settings_version">Version</string>
@@ -508,5 +521,6 @@
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
+    <string name="settings_theme">Theme</string>
 
 </resources>

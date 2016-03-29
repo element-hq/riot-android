@@ -17,7 +17,9 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -71,7 +73,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private Intent mOpenedRoomIntent = null;
 
     private View mWaitingView = null;
-    private View mRoomCreationView = null;
+    private FloatingActionButton mRoomCreationView = null;
 
     private MXEventListener mEventsListener;
     private MXEventListener mLiveEventListener;
@@ -104,7 +106,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         this.setTitle(R.string.title_activity_home);
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
-        mRoomCreationView = findViewById(R.id.listView_create_room_view);
+        mRoomCreationView = (FloatingActionButton) findViewById(R.id.listView_create_room_view);
 
         mRoomCreationView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -414,35 +416,51 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             aboutMenuItem.setTitle(version);
         }
 
+        mNavigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // launch the settings activity
+                final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorSettingsActivity.class);
+                settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                startActivity(settingsIntent);
+            }
+        });
+
         // init the main menu
-        TextView displaynameTextView = (TextView)  mNavigationView.findViewById(R.id.home_menu_main_displayname);
+        TextView displaynameTextView = (TextView)  mNavigationView.getHeaderView(0).findViewById(R.id.home_menu_main_displayname);
         displaynameTextView.setText(mSession.getMyUser().displayname);
 
-        TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
+        TextView userIdTextView = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.home_menu_main_matrix_id);
         userIdTextView.setText(mSession.getMyUserId());
 
-        ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
+        ImageView mainAvatarView = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.home_menu_main_avatar);
         VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
     }
 
     // warn the user scrolls up
     public void onRecentsListScrollUp() {
-        if (mRoomCreationView.getVisibility() != View.VISIBLE) {
-            mRoomCreationView.setVisibility(View.VISIBLE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbar.animate()
+                    .translationZ(0)
+                    .start();
         }
+
+        mRoomCreationView.show();
     }
 
     // warn when the user scrolls downs
     public void onRecentsListScrollDown() {
-        if (mRoomCreationView.getVisibility() != View.GONE) {
-            mRoomCreationView.setVisibility(View.GONE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbar.animate()
+                    .translationZ(16)
+                    .start();
         }
+
+        mRoomCreationView.hide();
     }
 
     // warn when the list content can be fully displayed without scrolling
     public void onRecentsListFitsScreen() {
-        if (mRoomCreationView.getVisibility() != View.VISIBLE) {
-            mRoomCreationView.setVisibility(View.VISIBLE);
-        }
+        mRoomCreationView.show();
     }
 }

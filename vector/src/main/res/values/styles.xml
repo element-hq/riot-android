@@ -1,7 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- no action bar window -->
-    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.DayNight">
 
         <!-- hide the action bar -->
         <item name="android:windowActionBar">false</item>
@@ -10,25 +10,27 @@
         <item name="windowNoTitle">true</item>
 
         <!-- status bar color -->
+        <item name="colorPrimary">@color/vector_actionbar_background</item>
         <item name="colorPrimaryDark">@color/vector_statusbar_color</item>
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>
 
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
         <!-- activities background -->
-        <item name="android:windowBackground">@color/vector_activity_background_color</item>
+        <!--<item name="android:windowBackground">@color/vector_activity_background_color</item>-->
     </style>
 
 
     <!-- NoActionBar + FullScreen -->
-    <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <!-- activities background -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- ActionBar + FullScreen -->
-    <style name="AppTheme.ActionBar.FullScreen" parent="@style/AppTheme.NoActionBar.FullScreen">
+    <style name="AppTheme.ActionBar.FullScreen" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
         <!-- show the action bar -->
         <item name="android:windowActionBar">true</item>
         <item name="windowActionBar">true</item>
@@ -59,7 +61,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.DayNight">
 
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>
@@ -68,7 +70,7 @@
         <item name="colorPrimaryDark">@color/vector_statusbar_color</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@color/vector_activity_background_color</item>
+        <!--<item name="android:windowBackground">@color/vector_activity_background_color</item>-->
 
         <!-- fonts -->
         <item name="android:typeface">sans</item>

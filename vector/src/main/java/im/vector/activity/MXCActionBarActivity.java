@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ import java.util.ArrayList;
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends ActionBarActivity {
+public class MXCActionBarActivity extends AppCompatActivity {
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 

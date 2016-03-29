@@ -303,6 +303,10 @@ public class NotificationUtils {
 
         extendForCar(context, builder, roomId, roomName, from, body);
 
+        builder.setContentTitle(from)
+                .setContentText(body)
+                .setContentIntent(pendingIntent);
+
         Notification n = builder.build();
         n.flags |= Notification.FLAG_SHOW_LIGHTS;
         n.defaults |= Notification.DEFAULT_LIGHTS;
@@ -310,10 +314,6 @@ public class NotificationUtils {
         if (shouldPlaySound) {
             n.defaults |= Notification.DEFAULT_SOUND;
         }
-
-        // some devices crash if this field is not set
-        // even if it is deprecated
-        n.setLatestEventInfo(context, from, body, pendingIntent);
 
         return n;
     }
