@@ -137,12 +137,6 @@ public class NotificationUtils {
         builder.setContentText(body);
         builder.setAutoCancel(true);
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.logo);
-        } else {
-            builder.setSmallIcon(R.drawable.logo_transparent);
-        }
-
         if (null != largeIcon) {
             largeIcon = createSquareBitmap(largeIcon);
 
@@ -213,18 +207,6 @@ public class NotificationUtils {
             builder.setLargeIcon(largeIcon);
         }
 
-        if (0 != globalUnseen) {
-            String unseenText = context.getString((globalUnseen == 1) ? R.string.unseen_message : R.string.unseen_messages, globalUnseen);
-
-            SpannableString spannable = new SpannableString(unseenText);
-            spannable.setSpan(new ForegroundColorSpan(Color.RED), 0, unseenText.length(), 0);
-
-            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-            spannable.setSpan(boldSpan, 0, unseenText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            builder.setSubText(spannable);
-        }
-
         String name = ": ";
         if(!TextUtils.isEmpty(roomName)) {
             name = " (" + roomName + "): ";
@@ -282,7 +264,7 @@ public class NotificationUtils {
             quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
             PendingIntent pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0);
             builder.addAction(
-                    R.drawable.ic_menu_edit,
+                    R.drawable.ic_material_mode_edit_green_vector,
                     context.getString(R.string.action_quick_reply),
                     pIntent);
 
@@ -296,7 +278,7 @@ public class NotificationUtils {
                     .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntentTap);
             builder.addAction(
-                    R.drawable.ic_menu_start_conversation,
+                    R.drawable.ic_material_message_green_vector,
                     context.getString(R.string.action_open),
                     stackBuildertap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }

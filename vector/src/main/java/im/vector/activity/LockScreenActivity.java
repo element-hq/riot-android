@@ -21,10 +21,13 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -98,14 +101,41 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         setTitle(room.getName(session.getCredentials().userId));
 
         ((TextView)findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
-        ((TextView)findViewById(R.id.lock_screen_body)).setText( intent.getStringExtra(EXTRA_MESSAGE_BODY));
+        ((TextView)findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
         ((TextView)findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
+        final ImageButton sendButton = (ImageButton)findViewById(R.id.lock_screen_sendbutton);
+        final EditText editText = (EditText) findViewById(R.id.lock_screen_edittext);
 
-        findViewById(R.id.lock_screen_sendbutton).setOnClickListener(new View.OnClickListener() {
+        // disable send button
+        sendButton.setEnabled(false);
+        sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+            }
 
             @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // disable/enable send button according to input text content
+                String inputText = editText.getText().toString();
+                if (TextUtils.isEmpty(inputText)) {
+                    sendButton.setEnabled(false);
+                    sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+                } else {
+                    sendButton.setEnabled(true);
+                    sendButton.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
+                }
+            }
+        });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
-                EditText editText = (EditText) findViewById(R.id.lock_screen_edittext);
                 String body = editText.getText().toString();
 
                 Message message = new Message();
