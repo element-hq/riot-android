@@ -153,6 +153,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private MXSession mSession;
     private Room mRoom;
     private String mMyUserId;
+    private String mEventId;
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
     private MXMediasCache mMediasCache;
@@ -363,6 +364,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
         }
 
+        mEventId = intent.getStringExtra(EXTRA_EVENT_ID);
+
         // the user has tapped on the "View" notification button
         if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
             // remove any pending notifications
@@ -527,8 +530,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (mVectorMessageListFragment == null) {
             // this fragment displays messages and handles all message logic
-            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), intent.getStringExtra(EXTRA_EVENT_ID),  org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), mEventId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
+        }
+
+        // in timeline mode (i.e search in the forward and backward room history)
+        // the edition is disabled.
+        if (!TextUtils.isEmpty(mEventId)) {
+            mNotificationsArea.setVisibility(View.GONE);
+            findViewById(R.id.bottom_separator).setVisibility(View.GONE);
+            findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
+            findViewById(R.id.room_notifications_area).setVisibility(View.GONE);
+
+            View v = findViewById(R.id.room_bottom_layout);
+            ViewGroup.LayoutParams params = v.getLayoutParams();
+            params.height = 0;
+            v.setLayoutParams(params);
         }
 
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
@@ -1720,7 +1737,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         }
 
-        mNotificationsArea.setVisibility(isAreaVisible? View.VISIBLE : View.INVISIBLE);
+        if (TextUtils.isEmpty(mEventId)) {
+            mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
+        }
 
         // typing
         mTypingIcon.setVisibility(isTypingIconDisplayed? View.VISIBLE : View.INVISIBLE);
