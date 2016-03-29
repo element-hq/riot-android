@@ -74,6 +74,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         void moveToLowPriority(MXSession session, String roomId);
 
         void onLeaveRoom(MXSession session, String roomId);
+        void onGroupCollapsedNotif(int aGroupPosition);
+        void onGroupExpandedNotif(int aGroupPosition);
     }
 
     private final Context mContext;
@@ -101,9 +103,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private ArrayList<PublicRoom> mMatchedPublicRooms;
 
     // the listener
-    private RoomEventListener mListener = null;
+    private RoomEventListener mListener;
 
-    // drap and drop mode
+    // drag and drop mode
     private boolean mIsDragAndDropMode = false;
 
     /**
@@ -239,6 +241,22 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     public boolean isDirectoryGroupPosition(int groupPosition) {
         return (mDirectoryGroupPosition == groupPosition);
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        if(null != mListener) {
+            mListener.onGroupCollapsedNotif(groupPosition);
+        }
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+        if(null != mListener) {
+            mListener.onGroupExpandedNotif(groupPosition);
+        }
     }
 
     /**
@@ -398,9 +416,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Return the summary
-     * @param aGroupPosition
-     * @param aChildPosition
-     * @return
+     * @param aGroupPosition group position
+     * @param aChildPosition child position
+     * @return the corresponding room summary
      */
     public RoomSummary getRoomSummaryAt(int aGroupPosition, int aChildPosition) {
         RoomSummary roomSummaryRetValue = mSummaryListByGroupPosition.get(aGroupPosition).get(aChildPosition);
