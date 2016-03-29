@@ -168,24 +168,24 @@
             android:layout_height="wrap_content"
             android:id="@+id/anchor_fragment_messages"
             android:layout_centerHorizontal="true">
-
-            <ProgressBar
-                android:id="@+id/loading_room_paginate_back_progress"
-                android:layout_height="40dp"
-                android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
-                android:visibility="gone"
-                android:indeterminate="true" />
-
-            <ProgressBar
-                android:id="@+id/loading_room_paginate_forward_progress"
-                android:layout_height="40dp"
-                android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:visibility="gone"
-                android:indeterminate="true" />
         </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_back_progress"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:indeterminate="true" />
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_forward_progress"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@id/anchor_fragment_messages"
+            android:visibility="gone"
+            android:indeterminate="true" />
 
         <RelativeLayout
             android:id="@+id/main_progress_layout"
@@ -195,7 +195,6 @@
             android:layout_height="match_parent"
             android:background="@color/chat_encoding_background"
             android:visibility="gone">
-
             <ProgressBar
                 android:id="@+id/medias_processing_progress"
                 android:layout_height="40dp"

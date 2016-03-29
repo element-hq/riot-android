@@ -164,7 +164,7 @@ public class VectorRoomMessageContextFragment extends Fragment {
                 int lastVisibleRow = mMessageListView.getLastVisiblePosition();
                 int count = mMessageListView.getCount();
 
-                if ((lastVisibleRow + 10) >= count) {
+                if ((lastVisibleRow + 2) >= count) {
                     forwardPaginate();
                 }  else if (firstVisibleRow < 2) {
                     backwardPaginate();
@@ -176,7 +176,7 @@ public class VectorRoomMessageContextFragment extends Fragment {
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             if (firstVisibleItem < 2) {
                 backwardPaginate();
-            } else if ((firstVisibleItem + visibleItemCount + 10) >= totalItemCount) {
+            } else if ((firstVisibleItem + visibleItemCount + 2) >= totalItemCount) {
                 forwardPaginate();
             }
         }
