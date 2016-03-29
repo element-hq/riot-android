@@ -85,12 +85,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     protected static final int ACTION_VECTOR_OPEN = 123456;
 
 
-    public static VectorMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
+    public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ROOM_ID, roomId);
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
+        args.putString(ARG_ROOM_ID, roomId);
+
+        if (null != eventId) {
+            args.putString(ARG_EVENT_ID, eventId);
+        }
+
         f.setArguments(args);
         return f;
     }
@@ -419,16 +424,16 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * Display a global spinner or any UI item to warn the user that there are some pending actions.
+     * Display a global spinner that back pagination is in progress.
      */
     @Override
-    public void displayLoadingProgress() {
+    public void displayLoadingBackProgress() {
         if (null != getActivity()) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
+                        final View progressView = getActivity().findViewById(R.id.loading_room_paginate_back_progress);
 
                         if (null != progressView) {
                             progressView.setVisibility(View.VISIBLE);
@@ -440,16 +445,16 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * Dismiss any global spinner.
+     * Dismiss the back pagination progress.
      */
     @Override
-    public void dismissLoadingProgress() {
+    public void dismissLoadingBackProgress() {
         if (null != getActivity()) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
+                        final View progressView = getActivity().findViewById(R.id.loading_room_paginate_back_progress);
 
                         if (null != progressView) {
                             progressView.setVisibility(View.GONE);
@@ -461,11 +466,45 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * logout from the application
+     * Display a global spinner that forward pagination is in progress.
      */
     @Override
-    public void logout() {
-        CommonActivityUtils.logout(VectorMessageListFragment.this.getActivity());
+    public void displayLoadingForwardProgress() {
+        if (null != getActivity()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != getActivity()) {
+                        final View progressView = getActivity().findViewById(R.id.loading_room_paginate_forward_progress);
+
+                        if (null != progressView) {
+                            progressView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Dismiss the forward pagination progress.
+     */
+    @Override
+    public void dismissLoadingForwardProgress() {
+        if (null != getActivity()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != getActivity()) {
+                        final View progressView = getActivity().findViewById(R.id.loading_room_paginate_forward_progress);
+
+                        if (null != progressView) {
+                            progressView.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     public boolean onRowLongClick(int position) {

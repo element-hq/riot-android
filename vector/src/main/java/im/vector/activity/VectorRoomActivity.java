@@ -104,6 +104,8 @@ import java.util.TimerTask;
 public class VectorRoomActivity extends MXCActionBarActivity implements VectorMessageListFragment.IListFragmentEventListener {
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
+    public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
+
     private static final boolean SHOW_ACTION_BAR_HEADER = true;
     private static final boolean HIDE_ACTION_BAR_HEADER = false;
 
@@ -394,6 +396,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
         Log.i(LOG_TAG, "Displaying " + roomId);
 
+
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
 
         // hide the header room as soon as the message input text area is touched
@@ -524,7 +527,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (mVectorMessageListFragment == null) {
             // this fragment displays messages and handles all message logic
-            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), intent.getStringExtra(EXTRA_EVENT_ID),  org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         }
 

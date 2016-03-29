@@ -145,7 +145,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * Display a global spinner or any UI item to warn the user that there are some pending actions.
      */
     @Override
-    public void displayLoadingProgress() {
+    public void displayLoadingBackProgress() {
         if (null != mProgressView) {
             mProgressView.setVisibility(View.VISIBLE);
         }
@@ -155,7 +155,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * Dismiss any global spinner.
      */
     @Override
-    public void dismissLoadingProgress() {
+    public void dismissLoadingBackProgress() {
         if (null != mProgressView) {
             mProgressView.setVisibility(View.GONE);
         }
