@@ -193,7 +193,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         final int firstPos = mMessageListView.getFirstVisiblePosition();
         final int countBeforeUpdate = mAdapter.getCount();
 
-        displayLoadingBackProgress();
+        showLoadingBackProgress();
 
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
             @Override
@@ -228,7 +228,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                         } else {
                             mIsBackPaginating = false;
                         }
-                        VectorSearchRoomFilesListFragment.this.dismissLoadingBackProgress();
+                        VectorSearchRoomFilesListFragment.this.hideLoadingBackProgress();
 
                     }
                 });
@@ -237,7 +237,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
             private void onError() {
                 mIsBackPaginating = false;
-                VectorSearchRoomFilesListFragment.this.dismissLoadingBackProgress();
+                VectorSearchRoomFilesListFragment.this.hideLoadingBackProgress();
             }
 
             // the request will be auto restarted when a valid network will be found

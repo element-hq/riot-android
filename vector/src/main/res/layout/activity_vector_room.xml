@@ -188,7 +188,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/medias_processing_progress_layout_background"
+            android:id="@+id/main_progress_layout"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_width="match_parent"

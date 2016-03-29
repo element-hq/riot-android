@@ -755,14 +755,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_room, menu);
+        // the menu is only displayed when the current activity does not display a timeline search
+        if (TextUtils.isEmpty(mEventId)) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.vector_room, menu);
 
-        mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
-        mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+            mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
+            mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
 
-        // hide / show the unsent / resend all entries.
-        refreshNotificationsArea();
+            // hide / show the unsent / resend all entries.
+            refreshNotificationsArea();
+        }
 
         return true;
     }
@@ -818,7 +821,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private void sendMedias(final ArrayList<Uri> mediaUris) {
         mVectorMessageListFragment.cancelSelectionMode();
 
-        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+        final View progressLayout = findViewById(R.id.main_progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
 
         final HandlerThread handlerThread = new HandlerThread("MediasEncodingThread");
@@ -1515,7 +1518,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+                                        final View progressLayout =  findViewById(R.id.main_progress_layout);
                                         progressLayout.setVisibility(View.VISIBLE);
 
                                         Thread thread = new Thread(new Runnable() {
@@ -1929,8 +1932,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void setActionBarDefaultCustomLayout(){
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+
         // sanity check
-        if(null == actionBar){
+        if (null == actionBar){
             return;
         }
 
@@ -1947,7 +1951,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
         mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
         mIsKeyboardDisplayed = false;
-
 
         // custom header
         View headerTextsContainer = customLayout.findViewById(R.id.header_texts_container);
