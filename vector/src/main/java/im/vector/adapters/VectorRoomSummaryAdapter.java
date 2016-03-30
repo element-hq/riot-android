@@ -910,7 +910,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         });
 
         popup.show();
-
     }
 
     /**
