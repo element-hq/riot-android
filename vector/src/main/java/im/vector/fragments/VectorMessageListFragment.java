@@ -134,6 +134,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         mMainProgressView = aHostActivity.findViewById(R.id.main_progress_layout);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mAdapter instanceof VectorMessagesAdapter) {
+            ((VectorMessagesAdapter)mAdapter).onPause();
+        }
+    }
+
     /**
      * Called when the fragment is no longer attached to its activity.  This
      * is called after {@link #onDestroy()}.

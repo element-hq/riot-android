@@ -22,8 +22,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.LoginFilter;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -79,6 +82,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     protected Date mReferenceDate = new Date();
     protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     protected Handler mUiHandler;
+
+    protected HashMap<String, String> mEventFormattedTsMap = new HashMap<String, String>();
 
     public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
                                  int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, MXMediasCache mediasCache) {
@@ -109,6 +114,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         // for dispatching data to add to the adapter we need to be on the main thread
         mUiHandler = new Handler(Looper.getMainLooper());
     }
+
+    /**
+     * the parent fragment is paused.
+     */
+    public void onPause() {
+        mEventFormattedTsMap.clear();
+    }
+
 
     /**
      * Toogle the selection mode.
@@ -159,11 +172,21 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      */
     @Override
     protected String getFormattedTimestamp(Event event) {
-        if (event.isValidOriginServerTs()) {
-            return AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
-        } else {
-            return " ";
+        String res = mEventFormattedTsMap.get(event.eventId);
+
+        if (null != res) {
+            return res;
         }
+
+        if (event.isValidOriginServerTs()) {
+            res = AdapterUtils.tsToString(mContext, event.getOriginServerTs(), true);
+        } else {
+            res = " ";
+        }
+
+        mEventFormattedTsMap.put(event.eventId, res);
+
+        return res;
     }
 
     @Override
