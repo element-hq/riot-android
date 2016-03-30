@@ -21,24 +21,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;

@@ -84,13 +84,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     protected static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
     protected static final int ACTION_VECTOR_OPEN = 123456;
 
+    // spinners
+    protected View mBackProgressView;
+    protected View mForwardProgressView;
+    protected View mMainProgressView;
 
-    public static VectorMessageListFragment newInstance(String matrixId, String roomId, int layoutResId) {
+    public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ROOM_ID, roomId);
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
+        args.putString(ARG_ROOM_ID, roomId);
+
+        if (null != eventId) {
+            args.putString(ARG_EVENT_ID, eventId);
+        }
+
         f.setArguments(args);
         return f;
     }
@@ -118,6 +127,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             // if host activity does not provide the implementation, just ignore it
             Log.w(LOG_TAG,"## onAttach(): host activity does not implement IListFragmentEventListener " + aHostActivity);
             mHostActivityListener = null;
+        }
+
+        mBackProgressView = aHostActivity.findViewById(R.id.loading_room_paginate_back_progress);
+        mForwardProgressView = aHostActivity.findViewById(R.id.loading_room_paginate_forward_progress);
+        mMainProgressView = aHostActivity.findViewById(R.id.main_progress_layout);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mAdapter instanceof VectorMessagesAdapter) {
+            ((VectorMessagesAdapter)mAdapter).onPause();
         }
     }
 
@@ -418,54 +440,40 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return preferences.getBoolean(getString(R.string.settings_key_display_all_events), false);
     }
 
-    /**
-     * Display a global spinner or any UI item to warn the user that there are some pending actions.
-     */
-    @Override
-    public void displayLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            });
+    private void setViewVisibility(View view, int visibility) {
+        if ((null != view) && (null != getActivity())) {
+            view.setVisibility(visibility);
         }
     }
 
-    /**
-     * Dismiss any global spinner.
-     */
     @Override
-    public void dismissLoadingProgress() {
-        if (null != getActivity()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (null != getActivity()) {
-                        final View progressView = getActivity().findViewById(R.id.loading_room_content_progress);
-
-                        if (null != progressView) {
-                            progressView.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
-        }
+    public void showLoadingBackProgress() {
+        setViewVisibility(mBackProgressView, View.VISIBLE);
     }
 
-    /**
-     * logout from the application
-     */
     @Override
-    public void logout() {
-        CommonActivityUtils.logout(VectorMessageListFragment.this.getActivity());
+    public void hideLoadingBackProgress() {
+        setViewVisibility(mBackProgressView, View.GONE);
+    }
+
+    @Override
+    public void showLoadingForwardProgress() {
+        setViewVisibility(mForwardProgressView, View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoadingForwardProgress() {
+        setViewVisibility(mForwardProgressView, View.GONE);
+    }
+
+    @Override
+    public void showInitLoading() {
+        setViewVisibility(mMainProgressView, View.VISIBLE);
+    }
+
+    @Override
+    public void hideInitLoading() {
+        setViewVisibility(mMainProgressView, View.GONE);
     }
 
     public boolean onRowLongClick(int position) {

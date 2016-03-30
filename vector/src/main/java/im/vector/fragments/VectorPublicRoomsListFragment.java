@@ -16,8 +16,10 @@
 
 package im.vector.fragments;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +32,11 @@ import org.matrix.androidsdk.rest.model.PublicRoom;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorPublicRoomsAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VectorPublicRoomsListFragment extends Fragment {
     private static final String LOG_TAG = "VectorPubRoomsListFrg";
@@ -88,7 +92,19 @@ public class VectorPublicRoomsListFragment extends Fragment {
 
                 // launch corresponding room activity
                 if (null != publicRoom.roomId) {
-                    CommonActivityUtils.goToRoomPage(mSession, publicRoom.roomId, getActivity(), null);
+                    HashMap<String, Object> params = new HashMap<String, Object>();
+                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
+
+                    if (!TextUtils.isEmpty(publicRoom.name)) {
+                        params.put(VectorRoomActivity.EXTRA_DEFAULT_NAME, publicRoom.name);
+                    }
+
+                    if (!TextUtils.isEmpty(publicRoom.topic)) {
+                        params.put(VectorRoomActivity.EXTRA_DEFAULT_TOPIC, publicRoom.topic);
+                    }
+
+                    CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
                 }
             }
         });
