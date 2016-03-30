@@ -258,7 +258,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 }
             });
 
-
             return true;
         }
 
