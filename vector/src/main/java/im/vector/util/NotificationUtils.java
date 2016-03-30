@@ -137,6 +137,12 @@ public class NotificationUtils {
         builder.setContentText(body);
         builder.setAutoCancel(true);
 
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            builder.setSmallIcon(R.drawable.logo);
+        } else {
+            builder.setSmallIcon(R.drawable.logo_transparent);
+        }
+
         if (null != largeIcon) {
             largeIcon = createSquareBitmap(largeIcon);
 
