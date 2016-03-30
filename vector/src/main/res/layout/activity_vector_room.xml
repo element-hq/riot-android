@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@color/room_background"
         android:paddingTop="0dp"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:paddingBottom="0dp">
 
         <ImageView
             android:id="@+id/search_background_imageview"
@@ -95,9 +95,7 @@
                 android:id="@+id/editText_messageBox"
                 android:layout_centerVertical="true"
                 android:theme="@style/SearchesAppTheme"
-                android:textColorHint="@color/vector_0_54_black_color"
-                />
-
+                android:textColorHint="@color/vector_0_54_black_color"/>
         </RelativeLayout>
 
         <View
@@ -161,25 +159,40 @@
             android:layout_above="@id/room_notifications_area"
             android:background="@color/vector_light_gray_color" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_alignParentTop="true"
             android:layout_above="@id/room_notification_separator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/anchor_fragment_messages"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical"
-            android:accessibilityLiveRegion="polite"/>
+            android:layout_centerHorizontal="true">
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_back_progress"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:indeterminate="true" />
+
+        <ProgressBar
+            android:id="@+id/loading_room_paginate_forward_progress"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@id/anchor_fragment_messages"
+            android:visibility="gone"
+            android:indeterminate="true" />
 
         <RelativeLayout
-            android:id="@+id/medias_processing_progress_layout_background"
+            android:id="@+id/main_progress_layout"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/chat_encoding_background"
             android:visibility="gone">
-
             <ProgressBar
                 android:id="@+id/medias_processing_progress"
                 android:layout_height="40dp"
@@ -216,6 +229,8 @@
                 android:layout_height="84dp"
                 android:id="@+id/room_avatar"/>
         </RelativeLayout>
+
+
 
         <TextView
             android:id="@+id/action_bar_header_room_title"
@@ -259,14 +274,5 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="19dp"/>
     </RelativeLayout>
-
-
-    <ProgressBar
-        android:id="@+id/loading_room_content_progress"
-        android:layout_height="40dp"
-        android:layout_width="match_parent"
-        android:layout_alignParentLeft="true"
-        android:visibility="gone"
-        android:indeterminate="true" />
 
 </RelativeLayout>

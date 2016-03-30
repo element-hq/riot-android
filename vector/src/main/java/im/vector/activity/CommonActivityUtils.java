@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -63,10 +64,13 @@ import im.vector.util.RageShake;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -298,22 +302,21 @@ public class CommonActivityUtils {
         return dialog;
     }
 
-    public static void goToRoomPage(final String matrixId, final String roomId, final Activity fromActivity, final Intent intentParam) {
-        goToRoomPage(Matrix.getMXSession(fromActivity, matrixId), roomId, fromActivity, intentParam);
+    public static void goToRoomPage(final Activity fromActivity, final Map<String, Object> params) {
+        goToRoomPage(fromActivity, null, params);
     }
 
-    public static void goToRoomPage(final MXSession aSession, final String roomId, final Activity fromActivity, final Intent intentParam) {
-        // check first if the 1:1 room already exists
-        MXSession session = (aSession == null) ? Matrix.getMXSession(fromActivity, null) : aSession;
+    public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
+        final MXSession aSession = (session == null) ? Matrix.getMXSession(fromActivity, (String)params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
-        if ((null == session) || !session.isActive()) {
+        if ((null == aSession) || !aSession.isActive()) {
             return;
         }
 
-        final MXSession fSession = session;
+        String roomId = (String)params.get(VectorRoomActivity.EXTRA_ROOM_ID);
 
-        Room room = session.getDataHandler().getRoom(roomId);
+        Room room = aSession.getDataHandler().getRoom(roomId);
 
         // do not open a leaving room.
         // it does not make.
@@ -329,21 +332,24 @@ public class CommonActivityUtils {
                                                // pop to the home activity
                                                Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
                                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_ID, roomId);
-                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_MATRIX_ID, fSession.getCredentials().userId);
-                                               if (null != intentParam) {
-                                                   intent.putExtra(VectorHomeActivity.EXTRA_ROOM_INTENT, intentParam);
-                                               }
+
+                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable)params);
                                                fromActivity.startActivity(intent);
                                            } else {
                                                // already to the home activity
                                                // so just need to open the room activity
                                                Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
-                                               intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                                               intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getCredentials().userId);
-                                               if (null != intentParam) {
-                                                   intent.putExtra(VectorHomeActivity.EXTRA_ROOM_INTENT, intentParam);
+
+                                               for(String key : params.keySet()) {
+                                                   Object value = params.get(key);
+
+                                                   if (value instanceof String) {
+                                                       intent.putExtra(key, (String)value);
+                                                   } else {
+                                                       intent.putExtra(key, (Parcelable)value);
+                                                   }
                                                }
+
                                                fromActivity.startActivity(intent);
                                            }
                                        }
@@ -398,7 +404,12 @@ public class CommonActivityUtils {
 
         // the room already exists -> switch to it
         if (null != room) {
-            CommonActivityUtils.goToRoomPage(session, room.getRoomId(), fromActivity, null);
+            HashMap<String, Object> params = new HashMap<String, Object>();
+
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+
+            CommonActivityUtils.goToRoomPage(fromActivity, session, params);
 
             // everything is ok
             if (null != callback) {
@@ -414,7 +425,12 @@ public class CommonActivityUtils {
                     room.invite(otherUserId, new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
-                            CommonActivityUtils.goToRoomPage(fSession, room.getRoomId(), fromActivity, null);
+
+                            HashMap<String, Object> params = new HashMap<String, Object>();
+                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
+                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+
+                            CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);
 
                             callback.onSuccess(null);
                         }
@@ -560,7 +576,13 @@ public class CommonActivityUtils {
                             @Override
                             public void run() {
                                 RoomSummary summary = mergedSummaries.get(which);
-                                CommonActivityUtils.goToRoomPage(session,  summary.getRoomId(), fromActivity, intent);
+
+                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
+
+                                CommonActivityUtils.goToRoomPage(fromActivity, session,  params);
                             }
                         });
                     }

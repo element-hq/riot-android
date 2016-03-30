@@ -55,6 +55,7 @@ import org.matrix.androidsdk.util.ContentManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -497,6 +498,10 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             return;
         }
 
-        CommonActivityUtils.goToRoomPage(mSession, mRoom.getRoomId(), this, null);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+
+        CommonActivityUtils.goToRoomPage(this, mSession, params);
     }
 }
