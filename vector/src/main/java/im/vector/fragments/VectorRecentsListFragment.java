@@ -133,7 +133,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(getActivity().getApplicationContext(), mSession, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
 
         mRecentsListView.setAdapter(mAdapter);
 
