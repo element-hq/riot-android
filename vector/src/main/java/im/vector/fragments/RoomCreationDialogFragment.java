@@ -33,8 +33,10 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorRoomActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A dialog fragment showing a list of room members for a given room.
@@ -112,7 +114,12 @@ public class RoomCreationDialogFragment extends DialogFragment {
                         mSession.createRoom(roomName, null, roomVisibility, roomAlias, new SimpleApiCallback<String>(getActivity()) {
                             @Override
                             public void onSuccess(String roomId) {
-                                CommonActivityUtils.goToRoomPage(mSession, roomId, activity, null);
+
+                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                                CommonActivityUtils.goToRoomPage(activity, mSession, params);
 
                                 Room room = mSession.getDataHandler().getRoom(roomId);
 

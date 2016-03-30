@@ -45,9 +45,11 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.view.RecentsExpandableListView;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
@@ -150,7 +152,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 // launch corresponding room activity
                 if (null != roomId) {
-                    CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+                    HashMap<String, Object> params = new HashMap<String, Object>();
+                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                    CommonActivityUtils.goToRoomPage(getActivity(), session, params);
                 }
 
                 // click is handled
@@ -379,7 +385,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public void onJoinRoom(MXSession session, String roomId) {
-        CommonActivityUtils.goToRoomPage(session, roomId, getActivity(), null);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+        CommonActivityUtils.goToRoomPage(getActivity(), session, params);
     }
 
     @Override

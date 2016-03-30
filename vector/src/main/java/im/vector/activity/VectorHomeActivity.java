@@ -49,6 +49,7 @@ import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -58,17 +59,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
-    public static final String EXTRA_JUMP_TO_ROOM_ID = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_ID";
-    public static final String EXTRA_JUMP_MATRIX_ID = "VectorHomeActivity.EXTRA_JUMP_MATRIX_ID";
-    public static final String EXTRA_ROOM_INTENT = "VectorHomeActivity.EXTRA_ROOM_INTENT";
-
+    public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
     private static final String TAG_FRAGMENT_RECENTS_LIST = "VectorHomeActivity.TAG_FRAGMENT_RECENTS_LIST";
 
 
     // switch to a room activity
-    private String mAutomaticallyOpenedRoomId = null;
-    private String mAutomaticallyOpenedMatrixId = null;
-    private Intent mOpenedRoomIntent = null;
+    private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
     private View mWaitingView = null;
     private View mRoomCreationView = null;
@@ -119,17 +115,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // process intent parameters
         final Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_JUMP_TO_ROOM_ID)) {
-            mAutomaticallyOpenedRoomId = intent.getStringExtra(EXTRA_JUMP_TO_ROOM_ID);
-        }
 
-        if (intent.hasExtra(EXTRA_JUMP_MATRIX_ID)) {
-            mAutomaticallyOpenedMatrixId = intent.getStringExtra(EXTRA_JUMP_MATRIX_ID);
-        }
-
-        if (intent.hasExtra(EXTRA_ROOM_INTENT)) {
-            mOpenedRoomIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
-        }
+        mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
 
         String action = intent.getAction();
         String type = intent.getType();
@@ -208,14 +195,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
 
-        if (null != mAutomaticallyOpenedRoomId) {
+        if (null != mAutomaticallyOpenedRoomParams) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    CommonActivityUtils.goToRoomPage(mAutomaticallyOpenedMatrixId, VectorHomeActivity.this.mAutomaticallyOpenedRoomId, VectorHomeActivity.this, mOpenedRoomIntent);
-                    VectorHomeActivity.this.mAutomaticallyOpenedRoomId = null;
-                    VectorHomeActivity.this.mAutomaticallyOpenedMatrixId = null;
-                    VectorHomeActivity.this.mOpenedRoomIntent = null;
+                    CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mAutomaticallyOpenedRoomParams);
+                    mAutomaticallyOpenedRoomParams = null;
                 }
             });
         }
@@ -242,16 +227,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (intent.hasExtra(EXTRA_JUMP_TO_ROOM_ID)) {
-            mAutomaticallyOpenedRoomId = intent.getStringExtra(EXTRA_JUMP_TO_ROOM_ID);
-        }
-
-        if (intent.hasExtra(EXTRA_JUMP_MATRIX_ID)) {
-            mAutomaticallyOpenedMatrixId = intent.getStringExtra(EXTRA_JUMP_MATRIX_ID);
-        }
-
-        if (intent.hasExtra(EXTRA_ROOM_INTENT)) {
-            mOpenedRoomIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
+        if (intent.hasExtra(EXTRA_JUMP_TO_ROOM_PARAMS)) {
+            mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
         }
     }
 

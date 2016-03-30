@@ -94,6 +94,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -105,6 +106,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
+    public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
+
+    // display the room information while joining a room.
+    // until the join is done.
+    public static final String EXTRA_DEFAULT_NAME = "EXTRA_DEFAULT_NAME";
+    public static final String EXTRA_DEFAULT_TOPIC = "EXTRA_DEFAULT_TOPIC";
 
     private static final boolean SHOW_ACTION_BAR_HEADER = true;
     private static final boolean HIDE_ACTION_BAR_HEADER = false;
@@ -154,6 +161,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private Room mRoom;
     private String mMyUserId;
     private String mEventId;
+    private String mDefaultRoomName;
+    private String mDefaultTopic;
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
     private MXMediasCache mMediasCache;
@@ -360,11 +369,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             return;
         }
 
-        if (intent.hasExtra(EXTRA_START_CALL_ID)) {
-            mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
-        }
-
+        mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
         mEventId = intent.getStringExtra(EXTRA_EVENT_ID);
+        mDefaultRoomName = intent.getStringExtra(EXTRA_DEFAULT_NAME);
+        mDefaultTopic = intent.getStringExtra(EXTRA_DEFAULT_TOPIC);
 
         // the user has tapped on the "View" notification button
         if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
@@ -552,8 +560,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mMediasCache = Matrix.getInstance(this).getMediasCache();
 
         // some medias must be sent while opening the chat
-        if (intent.hasExtra(VectorHomeActivity.EXTRA_ROOM_INTENT)) {
-            final Intent mediaIntent = intent.getParcelableExtra(VectorHomeActivity.EXTRA_ROOM_INTENT);
+        if (intent.hasExtra(EXTRA_ROOM_INTENT)) {
+            final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
 
             // sanity check
             if (null != mediaIntent) {
@@ -1852,7 +1860,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                         @Override
                         public void onSuccess(String roomId) {
                             if (null != roomId) {
-                                CommonActivityUtils.goToRoomPage(mSession, roomId, VectorRoomActivity.this, null);
+                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                                CommonActivityUtils.goToRoomPage(VectorRoomActivity.this, mSession, params);
                             }
                         }
                     });
@@ -2004,7 +2016,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void setTitle(){
         if((null != mSession) && (null != mRoom)) {
-            String titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
+            String titleToApply = mRoom.isReady() ? VectorUtils.getRoomDisplayname(this, mSession, mRoom) : mDefaultRoomName;
 
             // set action bar title
             if (null != mActionBarCustomTitle) {
@@ -2035,7 +2047,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void updateRoomHeaderTopic() {
         if((null != mActionBarCustomTopic) && (null != mRoom)) {
-            String value = mRoom.getTopic();
+            String value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
 
             // if topic value is empty, just hide the topic TextView
             if (TextUtils.isEmpty(value)) {
