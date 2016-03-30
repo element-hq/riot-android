@@ -66,7 +66,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
         // create the adapter
-        mAdapter = new VectorRoomSummaryAdapter(getActivity(), mSession, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
+        mAdapter = new VectorRoomSummaryAdapter(getActivity().getApplicationContext(), mSession, true, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
         mRecentsListView.setAdapter(mAdapter);
 
         // hide it by default
@@ -199,7 +199,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         }
     }
 
-    protected boolean isDrapAndDropSupported() {
+    protected boolean isDragAndDropSupported() {
         return false;
     }
 }

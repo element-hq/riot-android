@@ -76,7 +76,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
     @Override
     public void onPause() {
-        super.onResume();
+        super.onPause(); // Fix memory leak: VectorRoomDetailsActivity() instances leak
         cancelCatchingRequests();
     }
 
