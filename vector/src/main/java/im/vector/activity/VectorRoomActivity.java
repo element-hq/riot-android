@@ -96,6 +96,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -106,6 +107,14 @@ import java.util.TimerTask;
 public class VectorRoomActivity extends MXCActionBarActivity implements VectorMessageListFragment.IListFragmentEventListener {
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
+    public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
+    public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
+
+    // display the room information while joining a room.
+    // until the join is done.
+    public static final String EXTRA_DEFAULT_NAME = "EXTRA_DEFAULT_NAME";
+    public static final String EXTRA_DEFAULT_TOPIC = "EXTRA_DEFAULT_TOPIC";
+
     private static final boolean SHOW_ACTION_BAR_HEADER = true;
     private static final boolean HIDE_ACTION_BAR_HEADER = false;
 
@@ -153,6 +162,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private MXSession mSession;
     private Room mRoom;
     private String mMyUserId;
+    private String mEventId;
+    private String mDefaultRoomName;
+    private String mDefaultTopic;
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
     private MXMediasCache mMediasCache;
@@ -359,9 +371,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             return;
         }
 
-        if (intent.hasExtra(EXTRA_START_CALL_ID)) {
-            mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
-        }
+        mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
+        mEventId = intent.getStringExtra(EXTRA_EVENT_ID);
+        mDefaultRoomName = intent.getStringExtra(EXTRA_DEFAULT_NAME);
+        mDefaultTopic = intent.getStringExtra(EXTRA_DEFAULT_TOPIC);
 
         // the user has tapped on the "View" notification button
         if ((null != intent.getAction()) && (intent.getAction().startsWith(NotificationUtils.TAP_TO_VIEW_ACTION))) {
@@ -395,6 +408,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
         Log.i(LOG_TAG, "Displaying " + roomId);
+
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
 
@@ -544,16 +558,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (mVectorMessageListFragment == null) {
             // this fragment displays messages and handles all message logic
-            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), mEventId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
+        }
+
+        // in timeline mode (i.e search in the forward and backward room history)
+        // the edition is disabled.
+        if (!TextUtils.isEmpty(mEventId)) {
+            mNotificationsArea.setVisibility(View.GONE);
+            findViewById(R.id.bottom_separator).setVisibility(View.GONE);
+            findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
+            findViewById(R.id.room_notifications_area).setVisibility(View.GONE);
+
+            View v = findViewById(R.id.room_bottom_layout);
+            ViewGroup.LayoutParams params = v.getLayoutParams();
+            params.height = 0;
+            v.setLayoutParams(params);
         }
 
         mLatestChatMessageCache = Matrix.getInstance(this).getDefaultLatestChatMessageCache();
         mMediasCache = Matrix.getInstance(this).getMediasCache();
 
         // some medias must be sent while opening the chat
-        if (intent.hasExtra(VectorHomeActivity.EXTRA_ROOM_INTENT)) {
-            final Intent mediaIntent = intent.getParcelableExtra(VectorHomeActivity.EXTRA_ROOM_INTENT);
+        if (intent.hasExtra(EXTRA_ROOM_INTENT)) {
+            final Intent mediaIntent = intent.getParcelableExtra(EXTRA_ROOM_INTENT);
 
             // sanity check
             if (null != mediaIntent) {
@@ -657,9 +685,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         // check if the room has been left from another client.
-        if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
-            VectorRoomActivity.this.finish();
-            return;
+        if (mRoom.isReady()) {
+            if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                VectorRoomActivity.this.finish();
+                return;
+            }
         }
 
         // listen for room name or topic changes
@@ -755,14 +785,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vector_room, menu);
+        // the menu is only displayed when the current activity does not display a timeline search
+        if (TextUtils.isEmpty(mEventId)) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.vector_room, menu);
 
-        mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
-        mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+            mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
+            mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
 
-        // hide / show the unsent / resend all entries.
-        refreshNotificationsArea();
+            // hide / show the unsent / resend all entries.
+            refreshNotificationsArea();
+        }
 
         return true;
     }
@@ -818,7 +851,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private void sendMedias(final ArrayList<Uri> mediaUris) {
         mVectorMessageListFragment.cancelSelectionMode();
 
-        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+        final View progressLayout = findViewById(R.id.main_progress_layout);
         progressLayout.setVisibility(View.VISIBLE);
 
         final HandlerThread handlerThread = new HandlerThread("MediasEncodingThread");
@@ -1515,7 +1548,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        final View progressLayout =  findViewById(R.id.medias_processing_progress_layout_background);
+                                        final View progressLayout =  findViewById(R.id.main_progress_layout);
                                         progressLayout.setVisibility(View.VISIBLE);
 
                                         Thread thread = new Thread(new Runnable() {
@@ -1737,7 +1770,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         }
 
-        mNotificationsArea.setVisibility(isAreaVisible? View.VISIBLE : View.INVISIBLE);
+        if (TextUtils.isEmpty(mEventId)) {
+            mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
+        }
 
         // typing
         mTypingIcon.setVisibility(isTypingIconDisplayed? View.VISIBLE : View.INVISIBLE);
@@ -1845,7 +1880,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                         @Override
                         public void onSuccess(String roomId) {
                             if (null != roomId) {
-                                CommonActivityUtils.goToRoomPage(mSession, roomId, VectorRoomActivity.this, null);
+                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                                CommonActivityUtils.goToRoomPage(VectorRoomActivity.this, mSession, params);
                             }
                         }
                     });
@@ -1927,8 +1966,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void setActionBarDefaultCustomLayout(){
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+
         // sanity check
-        if(null == actionBar){
+        if (null == actionBar){
             return;
         }
 
@@ -1945,7 +1985,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
         mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
         mIsKeyboardDisplayed = false;
-
 
         // custom header
         View headerTextsContainer = customLayout.findViewById(R.id.header_texts_container);
@@ -1997,7 +2036,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void setTitle(){
         if((null != mSession) && (null != mRoom)) {
-            String titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
+            String titleToApply = mRoom.isReady() ? VectorUtils.getRoomDisplayname(this, mSession, mRoom) : mDefaultRoomName;
 
             // set action bar title
             if (null != mActionBarCustomTitle) {
@@ -2028,7 +2067,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void updateRoomHeaderTopic() {
         if((null != mActionBarCustomTopic) && (null != mRoom)) {
-            String value = mRoom.getTopic();
+            String value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
 
             // if topic value is empty, just hide the topic TextView
             if (TextUtils.isEmpty(value)) {

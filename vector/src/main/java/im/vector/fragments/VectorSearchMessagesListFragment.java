@@ -17,32 +17,24 @@
 package im.vector.fragments;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
-import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.EventTimeline;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
-import im.vector.activity.VectorUnifiedSearchActivity;
+import im.vector.activity.VectorRoomActivity;
+
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
@@ -135,7 +127,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * Display a global spinner or any UI item to warn the user that there are some pending actions.
      */
     @Override
-    public void displayLoadingProgress() {
+    public void showLoadingBackProgress() {
         if (null != mProgressView) {
             mProgressView.setVisibility(View.VISIBLE);
         }
@@ -145,7 +137,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * Dismiss any global spinner.
      */
     @Override
-    public void dismissLoadingProgress() {
+    public void hideLoadingBackProgress() {
         if (null != mProgressView) {
             mProgressView.setVisibility(View.GONE);
         }
@@ -273,59 +265,14 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
 
     @Override
     public void onContentClick(int position) {
-        MessageRow row = mAdapter.getItem(position);
-        Event event = row.getEvent();
+        Event event = mAdapter.getItem(position).getEvent();
 
-        Message message = JsonUtils.toMessage(event.content);
+        Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, event.roomId);
+        intent.putExtra(VectorRoomActivity.EXTRA_EVENT_ID, event.eventId);
 
-        // medias are managed by the mother class
-        if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
-            super.onContentClick(position);
-        } else {
-
-            final MessageRow messageRow = mAdapter.getItem(position);
-            final List<Integer> textIds = new ArrayList<>();
-            final List<Integer> iconIds = new ArrayList<Integer>();
-
-            textIds.add(R.string.copy);
-            iconIds.add(R.drawable.ic_material_copy);
-
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_MESSAGE_OPTIONS);
-
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-            }
-
-            Integer[] lIcons = iconIds.toArray(new Integer[iconIds.size()]);
-            Integer[] lTexts = textIds.toArray(new Integer[iconIds.size()]);
-
-            fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                @Override
-                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                    final Integer selectedVal = textIds.get(position);
-
-                    if (selectedVal == R.string.copy) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                                Event event = messageRow.getEvent();
-                                EventDisplay display = new EventDisplay(getActivity(), event, null);
-
-                                ClipData clip = ClipData.newPlainText("", display.getTextualDisplay().toString());
-                                clipboard.setPrimaryClip(clip);
-
-                                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-            });
-
-            fragment.show(fm, TAG_FRAGMENT_MESSAGE_OPTIONS);
-        }
+        getActivity().startActivity(intent);
     }
 
     /**
@@ -335,7 +282,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      */
     @Override
     public boolean onContentLongClick(int position) {
-        return onRowLongClick(position);
+        return false;
     }
 
     //==============================================================================================================
@@ -343,15 +290,11 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     //==============================================================================================================
 
     @Override
-    public void onLiveEvent(final Event event, final RoomState roomState) {
+    public void onEvent(final Event event, final EventTimeline.Direction direction, final RoomState roomState) {
     }
 
     @Override
     public void onLiveEventsChunkProcessed() {
-    }
-
-    @Override
-    public void onBackEvent(final Event event, final RoomState roomState) {
     }
 
     @Override

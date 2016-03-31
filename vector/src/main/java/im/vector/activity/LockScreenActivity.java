@@ -113,7 +113,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
                 message.body = body;
 
                 Event event = new Event(message, session.getCredentials().userId, roomId);
-                session.getDataHandler().storeLiveRoomEvent(event);
+                room.storeOutgoingEvent(event);
 
                 if (null != room) {
                     room.sendEvent(event, new ApiCallback<Void>() {
