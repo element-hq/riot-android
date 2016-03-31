@@ -34,6 +34,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.v4.util.LruCache;
 import android.text.Html;
@@ -335,14 +337,11 @@ public class VectorUtils {
      * @param session the session
      * @param imageView the image view
      * @param room the room
-     * @return the download Id
      */
-    public static String loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
-            return VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
+            VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
         }
-
-        return null;
     }
 
     /**
@@ -351,14 +350,11 @@ public class VectorUtils {
      * @param session the session
      * @param imageView the image view
      * @param roomMember the room member
-     * @return
      */
-    public static String loadRoomMemberAvatar(Context context, MXSession session, ImageView imageView, RoomMember roomMember) {
+    public static void loadRoomMemberAvatar(Context context, MXSession session, ImageView imageView, RoomMember roomMember) {
         if (null != roomMember) {
-            return VectorUtils.loadUserAvatar(context, session, imageView, roomMember.avatarUrl, roomMember.getUserId(), roomMember.displayname);
+            VectorUtils.loadUserAvatar(context, session, imageView, roomMember.avatarUrl, roomMember.getUserId(), roomMember.displayname);
         }
-
-        return null;
     }
 
     /**
@@ -367,15 +363,16 @@ public class VectorUtils {
      * @param session the session
      * @param imageView the image view
      * @param user the user
-     * @return
      */
-    public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, User user) {
+    public static void loadUserAvatar(Context context, MXSession session, ImageView imageView, User user) {
         if (null != user) {
-            return VectorUtils.loadUserAvatar(context, session, imageView, user.getAvatarUrl(), user.user_id, user.displayname);
+            VectorUtils.loadUserAvatar(context, session, imageView, user.getAvatarUrl(), user.user_id, user.displayname);
         }
-
-        return null;
     }
+
+    // the background thread
+    private static HandlerThread mImagesThread = null;
+    private static android.os.Handler mImagesThreadHandler  = null;
 
     /**
      * Set the user avatar in an imageview.
@@ -387,21 +384,37 @@ public class VectorUtils {
      * @param displayName the user displayname
      * @return the download Id
      */
-    public static String loadUserAvatar(Context context, MXSession session, ImageView imageView, String avatarUrl, String userId, String displayName) {
+    public static void loadUserAvatar(final Context context,final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
         // sanity check
         if ((null == session) || (null == imageView) || !session.isActive()) {
-            return null;
+            return;
         }
 
-        String downloadId = session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
-
-        // if there is no avatar URL
-        // or if the bitmap is not downloaded (loadAvatarThumbnail returns a download ID if the image is not downloaded
-        if (TextUtils.isEmpty(avatarUrl) || (null != downloadId)) {
+        if (session.getMediasCache().isAvartarThumbailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
+            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+        } else {
             setDefaultMemberAvatar(imageView, userId, displayName);
-        }
 
-        return downloadId;
+            if (!TextUtils.isEmpty(avatarUrl)) {
+                if (null == mImagesThread) {
+                    mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
+                    mImagesThread.start();
+                    mImagesThreadHandler = new android.os.Handler(mImagesThread.getLooper());
+                }
+
+                final String tag = avatarUrl + userId + displayName;
+                imageView.setTag(tag);
+
+                mImagesThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                        }
+                    }
+                });
+            }
+        }
     }
 
     //==============================================================================================================
