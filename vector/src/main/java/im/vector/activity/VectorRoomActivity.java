@@ -41,12 +41,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -431,6 +433,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         });
 
+        // on landscape orientation, the keyboard overlaps the screen.
+        mEditText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        String body = mEditText.getText().toString();
+                        sendMessage(body);
+                        mEditText.setText("");
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         mCallButton = (ImageButton) findViewById(R.id.button_call);
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -485,6 +502,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
             }
         });
+
 
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
