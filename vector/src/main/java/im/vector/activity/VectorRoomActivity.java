@@ -41,12 +41,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -415,6 +417,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             @Override
             public void onClick(View view) {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+            }
+        });
+
+        // IME's DONE button is treated as a send action
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean retCode = false;
+                int imeActionId = actionId & EditorInfo.IME_MASK_ACTION;
+
+                if (EditorInfo.IME_ACTION_DONE == imeActionId) {
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    String body = mEditText.getText().toString();
+                    sendMessage(body);
+                    mEditText.setText("");
+                    retCode = false;
+                }
+                return retCode;
             }
         });
 
