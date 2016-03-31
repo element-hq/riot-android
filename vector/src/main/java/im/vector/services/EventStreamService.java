@@ -335,7 +335,7 @@ public class EventStreamService extends Service {
             }
 
             if (null == largeBitmap) {
-                largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarcolor(senderID), TextUtils.isEmpty(from) ? senderID : from);
+                largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarcolor(senderID), TextUtils.isEmpty(from) ? senderID : from, true);
             }
 
             String roomName = null;

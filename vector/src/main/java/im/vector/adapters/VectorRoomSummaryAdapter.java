@@ -709,7 +709,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 }
             }
 
-            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null));
+            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null, true));
             return convertView;
         }
 

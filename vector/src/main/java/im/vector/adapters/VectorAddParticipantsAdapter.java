@@ -475,7 +475,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
             if ((null != mFirstEntry) && (position == 0)) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@"));
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@", true));
             } else {
                 if (TextUtils.isEmpty(participant.mUserId)) {
                     VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);

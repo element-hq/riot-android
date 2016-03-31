@@ -34,6 +34,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -271,7 +272,7 @@ public class VectorUtils {
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
 
         // draw the text in center
-        canvas.drawText(text, (canvas.getWidth() - textBounds.width() - textBounds.left) / 2 , (canvas.getHeight() + textBounds.height() - textBounds.bottom) / 2, textPaint);
+        canvas.drawText(text, (canvas.getWidth() - textBounds.width() - textBounds.left) / 2, (canvas.getHeight() + textBounds.height() - textBounds.bottom) / 2, textPaint);
 
         // Return the avatar
         return bitmap;
@@ -281,9 +282,10 @@ public class VectorUtils {
      * Returns an avatar from a text.
      * @param context the context.
      * @param aText the text.
+     * @param create create the avatar if it does not exist
      * @return the avatar.
      */
-    public static Bitmap getAvatar(Context context, int backgroundColor, String aText) {
+    public static Bitmap getAvatar(Context context, int backgroundColor, String aText, boolean create) {
         // ignore some characters
         if (!TextUtils.isEmpty(aText) && (aText.startsWith("@") || aText.startsWith("#"))) {
             aText = aText.substring(1);
@@ -300,7 +302,7 @@ public class VectorUtils {
         // check if the avatar is already defined
         Bitmap thumbnail = mAvatarImageByKeyDict.get(key);
 
-        if (null == thumbnail) {
+        if ((null == thumbnail) && create) {
             thumbnail = VectorUtils.createAvatar(context, backgroundColor, firstChar);
             mAvatarImageByKeyDict.put(key, thumbnail);
         }
@@ -314,10 +316,26 @@ public class VectorUtils {
      * @param userId the member userId.
      * @param displayName the member display name.
      */
-    public static void setDefaultMemberAvatar(ImageView imageView, String userId, String displayName) {
+    public static void setDefaultMemberAvatar(final ImageView imageView, final String userId, final String displayName) {
         // sanity checks
         if (null != imageView && !TextUtils.isEmpty(userId)) {
-            imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName));
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, true);
+
+            if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+                imageView.setImageBitmap(bitmap);
+            } else {
+                final String tag = userId + " - " + displayName;
+                imageView.setTag(tag);
+
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -373,6 +391,7 @@ public class VectorUtils {
     // the background thread
     private static HandlerThread mImagesThread = null;
     private static android.os.Handler mImagesThreadHandler  = null;
+    private static Handler mUIHandler = null;
 
     /**
      * Set the user avatar in an imageview.
@@ -393,23 +412,58 @@ public class VectorUtils {
         if (session.getMediasCache().isAvartarThumbailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
             session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         } else {
-            setDefaultMemberAvatar(imageView, userId, displayName);
+            if (null == mImagesThread) {
+                mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
+                mImagesThread.start();
+                mImagesThreadHandler = new android.os.Handler(mImagesThread.getLooper());
+                mUIHandler = new Handler(Looper.getMainLooper());
+            }
 
-            if (!TextUtils.isEmpty(avatarUrl)) {
-                if (null == mImagesThread) {
-                    mImagesThread = new HandlerThread("ImagesThread", Thread.MIN_PRIORITY);
-                    mImagesThread.start();
-                    mImagesThreadHandler = new android.os.Handler(mImagesThread.getLooper());
-                }
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
+
+            // test if the default avatar has been computed
+            if (null != bitmap) {
+                imageView.setImageBitmap(bitmap);
 
                 final String tag = avatarUrl + userId + displayName;
                 imageView.setTag(tag);
 
+                if (!TextUtils.isEmpty(avatarUrl)) {
+                    mImagesThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                            }
+                        }
+                    });
+                }
+            } else {
+                // create the default avatar in the background thread
                 mImagesThreadHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                            session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                        setDefaultMemberAvatar(imageView, userId, displayName);
+
+                        if (!TextUtils.isEmpty(avatarUrl)) {
+                            // wait that it is rendered to load the right one
+                            mUIHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //
+                                    final String tag = avatarUrl + userId + displayName;
+                                    imageView.setTag(tag);
+
+                                    mImagesThreadHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
+                                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                                            }
+                                        }
+                                    });
+                                }
+                            });
                         }
                     }
                 });
