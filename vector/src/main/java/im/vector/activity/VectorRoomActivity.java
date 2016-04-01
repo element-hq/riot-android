@@ -49,7 +49,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,7 +57,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.markdownj.MarkdownProcessor;
+import com.commonsware.cwac.anddown.AndDown;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
@@ -159,6 +159,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private static final int MEDIUM_IMAGE_SIZE = 1000;
     private static final int SMALL_IMAGE_SIZE  = 500;
     private static final int KEYBOARD_THRESHOLD_VIEW_SIZE = 1000;
+
+    private static final AndDown mAndDown = new AndDown();
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
@@ -600,10 +602,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void sendTextMessage() {
         String body = mEditText.getText().toString();
-
-        // convert the text to html
-        MarkdownProcessor m = new MarkdownProcessor();
-        String html = m.markdown(body);
+        String html = mAndDown.markdownToHtml(body);
 
         if (null != html) {
             html.trim();
