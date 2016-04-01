@@ -48,6 +48,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -420,6 +421,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         });
 
+        // IME's DONE button is treated as a send action
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                int imeActionId = actionId & EditorInfo.IME_MASK_ACTION;
+
+                if (EditorInfo.IME_ACTION_DONE == imeActionId) {
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    String body = mEditText.getText().toString();
+                    sendMessage(body);
+                    mEditText.setText("");
+                }
+                return false;
+            }
+        });
+
         mSendButton = (ImageButton) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
 
@@ -430,21 +447,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 String body = mEditText.getText().toString();
                 sendMessage(body);
                 mEditText.setText("");
-            }
-        });
-
-        // on landscape orientation, the keyboard overlaps the screen.
-        mEditText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                        String body = mEditText.getText().toString();
-                        sendMessage(body);
-                        mEditText.setText("");
-                        return true;
-                    }
-                }
-                return false;
             }
         });
 
