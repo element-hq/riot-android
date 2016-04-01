@@ -103,6 +103,7 @@ dependencies {
     compile 'io.pristine:libjingle:9690@aar'
 
     compile 'org.markdownj:markdownj-core:0.4'
+    compile 'org.sufficientlysecure:html-textview:1.4'
 
     compile(name: 'matrix-sdk', ext: 'aar')
 }
