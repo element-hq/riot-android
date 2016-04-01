@@ -20,7 +20,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#000"
+        android:background="@color/vector_green_color"
         />
 
     <TextView
@@ -69,8 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:background="@android:drawable/ic_menu_send"
-            android:textColor="#000" />
+            android:background="@drawable/ic_material_send_green"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
 
