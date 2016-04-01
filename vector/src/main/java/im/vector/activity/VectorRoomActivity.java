@@ -58,6 +58,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.markdownj.MarkdownProcessor;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
@@ -428,11 +429,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 int imeActionId = actionId & EditorInfo.IME_MASK_ACTION;
 
                 if (EditorInfo.IME_ACTION_DONE == imeActionId) {
-                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                    String body = mEditText.getText().toString();
-                    sendMessage(body);
-                    mEditText.setText("");
+                    sendTextMessage();
                 }
+
                 return false;
             }
         });
@@ -442,11 +441,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
             @Override
             public void onClick(View view) {
-                // hide the header room
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                String body = mEditText.getText().toString();
-                sendMessage(body);
-                mEditText.setText("");
+                sendTextMessage();
             }
         });
 
@@ -601,6 +596,38 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         refreshSelfAvatar();
+    }
+
+    private void sendTextMessage() {
+        String body = mEditText.getText().toString();
+
+        // convert the text to html
+        MarkdownProcessor m = new MarkdownProcessor();
+        String html = m.markdown(body);
+
+        if (null != html) {
+            html.trim();
+
+            if (html.startsWith("<p>")) {
+                html = html.substring("<p>".length());
+            }
+
+            if (html.endsWith("</p>\n")) {
+                html = html.substring(0, html.length() - "</p>\n".length());
+            } else if (html.endsWith("</p>")) {
+                html = html.substring(0, html.length() - "</p>".length());
+            }
+
+            if (TextUtils.equals(html, body)) {
+                html = null;
+            }
+        }
+
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        sendMessage(body, html, "org.matrix.custom.html");
+        mEditText.setText("");
     }
 
     @Override
@@ -835,11 +862,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     // medias sending
     //================================================================================
 
-    private void sendMessage(String body) {
+    private void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if (!manageIRCCommand(body)) {
+            if ((null != formattedBody) && !manageIRCCommand(body)) {
                 mVectorMessageListFragment.cancelSelectionMode();
-                mVectorMessageListFragment.sendTextMessage(body);
+                mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
         }
     }
@@ -1215,7 +1242,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                         uris.add((Uri) streamUri);
                     }
                 } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
-                    this.sendMessage(bundle.getString(Intent.EXTRA_TEXT));
+                    this.sendMessage(bundle.getString(Intent.EXTRA_TEXT), null, null);
                 }
             } else {
                 uris.add( mLatestTakePictureCameraUri == null ? null : Uri.parse(mLatestTakePictureCameraUri));
