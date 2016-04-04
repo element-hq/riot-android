@@ -726,7 +726,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             notificationCount = childRoom.getNotificationCount();
         }
 
-        // get last message to be displayed
+        // get         last message to be displayed
         CharSequence lastMsgToDisplay = getChildMessageToDisplay(childRoomSummary);
 
         // display the room avatar

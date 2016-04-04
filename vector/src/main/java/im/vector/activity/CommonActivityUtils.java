@@ -55,6 +55,8 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
+import im.vector.adapters.VectorPublicRoomsAdapter;
+import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
@@ -552,11 +554,9 @@ public class CommonActivityUtils {
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(fromActivity);
         builderSingle.setTitle(fromActivity.getText(R.string.send_files_in));
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(fromActivity, R.layout.dialog_room_selection);
 
-        for(RoomSummary summary : mergedSummaries) {
-            arrayAdapter.add(summary.getRoomName());
-        }
+        VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(fromActivity, R.layout.adapter_item_vector_recent_room, session);
+        adapter.addAll(mergedSummaries);
 
         builderSingle.setNegativeButton(fromActivity.getText(R.string.cancel),
                 new DialogInterface.OnClickListener() {
@@ -566,7 +566,7 @@ public class CommonActivityUtils {
                     }
                 });
 
-        builderSingle.setAdapter(arrayAdapter,
+        builderSingle.setAdapter(adapter,
                 new DialogInterface.OnClickListener() {
 
                     @Override
