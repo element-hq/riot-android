@@ -56,6 +56,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -75,12 +77,15 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
     private View mWaitingView = null;
+
+    private Timer mRoomCreationViewTimer = null;
     private View mRoomCreationView = null;
 
     private MXEventListener mEventsListener;
     private MXEventListener mLiveEventListener;
 
     private VectorRecentsListFragment mRecentsListFragment;
+
 
     // call listener
     private MenuItem mCallMenuItem = null;
@@ -256,6 +261,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onPause();
         if (mSession.isActive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
+        }
+
+        if (null != mRoomCreationViewTimer) {
+            mRoomCreationViewTimer.cancel();
+            mRoomCreationViewTimer = null;
         }
 
         VectorApp.setCurrentActivity(null);
@@ -494,18 +504,41 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
     }
 
+    /**
+     *
+     */
+    private void hideRoomCreationViewWithDelay() {
+        if (null != mRoomCreationViewTimer) {
+            mRoomCreationViewTimer.cancel();
+        }
+
+        mRoomCreationView.setVisibility(View.GONE);
+
+        mRoomCreationViewTimer = new Timer();
+        mRoomCreationViewTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mRoomCreationViewTimer.cancel();
+                mRoomCreationViewTimer = null;
+
+                VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRoomCreationView.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }, 1000);
+    }
+
     // warn the user scrolls up
     public void onRecentsListScrollUp() {
-        if (mRoomCreationView.getVisibility() != View.VISIBLE) {
-            mRoomCreationView.setVisibility(View.VISIBLE);
-        }
+        hideRoomCreationViewWithDelay();
     }
 
     // warn when the user scrolls downs
     public void onRecentsListScrollDown() {
-        if (mRoomCreationView.getVisibility() != View.GONE) {
-            mRoomCreationView.setVisibility(View.GONE);
-        }
+        hideRoomCreationViewWithDelay();
     }
 
     // warn when the list content can be fully displayed without scrolling
