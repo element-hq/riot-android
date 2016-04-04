@@ -59,7 +59,7 @@
                     android:paddingRight="4dp"
                     android:id="@+id/messagesAdapter_body_layout">
 
-                    <org.sufficientlysecure.htmltextview.HtmlTextView
+                    <org.matrix.androidsdk.view.ConsoleHtmlTextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:textSize="14sp"
