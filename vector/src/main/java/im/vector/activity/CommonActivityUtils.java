@@ -335,20 +335,20 @@ public class CommonActivityUtils {
                                                Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
                                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable)params);
+                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
                                                fromActivity.startActivity(intent);
                                            } else {
                                                // already to the home activity
                                                // so just need to open the room activity
                                                Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
 
-                                               for(String key : params.keySet()) {
+                                               for (String key : params.keySet()) {
                                                    Object value = params.get(key);
 
                                                    if (value instanceof String) {
-                                                       intent.putExtra(key, (String)value);
+                                                       intent.putExtra(key, (String) value);
                                                    } else {
-                                                       intent.putExtra(key, (Parcelable)value);
+                                                       intent.putExtra(key, (Parcelable) value);
                                                    }
                                                }
 
@@ -531,8 +531,18 @@ public class CommonActivityUtils {
             return;
         }
 
-        final ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>();
-        mergedSummaries.addAll(session.getDataHandler().getStore().getSummaries());
+        ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>(session.getDataHandler().getStore().getSummaries());
+
+        // keep only the joined room
+        for(int index = 0; index < mergedSummaries.size(); index++) {
+            RoomSummary summary =  mergedSummaries.get(index);
+            Room room = session.getDataHandler().getRoom(summary.getRoomId());
+
+            if ((null == room) || room.isInvited()) {
+                mergedSummaries.remove(index);
+                index--;
+            }
+        }
 
         Collections.sort(mergedSummaries, new Comparator<RoomSummary>() {
             @Override
@@ -566,6 +576,8 @@ public class CommonActivityUtils {
                     }
                 });
 
+        final  ArrayList<RoomSummary> fMergedSummaries = mergedSummaries;
+
         builderSingle.setAdapter(adapter,
                 new DialogInterface.OnClickListener() {
 
@@ -575,7 +587,7 @@ public class CommonActivityUtils {
                         fromActivity.runOnUiThread( new Runnable() {
                             @Override
                             public void run() {
-                                RoomSummary summary = mergedSummaries.get(which);
+                                RoomSummary summary = fMergedSummaries.get(which);
 
                                 HashMap<String, Object> params = new HashMap<String, Object>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
