@@ -66,6 +66,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private static final String LOG_TAG = "VectorHomeActivity";
 
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
+
+    public static final boolean IS_VOIP_ENABLED = true;
+
     private static final String TAG_FRAGMENT_RECENTS_LIST = "VectorHomeActivity.TAG_FRAGMENT_RECENTS_LIST";
 
     // switch to a room activity
@@ -233,7 +236,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         };
 
         mSession.getDataHandler().addListener(mLiveEventListener);
-        mSession.mCallsManager.addListener(mCallsManagerListener);
+
+        if (IS_VOIP_ENABLED) {
+            mSession.mCallsManager.addListener(mCallsManagerListener);
+        }
     }
 
     @Override

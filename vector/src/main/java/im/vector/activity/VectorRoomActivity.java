@@ -1735,7 +1735,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
 
-        boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+        boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
         mCallButton.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
 
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
