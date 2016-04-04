@@ -108,8 +108,6 @@ dependencies {
 
     compile 'com.commonsware.cwac:anddown:0.2.+'
 
-    compile 'org.sufficientlysecure:html-textview:1.4'
-
     compile(name: 'matrix-sdk', ext: 'aar')
 }
 
