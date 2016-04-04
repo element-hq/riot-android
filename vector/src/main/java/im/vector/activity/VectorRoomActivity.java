@@ -36,6 +36,7 @@ import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -619,6 +620,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
             if (TextUtils.equals(html, body)) {
                 html = null;
+            } else {
+                // remove the markdowns
+                body = Html.fromHtml(html).toString();
             }
         }
 
