@@ -20,8 +20,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.EventTimeline;
@@ -216,12 +219,14 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             super.searchPattern(pattern, mIsMediaSearch,  new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
-
                     // the pattern has been updated while search
                     if (!TextUtils.equals(pattern, mSearchingPattern)) {
                         mAdapter.clear();
                         mMessageListView.setVisibility(View.GONE);
                     } else {
+
+                        mIsInitialSyncing = false;
+                        mMessageListView.setOnScrollListener(mScrollListener);
                         mMessageListView.setAdapter(mAdapter);
 
                         // scroll to the bottom
