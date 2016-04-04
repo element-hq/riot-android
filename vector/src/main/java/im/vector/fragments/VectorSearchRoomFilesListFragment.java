@@ -130,6 +130,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                 mAdapter.clear();
                 mAdapter.addAll(messageRows);
 
+                mMessageListView.setAdapter(mAdapter);
+
                 // scroll to the bottom
                 scrollToBottom();
                 mMessageListView.setVisibility(View.VISIBLE);

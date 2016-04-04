@@ -216,11 +216,14 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             super.searchPattern(pattern, mIsMediaSearch,  new OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
+
                     // the pattern has been updated while search
                     if (!TextUtils.equals(pattern, mSearchingPattern)) {
                         mAdapter.clear();
                         mMessageListView.setVisibility(View.GONE);
                     } else {
+                        mMessageListView.setAdapter(mAdapter);
+
                         // scroll to the bottom
                         scrollToBottom();
                         mMessageListView.setVisibility(View.VISIBLE);
