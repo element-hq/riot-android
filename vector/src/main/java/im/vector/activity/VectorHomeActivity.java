@@ -16,8 +16,11 @@
 
 package im.vector.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,6 +35,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
@@ -49,6 +54,7 @@ import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -62,7 +68,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
     private static final String TAG_FRAGMENT_RECENTS_LIST = "VectorHomeActivity.TAG_FRAGMENT_RECENTS_LIST";
 
-
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
@@ -73,6 +78,65 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private MXEventListener mLiveEventListener;
 
     private VectorRecentsListFragment mRecentsListFragment;
+
+    // call listener
+    private MenuItem mCallMenuItem = null;
+
+    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+        /**
+         * Called when there is an incoming call within the room.
+         */
+        @Override
+        public void onIncomingCall(final IMXCall call) {
+            // can only manage one call instance.
+            if (null == CallViewActivity.getActiveCall()) {
+                // display the call activity only if the application is in background.
+                if (VectorHomeActivity.this.isScreenOn()) {
+                    // create the call object
+                    if (null != call) {
+                        final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
+
+                        intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorHomeActivity.this.startActivity(intent);
+                            }
+                        });
+                    }
+                }
+            } else {
+                VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        call.hangup("busy");
+                    }
+                });
+            }
+        }
+
+        /**
+         * Called when a called has been hung up
+         */
+        @Override
+        public void onCallHangUp(IMXCall call) {
+            final Boolean isActiveCall = CallViewActivity.isBackgroundedCallId(call.getCallId());
+
+            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (isActiveCall) {
+                        VectorApp.getInstance().onCallEnd();
+                        VectorHomeActivity.this.manageCallButton();
+
+                        CallViewActivity.startEndCallSound(VectorHomeActivity.this);
+                    }
+                }
+            });
+        }
+    };
 
     // sliding menu management
     private NavigationView mNavigationView = null;
@@ -169,6 +233,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         };
 
         mSession.getDataHandler().addListener(mLiveEventListener);
+        mSession.mCallsManager.addListener(mCallsManagerListener);
     }
 
     @Override
@@ -176,6 +241,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onDestroy();
         if (mSession.isActive()) {
             mSession.getDataHandler().removeListener(mLiveEventListener);
+            mSession.mCallsManager.removeListener(mCallsManagerListener);
         }
     }
 
@@ -237,6 +303,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
 
+        mCallMenuItem = menu.findItem(R.id.ic_action_resume_call);
+        manageCallButton();
+
         return true;
     }
 
@@ -264,6 +333,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             // search in rooms content
             case R.id.ic_action_mark_all_as_read:
                 markAllMessagesAsRead();
+                break;
+
+            case R.id.ic_action_resume_call:
+                IMXCall call = CallViewActivity.getActiveCall();
+                if (null != call) {
+                    final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
+                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            VectorHomeActivity.this.startActivity(intent);
+                        }
+                    });
+                }
                 break;
 
             default:
@@ -304,7 +389,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         }
     }
-
 
     //==============================================================================================================
     // Sliding menu management
@@ -420,6 +504,31 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public void onRecentsListFitsScreen() {
         if (mRoomCreationView.getVisibility() != View.VISIBLE) {
             mRoomCreationView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    //==============================================================================================================
+    // VOIP call management
+    //==============================================================================================================
+
+    @SuppressLint("NewApi")
+    private boolean isScreenOn() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            return powerManager.isInteractive();
+        } else {
+            return powerManager.isScreenOn();
+        }
+    }
+
+    /**
+     * Display or hide the the call button.
+     * it is used to resume a call.
+     */
+    private void manageCallButton() {
+        if (null != mCallMenuItem) {
+            mCallMenuItem.setVisible(CallViewActivity.getActiveCall() != null);
         }
     }
 }

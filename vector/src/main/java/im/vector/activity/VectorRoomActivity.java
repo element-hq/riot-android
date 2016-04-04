@@ -454,8 +454,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             public void onClick(View v) {
                 // hide the header room
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                // TODO implement a dedicated call activity
-                // we do not get any design by now
+
+                // create the call object
+                IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+                if (null != call) {
+                    call.setIsVideo(false);
+                    call.setRoom(mRoom);
+                    call.setIsIncoming(false);
+
+                    final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+
+                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                    VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            VectorRoomActivity.this.startActivity(intent);
+                        }
+                    });
+                }
             }
         });
 
@@ -1700,9 +1719,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         boolean hasText = mEditText.getText().length() > 0;
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-        // TODO manage Call support
-        mCallButton.setVisibility(View.GONE);
-        //mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+
+        boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+        mCallButton.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
+
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
