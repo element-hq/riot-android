@@ -722,7 +722,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int notificationCount = 0;
 
         if (null != childRoom) {
-            highlightCount = childRoom.gettHighlightCount();
+            highlightCount = childRoom.getHighlightCount();
             notificationCount = childRoom.getNotificationCount();
         }
 
