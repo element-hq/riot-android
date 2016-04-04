@@ -65,6 +65,7 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
@@ -125,9 +126,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public static final String EXTRA_START_CALL_ID = "EXTRA_START_CALL_ID";
 
     private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
-    private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
+    private static final String TAG_FRAGMENT_CALL_OPTIONS = "TAG_FRAGMENT_CALL_OPTIONS";
+
 
     private static final String LOG_TAG = "RoomActivity";
     private static final int TYPING_TIMEOUT_MS = 10000;
@@ -455,26 +457,39 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 // hide the header room
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-                // create the call object
-                IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
 
-                if (null != call) {
-                    call.setIsVideo(false);
-                    call.setRoom(mRoom);
-                    call.setIsIncoming(false);
+                final Integer[] lIcons = new Integer[]{ R.drawable.voice, R.drawable.video};
+                final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
 
-                    final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+                IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+                fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
 
-                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                        // create the call object
+                        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
 
-                    VectorRoomActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            VectorRoomActivity.this.startActivity(intent);
+                        if (null != call) {
+                            call.setIsVideo((1 == position));
+                            call.setRoom(mRoom);
+                            call.setIsIncoming(false);
+
+                            final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+
+                            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                            VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    VectorRoomActivity.this.startActivity(intent);
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+                });
+
+                fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
             }
         });
 
