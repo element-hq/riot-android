@@ -427,7 +427,6 @@ public class CommonActivityUtils {
                     room.invite(otherUserId, new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
-
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());

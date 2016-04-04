@@ -185,7 +185,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
                 Log.d(LOG_TAG,"## performItemAction(): Start new room");
-                CommonActivityUtils.displaySnack(mActionItemsListView, "Start new room");
+                
+                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
