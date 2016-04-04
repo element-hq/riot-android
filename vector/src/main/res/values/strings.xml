@@ -109,7 +109,9 @@
     <string name="membership_leave">Left</string>
     <string name="membership_kick">Kicked</string>
     <string name="membership_ban">Banned</string>
-    <string name="member_details_action_start_new_room">Start chat</string>
+    <string name="start_chat">Start chat</string>
+    <string name="start_voice_call">Start Voice Call</string>
+    <string name="start_video_call">Start Video Call</string>
 
     <plurals name="num_members">
         <item quantity="one">%1$s user</item>

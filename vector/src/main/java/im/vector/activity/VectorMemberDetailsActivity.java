@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -80,8 +81,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private MXSession mSession;
     //private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
     private MemberDetailsAdapter mListViewAdapter;
-    // TODO pass the VOip support as parameter
-    private boolean mEnableVoipCall;
+
+    private Room mCallableRoom;
 
     // UI widgets
     private ImageView mMemberAvatarImageView;
@@ -176,12 +177,40 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     };
 
     /**
+     * Start a call in a dedicated room
+     * @param room the room
+     * @param isVideo true if the call is a video call
+     */
+    private void startCall(Room room, boolean isVideo) {
+        // create the call object
+        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+        if (null != call) {
+            call.setIsVideo(isVideo);
+            call.setRoom(room);
+            call.setIsIncoming(false);
+
+            final Intent intent = new Intent(VectorMemberDetailsActivity.this, CallViewActivity.class);
+
+            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+            VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    VectorMemberDetailsActivity.this.startActivity(intent);
+                }
+            });
+        }
+    }
+
+    /**
      * Start the corresponding action given by aActionType value.
      *
      * @param aActionType the action associated to the list row
      */
     @Override
-    public void performItemAction(int aActionType) {
+    public void performItemAction(final int aActionType) {
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
                 Log.d(LOG_TAG,"## performItemAction(): Start new room");
@@ -194,6 +223,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         CommonActivityUtils.goToOneToOneRoom(mSession, mMemberId, VectorMemberDetailsActivity.this, mRoomActionsListener);
                     }
                 });
+                break;
+
+            case ITEM_ACTION_START_VIDEO_CALL:
+            case ITEM_ACTION_START_VOICE_CALL:
+                Log.d(LOG_TAG,"## performItemAction(): Start call");
+                startCall(mCallableRoom, ITEM_ACTION_START_VIDEO_CALL == aActionType);
                 break;
 
             case ITEM_ACTION_INVITE:
@@ -263,6 +298,28 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
+    /**
+     * Search the first callable room with this member
+     * @return
+     */
+    private Room searchCallableRoom() {
+        mCallableRoom = null;
+        Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
+
+        for (Room room : rooms) {
+            Collection<RoomMember> members = room.getMembers();
+
+            if (members.size() == 2) {
+                for (RoomMember member : members) {
+                    if (member.getUserId().equals(mMemberId) && room.canPerformCall()) {
+                        return mCallableRoom = room;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 
     // *********************************************************************************************
     /**
@@ -311,7 +368,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 supportedActions.add(ITEM_ACTION_START_CHAT);
             }
 
-            if (mEnableVoipCall) {
+            // 1:1 call
+            if ((null != searchCallableRoom()) && VectorHomeActivity.IS_VOIP_ENABLED && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);
@@ -402,8 +460,20 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // build the "start chat" item
             if (supportedActionsList.indexOf(ITEM_ACTION_START_CHAT) >= 0) {
                 imageResource = R.drawable.ic_person_add_black;
-                actionText = getResources().getString(R.string.member_details_action_start_new_room);
+                actionText = getResources().getString(R.string.start_chat);
                 mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
+            }
+
+            if (supportedActionsList.indexOf(ITEM_ACTION_START_VOICE_CALL) >= 0) {
+                imageResource = R.drawable.voice_call_black;
+                actionText = getResources().getString(R.string.start_voice_call);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VOICE_CALL));
+            }
+
+            if (supportedActionsList.indexOf(ITEM_ACTION_START_VIDEO_CALL) >= 0) {
+                imageResource = R.drawable.video_call_black;
+                actionText = getResources().getString(R.string.start_video_call);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VIDEO_CALL));
             }
 
             if (supportedActionsList.indexOf(ITEM_ACTION_INVITE) >= 0) {
