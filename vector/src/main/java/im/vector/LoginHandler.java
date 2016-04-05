@@ -11,6 +11,7 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
+import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
@@ -99,19 +100,19 @@ public class LoginHandler {
     }
 
     /**
-     * Retrieve the supported flows of a home server.
-     * @param ctx the application conttext.
+     * Retrieve the supported login flows of a home server.
+     * @param ctx the application context.
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void getSupportedFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<List<LoginFlow>> callback) {
+    public void getSupportedLoginFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<List<LoginFlow>> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
         client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>() {
             @Override
             public void onSuccess(List<LoginFlow> flows) {
-                Log.d(LOG_TAG, "getSupportedFlows " + flows);
+                Log.d(LOG_TAG, "getSupportedLoginFlows " + flows);
                 callback.onSuccess(flows);
             }
 
@@ -125,7 +126,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            getSupportedFlows(appCtx, hsConfig, callback);
+                            getSupportedLoginFlows(appCtx, hsConfig, callback);
                         }
 
                         @Override
@@ -155,4 +156,60 @@ public class LoginHandler {
         });
     }
 
+    /**
+     * Retrieve the supported registration flows of a home server.
+     * @param ctx the application context.
+     * @param hsConfig the home server config.
+     * @param callback the supported flows list callback.
+     */
+    public void getSupportedRegistrationFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<RegistrationFlowResponse> callback) {
+        final Context appCtx = ctx.getApplicationContext();
+        LoginRestClient client = new LoginRestClient(hsConfig);
+
+        client.getSupportedRegistrationFlows(new SimpleApiCallback<RegistrationFlowResponse>() {
+            @Override
+            public void onSuccess(RegistrationFlowResponse registrationFlowResponse) {
+                Log.d(LOG_TAG, "getSupportedRegistrationFlows " + registrationFlowResponse);
+                callback.onSuccess(registrationFlowResponse);
+            }
+
+            @Override
+            public void onNetworkError(final Exception e) {
+                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                if (unrecCertEx != null) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+
+                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            getSupportedRegistrationFlows(appCtx, hsConfig, callback);
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            callback.onNetworkError(e);
+                        }
+
+                        @Override
+                        public void onReject() {
+                            callback.onNetworkError(e);
+                        }
+                    });
+                } else {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                callback.onUnexpectedError(e);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                callback.onMatrixError(e);
+            }
+        });
+    }
 }
