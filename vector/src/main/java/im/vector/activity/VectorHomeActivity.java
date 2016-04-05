@@ -495,13 +495,21 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // init the main menu
         TextView displaynameTextView = (TextView)  mNavigationView.findViewById(R.id.home_menu_main_displayname);
-        displaynameTextView.setText(mSession.getMyUser().displayname);
+
+        if (null != displaynameTextView) {
+            displaynameTextView.setText(mSession.getMyUser().displayname);
+        }
 
         TextView userIdTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_matrix_id);
-        userIdTextView.setText(mSession.getMyUserId());
+        if (null != userIdTextView) {
+            userIdTextView.setText(mSession.getMyUserId());
+        }
 
         ImageView mainAvatarView = (ImageView)mNavigationView.findViewById(R.id.home_menu_main_avatar);
-        VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
+
+        if (null != mainAvatarView) {
+            VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
+        }
     }
 
     /**
