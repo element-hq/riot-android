@@ -53,19 +53,41 @@ import java.util.List;
 public class LoginActivity extends MXCActionBarActivity {
 
     private static final String LOG_TAG = "LoginActivity";
+
     static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
     static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
+
+    // activity modes
+    // either the user logs in
+    // or creates a new account
+    static final int LOGIN_MODE = 0;
+    static final int ACCOUNT_CREATION_MODE = 1;
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
 
-
     // saved parameters index
-    private static final String SAVED_EMAIL_ADDRESS = "SAVED_EMAIL_ADDRESS";
-    private static final String SAVED_PASSWORD_ADDRESS = "SAVED_PASSWORD_ADDRESS";
+
+    // login
+    private static final String SAVED_LOGIN_EMAIL_ADDRESS = "SAVED_LOGIN_EMAIL_ADDRESS";
+    private static final String SAVED_LOGIN_PASSWORD_ADDRESS = "SAVED_LOGIN_PASSWORD_ADDRESS";
+
+    // creation
+    private static final String SAVED_CREATION_EMAIL_ADDRESS = "SAVED_CREATION_EMAIL_ADDRESS";
+    private static final String SAVED_CREATION_USER_NAME = "SAVED_CREATION_USER_NAME";
+    private static final String SAVED_CREATION_PASSWORD1 = "SAVED_CREATION_PASSWORD1";
+    private static final String SAVED_CREATION_PASSWORD2 = "SAVED_CREATION_PASSWORD2";
+
+    // mode
+    private static final String SAVED_MODE = "SAVED_MODE";
+
+    // servers part
     private static final String SAVED_IS_SERVER_URL_EXPANDED = "SAVED_IS_SERVER_URL_EXPANDED";
-    private static final String SAVED_HOMESERVERURL = "SAVED_HOMESERVERURL";
-    private static final String SAVED_IDENTITY_SERVERURL = "SAVED_IDENTITY_SERVERURL";
+    private static final String SAVED_HOME_SERVER_URL = "SAVED_HOME_SERVER_URL";
+    private static final String SAVED_IDENTITY_SERVER_URL = "SAVED_IDENTITY_SERVER_URL";
+
+    // activity mode
+    private int mMode = LOGIN_MODE;
 
     // graphical items
     // login button
@@ -74,11 +96,23 @@ public class LoginActivity extends MXCActionBarActivity {
     // create account button
     private Button mRegisterButton;
 
-    // the account name
-    private TextView mEmailTextView;
+    // the login account name
+    private TextView mLoginEmailTextView;
 
-    // the password
-    private TextView mPasswordTextView;
+    // the login password
+    private TextView mLoginPasswordTextView;
+
+    // the creation email
+    private TextView mCreationEmailTextView;
+
+    // the creation user name
+    private TextView mCreationUsernameTextView;
+
+    // the password 1 name
+    private TextView mCreationPassword1TextView;
+
+    // the password 2 name
+    private TextView mCreationPassword2TextView;
 
     // forgot my password
     private TextView mPasswordForgottenTxtView;
@@ -120,42 +154,47 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // bind UI widgets
         mLoginMaskView = (RelativeLayout)findViewById(R.id.flow_ui_mask_login);
-        mEmailTextView = (EditText) findViewById(R.id.login_user_name);
+
+        // login
+        mLoginEmailTextView = (EditText) findViewById(R.id.login_user_name);
+        mLoginPasswordTextView = (EditText) findViewById(R.id.login_password);
+
+        // account creation
+        mCreationEmailTextView = (EditText) findViewById(R.id.creation_email_address);
+        mCreationUsernameTextView = (EditText) findViewById(R.id.creation_your_name);
+        mCreationPassword1TextView = (EditText) findViewById(R.id.creation_password1);
+        mCreationPassword2TextView = (EditText) findViewById(R.id.creation_password2);
+
+        mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
+
         mHomeServerText = (EditText) findViewById(R.id.login_matrix_server_url);
         mIdentityServerText = (EditText) findViewById(R.id.login_identity_url);
-        mPasswordTextView = (EditText) findViewById(R.id.editText_password);
-        mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
+
         mLoginButton = (Button)findViewById(R.id.button_login);
         mRegisterButton = (Button)findViewById(R.id.button_register);
+
         mDisplayHomeServerUrlView = findViewById(R.id.display_server_url_layout);
         mHomeServerUrlsLayout =  findViewById(R.id.login_matrix_server_options_layout);
         mExpandImageView = (ImageView)findViewById(R.id.display_server_url_expand_icon);
 
         if (null != savedInstanceState) {
-            if (savedInstanceState.containsKey(SAVED_EMAIL_ADDRESS)) {
-                mEmailTextView.setText(savedInstanceState.getString(SAVED_EMAIL_ADDRESS));
-            }
+            mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
+            mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
+            mIsHomeServerUrlIsDisplayed = savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED);
+            mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
+            mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
 
-            if (savedInstanceState.containsKey(SAVED_PASSWORD_ADDRESS)) {
-                mPasswordTextView.setText(savedInstanceState.getString(SAVED_PASSWORD_ADDRESS));
-            }
+            mCreationEmailTextView.setText(savedInstanceState.getString(SAVED_CREATION_EMAIL_ADDRESS));
+            mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
+            mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
+            mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
 
-            if (savedInstanceState.containsKey(SAVED_IS_SERVER_URL_EXPANDED)) {
-                mIsHomeServerUrlIsDisplayed = savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED);
-            }
-
-            if (savedInstanceState.containsKey(SAVED_HOMESERVERURL)) {
-                mHomeServerText.setText(savedInstanceState.getString(SAVED_HOMESERVERURL));
-            }
-
-            if (savedInstanceState.containsKey(SAVED_IDENTITY_SERVERURL)) {
-                mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVERURL));
-            }
+            mMode = savedInstanceState.getInt(SAVED_MODE, LOGIN_MODE);
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
 
-            mEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
-            mPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
+            mLoginEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
+            mLoginPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
         }
 
         // TODO implement the forgot password
@@ -164,8 +203,8 @@ public class LoginActivity extends MXCActionBarActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = mEmailTextView.getText().toString().trim();
-                String password = mPasswordTextView.getText().toString().trim();
+                String username = mLoginEmailTextView.getText().toString().trim();
+                String password = mLoginPasswordTextView.getText().toString().trim();
                 String serverUrl = mHomeServerText.getText().toString().trim();
                 String identityServerUrl = mIdentityServerText.getText().toString().trim();
                 onLoginClick(serverUrl, identityServerUrl, username, password);
@@ -176,25 +215,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String hs = mHomeServerText.getText().toString();
-
-                boolean validHomeServer = false;
-
-                try {
-                    Uri hsUri = Uri.parse(hs);
-                    validHomeServer = "http".equals(hsUri.getScheme()) || "https".equals(hsUri.getScheme());
-                } catch (Exception e) {
-                    Log.w(LOG_TAG,"## Exception: "+e.getMessage());
-                }
-
-                if (!validHomeServer) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Intent intent = new Intent(LoginActivity.this, AccountCreationActivity.class);
-                intent.putExtra(AccountCreationActivity.EXTRA_HOME_SERVER_ID, hs);
-                startActivityForResult(intent, ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE);
+                onRegisterClick();
             }
         });
 
@@ -240,16 +261,16 @@ public class LoginActivity extends MXCActionBarActivity {
             @Override
             public void onClick(View v) {
                 mIsHomeServerUrlIsDisplayed = !mIsHomeServerUrlIsDisplayed;
-                refreshHomeServerTextDisplay();
+                refreshDisplay();
             }
         });
 
-        refreshHomeServerTextDisplay();
+        refreshDisplay();
 
         // reset the badge counter
         CommonActivityUtils.updateBadgeCount(this, 0);
 
-        mEmailTextView.addTextChangedListener(new TextWatcher() {
+        mLoginEmailTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -259,7 +280,7 @@ public class LoginActivity extends MXCActionBarActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(LOGIN_PREF, mEmailTextView.getText().toString());
+                editor.putString(LOGIN_PREF, mLoginEmailTextView.getText().toString());
                 editor.commit();
             }
 
@@ -269,7 +290,7 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         });
 
-        mPasswordTextView.addTextChangedListener(new TextWatcher() {
+        mLoginPasswordTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -279,7 +300,7 @@ public class LoginActivity extends MXCActionBarActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(PASSWORD_PREF, mPasswordTextView.getText().toString());
+                editor.putString(PASSWORD_PREF, mLoginPasswordTextView.getText().toString());
                 editor.commit();
             }
 
@@ -288,7 +309,6 @@ public class LoginActivity extends MXCActionBarActivity {
 
             }
         });
-
     }
 
     @Override
@@ -307,30 +327,81 @@ public class LoginActivity extends MXCActionBarActivity {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
 
-        if (!TextUtils.isEmpty(mEmailTextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_EMAIL_ADDRESS, mEmailTextView.getText().toString().trim());
+        if (!TextUtils.isEmpty(mLoginEmailTextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_LOGIN_EMAIL_ADDRESS, mLoginEmailTextView.getText().toString().trim());
         }
 
-        if (!TextUtils.isEmpty(mPasswordTextView.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_PASSWORD_ADDRESS, mPasswordTextView.getText().toString().trim());
+        if (!TextUtils.isEmpty(mLoginPasswordTextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_LOGIN_PASSWORD_ADDRESS, mLoginPasswordTextView.getText().toString().trim());
         }
 
         savedInstanceState.putBoolean(SAVED_IS_SERVER_URL_EXPANDED, mIsHomeServerUrlIsDisplayed);
 
         if (!TextUtils.isEmpty(mHomeServerText.getText().toString().trim())) {
-            savedInstanceState.putString(SAVED_HOMESERVERURL, mHomeServerText.getText().toString().trim());
+            savedInstanceState.putString(SAVED_HOME_SERVER_URL, mHomeServerText.getText().toString().trim());
         }
+
+        if (!TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_CREATION_EMAIL_ADDRESS, mCreationEmailTextView.getText().toString().trim());
+        }
+
+        if (!TextUtils.isEmpty(mCreationUsernameTextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_CREATION_USER_NAME, mCreationUsernameTextView.getText().toString().trim());
+        }
+
+        if (!TextUtils.isEmpty(mCreationPassword1TextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_CREATION_PASSWORD1, mCreationPassword1TextView.getText().toString().trim());
+        }
+
+        if (!TextUtils.isEmpty(mCreationPassword2TextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_CREATION_PASSWORD2, mCreationPassword2TextView.getText().toString().trim());
+        }
+
+        savedInstanceState.putInt(SAVED_MODE, mMode);
     }
 
     /**
      * Refresh the visibility of mHomeServerText
      */
-    private void refreshHomeServerTextDisplay() {
+    private void refreshDisplay() {
+
+        // home server
         mHomeServerUrlsLayout.setVisibility(mIsHomeServerUrlIsDisplayed ? View.VISIBLE : View.GONE);
         mExpandImageView.setImageResource(mIsHomeServerUrlIsDisplayed ? R.drawable.ic_material_arrow_drop_down_black : R.drawable.ic_material_arrow_drop_up_black);
+
+        //
+        boolean isLoginMode = mMode == LOGIN_MODE;
+
+        View loginLayout = findViewById(R.id.login_inputs_layout);
+        View creationLayout = findViewById(R.id.creation_inputs_layout);
+
+        loginLayout.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
+        creationLayout.setVisibility(isLoginMode ? View.GONE : View.VISIBLE);
+
+        mLoginButton.setBackgroundColor(getResources().getColor(isLoginMode ? R.color.vector_green_color : android.R.color.white));
+        mLoginButton.setTextColor(getResources().getColor(!isLoginMode ? R.color.vector_green_color : android.R.color.white));
+
+        mRegisterButton.setBackgroundColor(getResources().getColor(!isLoginMode ? R.color.vector_green_color : android.R.color.white));
+        mRegisterButton.setTextColor(getResources().getColor(isLoginMode ? R.color.vector_green_color : android.R.color.white));
     }
 
+    private void onRegisterClick() {
+        // the user switches to another mode
+        if (mMode == LOGIN_MODE) {
+            mMode = ACCOUNT_CREATION_MODE;
+            refreshDisplay();
+            return;
+        }
+    }
+    
     private void onLoginClick(String hsUrlString, String identityUrlString, String username, String password) {
+        // the user switches to another mode
+        if (mMode != LOGIN_MODE) {
+            mMode = LOGIN_MODE;
+            refreshDisplay();
+            return;
+        }
+
         // --------------------- sanity tests for input values.. ---------------------
         if (!hsUrlString.startsWith("http")) {
             Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
