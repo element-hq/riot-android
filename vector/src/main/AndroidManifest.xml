@@ -89,6 +89,11 @@
         </activity>
 
         <activity
+            android:name="im.vector.activity.AccountCreationCaptchaActivity"
+            android:label="@string/create_account" >
+        </activity>
+
+        <activity
             android:name="im.vector.activity.FallbackLoginActivity"
             android:label="@string/login" >
         </activity>

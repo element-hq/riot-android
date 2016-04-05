@@ -61,6 +61,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
     static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
+    static final int CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316;
 
     // activity modes
     // either the user logs in
@@ -162,7 +163,7 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         // bind UI widgets
-        mLoginMaskView = (RelativeLayout)findViewById(R.id.flow_ui_mask_login);
+        mLoginMaskView = (RelativeLayout) findViewById(R.id.flow_ui_mask_login);
 
         // login
         mLoginEmailTextView = (EditText) findViewById(R.id.login_user_name);
@@ -179,28 +180,15 @@ public class LoginActivity extends MXCActionBarActivity {
         mHomeServerText = (EditText) findViewById(R.id.login_matrix_server_url);
         mIdentityServerText = (EditText) findViewById(R.id.login_identity_url);
 
-        mLoginButton = (Button)findViewById(R.id.button_login);
-        mRegisterButton = (Button)findViewById(R.id.button_register);
+        mLoginButton = (Button) findViewById(R.id.button_login);
+        mRegisterButton = (Button) findViewById(R.id.button_register);
 
         mDisplayHomeServerUrlView = findViewById(R.id.display_server_url_layout);
-        mHomeServerUrlsLayout =  findViewById(R.id.login_matrix_server_options_layout);
-        mExpandImageView = (ImageView)findViewById(R.id.display_server_url_expand_icon);
+        mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
+        mExpandImageView = (ImageView) findViewById(R.id.display_server_url_expand_icon);
 
         if (null != savedInstanceState) {
-            mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
-            mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
-            mIsHomeServerUrlIsDisplayed = savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED);
-            mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
-            mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
-
-            mCreationEmailTextView.setText(savedInstanceState.getString(SAVED_CREATION_EMAIL_ADDRESS));
-            mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
-            mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
-            mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
-
-            mRegistrationResponse = (RegistrationFlowResponse)savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
-
-            mMode = savedInstanceState.getInt(SAVED_MODE, LOGIN_MODE);
+            restoreSavedData(savedInstanceState);
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
 
@@ -337,12 +325,11 @@ public class LoginActivity extends MXCActionBarActivity {
         checkFlows();
     }
 
-
     private boolean hasCredentials() {
         try {
             return Matrix.getInstance(this).getDefaultSession() != null;
         } catch (Exception e) {
-            Log.w(LOG_TAG,"## Exception: "+e.getMessage());
+            Log.w(LOG_TAG, "## Exception: " + e.getMessage());
         }
 
         this.runOnUiThread(new Runnable() {
@@ -382,14 +369,15 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Check if the client supports the registration kind.
-     * @param hsConfig the homeserver config
+     *
+     * @param hsConfig                 the homeserver config
      * @param registrationFlowResponse the response
      */
     private void onRegistrationFlow(HomeserverConnectionConfig hsConfig, RegistrationFlowResponse registrationFlowResponse) {
         setFlowsMaskEnabled(false);
         setLoginButtonsEnabled(true);
 
-        ArrayList<LoginFlow>supportedFlows = new ArrayList<LoginFlow>();
+        ArrayList<LoginFlow> supportedFlows = new ArrayList<LoginFlow>();
 
         // supported only m.login.password by now
         for (LoginFlow flow : registrationFlowResponse.flows) {
@@ -401,7 +389,7 @@ public class LoginActivity extends MXCActionBarActivity {
             if (!isSupported && (null != flow.stages)) {
                 isSupported = true;
 
-                for(String stage : flow.stages) {
+                for (String stage : flow.stages) {
                     isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage);
@@ -416,7 +404,7 @@ public class LoginActivity extends MXCActionBarActivity {
         if (supportedFlows.size() > 0) {
             mRegistrationResponse = registrationFlowResponse;
             registrationFlowResponse.flows = supportedFlows;
-        } else  {
+        } else {
             String hs = mHomeServerText.getText().toString();
             boolean validHomeServer = false;
 
@@ -424,7 +412,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 Uri hsUri = Uri.parse(hs);
                 validHomeServer = "http".equals(hsUri.getScheme()) || "https".equals(hsUri.getScheme());
             } catch (Exception e) {
-                Log.d(LOG_TAG,"## Exception: "+e.getMessage());
+                Log.d(LOG_TAG, "## Exception: " + e.getMessage());
             }
 
             if (!validHomeServer) {
@@ -514,6 +502,10 @@ public class LoginActivity extends MXCActionBarActivity {
             refreshDisplay();
             return;
         }
+
+        Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
+        startActivityForResult(intent, CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
+
     }
 
     //==============================================================================================================
@@ -665,6 +657,31 @@ public class LoginActivity extends MXCActionBarActivity {
     // Instance backup
     //==============================================================================================================
 
+    private void restoreSavedData(Bundle savedInstanceState) {
+        if (null != savedInstanceState) {
+            mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
+            mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
+            mIsHomeServerUrlIsDisplayed = savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED);
+            mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
+            mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
+
+            mCreationEmailTextView.setText(savedInstanceState.getString(SAVED_CREATION_EMAIL_ADDRESS));
+            mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
+            mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
+            mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
+
+            mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
+
+            mMode = savedInstanceState.getInt(SAVED_MODE, LOGIN_MODE);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        restoreSavedData(savedInstanceState);
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
@@ -790,7 +807,12 @@ public class LoginActivity extends MXCActionBarActivity {
     //==============================================================================================================
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
-        if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
+        if (CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
+            if (resultCode == RESULT_OK) {
+                String captchakey = data.getStringExtra("response");
+                captchakey += captchakey;
+            }
+        } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
                 String homeServer = data.getStringExtra("homeServer");
                 String homeServerUrl = data.getStringExtra("homeServerUrl");
