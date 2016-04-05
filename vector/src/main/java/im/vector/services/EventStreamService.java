@@ -139,6 +139,16 @@ public class EventStreamService extends Service {
     }
 
     /**
+     * Remove any pending notification.
+     * It should be called when the application is logged out.
+     */
+    public static void removeNotification() {
+        if (null != mActiveEventStreamService) {
+            mActiveEventStreamService.clearNotification();
+        }
+    }
+
+    /**
      * Check if a notification must be cleared because the linked event has been read, deleted ...
      */
     public static void checkDisplayedNotification() {

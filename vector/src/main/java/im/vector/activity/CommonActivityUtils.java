@@ -109,6 +109,9 @@ public class CommonActivityUtils {
             MyPresenceManager.getInstance(activity, session).advertiseOffline();
             MyPresenceManager.remove(session);
 
+            // clear notification
+            EventStreamService.removeNotification();
+
             // unregister from the GCM.
             Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
 
