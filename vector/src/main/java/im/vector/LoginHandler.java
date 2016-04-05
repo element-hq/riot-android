@@ -108,7 +108,7 @@ public class LoginHandler {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.getSupportedFlows(new SimpleApiCallback<List<LoginFlow>>() {
+        client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>() {
             @Override
             public void onSuccess(List<LoginFlow> flows) {
                 Log.d(LOG_TAG, "getSupportedFlows " + flows);
