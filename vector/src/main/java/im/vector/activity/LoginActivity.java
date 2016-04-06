@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.ThirdPid;
+import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
@@ -75,8 +75,9 @@ public class LoginActivity extends MXCActionBarActivity {
     // activity modes
     // either the user logs in
     // or creates a new account
-    static final int LOGIN_MODE = 0;
-    static final int ACCOUNT_CREATION_MODE = 1;
+    static final int MODE_UNKNOWN = 0;
+    static final int MODE_LOGIN = 1;
+    static final int MODE_ACCOUNT_CREATION = 2;
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
@@ -103,7 +104,7 @@ public class LoginActivity extends MXCActionBarActivity {
     private static final String SAVED_IDENTITY_SERVER_URL = "SAVED_IDENTITY_SERVER_URL";
 
     // activity mode
-    private int mMode = LOGIN_MODE;
+    private int mMode = MODE_LOGIN;
 
     // graphical items
     // login button
@@ -156,6 +157,14 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // login handler
     private LoginHandler mLoginHandler = new LoginHandler();
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // ignore any server response when the acitity is destroyed
+        mMode = MODE_UNKNOWN;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -372,7 +381,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * check if the current page is supported by the current implementation
      */
     private void checkFlows() {
-        if (mMode == LOGIN_MODE) {
+        if (mMode == MODE_LOGIN) {
             checkLoginFlows();
         } else {
             checkRegistrationFlows();
@@ -433,7 +442,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void register(final RegistrationParams params) {
         // should not check login flows
-        if (mMode != ACCOUNT_CREATION_MODE) {
+        if (mMode != MODE_ACCOUNT_CREATION) {
             return;
         }
 
@@ -449,7 +458,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     {
                         @Override
                         public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 setFlowsMaskEnabled(false);
                                 goToSplash();
                                 LoginActivity.this.finish();
@@ -457,7 +466,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         }
 
                         private void onError (String errorMessage){
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 setFlowsMaskEnabled(false);
                                 setLoginButtonsEnabled(false);
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
@@ -477,7 +486,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         @Override
                         public void onMatrixError (MatrixError e){
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 // waiting for email case
                                 if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                                     Log.d(LOG_TAG, "Wait for email validation");
@@ -620,7 +629,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void checkRegistrationFlows() {
         // should not check login flows
-        if (mMode != ACCOUNT_CREATION_MODE) {
+        if (mMode != MODE_ACCOUNT_CREATION) {
             return;
         }
 
@@ -642,7 +651,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         private void onError(String errorMessage) {
                             // should not check login flows
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 setFlowsMaskEnabled(false);
                                 setLoginButtonsEnabled(false);
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
@@ -651,7 +660,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         @Override
                         public void onNetworkError(Exception e) {
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
                                 onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
                             }
@@ -659,16 +668,16 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                             }
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
-                            if (mMode == ACCOUNT_CREATION_MODE) {
+                            if (mMode == MODE_ACCOUNT_CREATION) {
                                 // should not check login flows
-                                if (mMode == ACCOUNT_CREATION_MODE) {
+                                if (mMode == MODE_ACCOUNT_CREATION) {
                                     RegistrationFlowResponse registrationFlowResponse = null;
 
                                     // when a response is not completed the server returns an error message
@@ -702,8 +711,8 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void onRegisterClick(boolean checkRegistraionValues) {
         // the user switches to another mode
-        if (mMode == LOGIN_MODE) {
-            mMode = ACCOUNT_CREATION_MODE;
+        if (mMode != MODE_ACCOUNT_CREATION) {
+            mMode = MODE_ACCOUNT_CREATION;
             refreshDisplay();
             return;
         }
@@ -778,9 +787,9 @@ public class LoginActivity extends MXCActionBarActivity {
             setFlowsMaskEnabled(true);
 
             final HomeserverConnectionConfig hsConfig = getHsConfig();
-            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThirdPid>() {
+            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThreePid>() {
                 @Override
-                public void onSuccess(ThirdPid thirdPid) {
+                public void onSuccess(ThreePid thirdPid) {
                     HashMap<String, Object> pidsCredentialsAuth = new HashMap<String, Object>();
                     pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
                     String identityServerHost = mIdentityServerText.getText().toString().trim();
@@ -874,8 +883,8 @@ public class LoginActivity extends MXCActionBarActivity {
 
     private void onLoginClick(String hsUrlString, String identityUrlString, String username, String password) {
         // the user switches to another mode
-        if (mMode != LOGIN_MODE) {
-            mMode = LOGIN_MODE;
+        if (mMode != MODE_LOGIN) {
+            mMode = MODE_LOGIN;
             refreshDisplay();
             return;
         }
@@ -953,7 +962,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void checkLoginFlows() {
         // should not check login flows
-        if (mMode != LOGIN_MODE) {
+        if (mMode != MODE_LOGIN) {
             return;
         }
 
@@ -969,7 +978,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 mLoginHandler.getSupportedLoginFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
                     @Override
                     public void onSuccess(List<LoginFlow> flows) {
-                        if (mMode == LOGIN_MODE) {
+                        if (mMode == MODE_LOGIN) {
                             setFlowsMaskEnabled(false);
                             setLoginButtonsEnabled(true);
                             boolean isSupported = true;
@@ -989,7 +998,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     }
 
                     private void onError(String errorMessage) {
-                        if (mMode == LOGIN_MODE) {
+                        if (mMode == MODE_LOGIN) {
                             setFlowsMaskEnabled(false);
                             setLoginButtonsEnabled(false);
                             Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
@@ -1039,7 +1048,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
             mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
 
-            mMode = savedInstanceState.getInt(SAVED_MODE, LOGIN_MODE);
+            mMode = savedInstanceState.getInt(SAVED_MODE, MODE_LOGIN);
         }
     }
 
@@ -1108,7 +1117,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mExpandImageView.setImageResource(mIsHomeServerUrlIsDisplayed ? R.drawable.ic_material_arrow_drop_down_black : R.drawable.ic_material_arrow_drop_up_black);
 
         //
-        boolean isLoginMode = mMode == LOGIN_MODE;
+        boolean isLoginMode = mMode == MODE_LOGIN;
 
         View loginLayout = findViewById(R.id.login_inputs_layout);
         View creationLayout = findViewById(R.id.creation_inputs_layout);
@@ -1153,11 +1162,11 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param enabled enabled/disabled the login buttons
      */
     private void setLoginButtonsEnabled(boolean enabled) {
-        mLoginButton.setEnabled(enabled || (mMode == ACCOUNT_CREATION_MODE));
-        mRegisterButton.setEnabled(enabled || (mMode == LOGIN_MODE));
+        mLoginButton.setEnabled(enabled || (mMode == MODE_ACCOUNT_CREATION));
+        mRegisterButton.setEnabled(enabled || (mMode == MODE_LOGIN));
 
-        mLoginButton.setAlpha((enabled || (mMode == ACCOUNT_CREATION_MODE)) ? 1.0f : 0.5f);
-        mRegisterButton.setAlpha((enabled || (mMode == LOGIN_MODE)) ? 1.0f : 0.5f);
+        mLoginButton.setAlpha((enabled || (mMode == MODE_ACCOUNT_CREATION)) ? 1.0f : 0.5f);
+        mRegisterButton.setAlpha((enabled || (mMode == MODE_LOGIN)) ? 1.0f : 0.5f);
     }
 
     //==============================================================================================================
