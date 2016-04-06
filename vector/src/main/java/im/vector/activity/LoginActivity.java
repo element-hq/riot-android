@@ -16,6 +16,8 @@
 
 package im.vector.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -36,9 +38,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -54,13 +53,13 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Displays the login screen.
@@ -143,6 +142,8 @@ public class LoginActivity extends MXCActionBarActivity {
     // used to display a UI mask on the screen
     private RelativeLayout mLoginMaskView;
 
+    private TextView mProgressTextView;
+
     private boolean mIsHomeServerUrlIsDisplayed;
     private View mDisplayHomeServerUrlView;
     private View mHomeServerUrlsLayout;
@@ -152,7 +153,9 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // allowed registration response
     private RegistrationFlowResponse mRegistrationResponse;
-    private HashMap<String, Object> mCreationAuth;
+
+    // login handler
+    private LoginHandler mLoginHandler = new LoginHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +201,8 @@ public class LoginActivity extends MXCActionBarActivity {
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
         mExpandImageView = (ImageView) findViewById(R.id.display_server_url_expand_icon);
 
+        mProgressTextView = (TextView) findViewById(R.id.flow_progress_message_textview);
+
         if (null != savedInstanceState) {
             restoreSavedData(savedInstanceState);
         } else {
@@ -225,7 +230,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onRegisterClick();
+                onRegisterClick(true);
             }
         });
 
@@ -379,23 +384,68 @@ public class LoginActivity extends MXCActionBarActivity {
     //==============================================================================================================
 
     /**
+     * Error case Management
+     * @param matrixError the matrix error
+     */
+    private void onFailureDuringAuthRequest(MatrixError matrixError) {
+        String message = matrixError.getLocalizedMessage();
+
+        Log.d(LOG_TAG, "onFailureDuringAuthRequest " + message);
+
+        setFlowsMaskEnabled(false);
+
+        // detect if it is a Matrix SDK issue
+        if (null != matrixError) {
+            String error = matrixError.error;
+            String errCode = matrixError.errcode;
+
+            if (null != errCode) {
+                if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
+                    message = getResources().getString(R.string.login_error_forbidden);
+                } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
+                    message = getResources().getString(R.string.login_error_unknown_token);
+                } else if (TextUtils.equals(errCode, MatrixError.BAD_JSON)) {
+                    message = getResources().getString(R.string.login_error_bad_json);
+                } else if (TextUtils.equals(errCode, MatrixError.NOT_JSON)) {
+                    message = getResources().getString(R.string.login_error_not_json);
+                } else if (TextUtils.equals(errCode, MatrixError.LIMIT_EXCEEDED)) {
+                    message = getResources().getString(R.string.login_error_limit_exceeded);
+                } else if (TextUtils.equals(errCode, MatrixError.USER_IN_USE)) {
+                    message = getResources().getString(R.string.login_error_user_in_use);
+                } else if (TextUtils.equals(errCode, MatrixError.LOGIN_EMAIL_URL_NOT_YET)) {
+                    message = getResources().getString(R.string.login_error_login_email_not_yet);
+                } else {
+                    message = errCode;
+                }
+            }
+            else if (!TextUtils.isEmpty(error)) {
+                message = error;
+            }
+        }
+
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
      * Check the homeserver flows.
      * i.e checks if this registration page is enough to perform a registration.
      * else switch to a fallback page
      */
     private void register(final RegistrationParams params) {
+        // should not check login flows
+        if (mMode != ACCOUNT_CREATION_MODE) {
+            return;
+        }
+
         if (null != mRegistrationResponse) {
             try {
                 final HomeserverConnectionConfig hsConfig = getHsConfig();
-                LoginHandler loginHandler = new LoginHandler();
 
                 // invalid URL
                 if (null == hsConfig) {
                     setLoginButtonsEnabled(false);
                 } else {
-                    setFlowsMaskEnabled(true);
-
-                    loginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>()
+                    mLoginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>()
                     {
                         @Override
                         public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
@@ -427,8 +477,9 @@ public class LoginActivity extends MXCActionBarActivity {
                             if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                                 Log.d(LOG_TAG, "Wait for email validation");
 
-                                Handler handler = new Handler(getMainLooper());
+                                setFlowsMaskEnabled(true, getResources().getString(R.string.auth_email_validation_message));
 
+                                Handler handler = new Handler(getMainLooper());
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -447,12 +498,14 @@ public class LoginActivity extends MXCActionBarActivity {
                                     }
                                 }
 
+                                // check if the server response can be casted
                                 if (null != registrationFlowResponse) {
+                                    Log.d(LOG_TAG, "The registration continues");
                                     mRegistrationResponse = registrationFlowResponse;
-                                    onRegisterClick();
+                                    // next step
+                                    onRegisterClick(false);
                                 } else {
-                                    // display an error message
-                                    onError(getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")");
+                                    onFailureDuringAuthRequest(e);
                                 }
                             }
                         }
@@ -560,10 +613,14 @@ public class LoginActivity extends MXCActionBarActivity {
      * else switch to a fallback page
      */
     private void checkRegistrationFlows() {
+        // should not check login flows
+        if (mMode != ACCOUNT_CREATION_MODE) {
+            return;
+        }
+
         if (null == mRegistrationResponse) {
             try {
                 final HomeserverConnectionConfig hsConfig = getHsConfig();
-                LoginHandler loginHandler = new LoginHandler();
 
                 // invalid URL
                 if (null == hsConfig) {
@@ -571,45 +628,51 @@ public class LoginActivity extends MXCActionBarActivity {
                 } else {
                     setFlowsMaskEnabled(true);
 
-                    loginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<HomeserverConnectionConfig>() {
+                    mLoginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<HomeserverConnectionConfig>() {
                         @Override
                         public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
                             // should never be called
                         }
 
                         private void onError(String errorMessage) {
-                            setFlowsMaskEnabled(false);
-                            setLoginButtonsEnabled(false);
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            // should not check login flows
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                setFlowsMaskEnabled(false);
+                                setLoginButtonsEnabled(false);
+                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            }
                         }
 
                         @Override
                         public void onNetworkError(Exception e) {
                             Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
-                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                            onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
                         }
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                            onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
-                            RegistrationFlowResponse registrationFlowResponse = null;
+                            // should not check login flows
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                RegistrationFlowResponse registrationFlowResponse = null;
 
-                            // when a response is not completed the server returns an error message
-                            if ((null != e.mStatus) && (e.mStatus == 401)) {
-                                try {
-                                    registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
-                                } catch (Exception castExcept) {
+                                // when a response is not completed the server returns an error message
+                                if ((null != e.mStatus) && (e.mStatus == 401)) {
+                                    try {
+                                        registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
+                                    } catch (Exception castExcept) {
+                                    }
                                 }
-                            }
 
-                            if (null != registrationFlowResponse) {
-                                onRegistrationFlow(hsConfig, registrationFlowResponse);
-                            } else {
-                                onError(getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")");
+                                if (null != registrationFlowResponse) {
+                                    onRegistrationFlow(hsConfig, registrationFlowResponse);
+                                } else {
+                                    onFailureDuringAuthRequest(e);
+                                }
                             }
                         }
                     });
@@ -622,7 +685,10 @@ public class LoginActivity extends MXCActionBarActivity {
         }
     }
 
-    private void onRegisterClick() {
+    /**
+     * The user clicks on the register button.
+     */
+    private void onRegisterClick(boolean checkRegistraionValues) {
         // the user switches to another mode
         if (mMode == LOGIN_MODE) {
             mMode = ACCOUNT_CREATION_MODE;
@@ -635,34 +701,78 @@ public class LoginActivity extends MXCActionBarActivity {
             return;
         }
 
+        // parameters
         final String email = mCreationEmailTextView.getText().toString().trim();
         final String name = mCreationUsernameTextView.getText().toString().trim();
-        final String password  = mCreationPassword1TextView.getText().toString().trim();
-        final String passwordCheck  = mCreationPassword2TextView.getText().toString().trim();
+        final String password = mCreationPassword1TextView.getText().toString().trim();
+        final String passwordCheck = mCreationPassword2TextView.getText().toString().trim();
 
-        // TODO add sanity check on parameters
+        if (checkRegistraionValues) {
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
+                return;
+            } else if (TextUtils.isEmpty(password)) {
+                Toast.makeText(getApplicationContext(), getString(R.string.auth_missing_password), Toast.LENGTH_SHORT).show();
+                return;
+            } else if (password.length() < 6) {
+                Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
+                return;
+            } else if (!TextUtils.equals(password, passwordCheck)) {
+                Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
+                return;
+            } else if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                String expression ="^[a-z0-9.\\-_]+$";
 
-        if (null == mCreationAuth) {
-            mCreationAuth = new HashMap<String, Object>();
-            mCreationAuth.put("session", mRegistrationResponse.session);
+                Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(name);
+                if (!matcher.matches()) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            // display a warning when there is no email address
+            if (TextUtils.isEmpty(email)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.auth_missing_optional_email);
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        setFlowsMaskEnabled(true);
+                        onRegisterClick(false);
+                    }
+                });
+
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                return;
+            }
         }
 
+        // require an email registration
         if (!TextUtils.isEmpty(email) && !isEmailIdentityFlowCompleted()) {
-            LoginHandler handler = new LoginHandler();
-
             final HomeserverConnectionConfig hsConfig = getHsConfig();
-
-            handler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThirdPid>() {
+            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThirdPid>() {
 
                 @Override
                 public void onSuccess(ThirdPid thirdPid) {
 
                     HashMap<String, Object> pidsCredentialsAuth = new HashMap<String, Object>();
-
                     pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
-
                     String identityServerHost = mIdentityServerText.getText().toString().trim();
-
                     if (identityServerHost.startsWith("http://")) {
                         identityServerHost = identityServerHost.substring("http://".length());
                     } else  if (identityServerHost.startsWith("https://")) {
@@ -720,7 +830,19 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         }
 
-        // what's else ?
+        // use the default registration
+        RegistrationParams params = new RegistrationParams();
+
+        HashMap<String, Object> authParams = new HashMap<String, Object>();
+        authParams.put("session", mRegistrationResponse.session);
+        authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+
+        params.auth = authParams;
+        params.username = name;
+        params.password = password;
+        params.bind_email = true;
+
+        register(params);
     }
 
     //==============================================================================================================
@@ -765,8 +887,7 @@ public class LoginActivity extends MXCActionBarActivity {
         setFlowsMaskEnabled(true);
 
         try {
-            LoginHandler loginHandler = new LoginHandler();
-            loginHandler.login(this, hsConfig, username, password, new SimpleApiCallback<HomeserverConnectionConfig>(this) {
+            mLoginHandler.login(this, hsConfig, username, password, new SimpleApiCallback<HomeserverConnectionConfig>(this) {
                 @Override
                 public void onSuccess(HomeserverConnectionConfig c) {
                     setFlowsMaskEnabled(false);
@@ -808,8 +929,12 @@ public class LoginActivity extends MXCActionBarActivity {
      * else switcth to a fallback page
      */
     private void checkLoginFlows() {
+        // should not check login flows
+        if (mMode != LOGIN_MODE) {
+            return;
+        }
+
         try {
-            LoginHandler loginHandler = new LoginHandler();
             final HomeserverConnectionConfig hsConfig = getHsConfig();
 
             // invalid URL
@@ -818,30 +943,34 @@ public class LoginActivity extends MXCActionBarActivity {
             } else {
                 setFlowsMaskEnabled(true);
 
-                loginHandler.getSupportedLoginFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
+                mLoginHandler.getSupportedLoginFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
                     @Override
                     public void onSuccess(List<LoginFlow> flows) {
-                        setFlowsMaskEnabled(false);
-                        setLoginButtonsEnabled(true);
-                        boolean isSupported = true;
+                        if (mMode == LOGIN_MODE) {
+                            setFlowsMaskEnabled(false);
+                            setLoginButtonsEnabled(true);
+                            boolean isSupported = true;
 
-                        // supported only m.login.password by now
-                        for (LoginFlow flow : flows) {
-                            isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, flow.type);
-                        }
+                            // supported only m.login.password by now
+                            for (LoginFlow flow : flows) {
+                                isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, flow.type);
+                            }
 
-                        // if not supported, switch to the fallback login
-                        if (!isSupported) {
-                            Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
-                            intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
-                            startActivityForResult(intent, FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
+                            // if not supported, switch to the fallback login
+                            if (!isSupported) {
+                                Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
+                                intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
+                                startActivityForResult(intent, FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
+                            }
                         }
                     }
 
                     private void onError(String errorMessage) {
-                        setFlowsMaskEnabled(false);
-                        setLoginButtonsEnabled(false);
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        if (mMode == LOGIN_MODE) {
+                            setFlowsMaskEnabled(false);
+                            setLoginButtonsEnabled(false);
+                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
@@ -973,14 +1102,27 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * display a loading screen mask over the login screen
-     * @param aIsMaskEnabled true to enable the loading screen, false otherwise
+     * @param aIsMaskEnabled
      */
     private void setFlowsMaskEnabled(boolean aIsMaskEnabled) {
+        setFlowsMaskEnabled(aIsMaskEnabled, null);
+    }
+
+    /**
+     * display a loading screen mask over the login screen
+     * @param aIsMaskEnabled true to enable the loading screen, false otherwise
+     */
+    private void setFlowsMaskEnabled(boolean aIsMaskEnabled, String progressText) {
         // disable/enable login buttons
         setLoginButtonsEnabled(!aIsMaskEnabled);
 
         if(null != mLoginMaskView) {
             mLoginMaskView.setVisibility(aIsMaskEnabled ? View.VISIBLE : View.GONE);
+        }
+
+        if (null != mProgressTextView) {
+            mProgressTextView.setText(progressText);
+            mLoginMaskView.setVisibility((null != progressText) ? View.VISIBLE : View.GONE);
         }
     }
 

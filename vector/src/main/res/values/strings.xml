@@ -143,6 +143,7 @@
     <string name="auth_invalid_user_name">User names may only contain letters, numbers, dots, hyphens and underscores</string>
     <string name="auth_invalid_password">Password too short (min 6)</string>
     <string name="auth_missing_password">Missing password</string>
+    <string name="auth_invalid_email">Invalid email address</string>
     <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_password_dont_match">Passwords don\'t match</string>
@@ -159,8 +160,21 @@
     <string name="login_error_must_start_http">URL must start with http[s]://</string>
     <string name="login_error_network_error">Unable to login: Network error</string>
     <string name="login_error_unable_login">Unable to login</string>
+    <string name="login_error_registration_network_error">Unable to register: Network error</string>
+    <string name="login_error_unable_register">Unable to login</string>
     <string name="login_error_invalid_credentials">Enter valid credentials</string>
     <string name="login_error_invalid_home_server">Enter valid URL</string>
+
+    <string name="login_error_no_login_flow">We failed to retrieve authentication information from this Home Server</string>
+    <string name="login_error_do_not_support_login_flows">Currently we do not support any or all login flows defined by this Home Server</string>
+    <string name="login_error_registration_is_not_supported">Registration is not currently supported</string>
+    <string name="login_error_forbidden">Invalid username/password</string>
+    <string name="login_error_unknown_token">The access token specified was not recognised</string>
+    <string name="login_error_bad_json">Malformed JSON</string>
+    <string name="login_error_not_json">Did not contain valid JSON</string>
+    <string name="login_error_limit_exceeded">Too many requests have been sent</string>
+    <string name="login_error_user_in_use">This user name is already used</string>
+    <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
 
     <!-- members list Screen -->
     <string name="members_list">Members List</string>

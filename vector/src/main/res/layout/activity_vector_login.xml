@@ -227,21 +227,39 @@
         android:id="@+id/flow_ui_mask_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_centerInParent="true">
+
         <View
             android:id="@+id/search_mask_view"
             android:background="#AAAAAAAA"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"/>
 
-        <ProgressBar
-            android:id="@+id/search_progress"
-            android:layout_height="60dp"
-            android:layout_width="60dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:indeterminate="true" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/flow_progress_message_textview"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="30dp"
+                android:text="A text here" />
+
+            <ProgressBar
+                android:id="@+id/search_progress"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:indeterminate="true"/>
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>
