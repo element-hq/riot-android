@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector;
 
 import android.content.Context;
@@ -6,11 +22,15 @@ import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
+import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
@@ -99,19 +119,19 @@ public class LoginHandler {
     }
 
     /**
-     * Retrieve the supported flows of a home server.
-     * @param ctx the application conttext.
+     * Retrieve the supported login flows of a home server.
+     * @param ctx the application context.
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void getSupportedFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<List<LoginFlow>> callback) {
+    public void getSupportedLoginFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<List<LoginFlow>> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.getSupportedFlows(new SimpleApiCallback<List<LoginFlow>>() {
+        client.getSupportedLoginFlows(new SimpleApiCallback<List<LoginFlow>>() {
             @Override
             public void onSuccess(List<LoginFlow> flows) {
-                Log.d(LOG_TAG, "getSupportedFlows " + flows);
+                Log.d(LOG_TAG, "getSupportedLoginFlows " + flows);
                 callback.onSuccess(flows);
             }
 
@@ -125,7 +145,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            getSupportedFlows(appCtx, hsConfig, callback);
+                            getSupportedLoginFlows(appCtx, hsConfig, callback);
                         }
 
                         @Override
@@ -155,4 +175,141 @@ public class LoginHandler {
         });
     }
 
+    /**
+     * Retrieve the supported registration flows of a home server.
+     * @param ctx the application context.
+     * @param hsConfig the home server config.
+     * @param callback the supported flows list callback.
+     */
+    public void getSupportedRegistrationFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<HomeserverConnectionConfig> callback) {
+        register(ctx, hsConfig, new RegistrationParams(), callback);
+    }
+
+    /**
+     * Retrieve the supported registration flows of a home server.
+     * @param ctx the application context.
+     * @param hsConfig the home server config.
+     * @param callback the supported flows list callback.
+     */
+    public void register(Context ctx, final HomeserverConnectionConfig hsConfig, final RegistrationParams params, final SimpleApiCallback<HomeserverConnectionConfig> callback) {
+        final Context appCtx = ctx.getApplicationContext();
+        LoginRestClient client = new LoginRestClient(hsConfig);
+
+        client.register(params, new SimpleApiCallback <Credentials> () {
+            @Override
+            public void onSuccess(Credentials credentials){
+                Collection<MXSession> sessions = Matrix.getMXSessions(appCtx);
+                Boolean isDuplicated = false;
+
+                for (MXSession existingSession : sessions) {
+                    Credentials cred = existingSession.getCredentials();
+                    isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
+                }
+
+                if (!isDuplicated) {
+                    hsConfig.setCredentials(credentials);
+                    MXSession session = Matrix.getInstance(appCtx).createSession(hsConfig);
+                    Matrix.getInstance(appCtx).addSession(session);
+                }
+
+                Log.d(LOG_TAG, "client getSupportedRegistrationFlows succeeded.");
+                callback.onSuccess(hsConfig);
+            }
+
+            @Override
+            public void onNetworkError ( final Exception e){
+                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                if (unrecCertEx != null) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+
+                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            getSupportedRegistrationFlows(appCtx, hsConfig, callback);
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            callback.onNetworkError(e);
+                        }
+
+                        @Override
+                        public void onReject() {
+                            callback.onNetworkError(e);
+                        }
+                    });
+                } else {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError (Exception e){
+                callback.onUnexpectedError(e);
+            }
+
+            @Override
+            public void onMatrixError (MatrixError e){
+                callback.onMatrixError(e);
+            }
+        });
+    }
+
+    /**
+     * Request a validation token.
+     * @param restClient the restclient to use.
+     * @param callback the callback when the operation is done
+     */
+    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final SimpleApiCallback<ThreePid> callback) {
+        final Context appCtx = ctx.getApplicationContext();
+        final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+
+        ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
+
+        pid.requestValidationToken(client, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                callback.onSuccess(pid);
+            }
+
+            @Override
+            public void onNetworkError(final Exception e) {
+                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                if (unrecCertEx != null) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+
+                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            requestValidationToken(ctx, hsConfig, email, callback);
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            callback.onNetworkError(e);
+                        }
+
+                        @Override
+                        public void onReject() {
+                            callback.onNetworkError(e);
+                        }
+                    });
+                } else {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError (Exception e){
+                callback.onUnexpectedError(e);
+            }
+
+            @Override
+            public void onMatrixError (MatrixError e){
+                callback.onMatrixError(e);
+            }
+        });
+    }
 }
