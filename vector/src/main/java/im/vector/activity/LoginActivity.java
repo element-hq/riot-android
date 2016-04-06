@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -44,6 +45,7 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
+import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.LoginHandler;
@@ -54,7 +56,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Displays the login screen.
@@ -609,6 +610,24 @@ public class LoginActivity extends MXCActionBarActivity {
             return;
         }
 
+        if (true) {
+            LoginHandler handler = new LoginHandler();
+
+            final HomeserverConnectionConfig hsConfig = getHsConfig();
+
+            handler.requestValidationToken(LoginActivity.this, hsConfig, "bilboc1978@gmail.com", new SimpleApiCallback<String>() {
+
+                @Override
+                public void onSuccess(String sid) {
+                    String a = sid;
+
+                    a+= a;
+                }
+            });
+
+            return;
+        }
+
         // checks parameters
         if (isRecaptchaFlowRequired()) {
             // retrieve the site_key
@@ -929,7 +948,18 @@ public class LoginActivity extends MXCActionBarActivity {
             hsUrlString = "https://" + hsUrlString;
         }
 
-        return new HomeserverConnectionConfig(Uri.parse(hsUrlString));
+        String identityServerUrlString = mIdentityServerText.getText().toString();
+
+        if ((null == identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
+            Toast.makeText(this,getString(R.string.login_error_must_start_http),Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        if(!identityServerUrlString.startsWith("http://") && !identityServerUrlString.startsWith("https://")){
+            identityServerUrlString = "https://" + identityServerUrlString;
+        }
+
+        return new HomeserverConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, null, false);
     }
 
     //==============================================================================================================
@@ -948,10 +978,10 @@ public class LoginActivity extends MXCActionBarActivity {
                 authParams.put("response", captchaResponse);
                 authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
 
-                params.auth = authParams;
+                /*params.auth = authParams;
                 params.username = mCreationUsernameTextView.getText().toString().trim();
                 params.password = mCreationPassword1TextView.getText().toString().trim();
-                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
+                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());*/
 
 
             }

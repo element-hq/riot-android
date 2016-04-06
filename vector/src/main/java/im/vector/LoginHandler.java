@@ -6,12 +6,14 @@ import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ThirdPid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
-import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
@@ -195,6 +197,63 @@ public class LoginHandler {
                         @Override
                         public void onAccept() {
                             getSupportedRegistrationFlows(appCtx, hsConfig, callback);
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            callback.onNetworkError(e);
+                        }
+
+                        @Override
+                        public void onReject() {
+                            callback.onNetworkError(e);
+                        }
+                    });
+                } else {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError (Exception e){
+                callback.onUnexpectedError(e);
+            }
+
+            @Override
+            public void onMatrixError (MatrixError e){
+                callback.onMatrixError(e);
+            }
+        });
+    }
+
+    /**
+     * Request a validation token.
+     * @param restClient the restclient to use.
+     * @param callback the callback when the operation is done
+     */
+    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final SimpleApiCallback<String> callback) {
+        final Context appCtx = ctx.getApplicationContext();
+        final ThirdPid pid = new ThirdPid(email, ThirdPid.MEDIUM_EMAIL);
+
+        ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
+
+        pid.requestValidationToken(client, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                callback.onSuccess(pid.sid);
+            }
+
+            @Override
+            public void onNetworkError(final Exception e) {
+                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                if (unrecCertEx != null) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+
+                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            requestValidationToken(ctx, hsConfig, email, callback);
                         }
 
                         @Override
