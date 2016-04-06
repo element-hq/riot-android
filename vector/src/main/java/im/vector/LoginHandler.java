@@ -165,7 +165,7 @@ public class LoginHandler {
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void getSupportedRegistrationFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<Credentials> callback) {
+    public void getSupportedRegistrationFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<HomeserverConnectionConfig> callback) {
         register(ctx, hsConfig, new RegistrationParams(), callback);
     }
 
@@ -175,15 +175,29 @@ public class LoginHandler {
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void register(Context ctx, final HomeserverConnectionConfig hsConfig, final RegistrationParams params, final SimpleApiCallback<Credentials> callback) {
+    public void register(Context ctx, final HomeserverConnectionConfig hsConfig, final RegistrationParams params, final SimpleApiCallback<HomeserverConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
         client.register(params, new SimpleApiCallback <Credentials> () {
             @Override
-            public void onSuccess (Credentials credentials){
-                Log.d(LOG_TAG, "getSupportedRegistrationFlows " + credentials);
-                callback.onSuccess(credentials);
+            public void onSuccess(Credentials credentials){
+                Collection<MXSession> sessions = Matrix.getMXSessions(appCtx);
+                Boolean isDuplicated = false;
+
+                for (MXSession existingSession : sessions) {
+                    Credentials cred = existingSession.getCredentials();
+                    isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
+                }
+
+                if (!isDuplicated) {
+                    hsConfig.setCredentials(credentials);
+                    MXSession session = Matrix.getInstance(appCtx).createSession(hsConfig);
+                    Matrix.getInstance(appCtx).addSession(session);
+                }
+
+                Log.d(LOG_TAG, "client getSupportedRegistrationFlows succeeded.");
+                callback.onSuccess(hsConfig);
             }
 
             @Override
@@ -231,7 +245,7 @@ public class LoginHandler {
      * @param restClient the restclient to use.
      * @param callback the callback when the operation is done
      */
-    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final SimpleApiCallback<String> callback) {
+    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final SimpleApiCallback<ThirdPid> callback) {
         final Context appCtx = ctx.getApplicationContext();
         final ThirdPid pid = new ThirdPid(email, ThirdPid.MEDIUM_EMAIL);
 
@@ -240,7 +254,7 @@ public class LoginHandler {
         pid.requestValidationToken(client, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                callback.onSuccess(pid.sid);
+                callback.onSuccess(pid);
             }
 
             @Override

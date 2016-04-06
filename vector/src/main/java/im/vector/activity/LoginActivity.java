@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -35,27 +36,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ThirdPid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
-import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Displays the login screen.
@@ -147,6 +152,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // allowed registration response
     private RegistrationFlowResponse mRegistrationResponse;
+    private HashMap<String, Object> mCreationAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -377,8 +383,8 @@ public class LoginActivity extends MXCActionBarActivity {
      * i.e checks if this registration page is enough to perform a registration.
      * else switch to a fallback page
      */
-    private void register(RegistrationParams params) {
-        if (null == mRegistrationResponse) {
+    private void register(final RegistrationParams params) {
+        if (null != mRegistrationResponse) {
             try {
                 final HomeserverConnectionConfig hsConfig = getHsConfig();
                 LoginHandler loginHandler = new LoginHandler();
@@ -389,48 +395,67 @@ public class LoginActivity extends MXCActionBarActivity {
                 } else {
                     setFlowsMaskEnabled(true);
 
-                    loginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback < Credentials > ()
+                    loginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>()
                     {
                         @Override
-                        public void onSuccess (Credentials credentials) {
-                        // should never be called
-                    }
+                        public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
+                            setFlowsMaskEnabled(false);
+                            goToSplash();
+                            LoginActivity.this.finish();
+                        }
 
-                    private void onError (String errorMessage){
-                        setFlowsMaskEnabled(false);
-                        setLoginButtonsEnabled(false);
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    }
+                        private void onError (String errorMessage){
+                            setFlowsMaskEnabled(false);
+                            setLoginButtonsEnabled(false);
+                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onNetworkError (Exception e){
-                        Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
-                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
-                    }
+                        @Override
+                        public void onNetworkError (Exception e){
+                            Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        }
 
-                    @Override
-                    public void onUnexpectedError (Exception e){
-                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
-                    }
+                        @Override
+                        public void onUnexpectedError (Exception e){
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                        }
 
-                    @Override
-                    public void onMatrixError (MatrixError e){
-                        RegistrationFlowResponse registrationFlowResponse = null;
+                        @Override
+                        public void onMatrixError (MatrixError e){
+                            // waiting for email case
+                            if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
+                                Log.d(LOG_TAG, "Wait for email validation");
 
-                        // when a response is not completed the server returns an error message
-                        if ((null != e.mStatus) && (e.mStatus == 401)) {
-                            try {
-                                registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
-                            } catch (Exception castExcept) {
+                                Handler handler = new Handler(getMainLooper());
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        register(params);
+                                    }
+                                }, 10 * 1000);
+                            } else {
+                                // detect if a parameter is expected
+                                RegistrationFlowResponse registrationFlowResponse = null;
+
+                                // when a response is not completed the server returns an error message
+                                if ((null != e.mStatus) && (e.mStatus == 401)) {
+                                    try {
+                                        registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
+                                    } catch (Exception castExcept) {
+                                    }
+                                }
+
+                                if (null != registrationFlowResponse) {
+                                    mRegistrationResponse = registrationFlowResponse;
+                                    onRegisterClick();
+                                } else {
+                                    // display an error message
+                                    onError(getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")");
+                                }
                             }
                         }
-
-                        if (null != registrationFlowResponse) {
-                            //onRegistrationFlow(hsConfig, registrationFlowResponse);
-                        } else {
-                            onError(getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")");
-                        }
-                    }
                     });
                 }
             } catch (Exception e) {
@@ -546,9 +571,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 } else {
                     setFlowsMaskEnabled(true);
 
-                    loginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<Credentials>() {
+                    loginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<HomeserverConnectionConfig>() {
                         @Override
-                        public void onSuccess(Credentials credentials) {
+                        public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
                             // should never be called
                         }
 
@@ -610,18 +635,55 @@ public class LoginActivity extends MXCActionBarActivity {
             return;
         }
 
-        if (true) {
+        final String email = mCreationEmailTextView.getText().toString().trim();
+        final String name = mCreationUsernameTextView.getText().toString().trim();
+        final String password  = mCreationPassword1TextView.getText().toString().trim();
+        final String passwordCheck  = mCreationPassword2TextView.getText().toString().trim();
+
+        // TODO add sanity check on parameters
+
+        if (null == mCreationAuth) {
+            mCreationAuth = new HashMap<String, Object>();
+            mCreationAuth.put("session", mRegistrationResponse.session);
+        }
+
+        if (!TextUtils.isEmpty(email) && !isEmailIdentityFlowCompleted()) {
             LoginHandler handler = new LoginHandler();
 
             final HomeserverConnectionConfig hsConfig = getHsConfig();
 
-            handler.requestValidationToken(LoginActivity.this, hsConfig, "bilboc1978@gmail.com", new SimpleApiCallback<String>() {
+            handler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThirdPid>() {
 
                 @Override
-                public void onSuccess(String sid) {
-                    String a = sid;
+                public void onSuccess(ThirdPid thirdPid) {
 
-                    a+= a;
+                    HashMap<String, Object> pidsCredentialsAuth = new HashMap<String, Object>();
+
+                    pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
+
+                    String identityServerHost = mIdentityServerText.getText().toString().trim();
+
+                    if (identityServerHost.startsWith("http://")) {
+                        identityServerHost = identityServerHost.substring("http://".length());
+                    } else  if (identityServerHost.startsWith("https://")) {
+                        identityServerHost = identityServerHost.substring("https://".length());
+                    }
+
+                    pidsCredentialsAuth.put("id_server", identityServerHost);
+                    pidsCredentialsAuth.put("sid", thirdPid.sid);
+                    RegistrationParams params = new RegistrationParams();
+
+                    HashMap<String, Object> authParams = new HashMap<String, Object>();
+                    authParams.put("session", mRegistrationResponse.session);
+                    authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
+                    authParams.put("threepid_creds", pidsCredentialsAuth);
+
+                    params.auth = authParams;
+                    params.username = name;
+                    params.password = password;
+                    params.bind_email = true;
+
+                    register(params);
                 }
             });
 
@@ -634,12 +696,14 @@ public class LoginActivity extends MXCActionBarActivity {
             String site_key = null;
 
             if (null != mRegistrationResponse.params) {
-                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
 
-                if ((null != recaptchaParamsAsVoid) && (recaptchaParamsAsVoid instanceof Map)) {
+                if (null != recaptchaParamsAsVoid) {
                     try {
                         Map<String, String> recaptchaParams = (Map<String, String>)recaptchaParamsAsVoid;
+
                         site_key = recaptchaParams.get("public_key");
+
                     } catch (Exception e) {
                     }
 
@@ -655,6 +719,8 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
             }
         }
+
+        // what's else ?
     }
 
     //==============================================================================================================
@@ -973,17 +1039,17 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 RegistrationParams params = new RegistrationParams();
 
-                HashMap<String, String> authParams = new HashMap<String, String>();
+                HashMap<String, Object> authParams = new HashMap<String, Object>();
                 authParams.put("session", mRegistrationResponse.session);
                 authParams.put("response", captchaResponse);
                 authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
 
-                /*params.auth = authParams;
+                params.auth = authParams;
                 params.username = mCreationUsernameTextView.getText().toString().trim();
                 params.password = mCreationPassword1TextView.getText().toString().trim();
-                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());*/
+                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
 
-
+                register(params);
             }
         } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
