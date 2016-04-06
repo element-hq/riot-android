@@ -43,6 +43,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
+import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.LoginHandler;
@@ -50,7 +51,10 @@ import im.vector.Matrix;
 import im.vector.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Displays the login screen.
@@ -368,6 +372,104 @@ public class LoginActivity extends MXCActionBarActivity {
     //==============================================================================================================
 
     /**
+     * Check the homeserver flows.
+     * i.e checks if this registration page is enough to perform a registration.
+     * else switch to a fallback page
+     */
+    private void register(RegistrationParams params) {
+        if (null == mRegistrationResponse) {
+            try {
+                final HomeserverConnectionConfig hsConfig = getHsConfig();
+                LoginHandler loginHandler = new LoginHandler();
+
+                // invalid URL
+                if (null == hsConfig) {
+                    setLoginButtonsEnabled(false);
+                } else {
+                    setFlowsMaskEnabled(true);
+
+                    loginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback < Credentials > ()
+                    {
+                        @Override
+                        public void onSuccess (Credentials credentials) {
+                        // should never be called
+                    }
+
+                    private void onError (String errorMessage){
+                        setFlowsMaskEnabled(false);
+                        setLoginButtonsEnabled(false);
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNetworkError (Exception e){
+                        Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
+                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError (Exception e){
+                        onError(getString(R.string.login_error_unable_login) + " : " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError (MatrixError e){
+                        RegistrationFlowResponse registrationFlowResponse = null;
+
+                        // when a response is not completed the server returns an error message
+                        if ((null != e.mStatus) && (e.mStatus == 401)) {
+                            try {
+                                registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
+                            } catch (Exception castExcept) {
+                            }
+                        }
+
+                        if (null != registrationFlowResponse) {
+                            //onRegistrationFlow(hsConfig, registrationFlowResponse);
+                        } else {
+                            onError(getString(R.string.login_error_unable_login) + " : " + e.error + "(" + e.errcode + ")");
+                        }
+                    }
+                    });
+                }
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
+                setLoginButtonsEnabled(true);
+                setFlowsMaskEnabled(false);
+            }
+        }
+    }
+
+    /**
+     * @return true if the email identity is completed
+     */
+    private boolean isEmailIdentityFlowCompleted() {
+        // sanity checks
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.completed)) {
+            return mRegistrationResponse.completed.indexOf(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY) >= 0;
+        }
+
+        return false;
+    }
+
+    /**
+     * return true if a captcha flow is required
+     */
+    private boolean isRecaptchaFlowRequired() {
+        // sanity checks
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow loginFlow : mRegistrationResponse.flows){
+                if ((loginFlow.stages.indexOf(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA) < 0) && !TextUtils.equals(loginFlow.type, LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if the client supports the registration kind.
      *
      * @param hsConfig                 the homeserver config
@@ -443,10 +545,10 @@ public class LoginActivity extends MXCActionBarActivity {
                 } else {
                     setFlowsMaskEnabled(true);
 
-                    loginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<RegistrationFlowResponse>() {
+                    loginHandler.getSupportedRegistrationFlows(LoginActivity.this, hsConfig, new SimpleApiCallback<Credentials>() {
                         @Override
-                        public void onSuccess(RegistrationFlowResponse registrationFlowResponse) {
-                            onRegistrationFlow(hsConfig, registrationFlowResponse);
+                        public void onSuccess(Credentials credentials) {
+                            // should never be called
                         }
 
                         private void onError(String errorMessage) {
@@ -494,7 +596,6 @@ public class LoginActivity extends MXCActionBarActivity {
         }
     }
 
-
     private void onRegisterClick() {
         // the user switches to another mode
         if (mMode == LOGIN_MODE) {
@@ -503,9 +604,38 @@ public class LoginActivity extends MXCActionBarActivity {
             return;
         }
 
-        Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
-        startActivityForResult(intent, CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
+        // sanity check
+        if (null == mRegistrationResponse) {
+            return;
+        }
 
+        // checks parameters
+        if (isRecaptchaFlowRequired()) {
+            // retrieve the site_key
+            String site_key = null;
+
+            if (null != mRegistrationResponse.params) {
+                Object recaptchaParamsAsVoid = mRegistrationResponse.params.get(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+
+                if ((null != recaptchaParamsAsVoid) && (recaptchaParamsAsVoid instanceof Map)) {
+                    try {
+                        Map<String, String> recaptchaParams = (Map<String, String>)recaptchaParamsAsVoid;
+                        site_key = recaptchaParams.get("public_key");
+                    } catch (Exception e) {
+                    }
+
+                    if (!TextUtils.isEmpty(site_key)) {
+                        Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
+
+                        intent.putExtra(AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL, mHomeServerUrl);
+                        intent.putExtra(AccountCreationCaptchaActivity.EXTRA_SITE_KEY, site_key);
+
+                        startActivityForResult(intent, CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     //==============================================================================================================
@@ -809,8 +939,21 @@ public class LoginActivity extends MXCActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
         if (CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
-                String captchakey = data.getStringExtra("response");
-                captchakey += captchakey;
+                String captchaResponse = data.getStringExtra("response");
+
+                RegistrationParams params = new RegistrationParams();
+
+                HashMap<String, String> authParams = new HashMap<String, String>();
+                authParams.put("session", mRegistrationResponse.session);
+                authParams.put("response", captchaResponse);
+                authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
+
+                params.auth = authParams;
+                params.username = mCreationUsernameTextView.getText().toString().trim();
+                params.password = mCreationPassword1TextView.getText().toString().trim();
+                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
+
+
             }
         } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {

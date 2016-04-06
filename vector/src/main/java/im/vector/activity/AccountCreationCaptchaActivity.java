@@ -108,8 +108,6 @@ public class AccountCreationCaptchaActivity extends Activity {
         }
 
         mSiteKey = intent.getStringExtra(EXTRA_SITE_KEY);
-        mSiteKey ="6Le31_kSAAAAAK-54VKccKamtr-MFA_3WS1d_fGV";
-
 
         String html = (new Formatter()).format(mRecaptchaHTMLString, mSiteKey).toString();
         String mime = "text/html";

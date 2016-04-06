@@ -12,6 +12,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
+import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
@@ -162,19 +163,29 @@ public class LoginHandler {
      * @param hsConfig the home server config.
      * @param callback the supported flows list callback.
      */
-    public void getSupportedRegistrationFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<RegistrationFlowResponse> callback) {
+    public void getSupportedRegistrationFlows(Context ctx, final HomeserverConnectionConfig hsConfig, final SimpleApiCallback<Credentials> callback) {
+        register(ctx, hsConfig, new RegistrationParams(), callback);
+    }
+
+    /**
+     * Retrieve the supported registration flows of a home server.
+     * @param ctx the application context.
+     * @param hsConfig the home server config.
+     * @param callback the supported flows list callback.
+     */
+    public void register(Context ctx, final HomeserverConnectionConfig hsConfig, final RegistrationParams params, final SimpleApiCallback<Credentials> callback) {
         final Context appCtx = ctx.getApplicationContext();
         LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.getSupportedRegistrationFlows(new SimpleApiCallback<RegistrationFlowResponse>() {
+        client.register(params, new SimpleApiCallback <Credentials> () {
             @Override
-            public void onSuccess(RegistrationFlowResponse registrationFlowResponse) {
-                Log.d(LOG_TAG, "getSupportedRegistrationFlows " + registrationFlowResponse);
-                callback.onSuccess(registrationFlowResponse);
+            public void onSuccess (Credentials credentials){
+                Log.d(LOG_TAG, "getSupportedRegistrationFlows " + credentials);
+                callback.onSuccess(credentials);
             }
 
             @Override
-            public void onNetworkError(final Exception e) {
+            public void onNetworkError ( final Exception e){
                 UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
                 if (unrecCertEx != null) {
                     final Fingerprint fingerprint = unrecCertEx.getFingerprint();
@@ -202,12 +213,12 @@ public class LoginHandler {
             }
 
             @Override
-            public void onUnexpectedError(Exception e) {
+            public void onUnexpectedError (Exception e){
                 callback.onUnexpectedError(e);
             }
 
             @Override
-            public void onMatrixError(MatrixError e) {
+            public void onMatrixError (MatrixError e){
                 callback.onMatrixError(e);
             }
         });
