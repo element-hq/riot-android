@@ -449,15 +449,19 @@ public class LoginActivity extends MXCActionBarActivity {
                     {
                         @Override
                         public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
-                            setFlowsMaskEnabled(false);
-                            goToSplash();
-                            LoginActivity.this.finish();
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                setFlowsMaskEnabled(false);
+                                goToSplash();
+                                LoginActivity.this.finish();
+                            }
                         }
 
                         private void onError (String errorMessage){
-                            setFlowsMaskEnabled(false);
-                            setLoginButtonsEnabled(false);
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                setFlowsMaskEnabled(false);
+                                setLoginButtonsEnabled(false);
+                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            }
                         }
 
                         @Override
@@ -473,39 +477,41 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         @Override
                         public void onMatrixError (MatrixError e){
-                            // waiting for email case
-                            if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
-                                Log.d(LOG_TAG, "Wait for email validation");
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                // waiting for email case
+                                if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
+                                    Log.d(LOG_TAG, "Wait for email validation");
 
-                                setFlowsMaskEnabled(true, getResources().getString(R.string.auth_email_validation_message));
+                                    setFlowsMaskEnabled(true, getResources().getString(R.string.auth_email_validation_message));
 
-                                Handler handler = new Handler(getMainLooper());
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        register(params);
-                                    }
-                                }, 10 * 1000);
-                            } else {
-                                // detect if a parameter is expected
-                                RegistrationFlowResponse registrationFlowResponse = null;
-
-                                // when a response is not completed the server returns an error message
-                                if ((null != e.mStatus) && (e.mStatus == 401)) {
-                                    try {
-                                        registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
-                                    } catch (Exception castExcept) {
-                                    }
-                                }
-
-                                // check if the server response can be casted
-                                if (null != registrationFlowResponse) {
-                                    Log.d(LOG_TAG, "The registration continues");
-                                    mRegistrationResponse = registrationFlowResponse;
-                                    // next step
-                                    onRegisterClick(false);
+                                    Handler handler = new Handler(getMainLooper());
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            register(params);
+                                        }
+                                    }, 10 * 1000);
                                 } else {
-                                    onFailureDuringAuthRequest(e);
+                                    // detect if a parameter is expected
+                                    RegistrationFlowResponse registrationFlowResponse = null;
+
+                                    // when a response is not completed the server returns an error message
+                                    if ((null != e.mStatus) && (e.mStatus == 401)) {
+                                        try {
+                                            registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
+                                        } catch (Exception castExcept) {
+                                        }
+                                    }
+
+                                    // check if the server response can be casted
+                                    if (null != registrationFlowResponse) {
+                                        Log.d(LOG_TAG, "The registration continues");
+                                        mRegistrationResponse = registrationFlowResponse;
+                                        // next step
+                                        onRegisterClick(false);
+                                    } else {
+                                        onFailureDuringAuthRequest(e);
+                                    }
                                 }
                             }
                         }
@@ -645,33 +651,39 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         @Override
                         public void onNetworkError(Exception e) {
-                            Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
-                            onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
+                                onError(getString(R.string.login_error_registration_network_error) + " : " + e.getLocalizedMessage());
+                            }
                         }
 
                         @Override
                         public void onUnexpectedError(Exception e) {
-                            onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                            if (mMode == ACCOUNT_CREATION_MODE) {
+                                onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                            }
                         }
 
                         @Override
                         public void onMatrixError(MatrixError e) {
-                            // should not check login flows
                             if (mMode == ACCOUNT_CREATION_MODE) {
-                                RegistrationFlowResponse registrationFlowResponse = null;
+                                // should not check login flows
+                                if (mMode == ACCOUNT_CREATION_MODE) {
+                                    RegistrationFlowResponse registrationFlowResponse = null;
 
-                                // when a response is not completed the server returns an error message
-                                if ((null != e.mStatus) && (e.mStatus == 401)) {
-                                    try {
-                                        registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
-                                    } catch (Exception castExcept) {
+                                    // when a response is not completed the server returns an error message
+                                    if ((null != e.mStatus) && (e.mStatus == 401)) {
+                                        try {
+                                            registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
+                                        } catch (Exception castExcept) {
+                                        }
                                     }
-                                }
 
-                                if (null != registrationFlowResponse) {
-                                    onRegistrationFlow(hsConfig, registrationFlowResponse);
-                                } else {
-                                    onFailureDuringAuthRequest(e);
+                                    if (null != registrationFlowResponse) {
+                                        onRegistrationFlow(hsConfig, registrationFlowResponse);
+                                    } else {
+                                        onFailureDuringAuthRequest(e);
+                                    }
                                 }
                             }
                         }
@@ -742,7 +754,6 @@ public class LoginActivity extends MXCActionBarActivity {
 
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        setFlowsMaskEnabled(true);
                         onRegisterClick(false);
                     }
                 });
@@ -764,12 +775,12 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // require an email registration
         if (!TextUtils.isEmpty(email) && !isEmailIdentityFlowCompleted()) {
+            setFlowsMaskEnabled(true);
+
             final HomeserverConnectionConfig hsConfig = getHsConfig();
             mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThirdPid>() {
-
                 @Override
                 public void onSuccess(ThirdPid thirdPid) {
-
                     HashMap<String, Object> pidsCredentialsAuth = new HashMap<String, Object>();
                     pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
                     String identityServerHost = mIdentityServerText.getText().toString().trim();
@@ -794,6 +805,18 @@ public class LoginActivity extends MXCActionBarActivity {
                     params.bind_email = true;
 
                     register(params);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                }
+
+                @Override
+                public void onUnexpectedError(final Exception e) {
+                }
+
+                @Override
+                public void onMatrixError(final MatrixError e) {
                 }
             });
 
@@ -1122,19 +1145,19 @@ public class LoginActivity extends MXCActionBarActivity {
 
         if (null != mProgressTextView) {
             mProgressTextView.setText(progressText);
-            mLoginMaskView.setVisibility((null != progressText) ? View.VISIBLE : View.GONE);
+            mProgressTextView.setVisibility((null != progressText) ? View.VISIBLE : View.GONE);
         }
     }
 
     /**
      * @param enabled enabled/disabled the login buttons
      */
-    private void setLoginButtonsEnabled(Boolean enabled) {
-        mLoginButton.setEnabled(enabled);
-        mRegisterButton.setEnabled(enabled);
+    private void setLoginButtonsEnabled(boolean enabled) {
+        mLoginButton.setEnabled(enabled || (mMode == ACCOUNT_CREATION_MODE));
+        mRegisterButton.setEnabled(enabled || (mMode == LOGIN_MODE));
 
-        mLoginButton.setAlpha(enabled ? 1.0f : 0.5f);
-        mRegisterButton.setAlpha(enabled ? 1.0f : 0.5f);
+        mLoginButton.setAlpha((enabled || (mMode == ACCOUNT_CREATION_MODE)) ? 1.0f : 0.5f);
+        mRegisterButton.setAlpha((enabled || (mMode == LOGIN_MODE)) ? 1.0f : 0.5f);
     }
 
     //==============================================================================================================
@@ -1179,7 +1202,7 @@ public class LoginActivity extends MXCActionBarActivity {
             if (resultCode == RESULT_OK) {
                 String captchaResponse = data.getStringExtra("response");
 
-                RegistrationParams params = new RegistrationParams();
+                final RegistrationParams params = new RegistrationParams();
 
                 HashMap<String, Object> authParams = new HashMap<String, Object>();
                 authParams.put("session", mRegistrationResponse.session);
@@ -1191,7 +1214,13 @@ public class LoginActivity extends MXCActionBarActivity {
                 params.password = mCreationPassword1TextView.getText().toString().trim();
                 params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
 
-                register(params);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setFlowsMaskEnabled(true);
+                        register(params);
+                    }
+                });
             }
         } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
