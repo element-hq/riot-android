@@ -403,10 +403,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
             addEmailPreference.setTitle(R.string.settings_add_email_address);
             addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
+            addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
 
             addEmailPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
-
                         @Override
                         public boolean onPreferenceChange(Preference preference, final Object newValue) {
                             getActivity().runOnUiThread(new Runnable() {
@@ -418,7 +418,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                             return false;
                         }
-
                     });
 
             mUserSettingsCategory.addPreference(addEmailPreference);
