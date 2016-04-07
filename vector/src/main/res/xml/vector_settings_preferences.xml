@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <PreferenceCategory android:title="@string/settings_user_settings" >
+    <PreferenceCategory
+        android:key="@string/settings_user_settings"
+        android:title="@string/settings_user_settings" >
 
         <im.vector.preference.UserAvatarPreference
             android:title="@string/settings_profile_picture"
