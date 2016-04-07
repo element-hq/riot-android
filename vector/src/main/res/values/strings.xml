@@ -329,6 +329,7 @@
     <string name="media_slider_saved_message">Save to downloads</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
+    <string name="_continue">Continue</string>
 
     <!-- Actions -->
     <string name="mark_all_as_read_prompt">Mark all as read?</string>
@@ -520,10 +521,13 @@
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_room_privacy_label">Privacy</string>
 
-
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
+
+    <string name="account_email_validation_title">Verification Pending</string>
+    <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
+    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
 
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">old password</string>

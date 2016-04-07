@@ -47,6 +47,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
@@ -401,9 +402,130 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             // display the add email entry
             EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
             addEmailPreference.setTitle(R.string.settings_add_email_address);
+            addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
+
+            addEmailPreference.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addEmail((String) newValue);
+                                }
+                            });
+
+                            return false;
+                        }
+
+                    });
+
             mUserSettingsCategory.addPreference(addEmailPreference);
         }
     }
+
+    /**
+     * Attempt to add a new email to the account
+     * @param email
+     */
+    private void addEmail(String email) {
+
+        // check first if the email syntax is valid
+        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getActivity(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+
+        displayLoadingView();
+
+        mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                showEmailValidationDialog(pid);
+            }
+
+            private void onError(String errorMessage) {
+                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                hideLoadingView();
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
+     * Show an email validation dialog to warn the user tho valid his email link.
+     * @param pid the used pid.
+     */
+    private void showEmailValidationDialog(final ThreePid pid) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.account_email_validation_title);
+        builder.setMessage(R.string.account_email_validation_title);
+        builder.setPositiveButton(R.string._continue, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                mSession.getMyUser().add3Pid(pid, true, new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        hideLoadingView();
+                        refreshEmailsList();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+/*
+  if (mxError && [mxError.errcode isEqualToString:kMXErrCodeStringThreePIDAuthFailed])
+            {
+                [strongSelf showValidationEmailDialogWithMessage:[NSBundle mxk_localizedStringForKey:@"account_email_validation_error"] for3PID:strongThreePID];
+            }
+ */
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+
+                    }
+                });
+            }
+        });
+
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                hideLoadingView();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+
+    }
+
 
     /**
      * Refresh the preferences.
