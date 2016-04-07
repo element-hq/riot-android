@@ -2083,10 +2083,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    VectorRoomActivity.this.startActivity(intent);
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+                        intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                        intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        VectorRoomActivity.this.startActivity(intent);
+                    }
+
                     return true;
                 }
             });
