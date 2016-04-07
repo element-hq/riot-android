@@ -144,6 +144,7 @@
     <string name="auth_invalid_password">Password too short (min 6)</string>
     <string name="auth_missing_password">Missing password</string>
     <string name="auth_invalid_email">Invalid email address</string>
+    <string name="auth_email_already_defined">This email address is already defined.</string>
     <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_password_dont_match">Passwords don\'t match</string>
@@ -329,6 +330,7 @@
     <string name="media_slider_saved_message">Save to downloads</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
+    <string name="_continue">Continue</string>
 
     <!-- Actions -->
     <string name="mark_all_as_read_prompt">Mark all as read?</string>
@@ -502,6 +504,7 @@
     <string name="settings_first_name">First Name</string>
     <string name="settings_surname">Surname</string>
     <string name="settings_email_address">Email Address</string>
+    <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
 
@@ -519,10 +522,13 @@
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_room_privacy_label">Privacy</string>
 
-
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
+
+    <string name="account_email_validation_title">Verification Pending</string>
+    <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
+    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
 
     <string name="settings_change_password">Change password</string>
     <string name="settings_old_password">old password</string>
