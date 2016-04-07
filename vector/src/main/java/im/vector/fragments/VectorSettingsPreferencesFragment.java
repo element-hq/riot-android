@@ -18,17 +18,15 @@ package im.vector.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
@@ -46,6 +44,7 @@ import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
@@ -53,18 +52,24 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.UserAvatarPreference;
+import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // arguments indexes
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
+
+    private static final String EMAIL_PREREFENCE_KEY_BASE = "EMAIL_PREREFENCE_KEY_BASE";
+    private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
 
     // members
     private MXSession mSession;
@@ -80,6 +85,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             refreshDisplay();
         }
     };
+
+    // displayed emails
+    private PreferenceCategory mUserSettingsCategory;
+    private List<String> mDisplayedEmails = new ArrayList<String>();
 
     // events listener
     private MXEventListener mEventsListener = new MXEventListener() {
@@ -229,21 +238,21 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         }
 
-
+        mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         refreshPreferences();
+        refreshEmailsList();
         refreshDisplay();
     }
-
-
+    
     @Override
     public void onPause() {
         super.onPause();
 
         if (mSession.isActive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
-        }
 
-        Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
+            Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
+        }
     }
 
     @Override
@@ -252,13 +261,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         if (mSession.isActive()) {
             mSession.getDataHandler().addListener(mEventsListener);
+
+            Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
+
+            mSession.getMyUser().refreshLinkedEmails(new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    refreshEmailsList();
+                }
+            });
+
+            // ensure that
+            refreshPreferences();
+            refreshDisplay();
         }
-
-        Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
-
-        // ensure that
-        refreshPreferences();
-        refreshDisplay();
     }
 
     //==============================================================================================================
@@ -332,6 +348,61 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
 
         editor.commit();
+    }
+
+
+    /**
+     * Refresh the emails list
+     */
+    private void refreshEmailsList() {
+        List<String> newEmailsList = mSession.getMyUser().getlinkedEmails();
+
+        // check first if there is an update
+        boolean isNewList = true;
+        if ((null != mDisplayedEmails) && (newEmailsList.size() == mDisplayedEmails.size())) {
+            isNewList = !mDisplayedEmails.containsAll(newEmailsList);
+        }
+
+        if (isNewList) {
+
+            // remove the displayed one
+            for(int index = 0; ; index++) {
+                Preference preference = mUserSettingsCategory.findPreference(EMAIL_PREREFENCE_KEY_BASE + index);
+
+                if (null != preference) {
+                    mUserSettingsCategory.removePreference(preference);
+                } else {
+                    break;
+                }
+            }
+
+            // remove the add email
+            Preference curAddEmailPreference = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
+            if (null != curAddEmailPreference) {
+                mUserSettingsCategory.removePreference(curAddEmailPreference);
+            }
+
+
+            // add new emails list
+            mDisplayedEmails = newEmailsList;
+
+            int index = 0;
+
+            for(String email : mDisplayedEmails) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                preference.setTitle(getResources().getString(R.string.settings_email_address));
+                preference.setSummary(email);
+                preference.setKey(EMAIL_PREREFENCE_KEY_BASE + index);
+                index++;
+                mUserSettingsCategory.addPreference(preference);
+            }
+
+            // display the add email entry
+            EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
+            addEmailPreference.setTitle(R.string.settings_add_email_address);
+            mUserSettingsCategory.addPreference(addEmailPreference);
+        }
     }
 
     /**
