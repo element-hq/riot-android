@@ -2,5 +2,5 @@
 
 <resources xmlns:tools="https://schemas.android.com/tools" 
     tools:ignore="TypographyDashes">
-  <string name="ga_trackingId">UA-64172813-1</string>
+  <string name="ga_trackingId">UA-65410662-1</string>
 </resources>

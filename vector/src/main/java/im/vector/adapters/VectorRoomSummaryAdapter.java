@@ -271,7 +271,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     int diff = r2.numJoinedMembers - r1.numJoinedMembers;
 
                     if (0 == diff) {
-                        diff  = VectorUtils.getPublicRoomDisplayName(r1).compareTo(VectorUtils.getPublicRoomDisplayName(r2));
+                        diff = VectorUtils.getPublicRoomDisplayName(r1).compareTo(VectorUtils.getPublicRoomDisplayName(r2));
                     }
 
                     return diff;
@@ -709,7 +709,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 }
             }
 
-            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null));
+            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null, true));
             return convertView;
         }
 
@@ -718,8 +718,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         RoomSummary childRoomSummary = mSummaryListByGroupPosition.get(groupPosition).get(childPosition);
         final Room childRoom =  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
         int unreadMsgCount = childRoomSummary.getUnreadEventsCount();
+        int highlightCount = 0;
+        int notificationCount = 0;
 
-        // get last message to be displayed
+        if (null != childRoom) {
+            highlightCount = childRoom.getHighlightCount();
+            notificationCount = childRoom.getNotificationCount();
+        }
+
+        // get         last message to be displayed
         CharSequence lastMsgToDisplay = getChildMessageToDisplay(childRoomSummary);
 
         // display the room avatar
@@ -729,9 +736,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // display the room name
         int roomNameTextColor;
-        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
+        if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
             roomNameTextColor = fushiaColor;
-        } else if ((0 != childRoom.getNotificationCount()) || (0 != unreadMsgCount)) {
+        } else if ((0 != notificationCount) || (0 != unreadMsgCount)) {
             roomNameTextColor = vectorDarkGreyColor;
         } else {
             roomNameTextColor = roomNameBlack;
@@ -746,9 +753,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         // set the timestamp
         // bing view
         int timestampTextColor;
-        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
+        if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
             timestampTextColor = fushiaColor;
-        } else if ((0 != childRoom.getNotificationCount()) || (0 != unreadMsgCount)) {
+        } else if ((0 != notificationCount) || (0 != unreadMsgCount)) {
             timestampTextColor = vectorDarkGreyColor;
         } else {
             timestampTextColor = vectorDefaultTimeStampColor;
@@ -760,9 +767,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // bing view
         int bingUnreadColor;
-        if ((0 != childRoom.gettHighlightCount()) || childRoomSummary.isHighlighted()) {
+        if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
             bingUnreadColor = fushiaColor;
-        } else if (0 != childRoom.getNotificationCount()) {
+        } else if (0 != notificationCount) {
             bingUnreadColor = vectorDarkGreyColor;
         } else {
             bingUnreadColor = Color.TRANSPARENT;
@@ -770,14 +777,20 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         bingUnreadMsgView.setBackgroundColor(bingUnreadColor);
 
         // some items are shown
-        bingUnreadMsgView.setVisibility(childRoom.isInvited() ? View.INVISIBLE : View.VISIBLE);
-        timestampTxtView.setVisibility((childRoom.isInvited() || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
-        actionImageView.setVisibility((childRoom.isInvited() || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
-        invitationView.setVisibility(childRoom.isInvited() ? View.VISIBLE : View.GONE);
+        boolean isInvited = false;
 
-        final String fRoomId = childRoom.getRoomId();
+        if (null != childRoom) {
+            isInvited = childRoom.isInvited();
+        }
 
-        if (childRoom.isInvited()) {
+        bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);
+        timestampTxtView.setVisibility((isInvited || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
+        actionImageView.setVisibility((isInvited || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
+        invitationView.setVisibility(isInvited ? View.VISIBLE : View.GONE);
+
+        final String fRoomId = childRoomSummary.getRoomId();
+
+        if (isInvited) {
             actionClickArea.setVisibility(View.GONE);
 
             joinButton.setOnClickListener(new View.OnClickListener() {
@@ -826,6 +839,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     @SuppressLint("NewApi")
     private void displayPopupMenu(final Room childRoom, final View actionView, final boolean isFavorite, final boolean isLowPrior) {
+        // sanity check
+        if (null == childRoom) {
+            return;
+        }
+
         PopupMenu popup;
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

@@ -66,6 +66,10 @@ android {
         flatDir {
             dir 'libs'
         }
+
+        maven {
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
     }
 }
 
@@ -101,6 +105,9 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'io.pristine:libjingle:9690@aar'
+
+    compile 'com.commonsware.cwac:anddown:0.2.+'
+
     compile(name: 'matrix-sdk', ext: 'aar')
 }
 

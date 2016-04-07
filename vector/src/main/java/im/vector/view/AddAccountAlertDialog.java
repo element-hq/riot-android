@@ -185,7 +185,7 @@ public class AddAccountAlertDialog extends AlertDialog.Builder  {
 
             // sanity check
             if (null != hsConfig) {{
-                loginHandler.getSupportedFlows(mActivity, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
+                loginHandler.getSupportedLoginFlows(mActivity, hsConfig, new SimpleApiCallback<List<LoginFlow>>() {
                     @Override
                     public void onSuccess(List<LoginFlow> flows) {
                         mSearchMaskView.setVisibility(View.GONE);

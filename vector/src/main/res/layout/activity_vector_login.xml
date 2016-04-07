@@ -68,36 +68,83 @@
                 </ImageView>
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/login_input_layout"
+            <LinearLayout
+                android:id="@+id/main_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginTop="19dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
 
-                <EditText
-                    android:id="@+id/login_user_name"
+                <LinearLayout
+                    android:id="@+id/login_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:hint="@string/auth_user_id_placeholder"
-                    android:layout_alignParentTop="true"/>
+                    android:visibility="gone"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/editText_password"
-                    android:layout_below="@id/login_user_name"
+                    <EditText
+                        android:id="@+id/login_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/auth_user_id_placeholder"/>
+
+                    <EditText
+                        android:id="@+id/login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_password_placeholder"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/creation_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:inputType="textPassword"
-                    android:ems="10"
-                    android:hint="@string/auth_password_placeholder"
-                    android:layout_marginTop="10dp" />
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/creation_email_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/auth_optional_email_placeholder" />
+
+                    <EditText
+                        android:id="@+id/creation_your_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/auth_user_name_placeholder" />
+
+                    <EditText
+                        android:id="@+id/creation_password1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_password_placeholder"/>
+
+                    <EditText
+                        android:id="@+id/creation_password2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_repeat_password_placeholder"/>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/display_server_url_layout"
-                    android:layout_below="@id/editText_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -171,7 +218,7 @@
                     android:textSize="14sp"
                     android:textColor="@color/vector_green_color"
                     android:text="@string/auth_forgot_password"/>
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -180,21 +227,39 @@
         android:id="@+id/flow_ui_mask_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_centerInParent="true">
+
         <View
             android:id="@+id/search_mask_view"
             android:background="#AAAAAAAA"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"/>
 
-        <ProgressBar
-            android:id="@+id/search_progress"
-            android:layout_height="60dp"
-            android:layout_width="60dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:indeterminate="true" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/flow_progress_message_textview"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="30dp"
+                android:text="A text here" />
+
+            <ProgressBar
+                android:id="@+id/search_progress"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:indeterminate="true"/>
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

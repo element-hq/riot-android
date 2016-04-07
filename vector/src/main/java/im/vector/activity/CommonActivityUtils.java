@@ -56,6 +56,8 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
+import im.vector.adapters.VectorPublicRoomsAdapter;
+import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
@@ -117,6 +119,9 @@ public class CommonActivityUtils {
             // Publish to the server that we're now offline
             MyPresenceManager.getInstance(activity, session).advertiseOffline();
             MyPresenceManager.remove(session);
+
+            // clear notification
+            EventStreamService.removeNotification();
 
             // unregister from the GCM.
             Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
@@ -344,20 +349,20 @@ public class CommonActivityUtils {
                                                Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
                                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable)params);
+                                               intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
                                                fromActivity.startActivity(intent);
                                            } else {
                                                // already to the home activity
                                                // so just need to open the room activity
                                                Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
 
-                                               for(String key : params.keySet()) {
+                                               for (String key : params.keySet()) {
                                                    Object value = params.get(key);
 
                                                    if (value instanceof String) {
-                                                       intent.putExtra(key, (String)value);
+                                                       intent.putExtra(key, (String) value);
                                                    } else {
-                                                       intent.putExtra(key, (Parcelable)value);
+                                                       intent.putExtra(key, (Parcelable) value);
                                                    }
                                                }
 
@@ -436,7 +441,6 @@ public class CommonActivityUtils {
                     room.invite(otherUserId, new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
-
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
@@ -540,8 +544,18 @@ public class CommonActivityUtils {
             return;
         }
 
-        final ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>();
-        mergedSummaries.addAll(session.getDataHandler().getStore().getSummaries());
+        ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>(session.getDataHandler().getStore().getSummaries());
+
+        // keep only the joined room
+        for(int index = 0; index < mergedSummaries.size(); index++) {
+            RoomSummary summary =  mergedSummaries.get(index);
+            Room room = session.getDataHandler().getRoom(summary.getRoomId());
+
+            if ((null == room) || room.isInvited()) {
+                mergedSummaries.remove(index);
+                index--;
+            }
+        }
 
         Collections.sort(mergedSummaries, new Comparator<RoomSummary>() {
             @Override
@@ -563,11 +577,9 @@ public class CommonActivityUtils {
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(fromActivity);
         builderSingle.setTitle(fromActivity.getText(R.string.send_files_in));
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(fromActivity, R.layout.dialog_room_selection);
 
-        for(RoomSummary summary : mergedSummaries) {
-            arrayAdapter.add(summary.getRoomName());
-        }
+        VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(fromActivity, R.layout.adapter_item_vector_recent_room, session);
+        adapter.addAll(mergedSummaries);
 
         builderSingle.setNegativeButton(fromActivity.getText(R.string.cancel),
                 new DialogInterface.OnClickListener() {
@@ -577,7 +589,9 @@ public class CommonActivityUtils {
                     }
                 });
 
-        builderSingle.setAdapter(arrayAdapter,
+        final  ArrayList<RoomSummary> fMergedSummaries = mergedSummaries;
+
+        builderSingle.setAdapter(adapter,
                 new DialogInterface.OnClickListener() {
 
                     @Override
@@ -586,7 +600,7 @@ public class CommonActivityUtils {
                         fromActivity.runOnUiThread( new Runnable() {
                             @Override
                             public void run() {
-                                RoomSummary summary = mergedSummaries.get(which);
+                                RoomSummary summary = fMergedSummaries.get(which);
 
                                 HashMap<String, Object> params = new HashMap<String, Object>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());

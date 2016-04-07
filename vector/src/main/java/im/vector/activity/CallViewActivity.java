@@ -76,9 +76,9 @@ public class CallViewActivity extends FragmentActivity {
 
     // call info
     private RoomMember mOtherMember = null;
-    private Boolean mIsAnsweredElsewhere = false;
-    private Boolean mAutoAccept = false;
-    private Boolean mIsCallEnded = false;
+    private boolean mIsAnsweredElsewhere = false;
+    private boolean mAutoAccept = false;
+    private boolean mIsCallEnded = false;
 
     // graphical items
     private View mAcceptRejectLayout;

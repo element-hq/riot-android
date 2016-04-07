@@ -36,17 +36,20 @@ import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,11 +58,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.commonsware.cwac.anddown.AndDown;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
@@ -120,9 +126,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public static final String EXTRA_START_CALL_ID = "EXTRA_START_CALL_ID";
 
     private static final String TAG_FRAGMENT_MATRIX_MESSAGE_LIST = "TAG_FRAGMENT_MATRIX_MESSAGE_LIST";
-    private static final String TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG = "TAG_FRAGMENT_INVITATION_MEMBERS_DIALOG";
     private static final String TAG_FRAGMENT_ATTACHMENTS_DIALOG = "TAG_FRAGMENT_ATTACHMENTS_DIALOG";
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
+    private static final String TAG_FRAGMENT_CALL_OPTIONS = "TAG_FRAGMENT_CALL_OPTIONS";
+
 
     private static final String LOG_TAG = "RoomActivity";
     private static final int TYPING_TIMEOUT_MS = 10000;
@@ -155,6 +162,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private static final int MEDIUM_IMAGE_SIZE = 1000;
     private static final int SMALL_IMAGE_SIZE  = 500;
     private static final int KEYBOARD_THRESHOLD_VIEW_SIZE = 1000;
+
+    private static final AndDown mAndDown = new AndDown();
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
@@ -418,16 +427,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         });
 
+        // IME's DONE button is treated as a send action
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                int imeActionId = actionId & EditorInfo.IME_MASK_ACTION;
+
+                if (EditorInfo.IME_ACTION_DONE == imeActionId) {
+                    sendTextMessage();
+                }
+
+                return false;
+            }
+        });
+
         mSendButton = (ImageButton) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                // hide the header room
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                String body = mEditText.getText().toString();
-                sendMessage(body);
-                mEditText.setText("");
+                sendTextMessage();
             }
         });
 
@@ -437,8 +456,39 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             public void onClick(View v) {
                 // hide the header room
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-                // TODO implement a dedicated call activity
-                // we do not get any design by now
+
+                final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
+                final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
+
+                IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+                fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+
+                        // create the call object
+                        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+                        if (null != call) {
+                            call.setIsVideo((1 == position));
+                            call.setRoom(mRoom);
+                            call.setIsIncoming(false);
+
+                            final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+
+                            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                            VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    VectorRoomActivity.this.startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+                });
+
+                fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
             }
         });
 
@@ -485,6 +535,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
             }
         });
+
 
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -581,6 +632,38 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         refreshSelfAvatar();
+    }
+
+    private void sendTextMessage() {
+        String body = mEditText.getText().toString();
+        String html = mAndDown.markdownToHtml(body);
+
+        if (null != html) {
+            html.trim();
+
+            if (html.startsWith("<p>")) {
+                html = html.substring("<p>".length());
+            }
+
+            if (html.endsWith("</p>\n")) {
+                html = html.substring(0, html.length() - "</p>\n".length());
+            } else if (html.endsWith("</p>")) {
+                html = html.substring(0, html.length() - "</p>".length());
+            }
+
+            if (TextUtils.equals(html, body)) {
+                html = null;
+            } else {
+                // remove the markdowns
+                body = Html.fromHtml(html).toString();
+            }
+        }
+
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        sendMessage(body, html, "org.matrix.custom.html");
+        mEditText.setText("");
     }
 
     @Override
@@ -815,11 +898,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     // medias sending
     //================================================================================
 
-    private void sendMessage(String body) {
+    private void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if (!manageIRCCommand(body)) {
+            if ((null != formattedBody) || !manageIRCCommand(body)) {
                 mVectorMessageListFragment.cancelSelectionMode();
-                mVectorMessageListFragment.sendTextMessage(body);
+                mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
         }
     }
@@ -1195,7 +1278,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                         uris.add((Uri) streamUri);
                     }
                 } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
-                    this.sendMessage(bundle.getString(Intent.EXTRA_TEXT));
+                    this.sendMessage(bundle.getString(Intent.EXTRA_TEXT), null, null);
                 }
             } else {
                 uris.add( mLatestTakePictureCameraUri == null ? null : Uri.parse(mLatestTakePictureCameraUri));
@@ -1650,9 +1733,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         boolean hasText = mEditText.getText().length() > 0;
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-        // TODO manage Call support
-        mCallButton.setVisibility(View.GONE);
-        //mCallButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+
+        boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+        mCallButton.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
+
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
