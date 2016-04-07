@@ -47,6 +47,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private ListView mListView;
     private ImageView mBackgroundImageView;
     private View mNoResultView;
+    private View mLoadingView;
 
     private VectorAddParticipantsAdapter mAdapter;
 
@@ -85,6 +86,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
         mNoResultView = findViewById(R.id.search_no_result_textview);
+        mLoadingView = findViewById(R.id.search_in_progress_view);
 
         mListView = (ListView) findViewById(R.id.room_details_members_list);
         mAdapter = new VectorAddParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mRoomId, false, mSession.getMediasCache());
@@ -141,15 +143,18 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
         }
 
+        mLoadingView.setVisibility(View.VISIBLE);
+
         mAdapter.setSearchedPattern(pattern, firstEntry, new VectorAddParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
                 mListView.post(new Runnable() {
                     @Override
                     public void run() {
+                        mLoadingView.setVisibility(View.GONE);
+
                         boolean hasPattern = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
                         boolean hasResult = (0 != count);
-
                         mNoResultView.setVisibility((hasPattern && !hasResult) ? View.VISIBLE : View.GONE);
                     }
                 });
