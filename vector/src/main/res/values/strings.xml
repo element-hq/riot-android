@@ -144,6 +144,7 @@
     <string name="auth_invalid_password">Password too short (min 6)</string>
     <string name="auth_missing_password">Missing password</string>
     <string name="auth_invalid_email">Invalid email address</string>
+    <string name="auth_email_already_defined">This email address is already defined.</string>
     <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_password_dont_match">Passwords don\'t match</string>

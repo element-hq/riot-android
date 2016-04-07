@@ -244,7 +244,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         refreshEmailsList();
         refreshDisplay();
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
@@ -314,217 +314,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
      * Hide the loading view and refresh the preferences.
      * @param refresh
      */
-    private void hideLoadingView(Boolean refresh) {
+    private void hideLoadingView(boolean refresh) {
         mLoadingView.setVisibility(View.GONE);
 
         if (refresh) {
             refreshDisplay();
         }
     }
-
-    /**
-     * Refresh the known information about the account
-     */
-    private void refreshPreferences() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(this.getResources().getString(R.string.settings_display_name), mSession.getMyUser().displayname);
-        editor.putString(this.getResources().getString(R.string.settings_version), VectorUtils.getApplicationVersion(getActivity()));
-
-        BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
-
-        if (null != mBingRuleSet) {
-            for (String resourceText : mPushesRuleByResourceId.keySet()) {
-                String ruleId = mPushesRuleByResourceId.get(resourceText);
-
-                BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
-                Boolean isEnabled = ((null != rule) && rule.isEnabled);
-
-                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
-                    isEnabled = !isEnabled;
-                }
-
-                editor.putBoolean(resourceText, isEnabled);
-            }
-        }
-
-        editor.commit();
-    }
-
-
-    /**
-     * Refresh the emails list
-     */
-    private void refreshEmailsList() {
-        List<String> newEmailsList = mSession.getMyUser().getlinkedEmails();
-
-        // check first if there is an update
-        boolean isNewList = true;
-        if ((null != mDisplayedEmails) && (newEmailsList.size() == mDisplayedEmails.size())) {
-            isNewList = !mDisplayedEmails.containsAll(newEmailsList);
-        }
-
-        if (isNewList) {
-
-            // remove the displayed one
-            for(int index = 0; ; index++) {
-                Preference preference = mUserSettingsCategory.findPreference(EMAIL_PREREFENCE_KEY_BASE + index);
-
-                if (null != preference) {
-                    mUserSettingsCategory.removePreference(preference);
-                } else {
-                    break;
-                }
-            }
-
-            // remove the add email
-            Preference curAddEmailPreference = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
-            if (null != curAddEmailPreference) {
-                mUserSettingsCategory.removePreference(curAddEmailPreference);
-            }
-
-
-            // add new emails list
-            mDisplayedEmails = newEmailsList;
-
-            int index = 0;
-
-            for(String email : mDisplayedEmails) {
-                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
-
-                preference.setTitle(getResources().getString(R.string.settings_email_address));
-                preference.setSummary(email);
-                preference.setKey(EMAIL_PREREFENCE_KEY_BASE + index);
-                index++;
-                mUserSettingsCategory.addPreference(preference);
-            }
-
-            // display the add email entry
-            EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
-            addEmailPreference.setTitle(R.string.settings_add_email_address);
-            addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
-            addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-
-            addEmailPreference.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addEmail((String) newValue);
-                                }
-                            });
-
-                            return false;
-                        }
-                    });
-
-            mUserSettingsCategory.addPreference(addEmailPreference);
-        }
-    }
-
-    /**
-     * Attempt to add a new email to the account
-     * @param email
-     */
-    private void addEmail(String email) {
-
-        // check first if the email syntax is valid
-        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(getActivity(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
-
-        displayLoadingView();
-
-        mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                showEmailValidationDialog(pid);
-            }
-
-            private void onError(String errorMessage) {
-                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-                hideLoadingView();
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                onError(e.getLocalizedMessage());
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-        });
-    }
-
-    /**
-     * Show an email validation dialog to warn the user tho valid his email link.
-     * @param pid the used pid.
-     */
-    private void showEmailValidationDialog(final ThreePid pid) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.account_email_validation_title);
-        builder.setMessage(R.string.account_email_validation_title);
-        builder.setPositiveButton(R.string._continue, new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                mSession.getMyUser().add3Pid(pid, true, new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        hideLoadingView();
-                        refreshEmailsList();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-/*
-  if (mxError && [mxError.errcode isEqualToString:kMXErrCodeStringThreePIDAuthFailed])
-            {
-                [strongSelf showValidationEmailDialogWithMessage:[NSBundle mxk_localizedStringForKey:@"account_email_validation_error"] for3PID:strongThreePID];
-            }
- */
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-
-                    }
-                });
-            }
-        });
-
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                hideLoadingView();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-
-
-    }
-
 
     /**
      * Refresh the preferences.
@@ -828,5 +624,219 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         }
 
+    }
+
+
+    /**
+     * Refresh the known information about the account
+     */
+    private void refreshPreferences() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(this.getResources().getString(R.string.settings_display_name), mSession.getMyUser().displayname);
+        editor.putString(this.getResources().getString(R.string.settings_version), VectorUtils.getApplicationVersion(getActivity()));
+
+        BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
+
+        if (null != mBingRuleSet) {
+            for (String resourceText : mPushesRuleByResourceId.keySet()) {
+                String ruleId = mPushesRuleByResourceId.get(resourceText);
+
+                BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
+                Boolean isEnabled = ((null != rule) && rule.isEnabled);
+
+                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                    isEnabled = !isEnabled;
+                }
+
+                editor.putBoolean(resourceText, isEnabled);
+            }
+        }
+
+        editor.commit();
+    }
+
+    //==============================================================================================================
+    // Email management
+    //==============================================================================================================
+
+    /**
+     * Refresh the emails list
+     */
+    private void refreshEmailsList() {
+        List<String> newEmailsList = mSession.getMyUser().getlinkedEmails();
+
+        // check first if there is an update
+        boolean isNewList = true;
+        if ((null != mDisplayedEmails) && (newEmailsList.size() == mDisplayedEmails.size())) {
+            isNewList = !mDisplayedEmails.containsAll(newEmailsList);
+        }
+
+        if (isNewList) {
+            // remove the displayed one
+            for(int index = 0; ; index++) {
+                Preference preference = mUserSettingsCategory.findPreference(EMAIL_PREREFENCE_KEY_BASE + index);
+
+                if (null != preference) {
+                    mUserSettingsCategory.removePreference(preference);
+                } else {
+                    break;
+                }
+            }
+
+            // remove the add email
+            Preference curAddEmailPreference = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
+            if (null != curAddEmailPreference) {
+                mUserSettingsCategory.removePreference(curAddEmailPreference);
+            }
+
+            // add new emails list
+            mDisplayedEmails = newEmailsList;
+
+            int index = 0;
+
+            for(String email : mDisplayedEmails) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                preference.setTitle(getResources().getString(R.string.settings_email_address));
+                preference.setSummary(email);
+                preference.setKey(EMAIL_PREREFENCE_KEY_BASE + index);
+                index++;
+                mUserSettingsCategory.addPreference(preference);
+            }
+
+            // display the "add email" entry
+            EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
+            addEmailPreference.setTitle(R.string.settings_add_email_address);
+            addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
+            addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
+
+            addEmailPreference.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            final String email = (String) newValue;
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addEmail(email);
+                                }
+                            });
+
+                            return false;
+                        }
+                    });
+
+            mUserSettingsCategory.addPreference(addEmailPreference);
+        }
+    }
+
+    /**
+     * The emila binding fails : display a dedicated error message.
+     * @param errorMessage the error message
+     */
+    private void onEmailBindingError(String errorMessage) {
+        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+        hideLoadingView();
+    }
+
+    /**
+     * Attempt to add a new email to the account
+     * @param email
+     */
+    private void addEmail(String email) {
+        // check first if the email syntax is valid
+        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getActivity(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // check first if the email syntax is valid
+        if (mDisplayedEmails.indexOf(email) >= 0) {
+            Toast.makeText(getActivity(), getString(R.string.auth_email_already_defined), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+
+        displayLoadingView();
+
+        mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                showEmailValidationDialog(pid);
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onEmailBindingError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onEmailBindingError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onEmailBindingError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
+     * Show an email validation dialog to warn the user tho valid his email link.
+     * @param pid the used pid.
+     */
+    private void showEmailValidationDialog(final ThreePid pid) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.account_email_validation_title);
+        builder.setMessage(R.string.account_email_validation_message);
+        builder.setPositiveButton(R.string._continue, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                mSession.getMyUser().add3Pid(pid, true, new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        hideLoadingView();
+                        refreshEmailsList();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onEmailBindingError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
+                            hideLoadingView();
+                            Toast.makeText(getActivity(), getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show();
+                        } else {
+                            onEmailBindingError(e.getLocalizedMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onEmailBindingError(e.getLocalizedMessage());
+                    }
+                });
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                hideLoadingView();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
