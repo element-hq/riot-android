@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -110,7 +111,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
-    ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
+    Collection<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
 
     ParticipantAdapterItem mFirstEntry;
@@ -265,15 +266,19 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         }
 
+        // list the known members
+        // a hashmap is a lot faster than a list search
+        HashMap<String, ParticipantAdapterItem> map = new HashMap<String, ParticipantAdapterItem>();
 
-        // check from any other known users
-        // because theirs presence have been received
-        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
-        for(User user : users) {
-            // accepted User ID or still active users
-            if (idsToIgnore.indexOf(user.user_id) < 0) {
-                unusedParticipants.add(new ParticipantAdapterItem(user));
-                idsToIgnore.add(user.user_id);
+        // from contacts
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
+
+        for(Contact contact : contacts) {
+            if (contact.hasMatridIds(mContext)) {
+                Contact.MXID mxId = contact.getFirstMatrixId();
+                map.put(mxId.mMatrixId, new ParticipantAdapterItem(contact, mContext));
+            } else {
+                map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, mContext));
             }
         }
 
@@ -287,34 +292,27 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
 
                 for (RoomMember member : otherRoomMembers) {
-                    String userID = member.getUserId();
-
-                    // accepted User ID or still active users
-                    if (idsToIgnore.indexOf(userID) < 0) {
-                        unusedParticipants.add(new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
-                        idsToIgnore.add(member.getUserId());
-                    }
+                    map.put(member.getUserId(), new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
                 }
             }
         }
 
-        // contacts
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
+        // check known users
+        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
 
-        for(Contact contact : contacts) {
-            if (contact.hasMatridIds(mContext)) {
-                Contact.MXID mxId = contact.getFirstMatrixId();
-
-                if (idsToIgnore.indexOf(mxId.mMatrixId) < 0) {
-                    unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
-                    idsToIgnore.add(mxId.mMatrixId);
-                }
-            } else {
-                unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
-            }
+        // we don't need to populate the room members or each room
+        // because an user is created for each room member event
+        for(User user : users) {
+            map.put(user.user_id, new ParticipantAdapterItem(user));
         }
 
-        mUnusedParticipants = unusedParticipants;
+        // remove the known user
+        for(String id : idsToIgnore ){
+            map.remove(id);
+        }
+
+        // retrieve the list
+        mUnusedParticipants = map.values();
     }
 
     // Comparator to order members alphabetically
@@ -400,10 +398,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 nextMembersList = mCreationParticipantsList;
             }
         } else {
+            Log.e("listOtherMembers", "---> refresh");
+
             // the list members are refreshed in background to avoid UI locks
             if (null == mUnusedParticipants) {
                 Thread t = new Thread(new Runnable() {
                     public void run() {
+                        Log.e("listOtherMembers", "---> refresh starts");
+
                         listOtherMembers();
 
                         Handler handler = new Handler(Looper.getMainLooper());
