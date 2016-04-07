@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -710,7 +711,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             addEmailPreference.setTitle(R.string.settings_add_email_address);
             addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
             addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-
+            addEmailPreference.setIcon(getResources().getDrawable(R.drawable.ic_material_add_circle));
+            
             addEmailPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
                         @Override
