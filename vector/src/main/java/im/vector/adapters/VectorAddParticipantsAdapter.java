@@ -270,16 +270,14 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // a hashmap is a lot faster than a list search
         HashMap<String, ParticipantAdapterItem> map = new HashMap<String, ParticipantAdapterItem>();
 
-        // from contacts
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
 
-        for(Contact contact : contacts) {
-            if (contact.hasMatridIds(mContext)) {
-                Contact.MXID mxId = contact.getFirstMatrixId();
-                map.put(mxId.mMatrixId, new ParticipantAdapterItem(contact, mContext));
-            } else {
-                map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, mContext));
-            }
+        // check known users
+        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
+
+        // we don't need to populate the room members or each room
+        // because an user is created for each room member event
+        for(User user : users) {
+            map.put(user.user_id, new ParticipantAdapterItem(user));
         }
 
         // checks for each room
@@ -292,19 +290,28 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
 
                 for (RoomMember member : otherRoomMembers) {
-                    map.put(member.getUserId(), new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
+                    if (null == map.get(member.getUserId())) {
+                        map.put(member.getUserId(), new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
+                    }
                 }
             }
         }
 
-        // check known users
-        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
+        // from contacts
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
 
-        // we don't need to populate the room members or each room
-        // because an user is created for each room member event
-        for(User user : users) {
-            map.put(user.user_id, new ParticipantAdapterItem(user));
+        for(Contact contact : contacts) {
+            if (contact.hasMatridIds(mContext)) {
+                Contact.MXID mxId = contact.getFirstMatrixId();
+
+                if (null == map.get(mxId.mMatrixId)) {
+                    map.put(mxId.mMatrixId, new ParticipantAdapterItem(contact, mContext));
+                }
+            } else {
+                map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, mContext));
+            }
         }
+
 
         // remove the known user
         for(String id : idsToIgnore ){
@@ -398,14 +405,10 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 nextMembersList = mCreationParticipantsList;
             }
         } else {
-            Log.e("listOtherMembers", "---> refresh");
-
             // the list members are refreshed in background to avoid UI locks
             if (null == mUnusedParticipants) {
                 Thread t = new Thread(new Runnable() {
                     public void run() {
-                        Log.e("listOtherMembers", "---> refresh starts");
-
                         listOtherMembers();
 
                         Handler handler = new Handler(Looper.getMainLooper());
