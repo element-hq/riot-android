@@ -502,6 +502,7 @@
     <string name="settings_first_name">First Name</string>
     <string name="settings_surname">Surname</string>
     <string name="settings_email_address">Email Address</string>
+    <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
 
