@@ -731,9 +731,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         if (null != participant.mAvatarBitmap) {
             memberAvatarImageView.setImageBitmap(participant.mAvatarBitmap);
         } else {
-            if (aChildPosition == 0) {
-                memberAvatarImageView.setImageBitmap(VectorUtils.getAvatar(memberAvatarImageView.getContext(), VectorUtils.getAvatarcolor(null), "@@"));
-            } else {
+            {
                 if (TextUtils.isEmpty(participant.mUserId)) {
                     VectorUtils.loadUserAvatar(mContext, mSession, memberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
                 } else {
@@ -847,10 +845,15 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             memberPowerLevel = powerLevels.getUserPowerLevel(participant.mUserId);
             kickPowerLevel = powerLevels.kick;
 
-            // hide actions menu if my power level is lower than the member's one
-            isActionsMenuHidden = ((0 != aChildPosition) && ((myPowerLevel < memberPowerLevel) || (myPowerLevel < kickPowerLevel)));
+            if(isLoggedUserPosition) {
+                // always offer possibility to leave the room to the logged member
+                isActionsMenuHidden = false;
+            } else {
+                // hide actions menu if my power level is lower than the member's one
+                isActionsMenuHidden = (((myPowerLevel < memberPowerLevel) || (myPowerLevel < kickPowerLevel)));
+            }
         } else {
-            isActionsMenuHidden = ((null == mRoom) && (0 == aChildPosition));
+            isActionsMenuHidden = (null == mRoom);
         }
 
         // set swipe layout click handler: notify the listener of the adapter

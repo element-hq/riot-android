@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
 
     private static final int INVITE_USER_REQUEST_CODE = 777;
-    private static final String CANCEL_SEARCH = null;
+    private static final String NO_PATTERN_FILTER = null;
     private static final boolean REFRESH_FORCED = true;
     private static final boolean REFRESH_NOT_FORCED = false;
 
@@ -104,37 +105,63 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
             mParticipantsListView.post(new Runnable() {
                 @Override
-                public void run () {
+                public void run() {
                     // stop waiting wheel
                     mProgressView.setVisibility(View.GONE);
 
-                    if(mIsKeyboardToHide) {
-                        // close IME after search to clean the UI
-                        InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if (null != inputMgr)
-                            inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+                    // close IME after search to clean the UI
+                    InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (null != inputMgr)
+                        inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+
+                    if (0 == aSearchCountResult) {
+                        // no results found!
+                        mSearchNoResultTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        mSearchNoResultTextView.setVisibility(View.GONE);
                     }
 
-                    // reset keyboard hiding to default value
-                    mIsKeyboardToHide = true;
-
-                    if(aIsSearchPerformed && (CANCEL_SEARCH != mPatternValue)) {
-                        // only force expanding, if it is a genuine search (not a CANCEL_SEARCH)
+                    if(NO_PATTERN_FILTER == mPatternValue) {
+                        // search result with no pattern filter
+                        updateListExpandingState();
+                    } else {
+                        // search result
                         forceListInExpandingState();
-
-                        if (0 == aSearchCountResult) {
-                            // no results found!
-                            // TODO display "No results found" when count result = 0 ??
-                        }
+                        mClearSearchImageView.setVisibility(View.VISIBLE); // restore state from inter switch tab
                     }
                 }
             });
         }
     };
 
+    private final TextWatcher mTextWatcherListener = new TextWatcher() {
+        @Override
+        public void afterTextChanged(android.text.Editable s) {
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String patternValue = mPatternToSearchEditText.getText().toString();
+
+            if (TextUtils.isEmpty(patternValue)) {
+                // search input is empty: restore a not filtered room members list
+                mClearSearchImageView.setVisibility(View.INVISIBLE);
+                mPatternValue = NO_PATTERN_FILTER;
+                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+            } else {
+                mClearSearchImageView.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
     // top view
     private View mViewHierarchy;
-    private TextView mPatternToSearchEditText;
+    private EditText mPatternToSearchEditText;
+    private TextView mSearchNoResultTextView;
     private ImageView mClearSearchImageView;
     private String mPatternValue;
 
@@ -147,6 +174,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d("RoomDetailsMembersFragment", "## onPause()");
+
+        if(null != mPatternToSearchEditText)
+            mPatternToSearchEditText.removeTextChangedListener(mTextWatcherListener);
 
         // sanity check
         if (null != mRoom) {
@@ -161,8 +191,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     @Override
     public void onStop() {
         InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if ((null != inputMgr) && (null != mPatternToSearchEditText))
+        if ((null != inputMgr) && (null != mPatternToSearchEditText)) {
             inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+            mPatternToSearchEditText.clearFocus();
+        }
 
         super.onStop();
     }
@@ -172,6 +204,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("RoomDetailsMembersFragment", "## onResume()");
+
+        // disable/enable search action according to search pattern
+        if(null != mPatternToSearchEditText)
+            mPatternToSearchEditText.addTextChangedListener(mTextWatcherListener);
 
         // sanity check
         if (null != mRoom) {
@@ -253,14 +289,13 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         // life cycle management
         if(null == savedInstanceState) {
-            mIsListViewGroupExpandedMap = new HashMap<>();
-            mPatternValue = CANCEL_SEARCH;
+            if(null == mIsListViewGroupExpandedMap) {
+                // inter tab switch keeps instance values, since fragment is not destroyed
+                mIsListViewGroupExpandedMap = new HashMap<>();
+            }
         } else {
             mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.getSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
-            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, CANCEL_SEARCH);
-
-            if(null != mPatternValue)
-                mPatternToSearchEditText.setText(mPatternValue);
+            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, NO_PATTERN_FILTER);
         }
 
         setHasOptionsMenu(true);
@@ -420,44 +455,24 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         });
 
         // search room members management
-        mPatternToSearchEditText = (TextView)mViewHierarchy.findViewById(R.id.search_value_edit_text);
+        mPatternToSearchEditText = (EditText)mViewHierarchy.findViewById(R.id.search_value_edit_text);
         mClearSearchImageView = (ImageView)mViewHierarchy.findViewById(R.id.clear_search_icon_image_view);
-
-        // disable/enable search action according to search pattern
-        mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(android.text.Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String patternValue = mPatternToSearchEditText.getText().toString();
-
-                if (TextUtils.isEmpty(patternValue)) {
-                    // search input is empty: restore a not filtered room members list
-                    mClearSearchImageView.setVisibility(View.INVISIBLE);
-                    mPatternValue = CANCEL_SEARCH;
-                    refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
-                } else {
-                    mIsKeyboardToHide = false;
-                    mClearSearchImageView.setVisibility(View.VISIBLE);
-                    mPatternValue = mPatternToSearchEditText.getText().toString();
-                    refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
-                }
-            }
-        });
+        mSearchNoResultTextView = (TextView)mViewHierarchy.findViewById(R.id.search_no_results_text_view);
 
         // add IME search action handler
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_SEARCH) || (actionId == EditorInfo.IME_ACTION_GO) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    String previousPattern = mPatternValue;
                     mPatternValue = mPatternToSearchEditText.getText().toString();
-                    refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+
+                    if(TextUtils.isEmpty(mPatternValue.trim())){
+                        // Prevent empty patterns to be launched and restore previous valid pattern to properly manage inter tab switch
+                        mPatternValue = previousPattern;
+                    }else  {
+                        refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                    }
                     return true;
                 }
                 return false;
@@ -469,7 +484,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             public void onClick(View view) {
                 // clear search pattern to restore no filtered room members list
                 mPatternToSearchEditText.setText("");
-                mPatternValue = CANCEL_SEARCH;
+                mPatternValue = NO_PATTERN_FILTER;
                 refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
                 forceListInExpandingState();
             }
@@ -607,18 +622,18 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      * Perform a search request: the adapter is asked to filter the display according to
      * the search pattern.
      * The pattern to search is given in aSearchedPattern. To cancel the search, and display the
-     * room members without any criteria, set aSearchedPattern to CANCEL_SEARCH.
+     * room members without any criteria, set aSearchedPattern to NO_PATTERN_FILTER.
      * @param aSearchedPattern string to be searched
      * @param aIsRefreshForced true to force a refresh whatever the pattern value
      */
     @SuppressLint("LongLogTag")
     private void refreshRoomMembersList(final String aSearchedPattern, boolean aIsRefreshForced) {
         if (null != mAdapter) {
-            // start waiting wheel during the search
-            mProgressView.setVisibility(View.VISIBLE);
-            mAdapter.setSearchedPattern(aSearchedPattern, mSearchListener, aIsRefreshForced);
+             // start waiting wheel during the search
+             mProgressView.setVisibility(View.VISIBLE);
+             mAdapter.setSearchedPattern(aSearchedPattern, mSearchListener, aIsRefreshForced);
         } else {
-            Log.w(LOG_TAG, "## refreshRoomMembersList(): search cannot be performed");
+            Log.w(LOG_TAG, "## refreshRoomMembersList(): search failure - adapter not initialized");
         }
     }
 

@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:layout_marginLeft="5dp">
 
         <EditText
             android:id="@+id/search_value_edit_text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="90"
-            android:layout_marginLeft="5dp"
             android:layout_centerVertical="true"
             android:imeOptions="actionSearch"
             android:inputType="text"
@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:layout_weight="10"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_material_clear_green_vector"
+            android:src="@drawable/vector_clear_edittext_green"
             android:visibility="invisible"/>
     </LinearLayout>
 
@@ -46,6 +46,17 @@
         android:divider="@color/bright_foreground_material_light"
         android:dividerHeight="1px"
         android:layout_below="@id/search_layout"/>
+
+    <TextView
+        android:id="@+id/search_no_results_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_no_results"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_below="@id/search_layout"
+        android:visibility="gone"
+        android:layout_marginLeft="5dp"/>
 
     <RelativeLayout
         android:id="@+id/add_participants_progress_view"
