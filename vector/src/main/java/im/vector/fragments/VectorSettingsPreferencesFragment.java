@@ -675,7 +675,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         if (isNewList) {
             // remove the displayed one
-            for(int index = 0; ; index++) {
+            for (int index = 0; ; index++) {
                 Preference preference = mUserSettingsCategory.findPreference(EMAIL_PREREFENCE_KEY_BASE + index);
 
                 if (null != preference) {
@@ -696,7 +696,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
             int index = 0;
 
-            for(String email : mDisplayedEmails) {
+            for (String email : mDisplayedEmails) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
                 preference.setTitle(getResources().getString(R.string.settings_email_address));
@@ -705,14 +705,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 index++;
                 mUserSettingsCategory.addPreference(preference);
             }
+        }
 
+        Preference curAddEmailPreference = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
+
+        if (null == curAddEmailPreference) {
             // display the "add email" entry
             EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
             addEmailPreference.setTitle(R.string.settings_add_email_address);
             addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
             addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
             addEmailPreference.setIcon(getResources().getDrawable(R.drawable.ic_material_add_circle));
-            
+
             addEmailPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
                         @Override
