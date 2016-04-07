@@ -6,19 +6,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/room_details_members_list"
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/search_value_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="90"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textColor="@color/vector_21_black"
+            android:textSize="16sp"
+            android:hint="@string/search_members_hint"
+            android:textColorHint="@color/vector_search_hint_color"
+            android:singleLine="true"/>
+
+        <ImageView
+            android:id="@+id/clear_search_icon_image_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_material_clear_green_vector"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/room_details_members_exp_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#00000000"
-        android:dividerHeight="1px"/>
+        android:divider="@color/bright_foreground_material_light"
+        android:dividerHeight="1px"
+        android:layout_below="@id/search_layout"/>
 
     <RelativeLayout
+        android:id="@+id/add_participants_progress_view"
         android:visibility="gone"
-        android:background="#33333333"
+        android:background="@color/vector_deemed_background_view_gray_color"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/add_participants_progress_view">
+        android:layout_height="match_parent">
 
         <ProgressBar
             android:layout_height="wrap_content"

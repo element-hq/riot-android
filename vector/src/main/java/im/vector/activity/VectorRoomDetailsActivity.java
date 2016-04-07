@@ -309,10 +309,11 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         resetUi();
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
+            mAddPeopleFragment = (VectorRoomDetailsMembersFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
             if (null == mAddPeopleFragment) {
                 mAddPeopleFragment = VectorRoomDetailsMembersFragment.newInstance();
                 ft.replace(R.id.room_details_fragment_container, mAddPeopleFragment, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
-                Log.d(LOG_TAG, "## onTabSelected() people frag added");
+                Log.d(LOG_TAG, "## onTabSelected() people frag replace");
             } else {
                 ft.attach(mAddPeopleFragment);
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
@@ -324,10 +325,11 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             mCurrentTabIndex = mSettingsTabIndex;
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
+            mSearchFilesFragment = (VectorSearchRoomFilesListFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
             if (null == mSearchFilesFragment) {
                 mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId, mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
-                Log.d(LOG_TAG, "## onTabSelected() file frag added");
+                Log.d(LOG_TAG, "## onTabSelected() file frag replace");
             } else {
                 ft.attach(mSearchFilesFragment);
                 Log.d(LOG_TAG, "## onTabSelected() file frag attach");
@@ -391,7 +393,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
         Bundle tabHolder = (Bundle) tab.getTag();
         String fragmentTag = tabHolder.getString(KEY_FRAGMENT_TAG, "");
-        Log.d("SearchActivity", "## onTabUnselected() FragTag=" + fragmentTag);
+        Log.d(LOG_TAG, "## onTabUnselected() FragTag=" + fragmentTag);
 
         // save tab UI context before leaving the tab...
         saveUiTabContext(tab);
@@ -440,11 +442,10 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 if (null == mRoomSettingsFragment) {
                     mRoomSettingsFragment = VectorRoomSettingsFragment.newInstance(mMatrixId, mRoomId);
                     getFragmentManager().beginTransaction().replace(R.id.room_details_fragment_container, mRoomSettingsFragment, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL).commit();
-                    Log.d(LOG_TAG, "## onTabSelected() settings frag added");
-                }
-                else {
+                    Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag replace");
+                } else {
                     getFragmentManager().beginTransaction().attach(mRoomSettingsFragment).commit();
-                    Log.d(LOG_TAG, "## onTabSelected() settings frag attach");
+                    Log.d(LOG_TAG, "## onTabSelectSettingsFragment() settings frag attach");
                 }
             }
         });

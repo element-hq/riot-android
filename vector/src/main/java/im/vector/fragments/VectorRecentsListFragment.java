@@ -71,9 +71,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     public static final String ARG_LAYOUT_ID = "VectorRecentsListFragment.ARG_LAYOUT_ID";
     public static final String ARG_MATRIX_ID = "VectorRecentsListFragment.ARG_MATRIX_ID";
 
-    private static final String KEY_GROUPS_EXPANDED_STATE = "KEY_GROUPS_EXPANDED_STATE";
-    private static final Boolean GROUP_IS_EXPANDED = Boolean.valueOf(true);
-    private static final Boolean GROUP_IS_COLLAPSED = Boolean.valueOf(false);
 
     public static VectorRecentsListFragment newInstance(String matrixId, int layoutResId) {
         VectorRecentsListFragment f = new VectorRecentsListFragment();
@@ -125,7 +122,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         if(null == savedInstanceState) {
             mIsListViewGroupExpandedMap = new HashMap<>();
         } else {
-            mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.get(KEY_GROUPS_EXPANDED_STATE);
+            mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.get(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
@@ -233,7 +230,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
-        aOutState.putSerializable(KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
+        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
     }
 
     private void findWaitingView() {
@@ -279,7 +276,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             public void run() {
                                 // expand all
                                 int groupCount = mRecentsListView.getExpandableListAdapter().getGroupCount();
-                                Boolean isExpanded = GROUP_IS_EXPANDED;
+                                Boolean isExpanded = CommonActivityUtils.GROUP_IS_EXPANDED;
 
                                 for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
 
@@ -287,7 +284,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                         isExpanded = mIsListViewGroupExpandedMap.get(Integer.valueOf(groupIndex));
                                     }
 
-                                    if((null == isExpanded) ||(GROUP_IS_EXPANDED == isExpanded)){
+                                    if((null == isExpanded) ||(CommonActivityUtils.GROUP_IS_EXPANDED == isExpanded)){
                                         mRecentsListView.expandGroup(groupIndex);
                                     } else {
                                         mRecentsListView.collapseGroup(groupIndex);
@@ -413,14 +410,14 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onGroupCollapsedNotif(int aGroupPosition){
         if(null != mIsListViewGroupExpandedMap) {
-            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), GROUP_IS_COLLAPSED);
+            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_COLLAPSED);
         }
     }
 
     @Override
     public void onGroupExpandedNotif(int aGroupPosition){
         if(null != mIsListViewGroupExpandedMap) {
-            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), GROUP_IS_EXPANDED);
+            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_EXPANDED);
         }
     }
 

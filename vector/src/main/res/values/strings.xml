@@ -419,6 +419,8 @@
     <string name="room_details_room_is_private">This room is private</string>
     <string name="room_details_selected">selected</string>
     <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">INVITED</string>
+    <string name="room_details_people_present_group_name">JOINED</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
@@ -428,6 +430,7 @@
 
     <!-- Search -->
     <string name="search_hint">Search</string>
+    <string name="search_members_hint">Search by name, email, id</string>
     <string name="search_no_results">No Results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>

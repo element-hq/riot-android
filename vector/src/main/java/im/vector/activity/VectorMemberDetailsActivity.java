@@ -350,7 +350,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
                     if (TextUtils.equals(membership, RoomMember.MEMBERSHIP_JOIN)) {
                         // if the member is already admin, then disable the action
-                        int maxPowerLevel = getRoomMaxPowerLevel();
+                        int maxPowerLevel = CommonActivityUtils.getRoomMaxPowerLevel(mRoom);
 
                         if ((selfPowerLevel == maxPowerLevel) && (memberPowerLevel != maxPowerLevel)) {
                             supportedActions.add(ITEM_ACTION_SET_ADMIN);
@@ -580,33 +580,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         }
         return mIsMemberJoined;
-    }
-
-    /**
-     * Helper method to retrieve the max power level cont&ined in the room.
-     * This value is used to indicate what is the power level value required
-     * to be admin of the room.
-     * @return max power level of the current room
-     */
-    private int getRoomMaxPowerLevel() {
-        int maxPowerLevel = 0;
-
-        if (null != mRoom){
-            int tempPowerLevel = 0;
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-
-            if(null != powerLevels) {
-                // find out the room member
-                Collection<RoomMember> members = mRoom.getMembers();
-                for (RoomMember member : members) {
-                    tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
-                    if (tempPowerLevel > maxPowerLevel) {
-                        maxPowerLevel = tempPowerLevel;
-                    }
-                }
-            }
-        }
-        return maxPowerLevel;
     }
 
     /**

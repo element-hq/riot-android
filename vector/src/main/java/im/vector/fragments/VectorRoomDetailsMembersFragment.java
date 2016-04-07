@@ -16,21 +16,30 @@
 
 package im.vector.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -43,18 +52,23 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.VectorApp;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.adapters.VectorRoomDetailsMembersAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
 
     private static final int INVITE_USER_REQUEST_CODE = 777;
+    private static final String CANCEL_SEARCH = null;
+    private static final boolean REFRESH_FORCED = true;
+    private static final boolean REFRESH_NOT_FORCED = false;
 
     // class members
     private MXSession mSession;
@@ -62,11 +76,14 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     // fragment items
     private View mProgressView;
-    private VectorAddParticipantsAdapter mAdapter;
+    private VectorRoomDetailsMembersAdapter mAdapter;
+    private ExpandableListView mParticipantsListView;
+    private HashMap<Integer, Boolean> mIsListViewGroupExpandedMap;
 
     private boolean mIsMultiSelectionMode;
-    private MenuItem mRemoveMembersItem;
-    private MenuItem mSwitchDeletionItem;
+    private MenuItem mRemoveMembersMenuItem;
+    private MenuItem mSwitchDeletionMenuItem;
+    private boolean mIsKeyboardToHide = true;
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -75,8 +92,40 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 @Override
                 public void run() {
                     if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type)) {
-                        mAdapter.listOtherMembers();
-                        mAdapter.refresh();
+                        refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
+                    }
+                }
+            });
+        }
+    };
+
+    private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
+        @Override
+        public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
+            mParticipantsListView.post(new Runnable() {
+                @Override
+                public void run () {
+                    // stop waiting wheel
+                    mProgressView.setVisibility(View.GONE);
+
+                    if(mIsKeyboardToHide) {
+                        // close IME after search to clean the UI
+                        InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (null != inputMgr)
+                            inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+                    }
+
+                    // reset keyboard hiding to default value
+                    mIsKeyboardToHide = true;
+
+                    if(aIsSearchPerformed && (CANCEL_SEARCH != mPatternValue)) {
+                        // only force expanding, if it is a genuine search (not a CANCEL_SEARCH)
+                        forceListInExpandingState();
+
+                        if (0 == aSearchCountResult) {
+                            // no results found!
+                            // TODO display "No results found" when count result = 0 ??
+                        }
                     }
                 }
             });
@@ -85,14 +134,19 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     // top view
     private View mViewHierarchy;
+    private TextView mPatternToSearchEditText;
+    private ImageView mClearSearchImageView;
+    private String mPatternValue;
 
     public static VectorRoomDetailsMembersFragment newInstance() {
         return new VectorRoomDetailsMembersFragment();
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("RoomDetailsMembersFragment", "## onPause()");
 
         // sanity check
         if (null != mRoom) {
@@ -105,8 +159,19 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if ((null != inputMgr) && (null != mPatternToSearchEditText))
+            inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+
+        super.onStop();
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
     public void onResume() {
         super.onResume();
+        Log.d("RoomDetailsMembersFragment", "## onResume()");
 
         // sanity check
         if (null != mRoom) {
@@ -114,17 +179,66 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
 
         // sanity check
-        if (null != mAdapter) {
-            mAdapter.listOtherMembers();
-            mAdapter.refresh();
-        }
+        refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+
+        // restore group expanding states
+        updateListExpandingState();
 
         refreshMenuEntries();
     }
 
+    @SuppressLint("LongLogTag")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onSaveInstanceState(Bundle aOutState) {
+        super.onSaveInstanceState(aOutState);
+        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
+        aOutState.putString(CommonActivityUtils.KEY_SEARCH_PATTERN, mPatternValue);
+        Log.d("RoomDetailsMembersFragment", "## onSaveInstanceState()");
+    }
+
+    private void updateListExpandingState(){
+        if(null !=  mParticipantsListView) {
+            mParticipantsListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int groupCount = mParticipantsListView.getExpandableListAdapter().getGroupCount();
+                    Boolean isExpanded = CommonActivityUtils.GROUP_IS_EXPANDED;
+
+                    for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+
+                        if (null != mIsListViewGroupExpandedMap) {
+                            isExpanded = mIsListViewGroupExpandedMap.get(Integer.valueOf(groupIndex));
+                        }
+
+                        if ((null == isExpanded) || (CommonActivityUtils.GROUP_IS_EXPANDED == isExpanded)) {
+                            mParticipantsListView.expandGroup(groupIndex);
+                        } else {
+                            mParticipantsListView.collapseGroup(groupIndex);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private void forceListInExpandingState(){
+        if(null !=  mParticipantsListView) {
+            mParticipantsListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int groupCount = mParticipantsListView.getExpandableListAdapter().getGroupCount();
+
+                    for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+                        mParticipantsListView.expandGroup(groupIndex);
+                    }
+                }
+            });
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewHierarchy = inflater.inflate(R.layout.fragment_vector_add_participants, container, false);
 
         Activity activity = getActivity();
@@ -137,6 +251,18 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             finalizeInit();
         }
 
+        // life cycle management
+        if(null == savedInstanceState) {
+            mIsListViewGroupExpandedMap = new HashMap<>();
+            mPatternValue = CANCEL_SEARCH;
+        } else {
+            mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.getSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
+            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, CANCEL_SEARCH);
+
+            if(null != mPatternValue)
+                mPatternToSearchEditText.setText(mPatternValue);
+        }
+
         setHasOptionsMenu(true);
 
         return mViewHierarchy;
@@ -147,8 +273,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
 
-        mRemoveMembersItem = menu.findItem(R.id.ic_action_room_details_delete);
-        mSwitchDeletionItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
+        mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
+        mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
 
         refreshMenuEntries();
     }
@@ -170,12 +296,12 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      * Refresh the menu entries according to the edition mode
      */
     private void refreshMenuEntries() {
-        if (null != mRemoveMembersItem) {
-            mRemoveMembersItem.setVisible(mIsMultiSelectionMode);
+        if (null != mRemoveMembersMenuItem) {
+            mRemoveMembersMenuItem.setVisible(mIsMultiSelectionMode);
         }
 
-        if (null != mSwitchDeletionItem) {
-            mSwitchDeletionItem.setVisible(!mIsMultiSelectionMode);
+        if (null != mSwitchDeletionMenuItem) {
+            mSwitchDeletionMenuItem.setVisible(!mIsMultiSelectionMode);
         }
     }
 
@@ -194,8 +320,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      * Reset the activity title.
      */
     private void resetActivityTitle() {
-        mRemoveMembersItem.setEnabled(true);
-        mSwitchDeletionItem.setEnabled(true);
+        mRemoveMembersMenuItem.setEnabled(true);
+        mSwitchDeletionMenuItem.setEnabled(true);
 
         setActivityTitle(this.getResources().getString(R.string.room_details_title));
     }
@@ -213,11 +339,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     /**
      * Kick an user Ids list
-     * @param userids the user ids list
+     * @param userIds the user ids list
      * @param index the start index
      */
-    private void kickUsers(final  ArrayList<String> userids, final int index) {
-        if (index >= userids.size()) {
+    private void kickUsers(final  ArrayList<String> userIds, final int index) {
+        if (index >= userIds.size()) {
             mProgressView.setVisibility(View.GONE);
 
             if (mIsMultiSelectionMode) {
@@ -227,14 +353,14 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             return;
         }
 
-        mRemoveMembersItem.setEnabled(false);
-        mSwitchDeletionItem.setEnabled(false);
+        mRemoveMembersMenuItem.setEnabled(false);
+        mSwitchDeletionMenuItem.setEnabled(false);
 
         mProgressView.setVisibility(View.VISIBLE);
 
-        mRoom.kick(userids.get(index), new ApiCallback<Void>() {
+        mRoom.kick(userIds.get(index), new ApiCallback<Void>() {
                     private void kickNext() {
-                        kickUsers(userids, index + 1);
+                        kickUsers(userIds, index + 1);
                     }
 
                     @Override
@@ -293,24 +419,76 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             }
         });
 
-        mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
-        ListView participantsListView = (ListView)mViewHierarchy.findViewById(R.id.room_details_members_list);
-        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
-        participantsListView.setAdapter(mAdapter);
+        // search room members management
+        mPatternToSearchEditText = (TextView)mViewHierarchy.findViewById(R.id.search_value_edit_text);
+        mClearSearchImageView = (ImageView)mViewHierarchy.findViewById(R.id.clear_search_icon_image_view);
 
-        mAdapter.registerDataSetObserver(new DataSetObserver() {
+        // disable/enable search action according to search pattern
+        mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onChanged() {
-                super.onChanged();
+            public void afterTextChanged(android.text.Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String patternValue = mPatternToSearchEditText.getText().toString();
+
+                if (TextUtils.isEmpty(patternValue)) {
+                    // search input is empty: restore a not filtered room members list
+                    mClearSearchImageView.setVisibility(View.INVISIBLE);
+                    mPatternValue = CANCEL_SEARCH;
+                    refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                } else {
+                    mIsKeyboardToHide = false;
+                    mClearSearchImageView.setVisibility(View.VISIBLE);
+                    mPatternValue = mPatternToSearchEditText.getText().toString();
+                    refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                }
             }
         });
 
-        mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+        // add IME search action handler
+        mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(int position) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_SEARCH) || (actionId == EditorInfo.IME_ACTION_GO) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    mPatternValue = mPatternToSearchEditText.getText().toString();
+                    refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mClearSearchImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // clear search pattern to restore no filtered room members list
+                mPatternToSearchEditText.setText("");
+                mPatternValue = CANCEL_SEARCH;
+                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                forceListInExpandingState();
+            }
+        });
+
+        mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
+        mParticipantsListView = (ExpandableListView)mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
+        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
+        mParticipantsListView.setAdapter(mAdapter);
+        // the group indicator is managed in the adapter (group view creation)
+        mParticipantsListView.setGroupIndicator(null);
+
+        // set all the listener handlers called from the adapter
+        mAdapter.setOnParticipantsListener(new VectorRoomDetailsMembersAdapter.OnParticipantsListener() {
+            @Override
+            public void onClick(final ParticipantAdapterItem participantItem) {
                 Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, mAdapter.getItem(position).mUserId);
+                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, participantItem.mUserId);
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                 startActivity(startRoomInfoIntent);
             }
@@ -407,7 +585,41 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         .create()
                         .show();
             }
+
+            @Override
+            public void onGroupCollapsedNotif(int aGroupPosition){
+                if(null != mIsListViewGroupExpandedMap) {
+                    mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_COLLAPSED);
+                }
+            }
+
+            @Override
+            public void onGroupExpandedNotif(int aGroupPosition){
+                if(null != mIsListViewGroupExpandedMap) {
+                    mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_EXPANDED);
+                }
+            }
         });
+    }
+
+
+    /**
+     * Perform a search request: the adapter is asked to filter the display according to
+     * the search pattern.
+     * The pattern to search is given in aSearchedPattern. To cancel the search, and display the
+     * room members without any criteria, set aSearchedPattern to CANCEL_SEARCH.
+     * @param aSearchedPattern string to be searched
+     * @param aIsRefreshForced true to force a refresh whatever the pattern value
+     */
+    @SuppressLint("LongLogTag")
+    private void refreshRoomMembersList(final String aSearchedPattern, boolean aIsRefreshForced) {
+        if (null != mAdapter) {
+            // start waiting wheel during the search
+            mProgressView.setVisibility(View.VISIBLE);
+            mAdapter.setSearchedPattern(aSearchedPattern, mSearchListener, aIsRefreshForced);
+        } else {
+            Log.w(LOG_TAG, "## refreshRoomMembersList(): search cannot be performed");
+        }
     }
 
     /**
@@ -418,7 +630,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     * Acivity result
+     * Activity result
      * @param requestCode the request code
      * @param resultCode teh result code
      * @param data the returned data
