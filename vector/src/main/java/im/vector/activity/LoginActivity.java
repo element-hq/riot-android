@@ -48,6 +48,7 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
+import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.LoginHandler;
@@ -955,11 +956,7 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         // ---------------------------------------------------------------------------
-
-        Uri hsUrl = Uri.parse(hsUrlString);
-        final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(hsUrl);
-
-        hsConfig.setIdentityServerUri(Uri.parse(identityUrlString));
+        final HomeserverConnectionConfig hsConfig = getHsConfig();
 
         // disable UI actions
         setFlowsMaskEnabled(true);
@@ -1246,7 +1243,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 identityServerUrlString = "https://" + identityServerUrlString;
             }
 
-            mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, null, false);
+            mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, new ArrayList<Fingerprint>(), false);
         }
 
         return mHomeserverConnectionConfig;
@@ -1294,9 +1291,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 credentials.homeServer = homeServer;
                 credentials.accessToken = accessToken;
 
-                final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(
-                        Uri.parse(homeServerUrl), credentials
-                );
+                final HomeserverConnectionConfig hsConfig = getHsConfig();
+
+                hsConfig.setCredentials(credentials);
 
                 Log.e(LOG_TAG, "Account creation succeeds");
 
