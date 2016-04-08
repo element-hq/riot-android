@@ -265,7 +265,82 @@
                 android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
+        <activity android:name=".activity.VectorUniversalLinkActivity"
+            android:theme="@android:style/Theme.NoDisplay">
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="vector.im" />
+                <!-- android:path="/something"
+                    android:scheme="http" -->
+                <data
+                    android:host="vector.im"
+                    android:pathPrefix="/beta/"
+                    android:scheme="http" />
+
+                <data
+                    android:host="vector.im"
+                    android:pathPrefix="/beta/"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <!--
+             universal links
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:host="vector.im"/>
+                <data android:pathPrefix="/app/"/>
+                <data android:pathPrefix="/beta/"/>
+                <data android:pathPrefix="/develop/"/>
+
+                <data
+                    android:host="vector.im"
+                    android:pathPrefix="/app/"
+                    android:scheme="http" />
+
+                                <data
+                    android:host="vector.im"
+                    android:pathPrefix="/develop/"
+                    android:scheme="http" />
+                <data
+                    android:host="vector.im"
+                    android:pathPrefix="/staging/"
+                    android:scheme="http" />
+
+                    <data
+                    android:host="vector.im"
+                    android:pathPrefix="/beta/"
+                    android:scheme="http" />
+        -->
+        <receiver
+            android:name=".broadcast.VectorUniversalLinkReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="vector.im"
+                    android:scheme="http" />
+                <data
+                    android:host="vector.im"
+                    android:scheme="https" />
+                <data
+                    android:host="vector.im"
+                    android:pathPrefix="/beta/"
+                    android:scheme="http" />
+            </intent-filter>
+        </receiver>
+
+        <!-- GCM components -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
