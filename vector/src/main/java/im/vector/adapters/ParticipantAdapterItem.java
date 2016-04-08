@@ -117,15 +117,14 @@ public class ParticipantAdapterItem {
             else if (rhs == null) {
                 return 1;
             }
-            
-            /*
-            // disable to have the same sort order than the IOS client.
+
             if (lhs.startsWith("@")) {
                 lhs = lhs.substring(1);
             }
             if (rhs.startsWith("@")) {
                 rhs = rhs.substring(1);
-            }*/
+            }
+
             return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
         }
     };
