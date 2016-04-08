@@ -87,7 +87,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private boolean mIsMultiSelectionMode;
     private MenuItem mRemoveMembersMenuItem;
     private MenuItem mSwitchDeletionMenuItem;
-    private boolean mIsKeyboardToHide = true;
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -124,14 +123,23 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         mSearchNoResultTextView.setVisibility(View.GONE);
                     }
 
-                    if(NO_PATTERN_FILTER == mPatternValue) {
+                    if (NO_PATTERN_FILTER == mPatternValue) {
                         // search result with no pattern filter
                         updateListExpandingState();
+
                     } else {
                         // search result
                         forceListInExpandingState();
                         mClearSearchImageView.setVisibility(View.VISIBLE); // restore state from inter switch tab
                     }
+
+                    mParticipantsListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // jump to the first item
+                            mParticipantsListView.setSelection(0);
+                        }
+                    });
                 }
             });
         }
@@ -476,10 +484,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                     String previousPattern = mPatternValue;
                     mPatternValue = mPatternToSearchEditText.getText().toString();
 
-                    if(TextUtils.isEmpty(mPatternValue.trim())){
+                    if (TextUtils.isEmpty(mPatternValue.trim())) {
                         // Prevent empty patterns to be launched and restore previous valid pattern to properly manage inter tab switch
                         mPatternValue = previousPattern;
-                    }else  {
+                    } else  {
                         refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
                     }
                     return true;
@@ -644,6 +652,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
              // start waiting wheel during the search
              mProgressView.setVisibility(View.VISIBLE);
              mAdapter.setSearchedPattern(aSearchedPattern, mSearchListener, aIsRefreshForced);
+
         } else {
             Log.w(LOG_TAG, "## refreshRoomMembersList(): search failure - adapter not initialized");
         }
