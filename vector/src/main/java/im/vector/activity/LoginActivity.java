@@ -17,6 +17,7 @@
 package im.vector.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -366,6 +368,8 @@ public class LoginActivity extends MXCActionBarActivity {
 
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
+            // the account creation is not always supported so ensure that the dedicated button is always displayed.
+            mRegisterButton.setVisibility(View.VISIBLE);
 
             checkFlows();
         }
@@ -381,6 +385,8 @@ public class LoginActivity extends MXCActionBarActivity {
 
             // invalidate the current homeserver config
             mHomeserverConnectionConfig = null;
+            // the account creation is not always supported so ensure that the dedicated button is always displayed.
+            mRegisterButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -451,31 +457,24 @@ public class LoginActivity extends MXCActionBarActivity {
         setFlowsMaskEnabled(false);
 
         // detect if it is a Matrix SDK issue
-        if (null != matrixError) {
-            String error = matrixError.error;
-            String errCode = matrixError.errcode;
+        String error = matrixError.error;
+        String errCode = matrixError.errcode;
 
-            if (null != errCode) {
-                if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
-                    message = getResources().getString(R.string.login_error_forbidden);
-                } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
-                    message = getResources().getString(R.string.login_error_unknown_token);
-                } else if (TextUtils.equals(errCode, MatrixError.BAD_JSON)) {
-                    message = getResources().getString(R.string.login_error_bad_json);
-                } else if (TextUtils.equals(errCode, MatrixError.NOT_JSON)) {
-                    message = getResources().getString(R.string.login_error_not_json);
-                } else if (TextUtils.equals(errCode, MatrixError.LIMIT_EXCEEDED)) {
-                    message = getResources().getString(R.string.login_error_limit_exceeded);
-                } else if (TextUtils.equals(errCode, MatrixError.USER_IN_USE)) {
-                    message = getResources().getString(R.string.login_error_user_in_use);
-                } else if (TextUtils.equals(errCode, MatrixError.LOGIN_EMAIL_URL_NOT_YET)) {
-                    message = getResources().getString(R.string.login_error_login_email_not_yet);
-                } else {
-                    message = errCode;
-                }
-            }
-            else if (!TextUtils.isEmpty(error)) {
-                message = error;
+        if (null != errCode) {
+            if (TextUtils.equals(errCode, MatrixError.FORBIDDEN)) {
+                message = getResources().getString(R.string.login_error_forbidden);
+            } else if (TextUtils.equals(errCode, MatrixError.UNKNOWN_TOKEN)) {
+                message = getResources().getString(R.string.login_error_unknown_token);
+            } else if (TextUtils.equals(errCode, MatrixError.BAD_JSON)) {
+                message = getResources().getString(R.string.login_error_bad_json);
+            } else if (TextUtils.equals(errCode, MatrixError.NOT_JSON)) {
+                message = getResources().getString(R.string.login_error_not_json);
+            } else if (TextUtils.equals(errCode, MatrixError.LIMIT_EXCEEDED)) {
+                message = getResources().getString(R.string.login_error_limit_exceeded);
+            } else if (TextUtils.equals(errCode, MatrixError.USER_IN_USE)) {
+                message = getResources().getString(R.string.login_error_user_in_use);
+            } else if (TextUtils.equals(errCode, MatrixError.LOGIN_EMAIL_URL_NOT_YET)) {
+                message = getResources().getString(R.string.login_error_login_email_not_yet);
             }
         }
 
@@ -723,23 +722,27 @@ public class LoginActivity extends MXCActionBarActivity {
                         @Override
                         public void onMatrixError(MatrixError e) {
                             if (mMode == MODE_ACCOUNT_CREATION) {
-                                // should not check login flows
-                                if (mMode == MODE_ACCOUNT_CREATION) {
-                                    RegistrationFlowResponse registrationFlowResponse = null;
+                                RegistrationFlowResponse registrationFlowResponse = null;
 
-                                    // when a response is not completed the server returns an error message
-                                    if ((null != e.mStatus) && (e.mStatus == 401)) {
+                                // when a response is not completed the server returns an error message
+                                if (null != e.mStatus) {
+                                    if (e.mStatus == 401) {
                                         try {
                                             registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
                                         } catch (Exception castExcept) {
                                         }
+                                    } else if (e.mStatus == 403) {
+                                        // not supported by the server
+                                        mRegisterButton.setVisibility(View.GONE);
+                                        mMode = MODE_LOGIN;
+                                        refreshDisplay();
                                     }
+                                }
 
-                                    if (null != registrationFlowResponse) {
-                                        onRegistrationFlow(hsConfig, registrationFlowResponse);
-                                    } else {
-                                        onFailureDuringAuthRequest(e);
-                                    }
+                                if (null != registrationFlowResponse) {
+                                    onRegistrationFlow(hsConfig, registrationFlowResponse);
+                                } else {
+                                    onFailureDuringAuthRequest(e);
                                 }
                             }
                         }
@@ -757,6 +760,8 @@ public class LoginActivity extends MXCActionBarActivity {
      * The user clicks on the register button.
      */
     private void onRegisterClick(boolean checkRegistraionValues) {
+        onClick();
+
         // the user switches to another mode
         if (mMode != MODE_ACCOUNT_CREATION) {
             mMode = MODE_ACCOUNT_CREATION;
@@ -928,7 +933,20 @@ public class LoginActivity extends MXCActionBarActivity {
     // login management
     //==============================================================================================================
 
+    /**
+     * Dismiss the keyboard and save the updated values
+     */
+    private void onClick() {
+        onIdentityserverUrlUpdate();
+        onHomeserverUrlUpdate();
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
+    }
+
     private void onLoginClick(String hsUrlString, String identityUrlString, String username, String password) {
+        onClick();
+
         // the user switches to another mode
         if (mMode != MODE_LOGIN) {
             mMode = MODE_LOGIN;
