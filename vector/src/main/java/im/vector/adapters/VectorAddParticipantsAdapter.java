@@ -266,54 +266,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         }
 
-        // list the known members
-        // a hashmap is a lot faster than a list search
-        HashMap<String, ParticipantAdapterItem> map = new HashMap<String, ParticipantAdapterItem>();
+        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mContext, mSession);
 
-
-        // check known users
-        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
-
-        // we don't need to populate the room members or each room
-        // because an user is created for each room member event
-        for(User user : users) {
-            map.put(user.user_id, new ParticipantAdapterItem(user));
-        }
-
-        // checks for each room
-        Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
-
-        for(RoomSummary summary : summaries) {
-            // not the current summary
-            if (!summary.getRoomId().equals(mRoomId)) {
-                Room curRoom = mSession.getDataHandler().getRoom(summary.getRoomId());
-                Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
-
-                for (RoomMember member : otherRoomMembers) {
-                    if (null == map.get(member.getUserId())) {
-                        map.put(member.getUserId(), new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
-                    }
-                }
-            }
-        }
-
-        // from contacts
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
-
-        for(Contact contact : contacts) {
-            if (contact.hasMatridIds(mContext)) {
-                Contact.MXID mxId = contact.getFirstMatrixId();
-
-                if (null == map.get(mxId.mMatrixId)) {
-                    map.put(mxId.mMatrixId, new ParticipantAdapterItem(contact, mContext));
-                }
-            } else {
-                map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, mContext));
-            }
-        }
-
-
-        // remove the known user
+        // remove the known users
         for(String id : idsToIgnore ){
             map.remove(id);
         }
