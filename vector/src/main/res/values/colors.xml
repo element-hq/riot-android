@@ -13,6 +13,7 @@
     <color name="room_summary_unread_background">#ede</color>
     <color name="room_summary_highlight_background">#FF88BBFF</color>
     <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
+    <color name="vector_deemed_background_view_gray_color">#339D9D9D</color>
 
     <!-- action bar color -->
     <color name="vector_statusbar_color">#5EA584</color>

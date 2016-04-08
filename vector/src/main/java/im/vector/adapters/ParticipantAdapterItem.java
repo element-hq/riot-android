@@ -44,6 +44,10 @@ public class ParticipantAdapterItem {
     private String mLowerCaseDisplayName;
     private String mLowerCaseMatrixId;
 
+    // auto reference fields to speed up search
+    public int mReferenceGroupPosition = -1;
+    public int mReferenceChildPosition = -1;
+
     public ParticipantAdapterItem(RoomMember member) {
         mDisplayName = member.getName();
         mAvatarUrl = member.avatarUrl;
@@ -140,11 +144,11 @@ public class ParticipantAdapterItem {
         boolean res = false;
 
         if (!res && !TextUtils.isEmpty(mLowerCaseDisplayName)) {
-            res = mLowerCaseDisplayName.indexOf(aPattern) >= 0;
+            res = mLowerCaseDisplayName.indexOf(aPattern) > -1;
         }
 
         if (!res && !TextUtils.isEmpty(mLowerCaseMatrixId)) {
-            res = mLowerCaseMatrixId.indexOf(aPattern) >= 0;
+            res = mLowerCaseMatrixId.indexOf(aPattern) > -1;
         }
 
         // the room member class only checks the matrixId and the displayname

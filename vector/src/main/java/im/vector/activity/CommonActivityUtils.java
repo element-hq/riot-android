@@ -50,6 +50,7 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import im.vector.VectorApp;
 import im.vector.Matrix;
@@ -96,6 +97,16 @@ public class CommonActivityUtils {
 
     public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
     public static final boolean UTILS_HIDE_PROGRESS_BAR = false;
+
+    // room details members:
+    public static final String KEY_GROUPS_EXPANDED_STATE = "KEY_GROUPS_EXPANDED_STATE";
+    public static final String KEY_SEARCH_PATTERN = "KEY_SEARCH_PATTERN";
+    public static final Boolean GROUP_IS_EXPANDED = Boolean.valueOf(true);
+    public static final Boolean GROUP_IS_COLLAPSED = Boolean.valueOf(false);
+
+    // power levels
+    public static final float UTILS_POWER_LEVEL_ADMIN = 100;
+    public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isActive()) {
@@ -859,6 +870,32 @@ public class CommonActivityUtils {
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Helper method to retrieve the max power level contained in the room.
+     * This value is used to indicate what is the power level value required
+     * to be admin of the room.
+     * @return max power level of the current room
+     */
+    public static int getRoomMaxPowerLevel(Room aRoom) {
+        int maxPowerLevel = 0;
+
+        if (null != aRoom){
+            int tempPowerLevel = 0;
+            PowerLevels powerLevels = aRoom.getLiveState().getPowerLevels();
+
+            if(null != powerLevels) {
+                // find out the room member
+                Collection<RoomMember> members = aRoom.getMembers();
+                for (RoomMember member : members) {
+                    tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
+                    if (tempPowerLevel > maxPowerLevel) {
+                        maxPowerLevel = tempPowerLevel;
+                    }
+                }
+            }
+        }
+        return maxPowerLevel;
+    }
 
     //==============================================================================================================
     // Application badge (displayed in the launcher)
