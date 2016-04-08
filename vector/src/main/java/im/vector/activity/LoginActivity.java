@@ -151,12 +151,16 @@ public class LoginActivity extends MXCActionBarActivity {
     private ImageView mExpandImageView;
 
     String mHomeServerUrl = null;
+    String mIdentityServerUrl = null;
 
     // allowed registration response
     private RegistrationFlowResponse mRegistrationResponse;
 
     // login handler
     private LoginHandler mLoginHandler = new LoginHandler();
+
+    // save the config because trust a certificate is asynchronous.
+    private HomeserverConnectionConfig mHomeserverConnectionConfig;
 
     @Override
     protected void onDestroy() {
@@ -248,15 +252,8 @@ public class LoginActivity extends MXCActionBarActivity {
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                    // the user validates the home server url
-                    if (!TextUtils.equals(mHomeServerUrl, mHomeServerText.getText().toString())) {
-                        mHomeServerUrl = mHomeServerText.getText().toString();
-
-                        mRegistrationResponse = null;
-                        checkFlows();
-                        return true;
-                    }
+                    onHomeserverUrlUpdate();
+                    return true;
                 }
 
                 return false;
@@ -267,15 +264,34 @@ public class LoginActivity extends MXCActionBarActivity {
         mHomeServerText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!TextUtils.equals(mHomeServerUrl, mHomeServerText.getText().toString())) {
-                        mHomeServerUrl = mHomeServerText.getText().toString();
-                        mRegistrationResponse = null;
-
-                        checkFlows();
-                    }
+                    onHomeserverUrlUpdate();
                 }
             }
         });
+
+
+        // identity server input validity: if the user taps on the next / done button
+        mIdentityServerText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    onIdentityserverUrlUpdate();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        // identity server input validity: when focus changes
+        mIdentityServerText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    onIdentityserverUrlUpdate();
+                }
+            }
+        });
+
 
         // "forgot password?" handler
         mPasswordForgottenTxtView.setOnClickListener(new View.OnClickListener() {
@@ -339,12 +355,42 @@ public class LoginActivity extends MXCActionBarActivity {
         });
     }
 
+    /**
+     * Check if the home server url has been updated
+     */
+    private void onHomeserverUrlUpdate() {
+        if (!TextUtils.equals(mHomeServerUrl, mHomeServerText.getText().toString())) {
+            mHomeServerUrl = mHomeServerText.getText().toString();
+            mRegistrationResponse = null;
+
+            // invalidate the current homeserver config
+            mHomeserverConnectionConfig = null;
+
+            checkFlows();
+        }
+    }
+
+    /**
+     * Check if the home server url has been updated
+     */
+    private void onIdentityserverUrlUpdate() {
+        if (!TextUtils.equals(mIdentityServerUrl, mIdentityServerText.getText().toString())) {
+            mIdentityServerUrl = mIdentityServerText.getText().toString();
+            mRegistrationResponse = null;
+
+            // invalidate the current homeserver config
+            mHomeserverConnectionConfig = null;
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
 
         // retrieve the home server path
         mHomeServerUrl = mHomeServerText.getText().toString();
+        mIdentityServerUrl = mIdentityServerText.getText().toString();
 
         // check if the login supports the server flows
         checkFlows();
@@ -1177,29 +1223,33 @@ public class LoginActivity extends MXCActionBarActivity {
      * @return the homeserver config. null if the url is not valid
      */
     private HomeserverConnectionConfig getHsConfig() {
-        String hsUrlString = mHomeServerText.getText().toString();
+        if (null == mHomeserverConnectionConfig) {
+            String hsUrlString = mHomeServerText.getText().toString();
 
-        if ((null == hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
-            Toast.makeText(this,getString(R.string.login_error_must_start_http),Toast.LENGTH_SHORT).show();
-            return null;
+            if ((null == hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
+                Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
+                return null;
+            }
+
+            if (!hsUrlString.startsWith("http://") && !hsUrlString.startsWith("https://")) {
+                hsUrlString = "https://" + hsUrlString;
+            }
+
+            String identityServerUrlString = mIdentityServerText.getText().toString();
+
+            if ((null == identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
+                Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
+                return null;
+            }
+
+            if (!identityServerUrlString.startsWith("http://") && !identityServerUrlString.startsWith("https://")) {
+                identityServerUrlString = "https://" + identityServerUrlString;
+            }
+
+            mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, null, false);
         }
 
-        if(!hsUrlString.startsWith("http://") && !hsUrlString.startsWith("https://")){
-            hsUrlString = "https://" + hsUrlString;
-        }
-
-        String identityServerUrlString = mIdentityServerText.getText().toString();
-
-        if ((null == identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
-            Toast.makeText(this,getString(R.string.login_error_must_start_http),Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        if(!identityServerUrlString.startsWith("http://") && !identityServerUrlString.startsWith("https://")){
-            identityServerUrlString = "https://" + identityServerUrlString;
-        }
-
-        return new HomeserverConnectionConfig(Uri.parse(hsUrlString), Uri.parse(identityServerUrlString), null, null, false);
+        return mHomeserverConnectionConfig;
     }
 
     //==============================================================================================================
