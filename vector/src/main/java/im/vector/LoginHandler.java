@@ -43,6 +43,31 @@ public class LoginHandler {
     private static final String LOG_TAG = "LoginHandler";
 
     /**
+     * The account login / creation succeeds so create the dedicated session and store it.
+     * @param appCtx the application context.
+     * @param hsConfig the homeserver config
+     * @param credentials the credentials
+     * @param callback the callback
+     */
+    private void onRegistrationDone(Context appCtx, HomeserverConnectionConfig hsConfig, Credentials credentials, SimpleApiCallback<HomeserverConnectionConfig> callback) {
+        Collection<MXSession> sessions = Matrix.getMXSessions(appCtx);
+        boolean isDuplicated = false;
+
+        for (MXSession existingSession : sessions) {
+            Credentials cred = existingSession.getCredentials();
+            isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
+        }
+
+        if (!isDuplicated) {
+            hsConfig.setCredentials(credentials);
+            MXSession session = Matrix.getInstance(appCtx).createSession(hsConfig);
+            Matrix.getInstance(appCtx).addSession(session);
+        }
+
+        callback.onSuccess(hsConfig);
+    }
+
+    /**
      * Try to login.
      * The MXSession is created if the operation succeeds.
      * @param ctx the context.
@@ -59,22 +84,7 @@ public class LoginHandler {
         client.loginWithPassword(username, password, new SimpleApiCallback<Credentials>() {
             @Override
             public void onSuccess(Credentials credentials) {
-                Collection<MXSession> sessions = Matrix.getMXSessions(appCtx);
-                Boolean isDuplicated = false;
-
-                for (MXSession existingSession : sessions) {
-                    Credentials cred = existingSession.getCredentials();
-                    isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
-                }
-
-                if (!isDuplicated) {
-                    hsConfig.setCredentials(credentials);
-                    MXSession session = Matrix.getInstance(appCtx).createSession(hsConfig);
-                    Matrix.getInstance(appCtx).addSession(session);
-                }
-
-                Log.d(LOG_TAG, "client loginWithPassword succeeded.");
-                callback.onSuccess(hsConfig);
+                onRegistrationDone(appCtx, hsConfig, credentials, callback);
             }
 
             @Override
@@ -82,9 +92,6 @@ public class LoginHandler {
                 UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
                 if (unrecCertEx != null) {
                     final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
-                    // TODO: Handle this. For example by displaying a "Do you trust this cert?" dialog
-
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
@@ -140,7 +147,6 @@ public class LoginHandler {
                 UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
                 if (unrecCertEx != null) {
                     final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
 
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
@@ -198,22 +204,7 @@ public class LoginHandler {
         client.register(params, new SimpleApiCallback <Credentials> () {
             @Override
             public void onSuccess(Credentials credentials){
-                Collection<MXSession> sessions = Matrix.getMXSessions(appCtx);
-                Boolean isDuplicated = false;
-
-                for (MXSession existingSession : sessions) {
-                    Credentials cred = existingSession.getCredentials();
-                    isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
-                }
-
-                if (!isDuplicated) {
-                    hsConfig.setCredentials(credentials);
-                    MXSession session = Matrix.getInstance(appCtx).createSession(hsConfig);
-                    Matrix.getInstance(appCtx).addSession(session);
-                }
-
-                Log.d(LOG_TAG, "client getSupportedRegistrationFlows succeeded.");
-                callback.onSuccess(hsConfig);
+                onRegistrationDone(appCtx, hsConfig, credentials, callback);
             }
 
             @Override
@@ -258,11 +249,12 @@ public class LoginHandler {
 
     /**
      * Request a validation token.
-     * @param restClient the restclient to use.
-     * @param callback the callback when the operation is done
+     * @param ctx the context.
+     * @param hsConfig the homeserver configuration.
+     * @param email the email.
+     * @param callback the callback.
      */
     public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final SimpleApiCallback<ThreePid> callback) {
-        final Context appCtx = ctx.getApplicationContext();
         final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
@@ -278,7 +270,6 @@ public class LoginHandler {
                 UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
                 if (unrecCertEx != null) {
                     final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                    Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
 
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
