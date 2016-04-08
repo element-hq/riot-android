@@ -41,6 +41,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -51,6 +52,8 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+
+import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -385,6 +388,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 toggleMultiSelectionMode();
                 resetActivityTitle();
             }
+
+            // refresh the display 
+            mAdapter.notifyDataSetChanged();
             return;
         }
 
@@ -409,8 +415,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                     }
 
                     @Override
-                    public void onMatrixError(MatrixError e) {
+                    public void onMatrixError(final MatrixError e) {
                         kickNext();
+                        if (null != getActivity()) {
+                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -569,23 +578,26 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                     @Override
                                     public void onSuccess(Void info) {
                                         mProgressView.setVisibility(View.GONE);
-                                        // display something
+                                    }
+
+                                    private void onError(String errorMessage) {
+                                        mProgressView.setVisibility(View.GONE);
+                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
                                     public void onNetworkError(Exception e) {
-                                        mProgressView.setVisibility(View.GONE);
-                                        // display something
+                                        onError(e.getLocalizedMessage());
                                     }
 
                                     @Override
                                     public void onMatrixError(MatrixError e) {
-                                        mProgressView.setVisibility(View.GONE);
+                                        onError(e.getLocalizedMessage());
                                     }
 
                                     @Override
                                     public void onUnexpectedError(Exception e) {
-                                        mProgressView.setVisibility(View.GONE);
+                                        onError(e.getLocalizedMessage());
                                     }
                                 });
                                 getActivity().finish();
