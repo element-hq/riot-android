@@ -162,7 +162,7 @@
     <string name="login_error_network_error">Unable to login: Network error</string>
     <string name="login_error_unable_login">Unable to login</string>
     <string name="login_error_registration_network_error">Unable to register: Network error</string>
-    <string name="login_error_unable_register">Unable to login</string>
+    <string name="login_error_unable_register">Unable to register</string>
     <string name="login_error_invalid_credentials">Enter valid credentials</string>
     <string name="login_error_invalid_home_server">Enter valid URL</string>
 

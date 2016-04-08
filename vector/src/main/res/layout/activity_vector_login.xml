@@ -219,6 +219,16 @@
                     android:textColor="@color/vector_green_color"
                     android:text="@string/auth_forgot_password"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/flow_progress_message_textview"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:text="A text here" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -227,39 +237,14 @@
         android:id="@+id/flow_ui_mask_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        android:layout_centerInParent="true">
+        android:visibility="gone">
 
-        <View
-            android:id="@+id/search_mask_view"
-            android:background="#AAAAAAAA"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
-
-        <LinearLayout
-            android:orientation="vertical"
+        <ProgressBar
+            android:id="@+id/search_progress"
             android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/flow_progress_message_textview"
-                android:gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:textColor="@android:color/white"
-                android:layout_marginBottom="30dp"
-                android:text="A text here" />
-
-            <ProgressBar
-                android:id="@+id/search_progress"
-                android:gravity="center_horizontal"
-                android:layout_gravity="center"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
-                android:indeterminate="true"/>
-        </LinearLayout>
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:indeterminate="true"/>
     </RelativeLayout>
 
 </RelativeLayout>
