@@ -96,6 +96,7 @@
     <string name="identity_url">Identity Server URL</string>
     <string name="user">user</string>
     <string name="users">users</string>
+    <string name="search">Search</string>
 
     <string name="create_room_set_alias">Set room alias</string>
     <string name="create_room_alias_hint">room-alias</string>

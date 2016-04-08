@@ -2105,6 +2105,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         if((null != mSession) && (null != mRoom)) {
             String titleToApply = mRoom.isReady() ? VectorUtils.getRoomDisplayname(this, mSession, mRoom) : mDefaultRoomName;
 
+            // in context mode, add search to the title.
+            if (!TextUtils.isEmpty(mEventId)) {
+                titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
+            }
+
             // set action bar title
             if (null != mActionBarCustomTitle) {
                 mActionBarCustomTitle.setText(titleToApply);
@@ -2112,8 +2117,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 setTitle(titleToApply);
             }
             // set title in the room header (no matter if not displayed)
-            if (null != mActionBarHeaderRoomName)
+            if (null != mActionBarHeaderRoomName) {
                 mActionBarHeaderRoomName.setText(titleToApply);
+            }
         }
     }
 
