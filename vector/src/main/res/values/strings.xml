@@ -460,7 +460,7 @@
 
     <!-- Search -->
     <string name="search_hint">Search</string>
-    <string name="search_members_hint">Search by name, email, id</string>
+    <string name="search_members_hint">\uD83D\uDD0D Search by name or id</string>
     <string name="search_no_results">No Results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>

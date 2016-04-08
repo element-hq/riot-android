@@ -6,20 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+
+
+    <RelativeLayout
         android:id="@+id/search_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
-        android:layout_marginLeft="5dp">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/clear_search_icon_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/vector_clear_edittext_green"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/search_value_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/clear_search_icon_image_view"
             android:layout_centerVertical="true"
             android:imeOptions="actionSearch"
             android:inputType="text"
@@ -27,17 +41,11 @@
             android:textSize="16sp"
             android:hint="@string/search_members_hint"
             android:textColorHint="@color/vector_search_hint_color"
+            android:theme="@style/SearchesAppTheme"
             android:singleLine="true"/>
 
-        <ImageView
-            android:id="@+id/clear_search_icon_image_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:layout_centerVertical="true"
-            android:src="@drawable/vector_clear_edittext_green"
-            android:visibility="invisible"/>
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <ExpandableListView
         android:id="@+id/room_details_members_exp_list_view"
