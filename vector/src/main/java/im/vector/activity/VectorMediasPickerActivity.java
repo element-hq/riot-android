@@ -653,81 +653,106 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
+     * Take a photo
+     */
+    private void takePhoto() {
+        Log.d(LOG_TAG, "## takePhoto");
+
+        try {
+            mCamera.takePicture(null, null, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    Log.d(LOG_TAG, "onPictureTaken succceeds");
+
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+                    File dstFile = null;
+                    String fileName = getSavedImageName();
+
+                    // remove any previously saved image
+                    if (!TextUtils.isEmpty(fileName)) {
+                        dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+                        if (dstFile.exists()) {
+                            dstFile.delete();
+                        }
+                    }
+
+                    // get new name
+                    fileName = buildNewImageName();
+                    dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+
+                    // Copy source file to destination
+                    FileOutputStream outputStream = null;
+                    try {
+
+                        dstFile.createNewFile();
+
+                        outputStream = new FileOutputStream(dstFile);
+
+                        byte[] buffer = new byte[1024 * 10];
+                        int len;
+                        while ((len = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, len);
+                        }
+
+                        mShootedPicturePath = dstFile.getAbsolutePath();
+                        displayImagePreview(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
+
+                        // force to stop preview:
+                        // some devices do not stop preview after the picture was taken (ie. G6 edge)
+                        mCamera.stopPreview();
+
+                        Log.d(LOG_TAG, "onPictureTaken processed");
+
+                    } catch (Exception e) {
+                        Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    } finally {
+
+                        // Close resources
+                        try {
+                            if (inputStream != null)
+                                inputStream.close();
+
+                            if (outputStream != null)
+                                outputStream.close();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
+                        }
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## takePicture(): EXCEPTION Msg=" + e.getMessage());
+        }
+    }
+
+    /**
      * Take a picture of the current preview
      */
     private void onClickTakeImage() {
+        Log.d(LOG_TAG, "onClickTakeImage");
+
         if (null != mCamera) {
             try {
                 mCamera.autoFocus(new Camera.AutoFocusCallback() {
                     public void onAutoFocus(boolean success, Camera camera) {
-                        if (success) {
-                            playShutterSound();
-
-                            try {
-                                mCamera.takePicture(null, null, new Camera.PictureCallback() {
-                                    @Override
-                                    public void onPictureTaken(byte[] data, Camera camera) {
-                                        ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-                                        File dstFile = null;
-                                        String fileName = getSavedImageName();
-
-                                        // remove any previously saved image
-                                        if (!TextUtils.isEmpty(fileName)) {
-                                            dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
-                                            if (dstFile.exists()) {
-                                                dstFile.delete();
-                                            }
-                                        }
-
-                                        // get new name
-                                        fileName = buildNewImageName();
-                                        dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
-
-                                        // Copy source file to destination
-                                        FileOutputStream outputStream = null;
-                                        try {
-
-                                            dstFile.createNewFile();
-
-                                            outputStream = new FileOutputStream(dstFile);
-
-                                            byte[] buffer = new byte[1024 * 10];
-                                            int len;
-                                            while ((len = inputStream.read(buffer)) != -1) {
-                                                outputStream.write(buffer, 0, len);
-                                            }
-
-                                            mShootedPicturePath = dstFile.getAbsolutePath();
-                                            displayImagePreview(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
-
-                                            // force to stop preview:
-                                            // some devices do not stop preview after the picture was taken (ie. G6 edge)
-                                            mCamera.stopPreview();
-                                        } catch (Exception e) {
-                                            Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                        } finally {
-
-                                            // Close resources
-                                            try {
-                                                if (inputStream != null)
-                                                    inputStream.close();
-
-                                                if (outputStream != null)
-                                                    outputStream.close();
-                                            } catch (Exception e) {
-                                                Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
-                                            }
-                                        }
-                                    }
-                                });
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "## takePicture(): EXCEPTION Msg=" + e.getMessage());
-                            }
+                        if (!success) {
+                            Log.e(LOG_TAG, "## autoFocus(): fails");
+                        } else {
+                            Log.d(LOG_TAG, "## autoFocus(): succeeds");
                         }
+
+                        playShutterSound();
+
+                        // take a photo event if the autofocus fails
+                        takePhoto();
                     }
                 });
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage());
+
+                // take a photo event if the autofocus fails
+                takePhoto();
             }
         }
     }
