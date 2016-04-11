@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -185,21 +186,31 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                 mSession.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(VectorHomeActivity.this) {
                     @Override
-                    public void onSuccess(String roomId) {
-                        mWaitingView.setVisibility(View.GONE);
-                        
-                        HashMap<String, Object> params = new HashMap<String, Object>();
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                    public void onSuccess(final String roomId) {
+                        mWaitingView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWaitingView.setVisibility(View.GONE);
 
-                        CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                            }
+                        });
                     }
 
                     private void onError(final String message) {
-                        if (null != message) {
-                            Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
-                        }
-                        mWaitingView.setVisibility(View.GONE);
+                        mWaitingView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (null != message) {
+                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                }
+                                mWaitingView.setVisibility(View.GONE);
+                            }
+                        });
                     }
 
                     @Override
