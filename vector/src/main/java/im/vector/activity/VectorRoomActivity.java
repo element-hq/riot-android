@@ -1748,20 +1748,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     private void setTopic(String aTopicValue){
-        // update the topic of the room header
-        updateRoomHeaderTopic();
+        // in search mode, the topic is not displayed
+        if (!TextUtils.isEmpty(mEventId)) {
+            mActionBarCustomTopic.setVisibility(View.GONE);
+        } else {
+            // update the topic of the room header
+            updateRoomHeaderTopic();
 
-        // update the action bar topic anyway
-        mActionBarCustomTopic.setText(aTopicValue);
+            // update the action bar topic anyway
+            mActionBarCustomTopic.setText(aTopicValue);
 
-        // set the visibility of topic on the custom action bar only
-        // if header room view is gone, otherwise skipp it
-        if (View.GONE == mRoomHeaderView.getVisibility()) {
-            // topic is only displayed if its content is not empty
-            if (TextUtils.isEmpty(aTopicValue))
-                mActionBarCustomTopic.setVisibility(View.GONE);
-            else
-                mActionBarCustomTopic.setVisibility(View.VISIBLE);
+            // set the visibility of topic on the custom action bar only
+            // if header room view is gone, otherwise skipp it
+            if (View.GONE == mRoomHeaderView.getVisibility()) {
+                // topic is only displayed if its content is not empty
+                if (TextUtils.isEmpty(aTopicValue)) {
+                    mActionBarCustomTopic.setVisibility(View.GONE);
+                } else {
+                    mActionBarCustomTopic.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -2068,10 +2074,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         headerTextsContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                VectorRoomActivity.this.startActivity(intent);
+                if (TextUtils.isEmpty(mEventId)) {
+                    Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    VectorRoomActivity.this.startActivity(intent);
+                }
             }
         });
 
@@ -2080,11 +2088,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                        intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                        intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        VectorRoomActivity.this.startActivity(intent);
+                    if (TextUtils.isEmpty(mEventId)) {
+                        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+                            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                            VectorRoomActivity.this.startActivity(intent);
+                        }
                     }
 
                     return true;
