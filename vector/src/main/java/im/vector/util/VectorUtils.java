@@ -193,7 +193,7 @@ public class VectorUtils {
                     }
                 }
                 else {
-                    displayName = myUserId;
+                    displayName = context.getString(R.string.room_displayname_no_title);
                 }
             }
         }

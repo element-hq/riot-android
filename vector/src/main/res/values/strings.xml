@@ -457,6 +457,7 @@
     <string name="room_displayname_room_invite">Room Invite</string>
     <string name="room_displayname_two_members">%1$s and %2$s</string>
     <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
+    <string name="room_displayname_no_title">Empty room</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>
