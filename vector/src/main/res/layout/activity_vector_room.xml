@@ -56,17 +56,17 @@
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/ic_material_call"
-                    android:id="@+id/button_call"
-                    android:contentDescription="@string/more"/>
+                    android:background="@drawable/ic_material_send_green"
+                    android:id="@+id/button_send"
+                    android:contentDescription="@string/send"/>
 
                 <ImageButton
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/ic_material_send_green"
-                    android:id="@+id/button_send"
-                    android:contentDescription="@string/send"/>
+                    android:background="@drawable/ic_material_call"
+                    android:id="@+id/button_call"
+                    android:contentDescription="@string/more"/>
 
             </LinearLayout>
 
