@@ -53,7 +53,6 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
-import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -673,42 +672,50 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-            String userId = data.getStringExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_USER_ID);
+            final String userId = data.getStringExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_USER_ID);
 
             if (null != userId) {
-                mProgressView.setVisibility(View.VISIBLE);
-                SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>(getActivity()) {
+                // the members list is first refreshed
+                mParticipantsListView.postDelayed(new Runnable() {
                     @Override
-                    public void onSuccess(Void info) {
-                        mProgressView.setVisibility(View.GONE);
-                    }
+                    public void run() {
+                        // and the new member is added.
+                        mProgressView.setVisibility(View.VISIBLE);
 
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        mProgressView.setVisibility(View.GONE);
-                    }
+                        SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>(getActivity()) {
+                            @Override
+                            public void onSuccess(Void info) {
+                                mProgressView.setVisibility(View.GONE);
+                            }
 
-                    @Override
-                    public void onMatrixError(final MatrixError e) {
-                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        mProgressView.setVisibility(View.GONE);
-                    }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                mProgressView.setVisibility(View.GONE);
+                            }
 
-                    @Override
-                    public void onUnexpectedError(final Exception e) {
-                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        mProgressView.setVisibility(View.GONE);
-                    }
-                };
+                            @Override
+                            public void onMatrixError(final MatrixError e) {
+                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                mProgressView.setVisibility(View.GONE);
+                            }
 
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                    mRoom.inviteByEmail(userId, callback);
-                } else {
-                    ArrayList<String> userIDs = new ArrayList<String>();
-                    userIDs.add(userId);
-                    mRoom.invite(userIDs, callback);
-                }
+                            @Override
+                            public void onUnexpectedError(final Exception e) {
+                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                mProgressView.setVisibility(View.GONE);
+                            }
+                        };
+
+                        if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
+                            mRoom.inviteByEmail(userId, callback);
+                        } else {
+                            ArrayList<String> userIDs = new ArrayList<String>();
+                            userIDs.add(userId);
+                            mRoom.invite(userIDs, callback);
+                        }
+                    }
+                }, 100);
             }
         }
     }
