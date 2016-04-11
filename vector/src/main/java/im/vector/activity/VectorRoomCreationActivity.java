@@ -43,6 +43,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
@@ -242,19 +243,27 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     addRoomItems();
                 }
 
+                private void onError(final String message) {
+                    if (null != message) {
+                        Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+
+                    progressView.setVisibility(View.GONE);
+                }
+
                 @Override
                 public void onNetworkError(Exception e) {
-                    progressView.setVisibility(View.GONE);
+                    onError(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(final MatrixError e) {
-                    progressView.setVisibility(View.GONE);
+                    onError(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(final Exception e) {
-                    progressView.setVisibility(View.GONE);
+                    onError(e.getLocalizedMessage());
                 }
             });
 
@@ -463,10 +472,14 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         if (null != mServerAvatarUri) {
             mRoom.updateAvatarUrl(mServerAvatarUri, new ApiCallback<Void>() {
 
-                private void onDone() {
+                private void onDone(final String message) {
                     VectorRoomCreationActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if (null != message) {
+                                Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+
                             mServerAvatarUri = null;
                             addRoomItems();
                         }
@@ -475,22 +488,22 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
                 @Override
                 public void onSuccess(Void info) {
-                    onDone();
+                    onDone(null);
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    onDone();
+                    onDone(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    onDone();
+                    onDone(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    onDone();
+                    onDone(e.getLocalizedMessage());
                 }
             });
 

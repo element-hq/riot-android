@@ -489,24 +489,24 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     hideWaitingView();
                 }
 
-                private void onError() {
-                    // TODO display a message ?
+                private void onError(String message) {
                     hideWaitingView();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    onError();
+                    onError(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    onError();
+                    onError(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    onError();
+                    onError(e.getLocalizedMessage());
                 }
             });
         }
@@ -534,7 +534,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 @Override
                 public void onBingRuleUpdateFailure(String errorMessage) {
-                    // TODO display a message ?
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                     hideWaitingView();
                 }
             });

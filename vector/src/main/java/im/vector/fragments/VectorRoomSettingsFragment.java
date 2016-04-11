@@ -445,18 +445,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 @Override
                 public void onNetworkError(Exception e) {
                     Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - NetworkError");
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView(DO_NOT_UPDATE_UI);
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
                     Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - MatrixError");
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView(DO_NOT_UPDATE_UI);
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
                     Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - UnexpectedError");
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView(DO_NOT_UPDATE_UI);
                 }
             });
@@ -488,18 +491,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 @Override
                 public void onNetworkError(Exception e) {
                     Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - NetworkError");
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView(DO_NOT_UPDATE_UI);
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
                     Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - MatrixError");
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView(DO_NOT_UPDATE_UI);
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
                     Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - UnexpectedError");
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView(DO_NOT_UPDATE_UI);
                 }
             });
@@ -582,18 +588,21 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                             @Override
                                             public void onNetworkError(Exception e) {
                                                 Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - NetworkError");
+                                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                                 hideLoadingView(DO_NOT_UPDATE_UI);
                                             }
 
                                             @Override
                                             public void onMatrixError(MatrixError e) {
                                                 Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - MatrixError");
+                                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                                 hideLoadingView(DO_NOT_UPDATE_UI);
                                             }
 
                                             @Override
                                             public void onUnexpectedError(Exception e) {
                                                 Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - UnexpectedError");
+                                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                                 hideLoadingView(DO_NOT_UPDATE_UI);
                                             }
                                         });

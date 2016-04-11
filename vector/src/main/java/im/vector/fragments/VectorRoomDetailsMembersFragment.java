@@ -685,16 +685,19 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
                     @Override
                     public void onNetworkError(Exception e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         mProgressView.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onMatrixError(final MatrixError e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         mProgressView.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onUnexpectedError(final Exception e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         mProgressView.setVisibility(View.GONE);
                     }
                 };

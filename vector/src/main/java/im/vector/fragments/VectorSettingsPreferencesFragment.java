@@ -537,16 +537,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 @Override
                 public void onNetworkError(Exception e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView();
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView();
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView();
                 }
             });
@@ -602,16 +605,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                                         @Override
                                         public void onNetworkError(Exception e) {
+                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                             hideLoadingView(false);
                                         }
 
                                         @Override
                                         public void onMatrixError(MatrixError e) {
+                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                             hideLoadingView(false);
                                         }
 
                                         @Override
                                         public void onUnexpectedError(Exception e) {
+                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                             hideLoadingView(false);
                                         }
                                     });
