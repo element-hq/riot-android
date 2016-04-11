@@ -172,6 +172,20 @@ public class SplashActivity extends MXCActionBarActivity {
                 public void onPusherRegistered() {
                     Log.d(LOG_TAG, "The GCM registration is done");
 
+                    // vector always uses GCM.
+                    // there is no way to enable / disable it in the application settings
+
+                    if (!Matrix.getInstance(SplashActivity.this).getSharedGcmRegistrationManager().useGCM()) {
+                        Matrix.getInstance(SplashActivity.this).getSharedGcmRegistrationManager().setUseGCM(true);
+
+                        SplashActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CommonActivityUtils.onGcmUpdate(SplashActivity.this);
+                            }
+                        });
+                    }
+
                     mPusherRegistrationComplete = true;
                     finishIfReady();
                 }

@@ -39,6 +39,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
 
 import java.io.IOException;
@@ -192,6 +193,12 @@ public final class GcmRegistrationManager {
                 @Override
                 public void onPusherRegistered() {
                     Log.d(LOG_TAG, "checkPusherRegistration : reregistered");
+                    // vector always uses GCM.
+                    // there is no way to enable / disable it in the application settings
+                    if (!useGCM()) {
+                        setUseGCM(true);
+                        CommonActivityUtils.onGcmUpdate(mContext);
+                    }
                 }
 
                 @Override
@@ -234,22 +241,9 @@ public final class GcmRegistrationManager {
 
                 @Override
                 protected void onPostExecute(String pushKey) {
-                    // succeed to retrieve the push key
-                    if (pushKey != null) {
-                        mRegistrationState = RegistrationState.GCM_REGISTRED;
 
-                        setStoredPushKey(pushKey);
-
-                        // register the sessions to the 3rd party server
-                        if (useGCM()) {
-                            registerSessions(appContext, null);
-                        }
-                    } else {
-                        // fail to retrieve the push key
-                        // assume that a full registration is required.
-                        setStoredPushKey(null);
-                        mRegistrationState = RegistrationState.UNREGISTRATED;
-                    }
+                    mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
+                    setStoredPushKey(pushKey);
 
                     // warn the listener
                     if (null != registrationListener) {
@@ -261,6 +255,14 @@ public final class GcmRegistrationManager {
                             }
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "registerPusher : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
+                        }
+                    }
+
+                    if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
+                        // register the sessions to the 3rd party server
+                        // this setting should be updated from the listener
+                        if (useGCM()) {
+                            registerSessions(appContext, null);
                         }
                     }
                 }
@@ -286,15 +288,15 @@ public final class GcmRegistrationManager {
         editor.apply();
     }
 
-    public Boolean isGCMRegistred() {
+    public boolean isGCMRegistred() {
         return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
-    public Boolean is3rdPartyServerRegistred() {
+    public boolean is3rdPartyServerRegistred() {
         return mRegistrationState == RegistrationState.SERVER_REGISTERED;
     }
 
-    public Boolean isRegistrating() {
+    public boolean isRegistrating() {
         return (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_UNREGISTRATING);
     }
 

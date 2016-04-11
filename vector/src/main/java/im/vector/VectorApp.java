@@ -169,21 +169,18 @@ public class VectorApp extends Application {
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
-            // resume the events thread if the client uses GCM
-            if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
 
-                // the event stream service has been killed
-                if (null == EventStreamService.getInstance()) {
-                    CommonActivityUtils.startEventStreamService(VectorApp.this);
-                } else {
-                    CommonActivityUtils.resumeEventStream(VectorApp.this);
+            // the event stream service has been killed
+            if (null == EventStreamService.getInstance()) {
+                CommonActivityUtils.startEventStreamService(VectorApp.this);
+            } else {
+                CommonActivityUtils.resumeEventStream(VectorApp.this);
 
-                    // try to perform a GCM registration if it failed
-                    // or if the GCM server generated a new push key
-                    GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
-                    if (null != gcmRegistrationManager) {
-                        gcmRegistrationManager.checkPusherRegistration(this);
-                    }
+                // try to perform a GCM registration if it failed
+                // or if the GCM server generated a new push key
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+                if (null != gcmRegistrationManager) {
+                    gcmRegistrationManager.checkPusherRegistration(this);
                 }
             }
 
