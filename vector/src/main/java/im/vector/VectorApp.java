@@ -55,9 +55,9 @@ public class VectorApp extends Application {
     private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
 
     // google analytics
-    private static GoogleAnalytics sGoogleAnalytics;
     private int VERSION_BUILD = -1;
-    private String VERSION_STRING = "";
+    private String VECTOR_VERSION_STRING = "";
+    private String SDK_VERSION_STRING = "";
 
     private Boolean mIsCallingInBackground = false;
 
@@ -84,7 +84,8 @@ public class VectorApp extends Application {
         }
         catch (PackageManager.NameNotFoundException e) {}
 
-        VERSION_STRING = Matrix.getInstance(this).getVersion(false);
+        VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true);
+        SDK_VERSION_STRING = Matrix.getInstance(this).getDefaultSession().getVersion(true);
 
         LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
         LogUtilities.storeLogcat();
@@ -239,8 +240,10 @@ public class VectorApp extends Application {
                 @Override
                 public String getDescription(String threadName, Throwable throwable) {
                     StringBuilder b = new StringBuilder();
-                    b.append("Build : " + VERSION_BUILD + "\n");
-                    b.append("Version : " + VERSION_STRING + "\n");
+
+                    b.append("Vector Build : " + VERSION_BUILD + "\n");
+                    b.append("Vector Version : " + VECTOR_VERSION_STRING + "\n");
+                    b.append("SDK Version : " + SDK_VERSION_STRING + "\n");
                     b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
                     b.append("Thread: ");
                     b.append(threadName);
