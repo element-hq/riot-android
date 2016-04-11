@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -40,8 +41,11 @@ import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -54,6 +58,7 @@ import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -176,9 +181,42 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mRoomCreationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // pop to the home activity
-                Intent intent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-                VectorHomeActivity.this.startActivity(intent);
+                mWaitingView.setVisibility(View.VISIBLE);
+
+                mSession.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                    @Override
+                    public void onSuccess(String roomId) {
+                        mWaitingView.setVisibility(View.GONE);
+                        
+                        HashMap<String, Object> params = new HashMap<String, Object>();
+                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                        CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                    }
+
+                    private void onError(final String message) {
+                        if (null != message) {
+                            Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                        }
+                        mWaitingView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(final MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(final Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
             }
         });
 
