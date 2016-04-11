@@ -287,7 +287,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mLiveEventListener);
             mSession.mCallsManager.removeListener(mCallsManagerListener);
         }
@@ -296,7 +296,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     protected void onPause() {
         super.onPause();
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
 
@@ -331,7 +331,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         };
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().addListener(mEventsListener);
         }
 

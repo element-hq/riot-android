@@ -250,7 +250,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     public void onPause() {
         super.onPause();
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
 
             Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
@@ -261,7 +261,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().addListener(mEventsListener);
 
             Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);

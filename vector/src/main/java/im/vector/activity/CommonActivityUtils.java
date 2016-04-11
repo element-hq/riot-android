@@ -109,7 +109,7 @@ public class CommonActivityUtils {
     public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
-        if (session.isActive()) {
+        if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
             ArrayList<String> matrixIds = new ArrayList<String>();
@@ -326,7 +326,7 @@ public class CommonActivityUtils {
         final MXSession aSession = (session == null) ? Matrix.getMXSession(fromActivity, (String)params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
-        if ((null == aSession) || !aSession.isActive()) {
+        if ((null == aSession) || !aSession.isAlive()) {
             return;
         }
 
@@ -411,7 +411,7 @@ public class CommonActivityUtils {
         }
 
         // sanity check
-        if ((null == session) || !session.isActive()) {
+        if ((null == session) || !session.isAlive()) {
             return;
         }
 
@@ -540,7 +540,7 @@ public class CommonActivityUtils {
      */
     public static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
-        if ((null == session) || !session.isActive()) {
+        if ((null == session) || !session.isAlive()) {
             return;
         }
 

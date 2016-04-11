@@ -602,7 +602,7 @@ public final class GcmRegistrationManager {
                             }
 
                             private void onError(final String message) {
-                                if (session.isActive()) {
+                                if (session.isAlive()) {
                                     mUIHandler.post(new Runnable() {
                                         @Override
                                         public void run() {

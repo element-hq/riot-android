@@ -271,7 +271,7 @@ public class EventStreamService extends Service {
             // should never happen.
             // But it could be triggered because of multi accounts management.
             // The dedicated account is removing but some pushes are still received.
-            if ((null == session) || !session.isActive()) {
+            if ((null == session) || !session.isAlive()) {
                 return;
             }
 
@@ -572,7 +572,7 @@ public class EventStreamService extends Service {
 
         if (mSessions != null) {
             for(MXSession session : mSessions) {
-                if (session.isActive()) {
+                if (session.isAlive()) {
                     session.stopEventStream();
                     session.getDataHandler().removeListener(mListener);
                 }

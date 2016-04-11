@@ -409,7 +409,7 @@ public class VectorUtils {
      */
     public static void loadUserAvatar(final Context context,final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
         // sanity check
-        if ((null == session) || (null == imageView) || !session.isActive()) {
+        if ((null == session) || (null == imageView) || !session.isAlive()) {
             return;
         }
 

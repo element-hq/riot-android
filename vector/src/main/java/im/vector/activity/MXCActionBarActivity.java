@@ -66,7 +66,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
 
         if (null != sessions) {
             for (MXSession session : sessions) {
-                if (session.isActive()) {
+                if (session.isAlive()) {
                     hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
                 }
             }
