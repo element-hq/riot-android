@@ -42,6 +42,8 @@
             android:hint="@string/search_members_hint"
             android:textColorHint="@color/vector_search_hint_color"
             android:theme="@style/SearchesAppTheme"
+            android:background="@android:color/transparent"
+            android:textCursorDrawable="@drawable/searches_cursor_background"
             android:singleLine="true"/>
 
 

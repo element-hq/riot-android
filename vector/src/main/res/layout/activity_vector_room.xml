@@ -95,6 +95,8 @@
                 android:id="@+id/editText_messageBox"
                 android:layout_centerVertical="true"
                 android:theme="@style/SearchesAppTheme"
+                android:background="@android:color/transparent"
+                android:textCursorDrawable="@drawable/searches_cursor_background"
                 android:textColorHint="@color/vector_0_54_black_color"/>
         </RelativeLayout>
 
