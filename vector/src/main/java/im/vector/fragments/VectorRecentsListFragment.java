@@ -240,7 +240,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                         if (off > mPrevOffset) {
                             onScrollDown();
-                        } else {
+                        } else if (off < mPrevOffset){
                             onScrollUp();
                         }
 
