@@ -496,7 +496,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     if (RoomMember.MEMBERSHIP_INVITE.equals(member.membership)) {
                         // invited members
                         invitedMembers.add(participantItem);
-                    } else if (powerLevels.getUserPowerLevel(member.getUserId()) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+                    } else if ((null != powerLevels) && (powerLevels.getUserPowerLevel(member.getUserId()) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN)) {
                         // administrator members
                         adminMembers.add(participantItem);
                     } else {
