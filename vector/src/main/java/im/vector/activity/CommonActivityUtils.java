@@ -75,6 +75,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
@@ -363,6 +364,20 @@ public class CommonActivityUtils {
                                                        intent.putExtra(key, (String) value);
                                                    } else {
                                                        intent.putExtra(key, (Parcelable) value);
+                                                   }
+                                               }
+
+                                               // try to find a displayed room name
+                                               if (null == params.get(VectorRoomActivity.EXTRA_DEFAULT_NAME)) {
+
+                                                   Room room = session.getDataHandler().getRoom((String)params.get(VectorRoomActivity.EXTRA_ROOM_ID));
+
+                                                   if ((null != room) && room.isInvited()) {
+                                                       String displayname = VectorUtils.getRoomDisplayname(fromActivity, session, room);
+
+                                                       if (null != displayname) {
+                                                           intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayname);
+                                                       }
                                                    }
                                                }
 

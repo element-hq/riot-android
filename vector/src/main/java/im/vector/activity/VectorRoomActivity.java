@@ -875,11 +875,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
             }
         } else if (id == R.id.ic_action_room_settings) {
-            // pop to the home activity
-            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            VectorRoomActivity.this.startActivity(intent);
+            launchRoomDetails();
         } else if (id == R.id.ic_action_room_resend_unsent) {
             mVectorMessageListFragment.resendUnsentMessages();
             refreshNotificationsArea();
@@ -889,6 +885,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void launchRoomDetails() {
+        if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+            // pop to the home activity
+            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            VectorRoomActivity.this.startActivity(intent);
+        }
     }
 
     //================================================================================
@@ -2075,10 +2081,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(mEventId)) {
-                    Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    VectorRoomActivity.this.startActivity(intent);
+                    launchRoomDetails();
                 }
             }
         });
@@ -2090,13 +2093,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     if (TextUtils.isEmpty(mEventId)) {
                         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                            VectorRoomActivity.this.startActivity(intent);
+                            launchRoomDetails();
                         }
                     }
-
                     return true;
                 }
             });
@@ -2110,7 +2109,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void setTitle(){
         if((null != mSession) && (null != mRoom)) {
-            String titleToApply = mRoom.isReady() ? VectorUtils.getRoomDisplayname(this, mSession, mRoom) : mDefaultRoomName;
+            String titleToApply = null;
+
+            if (mRoom.isReady()) {
+                titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
+            }
+
+            if (TextUtils.isEmpty(titleToApply)) {
+                titleToApply = mDefaultRoomName;
+            }
 
             // in context mode, add search to the title.
             if (!TextUtils.isEmpty(mEventId)) {
@@ -2123,9 +2130,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             } else {
                 setTitle(titleToApply);
             }
+
             // set title in the room header (no matter if not displayed)
             if (null != mActionBarHeaderRoomName) {
                 mActionBarHeaderRoomName.setText(titleToApply);
+            }
+        } else if (null != mDefaultRoomName) {
+            // set action bar title
+            if (null != mActionBarCustomTitle) {
+                mActionBarCustomTitle.setText(mDefaultRoomName);
+            } else {
+                setTitle(mDefaultRoomName);
             }
         }
     }
