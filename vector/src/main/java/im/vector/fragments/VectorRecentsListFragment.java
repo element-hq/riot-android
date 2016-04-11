@@ -182,23 +182,69 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         });
 
         mRecentsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            IVectorRecentsScrollEventListener mScrollEventListener = null;
+
+            private IVectorRecentsScrollEventListener getListener() {
+                if (null == mScrollEventListener) {
+                    if (getActivity() instanceof IVectorRecentsScrollEventListener) {
+                        mScrollEventListener = (IVectorRecentsScrollEventListener) getActivity();
+                    }
+                }
+
+                return mScrollEventListener;
+            }
+
+            private void onScrollUp() {
+                if (null != getListener()) {
+                    mScrollEventListener.onRecentsListScrollUp();
+                }
+            }
+
+            private void onScrollDown() {
+                if (null != getListener()) {
+                    mScrollEventListener.onRecentsListScrollDown();
+                }
+            }
+
+            private void onFitScreen() {
+                if (null != getListener()) {
+                    mScrollEventListener.onRecentsListFitsScreen();
+                }
+            }
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
 
+            // latest cell offset Y
+            private int mPrevOffset = 0;
+
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (getActivity() instanceof IVectorRecentsScrollEventListener) {
-                    IVectorRecentsScrollEventListener listener = (IVectorRecentsScrollEventListener) getActivity();
+                if ((0 == firstVisibleItem) && ((totalItemCount+1) < visibleItemCount)) {
+                    onFitScreen();
+                } else if (firstVisibleItem < mFirstVisibleIndex) {
+                    mFirstVisibleIndex = firstVisibleItem;
+                    mPrevOffset = 0;
+                    onScrollUp();
+                } else if (firstVisibleItem > mFirstVisibleIndex) {
+                    mFirstVisibleIndex = firstVisibleItem;
+                    mPrevOffset = 0;
+                    onScrollDown();
+                } else {
+                    // detect the cell has moved
+                    View visibleCell = mRecentsListView.getChildAt(firstVisibleItem);
 
-                    if ((0 == firstVisibleItem) && (totalItemCount <= visibleItemCount)) {
-                        listener.onRecentsListFitsScreen();
-                    } else if (firstVisibleItem < mFirstVisibleIndex) {
-                        mFirstVisibleIndex = firstVisibleItem;
-                        listener.onRecentsListScrollUp();
-                    } else if (firstVisibleItem > mFirstVisibleIndex) {
-                        mFirstVisibleIndex = firstVisibleItem;
-                        listener.onRecentsListScrollDown();
+                    if (null != visibleCell) {
+                        int off = visibleCell.getTop();
+
+                        if (off > mPrevOffset) {
+                            onScrollDown();
+                        } else {
+                            onScrollUp();
+                        }
+
+                        mPrevOffset = off;
                     }
                 }
             }
