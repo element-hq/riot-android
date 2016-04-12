@@ -1,7 +1,7 @@
-Console
+Vector
 =======
 
-Console is an Android Matrix client. 
+Vector is an Android Matrix client.
 
 It uses https://github.com/matrix-org/matrix-android-sdk
 
@@ -28,8 +28,8 @@ FAQ
 
 1. What is the minimum android version supported?
 
-    > the mininum SDK is 11 (android 3.0)
+    > the mininum SDK is 16 (android 4.1)
 
 2. Where the apk is generated?
 
-	> console/build/outputs/apk
+	> vector/build/outputs/apk
