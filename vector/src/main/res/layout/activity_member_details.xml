@@ -28,6 +28,17 @@
               android:layout_height="84dp"/>
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/member_avatar_badge"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="-7dp"
+            android:layout_marginTop="-0dp"
+            android:src="@drawable/admin_icon"
+            android:layout_alignRight="@id/member_avatar_container"
+            android:layout_alignTop="@id/member_avatar_container"
+            android:visibility="gone"/>
+
         <!-- the member name -->
         <TextView
           android:id="@+id/member_details_name"

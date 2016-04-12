@@ -49,6 +49,17 @@
             android:layout_marginLeft="16dp"
             android:layout_centerVertical="true" />
 
+        <ImageView
+            android:id="@+id/filtered_list_avatar_badge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginRight="-7dp"
+            android:src="@drawable/admin_icon"
+            android:layout_alignRight="@id/filtered_list_avatar"
+            android:layout_alignTop="@id/filtered_list_avatar"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/filtered_list_name"
             android:layout_toRightOf="@id/filtered_list_avatar"

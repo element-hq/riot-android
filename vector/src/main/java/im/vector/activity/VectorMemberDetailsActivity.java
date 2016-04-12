@@ -86,11 +86,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     // UI widgets
     private ImageView mMemberAvatarImageView;
+    private ImageView mMemberAvatarBadgeImageView;
     private TextView mMemberNameTextView;
     private TextView mPresenceTextView;
     private ListView mActionItemsListView;
     private View mProgressBarView;
-
 
     // MX event listener
     private final MXEventListener mLiveEventsListener = new MXEventListener() {
@@ -338,10 +338,20 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             powerLevels = mRoom.getLiveState().getPowerLevels();
         }
 
+        mMemberAvatarBadgeImageView.setVisibility(View.GONE);
+
         if (null != powerLevels) {
             // get power levels from myself and from the member of the room
             memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
             selfPowerLevel = powerLevels.getUserPowerLevel(selfUserId);
+
+            if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+            } else if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
+                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+            }
         }
 
         // Check user's power level before allowing an action (kick, ban, ...)
@@ -551,6 +561,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // setup UI view and bind the widgets
             setContentView(R.layout.activity_member_details);
             mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
+            mMemberAvatarBadgeImageView = (ImageView) findViewById(R.id.member_avatar_badge);
+
             mMemberNameTextView = (TextView) findViewById(R.id.member_details_name);
             mPresenceTextView = (TextView) findViewById(R.id.member_details_presence);
             mActionItemsListView = (ListView) findViewById(R.id.member_details_actions_list_view);
@@ -659,7 +671,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      */
     private void updateUi() {
         if (null != mMemberNameTextView) {
-
             if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
                 mMemberNameTextView.setText(mRoomMember.displayname);
             } else {

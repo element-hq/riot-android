@@ -704,7 +704,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int aGroupPosition, final int aChildPosition, boolean isLastChild, View aConvertView, ViewGroup aParentView) {
-        boolean isActionsMenuHidden = true;
+        boolean isActionsMenuHidden;
         final ParticipantAdapterItem participant;
         boolean isSearchMode = isSearchModeEnabled();
         final boolean isLoggedUserPosition = ((0==aChildPosition) && (mGroupIndexPresentMembers==aGroupPosition));
@@ -720,6 +720,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
 
         final ImageView memberAvatarImageView = (ImageView) aConvertView.findViewById(R.id.filtered_list_avatar);
+        final ImageView memberAvatarBadgeImageView  = (ImageView) aConvertView.findViewById(R.id.filtered_list_avatar_badge);
         final TextView memberNameTextView = (TextView) aConvertView.findViewById(R.id.filtered_list_name);
         final TextView memberStatusTextView = (TextView) aConvertView.findViewById(R.id.filtered_list_status);
         final View hiddenListActionsView = aConvertView.findViewById(R.id.filtered_list_actions);
@@ -760,12 +761,20 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         // Specific member name: member is "You" - at 0 position we must find the logged user, we then do not display its name, but R.string.you
         String memberName = (isLoggedUserPosition && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
-        // Specific member name: member is "admin" - "admin" text is added next to the name
+        // 2b admin badge
+        memberAvatarBadgeImageView.setVisibility(View.GONE);
+
         PowerLevels powerLevels = null;
         if (null != mRoom) {
             if (!isSearchMode && (null != (powerLevels = mRoom.getLiveState().getPowerLevels()))) {
+
                 if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+                    memberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    memberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
                     memberName = mContext.getString(R.string.room_participants_admin_name, memberName);
+                } else if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
+                    memberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    memberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
                 }
             }
         }
