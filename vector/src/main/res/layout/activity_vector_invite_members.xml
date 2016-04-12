@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/search_background_imageview"
+        android:background="#FFFFFFFF"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:src="@drawable/vector_search_bg"/>
+
+    <TextView
+        android:id="@+id/search_no_result_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_no_results"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:visibility="gone"/>
+
+    <ListView
+        android:id="@+id/room_details_members_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
+        android:divider="#00000000"
+        android:dividerHeight="1px"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/vector_dc_gray"/>
+
+    <RelativeLayout
+        android:id="@+id/search_in_progress_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/chat_encoding_background"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true"/>
+    </RelativeLayout>
+
+</FrameLayout>

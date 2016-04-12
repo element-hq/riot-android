@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/internal_container"
+        android:layout_width="match_parent"
+        android:layout_height="74dp">
+
+        <!-- Vertical bar with colour changing to indicate unread messages -->
+        <View
+            android:id="@+id/bing_indicator_unread_message"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="9dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp"
+            android:layout_alignParentLeft="true" />
+
+        <!-- Avatar -->
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/room_avatar_image_view"
+            android:layout_width="@dimen/chat_avatar_size"
+            android:layout_height="@dimen/chat_avatar_size"
+            android:layout_toRightOf="@id/bing_indicator_unread_message"
+            android:layout_centerVertical="true" />
+
+        <RelativeLayout
+            android:id="@+id/roomSummaryAdapter_show_more_layout"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_material_chevron_right_black"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/room_avatar_image_view"
+            android:layout_toLeftOf="@id/roomSummaryAdapter_show_more_layout">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
+
+                <!-- Room name - note margins values in each side (right/left) -->
+                <TextView
+                    android:id="@+id/roomSummaryAdapter_roomName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/roomSummaryAdapter_ts"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-regular"
+                    android:textColor="@color/vector_text_black_color"
+                    android:layout_alignParentBottom="true"
+                    android:text="Room Name" />
+
+                <!-- Message timestamp -->
+                <TextView
+                    android:id="@+id/roomSummaryAdapter_ts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="Jan 1 00:00"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/vector_0_54_black_color"
+                    android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="25dp"/>
+
+                <ImageView
+                    android:id="@+id/roomSummaryAdapter_action_image"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+                    android:src="@drawable/vector_actions_9b"/>
+
+                <RelativeLayout
+                    android:id="@+id/roomSummaryAdapter_action"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent">
+
+                    <View
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:id="@+id/roomSummaryAdapter_action_anchor"
+                        android:layout_width="1dp"
+                        android:layout_height="1dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_weight="0.5"
+                android:layout_height="0dp">
+                <!-- Last message of the room -->
+                <TextView
+                    android:id="@+id/roomSummaryAdapter_roomMessage"
+                    android:singleLine="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/vector_0_54_black_color"
+                    android:text="last room message" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/roomSummaryAdapter_action_click_area"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <!-- invitation section -->
+    <RelativeLayout
+        android:id="@+id/recents_groups_invitation_group"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/recents_invite_sep1"
+                android:background="@android:color/white"
+                android:layout_weight="0.20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/recents_invite_join_button"
+                android:layout_weight="0.26"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="14sp"
+                android:background="@color/vector_green_color"
+                android:textColor="@android:color/white"
+                android:text="@string/join"/>
+
+            <View
+                android:id="@+id/recents_invite_sep2"
+                android:background="@android:color/white"
+                android:layout_weight="0.04"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/recents_invite_reject_button"
+                android:layout_weight="0.26"
+                android:layout_width="0dp"
+                android:textColor="@color/vector_green_color"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="14sp"
+                android:layout_height="match_parent"
+                android:text="@string/reject"/>
+
+            <View
+                android:id="@+id/recents_invite_sep3"
+                android:background="@android:color/white"
+                android:layout_weight="0.20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- message line separator -->
+    <View
+        android:id="@+id/recents_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="73dp"
+        android:background="@color/vector_line_separator_gray_color"/>
+
+    <View
+        android:id="@+id/recents_groups_separator_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/vector_line_separator_gray_color"/>
+
+</LinearLayout>

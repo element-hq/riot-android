@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/account_group">
+        <item
+            android:id="@+id/sliding_menu_messages"
+            android:icon="@drawable/logo_transparent"
+            android:title="@string/room_sliding_menu_messages"/>
+
+        <item
+            android:id="@+id/sliding_menu_settings"
+            android:icon="@drawable/icons_settings"
+            android:title="@string/room_sliding_menu_settings"/>
+
+        <item
+            android:id="@+id/sliding_menu_send_bug_report"
+            android:icon="@drawable/ic_material_bug_report"
+            android:title="@string/send_bug_report"/>
+
+        <item
+            android:id="@+id/sliding_menu_logout"
+            android:icon="@drawable/ic_material_exit_to_app"
+            android:title="@string/action_logout"/>
+    </group>
+
+    <group android:id="@+id/app_group">
+        <item
+            android:id="@+id/sliding_menu_version"
+            android:title="@string/room_sliding_menu_version"/>
+
+        <item
+            android:id="@+id/sliding_menu_terms"
+            android:title="@string/room_sliding_menu_term_and_conditions"/>
+
+        <item
+            android:id="@+id/sliding_menu_privacy_policy"
+            android:title="@string/room_sliding_privacy_policy"/>
+    </group>
+
+</menu>

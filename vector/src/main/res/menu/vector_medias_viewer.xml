@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity">
+
+    <item android:id="@+id/ic_action_share"
+        android:title="Share"
+        android:icon="@drawable/ic_share_white"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/ic_action_download"
+        android:title="Download"
+        android:icon="@drawable/ic_file_download_white"
+        app:showAsAction="always" />
+</menu>

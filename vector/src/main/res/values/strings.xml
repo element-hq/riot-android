@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="resouces_language">en</string>
+    <string name="resouces_country">UK</string>
+
+    <!-- titles -->
+    <string name="app_name">Vector</string>
+    <string name="title_activity_home">Messages</string>
+    <string name="title_activity_room">Room</string>
+    <string name="title_activity_public_rooms">Public Rooms</string>
+    <string name="title_activity_room_info">Room info</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_notification_settings">Notification Settings</string>
+    <string name="title_activity_member_details">Member Details</string>
+    <string name="title_activity_invite_user">Invite Users</string>
+    <string name="title_activity_medias_picker">Select Medias</string>
+
+    <!-- button names -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="stay">Stay</string>
+    <string name="leave">Leave</string>
+    <string name="send">Send</string>
+    <string name="copy">Copy</string>
+    <string name="resend">Resend</string>
+    <string name="redact">Redact</string>
+    <string name="share">Share</string>
+    <string name="paste_username">Paste username</string>
+    <string name="delete_message">Delete message</string>
+    <string name="view_profile">View profile</string>
+    <string name="direct_message">Direct message</string>
+    <string name="forward">Forward</string>
+    <string name="message_details">Message details</string>
+    <string name="view">View</string>
+    <string name="set_power_level">Power level</string>
+    <string name="chat">Chat</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="more">More</string>
+    <string name="chat_with">Chat with </string>
+    <string name="delete">Delete</string>
+
+    <!-- actions -->
+    <string name="action_settings">Settings</string>
+    <string name="action_members">Members list</string>
+    <string name="action_public_rooms">Public Rooms</string>
+    <string name="action_my_rooms">My Rooms</string>
+    <string name="action_add_account">Add Account</string>
+    <string name="action_remove_account">Remove Account</string>
+    <string name="action_leave">Leave Room</string>
+    <string name="action_delete">Delete Room</string>
+    <string name="action_invite">Invite</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_enable_room_notification">Enable room notifications</string>
+    <string name="action_disable_room_notification">Disable room notifications</string>
+    <string name="send_bug_report">Send Bug Report</string>
+    <string name="action_create_room">Create...</string>
+    <string name="action_room_info">Room info</string>
+    <string name="action_voice_call">Voice Call</string>
+    <string name="action_video_call">Video Call</string>
+    <string name="action_search_room">Search room</string>
+    <string name="action_search_contact">Search contact</string>
+    <string name="action_mark_all_as_read">Mark all as read</string>
+    <string name="action_quick_reply">Quick reply</string>
+    <string name="action_open">Open</string>
+    <string name="action_close">Close</string>
+    <string name="action_invite_by_name">Invite from identifier</string>
+    <string name="action_invite_by_list">Invite from other rooms</string>
+    <string name="action_home">Home</string>
+    <string name="action_drawer">Extras</string>
+    <string name="action_resume_call">Resume call</string>
+    <string name="about">About</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <string name="send_files_in">Send into</string>
+    <string name="save_files_in">Save into</string>
+    <string name="file_is_saved">%1$s is saved.</string>
+    <string name="read_receipt">Read</string>
+
+    <string name="downloads">Downloads</string>
+    <string name="gallery">Gallery</string>
+    <string name="sd_scard">SD card</string>
+    <string name="other">Other</string>
+
+    <string name="my_rooms">My rooms</string>
+    <string name="create_room">Create Room</string>
+    <string name="join_room">Join Room</string>
+    <string name="create">Create:</string>
+    <string name="sign_in">Sign in</string>
+    <string name="username">Username</string>
+    <string name="create_account">Register</string>
+    <string name="matrix_login">Matrix Login</string>
+    <string name="login">Log in</string>
+    <string name="hs_url">Home Server URL</string>
+    <string name="identity_url">Identity Server URL</string>
+    <string name="user">user</string>
+    <string name="users">users</string>
+    <string name="search">Search</string>
+
+    <string name="create_room_set_alias">Set room alias</string>
+    <string name="create_room_alias_hint">room-alias</string>
+    <string name="create_room_set_name">Set room name</string>
+    <string name="create_room_name_hint">My room</string>
+    <string name="join_room_title">Join Room</string>
+    <string name="join_room_hint">(e.g. #foo:example.org)</string>
+
+    <string name="membership_invite">Invited</string>
+    <string name="membership_join">Joined</string>
+    <string name="membership_leave">Left</string>
+    <string name="membership_kick">Kicked</string>
+    <string name="membership_ban">Banned</string>
+    <string name="start_chat">Start chat</string>
+    <string name="start_voice_call">Start Voice Call</string>
+    <string name="start_video_call">Start Video Call</string>
+
+    <plurals name="num_members">
+        <item quantity="one">%1$s user</item>
+        <item quantity="other">%1$s users</item>
+    </plurals>
+
+    <string name="invite">Invite</string>
+    <string name="kick">Kick</string>
+    <string name="ban">Ban</string>
+    <string name="unban">Un-ban</string>
+
+    <string name="message_changes_successful">Changes successfully made</string>
+    <string name="message_unsaved_changes">There are unsaved changes. Leaving will discard them.</string>
+
+    <string name="option_send_files">Send files</string>
+    <string name="option_take_photo">Take photo</string>
+    <string name="option_attach_video">Attach video</string>
+
+    <!-- Authentication -->
+    <string name="auth_login">Log in</string>
+    <string name="auth_register">Register</string>
+    <string name="auth_user_id_placeholder">Email or user name</string>
+    <string name="auth_password_placeholder">Password</string>
+    <string name="auth_user_name_placeholder">Your name</string>
+    <string name="auth_optional_email_placeholder">Email address (optional)</string>
+    <string name="auth_email_placeholder">Email address</string>
+    <string name="auth_repeat_password_placeholder">Repeat password</string>
+    <string name="auth_invalid_login_param">Incorrect username and/or password</string>
+    <string name="auth_invalid_user_name">User names may only contain letters, numbers, dots, hyphens and underscores</string>
+    <string name="auth_invalid_password">Password too short (min 6)</string>
+    <string name="auth_missing_password">Missing password</string>
+    <string name="auth_invalid_email">Invalid email address</string>
+    <string name="auth_email_already_defined">This email address is already defined.</string>
+    <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
+    <string name="auth_missing_email">Missing email address</string>
+    <string name="auth_password_dont_match">Passwords don\'t match</string>
+    <string name="auth_forgot_password">Forgot password?</string>
+    <string name="auth_use_server_options">Use custom server options (advanced)</string>
+    <string name="auth_email_validation_message">Please check your email to continue registration</string>
+    <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
+    <string name="auth_username_in_use">Username in use</string>
+    <string name="auth_home_server">"Home Server:"</string>
+    <string name="auth_identity_server">"Identity Server:</string>
+
+    <!-- Login Screen -->
+    <string name="login_error_already_logged_in">Already logged in</string>
+    <string name="login_error_must_start_http">URL must start with http[s]://</string>
+    <string name="login_error_network_error">Unable to login: Network error</string>
+    <string name="login_error_unable_login">Unable to login</string>
+    <string name="login_error_registration_network_error">Unable to register: Network error</string>
+    <string name="login_error_unable_register">Unable to register</string>
+    <string name="login_error_invalid_credentials">Enter valid credentials</string>
+    <string name="login_error_invalid_home_server">Enter valid URL</string>
+
+    <string name="login_error_no_login_flow">We failed to retrieve authentication information from this Home Server</string>
+    <string name="login_error_do_not_support_login_flows">Currently we do not support any or all login flows defined by this Home Server</string>
+    <string name="login_error_registration_is_not_supported">Registration is not currently supported</string>
+    <string name="login_error_forbidden">Invalid username/password</string>
+    <string name="login_error_unknown_token">The access token specified was not recognised</string>
+    <string name="login_error_bad_json">Malformed JSON</string>
+    <string name="login_error_not_json">Did not contain valid JSON</string>
+    <string name="login_error_limit_exceeded">Too many requests have been sent</string>
+    <string name="login_error_user_in_use">This user name is already used</string>
+    <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
+
+    <!-- members list Screen -->
+    <string name="members_list">Members List</string>
+
+    <!-- read receipts list Screen -->
+    <string name="read_receipts_list">Read Receipts List</string>
+
+    <!-- accounts list Screen -->
+    <string name="choose_account">Choose account</string>
+
+    <!-- image size selection -->
+    <string name="compression_options">Send as </string>
+    <string name="compression_opt_list_original">Original</string>
+    <string name="compression_opt_list_large">Large</string>
+    <string name="compression_opt_list_medium">Medium</string>
+    <string name="compression_opt_list_small">Small</string>
+
+    <!-- invitation members list Screen -->
+    <string name="members_one_to_one">One to one room members</string>
+    <string name="members_small_room_members">Small room members</string>
+    <string name="members_large_room_members">Large room members</string>
+
+    <!-- room creation dialog Screen -->
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+
+    <!-- room creation dialog Screen -->
+    <string name="room_creation_room_name">Name</string>
+    <string name="room_creation_room_name_hint">(e.g lunchGroup)</string>
+    <string name="room_creation_room_alias">Alias</string>
+    <string name="room_creation_room_alias_hint">"Room Alias (optional)</string>
+    <string name="room_creation_participants">With</string>
+    <string name="room_creation_participants_hint">(e.g. @me:hs;...)</string>
+    <string name="room_creation_create_room">Create room</string>
+    <string name="room_creation_public">Public Room</string>
+    <string name="room_creation_private">Private</string>
+
+    <!-- room info dialog Screen -->
+    <string name="room_info_room_name">Room name</string>
+    <string name="room_info_room_name_hint">Enter a room name</string>
+    <string name="room_info_room_topic">Room topic</string>
+    <string name="room_info_room_topic_hint">Enter a room topic</string>
+    <string name="room_info_room_canonical_alias">Canonical alias</string>
+    <string name="room_info_room_canonical_hint">Enter a canonical alias</string>
+    <string name="room_info_room_discard_changes">Discard changes ?</string>
+    <string name="room_info_room_discard">Discard</string>
+
+    <!-- contacts list screen -->
+    <string name="contacts">Contacts</string>
+    <string name="invite_this_user_to_use_matrix">Invite this user to use matrix with</string>
+    <string name="invitation_message">I\'d like to chat with you with Vector. Please, visit the website http://vector.im to have more information.</string>
+
+    <!-- Notification settings screen -->
+    <string name="notification_settings_title">Notification Settings</string>
+    <string name="notification_settings_disable_all">Disable all notifications</string>
+    <string name="notification_settings_enable_notifications">Enable notifications</string>
+    <string name="notification_settings_enable_notifications_warning">All notifications are currently disabled for all devices.</string>
+    <string name="notification_settings_global_notification_settings">Global Notification Settings</string>
+    <string name="notification_settings_global_info">Notification settings are saved to your user account and are shared between all clients which support them (including desktop notifications).\n\nRules are applied in order; the first rule which matches defines the outcome for the message.\nSo: Per-word notifications are more important than per-room notifications which are more important than per-sender notifications.\nFor multiple rules of the same kind, the first one in the list that matches takes priority.</string>
+    <string name="notification_settings_per_word_notifications">Per-word notifications</string>
+    <string name="notification_settings_per_word_info">Words match case insensitively, and may include a * wildcard. So:\nfoo matches the string foo surrounded by word delimiters (e.g. punctuation and whitespace or start/end of line).\nfoo* matches any such word that begins foo.\n*foo* matches any such word which includes the 3 letters foo.</string>
+    <string name="notification_settings_always_notify">Always notify</string>
+    <string name="notification_settings_never_notify">Never notify</string>
+    <string name="notification_settings_word_to_match">word to match</string>
+    <string name="notification_settings_sound">Sound</string>
+    <string name="notification_settings_highlight">Highlight</string>
+    <string name="notification_settings_custom_sound">Custom sound</string>
+    <string name="notification_settings_per_room_notifications">Per-room notifications</string>
+    <string name="notification_settings_per_sender_notifications">Per-sender notifications</string>
+    <string name="notification_settings_sender_hint">\@user:domain.com</string>
+    <string name="notification_settings_room">Room : </string>
+    <string name="notification_settings_select_room">Select a room</string>
+
+    <string name="notification_settings_add">Add</string>
+
+    <string name="notification_settings_other_alerts">Other Alerts</string>
+    <string name="notification_settings_contain_my_user_name">Notify me with sound about messages that contain my user name</string>
+    <string name="notification_settings_contain_my_display_name">Notify me with sound about messages that contain my display name</string>
+    <string name="notification_settings_just_sent_to_me">Notify me with sound about messages sent just to me</string>
+    <string name="notification_settings_invite_to_a_new_room">Notify me when I am invited to a new room</string>
+    <string name="notification_settings_people_join_leave_rooms">Notify me when people join or leave rooms</string>
+    <string name="notification_settings_receive_a_call">Notify me when I receive a call</string>
+    <string name="notification_settings_suppress_from_bots">Suppress notifications from bots</string>
+
+    <string name="notification_settings_by_default">By default...</string>
+    <string name="notification_settings_notify_all_other">Notify for all other messages/rooms</string>
+
+    <!-- gcm section -->
+    <string name="settings_use_gcm">Use GCM</string>
+    <string name="settings_gcm_app_id">GCM pusher application ID</string>
+    <string name="settings_gcm_sender_id">GCM sender ID</string>
+    <string name="settings_gcm_pusher_url">GCM pusher url</string>
+    <string name="settings_gcm_pusher_profile_tag">GCM pusher profile tag</string>
+
+    <string name="settings_config_home_server">Home server: %s</string>
+    <string name="settings_config_identity_server">Identity server: %s</string>
+    <string name="settings_config_user_id">User ID: %s</string>
+    <string name="settings_config_access_token">Access token: %s</string>
+    <string name="settings_command_commands">The following commands are available in the room chat:\r\n\r\n /nick &#60;display_name&#62;&#58; change your display name\r\n /me &#60;action&#62;&#58; send the action you are doing. /me will be replaced by your display name\r\n /join &#60;room_alias&#62;&#58; join a room\r\n /kick &#60;user_id&#62; [&#60;reason>]&#58; kick the user\r\n /ban &#60;user_id&#62; [&#60;reason&#62;]&#58; ban the user\r\n /unban &#60;user_id&#62;&#58; unban the user\r\n /op &#60;user_id&#62; &#60;power_level&#62;&#58; set user power level\r\n /deop &#60;user_id&#62;&#58; reset user power level to the room default value</string>
+    <string name="settings_failed_to_upload_avatar">Failed to upload avatar</string>
+
+    <string name="settings_display_name_hint">Enter a display name</string>
+    <string name="settings_update_profile">Update profile</string>
+
+    <!-- Settings keys -->
+    <string name="settings_key_display_all_events">settings_key_display_all_events</string>
+    <string name="settings_key_hide_redactions">settings_key_hide_redactions</string>
+    <string name="settings_key_hide_unsupported_events">settings_key_hide_unsupported_events</string>
+    <string name="settings_key_sort_by_last_seen">settings_key_sort_by_last_seen</string>
+    <string name="settings_key_display_left_members">settings_key_display_left_members</string>
+    <string name="settings_key_display_public_rooms_recents">settings_key_display_public_rooms_recents</string>
+    <string name="settings_key_use_google_cloud_messaging">settings_key_use_google_cloud_messaging</string>
+    <string name="settings_key_use_rage_shake">settings_key_use_rage_shake</string>
+
+    <string name="logo">Logo</string>
+    <string name="user_says_body">%1$s says %2$s</string>
+    <string name="unseen_message">%1$s unseen notified message</string>
+    <string name="unseen_messages">%1$s unseen notified messages</string>
+
+    <!-- call string -->
+    <string name="call_connected">Call connected</string>
+    <string name="call_connecting">Call connecting...</string>
+    <string name="call_ended">Call ended</string>
+    <string name="call_ring">Calling...</string>
+    <string name="incoming_call">Incoming Call</string>
+    <string name="incoming_video_call">Incoming Video Call</string>
+    <string name="incoming_voice_call">Incoming Voice Call</string>
+    <string name="call_invite_expired">Call Invite Expired</string>
+    <string name="call_in_progress">Call In Progress</string>
+
+    <string name="call_error_user_not_responding">User Not Responding</string>
+    <string name="call_error_ice_failed">Media Connection Failed</string>
+    <string name="call_error_camera_init_failed">Cannot initialize the camera.</string>
+
+    <string name="action_accept">Accept</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_hangup">Hang up</string>
+
+    <!-- medias picker string -->
+    <string name="media_picker_picture_capture_title">Take a picture</string>
+    <string name="media_picker_video_capture_title">Record a video</string>
+    <string name="media_picker_both_capture_title">Take a picture or a video"</string>
+    <string name="media_picker_retake">Retake"</string>
+    <string name="media_picker_choose">Choose"</string>
+    <string name="media_picker_attach">Attach"</string>
+    <string name="media_picker_choose_from_library">Choose from library"</string>
+    <string name="media_picker_library">Library"</string>
+
+    <!-- medias slider string -->
+    <string name="media_slider_saved">Saved</string>
+    <string name="media_slider_saved_message">Save to downloads</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="_continue">Continue</string>
+
+    <!-- Actions -->
+    <string name="mark_all_as_read_prompt">Mark all as read?</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="remove">Remove</string>
+    <string name="join">Join</string>
+    <string name="reject">Reject</string>
+
+    <!-- Chat creation -->
+    <string name="room_creation_title">New Chat</string>
+    <string name="room_creation_account">Account</string>
+    <string name="room_creation_appearance">Appearance</string>
+    <string name="room_creation_appearance_name">Name</string>
+    <string name="room_creation_appearance_picture">Chat picture (optional)</string>
+    <string name="room_creation_privacy">Privacy</string>
+    <string name="room_creation_private_room">This chat is private</string>
+    <string name="room_creation_public_room">This chat is public</string>
+    <string name="room_creation_make_public">Make public</string>
+    <string name="room_creation_make_public_prompt_title">Make this chat public?</string>
+    <string name="room_creation_make_public_prompt_msg">Are you sure you want to make this chat public? Anyone can read your messages and join the chat.</string>
+    <string name="room_creation_keep_private">Keep private</string>
+    <string name="room_creation_make_private">Make private</string>
+    <string name="room_creation_name_mobile_email">name, mobile or email</string>
+    <string name="room_header_active_members">%1$d/%2$d active members</string>
+
+    <!--  Chat participants -->
+    <string name="room_participants_title">Participants</string>
+    <string name="room_participants_add_participant">Add participant</string>
+    <string name="room_participants_one_participant">1 participant</string>
+    <string name="room_participants_multi_participants">%s participants</string>
+    <string name="room_participants_leave_prompt_title">Leave?</string>
+    <string name="room_participants_leave_prompt_msg">Are you sure you want to leave this chat?</string>
+    <string name="room_participants_remove_prompt_title">Remove?</string>
+    <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
+    <string name="room_participants_admin_name">%s (admin)</string>
+    <string name="room_participants_create">Create</string>
+    <string name="room_participants_invite_another_user">Invite another user</string>
+
+    <string name="room_participants_active">Active</string>
+    <string name="room_participants_invite">Invite</string>
+    <string name="room_participants_leave">Left</string>
+    <string name="room_participants_ban">Banned</string>
+    <string name="room_participants_active_less_1_hour">Active less 1 hour ago</string>
+    <string name="room_participants_active_less_x_hours">Active less %d hours ago</string>
+    <string name="room_participants_active_less_x_days">Active less %d days ago</string>
+    <string name="you">You</string>
+
+    <string name="room_participants_action_invite">Invite</string>
+    <string name="room_participants_action_leave">Leave this room</string>
+    <string name="room_participants_action_remove">Remove from this room</string>
+    <string name="room_participants_action_ban">Block</string>
+    <string name="room_participants_action_unban">Unblock</string>
+    <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
+    <string name="room_participants_action_set_moderator">Make moderator</string>
+    <string name="room_participants_action_set_admin">Make admin</string>
+    <string name="room_participants_action_start_chat">Start chat</string>
+    <string name="room_participants_action_start_voice_call">Start voice call</string>
+    <string name="room_participants_action_start_video_call">Start video call</string>
+
+    <!-- Presence status-->
+    <string name="presence_offline">Offline</string>
+    <string name="presence_online">Online</string>
+    <string name="presence_online_now">Online now</string>
+    <string name="presence_hidden">Hidden</string>
+    <string name="presence_unavailable">Unavailable</string>
+
+    <!--  Chat -->
+    <string name="room_menu_search">Search</string>
+    <string name="room_menu_participants">Participants</string>
+    <string name="room_menu_favourite">Favourite</string>
+    <string name="room_menu_unfavourite">Unfavourite</string>
+    <string name="room_menu_settings">Settings</string>
+    <string name="room_option_start_group_voice">Start group audio chat</string>
+    <string name="room_option_start_group_video">Start group video chat</string>
+    <string name="room_option_share_location">Share location</string>
+    <string name="room_option_share_contact">Share contact</string>
+    <string name="room_one_user_is_typing">%s is typing...</string>
+    <string name="room_two_users_are_typing">%1$s &#038; %2$s are typing...</string>
+    <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing...</string>
+    <string name="room_message_placeholder">Type a message...</string>
+    <string name="room_offline_notification">Connectivity to the server has been lost.</string>
+    <string name="room_unsent_messages_notification">Messages not sent.</string>
+    <string name="room_prompt_resent">Resend now?</string>
+    <string name="room_resend_unsent_messages">Resend unsent messages</string>
+    <string name="room_delete_unsent_messages">Delete unsent messages</string>
+
+    <!-- unrecognized SSL certificate -->
+    <string name="ssl_trust">Trust</string>
+    <string name="ssl_do_not_trust">Do not trust</string>
+    <string name="ssl_logout_account">Logout</string>
+    <string name="ssl_remain_offline">Ignore</string>
+    <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
+    <string name="ssl_could_not_verify">Could not verify identity of remote server.</string>
+    <string name="ssl_cert_not_trust">This could mean that someone is maliciously intercepting your traffic, or that your phone does not trust the certificate provided by the remote server.</string>
+    <string name="ssl_cert_new_account_expl">If the server administrator has said that this is expected, ensure that the fingerprint below matches the fingerprint provided by them.</string>
+    <string name="ssl_unexpected_existing_expl">The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.</string>
+    <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
+    <string name="ssl_only_accept">ONLY accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
+    <string name="ssl_fingerprint_example">00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+
+    <!-- Room Details -->
+    <string name="room_details_title">Room Details</string>
+    <string name="room_details_mute_notifs">Mute notifications</string>
+    <string name="room_details_photo">Room Photo</string>
+    <string name="room_details_room_name">Room Name</string>
+    <string name="room_details_topic">Topic</string>
+    <string name="room_details_people">People</string>
+    <string name="room_details_files">Files</string>
+    <string name="room_details_settings">Settings</string>
+    <string name="room_details_fail_to_update_topic">Fail to update the topic</string>
+    <string name="room_details_fail_to_update_room_name">Fail to update the room name</string>
+    <string name="room_details_with_updates">The updates will be lost : are you sure to leave ?</string>
+    <string name="room_details_room_is_public">This room is public</string>
+    <string name="room_details_room_is_private">This room is private</string>
+    <string name="room_details_selected">selected</string>
+    <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
+    <string name="room_details_people_invited_group_name">INVITED</string>
+    <string name="room_details_people_present_group_name">JOINED</string>
+
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Invite from %s</string>
+    <string name="room_displayname_room_invite">Room Invite</string>
+    <string name="room_displayname_two_members">%1$s and %2$s</string>
+    <string name="room_displayname_more_than_two_members">%1$s and %2$d others</string>
+    <string name="room_displayname_no_title">Empty room</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search</string>
+    <string name="search_members_hint">Search by name or id</string>
+    <string name="search_no_results">No Results</string>
+    <string name="tab_title_search_rooms">ROOMS</string>
+    <string name="tab_title_search_messages">MESSAGES</string>
+    <string name="tab_title_search_people">PEOPLE</string>
+    <string name="tab_title_search_files">FILES</string>
+
+    <!-- Room recents -->
+    <string name="room_recents_directory">DIRECTORY</string>
+    <string name="room_recents_favourites">FAVORITES</string>
+    <string name="room_recents_conversations">ROOMS</string>
+    <string name="room_recents_low_priority">LOW PRIORITY</string>
+    <string name="room_recents_invites">INVITES</string>
+
+    <!-- Directory -->
+    <string name="directory_search_results_title">Browse directory results</string>
+    <string name="directory_search_result">%1$d results found</string>
+    <string name="directory_search_result_for">%1$d results found for %2$s</string>
+    <string name="directory_searching_title">Searching directory..</string>
+    <string name="directory_search_fail">Failed to fetch data</string>
+    <string name="splash_screen_display_text">Vector</string>
+    <string name="splash_screen_copyright">Copyright (c) 2016 vector.im. All rights reserved.</string>
+
+    <!-- home room settings -->
+    <string name="room_settings_notifications">Notifications</string>
+    <string name="room_settings_favourite">Favourite</string>
+    <string name="room_settings_de_prioritize">De-prioritize</string>
+    <string name="room_settings_leave_conversation">Leave Conversation</string>
+
+    <!-- home sliding menu -->
+    <string name="room_sliding_menu_messages">Messages</string>
+    <string name="room_sliding_menu_settings">Settings</string>
+    <string name="room_sliding_menu_version">Version </string>
+    <string name="room_sliding_menu_term_and_conditions">Terms &amp; conditions</string>
+    <string name="room_sliding_privacy_policy">Privacy policy</string>
+    <string name="action_voice_search">Voice search</string>
+
+    <!-- Vector Settings -->
+    <string name="account_logout_all">Logout all accounts</string>
+    <string name="settings_config_no_build_info">(no build info)</string>
+    <string name="settings_title_config">Configuration</string>
+
+    <string name="settings_sign_out">Sign Out</string>
+    <string name="settings_profile_picture">Profile Picture</string>
+    <string name="settings_display_name">Display Name</string>
+    <string name="settings_first_name">First Name</string>
+    <string name="settings_surname">Surname</string>
+    <string name="settings_email_address">Email Address</string>
+    <string name="settings_add_email_address">Add email address</string>
+    <string name="settings_phone_number">Phone Number</string>
+    <string name="settings_night_mode">Night Mode</string>
+
+    <string name="settings_enable_all_notif">Enable all notifications</string>
+    <string name="settings_general_messages">General messages</string>
+    <string name="settings_messages_my_display_name">Msg containing my display name</string>
+    <string name="settings_messages_my_user_name">Msg containing my user name</string>
+    <string name="settings_messages_sent_to_me">Messages sent to me</string>
+    <string name="settings_invited_to_room">When i m invited to a room</string>
+    <string name="settings_call_invitations">Call invitations</string>
+
+    <string name="settings_version">Version</string>
+    <string name="settings_term_conditions">Terms &amp; conditions</string>
+    <string name="settings_privacy_policy">Privacy</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_room_privacy_label">Privacy</string>
+
+    <string name="settings_user_settings">User settings</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_other">Other</string>
+
+    <string name="account_email_validation_title">Verification Pending</string>
+    <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
+    <string name="account_email_validation_error">Unable to verify email address. Please check your email and click on the link it contains. Once this is done, click continue</string>
+
+    <string name="settings_change_password">Change password</string>
+    <string name="settings_old_password">old password</string>
+    <string name="settings_new_password">new password</string>
+    <string name="settings_confirm_password">confirm password</string>
+    <string name="settings_fail_to_update_password">Fail to update password</string>
+    <string name="settings_password_updated">Your password has been updated</string>
+    <string name="room_settings_pref_category">Room settings</string>
+    <string name="room_settings_room_photo">Room Photo</string>
+
+    <!-- Directory -->
+    <string name="directory_title">Directory</string>
+
+</resources>

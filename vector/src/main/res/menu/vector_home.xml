@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.VectorHomeActivity" >
+
+    <item android:id="@+id/ic_action_search_room"
+        android:title="@string/action_search_room"
+        android:icon="@drawable/ic_material_search_white"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/ic_action_mark_all_as_read"
+        android:title="@string/action_mark_all_as_read"
+        android:icon="@drawable/ic_material_done_all_white"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/ic_action_resume_call"
+        android:title="@string/action_resume_call"
+        android:icon="@drawable/ic_material_call_white"
+        app:showAsAction="ifRoom" />
+
+</menu>

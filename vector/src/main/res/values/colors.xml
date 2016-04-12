@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="room_background">#FFFFFFFF</color>
+
+    <color name="presence_online">#38af00</color>
+    <color name="presence_unavailable">#fc0</color>
+    <color name="presence_offline">#E53333</color>
+
+    <color name="member_list_last_seen_text">#aaa</color>
+
+    <color name="chat_gray_text">#FFAAAAAA</color>
+    <color name="chat_encoding_background">#AAAAAAAA</color>
+    <color name="room_summary_unread_background">#ede</color>
+    <color name="room_summary_highlight_background">#FF88BBFF</color>
+    <color name="room_summary_public_highlight_background">#FFFFFFDD</color>
+    <color name="vector_deemed_background_view_gray_color">#339D9D9D</color>
+
+    <!-- action bar color -->
+    <color name="vector_statusbar_color">#5EA584</color>
+    <color name="vector_actionbar_background">#76CFA6</color>
+    <color name="vector_actionbar_text_color">#FFFFFF</color>
+    <color name="vector_actionbar_icons_color">#FFFFFF</color>
+
+    <!-- activities background -->
+    <color name="vector_activity_background_color">#FFF</color>
+
+    <color name="vector_green_color">#FF76cfa6</color>
+    <color name="vector_light_gray_color">#FFF2F2F2</color>
+    <color name="vector_silver_color">#FFC7C7C7</color>
+
+    <color name="vector_text_black_color">#FF3C3C3C</color>
+
+    <!-- 0_54_black gives invalid rendering so use 9D gray -->
+    <color name="vector_0_54_black_color">#8E000000</color>
+    <color name="vector_0_87_black_color">#DC000000</color>
+    <color name="vector_line_separator_gray_color">#339D9D9D</color>
+    <color name="vector_recents_header_background_color">#77F2F2F2</color>
+    <color name="vector_recents_bing_gray_color">#E2E2E2</color>
+
+    <!-- tabbar color-->
+    <color name="vector_tabbar_background_color">#FFF2F2F2</color>
+    <color name="vector_search_hint_color">#333C3C3C</color>
+
+    <!-- colors to check their uses -->
+    <color name="vector_background">#FFFAFAFA</color>
+    <color name="vector_title_color">#FFFFFF</color>
+    <color name="vector_border_color">#FF3C3C3C</color>
+
+    <!-- NavigationView color-->
+    <color name="vector_4d_gray">#FF4D4D4D</color>
+
+    <!-- FloatingActionButton -->
+    <color name="vector_fuchsia_color">#ff0064</color>
+
+    <color name="vector_text_gray_color">#FF9D9D9D</color>
+
+    <!-- tabbar underline -->
+    <color name="vector_dc_gray">#FFDCDCDC</color>
+
+    <!-- room members list -->
+    <color name="vector_21_black">#FF212121</color>
+    <color name="vector_80_gray">#FF808080</color>
+    <color name="vector_05_gray">#FFF2F2F2</color>
+
+
+    <color name="vector_d8_gray">#FFD8D8D8</color>
+
+    <color name="vector_74_gray">#FF747474</color>
+    <color name="vector_25_black">#25000000</color>
+
+</resources>

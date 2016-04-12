@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/messagesAdapter_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/vector_d8_gray"
+        android:text="1970/01/01 00:00:00" />
+
+    <ImageView
+        android:id="@+id/messagesAdapter_action_image"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/vector_actions_9b"/>
+
+    <View
+        android:id="@+id/messagesAdapter_action_anchor"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
+</LinearLayout>
+

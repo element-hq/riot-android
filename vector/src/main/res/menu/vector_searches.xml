@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.RoomActivity">
+
+    <item android:id="@+id/ic_action_speak_to_search"
+        android:title="Speak"
+        android:icon="@drawable/vector_micro_green"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/ic_action_clear_search"
+        android:title="Clear"
+        android:icon="@drawable/vector_clear_edittext_green"
+        app:showAsAction="always" />
+</menu>

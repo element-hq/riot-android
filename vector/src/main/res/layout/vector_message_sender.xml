@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-bold"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_gravity="left"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@color/vector_0_54_black_color"
+        android:text="SENDER"
+        android:id="@+id/messagesAdapter_sender"/>
+</LinearLayout>
