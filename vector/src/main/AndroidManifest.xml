@@ -267,25 +267,18 @@
 
         <activity android:name=".activity.VectorUniversalLinkActivity"
             android:theme="@android:style/Theme.NoDisplay">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="vector.im" />
-                <!-- android:path="/something"
-                    android:scheme="http" -->
-                <data
-                    android:host="vector.im"
-                    android:pathPrefix="/beta/"
-                    android:scheme="http" />
-
-                <data
-                    android:host="vector.im"
-                    android:pathPrefix="/beta/"
-                    android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
             </intent-filter>
         </activity>
 
@@ -317,26 +310,19 @@
                     android:pathPrefix="/beta/"
                     android:scheme="http" />
         -->
+        <!-- broadcast receiver -->
         <receiver
-            android:name=".broadcast.VectorUniversalLinkReceiver"
-            android:enabled="true"
-            android:exported="true">
+            android:name=".receiver.VectorUniversalLinkReceiver"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="vector.im"
-                    android:scheme="http" />
-                <data
-                    android:host="vector.im"
-                    android:scheme="https" />
-                <data
-                    android:host="vector.im"
-                    android:pathPrefix="/beta/"
-                    android:scheme="http" />
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
             </intent-filter>
         </receiver>
 
