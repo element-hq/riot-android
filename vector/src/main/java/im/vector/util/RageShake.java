@@ -98,6 +98,19 @@ public class RageShake implements SensorEventListener {
             try {
                 // store the file in shared place
                 String path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), screenShot, "screenshot-" + new Date(), null);
+                Uri screenUri = null;
+
+                if (null == path) {
+                    try {
+                        File file  = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "screenshot-" + new Date() + ".jpg");
+                        FileOutputStream out = new FileOutputStream(file);
+                        screenShot.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        screenUri = Uri.fromFile(file);
+                    } catch (Exception e) {
+                    }
+                } else {
+                    screenUri = Uri.parse(path);
+                }
 
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 intent.setType("text/html");
@@ -134,9 +147,11 @@ public class RageShake implements SensorEventListener {
 
                 ArrayList<Uri> attachmentUris = new ArrayList<Uri>();
 
-                // attachments
-                intent.setType("image/jpg");
-                attachmentUris.add(Uri.parse(path));
+                if (null != screenUri) {
+                    // attachments
+                    intent.setType("image/jpg");
+                    attachmentUris.add(screenUri);
+                }
 
                 String errorLog = LogUtilities.getLogCatError();
                 String debugLog = LogUtilities.getLogCatDebug();
@@ -197,6 +212,7 @@ public class RageShake implements SensorEventListener {
 
                 VectorApp.getCurrentActivity().startActivity(intent);
             } catch (Exception e) {
+                Log.e(LOG_TAG, "" + e);
             }
         }
     }
