@@ -88,7 +88,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
-    private Uri mUniverlinkToOpen = null;
+    private Uri mUniversallinkToOpen = null;
 
     private View mWaitingView = null;
 
@@ -246,7 +246,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         final Intent intent = getIntent();
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        mUniverlinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+        mUniversallinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
 
         String action = intent.getAction();
         String type = intent.getType();
@@ -351,13 +351,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
 
         // jump to an external link
-        if (null != mUniverlinkToOpen) {
-            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniverlinkToOpen);
+        if (null != mUniversallinkToOpen) {
+            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversallinkToOpen);
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     processIntentUniversalLink();
-                    mUniverlinkToOpen = null;
+                    mUniversallinkToOpen = null;
                 }
             });
         }
@@ -387,7 +387,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onNewIntent(intent);
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        mUniverlinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+        mUniversallinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
     }
 
     @Override
