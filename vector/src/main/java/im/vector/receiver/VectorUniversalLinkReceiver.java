@@ -54,11 +54,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     public static final String LOGIN_SENDER_ID = LoginActivity.class.getSimpleName();
     public static final String SPLASH_SENDER_ID = SplashActivity.class.getSimpleName();
 
-    // the supported pathes
-    public static final String SUPPORTED_PATH_BETA = "/beta/";
-    public static final String SUPPORTED_PATH_DEVELOP = "/develop/";
-    public static final String SUPPORTED_PATH_APP = "/app/";
-    public static final String SUPPORTED_PATH_STAGING = "/staging/";
+    // the supported paths
+    private static final String SUPPORTED_PATH_BETA = "/beta/";
+    private static final String SUPPORTED_PATH_DEVELOP = "/develop/";
+    private static final String SUPPORTED_PATH_APP = "/app/";
+    private static final String SUPPORTED_PATH_STAGING = "/staging/";
 
     // index of each item in path
     private static final int OFFSET_FRAGMENT_ROOM_ID = 1;
@@ -66,7 +66,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private static final int FRAGMENT_MAX_SPLIT_SECTIONS = 3;
 
     // supported paths list
-    public static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
+    private static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
 
     // the session
     private MXSession mSession;
@@ -184,7 +184,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             if (null != room) {
                 stopHomeActivitySpinner(aContext);
                 openRoomActivity(aContext);
-            } else if (null == room) {
+            } else {
                 inviteToJoin(aContext);
             }
         } else { // room ID is provided as a room alias: get corresponding room ID
@@ -200,19 +200,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 @Override
                 public void onSuccess(final String roomId) {
                     if (!TextUtils.isEmpty(roomId)) {
-
-                        final Timer wakeup = new Timer();
-                        wakeup.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                mRoomIdOrAlias = roomId;
-                                manageRoom(aContext);
-                            }
-                        }, 7000);
-
-                        /*stopHomeActivitySpinner(aContext);
                         mRoomIdOrAlias = roomId;
-                        manageRoom(aContext);*/
+                        manageRoom(aContext);
                     }
                 }
 
@@ -263,7 +252,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     /**
      * Display an invitation dialog to join the room.
-     * If there is no active acivity, launch the home activity
+     * If there is no active activity, launch the home activity
      * @param aContext
      */
     private void inviteToJoin(final Context aContext) {

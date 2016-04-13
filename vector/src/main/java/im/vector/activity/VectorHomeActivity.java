@@ -80,7 +80,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     // there are two ways to open an external link
     // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application is launched when clicking on the link)
-    // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that that an events chunck is processed.
+    // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an events chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
     public static final String EXTRA_WAITING_VIEW_STATUS = "VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS";
     public static final boolean WAITING_VIEW_STOP = false;
@@ -95,7 +95,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
-    private Uri mUniversallinkToOpen = null;
+    private Uri mUniversalLinkToOpen = null;
 
     private View mWaitingView = null;
 
@@ -196,7 +196,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mWaitingView = findViewById(R.id.listView_spinner_views);
         Intent intentRcv = getIntent();
         if(intentRcv != null){
-            if(VectorHomeActivity.WAITING_VIEW_START == intentRcv.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)){
+            if(intentRcv.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)){
                 showWaitingView();
             } else {
                 stopWaitingView();
@@ -269,7 +269,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         final Intent intent = getIntent();
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        mUniversallinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+        mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
 
         String action = intent.getAction();
         String type = intent.getType();
@@ -384,13 +384,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
 
         // jump to an external link
-        if (null != mUniversallinkToOpen) {
-            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversallinkToOpen);
+        if (null != mUniversalLinkToOpen) {
+            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkToOpen);
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     processIntentUniversalLink();
-                    mUniversallinkToOpen = null;
+                    mUniversalLinkToOpen = null;
                 }
             });
         }
@@ -420,10 +420,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onNewIntent(intent);
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        mUniversallinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+        mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
 
         // start waiting view
-        if(VectorHomeActivity.WAITING_VIEW_START == intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
+        if(intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
             showWaitingView();
         } else {
             stopWaitingView();

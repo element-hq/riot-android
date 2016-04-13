@@ -36,8 +36,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.util.HashMap;
-
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
 public class VectorUniversalLinkActivity extends Activity {
@@ -48,14 +46,6 @@ public class VectorUniversalLinkActivity extends Activity {
 
         Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK, getIntent().getData());
         sendBroadcast(myBroadcastIntent);
-
-        // Start the home activity with the waiting view enabled, while the URL link
-        // is processed in the receiver. The receiver, once the URL was parsed, will stop the waiting view.
-        /*Intent intent = new Intent(getApplicationContext(), VectorHomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
-        startActivity(intent);*/
-
         finish();
     }
 }
