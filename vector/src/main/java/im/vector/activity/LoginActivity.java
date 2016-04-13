@@ -460,8 +460,17 @@ public class LoginActivity extends MXCActionBarActivity {
      * Some sessions have been registred, skip the login process.
      */
     private void goToSplash() {
-        Log.e(LOG_TAG, "Go to splash.");
-        startActivity(new Intent(this, SplashActivity.class));
+        Log.w(LOG_TAG, "## gotoSplash(): Go to splash.");
+
+        //intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
+        Log.w("LOGIN", "## goToSplash() start SplashActivity");
+        Intent intent = new Intent(this, SplashActivity.class);
+        Bundle receivedBundle = getIntent().getExtras();
+
+        if(null != receivedBundle) {
+            intent.putExtras(receivedBundle);
+        }
+        startActivity(intent);
     }
 
     /**

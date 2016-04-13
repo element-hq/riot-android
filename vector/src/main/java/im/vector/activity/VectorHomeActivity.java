@@ -18,6 +18,7 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,6 +54,7 @@ import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.VectorRecentsListFragment;
+import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.RageShake;
 import im.vector.util.VectorUtils;
@@ -285,6 +287,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             @Override
             public void onLiveEventsChunkProcessed() {
                 EventStreamService.checkDisplayedNotification();
+
+                // treat any pending URL link workflow, that was started previously
+               processIntentUniversalLink();
             }
         };
 
@@ -455,6 +460,42 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         }
     }
+
+
+    /**
+     * Process the content of the current intent to detect universal link data.
+     * If data present, it means that the app was started through an URL link, but due
+     * to the App was not initialized properly, it has been required to re start the App.
+     *
+     * To indicate the App has finished its Login/Splash/Home flow, a resume action
+     * is sent to the receiver.
+     */
+    private void processIntentUniversalLink() {
+        Intent intent;
+        Uri uri;
+        if(null != (intent = getIntent())) {
+
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                Log.d("Home","## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
+                uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+
+                if (null != uri) {
+                    Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK_RESUME);
+
+                    myBroadcastIntent.putExtras(getIntent().getExtras());
+                    myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
+                    sendBroadcast(myBroadcastIntent);
+
+                    // use only once, remove since it has been used
+                    intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                    Log.d("Home", "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
+                }
+            } else {
+                Log.d("Home","## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI not present");
+            }
+        }
+    }
+
 
     //==============================================================================================================
     // Sliding menu management

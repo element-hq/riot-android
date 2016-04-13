@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -20,6 +21,8 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.LoginActivity;
+import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 
@@ -34,7 +37,15 @@ import im.vector.activity.VectorRoomActivity;
 @SuppressLint("LongLogTag")
 public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     public static final String BROADCAST_ACTION_UNIVERSAL_LINK = "im.vector.receiver.UNIVERSAL_LINK";
+    public static final String BROADCAST_ACTION_UNIVERSAL_LINK_RESUME = "im.vector.receiver.UNIVERSAL_LINK_RESUME";
     private static final String LOG_TAG = "VectorUniversalLinkReceiver";
+    public static final String EXTRA_UNIVERSAL_LINK_URI = "EXTRA_UNIVERSAL_LINK_URI";
+    public static final String EXTRA_UNIVERSAL_LINK_FLOW_ID = "EXTRA_UNIVERSAL_LINK_FLOW_ID";
+    public static final String EXTRA_UNIVERSAL_LINK_SENDER_ID = "EXTRA_UNIVERSAL_LINK_SENDER_ID";
+
+    public static final String HOME_SENDER_ID = VectorHomeActivity.class.getSimpleName();
+    public static final String LOGIN_SENDER_ID = LoginActivity.class.getSimpleName();
+    public static final String SPLASH_SENDER_ID = SplashActivity.class.getSimpleName();
 
     public static final String SUPPORTED_PATH_BETA = "/beta/";
     public static final String SUPPORTED_PATH_DEVELOP = "/develop/";
@@ -58,78 +69,123 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context aContext, Intent aIntent) {
-        String scheme, mimeType, action, packageName, uriString, host, path;
+    public void onReceive(final Context aContext, Intent aIntent) {
+        String action,uriString, path;
         Uri intentUri;
         final List<String> uriSegments;
         Room targetRoom = null;
 
         Log.d(LOG_TAG, "## onReceive() IN");
 
+        // get session
+        mSession = Matrix.getInstance(aContext).getDefaultSession();
+        if(null == mSession){
+            Log.e(LOG_TAG, "## onReceive() Warning - Unable to proceed URL link: Session is null");
+
+            // No user is logged => no session. Just forward request to the login activity
+            Intent intent = new Intent(aContext, LoginActivity.class);
+            intent.putExtra(EXTRA_UNIVERSAL_LINK_URI, aIntent.getData());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            aContext.startActivity(intent);
+
+            return;
+        }
+
+        /*Thread trun = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK);
+
+                aContext.sendBroadcast(myBroadcastIntent);
+            }
+        });
+        trun.start();*/
+
         if (null != aIntent) {
-            scheme = aIntent.getScheme();
             action = aIntent.getAction();
             uriString = aIntent.getDataString();
-            packageName = aIntent.getPackage();
-            mimeType = aIntent.getType();
 
-            Log.d(LOG_TAG, "## onCreate() scheme=" + scheme + " action=" + action + " uri getDataString=" + uriString);
-            Log.d(LOG_TAG, "## onCreate() packageName=" + packageName + " mimeType=" + mimeType);
+            Log.d(LOG_TAG, "## onReceive()  uri getDataString=" + uriString);
 
-            if (null != (intentUri = aIntent.getData())) {
-                host = intentUri.getHost();
-                int port = intentUri.getPort();
+            boolean isSessionActive = mSession.isAlive();
+            boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
+            Log.d(LOG_TAG, "## onReceive() isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
+
+
+            if(TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK)){
+                Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK");
+                intentUri = aIntent.getData();
+
+            } else if(TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME)){
+                Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK_RESUME");
+
+                // A first BROADCAST_ACTION_UNIVERSAL_LINK has been received with a room alias that could not be translated to a room ID.
+                // Translation has been asked to server, and the response is processed here.
+                // ......................
+                intentUri = aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_URI);
+                String senderId = aIntent.getParcelableExtra(EXTRA_UNIVERSAL_LINK_SENDER_ID);
+            } else {
+                // unknown action (very unlikely)
+                Log.e(LOG_TAG, "## onReceive() Unknown action received ("+action+") - unable to proceed URL link");
+                return;
+            }
+
+            if (null != intentUri) {
                 path = intentUri.getPath();
-                Log.d(LOG_TAG, "## onCreate() intentUri - intentUri.toString()=" + intentUri.toString());
-                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + host + " port=" + port + " path=" + path + " queryParams=" + intentUri.getQuery());
-                Log.d(LOG_TAG, "## onCreate() intentUri - EncodedFragment=" + intentUri.getEncodedFragment() + " DecodedFragment=" + intentUri.getFragment());
-                Log.d(LOG_TAG, "## onCreate() intentUri - EncodedSchemeSpecificPart=" + intentUri.getEncodedSchemeSpecificPart() + " SchemeSpecificPart=" + intentUri.getSchemeSpecificPart());
-                Log.d(LOG_TAG, "## onCreate() intentUri - LastPathSegment=" + intentUri.getLastPathSegment());
-
-                if (null != (uriSegments = intentUri.getPathSegments())) {
-                    for (String segment : uriSegments) {
-                        Log.d(LOG_TAG, "## onCreate() intentUri - uriSeg=" + segment);
-                    }
-                }
+                Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost() + " path=" + path + " queryParams=" + intentUri.getQuery());
+                //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
 
                 if (isUrlPathSupported(path)) {
                     String uriFragment = null;
-                    mSession = Matrix.getInstance(aContext).getDefaultSession();
-                    boolean isSessionActive = mSession.isAlive();
-                    boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
 
-                    // retrieve room ID and event ID (if any)
-                    getParamsFromUri(intentUri, mSession);
+                    if(!isSessionActive) {
+                        Log.w(LOG_TAG, "## onReceive() Warning: Session is not alive");
+                    }
 
-                    if (null == mRoomId) {
-                        // room could not be found:
-                        // - Vector app not started?
-                        // - Vector app has not finished sync complete?
-                        // - user has not already joined this room?
-                        Log.w(LOG_TAG, "## URL Link error: room ID cannot be found");
-                        CommonActivityUtils.displayToast(aContext, "URL Link error: room ID cannot be found");
-                    } else if ((null != (targetRoom = mSession.getDataHandler().getRoom(mRoomId))) && (targetRoom.isLeaving())) {
-                        Log.w(LOG_TAG, "## URL Link error: target room \""+mRoomId+"\"is about to be left by the user..");
-                        CommonActivityUtils.displayToast(aContext, "URL Link error: target room \""+mRoomId+"\"is about to be left by the user..");
-                    } else {
-                        HashMap<String, Object> params = new HashMap<String, Object>();
+                    if(!isLoginStepDone){
+                        Log.w(LOG_TAG, "## onReceive() Warning: Session is not complete - start Login Activity");
 
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoomId);
-                        if (null != mEventId) {
-                            params.put(VectorRoomActivity.EXTRA_EVENT_ID, mEventId);
-                        }
-
-                        // clear the activity stack to home activity
-                        Intent intent = new Intent(aContext, VectorHomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP/*Intent.FLAG_ACTIVITY_REORDER_TO_FRONT*/| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
+                        // Start the login activity and wait for BROADCAST_ACTION_UNIVERSAL_LINK_RESUME.
+                        // Once the login process flow is complete, BROADCAST_ACTION_UNIVERSAL_LINK_RESUME is
+                        // sent back to resume the URL link processing.
+                        Intent intent = new Intent(aContext, LoginActivity.class);
+                        intent.putExtra(EXTRA_UNIVERSAL_LINK_URI, aIntent.getData());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         aContext.startActivity(intent);
+                    } else {
+                        // retrieve room ID and event ID (if any)
+                        getParamsFromUri(intentUri, mSession);
+
+                        if (null == mRoomId) {
+                            // room could not be found:
+                            // - Vector app not started?
+                            // - Vector app has not finished sync complete?
+                            // - user has not already joined this room?
+                            Log.w(LOG_TAG, "## onReceive() URL Link error: room ID cannot be found");
+                            CommonActivityUtils.displayToast(aContext, "URL Link error: room ID cannot be found");
+                        } else if ((null != (targetRoom = mSession.getDataHandler().getRoom(mRoomId))) && (targetRoom.isLeaving())) {
+                            Log.w(LOG_TAG, "## onReceive() URL Link error: target room \"" + mRoomId + "\"is about to be left by the user..");
+                            CommonActivityUtils.displayToast(aContext, "URL Link error: target room \"" + mRoomId + "\"is about to be left by the user..");
+                        } else {
+                            HashMap<String, Object> params = new HashMap<String, Object>();
+
+                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoomId);
+                            if (null != mEventId) {
+                                params.put(VectorRoomActivity.EXTRA_EVENT_ID, mEventId);
+                            }
+
+                            // clear the activity stack to home activity
+                            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
+                            aContext.startActivity(intent);
+                        }
                     }
                 } else {
-                    Log.e(LOG_TAG, "## Path not supported: " + path);
-                    CommonActivityUtils.displayToast(aContext, "URL Link error: Path not supported: " + path);
+                    Log.e(LOG_TAG, "## onReceive() Path not supported: " + path);
+                    CommonActivityUtils.displayToast(aContext, "URL Link error - URL path ("+path+") is not supported");
                 }
             }
         }
@@ -159,7 +215,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
                 String temp[] = uriFragment.split("/", FRAGMENT_MAX_SPLIT_SECTIONS); // limit to 3 for security concerns (stack overflow injection)
 
-                Log.d(LOG_TAG,"## getParamsFromUri(): extracted room ID="+temp[OFFSET_FRAGMENT_ROOM_ID]);
+                Log.d(LOG_TAG,"## getParamsFromUri(): URI room ID="+temp[OFFSET_FRAGMENT_ROOM_ID]);
                 if (temp[OFFSET_FRAGMENT_ROOM_ID].startsWith("!")) {
                     // room ID in classical format (ex: !quwbwtvMMHXdqvHZvv:matrix.org)
                     mRoomId = temp[OFFSET_FRAGMENT_ROOM_ID];

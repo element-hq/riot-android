@@ -270,34 +270,6 @@
             </intent-filter>
         </activity>
 
-        <!--
-             universal links
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:host="vector.im"/>
-                <data android:pathPrefix="/app/"/>
-                <data android:pathPrefix="/beta/"/>
-                <data android:pathPrefix="/develop/"/>
-
-                <data
-                    android:host="vector.im"
-                    android:pathPrefix="/app/"
-                    android:scheme="http" />
-
-                                <data
-                    android:host="vector.im"
-                    android:pathPrefix="/develop/"
-                    android:scheme="http" />
-                <data
-                    android:host="vector.im"
-                    android:pathPrefix="/staging/"
-                    android:scheme="http" />
-
-                    <data
-                    android:host="vector.im"
-                    android:pathPrefix="/beta/"
-                    android:scheme="http" />
-        -->
         <!-- broadcast receiver -->
         <receiver
             android:name=".receiver.VectorUniversalLinkReceiver"
@@ -311,6 +283,9 @@
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
                 <data android:pathPrefix="/staging/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
             </intent-filter>
         </receiver>
 
