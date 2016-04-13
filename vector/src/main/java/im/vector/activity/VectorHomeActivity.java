@@ -77,7 +77,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
 
     // there are two ways to open an external link
-    // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application launch when clicking on the link)
+    // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application is launched when clicking on the link)
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that that an events chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
 
@@ -353,11 +353,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // jump to an external link
         if (null != mUniverlinkToOpen) {
             intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniverlinkToOpen);
-
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     processIntentUniversalLink();
+                    mUniverlinkToOpen = null;
                 }
             });
         }
