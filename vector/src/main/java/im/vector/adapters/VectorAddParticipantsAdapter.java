@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -110,7 +111,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
     private ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
 
-    ArrayList<ParticipantAdapterItem> mUnusedParticipants = null;
+    Collection<ParticipantAdapterItem> mUnusedParticipants = null;
     String mPattern = "";
 
     ParticipantAdapterItem mFirstEntry;
@@ -265,56 +266,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             }
         }
 
+        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mContext, mSession);
 
-        // check from any other known users
-        // because theirs presence have been received
-        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
-        for(User user : users) {
-            // accepted User ID or still active users
-            if (idsToIgnore.indexOf(user.user_id) < 0) {
-                unusedParticipants.add(new ParticipantAdapterItem(user));
-                idsToIgnore.add(user.user_id);
-            }
+        // remove the known users
+        for(String id : idsToIgnore ){
+            map.remove(id);
         }
 
-        // checks for each room
-        Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
-
-        for(RoomSummary summary : summaries) {
-            // not the current summary
-            if (!summary.getRoomId().equals(mRoomId)) {
-                Room curRoom = mSession.getDataHandler().getRoom(summary.getRoomId());
-                Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
-
-                for (RoomMember member : otherRoomMembers) {
-                    String userID = member.getUserId();
-
-                    // accepted User ID or still active users
-                    if (idsToIgnore.indexOf(userID) < 0) {
-                        unusedParticipants.add(new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
-                        idsToIgnore.add(member.getUserId());
-                    }
-                }
-            }
-        }
-
-        // contacts
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
-
-        for(Contact contact : contacts) {
-            if (contact.hasMatridIds(mContext)) {
-                Contact.MXID mxId = contact.getFirstMatrixId();
-
-                if (idsToIgnore.indexOf(mxId.mMatrixId) < 0) {
-                    unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
-                    idsToIgnore.add(mxId.mMatrixId);
-                }
-            } else {
-                unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
-            }
-        }
-
-        mUnusedParticipants = unusedParticipants;
+        // retrieve the list
+        mUnusedParticipants = map.values();
     }
 
     // Comparator to order members alphabetically

@@ -17,6 +17,8 @@
         android:hint="@string/search_hint"
         android:textColorHint="@color/vector_search_hint_color"
         android:focusableInTouchMode="true"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:background="@android:color/transparent"
+        android:textCursorDrawable="@drawable/searches_cursor_background"/>
 
 </RelativeLayout>

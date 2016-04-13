@@ -56,17 +56,17 @@
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/ic_material_call"
-                    android:id="@+id/button_call"
-                    android:contentDescription="@string/more"/>
+                    android:background="@drawable/ic_material_send_green"
+                    android:id="@+id/button_send"
+                    android:contentDescription="@string/send"/>
 
                 <ImageButton
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/ic_material_send_green"
-                    android:id="@+id/button_send"
-                    android:contentDescription="@string/send"/>
+                    android:background="@drawable/ic_material_call"
+                    android:id="@+id/button_call"
+                    android:contentDescription="@string/more"/>
 
             </LinearLayout>
 
@@ -95,6 +95,8 @@
                 android:id="@+id/editText_messageBox"
                 android:layout_centerVertical="true"
                 android:theme="@style/SearchesAppTheme"
+                android:background="@android:color/transparent"
+                android:textCursorDrawable="@drawable/searches_cursor_background"
                 android:textColorHint="@color/vector_0_54_black_color"/>
         </RelativeLayout>
 

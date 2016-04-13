@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -40,8 +42,11 @@ import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -177,9 +182,52 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mRoomCreationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // pop to the home activity
-                Intent intent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-                VectorHomeActivity.this.startActivity(intent);
+                mWaitingView.setVisibility(View.VISIBLE);
+
+                mSession.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                    @Override
+                    public void onSuccess(final String roomId) {
+                        mWaitingView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWaitingView.setVisibility(View.GONE);
+
+                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                            }
+                        });
+                    }
+
+                    private void onError(final String message) {
+                        mWaitingView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (null != message) {
+                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                }
+                                mWaitingView.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(final MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(final Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
             }
         });
 
@@ -250,7 +298,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mLiveEventListener);
             mSession.mCallsManager.removeListener(mCallsManagerListener);
         }
@@ -259,7 +307,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     protected void onPause() {
         super.onPause();
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
 
@@ -294,7 +342,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         };
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().addListener(mEventsListener);
         }
 

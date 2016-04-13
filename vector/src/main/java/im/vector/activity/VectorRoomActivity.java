@@ -42,6 +42,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,7 +66,6 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
@@ -100,10 +100,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Displays a single room with messages.
@@ -139,8 +143,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
     private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
-
-    private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
 
     // defines the command line operations
     // the user can write theses messages to perform some room events
@@ -204,6 +206,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
+
+    private static final Pattern mUrlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
     // network events
     private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -634,11 +642,68 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         refreshSelfAvatar();
     }
 
+    /**
+     * List the URLs in a text.
+     * @param text the text to parse
+     * @return the list of URLss
+     */
+    List<String>listURLs(String text) {
+        ArrayList<String> URLs = new ArrayList<>();
+
+        // sanity checks
+        if (!TextUtils.isEmpty(text)) {
+            Matcher matcher = mUrlPattern.matcher(text);
+
+            while (matcher.find()) {
+                int matchStart = matcher.start(1);
+                int matchEnd = matcher.end();
+
+                String url = text.substring(matchStart, matchEnd);
+
+                if (URLs.indexOf(url) < 0) {
+                    URLs.add(url);
+                }
+            }
+        }
+
+        return URLs;
+    }
+
     private void sendTextMessage() {
-        String body = mEditText.getText().toString();
-        String html = mAndDown.markdownToHtml(body);
+     	String body = mEditText.getText().toString();
+
+        // markdownToHtml does not manage properly urls with underscores
+        // so we replace the urls by a tmp value before parsing it.
+        List<String> urls = listURLs(body);
+        List<String> tmpUrlsValue = new ArrayList<String>();
+
+        String modifiedBody = new String(body);
+
+        if (urls.size() > 0) {
+            // sort by length -> largest before
+            Collections.sort(urls, new Comparator<String>() {
+                @Override
+                public int compare(String str1, String str2) {
+                    return str2.length() - str1.length();
+                }
+            });
+
+            for(String url : urls) {
+                String tmpValue = "url" + Math.abs(url.hashCode());
+
+                modifiedBody = modifiedBody.replace(url, tmpValue);
+                tmpUrlsValue.add(tmpValue);
+            }
+        }
+
+        String html = mAndDown.markdownToHtml(modifiedBody);
 
         if (null != html) {
+
+            for(int index = 0; index < tmpUrlsValue.size(); index++) {
+                html = html.replace(tmpUrlsValue.get(index), urls.get(index));
+            }
+
             html.trim();
 
             if (html.startsWith("<p>")) {
@@ -721,7 +786,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         Matrix.getInstance(this).removeNetworkEventListener(mNetworkEventListener);
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mPresenceEventListener);
         }
 
@@ -878,11 +943,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
             }
         } else if (id == R.id.ic_action_room_settings) {
-            // pop to the home activity
-            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            VectorRoomActivity.this.startActivity(intent);
+            launchRoomDetails();
         } else if (id == R.id.ic_action_room_resend_unsent) {
             mVectorMessageListFragment.resendUnsentMessages();
             refreshNotificationsArea();
@@ -892,6 +953,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void launchRoomDetails() {
+        if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+            // pop to the home activity
+            Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            VectorRoomActivity.this.startActivity(intent);
+        }
     }
 
     //================================================================================
@@ -1751,20 +1822,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     private void setTopic(String aTopicValue){
-        // update the topic of the room header
-        updateRoomHeaderTopic();
+        // in search mode, the topic is not displayed
+        if (!TextUtils.isEmpty(mEventId)) {
+            mActionBarCustomTopic.setVisibility(View.GONE);
+        } else {
+            // update the topic of the room header
+            updateRoomHeaderTopic();
 
-        // update the action bar topic anyway
-        mActionBarCustomTopic.setText(aTopicValue);
+            // update the action bar topic anyway
+            mActionBarCustomTopic.setText(aTopicValue);
 
-        // set the visibility of topic on the custom action bar only
-        // if header room view is gone, otherwise skipp it
-        if (View.GONE == mRoomHeaderView.getVisibility()) {
-            // topic is only displayed if its content is not empty
-            if (TextUtils.isEmpty(aTopicValue))
-                mActionBarCustomTopic.setVisibility(View.GONE);
-            else
-                mActionBarCustomTopic.setVisibility(View.VISIBLE);
+            // set the visibility of topic on the custom action bar only
+            // if header room view is gone, otherwise skipp it
+            if (View.GONE == mRoomHeaderView.getVisibility()) {
+                // topic is only displayed if its content is not empty
+                if (TextUtils.isEmpty(aTopicValue)) {
+                    mActionBarCustomTopic.setVisibility(View.GONE);
+                } else {
+                    mActionBarCustomTopic.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -2071,10 +2148,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         headerTextsContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                VectorRoomActivity.this.startActivity(intent);
+                if (TextUtils.isEmpty(mEventId)) {
+                    launchRoomDetails();
+                }
             }
         });
 
@@ -2083,10 +2159,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
-                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                    intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    VectorRoomActivity.this.startActivity(intent);
+                    if (TextUtils.isEmpty(mEventId)) {
+                        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                            launchRoomDetails();
+                        }
+                    }
                     return true;
                 }
             });
@@ -2100,7 +2177,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     private void setTitle(){
         if((null != mSession) && (null != mRoom)) {
-            String titleToApply = mRoom.isReady() ? VectorUtils.getRoomDisplayname(this, mSession, mRoom) : mDefaultRoomName;
+            String titleToApply = null;
+
+            if (mRoom.isReady()) {
+                titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
+            }
+
+            if (TextUtils.isEmpty(titleToApply)) {
+                titleToApply = mDefaultRoomName;
+            }
+
+            // in context mode, add search to the title.
+            if (!TextUtils.isEmpty(mEventId)) {
+                titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
+            }
 
             // set action bar title
             if (null != mActionBarCustomTitle) {
@@ -2108,9 +2198,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             } else {
                 setTitle(titleToApply);
             }
+
             // set title in the room header (no matter if not displayed)
-            if (null != mActionBarHeaderRoomName)
+            if (null != mActionBarHeaderRoomName) {
                 mActionBarHeaderRoomName.setText(titleToApply);
+            }
+        } else if (null != mDefaultRoomName) {
+            // set action bar title
+            if (null != mActionBarCustomTitle) {
+                mActionBarCustomTitle.setText(mDefaultRoomName);
+            } else {
+                setTitle(mDefaultRoomName);
+            }
         }
     }
 

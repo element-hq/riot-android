@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.RoomState;
@@ -167,16 +168,19 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
             @Override
             public void onNetworkError(Exception e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
         });
@@ -246,16 +250,19 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             // the request will be auto restarted when a valid network will be found
             @Override
             public void onNetworkError(Exception e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
         });
@@ -319,16 +326,19 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
             @Override
             public void onNetworkError(Exception e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
+                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 onError();
             }
         });

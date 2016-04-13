@@ -44,6 +44,13 @@ public class ParticipantAdapterItem {
     private String mLowerCaseDisplayName;
     private String mLowerCaseMatrixId;
 
+    private String mComparisonDisplayName;
+    private static final String mTrimRegEx = "[_!~`@#$%^&*\\-+();:=\\{\\}\\[\\],.<>?]";
+
+    // auto reference fields to speed up search
+    public int mReferenceGroupPosition = -1;
+    public int mReferenceChildPosition = -1;
+
     public ParticipantAdapterItem(RoomMember member) {
         mDisplayName = member.getName();
         mAvatarUrl = member.avatarUrl;
@@ -100,12 +107,33 @@ public class ParticipantAdapterItem {
         }
     }
 
+    /**
+     * @return a comparable displayname i.e. some characters are removed.
+     */
+    public String getComparisonDisplayName() {
+        if (null == mComparisonDisplayName) {
+            if (!TextUtils.isEmpty(mDisplayName)) {
+                mComparisonDisplayName = mDisplayName;
+            } else {
+                mComparisonDisplayName = mUserId;
+            }
+
+            mComparisonDisplayName = mComparisonDisplayName.replaceAll(mTrimRegEx, "");
+
+            if (null == mComparisonDisplayName) {
+                mComparisonDisplayName = "";
+            }
+        }
+
+        return mComparisonDisplayName;
+    }
+
     // Comparator to order members alphabetically
     public static Comparator<ParticipantAdapterItem> alphaComparator = new Comparator<ParticipantAdapterItem>() {
         @Override
         public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-            String lhs = TextUtils.isEmpty(part1.mDisplayName) ? part1.mUserId : part1.mDisplayName;
-            String rhs = TextUtils.isEmpty(part2.mDisplayName) ? part2.mUserId : part2.mDisplayName;
+            String lhs = part1.getComparisonDisplayName();
+            String rhs = part2.getComparisonDisplayName();
 
             if (lhs == null) {
                 return -1;
@@ -113,15 +141,7 @@ public class ParticipantAdapterItem {
             else if (rhs == null) {
                 return 1;
             }
-            
-            /*
-            // disable to have the same sort order than the IOS client.
-            if (lhs.startsWith("@")) {
-                lhs = lhs.substring(1);
-            }
-            if (rhs.startsWith("@")) {
-                rhs = rhs.substring(1);
-            }*/
+
             return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
         }
     };
@@ -140,11 +160,11 @@ public class ParticipantAdapterItem {
         boolean res = false;
 
         if (!res && !TextUtils.isEmpty(mLowerCaseDisplayName)) {
-            res = mLowerCaseDisplayName.indexOf(aPattern) >= 0;
+            res = mLowerCaseDisplayName.indexOf(aPattern) > -1;
         }
 
         if (!res && !TextUtils.isEmpty(mLowerCaseMatrixId)) {
-            res = mLowerCaseMatrixId.indexOf(aPattern) >= 0;
+            res = mLowerCaseMatrixId.indexOf(aPattern) > -1;
         }
 
         // the room member class only checks the matrixId and the displayname

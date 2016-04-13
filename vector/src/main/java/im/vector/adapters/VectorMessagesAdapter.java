@@ -210,7 +210,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     protected void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String url) {
-        if (!mSession.isActive()) {
+        if (!mSession.isAlive()) {
             return;
         }
 
@@ -355,7 +355,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      * @param roomState the room state.
      */
     private void displayReadReceipts(final View avatarsListView, final String eventId, final RoomState roomState) {
-        if (!mSession.isActive()) {
+        if (!mSession.isAlive()) {
             return;
         }
 

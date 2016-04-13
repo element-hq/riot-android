@@ -66,7 +66,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
 
         if (null != sessions) {
             for (MXSession session : sessions) {
-                if (session.isActive()) {
+                if (session.isAlive()) {
                     hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
                 }
             }
@@ -230,8 +230,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onMenuOpened(int featureId, Menu menu)
-    {
+    public boolean onMenuOpened(int featureId, Menu menu) {
         // display the menu icon with the text
         if (((featureId == Window.FEATURE_ACTION_BAR) || ((featureId == Window.FEATURE_OPTIONS_PANEL))) && menu != null){
             if(menu.getClass().getSimpleName().equals("MenuBuilder")){
@@ -262,79 +261,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
-    /**
-     * Define a sliding menu
-     * @param iconResourceIds the icons resource Ids
-     * @param textResourceIds the text resources Ids
-     * @param replaceUpButton The icon replaces the up button (left side)
-     */
-    protected void addSlidingMenu(Integer[] iconResourceIds, Integer[] textResourceIds, Boolean replaceUpButton) {
-        // sanity checks
-        if ((null == iconResourceIds) || (null == textResourceIds) || (iconResourceIds.length != textResourceIds.length)) {
-            return;
-        }
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        // there is no more sliding menu by now
-        mDrawerList = null; // (ListView) findViewById(R.id.left_drawer);
-
-        // check if the dedicated resource exists
-        if ((null != mDrawerLayout) && (null != mDrawerList)) {
-
-            mDrawerList.setBackgroundColor(Color.WHITE);
-
-            // Set the adapter for the list view
-            DrawerAdapter adapter = new DrawerAdapter(this, R.layout.adapter_drawer_header, R.layout.adapter_drawer_item);
-
-            adapter.mTextColor = this.getResources().getColor(R.color.vector_title_color);
-            adapter.setNotifyOnChange(false);
-            for (int index = 0; index < iconResourceIds.length; index++) {
-                adapter.add(iconResourceIds[index], getString(textResourceIds[index]));
-            }
-            adapter.setNotifyOnChange(true);
-            mDrawerList.setAdapter(adapter);
-
-            // Set the list's click listener
-            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-            if (replaceUpButton) {
-                mDrawerToggle = new ActionBarDrawerToggle(
-                        this,                  /* host Activity */
-                        mDrawerLayout,         /* DrawerLayout object */
-                         R.drawable.ic_material_menu_white,  /* nav drawer icon to replace 'Up' caret */
-                        R.string.action_open,  /* "open drawer" description */
-                        R.string.action_close  /* "close drawer" description */
-                ) {
-
-                    public void onDrawerClosed(View view) {
-                        if (mSelectedSlidingMenuIndex >= 0) {
-                            selectDrawItem(mSelectedSlidingMenuIndex);
-                            mSelectedSlidingMenuIndex = -1;
-                        }
-                    }
-
-                    public void onDrawerOpened(View drawerView) {
-                        mSelectedSlidingMenuIndex = -1;
-                        //dismissKeyboard(thisApp);
-                    }
-                };
-            }
-
-            // Set the drawer toggle as the DrawerListener
-            mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-            // display the home and title button
-            if (null != getSupportActionBar()) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeButtonEnabled(true);
-
-                if (replaceUpButton) {
-                    getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_material_menu_white));
-                }
-            }
         }
     }
 

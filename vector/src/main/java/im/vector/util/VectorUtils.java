@@ -73,9 +73,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.adapters.ParticipantAdapterItem;
+import im.vector.contacts.Contact;
+import im.vector.contacts.ContactsManager;
 import im.vector.db.VectorContentProvider;
 
 public class VectorUtils {
@@ -189,7 +193,7 @@ public class VectorUtils {
                     }
                 }
                 else {
-                    displayName = myUserId;
+                    displayName = context.getString(R.string.room_displayname_no_title);
                 }
             }
         }
@@ -405,7 +409,7 @@ public class VectorUtils {
      */
     public static void loadUserAvatar(final Context context,final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
         // sanity check
-        if ((null == session) || (null == imageView) || !session.isActive()) {
+        if ((null == session) || (null == imageView) || !session.isAlive()) {
             return;
         }
 
@@ -761,5 +765,47 @@ public class VectorUtils {
         }
 
         return onlineStatus;
+    }
+
+    //==============================================================================================================
+    // Users list
+    //==============================================================================================================
+
+    /**
+     * List the active users i.e the active rooms users (invited or joined) and the contacts with matrix id emails.
+     * This function could require a long time to process so it should be called in background.
+     * @param context the context
+     * @param session the session.
+     * @return a map indexed by the matrix id.
+     */
+    public static HashMap<String, ParticipantAdapterItem> listKnownParticipants(Context context, MXSession session) {
+        // a hashmap is a lot faster than a list search
+        HashMap<String, ParticipantAdapterItem> map = new HashMap<String, ParticipantAdapterItem>();
+
+        // check known users
+        Collection<User> users = session.getDataHandler().getStore().getUsers();
+
+        // we don't need to populate the room members or each room
+        // because an user is created for each joined / invited room member event
+        for(User user : users) {
+            map.put(user.user_id, new ParticipantAdapterItem(user));
+        }
+
+        // from contacts
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(context);
+
+        for(Contact contact : contacts) {
+            if (contact.hasMatridIds(context)) {
+                Contact.MXID mxId = contact.getFirstMatrixId();
+
+                if (null == map.get(mxId.mMatrixId)) {
+                    map.put(mxId.mMatrixId, new ParticipantAdapterItem(contact, context));
+                }
+            } else {
+                map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, context));
+            }
+        }
+
+        return map;
     }
 }

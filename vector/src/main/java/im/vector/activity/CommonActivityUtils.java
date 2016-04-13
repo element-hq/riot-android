@@ -50,6 +50,7 @@ import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import im.vector.VectorApp;
 import im.vector.Matrix;
@@ -74,6 +75,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
@@ -97,8 +99,18 @@ public class CommonActivityUtils {
     public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
     public static final boolean UTILS_HIDE_PROGRESS_BAR = false;
 
+    // room details members:
+    public static final String KEY_GROUPS_EXPANDED_STATE = "KEY_GROUPS_EXPANDED_STATE";
+    public static final String KEY_SEARCH_PATTERN = "KEY_SEARCH_PATTERN";
+    public static final Boolean GROUP_IS_EXPANDED = Boolean.valueOf(true);
+    public static final Boolean GROUP_IS_COLLAPSED = Boolean.valueOf(false);
+
+    // power levels
+    public static final float UTILS_POWER_LEVEL_ADMIN = 100;
+    public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
+
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
-        if (session.isActive()) {
+        if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
             ArrayList<String> matrixIds = new ArrayList<String>();
@@ -315,7 +327,7 @@ public class CommonActivityUtils {
         final MXSession aSession = (session == null) ? Matrix.getMXSession(fromActivity, (String)params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
-        if ((null == aSession) || !aSession.isActive()) {
+        if ((null == aSession) || !aSession.isAlive()) {
             return;
         }
 
@@ -352,6 +364,20 @@ public class CommonActivityUtils {
                                                        intent.putExtra(key, (String) value);
                                                    } else {
                                                        intent.putExtra(key, (Parcelable) value);
+                                                   }
+                                               }
+
+                                               // try to find a displayed room name
+                                               if (null == params.get(VectorRoomActivity.EXTRA_DEFAULT_NAME)) {
+
+                                                   Room room = session.getDataHandler().getRoom((String)params.get(VectorRoomActivity.EXTRA_ROOM_ID));
+
+                                                   if ((null != room) && room.isInvited()) {
+                                                       String displayname = VectorUtils.getRoomDisplayname(fromActivity, session, room);
+
+                                                       if (null != displayname) {
+                                                           intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayname);
+                                                       }
                                                    }
                                                }
 
@@ -400,7 +426,7 @@ public class CommonActivityUtils {
         }
 
         // sanity check
-        if ((null == session) || !session.isActive()) {
+        if ((null == session) || !session.isAlive()) {
             return;
         }
 
@@ -529,7 +555,7 @@ public class CommonActivityUtils {
      */
     public static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
-        if ((null == session) || !session.isActive()) {
+        if ((null == session) || !session.isAlive()) {
             return;
         }
 
@@ -859,6 +885,32 @@ public class CommonActivityUtils {
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Helper method to retrieve the max power level contained in the room.
+     * This value is used to indicate what is the power level value required
+     * to be admin of the room.
+     * @return max power level of the current room
+     */
+    public static int getRoomMaxPowerLevel(Room aRoom) {
+        int maxPowerLevel = 0;
+
+        if (null != aRoom){
+            int tempPowerLevel = 0;
+            PowerLevels powerLevels = aRoom.getLiveState().getPowerLevels();
+
+            if(null != powerLevels) {
+                // find out the room member
+                Collection<RoomMember> members = aRoom.getMembers();
+                for (RoomMember member : members) {
+                    tempPowerLevel = powerLevels.getUserPowerLevel(member.getUserId());
+                    if (tempPowerLevel > maxPowerLevel) {
+                        maxPowerLevel = tempPowerLevel;
+                    }
+                }
+            }
+        }
+        return maxPowerLevel;
+    }
 
     //==============================================================================================================
     // Application badge (displayed in the launcher)

@@ -250,7 +250,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     public void onPause() {
         super.onPause();
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
 
             Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
@@ -261,7 +261,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     public void onResume() {
         super.onResume();
 
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().addListener(mEventsListener);
 
             Matrix.getInstance(getActivity()).addNetworkEventListener(mNetworkListener);
@@ -537,16 +537,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 @Override
                 public void onNetworkError(Exception e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView();
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView();
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     hideLoadingView();
                 }
             });
@@ -602,16 +605,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                                         @Override
                                         public void onNetworkError(Exception e) {
+                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                             hideLoadingView(false);
                                         }
 
                                         @Override
                                         public void onMatrixError(MatrixError e) {
+                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                             hideLoadingView(false);
                                         }
 
                                         @Override
                                         public void onUnexpectedError(Exception e) {
+                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                             hideLoadingView(false);
                                         }
                                     });

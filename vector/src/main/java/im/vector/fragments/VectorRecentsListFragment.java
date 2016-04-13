@@ -71,9 +71,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     public static final String ARG_LAYOUT_ID = "VectorRecentsListFragment.ARG_LAYOUT_ID";
     public static final String ARG_MATRIX_ID = "VectorRecentsListFragment.ARG_MATRIX_ID";
 
-    private static final String KEY_GROUPS_EXPANDED_STATE = "KEY_GROUPS_EXPANDED_STATE";
-    private static final Boolean GROUP_IS_EXPANDED = Boolean.valueOf(true);
-    private static final Boolean GROUP_IS_COLLAPSED = Boolean.valueOf(false);
 
     public static VectorRecentsListFragment newInstance(String matrixId, int layoutResId) {
         VectorRecentsListFragment f = new VectorRecentsListFragment();
@@ -125,7 +122,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         if(null == savedInstanceState) {
             mIsListViewGroupExpandedMap = new HashMap<>();
         } else {
-            mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.get(KEY_GROUPS_EXPANDED_STATE);
+            mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.get(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
@@ -185,23 +182,69 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         });
 
         mRecentsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            IVectorRecentsScrollEventListener mScrollEventListener = null;
+
+            private IVectorRecentsScrollEventListener getListener() {
+                if (null == mScrollEventListener) {
+                    if (getActivity() instanceof IVectorRecentsScrollEventListener) {
+                        mScrollEventListener = (IVectorRecentsScrollEventListener) getActivity();
+                    }
+                }
+
+                return mScrollEventListener;
+            }
+
+            private void onScrollUp() {
+                if (null != getListener()) {
+                    mScrollEventListener.onRecentsListScrollUp();
+                }
+            }
+
+            private void onScrollDown() {
+                if (null != getListener()) {
+                    mScrollEventListener.onRecentsListScrollDown();
+                }
+            }
+
+            private void onFitScreen() {
+                if (null != getListener()) {
+                    mScrollEventListener.onRecentsListFitsScreen();
+                }
+            }
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
 
+            // latest cell offset Y
+            private int mPrevOffset = 0;
+
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (getActivity() instanceof IVectorRecentsScrollEventListener) {
-                    IVectorRecentsScrollEventListener listener = (IVectorRecentsScrollEventListener) getActivity();
+                if ((0 == firstVisibleItem) && ((totalItemCount+1) < visibleItemCount)) {
+                    onFitScreen();
+                } else if (firstVisibleItem < mFirstVisibleIndex) {
+                    mFirstVisibleIndex = firstVisibleItem;
+                    mPrevOffset = 0;
+                    onScrollUp();
+                } else if (firstVisibleItem > mFirstVisibleIndex) {
+                    mFirstVisibleIndex = firstVisibleItem;
+                    mPrevOffset = 0;
+                    onScrollDown();
+                } else {
+                    // detect the cell has moved
+                    View visibleCell = mRecentsListView.getChildAt(firstVisibleItem);
 
-                    if ((0 == firstVisibleItem) && (totalItemCount <= visibleItemCount)) {
-                        listener.onRecentsListFitsScreen();
-                    } else if (firstVisibleItem < mFirstVisibleIndex) {
-                        mFirstVisibleIndex = firstVisibleItem;
-                        listener.onRecentsListScrollUp();
-                    } else if (firstVisibleItem > mFirstVisibleIndex) {
-                        mFirstVisibleIndex = firstVisibleItem;
-                        listener.onRecentsListScrollDown();
+                    if (null != visibleCell) {
+                        int off = visibleCell.getTop();
+
+                        if (off > mPrevOffset) {
+                            onScrollDown();
+                        } else if (off < mPrevOffset){
+                            onScrollUp();
+                        }
+
+                        mPrevOffset = off;
                     }
                 }
             }
@@ -233,7 +276,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
-        aOutState.putSerializable(KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
+        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
     }
 
     private void findWaitingView() {
@@ -279,7 +322,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             public void run() {
                                 // expand all
                                 int groupCount = mRecentsListView.getExpandableListAdapter().getGroupCount();
-                                Boolean isExpanded = GROUP_IS_EXPANDED;
+                                Boolean isExpanded = CommonActivityUtils.GROUP_IS_EXPANDED;
 
                                 for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
 
@@ -287,7 +330,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                         isExpanded = mIsListViewGroupExpandedMap.get(Integer.valueOf(groupIndex));
                                     }
 
-                                    if((null == isExpanded) ||(GROUP_IS_EXPANDED == isExpanded)){
+                                    if((null == isExpanded) ||(CommonActivityUtils.GROUP_IS_EXPANDED == isExpanded)){
                                         mRecentsListView.expandGroup(groupIndex);
                                     } else {
                                         mRecentsListView.collapseGroup(groupIndex);
@@ -405,7 +448,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      * Remove the MXEventListener to the session listeners.
      */
     private void removeSessionListener() {
-        if (mSession.isActive()) {
+        if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
     }
@@ -413,14 +456,14 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onGroupCollapsedNotif(int aGroupPosition){
         if(null != mIsListViewGroupExpandedMap) {
-            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), GROUP_IS_COLLAPSED);
+            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_COLLAPSED);
         }
     }
 
     @Override
     public void onGroupExpandedNotif(int aGroupPosition){
         if(null != mIsListViewGroupExpandedMap) {
-            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), GROUP_IS_EXPANDED);
+            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_EXPANDED);
         }
     }
 
@@ -446,24 +489,24 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     hideWaitingView();
                 }
 
-                private void onError() {
-                    // TODO display a message ?
+                private void onError(String message) {
                     hideWaitingView();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    onError();
+                    onError(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    onError();
+                    onError(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    onError();
+                    onError(e.getLocalizedMessage());
                 }
             });
         }
@@ -491,7 +534,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 @Override
                 public void onBingRuleUpdateFailure(String errorMessage) {
-                    // TODO display a message ?
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                     hideWaitingView();
                 }
             });

@@ -55,9 +55,9 @@ public class VectorApp extends Application {
     private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
 
     // google analytics
-    private static GoogleAnalytics sGoogleAnalytics;
     private int VERSION_BUILD = -1;
-    private String VERSION_STRING = "";
+    private String VECTOR_VERSION_STRING = "";
+    private String SDK_VERSION_STRING = "";
 
     private Boolean mIsCallingInBackground = false;
 
@@ -84,7 +84,14 @@ public class VectorApp extends Application {
         }
         catch (PackageManager.NameNotFoundException e) {}
 
-        VERSION_STRING = Matrix.getInstance(this).getVersion(false);
+        VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true);
+
+        // not the first launch
+        if (null != Matrix.getInstance(this).getDefaultSession()) {
+            SDK_VERSION_STRING = Matrix.getInstance(this).getDefaultSession().getVersion(true);
+        } else {
+            SDK_VERSION_STRING = "";
+        }
 
         LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
         LogUtilities.storeLogcat();
@@ -168,21 +175,18 @@ public class VectorApp extends Application {
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
-            // resume the events thread if the client uses GCM
-            if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
 
-                // the event stream service has been killed
-                if (null == EventStreamService.getInstance()) {
-                    CommonActivityUtils.startEventStreamService(VectorApp.this);
-                } else {
-                    CommonActivityUtils.resumeEventStream(VectorApp.this);
+            // the event stream service has been killed
+            if (null == EventStreamService.getInstance()) {
+                CommonActivityUtils.startEventStreamService(VectorApp.this);
+            } else {
+                CommonActivityUtils.resumeEventStream(VectorApp.this);
 
-                    // try to perform a GCM registration if it failed
-                    // or if the GCM server generated a new push key
-                    GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
-                    if (null != gcmRegistrationManager) {
-                        gcmRegistrationManager.checkPusherRegistration(this);
-                    }
+                // try to perform a GCM registration if it failed
+                // or if the GCM server generated a new push key
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+                if (null != gcmRegistrationManager) {
+                    gcmRegistrationManager.checkPusherRegistration(this);
                 }
             }
 
@@ -239,8 +243,10 @@ public class VectorApp extends Application {
                 @Override
                 public String getDescription(String threadName, Throwable throwable) {
                     StringBuilder b = new StringBuilder();
-                    b.append("Build : " + VERSION_BUILD + "\n");
-                    b.append("Version : " + VERSION_STRING + "\n");
+
+                    b.append("Vector Build : " + VERSION_BUILD + "\n");
+                    b.append("Vector Version : " + VECTOR_VERSION_STRING + "\n");
+                    b.append("SDK Version : " + SDK_VERSION_STRING + "\n");
                     b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
                     b.append("Thread: ");
                     b.append(threadName);

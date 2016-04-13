@@ -51,7 +51,7 @@ public class SplashActivity extends MXCActionBarActivity {
         ArrayList<MXSession> sessions = Matrix.getMXSessions(this);
 
         for(MXSession session : sessions) {
-            if (session.isActive()) {
+            if (session.isAlive()) {
                 hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
             }
         }
@@ -172,6 +172,20 @@ public class SplashActivity extends MXCActionBarActivity {
                 public void onPusherRegistered() {
                     Log.d(LOG_TAG, "The GCM registration is done");
 
+                    // vector always uses GCM.
+                    // there is no way to enable / disable it in the application settings
+
+                    if (!Matrix.getInstance(SplashActivity.this).getSharedGcmRegistrationManager().useGCM()) {
+                        Matrix.getInstance(SplashActivity.this).getSharedGcmRegistrationManager().setUseGCM(true);
+
+                        SplashActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CommonActivityUtils.onGcmUpdate(SplashActivity.this);
+                            }
+                        });
+                    }
+
                     mPusherRegistrationComplete = true;
                     finishIfReady();
                 }
@@ -221,7 +235,7 @@ public class SplashActivity extends MXCActionBarActivity {
         Collection<MXSession> sessions = mDoneListeners.keySet();
 
         for(MXSession session : sessions) {
-            if (session.isActive()) {
+            if (session.isAlive()) {
                 session.getDataHandler().removeListener(mDoneListeners.get(session));
                 session.setFailureCallback(null);
             }
