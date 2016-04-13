@@ -658,10 +658,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 int matchStart = matcher.start(1);
                 int matchEnd = matcher.end();
 
-                String url = text.substring(matchStart, matchEnd);
+                String charBef = "";
+                String charAfter = "";
 
-                if (URLs.indexOf(url) < 0) {
-                    URLs.add(url);
+                long a = text.length();
+
+                if (matchStart > 2) {
+                    charBef = text.substring(matchStart-2, matchStart);
+                }
+
+                if ((matchEnd-1) < text.length()) {
+                    charAfter = text.substring(matchEnd-1, matchEnd);
+                }
+
+                // keep the link between parenthesis, it might be a link [title](link)
+                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](") ) {
+                    String url = text.substring(matchStart, matchEnd);
+
+                    if (URLs.indexOf(url) < 0) {
+                        URLs.add(url);
+                    }
                 }
             }
         }
@@ -671,7 +687,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void sendTextMessage() {
      	String body = mEditText.getText().toString();
-
+        
         // markdownToHtml does not manage properly urls with underscores
         // so we replace the urls by a tmp value before parsing it.
         List<String> urls = listURLs(body);
