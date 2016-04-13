@@ -63,6 +63,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
+import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
@@ -753,11 +754,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     public void onURLClick(Uri uri) {
         if (null != uri) {
-            // pop to the home activity
-            Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
-            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
-            getActivity().startActivity(intent);
+            if (null != VectorUniversalLinkReceiver.parseUniversalLink(uri)) {
+                // pop to the home activity
+                Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
+                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
+                getActivity().startActivity(intent);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.putExtra(Browser.EXTRA_APPLICATION_ID, getActivity().getPackageName());
+                getActivity().startActivity(intent);
+            }
         }
     }
 }

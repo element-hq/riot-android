@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,10 +54,12 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     public static final String SUPPORTED_PATH_DEVELOP = "/develop/";
     public static final String SUPPORTED_PATH_APP = "/app/";
     public static final String SUPPORTED_PATH_STAGING = "/staging/";
+
     private static final int OFFSET_FRAGMENT_ROOM_ID = 1;
     private static final int OFFSET_FRAGMENT_EVENT_ID = 2;
     private static final int FRAGMENT_MAX_SPLIT_SECTIONS = 3;
-    public static final HashSet<String> mSupportedVectorLinkPaths = new HashSet<String>();
+
+    public static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
 
     private String mRoomId;
     private String mEventId;
@@ -62,10 +67,6 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
 
     public VectorUniversalLinkReceiver() {
-        mSupportedVectorLinkPaths.add(SUPPORTED_PATH_BETA);
-        mSupportedVectorLinkPaths.add(SUPPORTED_PATH_DEVELOP);
-        mSupportedVectorLinkPaths.add(SUPPORTED_PATH_APP);
-        mSupportedVectorLinkPaths.add(SUPPORTED_PATH_STAGING);
     }
 
     @Override
@@ -197,40 +198,30 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param aSession
      */
     private void getParamsFromUri(Uri aIntentUri, MXSession aSession) {
-        String uriFragment;
-
         // sanity check
         if((null == aIntentUri) || (null == aSession)){
             mRoomId = null;
             mEventId = null;
             return;
         } else {
-            try {
-                // Extract room ID from URL
-                if (null != (uriFragment = aIntentUri.getFragment())) {
-                    // intentUri.getFragment() ex: "/room/#and:matrix.org/$1460098601502078OoSMt:matrix.org"
-                    // "/room/!quwbwtvMMHXdqvHZvv:matrix.org" or "/room/#Giom_and_Pedro:matrix.org"
-                    uriFragment = uriFragment.substring(1); // get rid of first "/"
-                }
+            List<String> params = parseUniversalLink(aIntentUri);
 
-                String temp[] = uriFragment.split("/", FRAGMENT_MAX_SPLIT_SECTIONS); // limit to 3 for security concerns (stack overflow injection)
+            if (null != params) {
+                Log.d(LOG_TAG,"## getParamsFromUri(): URI room ID=" + params.get(OFFSET_FRAGMENT_ROOM_ID));
 
-                Log.d(LOG_TAG,"## getParamsFromUri(): URI room ID="+temp[OFFSET_FRAGMENT_ROOM_ID]);
-                if (temp[OFFSET_FRAGMENT_ROOM_ID].startsWith("!")) {
+                if (params.get(OFFSET_FRAGMENT_ROOM_ID).startsWith("!")) {
                     // room ID in classical format (ex: !quwbwtvMMHXdqvHZvv:matrix.org)
-                    mRoomId = temp[OFFSET_FRAGMENT_ROOM_ID];
+                    mRoomId = params.get(OFFSET_FRAGMENT_ROOM_ID);
                 } else {
                     // room ID in alias format (ex: #Giom_and_Pedro:matrix.org)
                     // search the corresponding room and get its classical room ID
-                    mRoomId = getRoomIdFromAlias(temp[OFFSET_FRAGMENT_ROOM_ID], aSession);
+                    mRoomId = getRoomIdFromAlias(params.get(OFFSET_FRAGMENT_ROOM_ID), aSession);
                 }
 
                 // Is there any event ID?
-                if (temp.length > 2) {
-                    mEventId = temp[OFFSET_FRAGMENT_EVENT_ID];
+                if (params.size() > 2) {
+                    mEventId = params.get(OFFSET_FRAGMENT_EVENT_ID);
                 }
-            } catch (Exception ex) {
-                Log.w(LOG_TAG, "## getParamsFromUri(): Exception Msg=" + ex.getMessage());
             }
         }
     }
@@ -290,5 +281,54 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         return (null != aPath) ? mSupportedVectorLinkPaths.contains(aPath) : false;
     }
 
+    /***
+     * Tries to parse an universal link.
+     * @param uri the uri to parse
+     * @return the universal link items, null if the universal link is invalid
+     */
+    public static List<String> parseUniversalLink(Uri uri) {
+        List<String> res = null;
+
+        try {
+            // sanity check
+            if (null == uri) {
+                Log.e(LOG_TAG, "## parseUniversalLink : null");
+                return null;
+            }
+
+            if (!isUrlPathSupported(uri.getPath())) {
+                Log.e(LOG_TAG, "## parseUniversalLink : not supported");
+                return null;
+            }
+
+            String uriFragment;
+
+            // remove the server part
+            if (null != (uriFragment = uri.getFragment())) {
+                uriFragment = uriFragment.substring(1); // get rid of first "/"
+            } else {
+                Log.e(LOG_TAG, "## parseUniversalLink : cannot extract path");
+                return null;
+            }
+
+            String temp[] = uriFragment.split("/", FRAGMENT_MAX_SPLIT_SECTIONS); // limit to 3 for security concerns (stack overflow injection)
+
+            if (temp.length < 2) {
+                Log.e(LOG_TAG, "## parseUniversalLink : too short");
+                return null;
+            }
+
+            if (!TextUtils.equals(temp[0], "room")) {
+                Log.e(LOG_TAG, "## parseUniversalLink : not supported " + temp[0]);
+                return null;
+            }
+
+            res = Arrays.asList(temp);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## parseUniversalLink : crashes " + e.getLocalizedMessage());
+        }
+
+        return res;
+    }
 }
 
