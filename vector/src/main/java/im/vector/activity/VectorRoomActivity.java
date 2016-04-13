@@ -42,6 +42,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,10 +100,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Displays a single room with messages.
@@ -201,6 +206,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
+
+    private static final Pattern mUrlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
     // network events
     private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -631,11 +642,68 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         refreshSelfAvatar();
     }
 
+    /**
+     * List the URLs in a text.
+     * @param text the text to parse
+     * @return the list of URLss
+     */
+    List<String>listURLs(String text) {
+        ArrayList<String> URLs = new ArrayList<>();
+
+        // sanity checks
+        if (!TextUtils.isEmpty(text)) {
+            Matcher matcher = mUrlPattern.matcher(text);
+
+            while (matcher.find()) {
+                int matchStart = matcher.start(1);
+                int matchEnd = matcher.end();
+
+                String url = text.substring(matchStart, matchEnd);
+
+                if (URLs.indexOf(url) < 0) {
+                    URLs.add(url);
+                }
+            }
+        }
+
+        return URLs;
+    }
+
     private void sendTextMessage() {
-        String body = mEditText.getText().toString();
-        String html = mAndDown.markdownToHtml(body);
+     	String body = mEditText.getText().toString();
+
+        // markdownToHtml does not manage properly urls with underscores
+        // so we replace the urls by a tmp value before parsing it.
+        List<String> urls = listURLs(body);
+        List<String> tmpUrlsValue = new ArrayList<String>();
+
+        String modifiedBody = new String(body);
+
+        if (urls.size() > 0) {
+            // sort by length -> largest before
+            Collections.sort(urls, new Comparator<String>() {
+                @Override
+                public int compare(String str1, String str2) {
+                    return str2.length() - str1.length();
+                }
+            });
+
+            for(String url : urls) {
+                String tmpValue = "url" + Math.abs(url.hashCode());
+
+                modifiedBody = modifiedBody.replace(url, tmpValue);
+                tmpUrlsValue.add(tmpValue);
+            }
+        }
+
+        String html = mAndDown.markdownToHtml(modifiedBody);
 
         if (null != html) {
+
+            for(int index = 0; index < tmpUrlsValue.size(); index++) {
+                html = html.replace(tmpUrlsValue.get(index), urls.get(index));
+            }
+
             html.trim();
 
             if (html.startsWith("<p>")) {
