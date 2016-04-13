@@ -11,26 +11,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
-import android.view.KeyEvent;
-import android.view.View;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.RunnableFuture;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -74,7 +65,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private static final int OFFSET_FRAGMENT_EVENT_ID = 2;
     private static final int FRAGMENT_MAX_SPLIT_SECTIONS = 3;
 
-    // supported pathes list
+    // supported paths list
     public static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
 
     // the session
@@ -117,13 +108,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
             action = aIntent.getAction();
             uriString = aIntent.getDataString();
-
-            Log.d(LOG_TAG, "## onReceive()  uri getDataString=" + uriString);
-
             boolean isSessionActive = mSession.isAlive();
             boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
 
-            Log.d(LOG_TAG, "## onReceive() isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
+            Log.d(LOG_TAG, "## onReceive() uri getDataString=" + uriString+"isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
 
             if (TextUtils.equals(action, BROADCAST_ACTION_UNIVERSAL_LINK)){
                 Log.d(LOG_TAG, "## onReceive() action = BROADCAST_ACTION_UNIVERSAL_LINK");
@@ -184,30 +172,53 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     /**
      * Manage the room presence.
+     * Check the URL room ID format: if room ID is provided as an alias, we translate it
+     * into its corresponding room ID.
      * @param aContext the context
      */
     private void manageRoom(final Context aContext) {
-        // room Id
-        if (mRoomIdOrAlias.startsWith("!"))  {
+
+        if (mRoomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
             Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias, false);
 
             if (null != room) {
+                stopHomeActivitySpinner(aContext);
                 openRoomActivity(aContext);
             } else if (null == room) {
                 inviteToJoin(aContext);
             }
-        } else {
+        } else { // room ID is provided as a room alias: get corresponding room ID
+
+            // Start the home activity with the waiting view enabled, while the URL link
+            // is processed in the receiver. The receiver, once the URL was parsed, will stop the waiting view.
+            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+            aContext.startActivity(intent);
+
             mSession.getDataHandler().roomIdByAlias(mRoomIdOrAlias, new ApiCallback<String>() {
                 @Override
-                public void onSuccess(String roomId) {
+                public void onSuccess(final String roomId) {
                     if (!TextUtils.isEmpty(roomId)) {
+
+                        final Timer wakeup = new Timer();
+                        wakeup.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                mRoomIdOrAlias = roomId;
+                                manageRoom(aContext);
+                            }
+                        }, 7000);
+
+                        /*stopHomeActivitySpinner(aContext);
                         mRoomIdOrAlias = roomId;
-                        manageRoom(aContext);
+                        manageRoom(aContext);*/
                     }
                 }
 
                 private void onError(String errorMessage) {
                     CommonActivityUtils.displayToast(aContext, errorMessage);
+                    stopHomeActivitySpinner(aContext);
                 }
 
                 @Override
@@ -272,6 +283,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         public void onClick(DialogInterface dialog, int which) {
                             Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias, true);
 
+                            // try to join the room
                             room.join(new ApiCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void info) {
@@ -285,6 +297,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
                                 private void onError(String errorMessage) {
                                     CommonActivityUtils.displayToast(aContext, errorMessage);
+                                    stopHomeActivitySpinner(aContext);
                                 }
 
                                 @Override
@@ -308,6 +321,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                     builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            stopHomeActivitySpinner(aContext);
                         }
                     });
 
@@ -320,6 +334,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             // clear the activity stack to home activity
             Intent intent = new Intent(aContext, VectorHomeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
             aContext.startActivity(intent);
 
             final Timer wakeup = new Timer();
@@ -387,6 +402,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         }
 
         return res;
+    }
+
+    private void stopHomeActivitySpinner(Context aContext){
+        Intent myBroadcastIntent = new Intent(VectorHomeActivity.BROADCAST_ACTION_STOP_WAITING_VIEW);
+        aContext.sendBroadcast(myBroadcastIntent);
     }
 }
 

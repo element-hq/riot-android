@@ -82,6 +82,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application is launched when clicking on the link)
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that that an events chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
+    public static final String EXTRA_WAITING_VIEW_STATUS = "VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS";
+    public static final boolean WAITING_VIEW_STOP = false;
+    public static final boolean WAITING_VIEW_START = true;
+
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
 
     public static final boolean IS_VOIP_ENABLED = true;
@@ -189,13 +193,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_home);
 
+        mWaitingView = findViewById(R.id.listView_spinner_views);
+        Intent intentRcv = getIntent();
+        if(intentRcv != null){
+            if(VectorHomeActivity.WAITING_VIEW_START == intentRcv.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)){
+                showWaitingView();
+            } else {
+                stopWaitingView();
+            }
+        }
+
         // use a toolbar instead of the actionbar
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.home_toolbar);
         this.setSupportActionBar(mToolbar);
         mToolbar.setTitle(R.string.title_activity_home);
         this.setTitle(R.string.title_activity_home);
 
-        mWaitingView = findViewById(R.id.listView_spinner_views);
         mRoomCreationView = findViewById(R.id.listView_create_room_view);
 
         mRoomCreationView.setOnClickListener(new View.OnClickListener() {
@@ -332,7 +345,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onPause();
 
         // Unregister Broadcast receiver
-        unregisterReceiver(mBrdRcvStopWaitingView);
+        if(null != mBrdRcvStopWaitingView) {
+            stopWaitingView();
+            unregisterReceiver(mBrdRcvStopWaitingView);
+        }
 
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
@@ -405,6 +421,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
         mUniversallinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
+        // start waiting view
+        if(VectorHomeActivity.WAITING_VIEW_START == intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
+            showWaitingView();
+        } else {
+            stopWaitingView();
+        }
     }
 
     @Override
