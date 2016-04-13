@@ -76,12 +76,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
 
+    // there are two ways to open an external link
+    // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application launch when clicking on the link)
+    // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that that an events chunck is processed.
+    public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
+
     public static final boolean IS_VOIP_ENABLED = true;
 
     private static final String TAG_FRAGMENT_RECENTS_LIST = "VectorHomeActivity.TAG_FRAGMENT_RECENTS_LIST";
 
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
+
+    private Uri mUniverlinkToOpen = null;
 
     private View mWaitingView = null;
 
@@ -239,6 +246,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         final Intent intent = getIntent();
 
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+        mUniverlinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
 
         String action = intent.getAction();
         String type = intent.getType();
@@ -330,12 +338,26 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
 
+        Intent intent = getIntent();
+
         if (null != mAutomaticallyOpenedRoomParams) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mAutomaticallyOpenedRoomParams);
                     mAutomaticallyOpenedRoomParams = null;
+                }
+            });
+        }
+
+        // jump to an external link
+        if (null != mUniverlinkToOpen) {
+            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniverlinkToOpen);
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    processIntentUniversalLink();
                 }
             });
         }
@@ -364,9 +386,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (intent.hasExtra(EXTRA_JUMP_TO_ROOM_PARAMS)) {
-            mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
-        }
+        mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+        mUniverlinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
     }
 
     @Override

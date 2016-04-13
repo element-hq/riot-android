@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -56,6 +57,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
@@ -66,6 +68,7 @@ import im.vector.util.SlidableMediaInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
@@ -742,5 +745,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
         fragment = VectorReadReceiptsDialogFragment.newInstance(mSession, mRoom.getRoomId(), eventId);
         fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
+    }
+
+    /**
+     * The user taps on an URI.
+     * @param uri the URI
+     */
+    public void onURLClick(Uri uri) {
+        if (null != uri) {
+            // pop to the home activity
+            Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
+            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
+            getActivity().startActivity(intent);
+        }
     }
 }
