@@ -2,13 +2,18 @@ package im.vector.receiver;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+import android.view.KeyEvent;
+import android.view.View;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -23,8 +28,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.RunnableFuture;
 
 import im.vector.Matrix;
+import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.SplashActivity;
@@ -78,6 +88,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     public VectorUniversalLinkReceiver() {
     }
+
 
     @Override
     public void onReceive(final Context aContext, final Intent aIntent) {
@@ -156,55 +167,64 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         aContext.startActivity(intent);
                     } else {
                         mRoomIdOrAlias = params.get(OFFSET_FRAGMENT_ROOM_ID);
+
                         // Is there any event ID?
                         if (params.size() > 2) {
                             mEventId = params.get(OFFSET_FRAGMENT_EVENT_ID);
                         }
 
-                        // room Id
-                        if (mRoomIdOrAlias.startsWith("!"))  {
-                            Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias);
-
-                            if ((null != room) && !room.isLeaving()) {
-                                openRoomActivity(aContext);
-                            } else {
-                                // TODO ask to the user to join the room
-                            }
-                        } else {
-                            mSession.getDataHandler().roomIdByAlias(mRoomIdOrAlias, new ApiCallback<String>() {
-                                @Override
-                                public void onSuccess(String roomId) {
-                                    if (!TextUtils.isEmpty(roomId)) {
-                                        mRoomIdOrAlias = roomId;
-                                        openRoomActivity(aContext);
-                                    }
-                                }
-
-                                private void onError(String errorMessage) {
-                                    CommonActivityUtils.displayToast(aContext, errorMessage);
-                                }
-
-                                @Override
-                                public void onNetworkError(Exception e) {
-                                    onError(e.getLocalizedMessage());
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    onError(e.getLocalizedMessage());
-                                }
-
-                                @Override
-                                public void onUnexpectedError(Exception e) {
-                                    onError(e.getLocalizedMessage());
-                                }
-                            });
-                        }
+                        manageRoom(aContext);
                     }
                 } else {
                     Log.e(LOG_TAG, "## onReceive() Path not supported: " + intentUri.getPath());
                 }
             }
+        }
+    }
+
+    /**
+     * Manage the room presence.
+     * @param aContext the context
+     */
+    private void manageRoom(final Context aContext) {
+        // room Id
+        if (mRoomIdOrAlias.startsWith("!"))  {
+            Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias, false);
+
+            if (null != room) {
+                openRoomActivity(aContext);
+            } else if (null == room) {
+                inviteToJoin(aContext);
+            }
+        } else {
+            mSession.getDataHandler().roomIdByAlias(mRoomIdOrAlias, new ApiCallback<String>() {
+                @Override
+                public void onSuccess(String roomId) {
+                    if (!TextUtils.isEmpty(roomId)) {
+                        mRoomIdOrAlias = roomId;
+                        manageRoom(aContext);
+                    }
+                }
+
+                private void onError(String errorMessage) {
+                    CommonActivityUtils.displayToast(aContext, errorMessage);
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
         }
     }
 
@@ -228,6 +248,90 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
         intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
         context.startActivity(intent);
+    }
+
+    /**
+     * Display an invitation dialog to join the room.
+     * If there is no active acivity, launch the home activity
+     * @param aContext
+     */
+    private void inviteToJoin(final Context aContext) {
+        final Activity currentActivity = VectorApp.getCurrentActivity();
+
+        if (null != currentActivity) {
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
+
+                    builder.setTitle(R.string.universal_link_join_alert_title);
+                    builder.setMessage(R.string.universal_link_join_alert_body);
+
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias, true);
+
+                            room.join(new ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    currentActivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            manageRoom(aContext);
+                                        }
+                                    });
+                                }
+
+                                private void onError(String errorMessage) {
+                                    CommonActivityUtils.displayToast(aContext, errorMessage);
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+                            });
+                        }
+                    });
+
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
+        } else {
+            // clear the activity stack to home activity
+            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            aContext.startActivity(intent);
+
+            final Timer wakeup = new Timer();
+
+            wakeup.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    wakeup.cancel();
+                    inviteToJoin(aContext);
+                }
+            }, 200);
+        }
     }
 
     /***
