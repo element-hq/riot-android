@@ -17,11 +17,13 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -80,6 +82,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application is launched when clicking on the link)
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that that an events chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
+    public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
 
     public static final boolean IS_VOIP_ENABLED = true;
 
@@ -168,6 +171,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private MXSession mSession;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private final BroadcastReceiver mBrdRcvStopWaitingView = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopWaitingView();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -320,6 +330,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     protected void onPause() {
         super.onPause();
+
+        // Unregister Broadcast receiver
+        unregisterReceiver(mBrdRcvStopWaitingView);
+
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
         }
@@ -337,6 +351,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onResume();
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
+
+        // Broadcast receiver to stop waiting screen
+        registerReceiver(mBrdRcvStopWaitingView, new IntentFilter(BROADCAST_ACTION_STOP_WAITING_VIEW));
 
         Intent intent = getIntent();
 
@@ -453,7 +470,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     // RoomEventListener
     private void showWaitingView() {
-        mWaitingView.setVisibility(View.VISIBLE);
+        if(null != mWaitingView) {
+            mWaitingView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -507,6 +526,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     myBroadcastIntent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_SENDER_ID, VectorUniversalLinkReceiver.HOME_SENDER_ID);
                     sendBroadcast(myBroadcastIntent);
 
+                    showWaitingView();
+
                     // use only once, remove since it has been used
                     intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
                     Log.d("Home", "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
@@ -517,6 +538,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     }
 
+    public void stopWaitingView(){
+        if(null != mWaitingView){
+            mWaitingView.setVisibility(View.GONE);
+        }
+    }
 
     //==============================================================================================================
     // Sliding menu management
