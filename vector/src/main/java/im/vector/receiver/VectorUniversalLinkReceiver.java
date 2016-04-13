@@ -95,7 +95,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 if (isUrlPathSupported(path)) {
                     String uriFragment = null;
                     mSession = Matrix.getInstance(aContext).getDefaultSession();
-                    boolean isSessionActive = mSession.isActive();
+                    boolean isSessionActive = mSession.isAlive();
                     boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
 
                     // retrieve room ID and event ID (if any)
