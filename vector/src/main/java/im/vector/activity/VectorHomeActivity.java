@@ -295,6 +295,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     }
 
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+
+        Log.e(LOG_TAG, "onTrimMemory " + level);
+        if ((level == TRIM_MEMORY_RUNNING_CRITICAL) || (level == TRIM_MEMORY_RUNNING_LOW) || (level == TRIM_MEMORY_COMPLETE)) {
+            // clear the application cache
+            // to reduce memory usage.
+            Matrix.getInstance(this).reloadSessions(this);
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
