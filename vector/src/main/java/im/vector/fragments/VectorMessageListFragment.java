@@ -323,6 +323,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     startActivity(sendIntent);
                 }
             }
+        } else if (action == R.id.ic_action_vector_permalink) {
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("", "https://vector.im/develop/#/room/" + event.roomId + "/" + event.eventId);
+            clipboard.setPrimaryClip(clip);
+
+            Toast.makeText(getActivity(), this.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
         }
     }
 
