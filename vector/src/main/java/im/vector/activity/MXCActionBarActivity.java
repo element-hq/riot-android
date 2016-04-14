@@ -80,7 +80,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
         super.onTrimMemory(level);
 
         Log.e("MXCActionBarActivity", "onTrimMemory " + level);
-        if ((level == TRIM_MEMORY_RUNNING_CRITICAL) || (level == TRIM_MEMORY_RUNNING_LOW) || (level == TRIM_MEMORY_COMPLETE)) {
+        if ((level == TRIM_MEMORY_RUNNING_CRITICAL) || (level == TRIM_MEMORY_COMPLETE)) {
             // clear the application cache
             // to reduce memory usage.
             Matrix.getInstance(this).reloadSessions(this);
