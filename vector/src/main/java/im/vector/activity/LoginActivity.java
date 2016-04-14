@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -156,6 +157,8 @@ public class LoginActivity extends MXCActionBarActivity {
     private View mHomeServerUrlsLayout;
     private ImageView mExpandImageView;
 
+    private Parcelable mUniversalLinkUri;
+
     String mHomeServerUrl = null;
     String mIdentityServerUrl = null;
 
@@ -184,6 +187,7 @@ public class LoginActivity extends MXCActionBarActivity {
         Bundle receivedBundle = getIntent().getExtras();
         // resume the application
         if ((null!=receivedBundle) && (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI))) {
+            mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
             Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
             // activity has been launched from an universal link
         } else if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
@@ -287,7 +291,6 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
             }
         });
-
 
         // identity server input validity: if the user taps on the next / done button
         mIdentityServerText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -467,14 +470,13 @@ public class LoginActivity extends MXCActionBarActivity {
     private void goToSplash() {
         Log.w(LOG_TAG, "## gotoSplash(): Go to splash.");
 
-        //intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
         Log.w("LOGIN", "## goToSplash() start SplashActivity");
         Intent intent = new Intent(this, SplashActivity.class);
-        Bundle receivedBundle = getIntent().getExtras();
 
-        if(null != receivedBundle) {
-            intent.putExtras(receivedBundle);
+        if (null != mUniversalLinkUri) {
+            intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkUri);
         }
+
         startActivity(intent);
     }
 
@@ -1195,6 +1197,11 @@ public class LoginActivity extends MXCActionBarActivity {
             mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
 
             mMode = savedInstanceState.getInt(SAVED_MODE, MODE_LOGIN);
+
+            // check if the application has been opened by click on an url
+            if (savedInstanceState.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                mUniversalLinkUri = savedInstanceState.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+            }
         }
     }
 
@@ -1223,6 +1230,10 @@ public class LoginActivity extends MXCActionBarActivity {
             savedInstanceState.putString(SAVED_HOME_SERVER_URL, mHomeServerText.getText().toString().trim());
         }
 
+        if (!TextUtils.isEmpty(mIdentityServerText.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_IDENTITY_SERVER_URL, mIdentityServerText.getText().toString().trim());
+        }
+
         if (!TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim())) {
             savedInstanceState.putString(SAVED_CREATION_EMAIL_ADDRESS, mCreationEmailTextView.getText().toString().trim());
         }
@@ -1241,6 +1252,11 @@ public class LoginActivity extends MXCActionBarActivity {
 
         if (null != mRegistrationResponse) {
             savedInstanceState.putSerializable(SAVED_CREATION_REGISTRATION_RESPONSE, mRegistrationResponse);
+        }
+
+        // check if the application has been opened by click on an url
+        if (null != mUniversalLinkUri) {
+            savedInstanceState.putParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkUri);
         }
 
         savedInstanceState.putInt(SAVED_MODE, mMode);
@@ -1390,7 +1406,6 @@ public class LoginActivity extends MXCActionBarActivity {
         } else if ((ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE == requestCode) || (FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE == requestCode)) {
             if (resultCode == RESULT_OK) {
                 String homeServer = data.getStringExtra("homeServer");
-                String homeServerUrl = data.getStringExtra("homeServerUrl");
                 String userId = data.getStringExtra("userId");
                 String accessToken = data.getStringExtra("accessToken");
 
