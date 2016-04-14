@@ -107,7 +107,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private VectorRecentsListFragment mRecentsListFragment;
 
-
     // call listener
     private MenuItem mCallMenuItem = null;
 
@@ -196,7 +195,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mWaitingView = findViewById(R.id.listView_spinner_views);
         Intent intentRcv = getIntent();
         if(intentRcv != null){
-            if(intentRcv.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)){
+            if(intentRcv.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
                 showWaitingView();
             } else {
                 stopWaitingView();
