@@ -42,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -324,16 +325,16 @@ public class CommonActivityUtils {
     }
 
     public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
-        final MXSession aSession = (session == null) ? Matrix.getMXSession(fromActivity, (String)params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
+        final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String)params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
-        if ((null == aSession) || !aSession.isAlive()) {
+        if ((null == finalSession) || !finalSession.isAlive()) {
             return;
         }
 
         String roomId = (String)params.get(VectorRoomActivity.EXTRA_ROOM_ID);
 
-        Room room = aSession.getDataHandler().getRoom(roomId);
+        Room room = finalSession.getDataHandler().getRoom(roomId);
 
         // do not open a leaving room.
         // it does not make.
@@ -370,10 +371,10 @@ public class CommonActivityUtils {
                                                // try to find a displayed room name
                                                if (null == params.get(VectorRoomActivity.EXTRA_DEFAULT_NAME)) {
 
-                                                   Room room = aSession.getDataHandler().getRoom((String)params.get(VectorRoomActivity.EXTRA_ROOM_ID));
+                                                   Room room = finalSession.getDataHandler().getRoom((String)params.get(VectorRoomActivity.EXTRA_ROOM_ID));
 
                                                    if ((null != room) && room.isInvited()) {
-                                                       String displayname = VectorUtils.getRoomDisplayname(fromActivity, aSession, room);
+                                                       String displayname = VectorUtils.getRoomDisplayname(fromActivity, finalSession, room);
 
                                                        if (null != displayname) {
                                                            intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayname);

@@ -66,7 +66,14 @@ public class SplashActivity extends MXCActionBarActivity {
 
             if (!hasCorruptedStore()) {
                 // Go to the home page
-                startActivity(new Intent(SplashActivity.this, VectorHomeActivity.class));
+                Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
+                Bundle receivedBundle = getIntent().getExtras();
+
+                if(null != receivedBundle) {
+                    intent.putExtras(receivedBundle);
+                }
+                startActivity(intent);
+
                 SplashActivity.this.finish();
             } else {
                 CommonActivityUtils.logout(this);
