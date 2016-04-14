@@ -69,6 +69,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
+import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -180,7 +181,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private ImageButton mSendButton;
     private ImageButton mAttachmentsButton;
-    private ImageButton mCallButton;
     private EditText mEditText;
     private ImageView mAvatarImageView;
     // action bar header
@@ -204,6 +204,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private TextView mErrorMessageTextView;
     private String mLatestTypingMessage;
 
+    private MenuItem mCallMenuItem;
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
 
@@ -273,6 +274,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                         setTitle();
+                        refreshNotificationsArea();
                         updateRoomHeaderMembersStatus();
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
@@ -455,48 +457,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             @Override
             public void onClick(View view) {
                 sendTextMessage();
-            }
-        });
-
-        mCallButton = (ImageButton) findViewById(R.id.button_call);
-        mCallButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // hide the header room
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-                final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
-                final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
-
-                IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-                fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-
-                        // create the call object
-                        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
-
-                        if (null != call) {
-                            call.setIsVideo((1 == position));
-                            call.setRoom(mRoom);
-                            call.setIsIncoming(false);
-
-                            final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
-
-                            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                            VectorRoomActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    VectorRoomActivity.this.startActivity(intent);
-                                }
-                            });
-                        }
-                    }
-                });
-
-                fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
             }
         });
 
@@ -934,6 +894,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.vector_room, menu);
 
+            mCallMenuItem = menu.findItem(R.id.ic_action_call_in_room);
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
 
@@ -966,6 +927,42 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         } else if (id == R.id.ic_action_room_delete_unsent) {
             mVectorMessageListFragment.deleteUnsentMessages();
             refreshNotificationsArea();
+        } else if (id == R.id.ic_action_call_in_room) {
+            // hide the header room
+            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+            final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
+            final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
+
+            IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                @Override
+                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+
+                    // create the call object
+                    IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+                    if (null != call) {
+                        call.setIsVideo((1 == position));
+                        call.setRoom(mRoom);
+                        call.setIsIncoming(false);
+
+                        final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+
+                        intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorRoomActivity.this.startActivity(intent);
+                            }
+                        });
+                    }
+                }
+            });
+
+            fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
         }
 
         return super.onOptionsItemSelected(item);
@@ -1821,9 +1818,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
 
-        boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
-        mCallButton.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
-
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
@@ -1946,6 +1940,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (null != mResendDeleteMenuItem) {
             mResendDeleteMenuItem.setVisible(hasUnsentEvent);
+        }
+
+        if (null != mCallMenuItem) {
+            boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+            mCallMenuItem.setVisible(isCallSupported);
         }
     }
 
