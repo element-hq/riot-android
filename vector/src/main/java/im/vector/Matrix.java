@@ -251,25 +251,34 @@ public class Matrix {
      *
      * @return true if the matrix client instance defines a valid session
      */
-    public static Boolean hasValidSessions() {
+    public static boolean hasValidSessions() {
         if (null == instance) {
             Log.e(LOG_TAG, "hasValidSessions : has no instance");
             return false;
         }
 
-        Boolean res;
+        boolean res;
 
         synchronized (instance) {
             res = (null != instance.mMXSessions) && (instance.mMXSessions.size() > 0);
 
             if (!res) {
                 Log.e(LOG_TAG, "hasValidSessions : has no session");
+            } else {
+                for(MXSession session : instance.mMXSessions) {
+                    // some GA issues reported that the data handler can be null
+                    // so assume the application should be restarted
+                    res &= (null != session.getDataHandler());
+                }
+
+                if (!res) {
+                    Log.e(LOG_TAG, "hasValidSessions : one sesssion has no valid data hanlder");
+                }
             }
         }
 
         return res;
     }
-
 
     //==============================================================================================================
     // Session management

@@ -464,6 +464,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             menu.getItem(i).setVisible(false);
         }
 
+        if (mSession.getHomeserverConfig().getHomeserverUri().getHost().equals("matrix.org")) {
+            menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
+        }
+
         // before enabling them
         // according to the event type.
         if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type) ||

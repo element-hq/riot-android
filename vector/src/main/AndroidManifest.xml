@@ -104,7 +104,7 @@
         <activity
             android:name="im.vector.activity.VectorHomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_home" >
+            android:label="@string/title_activity_home">
         </activity>
 
         <activity
@@ -253,7 +253,43 @@
                 android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
+        <activity android:name=".activity.VectorUniversalLinkActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
+            </intent-filter>
+        </activity>
+
+        <!-- broadcast receiver -->
+        <receiver
+            android:name=".receiver.VectorUniversalLinkReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
+            </intent-filter>
+        </receiver>
+
+        <!-- GCM components -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

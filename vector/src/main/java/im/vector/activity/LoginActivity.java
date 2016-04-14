@@ -56,6 +56,7 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.receiver.VectorUniversalLinkReceiver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,8 +181,12 @@ public class LoginActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_login);
 
+        Bundle receivedBundle = getIntent().getExtras();
         // resume the application
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+        if ((null!=receivedBundle) && (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI))) {
+            Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
+            // activity has been launched from an universal link
+        } else if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             Log.e(LOG_TAG, "Resume the application");
             finish();
             return;
@@ -460,8 +465,17 @@ public class LoginActivity extends MXCActionBarActivity {
      * Some sessions have been registred, skip the login process.
      */
     private void goToSplash() {
-        Log.e(LOG_TAG, "Go to splash.");
-        startActivity(new Intent(this, SplashActivity.class));
+        Log.w(LOG_TAG, "## gotoSplash(): Go to splash.");
+
+        //intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (Serializable) params);
+        Log.w("LOGIN", "## goToSplash() start SplashActivity");
+        Intent intent = new Intent(this, SplashActivity.class);
+        Bundle receivedBundle = getIntent().getExtras();
+
+        if(null != receivedBundle) {
+            intent.putExtras(receivedBundle);
+        }
+        startActivity(intent);
     }
 
     /**

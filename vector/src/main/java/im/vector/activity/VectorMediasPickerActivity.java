@@ -985,14 +985,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     private void openFileExplorer() {
-        Intent fileIntent = new Intent(Intent.ACTION_PICK);
+        try {
+            Intent fileIntent = new Intent(Intent.ACTION_PICK);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+            }
+            // no mime type filter to allow any kind of content
+            fileIntent.setType(CommonActivityUtils.MIME_TYPE_IMAGE_ALL);
+            startActivityForResult(fileIntent, REQUEST_MEDIAS);
+        } catch(Exception e) {
+            Toast.makeText(VectorMediasPickerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
         }
-        // no mime type filter to allow any kind of content
-        fileIntent.setType(CommonActivityUtils.MIME_TYPE_IMAGE_ALL);
-        startActivityForResult(fileIntent, REQUEST_MEDIAS);
     }
 
     /**

@@ -42,6 +42,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +69,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
+import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -99,10 +101,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Displays a single room with messages.
@@ -175,7 +181,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private ImageButton mSendButton;
     private ImageButton mAttachmentsButton;
-    private ImageButton mCallButton;
     private EditText mEditText;
     private ImageView mAvatarImageView;
     // action bar header
@@ -199,8 +204,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private TextView mErrorMessageTextView;
     private String mLatestTypingMessage;
 
+    private MenuItem mCallMenuItem;
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
+
+    private static final Pattern mUrlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
     // network events
     private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -262,6 +274,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                         setTitle();
+                        refreshNotificationsArea();
                         updateRoomHeaderMembersStatus();
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
@@ -447,48 +460,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
         });
 
-        mCallButton = (ImageButton) findViewById(R.id.button_call);
-        mCallButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // hide the header room
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-                final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
-                final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
-
-                IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-                fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-
-                        // create the call object
-                        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
-
-                        if (null != call) {
-                            call.setIsVideo((1 == position));
-                            call.setRoom(mRoom);
-                            call.setIsIncoming(false);
-
-                            final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
-
-                            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                            VectorRoomActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    VectorRoomActivity.this.startActivity(intent);
-                                }
-                            });
-                        }
-                    }
-                });
-
-                fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
-            }
-        });
-
         mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
         mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
 
@@ -631,11 +602,84 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         refreshSelfAvatar();
     }
 
+    /**
+     * List the URLs in a text.
+     * @param text the text to parse
+     * @return the list of URLss
+     */
+    List<String>listURLs(String text) {
+        ArrayList<String> URLs = new ArrayList<>();
+
+        // sanity checks
+        if (!TextUtils.isEmpty(text)) {
+            Matcher matcher = mUrlPattern.matcher(text);
+
+            while (matcher.find()) {
+                int matchStart = matcher.start(1);
+                int matchEnd = matcher.end();
+
+                String charBef = "";
+                String charAfter = "";
+
+                long a = text.length();
+
+                if (matchStart > 2) {
+                    charBef = text.substring(matchStart-2, matchStart);
+                }
+
+                if ((matchEnd-1) < text.length()) {
+                    charAfter = text.substring(matchEnd-1, matchEnd);
+                }
+
+                // keep the link between parenthesis, it might be a link [title](link)
+                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](") ) {
+                    String url = text.substring(matchStart, matchEnd);
+
+                    if (URLs.indexOf(url) < 0) {
+                        URLs.add(url);
+                    }
+                }
+            }
+        }
+
+        return URLs;
+    }
+
     private void sendTextMessage() {
-        String body = mEditText.getText().toString();
-        String html = mAndDown.markdownToHtml(body);
+     	String body = mEditText.getText().toString();
+        
+        // markdownToHtml does not manage properly urls with underscores
+        // so we replace the urls by a tmp value before parsing it.
+        List<String> urls = listURLs(body);
+        List<String> tmpUrlsValue = new ArrayList<String>();
+
+        String modifiedBody = new String(body);
+
+        if (urls.size() > 0) {
+            // sort by length -> largest before
+            Collections.sort(urls, new Comparator<String>() {
+                @Override
+                public int compare(String str1, String str2) {
+                    return str2.length() - str1.length();
+                }
+            });
+
+            for(String url : urls) {
+                String tmpValue = "url" + Math.abs(url.hashCode());
+
+                modifiedBody = modifiedBody.replace(url, tmpValue);
+                tmpUrlsValue.add(tmpValue);
+            }
+        }
+
+        String html = mAndDown.markdownToHtml(modifiedBody);
 
         if (null != html) {
+
+            for(int index = 0; index < tmpUrlsValue.size(); index++) {
+                html = html.replace(tmpUrlsValue.get(index), urls.get(index));
+            }
+
             html.trim();
 
             if (html.startsWith("<p>")) {
@@ -850,6 +894,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.vector_room, menu);
 
+            mCallMenuItem = menu.findItem(R.id.ic_action_call_in_room);
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
 
@@ -882,6 +927,42 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         } else if (id == R.id.ic_action_room_delete_unsent) {
             mVectorMessageListFragment.deleteUnsentMessages();
             refreshNotificationsArea();
+        } else if (id == R.id.ic_action_call_in_room) {
+            // hide the header room
+            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+            final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
+            final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
+
+            IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                @Override
+                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+
+                    // create the call object
+                    IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+                    if (null != call) {
+                        call.setIsVideo((1 == position));
+                        call.setRoom(mRoom);
+                        call.setIsIncoming(false);
+
+                        final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+
+                        intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorRoomActivity.this.startActivity(intent);
+                            }
+                        });
+                    }
+                }
+            });
+
+            fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
         }
 
         return super.onOptionsItemSelected(item);
@@ -1737,9 +1818,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
 
-        boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
-        mCallButton.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
-
         mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
     }
 
@@ -1862,6 +1940,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (null != mResendDeleteMenuItem) {
             mResendDeleteMenuItem.setVisible(hasUnsentEvent);
+        }
+
+        if (null != mCallMenuItem) {
+            boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+            mCallMenuItem.setVisible(isCallSupported);
         }
     }
 
