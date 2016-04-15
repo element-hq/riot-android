@@ -23,9 +23,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.TextView;
+
+import com.squareup.okhttp.internal.Platform;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -277,17 +287,54 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 @Override
                 public void run() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
+                    if (mParameters.containsKey(ULINK_EMAIL_ID_KEY)) {
+                        String inviterName = mParameters.get(ULINK_INVITER_NAME_KEY);
 
-                    builder.setTitle(R.string.universal_link_join_alert_title);
-                    builder.setMessage(R.string.universal_link_join_alert_body);
+                        // should never happen
+                        if (null == inviterName) {
+                            inviterName = " ";
+                        }
 
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        String email = mParameters.get(ULINK_EMAIL_ID_KEY);
+
+                        // should never happen
+                        if (null == email) {
+                            email = " ";
+                        }
+
+                        String part1 = aContext.getString(R.string.universal_link_email_invitation_body_1, inviterName);
+                        String part2 = aContext.getString(R.string.universal_link_email_invitation_body_2);
+                        String part3 = aContext.getString(R.string.universal_link_email_invitation_body_3, email);
+
+                        String msg = part1 + "\n" + part2 + "\n\n" + part3;
+
+                        SpannableString message = new SpannableString(msg);
+
+                        // accept / reject red bold
+                        message.setSpan(new ForegroundColorSpan(Color.parseColor("#FF0000")), msg.indexOf(part2), msg.indexOf(part2) + part2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        message.setSpan(new StyleSpan(Typeface.BOLD), msg.indexOf(part2), msg.indexOf(part2) + part2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        // inviter in bold
+                        int pos =  msg.indexOf(inviterName);
+                        message.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + inviterName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        // email in bold
+                        pos =  msg.indexOf(email);
+                        message.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + email.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        builder.setMessage(message);
+                    } else {
+                        builder.setTitle(R.string.universal_link_join_alert_title);
+                        builder.setMessage(R.string.universal_link_join_alert_body);
+                    }
+
+                    builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Room room = mSession.getDataHandler().getRoom(mParameters.get(ULINK_ROOM_ID_KEY), true);
 
                             // try to join the room
-                            room.join(new ApiCallback<Void>() {
+                            room.joinWithThirdPartySigned(mParameters.get(ULINK_SIGN_URL_KEY), new ApiCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void info) {
                                     currentActivity.runOnUiThread(new Runnable() {
@@ -321,7 +368,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         }
                     });
 
-                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.reject, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             stopHomeActivitySpinner(aContext);
@@ -330,6 +377,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
+
+                    // Must call show() prior to fetching text view
+                    TextView messageView = (TextView)dialog.findViewById(android.R.id.message);
+                    messageView.setGravity(Gravity.CENTER);
+
                 }
             });
 
