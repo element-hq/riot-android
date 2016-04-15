@@ -205,7 +205,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
             Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
-            if (null != room) {
+            if ((null != room) && !room.isInvited()) {
                 stopHomeActivitySpinner(aContext);
                 openRoomActivity(aContext);
             } else {

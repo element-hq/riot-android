@@ -48,6 +48,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
@@ -193,14 +194,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         setContentView(R.layout.activity_vector_home);
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
-        Intent intentRcv = getIntent();
-        if(intentRcv != null){
-            if(intentRcv.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
-                showWaitingView();
-            } else {
-                stopWaitingView();
-            }
-        }
 
         // use a toolbar instead of the actionbar
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.home_toolbar);
@@ -267,8 +260,56 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // process intent parameters
         final Intent intent = getIntent();
 
+        // the activity could be started with a spinner
+        // because there is a pending action (like universallink processing)
+        if (intent.getBooleanExtra(EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_STOP)) {
+            showWaitingView();
+        } else {
+            stopWaitingView();
+        }
+
         mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
         mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
+
+        // the home activity has been launched with an universal link
+        if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+            final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+            intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+
+            // detect the room could be opened without waiting the next sync
+            HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+
+            if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_KEY)) {
+                final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_KEY);
+
+                // it is a room ID ?
+                if (roomIdOrAlias.startsWith("!")) {
+                    Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
+
+                    if (null != room) {
+                        // open the room asap
+                        mUniversalLinkToOpen = uri;
+                    } else {
+                        // wait the next sync
+                        intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+                    }
+                } else {
+                    // it is a room alias
+                    // convert the room alias to room Id
+                    mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
+                        @Override
+                        public void onSuccess(String roomId) {
+                            getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
+
+                            // the room exists, opens it
+                            if (null != mSession.getDataHandler().getRoom(roomId, false)) {
+                                processIntentUniversalLink();
+                            }
+                        }
+                    });
+                }
+            }
+        }
 
         String action = intent.getAction();
         String type = intent.getType();
