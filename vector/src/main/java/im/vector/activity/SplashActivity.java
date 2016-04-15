@@ -69,16 +69,17 @@ public class SplashActivity extends MXCActionBarActivity {
                 // Go to the home page
                 Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
 
-                // display a spinner while managing the universal link
-                if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                    intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
-                }
-
                 Bundle receivedBundle = getIntent().getExtras();
 
                 if(null != receivedBundle) {
                     intent.putExtras(receivedBundle);
                 }
+
+                // display a spinner while managing the universal link
+                if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                    intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+                }
+
                 startActivity(intent);
 
                 SplashActivity.this.finish();
