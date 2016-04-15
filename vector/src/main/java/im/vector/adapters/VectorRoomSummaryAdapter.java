@@ -662,6 +662,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
         }
 
+        if (!mMxSession.isAlive()) {
+            return convertView;
+        }
+
         int roomNameBlack = mContext.getResources().getColor(R.color.vector_text_black_color);
         int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
         int vectorDarkGreyColor = mContext.getResources().getColor(R.color.vector_4d_gray);
