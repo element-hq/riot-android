@@ -340,7 +340,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                                     currentActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            manageRoom(aContext);
+                                            stopHomeActivitySpinner(aContext);
+                                            openRoomActivity(aContext);
                                         }
                                     });
                                 }
