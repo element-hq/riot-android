@@ -79,11 +79,16 @@ public class MXCActionBarActivity extends ActionBarActivity {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
 
-        Log.e("MXCActionBarActivity", "onTrimMemory " + level);
-        if ((level == TRIM_MEMORY_RUNNING_CRITICAL) || (level == TRIM_MEMORY_COMPLETE)) {
-            // clear the application cache
-            // to reduce memory usage.
-            Matrix.getInstance(this).reloadSessions(this);
+        if (!VectorApp.isAppInBackground()) {
+            Log.e("MXCActionBarActivity", "Active application : onTrimMemory " + level);
+
+            if ((level == TRIM_MEMORY_RUNNING_CRITICAL) || (level == TRIM_MEMORY_COMPLETE)) {
+                // clear the application cache
+                // to reduce memory usage.
+                Matrix.getInstance(this).reloadSessions(this);
+            }
+        } else {
+            Log.e("MXCActionBarActivity", "background application : onTrimMemory " + level);
         }
     }
 
