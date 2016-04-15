@@ -151,20 +151,24 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * Used in the child views of the expandable list view.
      */
     private static class ChildMemberViewHolder {
-        final ImageView mAvatarImageView;
+        final ImageView mMemberAvatarImageView;
+        final ImageView mMemberAvatarBadgeImageView;
         final TextView mMemberNameTextView;
         final TextView mMemberStatusTextView;
         final View mHiddenListActionsView;
+        final View mDeleteActionsView;
         final RelativeLayout mSwipeCellLayout;
         final CheckBox mMultipleSelectionCheckBox;
 
         ChildMemberViewHolder(View aParentView){
-            mAvatarImageView = (ImageView)aParentView.findViewById(R.id.filtered_list_avatar);
+            mMemberAvatarImageView = (ImageView)aParentView.findViewById(R.id.filtered_list_avatar);
+            mMemberAvatarBadgeImageView  = (ImageView) aParentView.findViewById(R.id.filtered_list_avatar_badge);
             mMemberNameTextView = (TextView) aParentView.findViewById(R.id.filtered_list_name);
             mMemberStatusTextView = (TextView) aParentView.findViewById(R.id.filtered_list_status);
             mHiddenListActionsView = (View) aParentView.findViewById(R.id.filtered_list_actions);
             mSwipeCellLayout = (RelativeLayout) aParentView.findViewById(R.id.filtered_list_cell);
             mMultipleSelectionCheckBox = (CheckBox)aParentView.findViewById(R.id.filtered_list_checkbox);
+            mDeleteActionsView = (View)aParentView.findViewById(R.id.filtered_list_delete_action);
         }
     }
 
@@ -704,6 +708,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int aGroupPosition, final int aChildPosition, boolean isLastChild, View aConvertView, ViewGroup aParentView) {
+        final ChildMemberViewHolder viewHolder;
         boolean isActionsMenuHidden;
         final ParticipantAdapterItem participant;
         boolean isSearchMode = isSearchModeEnabled();
@@ -717,24 +722,19 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         if (aConvertView == null) {
             aConvertView = mLayoutInflater.inflate(mChildLayoutResourceId, aParentView, false);
+            viewHolder =  new ChildMemberViewHolder(aConvertView);
+            aConvertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ChildMemberViewHolder)aConvertView.getTag();
         }
-
-        final ImageView memberAvatarImageView = (ImageView) aConvertView.findViewById(R.id.filtered_list_avatar);
-        final ImageView memberAvatarBadgeImageView  = (ImageView) aConvertView.findViewById(R.id.filtered_list_avatar_badge);
-        final TextView memberNameTextView = (TextView) aConvertView.findViewById(R.id.filtered_list_name);
-        final TextView memberStatusTextView = (TextView) aConvertView.findViewById(R.id.filtered_list_status);
-        final View hiddenListActionsView = aConvertView.findViewById(R.id.filtered_list_actions);
-        final RelativeLayout swipeCellLayout = (RelativeLayout) aConvertView.findViewById(R.id.filtered_list_cell); // swipe management
-        final CheckBox multipleSelectionCheckBox = (CheckBox)aConvertView.findViewById(R.id.filtered_list_checkbox);
-        View deleteActionsView = aConvertView.findViewById(R.id.filtered_list_delete_action);
 
         // 1 - display member avatar
         if (null != participant.mAvatarBitmap) {
-            memberAvatarImageView.setImageBitmap(participant.mAvatarBitmap);
+            viewHolder.mMemberAvatarImageView.setImageBitmap(participant.mAvatarBitmap);
         } else {
             {
                 if (TextUtils.isEmpty(participant.mUserId)) {
-                    VectorUtils.loadUserAvatar(mContext, mSession, memberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
+                    VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
                 } else {
 
                     // try to provide a better display for a participant when the user is known.
@@ -752,7 +752,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                         }
                     }
 
-                    VectorUtils.loadUserAvatar(mContext, mSession, memberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
+                    VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
                 }
             }
         }
@@ -762,23 +762,23 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         String memberName = (isLoggedUserPosition && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
         // 2b admin badge
-        memberAvatarBadgeImageView.setVisibility(View.GONE);
+        viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.GONE);
 
         PowerLevels powerLevels = null;
         if (null != mRoom) {
             if (!isSearchMode && (null != (powerLevels = mRoom.getLiveState().getPowerLevels()))) {
 
                 if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
-                    memberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                    memberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+                    viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
                     memberName = mContext.getString(R.string.room_participants_admin_name, memberName);
                 } else if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
-                    memberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                    memberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+                    viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
                 }
             }
         }
-        memberNameTextView.setText(memberName);
+        viewHolder.mMemberNameTextView.setText(memberName);
 
         // 3 - display member status
         String status = "";
@@ -813,10 +813,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId);
             }
         }
-        memberStatusTextView.setText(status);
+        viewHolder.mMemberStatusTextView.setText(status);
 
         // add "remove member from room" action
-        deleteActionsView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
@@ -842,7 +842,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
 
         // cancel any translation
-        swipeCellLayout.setTranslationX(0);
+        viewHolder.mSwipeCellLayout.setTranslationX(0);
 
         // during a room creation, there is no dedicated power level
         if (null != powerLevels) {
@@ -866,7 +866,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
 
         // set swipe layout click handler: notify the listener of the adapter
-        swipeCellLayout.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mSwipeCellLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mOnParticipantsListener) {
@@ -889,7 +889,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             @Override
             public boolean onLongClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", memberNameTextView.getText());
+                ClipData clip = ClipData.newPlainText("", viewHolder.mMemberNameTextView.getText());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
 
@@ -898,20 +898,20 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         };
         // the cellLayout setOnLongClickListener might be trapped by the scroll management
         // so add it to some UI items.
-        swipeCellLayout.setOnLongClickListener(onLongClickListener);
-        memberNameTextView.setOnLongClickListener(onLongClickListener);
-        memberAvatarImageView.setOnLongClickListener(onLongClickListener);
+        viewHolder.mSwipeCellLayout.setOnLongClickListener(onLongClickListener);
+        viewHolder.mMemberNameTextView.setOnLongClickListener(onLongClickListener);
+        viewHolder.mMemberAvatarImageView.setOnLongClickListener(onLongClickListener);
 
         // SWIPE: the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || isActionsMenuHidden || (null == participant.mRoomMember)) {
-            swipeCellLayout.setOnTouchListener(null);
+            viewHolder.mSwipeCellLayout.setOnTouchListener(null);
         } else {
-            swipeCellLayout.setOnTouchListener(new View.OnTouchListener() {
+            viewHolder.mSwipeCellLayout.setOnTouchListener(new View.OnTouchListener() {
                 private float mStartX = 0;
 
                 @Override
                 public boolean onTouch(final View v, MotionEvent event) {
-                    final int hiddenViewWidth = hiddenListActionsView.getWidth();
+                    final int hiddenViewWidth = viewHolder.mHiddenListActionsView.getWidth();
                     boolean isMotionTrapped = true;
 
                     switch (event.getAction()) {
@@ -923,14 +923,14 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                                 return false;
                             }
 
-                            mSwipingCellView = swipeCellLayout;
+                            mSwipingCellView = viewHolder.mSwipeCellLayout;
                             mStartX = event.getX();
                             break;
                         }
                         case MotionEvent.ACTION_MOVE: {
                             float x = event.getX() + v.getTranslationX();
                             float deltaX = Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
-                            swipeCellLayout.setTranslationX(deltaX);
+                            viewHolder.mSwipeCellLayout.setTranslationX(deltaX);
                         }
                         break;
                         case MotionEvent.ACTION_CANCEL:
@@ -948,9 +948,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
 
                                 if (deltaX > (hiddenViewWidth / 2)) {
-                                    swipeCellLayout.setTranslationX(-hiddenViewWidth);
+                                    viewHolder.mSwipeCellLayout.setTranslationX(-hiddenViewWidth);
                                 } else {
-                                    swipeCellLayout.setTranslationX(0);
+                                    viewHolder.mSwipeCellLayout.setTranslationX(0);
                                     mSwipingCellView = null;
                                 }
                             }
@@ -971,23 +971,23 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         // multi selections mode
         // do not display a checkbox for oneself
         if (mIsMultiSelectionMode && !TextUtils.equals(mSession.getMyUserId(), participant.mUserId) && (null != participant.mRoomMember)) {
-            multipleSelectionCheckBox.setVisibility(View.VISIBLE);
+            viewHolder.mMultipleSelectionCheckBox.setVisibility(View.VISIBLE);
 
-            multipleSelectionCheckBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
+            viewHolder.mMultipleSelectionCheckBox.setChecked(mSelectedUserIds.indexOf(participant.mUserId) >= 0);
 
-            if (multipleSelectionCheckBox.isChecked()) {
+            if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
                 backgroundColor = mContext.getResources().getColor(R.color.vector_05_gray);
             }
 
-            multipleSelectionCheckBox.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mMultipleSelectionCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (multipleSelectionCheckBox.isChecked()) {
+                    if (viewHolder.mMultipleSelectionCheckBox.isChecked()) {
                         mSelectedUserIds.add(participant.mUserId);
-                        swipeCellLayout.setBackgroundColor(mContext.getResources().getColor(R.color.vector_05_gray));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(mContext.getResources().getColor(R.color.vector_05_gray));
                     } else {
                         mSelectedUserIds.remove(participant.mUserId);
-                        swipeCellLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+                        viewHolder.mSwipeCellLayout.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
                     }
 
                     if (null != mOnParticipantsListener) {
@@ -996,10 +996,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 }
             });
         } else {
-            multipleSelectionCheckBox.setVisibility(View.GONE);
+            viewHolder.mMultipleSelectionCheckBox.setVisibility(View.GONE);
         }
 
-        swipeCellLayout.setBackgroundColor(backgroundColor);
+        viewHolder.mSwipeCellLayout.setBackgroundColor(backgroundColor);
 
         return aConvertView;
     }
