@@ -16,6 +16,9 @@
 
 package im.vector.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -54,6 +57,11 @@ import java.util.List;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
 
+    private static final String KEY_EXPAND_STATE_INVITES_GROUP = "KEY_EXPAND_STATE_INVITES_GROUP";
+    private static final String KEY_EXPAND_STATE_ROOMS_GROUP = "KEY_EXPAND_STATE_ROOMS_GROUP";
+    private static final String KEY_EXPAND_STATE_LOW_PRIORITY_GROUP = "KEY_EXPAND_STATE_LOW_PRIORITY_GROUP";
+    private static final String KEY_EXPAND_STATE_FAVOURITE_GROUP = "KEY_EXPAND_STATE_FAVOURITE_GROUP";
+
     /**
      * warns the activity when there is a scroll in the recents
      */
@@ -87,7 +95,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected RecentsExpandableListView mRecentsListView;
     protected VectorRoomSummaryAdapter mAdapter;
     protected View mWaitingView = null;
-    private HashMap<Integer, Boolean> mIsListViewGroupExpandedMap;
 
     // drag and drop management
     protected RelativeLayout mSelectedCellLayout;
@@ -116,13 +123,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
         if (null == mSession) {
             throw new RuntimeException("Must have valid default MXSession.");
-        }
-
-        // mechanism to retain collapse/expanded state of the expandable list view groups
-        if(null == savedInstanceState) {
-            mIsListViewGroupExpandedMap = new HashMap<>();
-        } else {
-            mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.get(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
@@ -270,13 +270,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         // it does not trigger any live event.
         // So, it is safer to sort the messages when debackgrounding
         //mAdapter.sortSummaries();
-        mAdapter.notifyDataSetChanged();
+        forceNotifyDataSetChanged();
     }
 
     @Override
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
-        aOutState.putSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE, mIsListViewGroupExpandedMap);
     }
 
     private void findWaitingView() {
@@ -301,6 +300,72 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
+    private void forceNotifyDataSetChanged(){
+        mAdapter.notifyDataSetChanged();
+
+        mRecentsListView.post(new Runnable() {
+            @Override
+            public void run() {
+                int groupCount = mRecentsListView.getExpandableListAdapter().getGroupCount();
+                boolean isExpanded = CommonActivityUtils.GROUP_IS_EXPANDED;
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+
+                for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+
+                    if (mAdapter.isInvitedRoomPosition(groupIndex)) {
+                        isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_INVITES_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                    } else if (mAdapter.isFavouriteRoomPosition(groupIndex)) {
+                        isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_FAVOURITE_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                    } else if (mAdapter.isNoTagRoomPosition(groupIndex)) { // "Rooms" group
+                        isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_ROOMS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                    } else if (mAdapter.isLowPriorityRoomPosition(groupIndex)) {
+                        isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                    } else if (mAdapter.isDirectoryGroupPosition(groupIndex)) { // public rooms (search mode)
+                        isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                    } else {
+                        // unknown group index, just skipp
+                        break;
+                    }
+
+                    if (CommonActivityUtils.GROUP_IS_EXPANDED == isExpanded) {
+                        mRecentsListView.expandGroup(groupIndex);
+                    } else {
+                        mRecentsListView.collapseGroup(groupIndex);
+                    }
+                }
+            }
+        });
+    }
+
+    private void updateGroupExpandStatus(int aGroupPosition, boolean aValue){
+        Context context = null;
+        String groupKey = null;
+
+        if(mAdapter.isInvitedRoomPosition(aGroupPosition)){
+            groupKey = KEY_EXPAND_STATE_INVITES_GROUP;
+        } else if(mAdapter.isFavouriteRoomPosition(aGroupPosition)){
+            groupKey = KEY_EXPAND_STATE_FAVOURITE_GROUP;
+        } else if(mAdapter.isNoTagRoomPosition(aGroupPosition)){ // "Rooms" group
+            groupKey = KEY_EXPAND_STATE_ROOMS_GROUP;
+        } else if(mAdapter.isLowPriorityRoomPosition(aGroupPosition)){
+            groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
+        } else if(mAdapter.isDirectoryGroupPosition(aGroupPosition)) { // public rooms (search mode)
+            groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
+        } else {
+            // unknown group position, just skipp
+            Log.w(LOG_TAG, "## updateGroupExpandStatus(): Failure - Unknown group: "+aGroupPosition);
+            return;
+        }
+
+        if (null != (context = getActivity().getApplicationContext())) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(groupKey, aValue);
+            editor.commit();
+        }
+    }
+
+
     /**
      * Add a MXEventListener to the session listeners.
      */
@@ -315,29 +380,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     @Override
                     public void run() {
                         mInitialSyncComplete = true;
-                        mAdapter.notifyDataSetChanged();
-
-                        mRecentsListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // expand all
-                                int groupCount = mRecentsListView.getExpandableListAdapter().getGroupCount();
-                                Boolean isExpanded = CommonActivityUtils.GROUP_IS_EXPANDED;
-
-                                for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-
-                                    if(null != mIsListViewGroupExpandedMap) {
-                                        isExpanded = mIsListViewGroupExpandedMap.get(Integer.valueOf(groupIndex));
-                                    }
-
-                                    if((null == isExpanded) ||(CommonActivityUtils.GROUP_IS_EXPANDED == isExpanded)){
-                                        mRecentsListView.expandGroup(groupIndex);
-                                    } else {
-                                        mRecentsListView.collapseGroup(groupIndex);
-                                    }
-                                }
-                            }
-                        });
+                        forceNotifyDataSetChanged();
                     }
                 });
             }
@@ -349,7 +392,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     public void run() {
                         Log.d(LOG_TAG, "onLiveEventsChunkProcessed");
                         if (!mIsPaused && refreshOnChunkEnd && !mIsWaitingTagOrderEcho) {
-                            mAdapter.notifyDataSetChanged();
+
+                            forceNotifyDataSetChanged();
                         }
 
                         refreshOnChunkEnd = false;
@@ -414,7 +458,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mAdapter.notifyDataSetChanged();
+                            forceNotifyDataSetChanged();
                         }
                     });
                 }
@@ -455,16 +499,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public void onGroupCollapsedNotif(int aGroupPosition){
-        if(null != mIsListViewGroupExpandedMap) {
-            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_COLLAPSED);
-        }
+        updateGroupExpandStatus(aGroupPosition, CommonActivityUtils.GROUP_IS_COLLAPSED);
     }
 
     @Override
     public void onGroupExpandedNotif(int aGroupPosition){
-        if(null != mIsListViewGroupExpandedMap) {
-            mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_EXPANDED);
-        }
+        updateGroupExpandStatus(aGroupPosition, CommonActivityUtils.GROUP_IS_EXPANDED);
     }
 
     @Override
@@ -626,7 +666,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 // move cell
                 mAdapter.moveChildView(mDestGroupPosition, mDestChildPosition, groupPosition, childPosition);
                 // refresh
-                mAdapter.notifyDataSetChanged();
+                forceNotifyDataSetChanged();
 
                 // backup
                 mDestGroupPosition = groupPosition;
@@ -727,7 +767,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             mSession.getDataHandler().addListener(mEventsListener);
             mAdapter.setIsDragAndDropMode(false);
             if (!mIsWaitingTagOrderEcho) {
-                mAdapter.notifyDataSetChanged();
+                forceNotifyDataSetChanged();
             }
         }
     }

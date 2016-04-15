@@ -858,8 +858,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 // always offer possibility to leave the room to the logged member
                 isActionsMenuHidden = false;
             } else {
-                // hide actions menu if my power level is lower than the member's one
-                isActionsMenuHidden = (((myPowerLevel < memberPowerLevel) || (myPowerLevel < kickPowerLevel)));
+                // hide actions menu if my power level is lower or equal than the member's one
+                isActionsMenuHidden = (((myPowerLevel <= memberPowerLevel) || (myPowerLevel < kickPowerLevel)));
             }
         } else {
             isActionsMenuHidden = (null == mRoom);
