@@ -603,7 +603,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         if(null != (intent = getIntent())) {
 
             if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                Log.d("Home","## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
+                Log.d(LOG_TAG,"## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
                 uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
 
                 if (null != uri) {
@@ -617,10 +617,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                     // use only once, remove since it has been used
                     intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-                    Log.d("Home", "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
+                    Log.d(LOG_TAG, "## processIntentUniversalLink(): Broadcast BROADCAST_ACTION_UNIVERSAL_LINK_RESUME sent");
                 }
-            } else {
-                Log.d("Home","## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI not present");
             }
         }
     }
