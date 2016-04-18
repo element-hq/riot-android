@@ -512,7 +512,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             for (RoomThirdPartyInvite invite : thirdPartyInvites) {
                 // If the home server has converted the 3pid invite into a room member, do not show it
                 if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
-                    invitedMembers.add(new ParticipantAdapterItem(invite.display_name, "", null));
+                    ParticipantAdapterItem participant =  new ParticipantAdapterItem(invite.display_name, "", null);
+
+                    if ((!isSearchEnabled) || participant.matchWithPattern(mSearchPattern)) {
+                        invitedMembers.add(participant);
+                    }
                 }
             }
 
