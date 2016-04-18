@@ -21,7 +21,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,7 +36,6 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -245,7 +243,6 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             return;
         }
 
-        ArrayList<ParticipantAdapterItem> unusedParticipants = new ArrayList<ParticipantAdapterItem>();
         IMXStore store = mSession.getDataHandler().getStore();
 
         // list the used members IDs
@@ -259,7 +256,6 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                     idsToIgnore.add(member.getUserId());
                 }
             }
-
         } else {
             for(ParticipantAdapterItem item : mCreationParticipantsList) {
                 idsToIgnore.add(item.mUserId);
@@ -267,6 +263,23 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mContext, mSession);
+
+        // add contact emails
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(getContext());
+
+        for(Contact contact : contacts) {
+            for(String email : contact.mEmails) {
+                if (!TextUtils.isEmpty(email)) {
+                    Contact dummyContact = new Contact(email);
+                    dummyContact.setDisplayName(email);
+
+                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, getContext());
+                    participant.mUserId = email;
+
+                    map.put(email, participant);
+                }
+            }
+        }
 
         // remove the known users
         for(String id : idsToIgnore ){
@@ -436,6 +449,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         } else {
             if ((null != mFirstEntry) && (position == 0)) {
                 thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@", true));
+            } else if ((null != participant.mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches())) {
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(participant.mUserId), "@@", true));
             } else {
                 if (TextUtils.isEmpty(participant.mUserId)) {
                     VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);

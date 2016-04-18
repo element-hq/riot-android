@@ -454,7 +454,7 @@ public class CommonActivityUtils {
                 public void onSuccess(String roomId) {
                     final Room room = fSession.getDataHandler().getRoom(roomId);
 
-                    room.invite(otherUserId, new SimpleApiCallback<Void>(this) {
+                    final SimpleApiCallback inviteCallback = new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
                             HashMap<String, Object> params = new HashMap<String, Object>();
@@ -487,7 +487,14 @@ public class CommonActivityUtils {
                             }
                         }
 
-                    });
+                    };
+
+                    // check if the userId defines an meail address.
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches()) {
+                        room.inviteByEmail(otherUserId, inviteCallback);
+                    } else {
+                        room.invite(otherUserId, inviteCallback);
+                    }
                 }
 
                 @Override
