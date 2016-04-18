@@ -366,12 +366,7 @@ public final class GcmRegistrationManager {
                             }
 
                             private void onError(final String message) {
-                                mUIHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(mContext, "fail to register " + session.getMyUserId() + " (" + message + ")", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                Log.e(LOG_TAG, "fail to register " + session.getMyUserId() + " (" + message + ")");
 
                                 if (null != listener) {
                                     try {
@@ -603,12 +598,7 @@ public final class GcmRegistrationManager {
 
                             private void onError(final String message) {
                                 if (session.isAlive()) {
-                                    mUIHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(mContext, "fail to unregister " + session.getMyUserId() + " (" + message + ")", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
+                                    Log.e(LOG_TAG, "fail to unregister " + session.getMyUserId() + " (" + message + ")");
 
                                     if (null != listener) {
                                         try {
