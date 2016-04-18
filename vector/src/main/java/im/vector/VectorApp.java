@@ -207,6 +207,16 @@ public class VectorApp extends Application {
 
     static private Activity mCurrentActivity = null;
     public static void setCurrentActivity(Activity activity) {
+
+        if (VectorApp.isAppInBackground() && (null != activity)) {
+            Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
+
+            // sanity check
+            if (null != matrixInstance) {
+                matrixInstance.refreshPushRules();
+            }
+        }
+
         // wait 2s to check that the application is put in background
         if (null != getInstance()) {
             if (null == activity) {

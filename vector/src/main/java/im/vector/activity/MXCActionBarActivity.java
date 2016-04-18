@@ -218,16 +218,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        // refresh the push rules when debackgrounding the application
-        if (VectorApp.isAppInBackground()) {
-            Matrix matrixInstance =  Matrix.getInstance(getApplicationContext());
-
-            // sanity check
-            if (null != matrixInstance) {
-                matrixInstance.refreshPushRules();
-            }
-        }
-
         VectorApp.setCurrentActivity(this);
         Matrix.setSessionErrorListener(this);
 
