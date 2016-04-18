@@ -857,6 +857,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     intent.putExtra(CallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
                 }
 
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -911,6 +912,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (id == R.id.ic_action_search_in_room) {
             try {
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
                 // pop to the home activity
                 Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
                 intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -938,6 +941,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                 @Override
                 public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
                     // create the call object
                     IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
@@ -970,6 +974,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void launchRoomDetails() {
         if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
             // pop to the home activity
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -1401,6 +1407,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * @param mediaMimeType
      */
     public void createDocument(Message message, final String mediaUrl, final String mediaMimeType) {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
         String filename = "Vector_" + System.currentTimeMillis();
 
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -1794,6 +1802,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * Launch the files selection intent
      */
     private void launchFileSelectionIntent() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
         Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -1806,6 +1816,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * Launch the camera
      */
     private void launchCamera() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
         Intent intent = new Intent(this, VectorMediasPickerActivity.class);
         startActivityForResult(intent, TAKE_IMAGE);
     }
