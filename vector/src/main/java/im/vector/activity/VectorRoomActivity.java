@@ -1881,6 +1881,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     //================================================================================
 
     private void refreshNotificationsArea() {
+        // sanity check
+        // might happen when the application is logged out
+        if (null == mSession.getDataHandler()) {
+            return;
+        }
+
         boolean isAreaVisible = false;
         boolean isTypingIconDisplayed = false;
         boolean isErrorIconDisplayed = false;
