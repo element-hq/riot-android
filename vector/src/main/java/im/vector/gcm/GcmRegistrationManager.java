@@ -206,6 +206,13 @@ public final class GcmRegistrationManager {
                     Log.d(LOG_TAG, "checkPusherRegistration : onPusherRegistrationFailed");
                 }
             });
+        } else if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
+            // register the 3rd party server
+            // the server registration might have failed
+            // so ensure that it will be done when the application is debackgrounded.
+            if (useGCM()) {
+                registerSessions(appContext, null);
+            }
         }
     }
 
