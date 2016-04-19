@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+/**
+ * SplashActivity displays a splash while loading and inittializing the client.
+ */
 public class SplashActivity extends MXCActionBarActivity {
 
     private static final String LOG_TAG = "SplashActivity";

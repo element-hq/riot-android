@@ -38,22 +38,15 @@ import im.vector.R;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
+/**
+ * FallbackLoginActivity is the fallback login activity
+ * i.e this activity is created when the client does not support the
+ */
 public class FallbackLoginActivity extends Activity {
     public static String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
 
     WebView mWebView = null;
     private String mHomeServerUrl = null;
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            // This is to fix a bug in the v7 support lib. If there is no options menu and you hit MENU, it will crash with a
-            // NPE @ android.support.v7.app.ActionBarImplICS.getThemedContext(ActionBarImplICS.java:274)
-            // This can safely be removed if we add in menu options on this screen
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -223,5 +216,28 @@ public class FallbackLoginActivity extends Activity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            // This is to fix a bug in the v7 support lib. If there is no options menu and you hit MENU, it will crash with a
+            // NPE @ android.support.v7.app.ActionBarImplICS.getThemedContext(ActionBarImplICS.java:274)
+            // This can safely be removed if we add in menu options on this screen
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        CommonActivityUtils.onLowMemory(this);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        CommonActivityUtils.onTrimMemory(this, level);
     }
 }

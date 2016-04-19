@@ -24,6 +24,9 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.fragments.VectorSettingsPreferencesFragment;
 
+/**
+ * Displays the client settings.
+ */
 public class VectorSettingsActivity extends MXCActionBarActivity {
     // session
     private MXSession mSession;

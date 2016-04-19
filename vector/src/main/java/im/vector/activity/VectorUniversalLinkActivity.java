@@ -22,6 +22,9 @@ import android.os.Bundle;
 
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
+/**
+ * Dummy activity used to dispatch an universal link.
+ */
 public class VectorUniversalLinkActivity extends Activity {
 
     @Override

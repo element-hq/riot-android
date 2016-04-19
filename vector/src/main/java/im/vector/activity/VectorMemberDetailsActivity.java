@@ -49,6 +49,9 @@ import im.vector.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
+ */
 public class VectorMemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
     private static final String LOG_TAG = "VectorMemberDetAct";
 

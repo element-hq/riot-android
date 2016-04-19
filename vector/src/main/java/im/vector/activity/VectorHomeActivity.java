@@ -374,25 +374,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-
-        if (!VectorApp.isAppInBackground()) {
-            Log.e(LOG_TAG, "Active application : onLowMemory ");
-
-            // clear the application cache
-            // to reduce memory usage.
-            Matrix.getInstance(this).reloadSessions(this);
-        } else {
-            Log.e(LOG_TAG, "background application : onLowMemory ");
-        }
+        CommonActivityUtils.onLowMemory(this);
     }
-
 
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-
-        Log.e(LOG_TAG, "application : onTrimMemory " + level);
-        // TODO implement things to reduce memory usage
+        CommonActivityUtils.onTrimMemory(this, level);
     }
 
     @Override

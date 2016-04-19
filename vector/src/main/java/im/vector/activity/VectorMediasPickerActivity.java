@@ -67,6 +67,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * VectorMediasPickerActivity is used to take a photo or to send an old one.
+ */
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
     // medias folder
     private static final int REQUEST_MEDIAS = 54;
