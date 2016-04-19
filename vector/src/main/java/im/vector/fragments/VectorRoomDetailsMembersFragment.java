@@ -49,7 +49,6 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
@@ -165,6 +164,51 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             }
         }
     };
+
+    private ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressView.setVisibility(View.GONE);
+                            }
+                        });
+            }
+        }
+
+        public void onError(final String errorMessage) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressView.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
+
 
     // top view
     private View mViewHierarchy;
@@ -593,12 +637,26 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 mRoom.leave(new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
-                                        mProgressView.setVisibility(View.GONE);
+                                        if (null != getActivity()) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    getActivity().finish();
+                                                }
+                                            });
+                                        }
                                     }
 
-                                    private void onError(String errorMessage) {
-                                        mProgressView.setVisibility(View.GONE);
-                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                    private void onError(final String errorMessage) {
+                                        if (null != getActivity()) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mProgressView.setVisibility(View.GONE);
+                                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
@@ -616,7 +674,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                         onError(e.getLocalizedMessage());
                                     }
                                 });
-                                getActivity().finish();
+
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -691,37 +749,12 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         // and the new member is added.
                         mProgressView.setVisibility(View.VISIBLE);
 
-                        SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>(getActivity()) {
-                            @Override
-                            public void onSuccess(Void info) {
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onMatrixError(final MatrixError e) {
-                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onUnexpectedError(final Exception e) {
-                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                mProgressView.setVisibility(View.GONE);
-                            }
-                        };
-
                         if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                            mRoom.inviteByEmail(userId, callback);
+                            mRoom.inviteByEmail(userId, mDefaultCallBack);
                         } else {
                             ArrayList<String> userIDs = new ArrayList<String>();
                             userIDs.add(userId);
-                            mRoom.invite(userIDs, callback);
+                            mRoom.invite(userIDs, mDefaultCallBack);
                         }
                     }
                 }, 100);
