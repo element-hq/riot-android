@@ -18,6 +18,7 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
@@ -74,7 +75,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -971,25 +974,64 @@ public class CommonActivityUtils {
     // Low memory management
     //==============================================================================================================
 
+    private static final String LOW_MEMORY_LOG_TAG = "Memory usage";
+
+    /**
+     * Log the memory status.
+     */
+    private static void displayMemoryInformation(Activity activity) {
+        long freeSize = 0L;
+        long totalSize = 0L;
+        long usedSize = -1L;
+        try {
+            Runtime info = Runtime.getRuntime();
+            freeSize = info.freeMemory();
+            totalSize = info.totalMemory();
+            usedSize = totalSize - freeSize;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+        Log.e(LOW_MEMORY_LOG_TAG, "usedSize   " + (usedSize / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "freeSize   " + (freeSize / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "totalSize  " + (totalSize / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+
+
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+
+        Log.e(LOW_MEMORY_LOG_TAG, "availMem   " + (mi.availMem / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "totalMem   " + (mi.totalMem / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "threshold  " + (mi.threshold / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "lowMemory  " + (mi.lowMemory));
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+    }
+
     /**
      * Manage the low memory case
      *
      * @param activity
      */
     public static void onLowMemory(Activity activity) {
+
         if (!VectorApp.isAppInBackground()) {
-            Log.e("Low Memory", "Active application : onLowMemory from " + activity);
+            Log.e(LOW_MEMORY_LOG_TAG, "Active application : onLowMemory from " + activity);
 
             if (CommonActivityUtils.shouldRestartApp()) {
-                Log.e("Low Memory", "restart");
+                Log.e(LOW_MEMORY_LOG_TAG, "restart");
                 CommonActivityUtils.restartApp(activity);
             } else {
-                Log.e("Low Memory", "clear the application cache");
+                Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
                 Matrix.getInstance(activity).reloadSessions(activity);
             }
         } else {
-            Log.e("Low Memory", "background application : onLowMemory ");
+            Log.e(LOW_MEMORY_LOG_TAG, "background application : onLowMemory ");
         }
+
+        displayMemoryInformation(activity);
     }
 
     /**
@@ -1000,5 +1042,7 @@ public class CommonActivityUtils {
     public static void onTrimMemory(Activity activity, int level) {
         Log.e("Low Memory","application : onTrimMemory "+level);
         // TODO implement things to reduce memory usage
+
+        displayMemoryInformation(activity);
     }
 }
