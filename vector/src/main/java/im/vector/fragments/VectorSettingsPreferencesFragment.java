@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -269,7 +268,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mSession.getMyUser().refreshLinkedEmails(new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    refreshEmailsList();
+                    // ensure that the activity still exists
+                    if (null != getActivity()) {
+                        // and the result is called in the right thread
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshEmailsList();
+                            }
+                        });
+                    }
                 }
             });
 
@@ -392,32 +400,40 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                         displayLoadingView();
 
                         mSession.updatePassword(oldPwd, newPwd, new ApiCallback<Void>() {
-                            private void onDone(String message) {
-                                hideLoadingView();
-
-                                Toast.makeText(getActivity(),
-                                        message,
-                                        Toast.LENGTH_LONG).show();
+                            private void onDone(final int textId) {
+                                // check the activity still exists
+                                if (null != getActivity()) {
+                                    // and the code is called in the right thread
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hideLoadingView();
+                                            Toast.makeText(getActivity(),
+                                                    getActivity().getResources().getString(textId),
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
                             }
 
                             @Override
                             public void onSuccess(Void info) {
-                                onDone(getActivity().getResources().getString(R.string.settings_password_updated));
+                                onDone(R.string.settings_password_updated);
                             }
 
                             @Override
                             public void onNetworkError(Exception e) {
-                                onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
+                                onDone(R.string.settings_fail_to_update_password);
                             }
 
                             @Override
                             public void onMatrixError(MatrixError e) {
-                                onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
+                                onDone(R.string.settings_fail_to_update_password);
                             }
 
                             @Override
                             public void onUnexpectedError(Exception e) {
-                                onDone(getActivity().getResources().getString(R.string.settings_fail_to_update_password));
+                                onDone(R.string.settings_fail_to_update_password);
                             }
                         });
                     }
@@ -493,20 +509,29 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mSession.getDataHandler().getBingRulesManager().toggleRule(rule, new BingRulesManager.onBingRuleUpdateListener() {
 
                 private void onDone() {
-                    hideLoadingView();
+                    // check if the activity still exists
+                    if (null != getActivity()) {
+                        // ensure that the response is done in the right thread.
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideLoadingView();
 
-                    BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
-                    Boolean isEnabled = ((null != rule) && rule.isEnabled);
+                                BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
+                                boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-                    if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
-                        isEnabled = !isEnabled;
+                                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                                    isEnabled = !isEnabled;
+                                }
+
+                                final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putBoolean(fResourceText, isEnabled);
+                                editor.commit();
+                                hideLoadingView(true);
+                            }
+                        });
                     }
-
-                    final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(fResourceText, isEnabled);
-                    editor.commit();
-                    hideLoadingView(true);
                 }
 
                 @Override
@@ -532,25 +557,22 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    hideLoadingView(true);
+                    onCommonDone(null);
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView();
+                    onCommonDone(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView();
+                    onCommonDone(e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView();
+                    onCommonDone(e.getLocalizedMessage());
                 }
             });
         }
@@ -600,25 +622,22 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                                     mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
                                         @Override
                                         public void onSuccess(Void info) {
-                                            hideLoadingView(true);
+                                            onCommonDone(null);
                                         }
 
                                         @Override
                                         public void onNetworkError(Exception e) {
-                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                            hideLoadingView(false);
+                                            onCommonDone(e.getLocalizedMessage());
                                         }
 
                                         @Override
                                         public void onMatrixError(MatrixError e) {
-                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                            hideLoadingView(false);
+                                            onCommonDone(e.getLocalizedMessage());
                                         }
 
                                         @Override
                                         public void onUnexpectedError(Exception e) {
-                                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                            hideLoadingView(false);
+                                            onCommonDone(e.getLocalizedMessage());
                                         }
                                     });
                                 } else {
@@ -745,12 +764,22 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     }
 
     /**
-     * The emila binding fails : display a dedicated error message.
+     * A request has been processed.
+     * Display a toast if there is a an error message
      * @param errorMessage the error message
      */
-    private void onEmailBindingError(String errorMessage) {
-        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-        hideLoadingView();
+    private void onCommonDone(final String errorMessage) {
+        if (null != getActivity()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!TextUtils.isEmpty(errorMessage)) {
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                    hideLoadingView();
+                }
+            });
+        }
     }
 
     /**
@@ -777,22 +806,29 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
-                showEmailValidationDialog(pid);
+                if (null != getActivity()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showEmailValidationDialog(pid);
+                        }
+                    });
+                }
             }
 
             @Override
             public void onNetworkError(Exception e) {
-                onEmailBindingError(e.getLocalizedMessage());
+                onCommonDone(e.getLocalizedMessage());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-                onEmailBindingError(e.getLocalizedMessage());
+                onCommonDone(e.getLocalizedMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-                onEmailBindingError(e.getLocalizedMessage());
+                onCommonDone(e.getLocalizedMessage());
             }
         });
     }
@@ -812,28 +848,42 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 mSession.getMyUser().add3Pid(pid, true, new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        hideLoadingView();
-                        refreshEmailsList();
+                        if (null != getActivity()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoadingView();
+                                    refreshEmailsList();
+                                }
+                            });
+                        }
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        onEmailBindingError(e.getLocalizedMessage());
+                        onCommonDone(e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
                         if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                            hideLoadingView();
-                            Toast.makeText(getActivity(), getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show();
+                            if (null != getActivity()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideLoadingView();
+                                        Toast.makeText(getActivity(), getString(R.string.account_email_validation_error), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         } else {
-                            onEmailBindingError(e.getLocalizedMessage());
+                            onCommonDone(e.getLocalizedMessage());
                         }
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onEmailBindingError(e.getLocalizedMessage());
+                        onCommonDone(e.getLocalizedMessage());
                     }
                 });
             }
