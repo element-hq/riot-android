@@ -693,7 +693,14 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         };
         // the cellLayout setOnLongClickListener might be trapped by the scroll management
         // so add it to some UI items.
-        viewHolder.mSwipeCellLayout.setOnLongClickListener(onLongClickListener);
+        viewHolder.mSwipeCellLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+
+        // long tap on the avatar or the display name copy it into the clipboard.
         viewHolder.mMemberNameTextView.setOnLongClickListener(onLongClickListener);
         viewHolder.mMemberAvatarImageView.setOnLongClickListener(onLongClickListener);
 
@@ -712,13 +719,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN: {
                             // cancel hidden view display
-                            if (null != mSwipingCellView) {
-                                mSwipingCellView.setTranslationX(0);
-                                mSwipingCellView = null;
-                                return false;
+                            if (null == mSwipingCellView) {
+                                mSwipingCellView = viewHolder.mSwipeCellLayout;
                             }
 
-                            mSwipingCellView = viewHolder.mSwipeCellLayout;
                             mStartX = event.getX();
                             break;
                         }
