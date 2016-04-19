@@ -215,12 +215,15 @@ public class CommonActivityUtils {
         activity.finish();
     }
 
-    public static void disconnect(Activity activity) {
-        stopEventStream(activity);
-        activity.finish();
-        Matrix.getInstance(activity).mHasBeenDisconnected = true;
-    }
+    //==============================================================================================================
+    // Events stream service
+    //==============================================================================================================
 
+    /**
+     * Send an action to the events service.
+     * @param context the context.
+     * @param action the action to send.
+     */
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
@@ -230,21 +233,37 @@ public class CommonActivityUtils {
         appContext.startService(killStreamService);
     }
 
+    /**
+     * Stop the event stream.
+     * @param context the context.
+     */
     public static void stopEventStream(Context context) {
         Log.d(LOG_TAG, "stopEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.STOP);
     }
 
+    /**
+     * Pause the event stream.
+     * @param context the context.
+     */
     public static void pauseEventStream(Context context) {
         Log.d(LOG_TAG, "pauseEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.PAUSE);
     }
 
+    /**
+     * Resume the events stream
+     * @param context the context.
+     */
     public static void resumeEventStream(Context context) {
         Log.d(LOG_TAG, "resumeEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.RESUME);
     }
 
+    /**
+     * Trigger a event stream catchup i.e. there is only sync/ call.
+     * @param context the context.
+     */
     public static void catchupEventStream(Context context) {
         if (VectorApp.isAppInBackground()) {
             Log.d(LOG_TAG, "catchupEventStream");
@@ -252,11 +271,19 @@ public class CommonActivityUtils {
         }
     }
 
+    /**
+     * Warn the events stream that there was a GCM status update.
+     * @param context the context.
+     */
     public static void onGcmUpdate(Context context) {
         Log.d(LOG_TAG, "onGcmUpdate");
         sendEventStreamAction(context, EventStreamService.StreamAction.GCM_STATUS_UPDATE);
     }
 
+    /**
+     * Start the events stream service.
+     * @param context the context.
+     */
     public static void startEventStreamService(Context context) {
         // the events stream service is launched
         // either the application has never be launched
@@ -269,7 +296,7 @@ public class CommonActivityUtils {
                 Log.d(LOG_TAG, "restart EventStreamService");
 
                 for (MXSession session : sessions) {
-                    Boolean isSessionReady = session.getDataHandler().getStore().isReady();
+                    boolean isSessionReady = session.getDataHandler().getStore().isReady();
 
                     if (!isSessionReady) {
                         session.getDataHandler().getStore().open();
@@ -287,56 +314,27 @@ public class CommonActivityUtils {
         }
     }
 
-    public interface OnSubmitListener {
-        void onSubmit(String text);
+    //==============================================================================================================
+    // Room jump methods.
+    //==============================================================================================================
 
-        void onCancelled();
-    }
-
-    public static AlertDialog createEditTextAlert(Activity context, String title, String hint, String initialText, final OnSubmitListener listener) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        final EditText input = new EditText(context);
-        if (hint != null) {
-            input.setHint(hint);
-        }
-
-        if (initialText != null) {
-            input.setText(initialText);
-        }
-        alert.setTitle(title);
-        alert.setView(input);
-        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString().trim();
-                listener.onSubmit(value);
-            }
-        });
-
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.cancel();
-                    }
-                }
-        );
-
-        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                listener.onCancelled();
-            }
-        });
-
-        AlertDialog dialog = alert.create();
-        // add the dialog to be rendered in the screenshot
-        RageShake.getInstance().registerDialog(dialog);
-
-        return dialog;
-    }
-
+    /**
+     * Start a room activity with the dedicated parameters.
+     * Pop the activity to the homeActivity before pushing the new activity.
+     * @param fromActivity the caller activity.
+     * @param params the room activity parameters
+     */
     public static void goToRoomPage(final Activity fromActivity, final Map<String, Object> params) {
         goToRoomPage(fromActivity, null, params);
     }
 
+    /**
+     * Start a room activity with the dedicated parameters.
+     * Pop the activity to the homeActivity before pushing the new activity.
+     * @param fromActivity  the caller activity.
+     * @param session the session.
+     * @param params the room activity parameters.
+     */
     public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
         final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String) params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
@@ -402,10 +400,16 @@ public class CommonActivityUtils {
         );
     }
 
-    public static void goToOneToOneRoom(final String matrixId, final String otherUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
-        goToOneToOneRoom(Matrix.getMXSession(fromActivity, matrixId), otherUserId, fromActivity, callback);
-    }
+    //==============================================================================================================
+    // 1:1 Room  methods.
+    //==============================================================================================================
 
+    /**
+     * Search the first existing room with a dedicated user.
+     * @param aSession the session
+     * @param otherUserId the other user id
+     * @return the room if it exits.
+     */
     public static Room findOneToOneRoom(final MXSession aSession, final String otherUserId) {
         Collection<Room> rooms = aSession.getDataHandler().getStore().getRooms();
 
@@ -424,6 +428,14 @@ public class CommonActivityUtils {
         return null;
     }
 
+    /**
+     * Jump to a 1:1 room with a dedicated user.
+     * If there is no room with this user, the room is created.
+     * @param aSession the session.
+     * @param otherUserId the other user id.
+     * @param fromActivity the caller activity.
+     * @param callback the callback.
+     */
     public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
         // sanity check
         if (null == otherUserId) {
@@ -653,6 +665,10 @@ public class CommonActivityUtils {
         builderSingle.show();
     }
 
+    //==============================================================================================================
+    // Parameters checkers.
+    //==============================================================================================================
+
     /**
      * Check if the userId format is valid with the matrix standard.
      * It should start with a @ and ends with the home server suffix.
@@ -678,59 +694,9 @@ public class CommonActivityUtils {
         return res;
     }
 
-    /**
-     * Parse an userIDS text into a list.
-     *
-     * @param userIDsText      the userIDs text.
-     * @param homeServerSuffix the home server suffix
-     * @return the userIDs list.
-     */
-    public static ArrayList<String> parseUserIDsList(String userIDsText, String homeServerSuffix) {
-        ArrayList<String> userIDsList = new ArrayList<String>();
-
-        if (!TextUtils.isEmpty(userIDsText)) {
-            userIDsText = userIDsText.trim();
-
-            if (!TextUtils.isEmpty(userIDsText)) {
-                // they are separated by a ;
-                String[] splitItems = userIDsText.split(";");
-
-                for (int i = 0; i < splitItems.length; i++) {
-                    String item = splitItems[i];
-
-                    // avoid null name
-                    if (item.length() > 0) {
-                        // add missing @ or home suffix
-                        String checkedItem = CommonActivityUtils.checkUserId(item, homeServerSuffix);
-
-                        // not yet added ? -> add it
-                        if (userIDsList.indexOf(checkedItem) < 0) {
-                            checkedItem.trim();
-                            userIDsList.add(checkedItem);
-                        }
-                    }
-                }
-            }
-        }
-
-        return userIDsList;
-    }
-
-    /**
-     * @param context  the context
-     * @param filename the filename
-     * @return true if a file named "filename" is stored in the downloads directory
-     */
-    public static Boolean doesFileExistInDownloads(Context context, String filename) {
-        File dstDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-        if (dstDir != null) {
-            dstDir.mkdirs();
-        }
-
-        File dstFile = new File(dstDir, filename);
-        return dstFile.exists();
-    }
+    //==============================================================================================================
+    // Media utils
+    //==============================================================================================================
 
     /**
      * Save a media in the downloads directory and offer to open it with a third party application.
@@ -880,38 +846,31 @@ public class CommonActivityUtils {
         return filePath;
     }
 
+    //==============================================================================================================
+    // toast utils
+    //==============================================================================================================
+
     /**
-     * Save an image URI into the Movies
-     *
-     * @param context    the context.
-     * @param sourceFile the video path to save.
+     * Display a toast
+     * @param aContext the context.
+     * @param aTextToDisplay the text to display.
      */
-    public static String saveIntoMovies(Context context, File sourceFile) {
-        String filePath = saveFileInto(context, sourceFile, Environment.DIRECTORY_MOVIES, null);
-
-        if (null != filePath) {
-            // This broadcasts that there's been a change in the media directory
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filePath))));
-        }
-
-        return filePath;
-    }
-
-    public static void displayNotImplementedToast(Context aContext) {
-        displayToast(aContext, "Not implemented");
-    }
-
-    public static void displayNotImplementedSnack(View aTargetView) {
-        displaySnack(aTargetView, "Not implemented");
-    }
-
     public static void displayToast(Context aContext, CharSequence aTextToDisplay) {
         Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Display a snack.
+     * @param aTargetView the parent view.
+     * @param aTextToDisplay the text to display.
+     */
     public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
     }
+
+    //==============================================================================================================
+    // room utils
+    //==============================================================================================================
 
     /**
      * Helper method to retrieve the max power level contained in the room.
