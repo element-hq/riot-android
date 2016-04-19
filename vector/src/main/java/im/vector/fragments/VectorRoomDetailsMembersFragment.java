@@ -387,15 +387,25 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private void kickUsers(final  ArrayList<String> userIds, final int index) {
         if (index >= userIds.size()) {
-            mProgressView.setVisibility(View.GONE);
+            // the kick requests are performed in a dedicated thread
+            // so switch to the UI thread at the end.
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mProgressView.setVisibility(View.GONE);
 
-            if (mIsMultiSelectionMode) {
-                toggleMultiSelectionMode();
-                resetActivityTitle();
+                        if (mIsMultiSelectionMode) {
+                            toggleMultiSelectionMode();
+                            resetActivityTitle();
+                        }
+
+                        // refresh the display
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
-            // refresh the display 
-            mAdapter.notifyDataSetChanged();
             return;
         }
 
@@ -546,10 +556,15 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
 
-                                ArrayList<String> userIds = new ArrayList<String>();
-                                userIds.add(participantItem.mUserId);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ArrayList<String> userIds = new ArrayList<String>();
+                                        userIds.add(participantItem.mUserId);
 
-                                kickUsers(userIds, 0);
+                                        kickUsers(userIds, 0);
+                                    }
+                                });
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
