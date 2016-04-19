@@ -539,12 +539,26 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             room.leave(new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    hideWaitingView();
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideWaitingView();
+                            }
+                        });
+                    }
                 }
 
-                private void onError(String message) {
-                    hideWaitingView();
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                private void onError(final String message) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideWaitingView();
+                                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
 
                 @Override
@@ -582,13 +596,30 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             bingRulesManager.muteRoomNotifications(room, !bingRulesManager.isRoomNotificationsDisabled(room), new BingRulesManager.onBingRuleUpdateListener() {
                 @Override
                 public void onBingRuleUpdateSuccess() {
-                    hideWaitingView();
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideWaitingView();
+                            }
+                        });
+                    }
                 }
 
                 @Override
-                public void onBingRuleUpdateFailure(String errorMessage) {
-                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-                    hideWaitingView();
+                public void onBingRuleUpdateFailure(final String errorMessage) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                        hideWaitingView();
+                                    }
+                                }
+                        );
+                    }
+
                 }
             });
         }
@@ -826,17 +857,31 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 @Override
                 public void onSuccess(Void info) {
-                    hideWaitingView();
-                    stopDragAndDropMode();
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideWaitingView();
+                                stopDragAndDropMode();
+                            }
+                        });
+                    }
                 }
 
-                private void onReplaceFails(String errorMessage) {
-                    mIsWaitingTagOrderEcho = false;
-                    hideWaitingView();
-                    stopDragAndDropMode();
+                private void onReplaceFails(final String errorMessage) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mIsWaitingTagOrderEcho = false;
+                                hideWaitingView();
+                                stopDragAndDropMode();
 
-                    if (!TextUtils.isEmpty(errorMessage)) {
-                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                if (!TextUtils.isEmpty(errorMessage)) {
+                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
                     }
                 }
 
