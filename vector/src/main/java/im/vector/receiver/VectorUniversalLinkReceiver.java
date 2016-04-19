@@ -346,9 +346,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                                     });
                                 }
 
-                                private void onError(String errorMessage) {
-                                    CommonActivityUtils.displayToast(aContext, errorMessage);
-                                    stopHomeActivitySpinner(aContext);
+                                private void onError(final String errorMessage) {
+                                    currentActivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CommonActivityUtils.displayToast(aContext, errorMessage);
+                                            stopHomeActivitySpinner(aContext);
+                                        }
+                                    });
                                 }
 
                                 @Override
