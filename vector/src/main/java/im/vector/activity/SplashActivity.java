@@ -50,6 +50,9 @@ public class SplashActivity extends MXCActionBarActivity {
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
 
+    /**
+     * @return true if a store is corrupted.
+     */
     private boolean hasCorruptedStore() {
         boolean hasCorruptedStore = false;
         ArrayList<MXSession> sessions = Matrix.getMXSessions(this);
@@ -62,6 +65,9 @@ public class SplashActivity extends MXCActionBarActivity {
         return hasCorruptedStore;
     }
 
+    /**
+     * Close the splash screen if the stores are fully loaded.
+     */
     private void finishIfReady() {
         Log.e(LOG_TAG, "finishIfReady " + mInitialSyncComplete + " " + mPusherRegistrationComplete);
 
@@ -123,7 +129,7 @@ public class SplashActivity extends MXCActionBarActivity {
                 @Override
                 public void onInitialSyncComplete() {
                     super.onInitialSyncComplete();
-                    Boolean noMoreListener;
+                    boolean noMoreListener;
 
                     Log.e(LOG_TAG, "Session " + fSession.getCredentials().userId + " is initialized");
 
