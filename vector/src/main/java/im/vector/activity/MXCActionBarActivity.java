@@ -45,8 +45,6 @@ import im.vector.MyPresenceManager;
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.adapters.DrawerAdapter;
-import im.vector.services.EventStreamService;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
