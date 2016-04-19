@@ -69,7 +69,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
 
     private static final int INVITE_USER_REQUEST_CODE = 777;
-    private static final String NO_PATTERN_FILTER = null;
     private static final boolean REFRESH_FORCED = true;
     private static final boolean REFRESH_NOT_FORCED = false;
 
@@ -122,10 +121,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         mSearchNoResultTextView.setVisibility(View.GONE);
                     }
 
-                    if (NO_PATTERN_FILTER.equals(mPatternValue)) {
+                    if (TextUtils.isEmpty(mPatternValue)) {
                         // search result with no pattern filter
                         updateListExpandingState();
-
                     } else {
                         // search result
                         forceListInExpandingState();
@@ -160,7 +158,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             if (TextUtils.isEmpty(patternValue)) {
                 // search input is empty: restore a not filtered room members list
                 mClearSearchImageView.setVisibility(View.INVISIBLE);
-                mPatternValue = NO_PATTERN_FILTER;
+                mPatternValue = null;
                 refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
             } else {
                 mClearSearchImageView.setVisibility(View.VISIBLE);
@@ -305,7 +303,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             }
         } else {
             mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.getSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
-            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, NO_PATTERN_FILTER);
+            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, null);
         }
 
         setHasOptionsMenu(true);
@@ -500,7 +498,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             public void onClick(View view) {
                 // clear search pattern to restore no filtered room members list
                 mPatternToSearchEditText.setText("");
-                mPatternValue = NO_PATTERN_FILTER;
+                mPatternValue = null;
                 refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
                 forceListInExpandingState();
             }
@@ -508,7 +506,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         mParticipantsListView = (ExpandableListView)mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
-        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
+        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);
         // the group indicator is managed in the adapter (group view creation)
         mParticipantsListView.setGroupIndicator(null);
@@ -537,35 +535,31 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                if (null == mRoom) {
-                    mAdapter.removeParticipant(participantItem);
-                } else {
-                    String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
+                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
 
-                    // The user is trying to leave with unsaved changes. Warn about that
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                            .setTitle(R.string.room_participants_remove_prompt_title)
-                            .setMessage(text)
-                            .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                // The user is trying to leave with unsaved changes. Warn about that
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_remove_prompt_title)
+                        .setMessage(text)
+                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
 
-                                    ArrayList<String> userIds = new ArrayList<String>();
-                                    userIds.add(participantItem.mUserId);
+                                ArrayList<String> userIds = new ArrayList<String>();
+                                userIds.add(participantItem.mUserId);
 
-                                    kickUsers(userIds, 0);
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create()
-                            .show();
-                }
+                                kickUsers(userIds, 0);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
             }
 
             @Override

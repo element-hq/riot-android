@@ -117,15 +117,12 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     private boolean mIsMultiSelectionMode;
     private ArrayList<String> mSelectedUserIds = new ArrayList<String>();
 
-    private final ArrayList<ParticipantAdapterItem> mCreationParticipantsList = new ArrayList<ParticipantAdapterItem>();
     private ArrayList<ArrayList<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
 
     private int mGroupIndexInvitedMembers = -1;  // "Invited" index
-    private int mGroupIndexPresentMembers = -1;// "Favourites" index
+    private int mGroupIndexPresentMembers = -1; // "Favourites" index
 
     // search list view: list view displaying the result of the search based on "mSearchPattern"
-    //ArrayAdapter<ParticipantAdapterItem> mSearchResultsListViewAdapter;
-    private ArrayList<ParticipantAdapterItem> mUnusedParticipants;
     private String mSearchPattern = "";
 
     //ParticipantAdapterItem mFirstEntry;
@@ -181,7 +178,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * @param aRoomId the room id
      * @param aMediasCache the medias cache
      */
-    public VectorRoomDetailsMembersAdapter(Context aContext, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, MXSession aSession, String aRoomId, boolean aMultiSelectionMode, MXMediasCache aMediasCache) {
+    public VectorRoomDetailsMembersAdapter(Context aContext, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, MXSession aSession, String aRoomId, MXMediasCache aMediasCache) {
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(aContext);
         mChildLayoutResourceId = aChildLayoutResourceId;// R.layout.adapter_item_vector_add_participants
@@ -189,50 +186,32 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         mMediasCache = aMediasCache;
         mSession = aSession;
 
-        // retrieve the room
-        if (null != aRoomId) {
-            mRoomId = aRoomId;
-            mRoom = mSession.getDataHandler().getRoom(aRoomId);
-        }
-
-        if (null == mRoom) {
-            MyUser myUser = mSession.getMyUser();
-
-            ParticipantAdapterItem item = new ParticipantAdapterItem(myUser.displayname, myUser.getAvatarUrl(), myUser.user_id);
-            //this.add(item); TODO TBC old listview
-            mCreationParticipantsList.add(item);
-        }
+        mRoomId = aRoomId;
+        mRoom = mSession.getDataHandler().getRoom(aRoomId);
 
         // display check box to select multiple items
-        mIsMultiSelectionMode = aMultiSelectionMode;
-    }
-
-    /**
-     * Search a pattern in the known members list.
-     * @param pattern the pattern to search
-     */
-    public void setSearchedPattern(String pattern, final OnRoomMembersSearchListener searchListener, boolean aIsRefreshForced) {
-        setSearchedPattern(pattern, null, searchListener, aIsRefreshForced);
+        // by default, they are not displayed
+        mIsMultiSelectionMode = false;
     }
 
     /**
      * Search a pattern in the known members list.
      * @param aPattern the pattern to search
-     * @param aFirstEntry the entry to display in the results list.
-     * @param aIsRefreshForced true to force a refresh whatever pattern value.
+     * @param searchListener the search listener
+     * @param aIsRefreshForced set to tru to force the refresh
      */
     @SuppressLint("LongLogTag")
-    private void setSearchedPattern(String aPattern, ParticipantAdapterItem aFirstEntry, OnRoomMembersSearchListener searchListener, boolean aIsRefreshForced) {
-        if(null == aPattern) {
+    public void setSearchedPattern(String aPattern, final OnRoomMembersSearchListener searchListener, boolean aIsRefreshForced) {
+        if (TextUtils.isEmpty(aPattern)) {
             // refresh list members without any pattern filter (nominal display)
             mSearchPattern = null;
-            refresh(searchListener);
+            updateRoomMembersDataModel(searchListener);
         }
-        else if(!TextUtils.isEmpty(aPattern)) {
+        else {
             // new pattern different from previous one?
             if (!aPattern.trim().equals(mSearchPattern) || aIsRefreshForced) {
                 mSearchPattern = aPattern.trim().toLowerCase();
-                refresh(searchListener);
+                updateRoomMembersDataModel(searchListener);
             } else {
                 // search pattern is identical, notify listener and exit
                 if (null != searchListener) {
@@ -240,20 +219,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     searchListener.onSearchEnd(searchItemsCount, false/*search not updated*/);
                 }
             }
-        } else {
-            Log.w(LOG_TAG,"## setSearchedPattern(): no search performed due to empty pattern");
-
-            if (null != searchListener) {
-                searchListener.onSearchEnd(0, false/*search not performed*/);
-            }
         }
-    }
-
-    /**
-     * @return the searched pattern.
-     */
-    public String getSearchedPattern() {
-        return mSearchPattern;
     }
 
 
@@ -265,129 +231,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Refresh the un-invited members
-     */
-    public void listOtherMembers() {
-        // refresh only when performing a search
-        if (!isSearchModeEnabled()) {
-            return;
-        }
-
-        ArrayList<ParticipantAdapterItem> unusedParticipants = new ArrayList<ParticipantAdapterItem>();
-        IMXStore store = mSession.getDataHandler().getStore();
-
-        // list the used members IDs
-        ArrayList<String> idsToIgnore = new ArrayList<String>();
-
-        if (null != mRoomId) {
-            Room fromRoom = store.getRoom(mRoomId);
-            Collection<RoomMember> members = fromRoom.getMembers();
-            for(RoomMember member : members) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                    idsToIgnore.add(member.getUserId());
-                }
-            }
-
-        } else {
-            for(ParticipantAdapterItem item : mCreationParticipantsList) {
-                idsToIgnore.add(item.mUserId);
-            }
-        }
-
-
-        // check from any other known users
-        // because theirs presence have been received
-        Collection<User> users = mSession.getDataHandler().getStore().getUsers();
-        for(User user : users) {
-            // accepted User ID or still active users
-            if (idsToIgnore.indexOf(user.user_id) < 0) {
-                unusedParticipants.add(new ParticipantAdapterItem(user));
-                idsToIgnore.add(user.user_id);
-            }
-        }
-
-        // checks for each room
-        Collection<RoomSummary> summaries = mSession.getDataHandler().getStore().getSummaries();
-
-        for(RoomSummary summary : summaries) {
-            // not the current summary
-            if (!summary.getRoomId().equals(mRoomId)) {
-                Room curRoom = mSession.getDataHandler().getRoom(summary.getRoomId());
-                Collection<RoomMember> otherRoomMembers = curRoom.getMembers();
-
-                for (RoomMember member : otherRoomMembers) {
-                    String userID = member.getUserId();
-
-                    // accepted User ID or still active users
-                    if (idsToIgnore.indexOf(userID) < 0) {
-                        unusedParticipants.add(new ParticipantAdapterItem(member.getName(), member.avatarUrl, member.getUserId()));
-                        idsToIgnore.add(member.getUserId());
-                    }
-                }
-            }
-        }
-
-        // contacts
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
-
-        for(Contact contact : contacts) {
-            if (contact.hasMatridIds(mContext)) {
-                Contact.MXID mxId = contact.getFirstMatrixId();
-
-                if (idsToIgnore.indexOf(mxId.mMatrixId) < 0) {
-                    unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
-                    idsToIgnore.add(mxId.mMatrixId);
-                }
-            } else {
-                unusedParticipants.add(new ParticipantAdapterItem(contact, mContext));
-            }
-        }
-
-        mUnusedParticipants = unusedParticipants;
-    }
-
-    /**
      * Update the paticipants listener
      * @param onParticipantsListener
      */
     public void setOnParticipantsListener(OnParticipantsListener onParticipantsListener) {
         mOnParticipantsListener = onParticipantsListener;
-    }
-
-    /**
-     * Add a participant to the edition list.
-     * @param participant the participant to add.
-     */
-    public void addParticipant(ParticipantAdapterItem participant) {
-        if (null == mRoom) {
-            mUnusedParticipants.remove(participant);
-            mCreationParticipantsList.add(participant);
-        }
-    }
-
-    /**
-     * Remove a participant from the edition list.
-     * @param aParticipant the participant to remove.
-     */
-    public void removeParticipant(ParticipantAdapterItem aParticipant) {
-        if (null == mRoom) {
-            mCreationParticipantsList.remove(aParticipant);
-            mUnusedParticipants.add(aParticipant);
-
-            removeMember(aParticipant.mReferenceGroupPosition, aParticipant.mReferenceChildPosition);
-        }
-    }
-
-    @SuppressLint("LongLogTag")
-    private void removeMember(int aGroupPosition, int aChildPosition) {
-        if(null != mRoomMembersListByGroupPosition){
-            try {
-                mRoomMembersListByGroupPosition.get(aGroupPosition).remove(aChildPosition);
-            } catch(Exception ex){
-                // In particular, any "out of bounds" exception.. (unlikely)
-                Log.w(LOG_TAG,"## removeCurrentMember(): Exception Msg="+ex.getMessage());
-            }
-        }
     }
 
     /**
@@ -405,41 +253,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         mSelectedUserIds = new ArrayList<String>();
     }
 
-    // Comparator to order members alphabetically
-    public static Comparator<RoomMember> alphaComparator = new Comparator<RoomMember>() {
-        @Override
-        public int compare(RoomMember member1, RoomMember member2) {
-            String lhs = member1.getName();
-            String rhs = member2.getName();
-
-            if (lhs == null) {
-                return -1;
-            }
-            else if (rhs == null) {
-                return 1;
-            }
-            if (lhs.startsWith("@")) {
-                lhs = lhs.substring(1);
-            }
-            if (rhs.startsWith("@")) {
-                rhs = rhs.substring(1);
-            }
-            return String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
-        }
-    };
-
-    /**
-     * Refresh the list of the room members
-     */
-    /*public void refresh() {
-        // Reset search pattern to force an update of the
-        // member list without any search filter
-        mSearchPattern = null;
-
-        refresh(null);
-    }*/
-
-
     /**
      * Test if the adapter data model is filtered with the search pattern.
      * @return true if search mode is enabled, false otherwise
@@ -452,8 +265,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * Update the data model of the adapter which is based on a set of ParticipantAdapterItem objects.
      * @param aSearchListener search events listener, set to null if search not enabled
      */
-    // TODO rename refresh() updateRoomMembersDataModel()
-    private void refresh(final OnRoomMembersSearchListener aSearchListener) {
+    private void updateRoomMembersDataModel(final OnRoomMembersSearchListener aSearchListener) {
         boolean isSearchEnabled = false;
         int groupIndex = 0;
         ParticipantAdapterItem participantItem;
@@ -474,80 +286,72 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         mGroupIndexInvitedMembers = -1;
 
         // retrieve the room members
-        if (null != mRoom) {
-            ArrayList<ParticipantAdapterItem> adminMembers = new ArrayList<ParticipantAdapterItem>();
-            ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
-            ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> adminMembers = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<ParticipantAdapterItem>();
 
-            Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
-            String myUserId = mSession.getMyUserId();
-            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
+        String myUserId = mSession.getMyUserId();
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-            // search loop to extract the following members: current user, invited, administrator and others
-            for (RoomMember member : activeMembers) {
-                participantItem = new ParticipantAdapterItem(member);
+        // search loop to extract the following members: current user, invited, administrator and others
+        for (RoomMember member : activeMembers) {
+            participantItem = new ParticipantAdapterItem(member);
 
-                // if search is enabled, just skipp the member if pattern does not match
-                if(isSearchEnabled && (!participantItem.matchWithPattern(mSearchPattern))){
-                    continue;
-                }
+            // if search is enabled, just skipp the member if pattern does not match
+            if(isSearchEnabled && (!participantItem.matchWithPattern(mSearchPattern))){
+                continue;
+            }
 
-                // oneself member ("You") is displayed on first raw
-                if (member.getUserId().equals(myUserId)) {
-                    presentMembersList.add(participantItem);
+            // oneself member ("You") is displayed on first raw
+            if (member.getUserId().equals(myUserId)) {
+                presentMembersList.add(participantItem);
+            } else {
+                if (RoomMember.MEMBERSHIP_INVITE.equals(member.membership)) {
+                    // invited members
+                    invitedMembers.add(participantItem);
+                } else if ((null != powerLevels) && (powerLevels.getUserPowerLevel(member.getUserId()) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN)) {
+                    // administrator members
+                    adminMembers.add(participantItem);
                 } else {
-                    if (RoomMember.MEMBERSHIP_INVITE.equals(member.membership)) {
-                        // invited members
-                        invitedMembers.add(participantItem);
-                    } else if ((null != powerLevels) && (powerLevels.getUserPowerLevel(member.getUserId()) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN)) {
-                        // administrator members
-                        adminMembers.add(participantItem);
-                    } else {
-                        // the other members..
-                        otherMembers.add(participantItem);
-                    }
+                    // the other members..
+                    otherMembers.add(participantItem);
                 }
             }
+        }
 
-            // add 3rd party invite
-            Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getLiveState().thirdPartyInvites();
+        // add 3rd party invite
+        Collection<RoomThirdPartyInvite> thirdPartyInvites = mRoom.getLiveState().thirdPartyInvites();
 
-            for (RoomThirdPartyInvite invite : thirdPartyInvites) {
-                // If the home server has converted the 3pid invite into a room member, do not show it
-                if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
-                    ParticipantAdapterItem participant =  new ParticipantAdapterItem(invite.display_name, "", null);
+        for (RoomThirdPartyInvite invite : thirdPartyInvites) {
+            // If the home server has converted the 3pid invite into a room member, do not show it
+            if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
+                ParticipantAdapterItem participant =  new ParticipantAdapterItem(invite.display_name, "", null);
 
-                    if ((!isSearchEnabled) || participant.matchWithPattern(mSearchPattern)) {
-                        invitedMembers.add(participant);
-                    }
+                if ((!isSearchEnabled) || participant.matchWithPattern(mSearchPattern)) {
+                    invitedMembers.add(participant);
                 }
             }
+        }
 
-            // create "members present in the room" list
-            Collections.sort(adminMembers, ParticipantAdapterItem.alphaComparator);
-            presentMembersList.addAll(adminMembers);
+        // create "members present in the room" list
+        Collections.sort(adminMembers, ParticipantAdapterItem.alphaComparator);
+        presentMembersList.addAll(adminMembers);
 
-            Collections.sort(otherMembers, ParticipantAdapterItem.alphaComparator);
-            presentMembersList.addAll(otherMembers);
+        Collections.sort(otherMembers, ParticipantAdapterItem.alphaComparator);
+        presentMembersList.addAll(otherMembers);
 
-            // first group: members present in the room
-            if (0 != presentMembersList.size()) {
-                mRoomMembersListByGroupPosition.add(presentMembersList);
-                mGroupIndexPresentMembers = groupIndex;
-                groupIndex++;
-            }
+        // first group: members present in the room
+        if (0 != presentMembersList.size()) {
+            mRoomMembersListByGroupPosition.add(presentMembersList);
+            mGroupIndexPresentMembers = groupIndex;
+            groupIndex++;
+        }
 
-            // second group: invited members only
-            if (0 != invitedMembers.size()) {
-                Collections.sort(invitedMembers, ParticipantAdapterItem.alphaComparator);
-                mRoomMembersListByGroupPosition.add(invitedMembers);
-                mGroupIndexInvitedMembers = groupIndex;
-            }
-
-            mUnusedParticipants = null;
-        } else {
-            Collections.sort(mCreationParticipantsList, ParticipantAdapterItem.alphaComparator);
-            mRoomMembersListByGroupPosition.add(mCreationParticipantsList);
+        // second group: invited members only
+        if (0 != invitedMembers.size()) {
+            Collections.sort(invitedMembers, ParticipantAdapterItem.alphaComparator);
+            mRoomMembersListByGroupPosition.add(invitedMembers);
             mGroupIndexInvitedMembers = groupIndex;
         }
 
@@ -624,12 +428,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    /*@Override
-    public void notifyDataSetChanged() {
-        refresh();
-        super.notifyDataSetChanged();
-    }*/
-
     @Override
     public int getGroupCount() {
         if (null != mRoomMembersListByGroupPosition) {
@@ -690,7 +488,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         if (aConvertView == null) {
             aConvertView = mLayoutInflater.inflate(mGroupLayoutResourceId, null);
-            // TODO aConvertView = mLayoutInflater.inflate(mGroupLayoutResourceId, aParentView, false);
             viewHolder =  new GroupViewHolder(aConvertView);
             aConvertView.setTag(viewHolder);
         } else {
