@@ -1342,7 +1342,7 @@ public class LoginActivity extends MXCActionBarActivity {
         if (null == mHomeserverConnectionConfig) {
             String hsUrlString = mHomeServerText.getText().toString();
 
-            if ((null == hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
+            if (TextUtils.isEmpty(hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                 return null;
             }
@@ -1353,7 +1353,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
             String identityServerUrlString = mIdentityServerText.getText().toString();
 
-            if ((null == identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
+            if (TextUtils.isEmpty(identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
                 return null;
             }
@@ -1417,9 +1417,13 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 final HomeserverConnectionConfig hsConfig = getHsConfig();
 
-                hsConfig.setCredentials(credentials);
+                try {
+                    hsConfig.setCredentials(credentials);
+                } catch (Exception e) {
+                    Log.d(LOG_TAG, "hsConfig setCredentials failed " + e.getLocalizedMessage());
+                }
 
-                Log.e(LOG_TAG, "Account creation succeeds");
+                Log.d(LOG_TAG, "Account creation succeeds");
 
                 // let's go...
                 MXSession session = Matrix.getInstance(getApplicationContext()).createSession(hsConfig);

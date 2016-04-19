@@ -507,11 +507,9 @@ public final class GcmRegistrationManager {
                     Log.d(LOG_TAG, "registerSessions unregistrated : GCM registration failed again");
 
                     if (null != listener) {
-                        if (null != listener) {
-                            try {
-                                listener.onSessionRegistrationFailed();
-                            } catch (Exception e) {
-                            }
+                        try {
+                            listener.onSessionRegistrationFailed();
+                        } catch (Exception e) {
                         }
                     }
                 }

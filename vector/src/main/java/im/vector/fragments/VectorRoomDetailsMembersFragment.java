@@ -122,7 +122,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         mSearchNoResultTextView.setVisibility(View.GONE);
                     }
 
-                    if (NO_PATTERN_FILTER == mPatternValue) {
+                    if (NO_PATTERN_FILTER.equals(mPatternValue)) {
                         // search result with no pattern filter
                         updateListExpandingState();
 

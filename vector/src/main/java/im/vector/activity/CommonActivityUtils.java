@@ -921,10 +921,11 @@ public class CommonActivityUtils {
         int maxPowerLevel = 0;
 
         if (null != aRoom) {
-            int tempPowerLevel = 0;
             PowerLevels powerLevels = aRoom.getLiveState().getPowerLevels();
 
             if (null != powerLevels) {
+                int tempPowerLevel;
+
                 // find out the room member
                 Collection<RoomMember> members = aRoom.getMembers();
                 for (RoomMember member : members) {

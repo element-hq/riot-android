@@ -127,7 +127,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
                     Log.e(LOG_TAG, "Session " + fSession.getCredentials().userId + " is initialized");
 
-                    synchronized(mListeners) {
+                    synchronized(LOG_TAG) {
                         mDoneListeners.put(fSession, mListeners.get(fSession));
                         // do not remove the listeners here
                         // it crashes the application because of the upper loop
@@ -232,7 +232,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         boolean noUpdate;
 
-        synchronized(mListeners) {
+        synchronized(LOG_TAG) {
             mInitialSyncComplete = (mListeners.size() == 0);
             noUpdate = mInitialSyncComplete && mPusherRegistrationComplete;
         }

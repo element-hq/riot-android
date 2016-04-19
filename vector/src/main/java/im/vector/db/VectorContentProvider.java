@@ -48,8 +48,12 @@ public class VectorContentProvider extends ContentProvider {
 
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-        File privateFile = new File(getContext().getFilesDir(), uri.getPath());
-        return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
+        try {
+            File privateFile = new File(getContext().getFilesDir(), uri.getPath());
+            return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

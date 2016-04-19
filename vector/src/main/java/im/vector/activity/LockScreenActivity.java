@@ -147,26 +147,23 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
 
                 Event event = new Event(message, session.getCredentials().userId, roomId);
                 room.storeOutgoingEvent(event);
+                room.sendEvent(event, new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                    }
 
-                if (null != room) {
-                    room.sendEvent(event, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void info) {
-                        }
+                    @Override
+                    public void onNetworkError(Exception e) {
+                    }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                        }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                    }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                        }
-                    });
-                }
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                    }
+                });
 
                 LockScreenActivity.this.runOnUiThread(new Runnable() {
                     @Override

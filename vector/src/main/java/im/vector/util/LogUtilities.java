@@ -79,7 +79,7 @@ public class LogUtilities {
     private static final int BUFFER_SIZE = 1024;
 
     private static String getLog(String[] cmd) {
-        Process logcatProc = null;
+        Process logcatProc;
         try {
             logcatProc = Runtime.getRuntime().exec(cmd);
         }
@@ -166,7 +166,7 @@ public class LogUtilities {
             try {
                 stream.close();
             }
-            catch (IOException e) {}
+            catch (Exception e) {}
         }
     }
 

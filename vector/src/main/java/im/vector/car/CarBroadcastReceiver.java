@@ -18,6 +18,7 @@ import im.vector.Matrix;
 import im.vector.util.NotificationUtils;
 
 public class CarBroadcastReceiver extends BroadcastReceiver {
+
     private static final String TAG = CarBroadcastReceiver.class.getSimpleName();
 
     @Override
@@ -36,7 +37,11 @@ public class CarBroadcastReceiver extends BroadcastReceiver {
 
             final Room room = session.getDataHandler().getRoom(roomId);
             final Message message = new Message();
-            message.body = reply.toString();
+            try {
+                message.body = reply.toString();
+            } catch (Exception e) {
+                Log.e(TAG, "reply.toString fails " + e.getLocalizedMessage());
+            }
             message.msgtype = Message.MSGTYPE_TEXT;
 
             Event event = new Event(message, session.getCredentials().userId, room.getRoomId());

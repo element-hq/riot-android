@@ -107,7 +107,7 @@ public class ResourceUtils {
                 ContentResolver resolver = context.getContentResolver();
 
                 List uriPath = mediaUri.getPathSegments();
-                long imageId = -1;
+                long imageId;
                 String lastSegment = (String) uriPath.get(uriPath.size() - 1);
 
                 // > Kitkat
@@ -137,7 +137,11 @@ public class ResourceUtils {
                 Bitmap fullSizeBitmap = null;
 
                 if (null == thumbnailBitmap) {
-                    fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                    try {
+                        fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "BitmapFactory.decodeStream fails " + e.getLocalizedMessage());
+                    }
                 }
 
                 if ((fullSizeBitmap != null) || (thumbnailBitmap != null)) {

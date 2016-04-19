@@ -239,7 +239,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     // Tabs logic implementation
     private void createNavigationTabs(Bundle aSavedInstanceState) {
         int tabIndex = 0;
-        int tabIndexToRestore = -1;
+        int tabIndexToRestore;
 
         // Set the tabs navigation mode
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

@@ -286,7 +286,7 @@ public class RageShake implements SensorEventListener {
             for (int i=0; i<mDialogs.size(); i++) {
                 WeakReference<Dialog> wfd = mDialogs.get(i);
                 Dialog d = wfd.get();
-                if (d == null || (d != null && !d.isShowing())) {
+                if (d == null || !d.isShowing()) {
                     Log.d(LOG_TAG,  "Discarding empty/null dialog. "+d);
                     mDialogs.remove(i);
                     i--;
@@ -389,7 +389,7 @@ public class RageShake implements SensorEventListener {
     
     private float threshold = 35.0f;
     
-    private long intervalNanos = 1000 * 1000 * 10000; // 10sec
+    private long intervalNanos = 1000L * 1000L * 10000L; // 10sec
     
     private long timeToNextShakeMs = 10 * 1000;
     private long lastShakeTimestamp = 0L;

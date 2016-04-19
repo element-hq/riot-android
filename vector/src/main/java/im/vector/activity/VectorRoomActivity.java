@@ -621,8 +621,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 String charBef = "";
                 String charAfter = "";
 
-                long a = text.length();
-
                 if (matchStart > 2) {
                     charBef = text.substring(matchStart-2, matchStart);
                 }
@@ -1094,7 +1092,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         ContentResolver resolver = getContentResolver();
 
                                         List uriPath = mediaUri.getPathSegments();
-                                        long imageId = -1;
+                                        long imageId;
                                         String lastSegment = (String) uriPath.get(uriPath.size() - 1);
 
                                         // > Kitkat
@@ -1600,7 +1598,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             if ("image/jpeg".equals(mPendingMimeType)) {
 
                 System.gc();
-                FileInputStream imageStream = null;
+                FileInputStream imageStream;
 
                 try {
                     Uri uri = Uri.parse(mPendingMediaUrl);

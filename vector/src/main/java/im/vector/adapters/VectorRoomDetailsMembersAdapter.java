@@ -456,7 +456,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     private void refresh(final OnRoomMembersSearchListener aSearchListener) {
         boolean isSearchEnabled = false;
         int groupIndex = 0;
-        int searchItemsCount = 0;
         ParticipantAdapterItem participantItem;
         ArrayList<ParticipantAdapterItem> presentMembersList = new ArrayList<ParticipantAdapterItem>();
 
@@ -554,8 +553,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         // notify end of search if listener is provided
         if (null != aSearchListener) {
-            searchItemsCount = getItemsCount();
-            aSearchListener.onSearchEnd(searchItemsCount, isSearchEnabled);
+            aSearchListener.onSearchEnd(getItemsCount(), isSearchEnabled);
         }
 
         // force UI rendering update
