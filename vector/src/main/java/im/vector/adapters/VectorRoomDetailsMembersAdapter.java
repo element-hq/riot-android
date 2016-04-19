@@ -165,10 +165,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             mMemberAvatarBadgeImageView  = (ImageView) aParentView.findViewById(R.id.filtered_list_avatar_badge);
             mMemberNameTextView = (TextView) aParentView.findViewById(R.id.filtered_list_name);
             mMemberStatusTextView = (TextView) aParentView.findViewById(R.id.filtered_list_status);
-            mHiddenListActionsView = (View) aParentView.findViewById(R.id.filtered_list_actions);
+            mHiddenListActionsView = aParentView.findViewById(R.id.filtered_list_actions);
             mSwipeCellLayout = (RelativeLayout) aParentView.findViewById(R.id.filtered_list_cell);
             mMultipleSelectionCheckBox = (CheckBox)aParentView.findViewById(R.id.filtered_list_checkbox);
-            mDeleteActionsView = (View)aParentView.findViewById(R.id.filtered_list_delete_action);
+            mDeleteActionsView = aParentView.findViewById(R.id.filtered_list_delete_action);
         }
     }
 

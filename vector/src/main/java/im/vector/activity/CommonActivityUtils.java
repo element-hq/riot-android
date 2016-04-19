@@ -895,11 +895,11 @@ public class CommonActivityUtils {
     }
 
     public static void displayNotImplementedToast(Context aContext) {
-        displayToast(aContext, (CharSequence) "Not implemented");
+        displayToast(aContext, "Not implemented");
     }
 
     public static void displayNotImplementedSnack(View aTargetView) {
-        displaySnack(aTargetView, (CharSequence) "Not implemented");
+        displaySnack(aTargetView, "Not implemented");
     }
 
     public static void displayToast(Context aContext, CharSequence aTextToDisplay) {

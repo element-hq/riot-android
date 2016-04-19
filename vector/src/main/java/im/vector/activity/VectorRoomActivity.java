@@ -2358,10 +2358,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     int rootHeight = vectorActivityRoomView.getRootView().getHeight();
                     int height =  vectorActivityRoomView.getHeight();
                     int heightDiff = rootHeight - height;
-                    if (heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE)
-                        mIsKeyboardDisplayed = true;
-                    else
-                        mIsKeyboardDisplayed = false;
+                    mIsKeyboardDisplayed = heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE;
                 }
             };
         }
