@@ -45,8 +45,7 @@
                 android:layout_gravity="center_vertical"
                 style="@style/Base.TextAppearance.AppCompat.Caption"
                 android:text="localpart:domain"
-                android:id="@+id/contact_userId"
-                />
+                android:id="@+id/contact_userId"/>
         </LinearLayout>
 
         <ImageView
@@ -56,7 +55,7 @@
             android:id="@+id/imageView_matrix_user"
             android:layout_gravity="center_vertical"
             android:src="@drawable/matrix_user"/>
-            />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -40,8 +40,7 @@
             android:layout_height="match_parent"
             android:id="@+id/search_fragment_messages"
             android:layout_centerHorizontal="true"
-            android:orientation="vertical"
-            android:accessibilityLiveRegion="polite"/>
+            android:orientation="vertical"/>
 
         <RelativeLayout
             android:id="@+id/search_in_progress_view"

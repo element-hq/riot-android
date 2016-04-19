@@ -40,8 +40,7 @@
             android:layout_weight="0.2"
             android:layout_width="0dp"
             android:textSize="15sp"
-            android:text="@string/room_creation_room_name"
-            />
+            android:text="@string/room_creation_room_name" />
 
         <EditText
             android:layout_height="wrap_content"
@@ -52,8 +51,6 @@
             android:textSize="15sp"
             android:hint="@string/room_creation_room_name_hint"
             android:id="@+id/editText_roomName"/>
-        />
-
     </LinearLayout>
 
     <LinearLayout
