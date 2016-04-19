@@ -34,10 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.IMXStore;
-import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -47,13 +44,10 @@ import org.matrix.androidsdk.rest.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.contacts.Contact;
-import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -222,7 +216,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
     }
 
-
+    /**
+     * @return the total number of items
+     */
     public int getItemsCount() {
         int itemsCount = getChildrenCount(mGroupIndexInvitedMembers);
         itemsCount += getChildrenCount(mGroupIndexPresentMembers);
