@@ -644,7 +644,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     private void sendTextMessage() {
-     	String body = mEditText.getText().toString();
+     	String body = mEditText.getText().toString().trim();
         
         // markdownToHtml does not manage properly urls with underscores
         // so we replace the urls by a tmp value before parsing it.
