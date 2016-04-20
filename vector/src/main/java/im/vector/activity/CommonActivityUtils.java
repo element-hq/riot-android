@@ -938,7 +938,7 @@ public class CommonActivityUtils {
     /**
      * Log the memory status.
      */
-    private static void displayMemoryInformation(Activity activity) {
+    public static void displayMemoryInformation(Activity activity) {
         long freeSize = 0L;
         long totalSize = 0L;
         long usedSize = -1L;
