@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.util;
 
 import java.io.ByteArrayOutputStream;
@@ -20,22 +21,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -46,31 +44,33 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 
 import org.matrix.androidsdk.MXSession;
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import org.matrix.androidsdk.data.MyUser;
 
-
+/**
+ * manages the rageshakes
+ */
 public class RageShake implements SensorEventListener {
+
     private static final String LOG_TAG = "RageShake";
 
+    // the instance
     private static RageShake instance;
 
+    // the context
     private Context mContext;
 
-    // weak refs so dead dialogs can be GCed
-    private List<WeakReference<Dialog>> mDialogs;
-    
+    /**
+     * Contrustor
+     */
     protected RageShake() {
-        mDialogs = new ArrayList<WeakReference<Dialog>>();
 
         // Samsung devices for some reason seem to be less sensitive than others so the threshold is being
-        // lowered for them. A possible lead for a better formula is the fact that the sensitivity detected 
+        // lowered for them. A possible lead for a better formula is the fact that the sensitivity detected
         // with the calculated force below seems to relate to the sample rate: The higher the sample rate,
         // the higher the sensitivity.
         String model = Build.MODEL.trim();
@@ -80,6 +80,9 @@ public class RageShake implements SensorEventListener {
         }
     }
 
+    /**
+     * @return the rageshake instance
+     */
     public synchronized static RageShake getInstance() {
         if (instance == null) {
             instance = new RageShake();
@@ -87,10 +90,9 @@ public class RageShake implements SensorEventListener {
         return instance;
     }
 
-    public void registerDialog(Dialog d) {
-        mDialogs.add(new WeakReference<Dialog>(d));
-    }
-
+    /**
+     * Send the bug report
+     */
     public void sendBugReport() {
         Bitmap screenShot = this.takeScreenshot();
 
@@ -119,8 +121,8 @@ public class RageShake implements SensorEventListener {
 
                 String message = "Something went wrong on my Vector client : \n\n\n";
                 message += "-----> my comments <-----\n\n\n";
-                message += "------------------------------\n";
 
+                message += "---------------------------------------------------------------------\n";
                 message += "Application info\n";
 
                 Collection<MXSession> sessions = Matrix.getMXSessions(mContext);
@@ -137,11 +139,42 @@ public class RageShake implements SensorEventListener {
                 }
 
                 message += "\n";
-
+                message += "---------------------------------------------------------------------\n";
+                message += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
                 message += "Vector version: " + Matrix.getInstance(mContext).getVersion(true) + "\n";
                 message += "SDK version:  " + Matrix.getInstance(mContext).getDefaultSession().getVersion(true) + "\n";
+                message += "\n";
+                message += "---------------------------------------------------------------------\n";
+                message += "Memory statuses \n";
 
-                message += "\n\n\n";
+                long freeSize = 0L;
+                long totalSize = 0L;
+                long usedSize = -1L;
+                try {
+                    Runtime info = Runtime.getRuntime();
+                    freeSize = info.freeMemory();
+                    totalSize = info.totalMemory();
+                    usedSize = totalSize - freeSize;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                message += "---------------------------------------------------------------------\n";
+                message += "usedSize   " + (usedSize / 1048576L) + " MB\n";
+                message += "freeSize   " + (freeSize / 1048576L) + " MB\n";
+                message += "totalSize   " + (totalSize / 1048576L) + " MB\n";
+                message += "---------------------------------------------------------------------\n";
+
+                ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+                ActivityManager activityManager = (ActivityManager) VectorApp.getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                activityManager.getMemoryInfo(mi);
+
+                message += "availMem   " + (mi.availMem / 1048576L) + " MB\n";
+                message += "totalMem   " + (mi.totalMem / 1048576L) + " MB\n";
+                message += "threshold  " + (mi.threshold / 1048576L) + " MB\n";
+                message += "lowMemory  " + mi.lowMemory + "\n";
+
+                message += "---------------------------------------------------------------------\n";
 
                 intent.putExtra(Intent.EXTRA_TEXT, message);
 
@@ -217,6 +250,9 @@ public class RageShake implements SensorEventListener {
         }
     }
 
+    /**
+     * Display a dialog to let the user chooses if he would like to send a bnug report.
+     */
     public void promptForReport() {
         // Cannot prompt for bug, no active activity.
         if (VectorApp.getCurrentActivity() == null) {
@@ -256,18 +292,22 @@ public class RageShake implements SensorEventListener {
 
     }
 
+    /**
+     * Take a screenshot of the display
+     * @return
+     */
     private Bitmap takeScreenshot() {
+        // sanity check
         if (VectorApp.getCurrentActivity() == null) {
             return null;
         }
-        
         // get content view
         View contentView = VectorApp.getCurrentActivity().findViewById(android.R.id.content);
         if (contentView == null) {
             Log.e(LOG_TAG, "Cannot find content view on " + VectorApp.getCurrentActivity() + ". Cannot take screenshot.");
             return null;
         }
-        
+
         // get the root view to snapshot
         View rootView = contentView.getRootView();
         if (rootView == null) {
@@ -277,72 +317,9 @@ public class RageShake implements SensorEventListener {
         // refresh it
         rootView.setDrawingCacheEnabled(false);
         rootView.setDrawingCacheEnabled(true);
-        
+
         try {
-            Bitmap baseScreen = rootView.getDrawingCache();
-            
-            // loop the dialogs and prune old/not visible ones
-            List<Dialog> onScreenDialogs = new ArrayList<Dialog>();
-            for (int i=0; i<mDialogs.size(); i++) {
-                WeakReference<Dialog> wfd = mDialogs.get(i);
-                Dialog d = wfd.get();
-                if (d == null || !d.isShowing()) {
-                    Log.d(LOG_TAG,  "Discarding empty/null dialog. "+d);
-                    mDialogs.remove(i);
-                    i--;
-                    continue;
-                }
-                onScreenDialogs.add(d);
-            }
-        
-            if (onScreenDialogs.size() == 0) {
-                Log.d(LOG_TAG, "No on screen dialogs.");
-                return baseScreen;
-            }
-            else {
-                // use a canvas to draw on top of the base screen.
-                Canvas c = new Canvas(baseScreen);
-                for (Dialog d : onScreenDialogs) {
-                    if (d.getWindow() != null && d.getWindow().getAttributes() != null) {
-                        View dialogView = d.getWindow().peekDecorView();
-                        Bitmap dialogBitmap = null;
-                        // get the dialog bitmap
-                        if (dialogView != null) {
-                            dialogView.setDrawingCacheEnabled(false);
-                            dialogView.setDrawingCacheEnabled(true);
-                            dialogBitmap = dialogView.getDrawingCache();
-                        }
-                        if (dialogBitmap == null) {
-                            Log.w(LOG_TAG, "Cannot get dialog bitmap.");
-                            continue;
-                        }
-                        
-                        // draw it to the canvas in the right place
-                        WindowManager.LayoutParams params = d.getWindow().getAttributes();
-                        int x = params.x;
-                        int y = params.y;
-                        int w = dialogView.getWidth();
-                        int h = dialogView.getHeight();
-                        int gravity = params.gravity;
-                        Log.d(LOG_TAG, "Dialog x "+x+" y "+y+" w "+w+" h "+h+" gravity "+gravity);
-                        if (x == 0 && y == 0 && w < baseScreen.getWidth() && h < baseScreen.getHeight()) {
-                            switch (gravity) {
-                            case Gravity.CENTER:
-                                // mid-point - 1/2
-                                x = baseScreen.getWidth()/2 - (w/2);
-                                y = baseScreen.getHeight()/2 - (h/2);
-                                break;
-                            default:
-                                Log.w(LOG_TAG, "Unhandled gravity: "+gravity);
-                                break;
-                            }
-                        }
-                        c.drawBitmap(dialogBitmap, x, y, null);
-                        Log.d(LOG_TAG, "Drew a dialog to the canvas");
-                    }
-                }
-                return baseScreen;
-            }
+           return rootView.getDrawingCache();
         }
         catch (OutOfMemoryError oom) {
             Log.e(LOG_TAG, "Cannot get drawing cache for "+ VectorApp.getCurrentActivity() +" OOM.");
@@ -357,7 +334,6 @@ public class RageShake implements SensorEventListener {
      * start the sensor detector
      */
     public void start(Context context) {
-
         mContext = context;
 
         SensorManager sm = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -386,22 +362,22 @@ public class RageShake implements SensorEventListener {
     private float lastY = 0;
     private float lastZ = 0;
     private float force = 0;
-    
+
     private float threshold = 35.0f;
-    
-    private long intervalNanos = 1000L * 1000L * 10000L; // 10sec
-    
+
+    private long intervalNanos = 3L * 1000L * 1000L; // 3 sec
+
     private long timeToNextShakeMs = 10 * 1000;
     private long lastShakeTimestamp = 0L;
-    
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }
-        
+
         now = event.timestamp;
-        
+
         x = event.values[0];
         y = event.values[1];
         z = event.values[2];
@@ -416,22 +392,22 @@ public class RageShake implements SensorEventListener {
         }
         else {
             timeDiff = now - lastUpdate;
-            
-            if (timeDiff > 0) { 
+
+            if (timeDiff > 0) {
                 force = Math.abs(x + y + z - lastX - lastY - lastZ);
-                if (Float.compare(force, threshold) >0 ) {
-                    if (now - lastShake >= intervalNanos && (System.currentTimeMillis() - lastShakeTimestamp) > timeToNextShakeMs) { 
-                         Log.d(LOG_TAG, "Shaking detected.");
-                         lastShakeTimestamp = System.currentTimeMillis();
+                if (Float.compare(force, threshold) > 0) {
+                    if (((now - lastShake) >= intervalNanos) && ((System.currentTimeMillis() - lastShakeTimestamp) > timeToNextShakeMs)) {
+                        Log.d(LOG_TAG, "Shaking detected.");
+                        lastShakeTimestamp = System.currentTimeMillis();
 
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
                         if (preferences.getBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), true)) {
-                         promptForReport();
-                    }
+                            promptForReport();
+                        }
                     }
                     else {
-                        Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: "+(timeToNextShakeMs - 
+                        Log.d(LOG_TAG, "Suppress shaking - not passed interval. Ms to go: "+(timeToNextShakeMs -
                                 (System.currentTimeMillis() - lastShakeTimestamp))+" ms");
                     }
                     lastShake = now;
@@ -439,9 +415,8 @@ public class RageShake implements SensorEventListener {
                 lastX = x;
                 lastY = y;
                 lastZ = z;
-                lastUpdate = now; 
+                lastUpdate = now;
             }
         }
     }
-
 }
