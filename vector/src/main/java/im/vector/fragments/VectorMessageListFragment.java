@@ -263,7 +263,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 @Override
                 public void run() {
                     ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                    String text = "";
+                    String text;
 
                     if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type) ||
                             Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||

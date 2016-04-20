@@ -97,6 +97,55 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     };
 
+
+    // update field listener
+    private ApiCallback<Void> mUpdateCallback = new ApiCallback<Void>() {
+        /**
+         * refresh the fragment.
+         * @param mode true to force refresh
+         */
+        private void onDone(final String message, final boolean mode) {
+            if (null != getActivity()) {
+                if (!TextUtils.isEmpty(message)) {
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                }
+
+                // ensure that the response has been sent in the UI thread
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideLoadingView(mode);
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onSuccess(Void info) {
+            Log.d(LOG_TAG, "##update succeed");
+            onDone(null, UPDATE_UI);
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            Log.w(LOG_TAG, "##NetworkError " + e.getLocalizedMessage());
+            onDone(e.getLocalizedMessage(), DO_NOT_UPDATE_UI);
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            Log.w(LOG_TAG, "##MatrixError " + e.getLocalizedMessage());
+            onDone(e.getLocalizedMessage(), DO_NOT_UPDATE_UI);
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            Log.w(LOG_TAG, "##UnexpectedError " + e.getLocalizedMessage());
+            onDone(e.getLocalizedMessage(), DO_NOT_UPDATE_UI);
+        }
+    };
+
+
     // MX system events listener
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -435,34 +484,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // update only, if values are different
         if (!TextUtils.equals(previousName, newName)) {
             displayLoadingView();
-            mRoom.updateName(newName, new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    Log.d(LOG_TAG, "##onRoomNamePreferenceChanged(): update succeed");
-                    hideLoadingView(UPDATE_UI);
-                }
 
-                @Override
-                public void onNetworkError(Exception e) {
-                    Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - NetworkError");
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - MatrixError");
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    Log.w(LOG_TAG, "##onRoomNamePreferenceChanged(): room name update failure - UnexpectedError");
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-            });
+            Log.d(LOG_TAG, "##onRoomNamePreferenceChanged to " + newName);
+            mRoom.updateName(newName, mUpdateCallback);
         }
     }
 
@@ -481,34 +505,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // update only, if values are different
         if (!TextUtils.equals(previousTopic, newTopic)) {
             displayLoadingView();
-            mRoom.updateTopic(newTopic, new ApiCallback<Void>() {
-                @Override
-                public void onSuccess(Void info) {
-                    Log.d(LOG_TAG, "##onRoomTopicPreferenceChanged(): update succeed");
-                    hideLoadingView(UPDATE_UI);
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - NetworkError");
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - MatrixError");
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    Log.w(LOG_TAG, "##onRoomTopicPreferenceChanged(): update failure - UnexpectedError");
-                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    hideLoadingView(DO_NOT_UPDATE_UI);
-                }
-            });
+            Log.d(LOG_TAG, "## update topic to " + newTopic);
+            mRoom.updateTopic(newTopic, mUpdateCallback);
         }
 
     }
@@ -578,35 +576,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                 @Override
                                 public void run() {
                                     if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                        mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
-                                            @Override
-                                            public void onSuccess(Void info) {
-                                                Log.d(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update succeed");
-                                                hideLoadingView(UPDATE_UI);
-                                            }
-
-                                            @Override
-                                            public void onNetworkError(Exception e) {
-                                                Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - NetworkError");
-                                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                                hideLoadingView(DO_NOT_UPDATE_UI);
-                                            }
-
-                                            @Override
-                                            public void onMatrixError(MatrixError e) {
-                                                Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - MatrixError");
-                                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                                hideLoadingView(DO_NOT_UPDATE_UI);
-                                            }
-
-                                            @Override
-                                            public void onUnexpectedError(Exception e) {
-                                                Log.w(LOG_TAG, "##onActivityResultRoomAvatarUpdate(): update failure - UnexpectedError");
-                                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                                hideLoadingView(DO_NOT_UPDATE_UI);
-                                            }
-                                        });
+                                        Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
+                                        mRoom.updateAvatarUrl(uploadResponse.contentUri, mUpdateCallback);
                                     } else {
+                                        Log.e(LOG_TAG, "Fail to upload the avatar");
                                         hideLoadingView(DO_NOT_UPDATE_UI);
                                     }
                                 }

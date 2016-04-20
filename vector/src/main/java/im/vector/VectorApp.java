@@ -37,6 +37,7 @@ import im.vector.ga.Analytics;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -207,6 +208,19 @@ public class VectorApp extends Application {
 
     static private Activity mCurrentActivity = null;
     public static void setCurrentActivity(Activity activity) {
+        if (VectorApp.isAppInBackground() && (null != activity)) {
+            Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
+
+            // sanity check
+            if (null != matrixInstance) {
+                matrixInstance.refreshPushRules();
+            }
+
+            Log.e("debackground", "The application is resumed");
+            // display the memory usage when the application is debackgrounded.
+            CommonActivityUtils.displayMemoryInformation(activity);
+        }
+
         // wait 2s to check that the application is put in background
         if (null != getInstance()) {
             if (null == activity) {

@@ -23,18 +23,30 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.TextView;
+
+import com.squareup.okhttp.internal.Platform;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -76,9 +88,15 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private static final String SUPPORTED_PATH_STAGING = "/staging/";
 
     // index of each item in path
-    private static final int OFFSET_FRAGMENT_ROOM_ID = 1;
-    private static final int OFFSET_FRAGMENT_EVENT_ID = 2;
-    private static final int FRAGMENT_MAX_SPLIT_SECTIONS = 3;
+    public static final String ULINK_ROOM_ID_KEY = "ULINK_ROOM_ID_KEY";
+    public static final String ULINK_EVENT_ID_KEY = "ULINK_EVENT_ID_KEY";
+    public static final String ULINK_EMAIL_ID_KEY = "email";
+    public static final String ULINK_SIGN_URL_KEY = "signurl";
+    public static final String ULINK_ROOM_NAME_KEY = "room_name";
+    public static final String ULINK_ROOM_AVATAR_URL_KEY = "room_avatar_url";
+    public static final String ULINK_INVITER_NAME_KEY = "inviter_name";
+    public static final String ULINK_GUEST_ACCESS_TOKEN_KEY = "guest_access_token";
+    public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";
 
     // supported paths list
     private static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
@@ -86,15 +104,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     // the session
     private MXSession mSession;
 
-    // the room id
-    private String mRoomIdOrAlias;
-
-    // the event id
-    private String mEventId;
+    // the universal link parameters
+    private HashMap<String, String>  mParameters;
 
     public VectorUniversalLinkReceiver() {
     }
-
 
     @Override
     public void onReceive(final Context aContext, final Intent aIntent) {
@@ -150,7 +164,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 Log.d(LOG_TAG, "## onCreate() intentUri - host=" + intentUri.getHost() + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
                 //intentUri.getEncodedSchemeSpecificPart() = //vector.im/beta/  intentUri.getSchemeSpecificPart() = //vector.im/beta/
 
-                List<String> params = parseUniversalLink(intentUri);
+                HashMap<String, String> params = parseUniversalLink(intentUri);
 
                 if (null != params) {
 
@@ -169,13 +183,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         aContext.startActivity(intent);
                     } else {
-                        mRoomIdOrAlias = params.get(OFFSET_FRAGMENT_ROOM_ID);
-
-                        // Is there any event ID?
-                        if (params.size() > 2) {
-                            mEventId = params.get(OFFSET_FRAGMENT_EVENT_ID);
-                        }
-
+                        mParameters = params;
                         manageRoom(aContext);
                     }
                 } else {
@@ -192,11 +200,12 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param aContext the context
      */
     private void manageRoom(final Context aContext) {
+        String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
 
-        if (mRoomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
-            Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias, false);
+        if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
+            Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
-            if (null != room) {
+            if ((null != room) && !room.isInvited()) {
                 stopHomeActivitySpinner(aContext);
                 openRoomActivity(aContext);
             } else {
@@ -211,11 +220,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
             aContext.startActivity(intent);
 
-            mSession.getDataHandler().roomIdByAlias(mRoomIdOrAlias, new ApiCallback<String>() {
+            mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
                 @Override
                 public void onSuccess(final String roomId) {
                     if (!TextUtils.isEmpty(roomId)) {
-                        mRoomIdOrAlias = roomId;
+                        mParameters.put(ULINK_ROOM_ID_KEY, roomId);
                         manageRoom(aContext);
                     }
                 }
@@ -251,10 +260,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        params.put(VectorRoomActivity.EXTRA_ROOM_ID, mRoomIdOrAlias);
+        params.put(VectorRoomActivity.EXTRA_ROOM_ID, mParameters.get(ULINK_ROOM_ID_KEY));
 
-        if (null != mEventId) {
-            params.put(VectorRoomActivity.EXTRA_EVENT_ID, mEventId);
+        if (mParameters.containsKey(ULINK_EVENT_ID_KEY)) {
+            params.put(VectorRoomActivity.EXTRA_EVENT_ID, mParameters.get(ULINK_EVENT_ID_KEY));
         }
 
         // clear the activity stack to home activity
@@ -278,30 +287,73 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 @Override
                 public void run() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
+                    if (mParameters.containsKey(ULINK_EMAIL_ID_KEY)) {
+                        String inviterName = mParameters.get(ULINK_INVITER_NAME_KEY);
 
-                    builder.setTitle(R.string.universal_link_join_alert_title);
-                    builder.setMessage(R.string.universal_link_join_alert_body);
+                        // should never happen
+                        if (null == inviterName) {
+                            inviterName = " ";
+                        }
 
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        String email = mParameters.get(ULINK_EMAIL_ID_KEY);
+
+                        // should never happen
+                        if (null == email) {
+                            email = " ";
+                        }
+
+                        String part1 = aContext.getString(R.string.universal_link_email_invitation_body_1, inviterName);
+                        String part2 = aContext.getString(R.string.universal_link_email_invitation_body_2);
+                        String part3 = aContext.getString(R.string.universal_link_email_invitation_body_3, email);
+
+                        String msg = part1 + "\n" + part2 + "\n\n" + part3;
+
+                        SpannableString message = new SpannableString(msg);
+
+                        // accept / reject red bold
+                        message.setSpan(new ForegroundColorSpan(Color.parseColor("#FF0000")), msg.indexOf(part2), msg.indexOf(part2) + part2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        message.setSpan(new StyleSpan(Typeface.BOLD), msg.indexOf(part2), msg.indexOf(part2) + part2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        // inviter in bold
+                        int pos =  msg.indexOf(inviterName);
+                        message.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + inviterName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        // email in bold
+                        pos =  msg.indexOf(email);
+                        message.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + email.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        builder.setMessage(message);
+                    } else {
+                        builder.setTitle(R.string.universal_link_join_alert_title);
+                        builder.setMessage(R.string.universal_link_join_alert_body);
+                    }
+
+                    builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Room room = mSession.getDataHandler().getRoom(mRoomIdOrAlias, true);
+                            Room room = mSession.getDataHandler().getRoom(mParameters.get(ULINK_ROOM_ID_KEY), true);
 
                             // try to join the room
-                            room.join(new ApiCallback<Void>() {
+                            room.joinWithThirdPartySigned(mParameters.get(ULINK_SIGN_URL_KEY), new ApiCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void info) {
                                     currentActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            manageRoom(aContext);
+                                            stopHomeActivitySpinner(aContext);
+                                            openRoomActivity(aContext);
                                         }
                                     });
                                 }
 
-                                private void onError(String errorMessage) {
-                                    CommonActivityUtils.displayToast(aContext, errorMessage);
-                                    stopHomeActivitySpinner(aContext);
+                                private void onError(final String errorMessage) {
+                                    currentActivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CommonActivityUtils.displayToast(aContext, errorMessage);
+                                            stopHomeActivitySpinner(aContext);
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -322,7 +374,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         }
                     });
 
-                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.reject, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             stopHomeActivitySpinner(aContext);
@@ -331,6 +383,11 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
+
+                    // Must call show() prior to fetching text view
+                    TextView messageView = (TextView)dialog.findViewById(android.R.id.message);
+                    messageView.setGravity(Gravity.CENTER);
+
                 }
             });
 
@@ -358,8 +415,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param uri the uri to parse
      * @return the universal link items, null if the universal link is invalid
      */
-    public static List<String> parseUniversalLink(Uri uri) {
-        List<String> res = null;
+    public static HashMap<String, String> parseUniversalLink(Uri uri) {
+        HashMap<String, String> map = null;
 
         try {
             // sanity check
@@ -388,7 +445,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            String temp[] = uriFragment.split("/", FRAGMENT_MAX_SPLIT_SECTIONS); // limit to 3 for security concerns (stack overflow injection)
+            String temp[] = uriFragment.split("/", 3); // limit to 3 for security concerns (stack overflow injection)
 
             if (temp.length < 2) {
                 Log.e(LOG_TAG, "## parseUniversalLink : too short");
@@ -400,12 +457,42 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            res = Arrays.asList(temp);
+            map = new HashMap<>();
+
+            // room id only ?
+            if (temp.length == 2) {
+                map.put(ULINK_ROOM_ID_KEY, temp[1]);
+            } else {
+                String eventId = temp[2];
+
+                if (eventId.startsWith("$")) {
+                    map.put(ULINK_ROOM_ID_KEY, temp[1]);
+                    map.put(ULINK_EVENT_ID_KEY, temp[2]);
+                } else {
+                    uri = Uri.parse(uri.toString().replace("#/room/", "room/"));
+
+                    map.put(ULINK_ROOM_ID_KEY, uri.getLastPathSegment());
+
+                    Set<String> names = uri.getQueryParameterNames();
+
+                    for(String name : names) {
+                        String value = uri.getQueryParameter(name);
+
+                        try {
+                            value = URLDecoder.decode(value, "UTF-8");
+                        } catch (Exception e) {
+
+                        }
+
+                        map.put(name, value);
+                    }
+                }
+            }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## parseUniversalLink : crashes " + e.getLocalizedMessage());
         }
 
-        return res;
+        return map;
     }
 
     private void stopHomeActivitySpinner(Context aContext){

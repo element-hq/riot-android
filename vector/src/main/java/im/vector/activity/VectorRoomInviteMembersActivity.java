@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -89,25 +90,12 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
         mListView = (ListView) findViewById(R.id.room_details_members_list);
-        mAdapter = new VectorAddParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mRoomId, false, mSession.getMediasCache());
+        mAdapter = new VectorAddParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mRoomId);
         mListView.setAdapter(mAdapter);
-
-        mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onRemoveClick(ParticipantAdapterItem participant) {
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            @Override
-            public void onLeaveClick() {
-            }
-
-            @Override
-            public void onSelectUserId(String userId) {
-
-            }
-
-            @Override
-            public void onClick(int position) {
                 // returns the selected user
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_SELECTED_USER_ID, mAdapter.getItem(position).mUserId);
@@ -115,16 +103,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 finish();
             }
         });
-
-        /*
-        -> do not use the on click listener because the adapter manages scrollview inside the cell view
-        So the scrollview events must manage the click events.
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });*/
 
         manageBackground();
     }

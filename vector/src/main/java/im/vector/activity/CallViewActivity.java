@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
@@ -55,6 +54,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+/**
+ * CallViewActivity is the call activity.
+ */
 public class CallViewActivity extends FragmentActivity {
     private static final String LOG_TAG = "CallViewActivity";
 
@@ -76,7 +78,6 @@ public class CallViewActivity extends FragmentActivity {
 
     // call info
     private RoomMember mOtherMember = null;
-    private boolean mIsAnsweredElsewhere = false;
     private boolean mAutoAccept = false;
     private boolean mIsCallEnded = false;
 
@@ -180,8 +181,6 @@ public class CallViewActivity extends FragmentActivity {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "onCallAnsweredElsewhere");
-
-                    mIsAnsweredElsewhere = true;
                     clearCallData();
                     CallViewActivity.this.finish();
                 }
@@ -207,7 +206,7 @@ public class CallViewActivity extends FragmentActivity {
      * @return true if the call can be resumed.
      * i.e this callView can be closed to be re opened later.
      */
-    private static Boolean canCallBeResumed() {
+    private static boolean canCallBeResumed() {
         if (null != mCall) {
             String state = mCall.getCallState();
 
@@ -227,7 +226,7 @@ public class CallViewActivity extends FragmentActivity {
      * @param callId the call Id
      * @return true if the call is the active callId
      */
-    public static Boolean isBackgroundedCallId(String callId) {
+    public static boolean isBackgroundedCallId(String callId) {
         Boolean res = false;
 
         if ((null != mCall) && (null == instance)) {
@@ -364,6 +363,18 @@ public class CallViewActivity extends FragmentActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        CommonActivityUtils.onLowMemory(this);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        CommonActivityUtils.onTrimMemory(this, level);
     }
 
     @Override

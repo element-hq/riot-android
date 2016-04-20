@@ -27,12 +27,16 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.ga.Analytics;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+/**
+ * SplashActivity displays a splash while loading and inittializing the client.
+ */
 public class SplashActivity extends MXCActionBarActivity {
 
     private static final String LOG_TAG = "SplashActivity";
@@ -46,6 +50,9 @@ public class SplashActivity extends MXCActionBarActivity {
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
 
+    /**
+     * @return true if a store is corrupted.
+     */
     private boolean hasCorruptedStore() {
         boolean hasCorruptedStore = false;
         ArrayList<MXSession> sessions = Matrix.getMXSessions(this);
@@ -58,6 +65,9 @@ public class SplashActivity extends MXCActionBarActivity {
         return hasCorruptedStore;
     }
 
+    /**
+     * Close the splash screen if the stores are fully loaded.
+     */
     private void finishIfReady() {
         Log.e(LOG_TAG, "finishIfReady " + mInitialSyncComplete + " " + mPusherRegistrationComplete);
 
@@ -67,11 +77,18 @@ public class SplashActivity extends MXCActionBarActivity {
             if (!hasCorruptedStore()) {
                 // Go to the home page
                 Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
+
                 Bundle receivedBundle = getIntent().getExtras();
 
                 if(null != receivedBundle) {
                     intent.putExtras(receivedBundle);
                 }
+
+                // display a spinner while managing the universal link
+                if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                    intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+                }
+
                 startActivity(intent);
 
                 SplashActivity.this.finish();
@@ -112,11 +129,11 @@ public class SplashActivity extends MXCActionBarActivity {
                 @Override
                 public void onInitialSyncComplete() {
                     super.onInitialSyncComplete();
-                    Boolean noMoreListener;
+                    boolean noMoreListener;
 
                     Log.e(LOG_TAG, "Session " + fSession.getCredentials().userId + " is initialized");
 
-                    synchronized(mListeners) {
+                    synchronized(LOG_TAG) {
                         mDoneListeners.put(fSession, mListeners.get(fSession));
                         // do not remove the listeners here
                         // it crashes the application because of the upper loop
@@ -221,7 +238,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         boolean noUpdate;
 
-        synchronized(mListeners) {
+        synchronized(LOG_TAG) {
             mInitialSyncComplete = (mListeners.size() == 0);
             noUpdate = mInitialSyncComplete && mPusherRegistrationComplete;
         }

@@ -67,6 +67,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * VectorMediasPickerActivity is used to take a photo or to send an old one.
+ */
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
     // medias folder
     private static final int REQUEST_MEDIAS = 54;
@@ -460,7 +463,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     private int getGalleryRowsCount() {
-        int rowsCountRetVal = 0;
+        int rowsCountRetVal;
 
         mGalleryImageCount = getMediaStoreImageCount();
         if((0==mGalleryImageCount) || (0 != (mGalleryImageCount%GALLERY_COLUMN_COUNT))) {
@@ -523,13 +526,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void buildGalleryImageTableLayout() {
         final int CELL_MARGIN = 2;
         TableRow tableRow = null;
-        RecentMediaLayout recentImageView = null;
-        int tableLayoutWidth = 0;
-        int cellWidth = 0;
-        int cellHeight = 0;
-        int itemIndex = 0;
-        ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
-        TableRow.LayoutParams rawLayoutParams = null;
+        RecentMediaLayout recentImageView;
+        int tableLayoutWidth;
+        int cellWidth;
+        int cellHeight;
+        int itemIndex;
+        ImageView.ScaleType scaleType;
+        TableRow.LayoutParams rawLayoutParams;
         TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
 
         if(null != mGalleryTableLayout) {
@@ -665,7 +668,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     Log.d(LOG_TAG, "onPictureTaken succceeds");
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-                    File dstFile = null;
+                    File dstFile;
                     String fileName = getSavedImageName();
 
                     // remove any previously saved image
@@ -709,11 +712,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                         // Close resources
                         try {
-                            if (inputStream != null)
-                                inputStream.close();
+                            inputStream.close();
 
-                            if (outputStream != null)
+                            if (outputStream != null) {
                                 outputStream.close();
+                            }
+
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
                         }
@@ -759,7 +763,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
 
     private String buildNewImageName(){
-        String nameRetValue = null;
+        String nameRetValue;
 
         // build name based on the date
         //String fileSufixTime = DateFormat.getDateTimeInstance().format(new Date());
@@ -848,7 +852,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setEnabled(false);
 
         Bitmap newBitmap = null;
-        Uri defaultUri = null;
+        Uri defaultUri;
 
         if (IMAGE_ORIGIN_CAMERA == aOrigin) {
             newBitmap = mCameraTextureView.getBitmap();

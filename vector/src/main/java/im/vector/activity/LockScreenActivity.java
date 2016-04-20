@@ -39,6 +39,9 @@ import org.matrix.androidsdk.rest.model.Message;
 import im.vector.Matrix;
 import im.vector.R;
 
+/**
+ * LockScreenActivity is displayed within the notification to send a message without opening the application.
+ */
 public class LockScreenActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";
     public static final String EXTRA_MESSAGE_BODY = "extra_chat_body";
@@ -144,26 +147,23 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
 
                 Event event = new Event(message, session.getCredentials().userId, roomId);
                 room.storeOutgoingEvent(event);
+                room.sendEvent(event, new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                    }
 
-                if (null != room) {
-                    room.sendEvent(event, new ApiCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void info) {
-                        }
+                    @Override
+                    public void onNetworkError(Exception e) {
+                    }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                        }
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                    }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                        }
-
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                        }
-                    });
-                }
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                    }
+                });
 
                 LockScreenActivity.this.runOnUiThread(new Runnable() {
                     @Override

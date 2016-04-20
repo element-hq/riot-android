@@ -45,8 +45,6 @@ import im.vector.MyPresenceManager;
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.adapters.DrawerAdapter;
-import im.vector.services.EventStreamService;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -76,15 +74,15 @@ public class MXCActionBarActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        CommonActivityUtils.onLowMemory(this);
+    }
+
+    @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-
-        Log.e("MXCActionBarActivity", "onTrimMemory " + level);
-        if ((level == TRIM_MEMORY_RUNNING_CRITICAL) || (level == TRIM_MEMORY_COMPLETE)) {
-            // clear the application cache
-            // to reduce memory usage.
-            Matrix.getInstance(this).reloadSessions(this);
-        }
+        CommonActivityUtils.onTrimMemory(this, level);
     }
 
     @Override
@@ -205,16 +203,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        // refresh the push rules when debackgrounding the application
-        if (VectorApp.isAppInBackground()) {
-            Matrix matrixInstance =  Matrix.getInstance(getApplicationContext());
-
-            // sanity check
-            if (null != matrixInstance) {
-                matrixInstance.refreshPushRules();
-            }
-        }
 
         VectorApp.setCurrentActivity(this);
         Matrix.setSessionErrorListener(this);

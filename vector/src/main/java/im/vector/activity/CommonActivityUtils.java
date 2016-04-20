@@ -18,6 +18,7 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
@@ -74,7 +75,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -85,16 +88,24 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 public class CommonActivityUtils {
     private static final String LOG_TAG = "CommonActivityUtils";
 
-    /** Mime types **/
-    public static final  String MIME_TYPE_IMAGE_ALL = "image/*";
-    public static final  String MIME_TYPE_ALL_CONTENT = "*/*";
+    /**
+     * Mime types
+     **/
+    public static final String MIME_TYPE_IMAGE_ALL = "image/*";
+    public static final String MIME_TYPE_ALL_CONTENT = "*/*";
 
     // global helper constants:
-    /** The view is visible **/
+    /**
+     * The view is visible
+     **/
     public static final float UTILS_OPACITY_NONE = 1f;
-    /** The view is half dimmed **/
+    /**
+     * The view is half dimmed
+     **/
     public static final float UTILS_OPACITY_HALF = 0.5f;
-    /** The view is hidden **/
+    /**
+     * The view is hidden
+     **/
     public static final float UTILS_OPACITY_FULL = 0f;
 
     public static final boolean UTILS_DISPLAY_PROGRESS_BAR = true;
@@ -103,8 +114,8 @@ public class CommonActivityUtils {
     // room details members:
     public static final String KEY_GROUPS_EXPANDED_STATE = "KEY_GROUPS_EXPANDED_STATE";
     public static final String KEY_SEARCH_PATTERN = "KEY_SEARCH_PATTERN";
-    public static final Boolean GROUP_IS_EXPANDED = Boolean.valueOf(true);
-    public static final Boolean GROUP_IS_COLLAPSED = Boolean.valueOf(false);
+    public static final Boolean GROUP_IS_EXPANDED = true;
+    public static final Boolean GROUP_IS_COLLAPSED = false;
 
     // power levels
     public static final float UTILS_POWER_LEVEL_ADMIN = 100;
@@ -133,13 +144,14 @@ public class CommonActivityUtils {
         }
     }
 
-    public static Boolean shouldRestartApp() {
+    public static boolean shouldRestartApp() {
         EventStreamService eventStreamService = EventStreamService.getInstance();
         return !Matrix.hasValidSessions() || (null == eventStreamService);
     }
 
     /**
      * Restart the application after 100ms
+     *
      * @param activity activity
      */
     public static void restartApp(Context activity) {
@@ -153,6 +165,7 @@ public class CommonActivityUtils {
 
     /**
      * Logout the current user.
+     *
      * @param activity the caller activity
      */
     public static void logout(Activity activity) {
@@ -165,7 +178,7 @@ public class CommonActivityUtils {
 
         // warn that the user logs out
         Collection<MXSession> sessions = Matrix.getMXSessions(activity);
-        for(MXSession session : sessions) {
+        for (MXSession session : sessions) {
             // Publish to the server that we're now offline
             MyPresenceManager.getInstance(activity, session).advertiseOffline();
             MyPresenceManager.remove(session);
@@ -202,12 +215,15 @@ public class CommonActivityUtils {
         activity.finish();
     }
 
-    public static void disconnect(Activity activity) {
-        stopEventStream(activity);
-        activity.finish();
-        Matrix.getInstance(activity).mHasBeenDisconnected = true;
-    }
+    //==============================================================================================================
+    // Events stream service
+    //==============================================================================================================
 
+    /**
+     * Send an action to the events service.
+     * @param context the context.
+     * @param action the action to send.
+     */
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
@@ -217,21 +233,37 @@ public class CommonActivityUtils {
         appContext.startService(killStreamService);
     }
 
+    /**
+     * Stop the event stream.
+     * @param context the context.
+     */
     public static void stopEventStream(Context context) {
         Log.d(LOG_TAG, "stopEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.STOP);
     }
 
+    /**
+     * Pause the event stream.
+     * @param context the context.
+     */
     public static void pauseEventStream(Context context) {
         Log.d(LOG_TAG, "pauseEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.PAUSE);
     }
 
+    /**
+     * Resume the events stream
+     * @param context the context.
+     */
     public static void resumeEventStream(Context context) {
         Log.d(LOG_TAG, "resumeEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.RESUME);
     }
 
+    /**
+     * Trigger a event stream catchup i.e. there is only sync/ call.
+     * @param context the context.
+     */
     public static void catchupEventStream(Context context) {
         if (VectorApp.isAppInBackground()) {
             Log.d(LOG_TAG, "catchupEventStream");
@@ -239,11 +271,19 @@ public class CommonActivityUtils {
         }
     }
 
+    /**
+     * Warn the events stream that there was a GCM status update.
+     * @param context the context.
+     */
     public static void onGcmUpdate(Context context) {
         Log.d(LOG_TAG, "onGcmUpdate");
         sendEventStreamAction(context, EventStreamService.StreamAction.GCM_STATUS_UPDATE);
     }
 
+    /**
+     * Start the events stream service.
+     * @param context the context.
+     */
     public static void startEventStreamService(Context context) {
         // the events stream service is launched
         // either the application has never be launched
@@ -256,7 +296,7 @@ public class CommonActivityUtils {
                 Log.d(LOG_TAG, "restart EventStreamService");
 
                 for (MXSession session : sessions) {
-                    Boolean isSessionReady = session.getDataHandler().getStore().isReady();
+                    boolean isSessionReady = session.getDataHandler().getStore().isReady();
 
                     if (!isSessionReady) {
                         session.getDataHandler().getStore().open();
@@ -274,65 +314,36 @@ public class CommonActivityUtils {
         }
     }
 
-    public interface OnSubmitListener {
-        void onSubmit(String text);
+    //==============================================================================================================
+    // Room jump methods.
+    //==============================================================================================================
 
-        void onCancelled();
-    }
-
-    public static AlertDialog createEditTextAlert(Activity context, String title, String hint, String initialText, final OnSubmitListener listener) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        final EditText input = new EditText(context);
-        if (hint != null) {
-            input.setHint(hint);
-        }
-
-        if (initialText != null) {
-            input.setText(initialText);
-        }
-        alert.setTitle(title);
-        alert.setView(input);
-        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString().trim();
-                listener.onSubmit(value);
-            }
-        });
-
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.cancel();
-                    }
-                }
-        );
-
-        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                listener.onCancelled();
-            }
-        });
-
-        AlertDialog dialog = alert.create();
-        // add the dialog to be rendered in the screenshot
-        RageShake.getInstance().registerDialog(dialog);
-
-        return dialog;
-    }
-
+    /**
+     * Start a room activity with the dedicated parameters.
+     * Pop the activity to the homeActivity before pushing the new activity.
+     * @param fromActivity the caller activity.
+     * @param params the room activity parameters
+     */
     public static void goToRoomPage(final Activity fromActivity, final Map<String, Object> params) {
         goToRoomPage(fromActivity, null, params);
     }
 
+    /**
+     * Start a room activity with the dedicated parameters.
+     * Pop the activity to the homeActivity before pushing the new activity.
+     * @param fromActivity  the caller activity.
+     * @param session the session.
+     * @param params the room activity parameters.
+     */
     public static void goToRoomPage(final Activity fromActivity, final MXSession session, final Map<String, Object> params) {
-        final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String)params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
+        final MXSession finalSession = (session == null) ? Matrix.getMXSession(fromActivity, (String) params.get(VectorRoomActivity.EXTRA_MATRIX_ID)) : session;
 
         // sanity check
         if ((null == finalSession) || !finalSession.isAlive()) {
             return;
         }
 
-        String roomId = (String)params.get(VectorRoomActivity.EXTRA_ROOM_ID);
+        String roomId = (String) params.get(VectorRoomActivity.EXTRA_ROOM_ID);
 
         Room room = finalSession.getDataHandler().getRoom(roomId);
 
@@ -371,7 +382,7 @@ public class CommonActivityUtils {
                                                // try to find a displayed room name
                                                if (null == params.get(VectorRoomActivity.EXTRA_DEFAULT_NAME)) {
 
-                                                   Room room = finalSession.getDataHandler().getRoom((String)params.get(VectorRoomActivity.EXTRA_ROOM_ID));
+                                                   Room room = finalSession.getDataHandler().getRoom((String) params.get(VectorRoomActivity.EXTRA_ROOM_ID));
 
                                                    if ((null != room) && room.isInvited()) {
                                                        String displayname = VectorUtils.getRoomDisplayname(fromActivity, finalSession, room);
@@ -389,10 +400,16 @@ public class CommonActivityUtils {
         );
     }
 
-    public static void goToOneToOneRoom(final String matrixId, final String otherUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
-        goToOneToOneRoom(Matrix.getMXSession(fromActivity, matrixId), otherUserId, fromActivity, callback);
-    }
+    //==============================================================================================================
+    // 1:1 Room  methods.
+    //==============================================================================================================
 
+    /**
+     * Search the first existing room with a dedicated user.
+     * @param aSession the session
+     * @param otherUserId the other user id
+     * @return the room if it exits.
+     */
     public static Room findOneToOneRoom(final MXSession aSession, final String otherUserId) {
         Collection<Room> rooms = aSession.getDataHandler().getStore().getRooms();
 
@@ -411,6 +428,14 @@ public class CommonActivityUtils {
         return null;
     }
 
+    /**
+     * Jump to a 1:1 room with a dedicated user.
+     * If there is no room with this user, the room is created.
+     * @param aSession the session.
+     * @param otherUserId the other user id.
+     * @param fromActivity the caller activity.
+     * @param callback the callback.
+     */
     public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
         // sanity check
         if (null == otherUserId) {
@@ -454,7 +479,7 @@ public class CommonActivityUtils {
                 public void onSuccess(String roomId) {
                     final Room room = fSession.getDataHandler().getRoom(roomId);
 
-                    room.invite(otherUserId, new SimpleApiCallback<Void>(this) {
+                    final SimpleApiCallback inviteCallback = new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
                             HashMap<String, Object> params = new HashMap<String, Object>();
@@ -487,7 +512,14 @@ public class CommonActivityUtils {
                             }
                         }
 
-                    });
+                    };
+
+                    // check if the userId defines an meail address.
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches()) {
+                        room.inviteByEmail(otherUserId, inviteCallback);
+                    } else {
+                        room.invite(otherUserId, inviteCallback);
+                    }
                 }
 
                 @Override
@@ -516,14 +548,15 @@ public class CommonActivityUtils {
 
     /**
      * Offer to send some dedicated intent data to an existing room
+     *
      * @param fromActivity the caller activity
-     * @param intent the intent param
+     * @param intent       the intent param
      */
     public static void sendFilesTo(final Activity fromActivity, final Intent intent) {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
-            sendFilesTo(fromActivity, intent,Matrix.getMXSession(fromActivity, null));
-        } else if (fromActivity instanceof FragmentActivity){
-            FragmentManager fm = ((FragmentActivity)fromActivity).getSupportFragmentManager();
+            sendFilesTo(fromActivity, intent, Matrix.getMXSession(fromActivity, null));
+        } else if (fromActivity instanceof FragmentActivity) {
+            FragmentManager fm = ((FragmentActivity) fromActivity).getSupportFragmentManager();
 
             AccountsSelectionDialogFragment fragment = (AccountsSelectionDialogFragment) fm.findFragmentByTag(MXCActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG);
             if (fragment != null) {
@@ -550,9 +583,10 @@ public class CommonActivityUtils {
 
     /**
      * Offer to send some dedicated intent data to an existing room
+     *
      * @param fromActivity the caller activity
-     * @param intent the intent param
-     * @param session the session/
+     * @param intent       the intent param
+     * @param session      the session/
      */
     public static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
@@ -563,8 +597,8 @@ public class CommonActivityUtils {
         ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>(session.getDataHandler().getStore().getSummaries());
 
         // keep only the joined room
-        for(int index = 0; index < mergedSummaries.size(); index++) {
-            RoomSummary summary =  mergedSummaries.get(index);
+        for (int index = 0; index < mergedSummaries.size(); index++) {
+            RoomSummary summary = mergedSummaries.get(index);
             Room room = session.getDataHandler().getRoom(summary.getRoomId());
 
             if ((null == room) || room.isInvited()) {
@@ -605,7 +639,7 @@ public class CommonActivityUtils {
                     }
                 });
 
-        final  ArrayList<RoomSummary> fMergedSummaries = mergedSummaries;
+        final ArrayList<RoomSummary> fMergedSummaries = mergedSummaries;
 
         builderSingle.setAdapter(adapter,
                 new DialogInterface.OnClickListener() {
@@ -613,7 +647,7 @@ public class CommonActivityUtils {
                     @Override
                     public void onClick(DialogInterface dialog, final int which) {
                         dialog.dismiss();
-                        fromActivity.runOnUiThread( new Runnable() {
+                        fromActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 RoomSummary summary = fMergedSummaries.get(which);
@@ -623,13 +657,17 @@ public class CommonActivityUtils {
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
 
-                                CommonActivityUtils.goToRoomPage(fromActivity, session,  params);
+                                CommonActivityUtils.goToRoomPage(fromActivity, session, params);
                             }
                         });
                     }
                 });
         builderSingle.show();
     }
+
+    //==============================================================================================================
+    // Parameters checkers.
+    //==============================================================================================================
 
     /**
      * Check if the userId format is valid with the matrix standard.
@@ -656,65 +694,16 @@ public class CommonActivityUtils {
         return res;
     }
 
-    /**
-     * Parse an userIDS text into a list.
-     *
-     * @param userIDsText      the userIDs text.
-     * @param homeServerSuffix the home server suffix
-     * @return the userIDs list.
-     */
-    public static ArrayList<String> parseUserIDsList(String userIDsText, String homeServerSuffix) {
-        ArrayList<String> userIDsList = new ArrayList<String>();
-
-        if (!TextUtils.isEmpty(userIDsText)) {
-            userIDsText = userIDsText.trim();
-
-            if (!TextUtils.isEmpty(userIDsText)) {
-                // they are separated by a ;
-                String[] splitItems = userIDsText.split(";");
-
-                for (int i = 0; i < splitItems.length; i++) {
-                    String item = splitItems[i];
-
-                    // avoid null name
-                    if (item.length() > 0) {
-                        // add missing @ or home suffix
-                        String checkedItem = CommonActivityUtils.checkUserId(item, homeServerSuffix);
-
-                        // not yet added ? -> add it
-                        if (userIDsList.indexOf(checkedItem) < 0) {
-                            checkedItem.trim();
-                            userIDsList.add(checkedItem);
-                        }
-                    }
-                }
-            }
-        }
-
-        return userIDsList;
-    }
-
-    /**
-     * @param context the context
-     * @param filename the filename
-     * @return true if a file named "filename" is stored in the downloads directory
-     */
-    public static Boolean doesFileExistInDownloads(Context context, String filename) {
-        File dstDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-        if (dstDir != null) {
-            dstDir.mkdirs();
-        }
-
-        File dstFile = new File(dstDir, filename);
-        return dstFile.exists();
-    }
+    //==============================================================================================================
+    // Media utils
+    //==============================================================================================================
 
     /**
      * Save a media in the downloads directory and offer to open it with a third party application.
-     * @param activity the activity
+     *
+     * @param activity       the activity
      * @param savedMediaPath the media path
-     * @param mimeType the media mime type.
+     * @param mimeType       the media mime type.
      */
     public static void openMedia(final Activity activity, final String savedMediaPath, final String mimeType) {
         if ((null != activity) && (null != savedMediaPath)) {
@@ -740,9 +729,10 @@ public class CommonActivityUtils {
      * Copy a file into a dstPath directory.
      * The output filename can be provided.
      * The output file is not overriden if it is already exist.
-     * @param context the context
-     * @param sourceFile the file source path
-     * @param dstDirPath the dst path
+     *
+     * @param context        the context
+     * @param sourceFile     the file source path
+     * @param dstDirPath     the dst path
      * @param outputFilename optional the output filename
      * @return the downloads file path if the file exists or has been properly saved
      */
@@ -814,8 +804,9 @@ public class CommonActivityUtils {
 
     /**
      * Save a media URI into the download directory
-     * @param context the context
-     * @param srcFile the source file.
+     *
+     * @param context  the context
+     * @param srcFile  the source file.
      * @param filename the filename (optional)
      * @return the downloads file path
      */
@@ -840,7 +831,8 @@ public class CommonActivityUtils {
 
     /**
      * Save an image URI into the gallery
-     * @param context the context.
+     *
+     * @param context    the context.
      * @param sourceFile the image path to save.
      */
     public static String saveImageIntoGallery(Context context, File sourceFile) {
@@ -854,52 +846,48 @@ public class CommonActivityUtils {
         return filePath;
     }
 
+    //==============================================================================================================
+    // toast utils
+    //==============================================================================================================
+
     /**
-     * Save an image URI into the Movies
-     * @param context the context.
-     * @param sourceFile the video path to save.
+     * Display a toast
+     * @param aContext the context.
+     * @param aTextToDisplay the text to display.
      */
-    public static String saveIntoMovies(Context context, File sourceFile) {
-        String filePath = saveFileInto(context, sourceFile, Environment.DIRECTORY_MOVIES, null);
-
-        if (null != filePath) {
-            // This broadcasts that there's been a change in the media directory
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filePath))));
-        }
-
-        return filePath;
-    }
-
-    public static void displayNotImplementedToast(Context aContext){
-        displayToast(aContext, (CharSequence) "Not implemented");
-    }
-
-    public static void displayNotImplementedSnack(View aTargetView){
-        displaySnack(aTargetView, (CharSequence) "Not implemented");
-    }
-
-    public static void displayToast(Context aContext, CharSequence aTextToDisplay){
+    public static void displayToast(Context aContext, CharSequence aTextToDisplay) {
         Toast.makeText(aContext, aTextToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    public static void displaySnack(View aTargetView, CharSequence aTextToDisplay){
+    /**
+     * Display a snack.
+     * @param aTargetView the parent view.
+     * @param aTextToDisplay the text to display.
+     */
+    public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
     }
+
+    //==============================================================================================================
+    // room utils
+    //==============================================================================================================
 
     /**
      * Helper method to retrieve the max power level contained in the room.
      * This value is used to indicate what is the power level value required
      * to be admin of the room.
+     *
      * @return max power level of the current room
      */
     public static int getRoomMaxPowerLevel(Room aRoom) {
         int maxPowerLevel = 0;
 
-        if (null != aRoom){
-            int tempPowerLevel = 0;
+        if (null != aRoom) {
             PowerLevels powerLevels = aRoom.getLiveState().getPowerLevels();
 
-            if(null != powerLevels) {
+            if (null != powerLevels) {
+                int tempPowerLevel;
+
                 // find out the room member
                 Collection<RoomMember> members = aRoom.getMembers();
                 for (RoomMember member : members) {
@@ -921,7 +909,8 @@ public class CommonActivityUtils {
 
     /**
      * Update the application badge value.
-     * @param context the context
+     *
+     * @param context    the context
      * @param badgeValue the new badge value
      */
     public static void updateBadgeCount(Context context, int badgeValue) {
@@ -937,5 +926,82 @@ public class CommonActivityUtils {
      */
     public static int getBadgeCount() {
         return mBadgeValue;
+    }
+
+
+    //==============================================================================================================
+    // Low memory management
+    //==============================================================================================================
+
+    private static final String LOW_MEMORY_LOG_TAG = "Memory usage";
+
+    /**
+     * Log the memory status.
+     */
+    public static void displayMemoryInformation(Activity activity) {
+        long freeSize = 0L;
+        long totalSize = 0L;
+        long usedSize = -1L;
+        try {
+            Runtime info = Runtime.getRuntime();
+            freeSize = info.freeMemory();
+            totalSize = info.totalMemory();
+            usedSize = totalSize - freeSize;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+        Log.e(LOW_MEMORY_LOG_TAG, "usedSize   " + (usedSize / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "freeSize   " + (freeSize / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "totalSize  " + (totalSize / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+
+
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+
+        Log.e(LOW_MEMORY_LOG_TAG, "availMem   " + (mi.availMem / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "totalMem   " + (mi.totalMem / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "threshold  " + (mi.threshold / 1048576L) + " MB");
+        Log.e(LOW_MEMORY_LOG_TAG, "lowMemory  " + (mi.lowMemory));
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+    }
+
+    /**
+     * Manage the low memory case
+     *
+     * @param activity
+     */
+    public static void onLowMemory(Activity activity) {
+
+        if (!VectorApp.isAppInBackground()) {
+            Log.e(LOW_MEMORY_LOG_TAG, "Active application : onLowMemory from " + activity);
+
+            if (CommonActivityUtils.shouldRestartApp()) {
+                Log.e(LOW_MEMORY_LOG_TAG, "restart");
+                CommonActivityUtils.restartApp(activity);
+            } else {
+                Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
+                Matrix.getInstance(activity).reloadSessions(activity);
+            }
+        } else {
+            Log.e(LOW_MEMORY_LOG_TAG, "background application : onLowMemory ");
+        }
+
+        displayMemoryInformation(activity);
+    }
+
+    /**
+     * Manage the trim memory.
+     * @param activity the activity.
+     * @param level the memory level
+     */
+    public static void onTrimMemory(Activity activity, int level) {
+        Log.e("Low Memory","application : onTrimMemory "+level);
+        // TODO implement things to reduce memory usage
+
+        displayMemoryInformation(activity);
     }
 }

@@ -792,7 +792,8 @@ public class VectorUtils {
         }
 
         // from contacts
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(context);
+        // there is no design to select an email from a contact
+        /*Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(context);
 
         for(Contact contact : contacts) {
             if (contact.hasMatridIds(context)) {
@@ -804,7 +805,7 @@ public class VectorUtils {
             } else {
                 map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, context));
             }
-        }
+        }*/
 
         return map;
     }

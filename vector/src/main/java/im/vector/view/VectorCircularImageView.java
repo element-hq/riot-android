@@ -47,7 +47,6 @@ public class VectorCircularImageView extends ImageView {
      */
     public void setImageBitmap(Bitmap bm) {
         if (null != bm) {
-
             // convert the bitmap to a square bitmap
             int width = bm.getWidth();
             int height = bm.getHeight();
@@ -86,7 +85,7 @@ public class VectorCircularImageView extends ImageView {
             this.setImageDrawable(img);
 
         } else {
-            super.setImageBitmap(bm);
+            super.setImageBitmap(null);
         }
     }
 }

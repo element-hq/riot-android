@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -38,22 +39,19 @@ import im.vector.R;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
+/**
+ * FallbackLoginActivity is the fallback login activity
+ * i.e this activity is created when the client does not support the
+ */
 public class FallbackLoginActivity extends Activity {
+
+    private static final String LOG_TAG = "FallbackLoginAct";
+
+
     public static String EXTRA_HOME_SERVER_ID = "FallbackLoginActivity.EXTRA_HOME_SERVER_ID";
 
     WebView mWebView = null;
     private String mHomeServerUrl = null;
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            // This is to fix a bug in the v7 support lib. If there is no options menu and you hit MENU, it will crash with a
-            // NPE @ android.support.v7.app.ActionBarImplICS.getThemedContext(ActionBarImplICS.java:274)
-            // This can safely be removed if we add in menu options on this screen
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -83,15 +81,24 @@ public class FallbackLoginActivity extends Activity {
         if ((null != cookieManager) && !cookieManager.hasCookies()) {
             launchWebView();
         } else if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            cookieManager.removeAllCookie();
+            try {
+                cookieManager.removeAllCookie();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, " cookieManager.removeAllCookie() fails " + e.getLocalizedMessage());
+            }
             launchWebView();
         } else {
-            cookieManager.removeAllCookies(new ValueCallback<Boolean>() {
-                @Override
-                public void onReceiveValue(Boolean value) {
-                    launchWebView();
-                }
-            });
+            try {
+                cookieManager.removeAllCookies(new ValueCallback<Boolean>() {
+                    @Override
+                    public void onReceiveValue(Boolean value) {
+                        launchWebView();
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(LOG_TAG, " cookieManager.removeAllCookie() fails " + e.getLocalizedMessage());
+                launchWebView();
+            }
         }
     }
 
@@ -223,5 +230,28 @@ public class FallbackLoginActivity extends Activity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            // This is to fix a bug in the v7 support lib. If there is no options menu and you hit MENU, it will crash with a
+            // NPE @ android.support.v7.app.ActionBarImplICS.getThemedContext(ActionBarImplICS.java:274)
+            // This can safely be removed if we add in menu options on this screen
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        CommonActivityUtils.onLowMemory(this);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        CommonActivityUtils.onTrimMemory(this, level);
     }
 }

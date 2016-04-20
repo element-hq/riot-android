@@ -159,7 +159,7 @@ public class ParticipantAdapterItem {
 
         boolean res = false;
 
-        if (!res && !TextUtils.isEmpty(mLowerCaseDisplayName)) {
+        if (/*!res &&*/ !TextUtils.isEmpty(mLowerCaseDisplayName)) {
             res = mLowerCaseDisplayName.indexOf(aPattern) > -1;
         }
 
@@ -194,7 +194,7 @@ public class ParticipantAdapterItem {
 
         boolean res = false;
 
-        if (!res && !TextUtils.isEmpty(mDisplayName)) {
+        if (/*!res &&*/ !TextUtils.isEmpty(mDisplayName)) {
             res = mDisplayName.matches(aRegEx);
         }
 

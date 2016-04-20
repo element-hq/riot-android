@@ -110,7 +110,7 @@ public class Matrix {
     public ArrayList<MXSession> getSessions() {
         ArrayList<MXSession> sessions = new ArrayList<MXSession>();
 
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             if (null != mMXSessions) {
                 sessions = new ArrayList<MXSession>(mMXSessions);
             }
@@ -151,7 +151,7 @@ public class Matrix {
             }
         }
 
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             mMXSessions = sessions;
         }
 
@@ -259,7 +259,7 @@ public class Matrix {
 
         boolean res;
 
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             res = (null != instance.mMXSessions) && (instance.mMXSessions.size() > 0);
 
             if (!res) {
@@ -297,7 +297,7 @@ public class Matrix {
 
         session.clear(context);
 
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             mMXSessions.remove(session);
         }
     }
@@ -308,7 +308,7 @@ public class Matrix {
      * @param clearCredentials  true to clear the credentials.
      */
     public synchronized void clearSessions(Context context, Boolean clearCredentials) {
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             while (mMXSessions.size() > 0) {
                 clearSession(context, mMXSessions.get(0), clearCredentials);
             }
@@ -321,7 +321,7 @@ public class Matrix {
      */
     public synchronized void addSession(MXSession session) {
         mLoginStorage.addCredentials(session.getHomeserverConfig());
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             mMXSessions.add(session);
         }
     }
@@ -377,7 +377,7 @@ public class Matrix {
 
         clearSessions(fromActivity, false);
 
-        synchronized (instance) {
+        synchronized (LOG_TAG) {
             // build a new sessions list
             ArrayList<HomeserverConnectionConfig> configs = mLoginStorage.getCredentialsList();
 
@@ -406,7 +406,7 @@ public class Matrix {
      * Refresh the sessions push rules.
      */
     public void refreshPushRules() {
-        ArrayList<MXSession> sessions = null;
+        ArrayList<MXSession> sessions;
 
         synchronized (this) {
             sessions = getSessions();

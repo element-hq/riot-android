@@ -49,7 +49,6 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
@@ -69,7 +68,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
 
     private static final int INVITE_USER_REQUEST_CODE = 777;
-    private static final String NO_PATTERN_FILTER = null;
     private static final boolean REFRESH_FORCED = true;
     private static final boolean REFRESH_NOT_FORCED = false;
 
@@ -122,10 +120,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         mSearchNoResultTextView.setVisibility(View.GONE);
                     }
 
-                    if (NO_PATTERN_FILTER == mPatternValue) {
+                    if (TextUtils.isEmpty(mPatternValue)) {
                         // search result with no pattern filter
                         updateListExpandingState();
-
                     } else {
                         // search result
                         forceListInExpandingState();
@@ -160,13 +157,58 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             if (TextUtils.isEmpty(patternValue)) {
                 // search input is empty: restore a not filtered room members list
                 mClearSearchImageView.setVisibility(View.INVISIBLE);
-                mPatternValue = NO_PATTERN_FILTER;
+                mPatternValue = null;
                 refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
             } else {
                 mClearSearchImageView.setVisibility(View.VISIBLE);
             }
         }
     };
+
+    private ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressView.setVisibility(View.GONE);
+                            }
+                        });
+            }
+        }
+
+        public void onError(final String errorMessage) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mProgressView.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
+
 
     // top view
     private View mViewHierarchy;
@@ -305,7 +347,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             }
         } else {
             mIsListViewGroupExpandedMap = (HashMap<Integer, Boolean>) savedInstanceState.getSerializable(CommonActivityUtils.KEY_GROUPS_EXPANDED_STATE);
-            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, NO_PATTERN_FILTER);
+            mPatternValue = savedInstanceState.getString(CommonActivityUtils.KEY_SEARCH_PATTERN, null);
         }
 
         setHasOptionsMenu(true);
@@ -389,15 +431,25 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private void kickUsers(final  ArrayList<String> userIds, final int index) {
         if (index >= userIds.size()) {
-            mProgressView.setVisibility(View.GONE);
+            // the kick requests are performed in a dedicated thread
+            // so switch to the UI thread at the end.
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mProgressView.setVisibility(View.GONE);
 
-            if (mIsMultiSelectionMode) {
-                toggleMultiSelectionMode();
-                resetActivityTitle();
+                        if (mIsMultiSelectionMode) {
+                            toggleMultiSelectionMode();
+                            resetActivityTitle();
+                        }
+
+                        // refresh the display
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
-            // refresh the display 
-            mAdapter.notifyDataSetChanged();
             return;
         }
 
@@ -500,7 +552,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             public void onClick(View view) {
                 // clear search pattern to restore no filtered room members list
                 mPatternToSearchEditText.setText("");
-                mPatternValue = NO_PATTERN_FILTER;
+                mPatternValue = null;
                 refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
                 forceListInExpandingState();
             }
@@ -508,7 +560,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         mProgressView = mViewHierarchy.findViewById(R.id.add_participants_progress_view);
         mParticipantsListView = (ExpandableListView)mViewHierarchy.findViewById(R.id.room_details_members_exp_list_view);
-        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, (null != mRoom) ? mRoom.getRoomId() : null, false, mxMediasCache);
+        mAdapter = new VectorRoomDetailsMembersAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_recent_header, mSession, mRoom.getRoomId(), mxMediasCache);
         mParticipantsListView.setAdapter(mAdapter);
         // the group indicator is managed in the adapter (group view creation)
         mParticipantsListView.setGroupIndicator(null);
@@ -537,35 +589,36 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             @Override
             public void onRemoveClick(final ParticipantAdapterItem participantItem) {
-                if (null == mRoom) {
-                    mAdapter.removeParticipant(participantItem);
-                } else {
-                    String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
+                String text = getActivity().getString(R.string.room_participants_remove_prompt_msg, participantItem.mDisplayName);
 
-                    // The user is trying to leave with unsaved changes. Warn about that
-                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                            .setTitle(R.string.room_participants_remove_prompt_title)
-                            .setMessage(text)
-                            .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                // The user is trying to leave with unsaved changes. Warn about that
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_remove_prompt_title)
+                        .setMessage(text)
+                        .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
 
-                                    ArrayList<String> userIds = new ArrayList<String>();
-                                    userIds.add(participantItem.mUserId);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ArrayList<String> userIds = new ArrayList<String>();
+                                        userIds.add(participantItem.mUserId);
 
-                                    kickUsers(userIds, 0);
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create()
-                            .show();
-                }
+                                        kickUsers(userIds, 0);
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
             }
 
             @Override
@@ -584,12 +637,26 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 mRoom.leave(new ApiCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void info) {
-                                        mProgressView.setVisibility(View.GONE);
+                                        if (null != getActivity()) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    getActivity().finish();
+                                                }
+                                            });
+                                        }
                                     }
 
-                                    private void onError(String errorMessage) {
-                                        mProgressView.setVisibility(View.GONE);
-                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                    private void onError(final String errorMessage) {
+                                        if (null != getActivity()) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mProgressView.setVisibility(View.GONE);
+                                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
                                     }
 
                                     @Override
@@ -607,7 +674,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                         onError(e.getLocalizedMessage());
                                     }
                                 });
-                                getActivity().finish();
+
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -682,37 +749,12 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         // and the new member is added.
                         mProgressView.setVisibility(View.VISIBLE);
 
-                        SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>(getActivity()) {
-                            @Override
-                            public void onSuccess(Void info) {
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onNetworkError(Exception e) {
-                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onMatrixError(final MatrixError e) {
-                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                mProgressView.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onUnexpectedError(final Exception e) {
-                                Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                mProgressView.setVisibility(View.GONE);
-                            }
-                        };
-
                         if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                            mRoom.inviteByEmail(userId, callback);
+                            mRoom.inviteByEmail(userId, mDefaultCallBack);
                         } else {
                             ArrayList<String> userIDs = new ArrayList<String>();
                             userIDs.add(userId);
-                            mRoom.invite(userIDs, callback);
+                            mRoom.invite(userIDs, mDefaultCallBack);
                         }
                     }
                 }, 100);

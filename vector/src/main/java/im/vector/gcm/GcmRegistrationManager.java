@@ -206,6 +206,13 @@ public final class GcmRegistrationManager {
                     Log.d(LOG_TAG, "checkPusherRegistration : onPusherRegistrationFailed");
                 }
             });
+        } else if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
+            // register the 3rd party server
+            // the server registration might have failed
+            // so ensure that it will be done when the application is debackgrounded.
+            if (useGCM()) {
+                registerSessions(appContext, null);
+            }
         }
     }
 
@@ -366,12 +373,7 @@ public final class GcmRegistrationManager {
                             }
 
                             private void onError(final String message) {
-                                mUIHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(mContext, "fail to register " + session.getMyUserId() + " (" + message + ")", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                Log.e(LOG_TAG, "fail to register " + session.getMyUserId() + " (" + message + ")");
 
                                 if (null != listener) {
                                     try {
@@ -505,11 +507,9 @@ public final class GcmRegistrationManager {
                     Log.d(LOG_TAG, "registerSessions unregistrated : GCM registration failed again");
 
                     if (null != listener) {
-                        if (null != listener) {
-                            try {
-                                listener.onSessionRegistrationFailed();
-                            } catch (Exception e) {
-                            }
+                        try {
+                            listener.onSessionRegistrationFailed();
+                        } catch (Exception e) {
                         }
                     }
                 }
@@ -603,12 +603,7 @@ public final class GcmRegistrationManager {
 
                             private void onError(final String message) {
                                 if (session.isAlive()) {
-                                    mUIHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(mContext, "fail to unregister " + session.getMyUserId() + " (" + message + ")", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
+                                    Log.e(LOG_TAG, "fail to unregister " + session.getMyUserId() + " (" + message + ")");
 
                                     if (null != listener) {
                                         try {

@@ -621,8 +621,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 String charBef = "";
                 String charAfter = "";
 
-                long a = text.length();
-
                 if (matchStart > 2) {
                     charBef = text.substring(matchStart-2, matchStart);
                 }
@@ -646,7 +644,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     }
 
     private void sendTextMessage() {
-     	String body = mEditText.getText().toString();
+     	String body = mEditText.getText().toString().trim();
         
         // markdownToHtml does not manage properly urls with underscores
         // so we replace the urls by a tmp value before parsing it.
@@ -857,6 +855,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     intent.putExtra(CallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
                 }
 
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -911,6 +910,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         if (id == R.id.ic_action_search_in_room) {
             try {
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
                 // pop to the home activity
                 Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
                 intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -938,6 +939,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                 @Override
                 public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
                     // create the call object
                     IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
@@ -970,6 +972,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void launchRoomDetails() {
         if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
+            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
             // pop to the home activity
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
@@ -1088,7 +1092,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         ContentResolver resolver = getContentResolver();
 
                                         List uriPath = mediaUri.getPathSegments();
-                                        long imageId = -1;
+                                        long imageId;
                                         String lastSegment = (String) uriPath.get(uriPath.size() - 1);
 
                                         // > Kitkat
@@ -1401,6 +1405,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * @param mediaMimeType
      */
     public void createDocument(Message message, final String mediaUrl, final String mediaMimeType) {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
         String filename = "Vector_" + System.currentTimeMillis();
 
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -1592,7 +1598,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             if ("image/jpeg".equals(mPendingMimeType)) {
 
                 System.gc();
-                FileInputStream imageStream = null;
+                FileInputStream imageStream;
 
                 try {
                     Uri uri = Uri.parse(mPendingMediaUrl);
@@ -1794,6 +1800,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * Launch the files selection intent
      */
     private void launchFileSelectionIntent() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
         Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -1806,6 +1814,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * Launch the camera
      */
     private void launchCamera() {
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
         Intent intent = new Intent(this, VectorMediasPickerActivity.class);
         startActivityForResult(intent, TAKE_IMAGE);
     }
@@ -1881,6 +1891,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     //================================================================================
 
     private void refreshNotificationsArea() {
+        // sanity check
+        // might happen when the application is logged out
+        if (null == mSession.getDataHandler()) {
+            return;
+        }
+
         boolean isAreaVisible = false;
         boolean isTypingIconDisplayed = false;
         boolean isErrorIconDisplayed = false;
@@ -2340,10 +2356,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                     int rootHeight = vectorActivityRoomView.getRootView().getHeight();
                     int height =  vectorActivityRoomView.getHeight();
                     int heightDiff = rootHeight - height;
-                    if (heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE)
-                        mIsKeyboardDisplayed = true;
-                    else
-                        mIsKeyboardDisplayed = false;
+                    mIsKeyboardDisplayed = heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE;
                 }
             };
         }

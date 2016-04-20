@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -83,25 +84,12 @@ public class VectorSearchPeopleListFragment extends Fragment {
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
         mPeopleListView = (ListView)v.findViewById(R.id.search_people_list);
-        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null, false, mSession.getMediasCache());
+        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null);
         mPeopleListView.setAdapter(mAdapter);
 
-        mAdapter.setOnParticipantsListener(new VectorAddParticipantsAdapter.OnParticipantsListener() {
+        mPeopleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onRemoveClick(ParticipantAdapterItem participant) {
-            }
-
-            @Override
-            public void onLeaveClick() {
-            }
-
-            @Override
-            public void onSelectUserId(String userId) {
-
-            }
-
-            @Override
-            public void onClick(int position) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ParticipantAdapterItem item = mAdapter.getItem(position);
 
                 Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);

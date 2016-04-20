@@ -182,6 +182,9 @@
     <!-- universal link receiver -->
     <string name="universal_link_join_alert_title">You are trying to access a room.</string>
     <string name="universal_link_join_alert_body">Would you like to join in order to participate in the discussion?</string>
+    <string name="universal_link_email_invitation_body_1">You have been invited to join this room by %s</string>
+    <string name="universal_link_email_invitation_body_2">Would you like to accept or decline this invitation?</string>
+    <string name="universal_link_email_invitation_body_3">This invitation was sent to %s which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
 
     <!-- members list Screen -->
     <string name="members_list">Members List</string>
