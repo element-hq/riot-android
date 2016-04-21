@@ -84,7 +84,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
 
         String roomName = sRoomPreviewData.getRoomName();
         if (TextUtils.isEmpty(roomName)) {
-            roomName = getResources().getString(R.string.room_preview_try_join_an_unknown_room_default);
+            roomName = " ";
         }
 
         // if the room already exists

@@ -186,12 +186,46 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         aContext.startActivity(intent);
                     } else {
                         mParameters = params;
-                        manageRoom(aContext);
+                        manageRoomOnActivity(aContext);
                     }
                 } else {
                     Log.e(LOG_TAG, "## onReceive() Path not supported: " + intentUri.getPath());
                 }
             }
+        }
+    }
+
+    /**
+     * Start the universal link management when the login process is done.
+     * If there is no active activity, launch the home activity
+     * @param aContext
+     */
+    private void manageRoomOnActivity(final Context aContext) {
+        final Activity currentActivity = VectorApp.getCurrentActivity();
+
+        if (null != currentActivity) {
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    manageRoom(aContext);
+                }
+            });
+        } else {
+            // clear the activity stack to home activity
+            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+            aContext.startActivity(intent);
+
+            final Timer wakeup = new Timer();
+
+            wakeup.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    wakeup.cancel();
+                    manageRoomOnActivity(aContext);
+                }
+            }, 200);
         }
     }
 
@@ -402,6 +436,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         return map;
     }
 
+    /**
+     * Stop the spinner on the home activity
+     * @param aContext the context.
+     */
     private void stopHomeActivitySpinner(Context aContext){
         Intent myBroadcastIntent = new Intent(VectorHomeActivity.BROADCAST_ACTION_STOP_WAITING_VIEW);
         aContext.sendBroadcast(myBroadcastIntent);
