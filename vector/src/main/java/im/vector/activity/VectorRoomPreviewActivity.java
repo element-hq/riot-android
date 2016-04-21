@@ -56,12 +56,13 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
             CommonActivityUtils.restartApp(this);
         }
 
+        super.onCreate(savedInstanceState);
+
         if (null == sRoomPreviewData) {
             finish();
             return;
         }
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_room_preview);
 
         // retrieve the UI items
@@ -69,8 +70,9 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         TextView actionBarHeaderRoomName = (TextView)findViewById(R.id.action_bar_header_room_title);
         TextView actionBarHeaderActiveMembers = (TextView)findViewById(R.id.action_bar_header_room_members);
         ImageView actionBarHeaderRoomAvatar = (ImageView)findViewById(R.id.avatar_img);
-        TextView infoMessageTextView = (TextView)findViewById(R.id.room_preview_info_message);
-        final View progressLayout = findViewById(R.id.room_preview_info_message);
+        TextView invitationTextView = (TextView)findViewById(R.id.room_preview_invitation_textview);
+        TextView subInvitationTextView = (TextView)findViewById(R.id.room_preview_subinvitation_textview);
+        final View progressLayout = findViewById(R.id.room_preview_progress_layout);
 
         Button joinButton = (Button)findViewById(R.id.button_join_room);
         Button declineButton = (Button)findViewById(R.id.button_decline);
@@ -89,14 +91,24 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         if (null != room) {
             actionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, room));
             VectorUtils.loadRoomAvatar(this, mSession, actionBarHeaderRoomAvatar, room);
+            actionBarHeaderRoomTopic.setText(room.getTopic());
 
-            if (!TextUtils.isEmpty(room.getTopic())) {
-                actionBarHeaderRoomTopic.setText(room.getTopic());
-            } else {
-                actionBarHeaderRoomTopic.setVisibility(View.GONE);
+            String inviter = "";
+
+            if (null != roomEmailInvitation) {
+                inviter = roomEmailInvitation.inviterName;
             }
 
-            infoMessageTextView.setText(getResources().getText(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+            if (TextUtils.isEmpty(inviter)) {
+                Collection<RoomMember> members = room.getActiveMembers();
+                for (RoomMember member : members) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                        inviter = TextUtils.isEmpty(member.displayname) ? member.getUserId() : member.displayname;
+                    }
+                }
+            }
+
+            invitationTextView.setText(getResources().getString(R.string.room_preview_invitation_format, inviter));
             actionBarHeaderActiveMembers.setVisibility(View.GONE);
 
             declineButton.setOnClickListener(new View.OnClickListener() {
@@ -160,9 +172,10 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
             }
 
             if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
-                infoMessageTextView.setText(getResources().getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+                invitationTextView.setText(getResources().getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+                subInvitationTextView.setText(getResources().getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
             } else {
-                infoMessageTextView.setText(getResources().getString(R.string.room_preview_try_join_an_unknown_room, roomName));
+                invitationTextView.setText(getResources().getString(R.string.room_preview_try_join_an_unknown_room, roomName));
             }
 
             // common items

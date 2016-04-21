@@ -206,52 +206,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mRoomCreationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWaitingView.setVisibility(View.VISIBLE);
-
-                mSession.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(VectorHomeActivity.this) {
-                    @Override
-                    public void onSuccess(final String roomId) {
-                        mWaitingView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mWaitingView.setVisibility(View.GONE);
-
-                                HashMap<String, Object> params = new HashMap<String, Object>();
-                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-                                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
-                            }
-                        });
-                    }
-
-                    private void onError(final String message) {
-                        mWaitingView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (null != message) {
-                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
-                                }
-                                mWaitingView.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(final MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(final Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
+                Intent intent = new Intent(VectorHomeActivity.this, VectorRoomPreviewActivity.class);
+                VectorHomeActivity.this.startActivity(intent);
             }
         });
 

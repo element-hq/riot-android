@@ -215,42 +215,41 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 if (room.isInvited()) {
                     VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
                     stopHomeActivitySpinner(aContext);
-                    Intent intent = new Intent(aContext, VectorRoomPreviewActivity.class);
-                    aContext.startActivity(intent);
+                    Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                    VectorApp.getCurrentActivity().startActivity(intent);
                 } else {
                     stopHomeActivitySpinner(aContext);
                     openRoomActivity(aContext);
                 }
-
             } else {
                 roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
+
+                    private void onDone() {
                         VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
                         stopHomeActivitySpinner(aContext);
 
-                        Intent intent = new Intent(aContext, VectorRoomPreviewActivity.class);
-                        aContext.startActivity(intent);
+                        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                        VectorApp.getCurrentActivity().startActivity(intent);
                     }
 
-                    private void onError(String errorMessage) {
-                        stopHomeActivitySpinner(aContext);
-                        CommonActivityUtils.displayToast(aContext, errorMessage);
+                    @Override
+                    public void onSuccess(Void info) {
+                        onDone();
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
+                        onDone();
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
+                        onDone();
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
+                        onDone();
                     }
                 });
             }

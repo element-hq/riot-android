@@ -35,7 +35,7 @@
                     android:layout_marginTop="16dp">
 
                     <TextView
-                        android:id="@+id/room_preview_info_message"
+                        android:id="@+id/room_preview_invitation_textview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
@@ -70,6 +70,15 @@
                             android:background="@android:color/white"
                             android:text="@string/decline"/>
                     </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/room_preview_subinvitation_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text=""
+                        android:textColor="@color/vector_silver_color"/>
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -79,8 +88,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/chat_encoding_background"
-                android:visibility="gone">
+                android:background="@color/chat_encoding_background">
                 <ProgressBar
                     android:id="@+id/medias_processing_progress"
                     android:layout_height="40dp"
