@@ -185,13 +185,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_vector_home);
+
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
+            return;
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vector_home);
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
 
@@ -484,6 +485,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // the application is in a weird state
+        if (CommonActivityUtils.shouldRestartApp()) {
+            return false;
+        }
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
 

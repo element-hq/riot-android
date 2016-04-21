@@ -41,12 +41,13 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (CommonActivityUtils.shouldRestartApp()) {
-            CommonActivityUtils.restartApp(this);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_public_rooms);
+
+        if (CommonActivityUtils.shouldRestartApp()) {
+            CommonActivityUtils.restartApp(this);
+            return;
+        }
 
         Intent intent = getIntent();
 

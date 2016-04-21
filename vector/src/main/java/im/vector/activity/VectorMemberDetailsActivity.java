@@ -546,6 +546,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application");
             CommonActivityUtils.restartApp(this);
+            return;
         }
 
         // retrieve the parameters contained extras and setup other
