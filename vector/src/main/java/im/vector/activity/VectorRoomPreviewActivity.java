@@ -35,7 +35,9 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 // displays a preview of a dedicated room.
@@ -62,6 +64,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_room_preview);
 
+        // retrieve the UI items
         TextView actionBarHeaderRoomTopic = (TextView)findViewById(R.id.action_bar_header_room_topic);
         TextView actionBarHeaderRoomName = (TextView)findViewById(R.id.action_bar_header_room_title);
         TextView actionBarHeaderActiveMembers = (TextView)findViewById(R.id.action_bar_header_room_members);
@@ -72,45 +75,108 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         Button joinButton = (Button)findViewById(R.id.button_join_room);
         Button declineButton = (Button)findViewById(R.id.button_decline);
 
-        RoomState roomState = sRoomPreviewData.getRoomState();
+        mSession = sRoomPreviewData.getSession();
 
-        if (null != roomState) {
-            actionBarHeaderRoomTopic.setText(roomState.topic);
-
-            // compute the number of joined members
-            int joined = 0;
-            for (RoomMember member : roomState.getMembers()) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                    joined++;
-                }
-            }
-
-            if (joined == 1) {
-                actionBarHeaderActiveMembers.setText(getResources().getString(R.string.room_title_one_member));
-            } else {
-                actionBarHeaderActiveMembers.setText(getResources().getString(R.string.room_title_members, joined));
-            }
-        } else {
-            actionBarHeaderRoomTopic.setVisibility(View.GONE);
-            actionBarHeaderActiveMembers.setVisibility(View.GONE);
-        }
-
-        final RoomEmailInvitation roomEmailInvitation =  sRoomPreviewData.getRoomEmailInvitation();
+        final Room room = mSession.getDataHandler().getRoom(sRoomPreviewData.getRoomId(), false);
+        final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
 
         String roomName = sRoomPreviewData.getRoomName();
         if (TextUtils.isEmpty(roomName)) {
             roomName = getResources().getString(R.string.room_preview_try_join_an_unknown_room_default);
         }
 
-        if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
-            infoMessageTextView.setText(getResources().getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
-        } else {
-            infoMessageTextView.setText(getResources().getString(R.string.room_preview_try_join_an_unknown_room, roomName));
-        }
+        // if the room already exists
+        if (null != room) {
+            actionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, room));
+            VectorUtils.loadRoomAvatar(this, mSession, actionBarHeaderRoomAvatar, room);
 
-        // common items
-        actionBarHeaderRoomName.setText(roomName);
-        VectorUtils.loadUserAvatar(this, sRoomPreviewData.getSession(), actionBarHeaderRoomAvatar, sRoomPreviewData.getRoomAvatarUrl(), sRoomPreviewData.getRoomId(), roomName);
+            if (!TextUtils.isEmpty(room.getTopic())) {
+                actionBarHeaderRoomTopic.setText(room.getTopic());
+            } else {
+                actionBarHeaderRoomTopic.setVisibility(View.GONE);
+            }
+
+            infoMessageTextView.setText(getResources().getText(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+            actionBarHeaderActiveMembers.setVisibility(View.GONE);
+
+            declineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    progressLayout.setVisibility(View.VISIBLE);
+
+                    room.leave(new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            VectorRoomPreviewActivity.this.finish();
+                            sRoomPreviewData = null;
+                        }
+
+                        private void onError(String errorMessage) {
+                            CommonActivityUtils.displayToast(VectorRoomPreviewActivity.this, errorMessage);
+                            progressLayout.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+                    });
+                }
+            });
+
+        } else {
+
+            RoomState roomState = sRoomPreviewData.getRoomState();
+
+            if (null != roomState) {
+                actionBarHeaderRoomTopic.setText(roomState.topic);
+
+                // compute the number of joined members
+                int joined = 0;
+                for (RoomMember member : roomState.getMembers()) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                        joined++;
+                    }
+                }
+
+                if (joined == 1) {
+                    actionBarHeaderActiveMembers.setText(getResources().getString(R.string.room_title_one_member));
+                } else {
+                    actionBarHeaderActiveMembers.setText(getResources().getString(R.string.room_title_members, joined));
+                }
+            } else {
+                actionBarHeaderRoomTopic.setVisibility(View.GONE);
+                actionBarHeaderActiveMembers.setVisibility(View.GONE);
+            }
+
+            if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
+                infoMessageTextView.setText(getResources().getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+            } else {
+                infoMessageTextView.setText(getResources().getString(R.string.room_preview_try_join_an_unknown_room, roomName));
+            }
+
+            // common items
+            actionBarHeaderRoomName.setText(roomName);
+            VectorUtils.loadUserAvatar(this, sRoomPreviewData.getSession(), actionBarHeaderRoomAvatar, sRoomPreviewData.getRoomAvatarUrl(), sRoomPreviewData.getRoomId(), roomName);
+
+            declineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sRoomPreviewData = null;
+                    VectorRoomPreviewActivity.this.finish();
+                }
+            });
+        }
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,14 +196,21 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
                     public void onSuccess(Void info) {
                         HashMap<String, Object> params = new HashMap<String, Object>();
 
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, sRoomPreviewData.getSession().getMyUserId());
+                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
+
+                        if (null != sRoomPreviewData.getEventId()) {
+                            params.put(VectorRoomActivity.EXTRA_EVENT_ID, sRoomPreviewData.getEventId());
+                        }
 
                         // clear the activity stack to home activity
                         Intent intent = new Intent(VectorRoomPreviewActivity.this, VectorHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
                         VectorRoomPreviewActivity.this.startActivity(intent);
+
+                        sRoomPreviewData = null;
                     }
 
                     private void onError(String errorMessage) {
@@ -164,11 +237,5 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
             }
         });
 
-        declineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VectorRoomPreviewActivity.this.finish();
-            }
-        });
     }
 }

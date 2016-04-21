@@ -194,9 +194,17 @@
                 android:layout_centerVertical="true"
                 android:indeterminate="true" />
         </RelativeLayout>
-
     </RelativeLayout>
 
 
+    <!-- room header displayed when the status bar title is pressed -->
+    <RelativeLayout
+        android:id="@+id/action_bar_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
+
+        <include layout="@layout/vector_room_header" />
+    </RelativeLayout>
 
 </RelativeLayout>
