@@ -25,17 +25,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.JsonUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,9 +50,33 @@ import java.util.HashMap;
 public class VectorRoomPreviewActivity extends MXCActionBarActivity {
     private static final String LOG_TAG = "VectorRoomPrevAct";
 
-    // the paramater is too big to be sent by the intent
+    // the parameter is too big to be sent by the intent
     // so use a static variable to send it
     public static RoomPreviewData sRoomPreviewData = null;
+
+    // the join / leave listener
+    private final MXEventListener mEventListener = new MXEventListener() {
+        @Override
+        public void onLeaveRoom(String roomId) {
+            // test if the user reject the invitation
+            if ((null != sRoomPreviewData) && TextUtils.equals(sRoomPreviewData.getRoomId(), roomId)) {
+                onDeclined();
+            }
+        }
+
+        @Override
+        public void onJoinRoom(String roomId) {
+            // test if the user accepts the invitation
+            if ((null != sRoomPreviewData) && TextUtils.equals(sRoomPreviewData.getRoomId(), roomId)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onJoined();
+                    }
+                });
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,8 +148,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
                     room.leave(new ApiCallback<Void>() {
                         @Override
                         public void onSuccess(Void info) {
-                            VectorRoomPreviewActivity.this.finish();
-                            sRoomPreviewData = null;
+                            onDeclined();
                         }
 
                         private void onError(String errorMessage) {
@@ -207,23 +235,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
                 room.joinWithThirdPartySigned(signUrl, new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
-                        HashMap<String, Object> params = new HashMap<String, Object>();
-
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
-
-                        if (null != sRoomPreviewData.getEventId()) {
-                            params.put(VectorRoomActivity.EXTRA_EVENT_ID, sRoomPreviewData.getEventId());
-                        }
-
-                        // clear the activity stack to home activity
-                        Intent intent = new Intent(VectorRoomPreviewActivity.this, VectorHomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
-                        VectorRoomPreviewActivity.this.startActivity(intent);
-
-                        sRoomPreviewData = null;
+                        onJoined();
                     }
 
                     private void onError(String errorMessage) {
@@ -249,6 +261,58 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
 
             }
         });
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getSession())) {
+            sRoomPreviewData.getSession().getDataHandler().removeListener(mEventListener);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getSession())) {
+            sRoomPreviewData.getSession().getDataHandler().addListener(mEventListener);
+        }
+    }
+
+    /**
+     * The room invitation has been declined
+     */
+    private void onDeclined() {
+        if (null != sRoomPreviewData) {
+            VectorRoomPreviewActivity.this.finish();
+            sRoomPreviewData = null;
+        }
+    }
+
+    /**
+     * the room has been joined
+     */
+    private void onJoined() {
+        if (null != sRoomPreviewData) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
+
+            if (null != sRoomPreviewData.getEventId()) {
+                params.put(VectorRoomActivity.EXTRA_EVENT_ID, sRoomPreviewData.getEventId());
+            }
+
+            // clear the activity stack to home activity
+            Intent intent = new Intent(VectorRoomPreviewActivity.this, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            VectorRoomPreviewActivity.this.startActivity(intent);
+
+            sRoomPreviewData = null;
+        }
     }
 }
