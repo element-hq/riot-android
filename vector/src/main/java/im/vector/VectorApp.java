@@ -25,7 +25,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.analytics.ExceptionParser;
-import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.matrix.androidsdk.MXSession;
 
@@ -37,7 +36,6 @@ import im.vector.ga.Analytics;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
-import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.util.ArrayList;

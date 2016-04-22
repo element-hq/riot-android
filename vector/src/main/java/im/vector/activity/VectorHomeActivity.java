@@ -54,6 +54,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
+import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.VectorRecentsListFragment;
@@ -370,6 +371,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         if (IS_VOIP_ENABLED) {
             mSession.mCallsManager.addListener(mCallsManagerListener);
         }
+
+        // initialize the public rooms list
+        PublicRoomsManager.setSession(mSession);
+        PublicRoomsManager.refresh(null);
     }
 
     @Override

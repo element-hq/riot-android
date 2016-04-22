@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.Matrix;
+import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
@@ -178,7 +179,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             return;
         }
 
-        mAdapter.setPublicRoomsList(mPublicRoomsList);
+        mAdapter.setPublicRoomsList(PublicRoomsManager.getPublicRooms());
         mAdapter.setSearchPattern(pattern);
 
         mRecentsListView.post(new Runnable() {
@@ -192,52 +193,22 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
         // the public rooms have not yet been retrieved
         if ((null == mPublicRoomsList) && (!mIsLoadingPublicRooms)) {
-            final long t0 = System.currentTimeMillis();
 
-            Log.d(LOG_TAG, "Get the rooms public list");
-
-            mIsLoadingPublicRooms = true;
-            // use any session to get the public rooms list
-            mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
+            PublicRoomsManager.refresh(new PublicRoomsManager.PublicRoomsManagerListener() {
                 @Override
-                public void onSuccess(final List<PublicRoom> publicRooms) {
-                    Log.d(LOG_TAG, "Got the rooms public list : " + publicRooms.size() + " rooms in " + (System.currentTimeMillis() - t0) + " ms");
-
+                public void onRefresh() {
                     if (null != getActivity()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 mIsLoadingPublicRooms = false;
 
-                                if (null != publicRooms) {
-                                    mPublicRoomsList = publicRooms;
-                                    mAdapter.setPublicRoomsList(mPublicRoomsList);
-                                    mAdapter.notifyDataSetChanged();
-                                }
+                                mPublicRoomsList = PublicRoomsManager.getPublicRooms();
+                                mAdapter.setPublicRoomsList(mPublicRoomsList);
+                                mAdapter.notifyDataSetChanged();
                             }
                         });
                     }
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    super.onNetworkError(e);
-                    mIsLoadingPublicRooms = false;
-                    Log.e(LOG_TAG, "fails to retrieve the public room list " + e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    super.onMatrixError(e);
-                    mIsLoadingPublicRooms = false;
-                    Log.e(LOG_TAG, "fails to retrieve the public room list " + e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    super.onUnexpectedError(e);
-                    mIsLoadingPublicRooms = false;
-                    Log.e(LOG_TAG, "fails to retrieve the public room list " + e.getLocalizedMessage());
                 }
             });
         }
