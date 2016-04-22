@@ -150,12 +150,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (CommonActivityUtils.shouldRestartApp()) {
-            CommonActivityUtils.restartApp(this);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_medias_picker);
+
+        if (CommonActivityUtils.shouldRestartApp()) {
+            Log.e(LOG_TAG, "Restart the application.");
+            CommonActivityUtils.restartApp(this);
+            return;
+        }
+
         mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
         // camera preview

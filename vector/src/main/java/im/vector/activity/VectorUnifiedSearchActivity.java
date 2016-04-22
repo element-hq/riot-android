@@ -79,13 +79,14 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_vector_unified_search);
+
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
+            return;
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vector_unified_search);
 
         // the session should be passed in parameter
         // but the current design does not describe how the multi accounts will be managed.

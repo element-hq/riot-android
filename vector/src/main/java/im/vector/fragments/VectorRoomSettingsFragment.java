@@ -377,7 +377,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // update the room name preference
         if(null != mRoomNameEditTxt) {
-            value = VectorUtils.getRoomDisplayname(getActivity(), mSession, mRoom);
+            value = mRoom.getLiveState().name;
             mRoomNameEditTxt.setSummary(value);
             mRoomNameEditTxt.setText(value);
         }
@@ -479,7 +479,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         // get new and previous values
-        String previousName = mRoom.getName(mSession.getMyUserId());
+        String previousName = mRoom.getLiveState().name;
         String newName = mRoomNameEditTxt.getText();
         // update only, if values are different
         if (!TextUtils.equals(previousName, newName)) {

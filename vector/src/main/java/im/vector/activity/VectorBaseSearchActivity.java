@@ -139,6 +139,11 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // the application is in a weird state
+        if (CommonActivityUtils.shouldRestartApp()) {
+            return false;
+        }
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_searches, menu);
 
