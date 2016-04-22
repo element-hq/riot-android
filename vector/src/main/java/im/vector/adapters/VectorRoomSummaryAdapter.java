@@ -352,7 +352,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             noTagRoomSummaryList.add(roomSummary);
                         }
                     }
-                } else {
+                } else if (TextUtils.isEmpty(mSearchedPattern)){
                     Log.e(DBG_CLASS_NAME, "buildSummariesBySections " + roomSummaryId + " has no known room");
                 }
             }
