@@ -252,14 +252,23 @@ public class LoginHandler {
      * @param ctx the context.
      * @param hsConfig the homeserver configuration.
      * @param email the email.
+     * @param session the session description
      * @param callback the callback.
      */
-    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final SimpleApiCallback<ThreePid> callback) {
+    public void requestValidationToken(final Context ctx, final HomeserverConnectionConfig hsConfig, final String email, final String session, final SimpleApiCallback<ThreePid> callback) {
         final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
 
-        pid.requestValidationToken(client, new ApiCallback<Void>() {
+        // TODO define an application settings
+        String webAppUrl = "https://vector.im/develop";
+
+        String nextLink = webAppUrl + "/#/register?client_secret=" + pid.clientSecret;
+        nextLink += "&hs_url=" + hsConfig.getHomeserverUri().toString();
+        nextLink += "&is_url=" + hsConfig.getIdentityServerUri().toString();
+        nextLink += "&session_id=" + session;
+
+        pid.requestValidationToken(client, nextLink, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 callback.onSuccess(pid);
@@ -274,7 +283,7 @@ public class LoginHandler {
                     UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
                         @Override
                         public void onAccept() {
-                            requestValidationToken(ctx, hsConfig, email, callback);
+                            requestValidationToken(ctx,hsConfig, email, session, callback);
                         }
 
                         @Override

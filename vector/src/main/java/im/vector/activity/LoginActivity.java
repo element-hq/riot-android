@@ -922,7 +922,7 @@ public class LoginActivity extends MXCActionBarActivity {
             setFlowsMaskEnabled(true);
 
             final HomeserverConnectionConfig hsConfig = getHsConfig();
-            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, new SimpleApiCallback<ThreePid>() {
+            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, fsession,new SimpleApiCallback<ThreePid>() {
                 @Override
                 public void onSuccess(ThreePid thirdPid) {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fsession, getRegistrationSession()))) {
