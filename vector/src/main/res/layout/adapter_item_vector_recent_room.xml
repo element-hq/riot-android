@@ -153,7 +153,7 @@
                 android:layout_height="match_parent"/>
 
             <Button
-                android:id="@+id/recents_invite_join_button"
+                android:id="@+id/recents_invite_preview_button"
                 android:layout_weight="0.26"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
@@ -161,7 +161,7 @@
                 android:textSize="14sp"
                 android:background="@color/vector_green_color"
                 android:textColor="@android:color/white"
-                android:text="@string/join"/>
+                android:text="@string/preview"/>
 
             <View
                 android:id="@+id/recents_invite_sep2"

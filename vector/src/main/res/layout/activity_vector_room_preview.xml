@@ -1,0 +1,112 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- room header displayed when the status bar title is pressed -->
+                    <RelativeLayout
+                        android:id="@+id/room_preview_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include layout="@layout/vector_room_header" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/room_preview_info_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="16dp">
+
+                        <TextView
+                            android:id="@+id/room_preview_invitation_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="A text here"
+                            android:textColor="@color/vector_text_black_color"/>
+
+                        <RelativeLayout
+                            android:id="@+id/preview_actions_bar"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="65dp">
+
+                            <Button
+                                android:id="@+id/button_join_room"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_marginRight="16dp"
+                                android:layout_width="94dp"
+                                android:layout_height="36dp"
+                                android:background="@color/vector_green_color"
+                                android:textColor="@android:color/white"
+                                android:text="@string/join_room"/>
+
+                            <Button
+                                android:id="@+id/button_decline"
+                                android:layout_centerVertical="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="94dp"
+                                android:layout_height="36dp"
+                                android:textColor="@color/vector_fuchsia_color"
+                                android:background="@android:color/white"
+                                android:text="@string/decline"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/room_preview_subinvitation_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text=""
+                            android:textColor="@color/vector_silver_color"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/room_preview_progress_layout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/chat_encoding_background"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/medias_processing_progress"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminate="true" />
+
+        </RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>
+

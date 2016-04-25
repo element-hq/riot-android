@@ -347,7 +347,15 @@
     <string name="back">Back</string>
     <string name="remove">Remove</string>
     <string name="join">Join</string>
+    <string name="preview">Preview</string>
     <string name="reject">Reject</string>
+
+    <!-- Room Preview -->
+    <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
+    <string name="room_preview_subtitle">This is a preview of this room. Files and other attachments have been disabled.</string>
+    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
+    <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">a room</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
@@ -365,6 +373,8 @@
     <string name="room_creation_make_private">Make private</string>
     <string name="room_creation_name_mobile_email">name, mobile or email</string>
     <string name="room_header_active_members">%1$d/%2$d active members</string>
+    <string name="room_title_members">%1$d members</string>
+    <string name="room_title_one_member">1 member</string>
 
     <!--  Chat participants -->
     <string name="room_participants_title">Participants</string>
