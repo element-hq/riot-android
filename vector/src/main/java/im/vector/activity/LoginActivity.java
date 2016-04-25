@@ -184,6 +184,9 @@ public class LoginActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_login);
 
+        // warn that the application has started.
+        CommonActivityUtils.onApplicationStarted(this);
+
         Bundle receivedBundle = getIntent().getExtras();
         // resume the application
         if ((null!=receivedBundle) && (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI))) {

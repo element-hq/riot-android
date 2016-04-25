@@ -357,6 +357,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // the application is in a weird state
+        if (CommonActivityUtils.shouldRestartApp()) {
+            return;
+        }
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.vector_room_details_add_people, menu);
 

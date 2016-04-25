@@ -54,13 +54,13 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
+            return;
         }
-
-        super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
 

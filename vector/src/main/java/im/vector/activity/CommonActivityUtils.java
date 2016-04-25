@@ -149,18 +149,50 @@ public class CommonActivityUtils {
         return !Matrix.hasValidSessions() || (null == eventStreamService);
     }
 
+    public static final String RESTART_IN_PROGRESS_KEY = "RESTART_IN_PROGRESS_KEY";
+
+    /**
+     * The application has been started
+     */
+    public static void onApplicationStarted(Activity activity) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putBoolean(RESTART_IN_PROGRESS_KEY, false);
+        editor.commit();
+    }
+
     /**
      * Restart the application after 100ms
      *
      * @param activity activity
      */
-    public static void restartApp(Context activity) {
-        PendingIntent mPendingIntent = PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+    public static void restartApp(Activity activity) {
+        // clear the preferences
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = preferences.edit();
 
-        // so restart the application after 100ms
-        AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 50, mPendingIntent);
-        System.exit(0);
+        // use the preference to avoid infinite relaunch on some devices
+        // the culprit activity is restarted when System.exit is called.
+        // so called it once to fix it
+        if (!preferences.getBoolean(RESTART_IN_PROGRESS_KEY, false)) {
+            CommonActivityUtils.displayToast(activity.getApplicationContext(), "Restart the application (low memory)");
+
+            Log.e(LOG_TAG, "Kill the application");
+            editor.putBoolean(RESTART_IN_PROGRESS_KEY, true);
+            editor.commit();
+
+            PendingIntent mPendingIntent = PendingIntent.getActivity(activity, 314159, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+
+            // so restart the application after 100ms
+            AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 50, mPendingIntent);
+
+            System.exit(0);
+        } else {
+            Log.e(LOG_TAG, "The application is restarting, please wait !!");
+            activity.finish();
+        }
     }
 
     /**

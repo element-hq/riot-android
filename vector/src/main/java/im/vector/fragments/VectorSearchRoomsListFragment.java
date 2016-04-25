@@ -18,6 +18,8 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +30,14 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.Matrix;
+import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
@@ -42,11 +46,17 @@ import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.view.RecentsExpandableListView;
 
 public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
+
+    private static final String LOG_TAG = "VectorSrchRListFrag";
+
     // the session
     private MXSession mSession;
 
     // current public Rooms List
     private List<PublicRoom> mPublicRoomsList;
+
+    // true to avoid trigger several public rooms request
+    private boolean mIsLoadingPublicRooms;
 
     /**
      * Static constructor
@@ -169,7 +179,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             return;
         }
 
-        mAdapter.setPublicRoomsList(mPublicRoomsList);
+        mAdapter.setPublicRoomsList(PublicRoomsManager.getPublicRooms());
         mAdapter.setSearchPattern(pattern);
 
         mRecentsListView.post(new Runnable() {
@@ -182,15 +192,22 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         });
 
         // the public rooms have not yet been retrieved
-        if (null == mPublicRoomsList) {
-            // use any session to get the public rooms list
-            mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>(getActivity()) {
+        if ((null == mPublicRoomsList) && (!mIsLoadingPublicRooms)) {
+
+            PublicRoomsManager.refresh(new PublicRoomsManager.PublicRoomsManagerListener() {
                 @Override
-                public void onSuccess(List<PublicRoom> publicRooms) {
-                    if (null != publicRooms) {
-                        mPublicRoomsList = publicRooms;
-                        mAdapter.setPublicRoomsList(mPublicRoomsList);
-                        mAdapter.notifyDataSetChanged();
+                public void onRefresh() {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mIsLoadingPublicRooms = false;
+
+                                mPublicRoomsList = PublicRoomsManager.getPublicRooms();
+                                mAdapter.setPublicRoomsList(mPublicRoomsList);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 }
             });

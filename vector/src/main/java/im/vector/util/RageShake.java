@@ -372,6 +372,12 @@ public class RageShake implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        // ignore the sensor events when the application is in background
+        if (VectorApp.isAppInBackground()) {
+            lastUpdate = 0;
+            return;
+        }
+
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }

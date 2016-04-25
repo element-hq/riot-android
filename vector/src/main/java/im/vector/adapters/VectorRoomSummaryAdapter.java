@@ -352,7 +352,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             noTagRoomSummaryList.add(roomSummary);
                         }
                     }
-                } else {
+                } else if (null == room) {
                     Log.e(DBG_CLASS_NAME, "buildSummariesBySections " + roomSummaryId + " has no known room");
                 }
             }
@@ -693,19 +693,20 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (mDirectoryGroupPosition == groupPosition) {
             // some items are show
             bingUnreadMsgView.setVisibility(View.INVISIBLE);
-            timestampTxtView.setVisibility(View.INVISIBLE);
-            actionImageView.setVisibility(View.INVISIBLE);
+            timestampTxtView.setVisibility(View.GONE);
+            actionImageView.setVisibility(View.GONE);
             invitationView.setVisibility(View.GONE);
             separatorView.setVisibility(View.GONE);
             separatorGroupView.setVisibility(View.VISIBLE);
             showMoreView.setVisibility(View.VISIBLE);
             actionClickArea.setVisibility(View.GONE);
 
-            roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
-
             if (null == mPublicRooms) {
-                roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
+                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
+                roomMsgTxtView.setText("");
             } else {
+                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
+
                 if (TextUtils.isEmpty(mSearchedPattern)) {
                     roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result, mMatchedPublicRooms.size()));
                 } else {

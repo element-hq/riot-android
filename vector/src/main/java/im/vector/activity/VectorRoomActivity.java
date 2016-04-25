@@ -353,13 +353,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_vector_room);
+
         if (CommonActivityUtils.shouldRestartApp()) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
+            return;
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vector_room);
 
         // bind the widgets of the room header view. The room header view is displayed by
         // clicking on the title of the action bar
@@ -888,6 +889,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // the application is in a weird state
+        if (CommonActivityUtils.shouldRestartApp()) {
+            return false;
+        }
+
         // the menu is only displayed when the current activity does not display a timeline search
         if (TextUtils.isEmpty(mEventId)) {
             // Inflate the menu; this adds items to the action bar if it is present.
