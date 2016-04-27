@@ -1499,23 +1499,33 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
 
             if (timerTimeoutInMs > 0) {
-                mTypingTimer = new Timer();
+
                 mTypingTimerTask = new TimerTask() {
                     public void run() {
-                        if (mTypingTimerTask != null) {
-                            mTypingTimerTask.cancel();
-                            mTypingTimerTask = null;
-                        }
+                        synchronized (LOG_TAG) {
+                            if (mTypingTimerTask != null){
+                                mTypingTimerTask.cancel();
+                                mTypingTimerTask = null;
+                            }
 
-                        if (mTypingTimer != null) {
-                            mTypingTimer.cancel();
-                            mTypingTimer = null;
+                            if (mTypingTimer != null) {
+                                mTypingTimer.cancel();
+                                mTypingTimer = null;
+                            }
+                            // Post a new typing notification
+                            VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                         }
-                        // Post a new typing notification
-                        VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                     }
                 };
-                mTypingTimer.schedule(mTypingTimerTask, TYPING_TIMEOUT_MS);
+
+                try {
+                    synchronized (LOG_TAG) {
+                        mTypingTimer = new Timer();
+                        mTypingTimer.schedule(mTypingTimerTask, TYPING_TIMEOUT_MS);
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "fails to launch typing timer " + e.getLocalizedMessage());
+                }
 
                 // Compute the notification timeout in ms (consider the double of the local typing timeout)
                 notificationTimeoutMS = TYPING_TIMEOUT_MS * 2;
