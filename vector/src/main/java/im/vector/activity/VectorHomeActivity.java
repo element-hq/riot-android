@@ -392,9 +392,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSession.isAlive()) {
+
+        // GA issue : mSession was null
+        if ((null != mSession) && mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mLiveEventListener);
-            mSession.mCallsManager.removeListener(mCallsManagerListener);
+
+            if (null != mSession.mCallsManager) {
+                mSession.mCallsManager.removeListener(mCallsManagerListener);
+            }
         }
     }
 
