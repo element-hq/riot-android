@@ -890,7 +890,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        // GA : msession is null
+        if (CommonActivityUtils.shouldRestartApp() || (null == mSession)) {
             return false;
         }
 
