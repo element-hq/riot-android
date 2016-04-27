@@ -1062,18 +1062,25 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
             }
 
-            mCamera = Camera.open(mCameraId);
-
-            // set the full quality picture, rotation angle
-            initCameraSettings();
-
             try {
-                mCamera.setPreviewTexture(mSurfaceTexture);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewTexture EXCEPTION Msg=" + e.getMessage());
-            }
+                mCamera = Camera.open(mCameraId);
 
-            mCamera.startPreview();
+                // set the full quality picture, rotation angle
+                initCameraSettings();
+
+                try {
+                    mCamera.setPreviewTexture(mSurfaceTexture);
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "## onSwitchCamera(): setPreviewTexture EXCEPTION Msg=" + e.getMessage());
+                }
+
+                mCamera.startPreview();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onSwitchCamera(): cannot init the other camera");
+                // assume that only one camera can be used.
+                mSwitchCameraImageView.setVisibility(View.GONE);
+                onSwitchCamera();
+            }
         }
     }
 
@@ -1166,11 +1173,21 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        mCamera = Camera.open(mCameraId);
+        try {
+            mCamera = Camera.open(mCameraId);
+        } catch (Exception e) {
+            Log.e(LOG_TAG,"Cannot open the camera " + mCameraId);
+        }
 
         // fall back: the camera initialisation failed
         if (null == mCamera) {
-            mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
+            // assume that only one camera can be used.
+            mSwitchCameraImageView.setVisibility(View.GONE);
+            try {
+                mCamera = Camera.open((Camera.CameraInfo.CAMERA_FACING_BACK == mCameraId) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
+            }  catch (Exception e) {
+                Log.e(LOG_TAG,"Cannot open the camera " + mCameraId);
+            }
         }
 
         // cannot start the cam
