@@ -995,7 +995,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if ((null != formattedBody) || !manageIRCCommand(body)) {
+            if (!manageIRCCommand(body)) {
                 mVectorMessageListFragment.cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
