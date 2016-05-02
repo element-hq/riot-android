@@ -54,6 +54,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorRoomPreviewActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
+import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
 
 import java.util.HashMap;
@@ -488,6 +489,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             @Override
             public void onLeaveRoom(final String roomId) {
+                // clear any pending notification for this room
+                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
                 onForceRefresh();
             }
 
@@ -533,7 +536,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void onRejectInvitation(MXSession session, String roomId) {
+    public void onRejectInvitation(final MXSession session, final String roomId) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -546,6 +549,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                // clear any pending notification for this room
+                                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
                                 hideWaitingView();
                             }
                         });
