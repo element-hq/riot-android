@@ -740,6 +740,32 @@ public class VectorUtils {
     //==============================================================================================================
 
     /**
+     * Format a time interval in seconds to a string
+     * @param context the context.
+     * @param secondsInterval the time interval.
+     * @return the formatted string
+     */
+    public static String formatSecondsIntervalFloored(Context context, long secondsInterval) {
+        String formattedString;
+
+        if (secondsInterval < 0) {
+            formattedString = "0" + context.getResources().getString(R.string.format_time_s);
+        } else {
+            if (secondsInterval < 60) {
+                formattedString = secondsInterval + context.getResources().getString(R.string.format_time_s);
+            } else if (secondsInterval < 3600) {
+                formattedString = (secondsInterval / 60) + context.getResources().getString(R.string.format_time_m);
+            } else if (secondsInterval < 86400) {
+                formattedString = (secondsInterval / 3600) + context.getResources().getString(R.string.format_time_h);
+            } else {
+                formattedString = (secondsInterval / 86400) + context.getResources().getString(R.string.format_time_d);
+            }
+        }
+
+        return formattedString;
+    }
+
+    /**
      * Provide the user online status from his user Id.
      * @param context the context.
      * @param session the session.
@@ -747,49 +773,35 @@ public class VectorUtils {
      * @return the online status desrcription.
      */
     public static String getUserOnlineStatus(Context context, MXSession session, String userId) {
+        String presenceText = context.getResources().getString(R.string.room_participants_unkown);
 
         // sanity checks
         if ((null == session) || (null == userId)) {
-            return null;
+            return presenceText;
         }
 
         User user = session.getDataHandler().getStore().getUser(userId);
 
         // unknown user
         if (null == user) {
-            return null;
+            return presenceText;
         }
 
-        String onlineStatus = "";
-
-        if (null == user.presence) {
-            onlineStatus = "";
-        } else if ((null != user.currently_active) && user.currently_active) {
-            onlineStatus = context.getResources().getString(R.string.presence_online_now);
-        } else if (User.PRESENCE_ONLINE.equals(user.presence)) {
-            onlineStatus = context.getResources().getString(R.string.room_participants_active);
-        } else {
-            Long lastActiveMs = user.lastActiveAgo;
-
-            if (null == lastActiveMs) {
-                lastActiveMs = (long) -1;
-            }
-
-            if (-1 != lastActiveMs) {
-                long lastActivehour = lastActiveMs / 1000 / 60 / 60;
-                long lastActiveDays = lastActivehour / 24;
-
-                if (lastActivehour < 1) {
-                    onlineStatus = context.getString(R.string.room_participants_active_less_1_hour);
-                } else if (lastActivehour < 24) {
-                    onlineStatus = context.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
-                } else {
-                    onlineStatus = context.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
-                }
-            }
+        if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
+            presenceText = context.getResources().getString(R.string.room_participants_online);
+        } else if (TextUtils.equals(user.presence, User.PRESENCE_UNAVAILABLE)) {
+            presenceText = context.getResources().getString(R.string.room_participants_idle);
+        } else if (TextUtils.equals(user.presence, User.PRESENCE_OFFLINE) || (null == user.presence)) {
+            presenceText = context.getResources().getString(R.string.room_participants_offline);
         }
 
-        return onlineStatus;
+        if ((null != user.currently_active) && user.currently_active) {
+            presenceText += " " +  context.getResources().getString(R.string.room_participants_now);
+        } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
+            presenceText += " " + formatSecondsIntervalFloored(context, user.lastActiveAgo / 1000L) + " " + context.getResources().getString(R.string.room_participants_ago);
+        }
+
+        return presenceText;
     }
 
     //==============================================================================================================
