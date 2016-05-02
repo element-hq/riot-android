@@ -13,11 +13,7 @@ import android.graphics.Typeface;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 
 import im.vector.R;
 import im.vector.activity.LockScreenActivity;
@@ -37,7 +33,7 @@ public class NotificationUtils {
     public static final String ACTION_MESSAGE_REPLY = "ACTION_MESSAGE_REPLY";
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
-    // the bubble radius is computed for 99 
+    // the bubble radius is computed for 99
     static int mUnreadBubbleWidth = -1;
 
 
@@ -146,7 +142,7 @@ public class NotificationUtils {
         if (null != largeIcon) {
             largeIcon = createSquareBitmap(largeIcon);
 
-        	// add a bubble in the top right
+            // add a bubble in the top right
             if (0 != memberUnseen) {
                 try {
                     android.graphics.Bitmap.Config bitmapConfig = largeIcon.getConfig();
@@ -177,7 +173,7 @@ public class NotificationUtils {
                     canvas.drawBitmap(rescaledBitmap, (side - scaledWidth) / 2, (side - scaledHeight) / 2, null);
 
                     String text = "" + memberUnseen;
-                    
+
                     // prepare the text drawing
                     Paint textPaint = new Paint();
                     textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -224,28 +220,28 @@ public class NotificationUtils {
 
         builder.setTicker(from + name + body);
 
-            // Build the pending intent for when the notification is clicked
-            Intent roomIntent = new Intent(context, VectorRoomActivity.class);
-            roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+        // Build the pending intent for when the notification is clicked
+        Intent roomIntent = new Intent(context, VectorRoomActivity.class);
+        roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
-            if (null != matrixId) {
-                roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
-            }
+        if (null != matrixId) {
+            roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
+        }
 
         if (null != callId) {
             roomIntent.putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId);
         }
 
-            // Recreate the back stack
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
-                    .addParentStack(VectorRoomActivity.class)
-                    .addNextIntent(roomIntent);
+        // Recreate the back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
+                .addParentStack(VectorRoomActivity.class)
+                .addNextIntent(roomIntent);
 
 
-            // android 4.3 issue
-            // use a generator for the private requestCode.
-            // When using 0, the intent is not created/launched when the user taps on the notification.
-            //
+        // android 4.3 issue
+        // use a generator for the private requestCode.
+        // When using 0, the intent is not created/launched when the user taps on the notification.
+        //
         PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
