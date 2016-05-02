@@ -54,11 +54,16 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.AccountPicker;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -75,6 +80,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -767,12 +773,14 @@ public class VectorUtils {
 
     /**
      * Provide the user online status from his user Id.
+     * if refreshCallback is set, try to refresh the user presence if it is not known
      * @param context the context.
      * @param session the session.
      * @param userId the userId.
+     * @param refreshCallback the presence callback.
      * @return the online status desrcription.
      */
-    public static String getUserOnlineStatus(Context context, MXSession session, String userId) {
+    public static String getUserOnlineStatus(final Context context, final MXSession session, final String userId, final SimpleApiCallback<Void> refreshCallback) {
         String presenceText = context.getResources().getString(R.string.room_participants_unkown);
 
         // sanity checks
@@ -781,6 +789,39 @@ public class VectorUtils {
         }
 
         User user = session.getDataHandler().getStore().getUser(userId);
+
+        if ((null != refreshCallback) && ((null == user) || (null == user.presence))) {
+            Log.d(LOG_TAG, "Get the user presence : " + userId);
+
+            session.refreshUserPresence(userId, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (null != refreshCallback) {
+                        Log.d(LOG_TAG, "Got the user presence : " + userId);
+                        try {
+                            refreshCallback.onSuccess(null);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "getUserOnlineStatus refreshCallback failed");
+                        }
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    Log.e(LOG_TAG, "getUserOnlineStatus onNetworkError " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    Log.e(LOG_TAG, "getUserOnlineStatus onMatrixError " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    Log.e(LOG_TAG, "getUserOnlineStatus onUnexpectedError " + e.getLocalizedMessage());
+                }
+            });
+        }
 
         // unknown user
         if (null == user) {

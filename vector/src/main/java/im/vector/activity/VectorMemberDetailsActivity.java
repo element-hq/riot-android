@@ -710,7 +710,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private void updatePresenceInfoUi() {
         // sanity check
         if (null != mPresenceTextView) {
-            mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(this, mSession, mMemberId));
+            mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null));
+                }
+            }));
         }
     }
 

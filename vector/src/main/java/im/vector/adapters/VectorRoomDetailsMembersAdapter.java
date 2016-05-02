@@ -36,6 +36,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.RoomThirdPartyInvite;
@@ -652,7 +653,12 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         viewHolder.mMemberNameTextView.setText(memberName);
 
         // 3 - display member status
-        viewHolder.mMemberStatusTextView.setText( VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId));
+        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId,new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                // do nothing because the members are sorted by presence.
+            }
+        }));
 
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
