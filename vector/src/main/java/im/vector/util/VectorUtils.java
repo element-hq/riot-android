@@ -283,6 +283,41 @@ public class VectorUtils {
     }
 
     /**
+     * Return the char to display for a naem
+     * @param name the name
+     * @return teh first char
+     */
+    private static String getInitialLetter(String name) {
+        String firstChar = " ";
+
+        if (!TextUtils.isEmpty(name)) {
+            int idx = 0;
+            char initial = name.charAt(idx);
+
+            if ((initial == '@' || initial == '#') && (name.length() > 1)) {
+                idx++;
+            }
+
+            // string.codePointAt(0) would do this, but that isn't supported by
+            // some browsers (notably PhantomJS).
+            int chars = 1;
+            char first = name.charAt(idx);
+
+            // check if it’s the start of a surrogate pair
+            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > 2)) {
+                char second = name.charAt(idx+1);
+                if (second >= 0xDC00 && second <= 0xDFFF) {
+                    chars++;
+                }
+            }
+
+            firstChar = name.substring(idx, idx+chars);
+        }
+
+        return firstChar.toUpperCase();
+    }
+
+    /**
      * Returns an avatar from a text.
      * @param context the context.
      * @param aText the text.
@@ -290,17 +325,7 @@ public class VectorUtils {
      * @return the avatar.
      */
     public static Bitmap getAvatar(Context context, int backgroundColor, String aText, boolean create) {
-        // ignore some characters
-        if (!TextUtils.isEmpty(aText) && (aText.startsWith("@") || aText.startsWith("#"))) {
-            aText = aText.substring(1);
-        }
-
-        String firstChar = " ";
-
-        if (!TextUtils.isEmpty(aText)) {
-            firstChar = aText.substring(0, 1).toUpperCase();
-        }
-
+        String firstChar = getInitialLetter(aText);
         String key = firstChar + "_" + backgroundColor;
 
         // check if the avatar is already defined
