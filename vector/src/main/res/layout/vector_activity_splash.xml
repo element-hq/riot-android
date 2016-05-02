@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/vector_silver_color"
         android:text="@string/splash_screen_copyright" />
 
