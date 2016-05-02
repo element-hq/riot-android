@@ -312,4 +312,55 @@ public class LoginHandler {
             }
         });
     }
+
+
+    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig, final int aToken, final String aClientSecret, final int aSid, final ApiCallback<Void> aRespCallback) {
+        final ThreePid pid = new ThreePid(null,  ThreePid.MEDIUM_EMAIL);
+        ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
+
+
+        pid.submitEmailValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                aRespCallback.onSuccess(info);
+            }
+
+            @Override
+            public void onNetworkError(final Exception e) {
+                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                if (unrecCertEx != null) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+
+                    UnrecognizedCertHandler.show(aHomeServerConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            submitEmailTokenValidation(aCtx, aHomeServerConfig, aToken, aClientSecret, aSid, aRespCallback);
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            aRespCallback.onNetworkError(e);
+                        }
+
+                        @Override
+                        public void onReject() {
+                            aRespCallback.onNetworkError(e);
+                        }
+                    });
+                } else {
+                    aRespCallback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                aRespCallback.onUnexpectedError(e);
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                aRespCallback.onMatrixError(e);
+            }
+        });
+    }
 }

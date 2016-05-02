@@ -255,6 +255,8 @@
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
                 <data android:pathPrefix="/staging/" />
+                <!-- mail validation -->
+                <data android:pathPrefix="/_matrix/" />
             </intent-filter>
         </activity>
 
@@ -274,6 +276,19 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".receiver.VectorRegistrationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="im.vector.receiver.BROADCAST_ACTION_REGISTRATION" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <!-- mail validation -->
+                <data android:pathPrefix="/_matrix/" />
             </intent-filter>
         </receiver>
 

@@ -94,6 +94,12 @@ public class CommonActivityUtils {
     public static final String MIME_TYPE_IMAGE_ALL = "image/*";
     public static final String MIME_TYPE_ALL_CONTENT = "*/*";
 
+    /**
+     * Schemes
+     */
+    public static final String HTTP_SCHEME = "http://";
+    public static final String HTTPS_SCHEME = "https://";
+
     // global helper constants:
     /**
      * The view is visible
@@ -245,6 +251,26 @@ public class CommonActivityUtils {
         // go to login page
         activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.finish();
+    }
+
+    /**
+     * Remove the http schemes from the URl passed in parameter
+     * @param aUrl URL to be parsed
+     * @return the URL with the scheme removed
+     */
+    public static String removeUrlScheme(String aUrl){
+        String urlRetValue = aUrl;
+
+        if(null != aUrl) {
+            // remove URL scheme
+            if (aUrl.startsWith(HTTP_SCHEME)) {
+                urlRetValue = aUrl.substring(HTTP_SCHEME.length());
+            } else if (aUrl.startsWith(HTTPS_SCHEME)) {
+                urlRetValue = aUrl.substring(HTTPS_SCHEME.length());
+            }
+        }
+
+        return urlRetValue;
     }
 
     //==============================================================================================================
