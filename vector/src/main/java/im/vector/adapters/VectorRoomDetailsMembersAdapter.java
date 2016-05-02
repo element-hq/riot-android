@@ -44,6 +44,7 @@ import org.matrix.androidsdk.rest.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -258,6 +259,22 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     }
 
     /**
+     * Compare 2 string and returns sort order.
+     * @param s1 string 1.
+     * @param s2 string 2.
+     * @return the sort order.
+     */
+    private int alphaComparator(String s1, String s2) {
+        if (s1 == null) {
+            return -1;
+        } else if (s2 == null) {
+            return 1;
+        }
+
+        return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
+    }
+
+    /**
      * Update the data model of the adapter which is based on a set of ParticipantAdapterItem objects.
      * @param aSearchListener search events listener, set to null if search not enabled
      */
@@ -282,13 +299,12 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         mGroupIndexInvitedMembers = -1;
 
         // retrieve the room members
-        ArrayList<ParticipantAdapterItem> adminMembers = new ArrayList<ParticipantAdapterItem>();
-        ArrayList<ParticipantAdapterItem> otherMembers = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> actualParticipants = new ArrayList<ParticipantAdapterItem>();
         ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<ParticipantAdapterItem>();
 
         Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
         String myUserId = mSession.getMyUserId();
-        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        final PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
         // search loop to extract the following members: current user, invited, administrator and others
         for (RoomMember member : activeMembers) {
@@ -306,12 +322,9 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 if (RoomMember.MEMBERSHIP_INVITE.equals(member.membership)) {
                     // invited members
                     invitedMembers.add(participantItem);
-                } else if ((null != powerLevels) && (powerLevels.getUserPowerLevel(member.getUserId()) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN)) {
-                    // administrator members
-                    adminMembers.add(participantItem);
                 } else {
                     // the other members..
-                    otherMembers.add(participantItem);
+                    actualParticipants.add(participantItem);
                 }
             }
         }
@@ -330,12 +343,77 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        // create "members present in the room" list
-        Collections.sort(adminMembers, ParticipantAdapterItem.alphaComparator);
-        presentMembersList.addAll(adminMembers);
+        // Comparator to order members alphabetically
+        Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
+            @Override
+            public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
+                User userA = mSession.getDataHandler().getUser(part1.mUserId);
+                User userB = mSession.getDataHandler().getUser(part2.mUserId);
 
-        Collections.sort(otherMembers, ParticipantAdapterItem.alphaComparator);
-        presentMembersList.addAll(otherMembers);
+                String userADisplayName = part1.getComparisonDisplayName();
+                String userBDisplayName = part2.getComparisonDisplayName();
+
+                boolean isUserA_Active = false;
+                boolean isUserB_Active = false;
+
+                if ((null != userA) && (null != userA.currently_active)) {
+                    isUserA_Active = userA.currently_active;
+                }
+
+                if ((null != userB) && (null != userB.currently_active)) {
+                    isUserB_Active = userB.currently_active;
+                }
+
+                int powerLevelA = 0;
+                int powerLevelB = 0;
+
+                if (null != powerLevels) {
+                    if ((null != userA) && (null != userA.user_id)) {
+                        powerLevelA = powerLevels.getUserPowerLevel(userA.user_id);
+                    }
+
+                    if ((null != userB) && (null != userB.user_id)) {
+                        powerLevelB = powerLevels.getUserPowerLevel(userB.user_id);
+                    }
+                }
+
+                if ((null == userA) && (null == userB)) {
+                    return alphaComparator(userADisplayName, userBDisplayName);
+                } else if ((null != userA) && (null == userB)) {
+                    return +1;
+                } else if ((null == userA) && (null != userB)) {
+                    return -1;
+                } else if (isUserA_Active && isUserB_Active) {
+                    if (powerLevelA == powerLevelB) {
+                        return alphaComparator(userADisplayName, userBDisplayName);
+                    } else {
+                        return powerLevelB - powerLevelA;
+                    }
+                }
+
+                if (isUserA_Active && !isUserB_Active) {
+                    return -1;
+                } if (!isUserA_Active && isUserB_Active) {
+                    return +1;
+                }
+
+                // Finally, compare the timestamps
+                long lastActiveAgoA = (null != userA) && (null != userA.lastActiveAgo) ? userA.getRealLastActiveAgo() : 0;
+                long lastActiveAgoB = (null != userB) && (null != userB.lastActiveAgo) ? userB.getRealLastActiveAgo() : 0;
+
+                long diff = lastActiveAgoA - lastActiveAgoB;
+
+                if (diff == 0) {
+                    return alphaComparator(userADisplayName, userBDisplayName);
+                }
+
+                return (diff > 0) ? +1 : -1;
+            }
+        };
+
+        // create "members present in the room" list
+        Collections.sort(actualParticipants, comparator);
+        presentMembersList.addAll(actualParticipants);
 
         // first group: members present in the room
         if (0 != presentMembersList.size()) {
@@ -346,7 +424,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         // second group: invited members only
         if (0 != invitedMembers.size()) {
-            Collections.sort(invitedMembers, ParticipantAdapterItem.alphaComparator);
+            Collections.sort(invitedMembers, comparator);
             mRoomMembersListByGroupPosition.add(invitedMembers);
             mGroupIndexInvitedMembers = groupIndex;
         }
@@ -442,7 +520,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 countRetValue = mRoomMembersListByGroupPosition.get(aGroupPosition).size();
             }
         } catch(Exception ex) {
-          Log.e(LOG_TAG,"## getChildrenCount(): Exception Msg=" + ex.getMessage());
+            Log.e(LOG_TAG,"## getChildrenCount(): Exception Msg=" + ex.getMessage());
         }
 
         return countRetValue;
@@ -561,12 +639,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         PowerLevels powerLevels = null;
         if (null != mRoom) {
-            if (!isSearchMode && (null != (powerLevels = mRoom.getLiveState().getPowerLevels()))) {
-
+            if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
                 if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
                     viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
                     viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
-                    memberName = mContext.getString(R.string.room_participants_admin_name, memberName);
                 } else if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
                     viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
                     viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
@@ -576,39 +652,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         viewHolder.mMemberNameTextView.setText(memberName);
 
         // 3 - display member status
-        String status = "";
-        if ((null != participant.mRoomMember) && (null != participant.mRoomMember.membership) && !TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_JOIN)) {
-            if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                status = mContext.getString(R.string.room_participants_invite);
-            } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_LEAVE)) {
-                status = mContext.getString(R.string.room_participants_leave);
-            } else if (TextUtils.equals(participant.mRoomMember.membership, RoomMember.MEMBERSHIP_BAN)) {
-                status = mContext.getString(R.string.room_participants_ban);
-            }
-        } else if ((null == participant.mUserId) && (null == participant.mRoomMember) && (!isSearchMode))  {
-            // 3rd party invitation
-            status = mContext.getString(R.string.room_participants_invite);
-        } else if (null != participant.mUserId) {
-            User user = null;
-            MXSession matchedSession = null;
-            // retrieve the linked user
-            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
-
-            for(MXSession session : sessions) {
-                if (null == user) {
-                    matchedSession = session;
-                    user = session.getDataHandler().getUser(participant.mUserId);
-                } else {
-                    break;
-                }
-            }
-
-            // find a related user
-            if (null != user) {
-                status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId);
-            }
-        }
-        viewHolder.mMemberStatusTextView.setText(status);
+        viewHolder.mMemberStatusTextView.setText( VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId));
 
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
