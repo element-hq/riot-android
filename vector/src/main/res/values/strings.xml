@@ -566,4 +566,9 @@
     <!-- Directory -->
     <string name="directory_title">Directory</string>
 
+    <!-- GA use -->
+    <string name="ga_use_alert_message">Do you accept to help us to improve the application behaviour and to send crash reports ?</string>
+    <string name="ga_use_settings">Automatically send crash reports</string>
+    <string name="ga_use_disable_alert_message">You need to restart the application to disable the crash reports.</string>
+
 </resources>

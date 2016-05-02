@@ -59,6 +59,8 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
@@ -238,6 +240,31 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 });
             }
         }
+
+        final SwitchPreference useGaPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
+        useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Boolean useGA = VectorApp.getInstance().useGA(getActivity());
+                boolean newGa = (boolean)newValue;
+
+                if ((null != useGA) && (useGA != newGa)) {
+                    if (!newGa) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                        builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do something here
+                            }
+                        }).show();
+                    }
+                    VectorApp.getInstance().setUseGA(getActivity(), newGa);
+                }
+
+                return true;
+            }
+        });
 
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         refreshPreferences();

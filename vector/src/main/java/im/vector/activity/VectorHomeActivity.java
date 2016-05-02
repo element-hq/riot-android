@@ -17,8 +17,10 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -476,6 +478,27 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         refreshSlidingMenu();
 
         manageCallButton();
+
+        // check if the GA accepts to send crash reports.
+        if (null == VectorApp.getInstance().useGA(this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (null != VectorApp.getInstance()) {
+                        VectorApp.getInstance().setUseGA(VectorHomeActivity.this, true);
+                    }
+                }
+            }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (null != VectorApp.getInstance()) {
+                        VectorApp.getInstance().setUseGA(VectorHomeActivity.this, false);
+                    }
+                }
+            }).show();
+        }
     }
 
     @Override
