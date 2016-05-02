@@ -42,10 +42,12 @@ import android.support.v4.util.LruCache;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
@@ -565,7 +567,6 @@ public class VectorUtils {
      * @param activity the activity
      */
     private static void initLicenseText(Activity activity) {
-
         if (null == mLicenseString) {
             // build a local license file
             InputStream inputStream = activity.getResources().openRawResource(R.raw.all_licenses);
@@ -605,10 +606,16 @@ public class VectorUtils {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                final TextView messageView = new TextView(activity);
+                final SpannableString s = new SpannableString(mLicenseString);
+                Linkify.addLinks(s, Linkify.WEB_URLS);
+                messageView.setText(s);
+                messageView.setMovementMethod(LinkMovementMethod.getInstance());
+
                 final AlertDialog dialog = new AlertDialog.Builder(activity)
                         .setPositiveButton(android.R.string.ok, null)
-                        .setMessage(mLicenseString)
-                        .setTitle("Third Part licenses")
+                        .setView(messageView)
                         .create();
                 dialog.show();
             }
