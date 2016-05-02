@@ -34,6 +34,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
@@ -316,7 +317,12 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         if (null != user) {
-            status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId);
+            status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    VectorAddParticipantsAdapter.this.notifyDataSetChanged();
+                }
+            });
         }
 
         statusTextView.setText(status);
