@@ -179,7 +179,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayLicense(getActivity());
+                    VectorUtils.displayLicenses(getActivity());
                     return false;
                 }
             });

@@ -50,6 +50,7 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -539,7 +540,7 @@ public class VectorUtils {
                 URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
                 if (link.length != 0) {
                     // display the license
-                    displayLicense(mActivity);
+                    displayLicenses(mActivity);
                     return true;
                 }
             }
@@ -549,8 +550,6 @@ public class VectorUtils {
     }
 
     private static AlertDialog mMainAboutDialog = null;
-    private static String mLicenseString = null;
-    private static MovementCheck mMovementCheck = null;
 
     /**
      * Provide the application version
@@ -562,41 +561,10 @@ public class VectorUtils {
     }
 
     /**
-     * Init the license text to display.
-     * It is extracted from a resource raw file.
-     * @param activity the activity
-     */
-    private static void initLicenseText(Activity activity) {
-        if (null == mLicenseString) {
-            // build a local license file
-            InputStream inputStream = activity.getResources().openRawResource(R.raw.all_licenses);
-            StringBuilder buf = new StringBuilder();
-
-            try {
-                String str;
-                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-                while ((str = in.readLine()) != null) {
-                    buf.append(str);
-                    buf.append("\n");
-                }
-
-                in.close();
-            } catch (Exception e) {
-
-            }
-
-            mLicenseString = buf.toString();
-        }
-    }
-
-    /**
      * Display the licenses text.
      * @param activity the activity
      */
-    public static void displayLicense(final Activity activity) {
-
-        initLicenseText(activity);
+    public static void displayLicenses(final Activity activity) {
 
         if (null != mMainAboutDialog) {
             mMainAboutDialog.dismiss();
@@ -606,18 +574,15 @@ public class VectorUtils {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                final TextView messageView = new TextView(activity);
-                final SpannableString s = new SpannableString(mLicenseString);
-                Linkify.addLinks(s, Linkify.WEB_URLS);
-                messageView.setText(s);
-                messageView.setMovementMethod(LinkMovementMethod.getInstance());
-
-                final AlertDialog dialog = new AlertDialog.Builder(activity)
+                WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
+                view.loadUrl("file:///android_asset/open_source_licenses.html");
+                view.setScrollbarFadingEnabled(false);
+                mMainAboutDialog = new AlertDialog.Builder(activity)
+                        .setTitle("Third party licences")
+                        .setView(view)
                         .setPositiveButton(android.R.string.ok, null)
-                        .setView(messageView)
                         .create();
-                dialog.show();
+                mMainAboutDialog.show();
             }
         });
     }
@@ -643,54 +608,6 @@ public class VectorUtils {
         alert.setView(wv);
         alert.setPositiveButton(android.R.string.ok, null);
         alert.show();
-    }
-
-    /**
-     * Display third party licenses
-     * @param activity the activity
-     */
-    public static void displayAbout(final Activity activity) {
-        initLicenseText(activity);
-
-        // sanity check
-        if (null == mLicenseString) {
-            return;
-        }
-
-        File cachedLicenseFile = new File(activity.getFilesDir(), "Licenses.txt");
-        // convert the file to content:// uri
-        Uri uri = VectorContentProvider.absolutePathToUri(activity, cachedLicenseFile.getAbsolutePath());
-
-        if (null == uri) {
-            return;
-        }
-
-        String message = "<div class=\"banner\"> <div class=\"l-page no-clear align-center\"> <h2 class=\"s-heading\">"+ activity.getString(R.string.settings_title_config) + "</h2> </div> </div>";
-
-        String versionName = getApplicationVersion(activity);
-
-        message += "<strong>Vector version</strong> <br>" + versionName;
-        message += "<p><strong>SDK version</strong> <br>" + versionName;
-        message += "<div class=\"banner\"> <div class=\"l-page no-clear align-center\"> <h2 class=\"s-heading\">Third Party Library Licenses</h2> </div> </div>";
-        message += "<a href=\"" + uri.toString() + "\">Licenses</a>";
-
-        Spanned text = Html.fromHtml(message);
-
-        mMainAboutDialog = new AlertDialog.Builder(activity)
-                .setPositiveButton(android.R.string.ok, null)
-                .setMessage(text)
-                .setIcon(R.drawable.ic_menu_small_matrix_transparent)
-                .create();
-        mMainAboutDialog.show();
-
-        if (null == mMovementCheck) {
-            mMovementCheck = new MovementCheck();
-        }
-
-        mMovementCheck.mActivity = activity;
-
-        // allow link to be clickable
-        ((TextView)mMainAboutDialog.findViewById(android.R.id.message)).setMovementMethod(mMovementCheck);
     }
 
     //==============================================================================================================

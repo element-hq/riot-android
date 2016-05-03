@@ -697,7 +697,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
 
                     case R.id.sliding_menu_terms: {
-                        VectorUtils.displayLicense(VectorHomeActivity.this);
+                        VectorUtils.displayLicenses(VectorHomeActivity.this);
                         break;
                     }
 
