@@ -24,19 +24,13 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.matrix.androidsdk.MXSession;
-
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Set;
 
-import im.vector.Matrix;
 import im.vector.activity.LoginActivity;
 
 @SuppressLint("LongLogTag")
-/**
- * An universal link receiver.
- */
 public class VectorRegistrationReceiver extends BroadcastReceiver {
     private static final String LOG_TAG = "VectorRegistrationReceiver";
 
@@ -47,6 +41,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
 
     // Supported path
     public static final String SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION = "/_matrix/identity/api/v1/validate/email/submitToken";
+    public static final String SUPPORTED_HOST = "vector.im";
 
     // mail validation url query parameters
     // Examples:
@@ -60,15 +55,12 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
     public static final String KEY_MAIL_VALIDATION_IDENTITY_SERVER_URL = "is_url";
     public static final String KEY_MAIL_VALIDATION_SESSION_ID = "session_id";
 
-    // the session
-    private MXSession mSession;
-
     public VectorRegistrationReceiver() {
     }
 
     @Override
     public void onReceive(final Context aContext, final Intent aIntent) {
-        String action,uriString;
+        String action;
         Uri intentUri;
 
         Log.d(LOG_TAG, "## onReceive() IN");
@@ -76,7 +68,6 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
         // sanity check
         if (null != aIntent) {
             action = aIntent.getAction();
-            uriString = aIntent.getDataString();
 
             // test action received
             if (!TextUtils.equals(action, BROADCAST_ACTION_REGISTRATION)) {
@@ -84,20 +75,11 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
             } else if (null == (intentUri = aIntent.getData())) {
                 Log.e(LOG_TAG, "## onReceive() Error - Uri is null");
             } else {
-                Log.d(LOG_TAG, "## onReceive() intentUri - host=" + intentUri.getHost() + " path=" + intentUri.getPath() + " queryParams=" + intentUri.getQuery());
 
                 // test if URI path is allowed
                 if (SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(intentUri.getPath())) {
                     // account registration URL set in a mail:
                     HashMap<String, String> mailRegParams = parseMailRegistrationLink(intentUri);
-
-                    // get session
-                    mSession = Matrix.getInstance(aContext).getDefaultSession();
-                    if(null != mSession) {
-                        boolean isSessionActive = mSession.isAlive();
-                        boolean isLoginStepDone = mSession.getDataHandler().isInitialSyncComplete();
-                        Log.d(LOG_TAG, "## onReceive() uri getDataString=" + uriString + "isSessionActive=" + isSessionActive + " isLoginStepDone=" + isLoginStepDone);
-                    }
 
                     // build Login intent
                     Intent intent = new Intent(aContext, LoginActivity.class);
@@ -132,7 +114,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                 String uriFragment, host=uri.getHost();
                 Log.i(LOG_TAG,"## parseMailRegistrationLink(): host="+host);
 
-                if (!TextUtils.equals(host, "vector.im")) {
+                if (!TextUtils.equals(host, SUPPORTED_HOST)) {
                     Log.e(LOG_TAG, "## parseUniversalLink : unsupported host ="+host);
                     return null;
                 }
@@ -158,15 +140,13 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                     try {
                         value = URLDecoder.decode(value, "UTF-8");
                     } catch (Exception e) {
-
+                        Log.e(LOG_TAG, "## parseUniversalLink : Exception - parse query params Msg="+e.getLocalizedMessage());
                     }
                     mapParams.put(name, value);
                 }
 
                 // parse next link URI
                 if(null !=  nextLinkUri) {
-                    //Uri nextLinkUri = Uri.parse(mapParams.get(KEY_MAIL_VALIDATION_NEXT_LINK));
-                    Set<String> nextLinkParamsList = nextLinkUri.getQueryParameterNames();
 
                     String nextLinkHomeServer = nextLinkUri.getQueryParameter(KEY_MAIL_VALIDATION_HOME_SERVER_URL);
                     mapParams.put(KEY_MAIL_VALIDATION_HOME_SERVER_URL, nextLinkHomeServer);
@@ -182,20 +162,10 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             mapParams = null;
-            Log.e(LOG_TAG, "## parseUniversalLink : crashes " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## parseUniversalLink : Exception - Msg=" + e.getLocalizedMessage());
         }
 
         return mapParams;
-    }
-
-    /**
-     * Send a broadcast to finish the Login activity.
-     * @param aContext
-     */
-    private void stopLoginActivityByBroadcast(Context aContext) {
-        Intent myBroadcastIntent = new Intent(LoginActivity.BROADCAST_ACTION_MAIL_VALIDATION);
-        myBroadcastIntent.putExtra(LoginActivity.EXTRA_IS_STOP_REQUIRED, true);
-        aContext.sendBroadcast(myBroadcastIntent);
     }
 }
 

@@ -26,7 +26,7 @@ import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
 /**
- * Dummy activity used to dispatch an universal link.
+ * Dummy activity used to dispatch the vector URL links.
  */
 @SuppressLint("LongLogTag")
 public class VectorUniversalLinkActivity extends Activity {
@@ -41,6 +41,9 @@ public class VectorUniversalLinkActivity extends Activity {
         try {
             // dispatch on the right receiver
             if (VectorRegistrationReceiver.SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(getIntent().getData().getPath())) {
+
+                // logout current session, before starting any mail validation
+                // to have the LoginActivity always in a "no credentials state".
                 CommonActivityUtils.logout(this, false);
                 intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
             } else {

@@ -116,7 +116,6 @@ public class LoginActivity extends MXCActionBarActivity {
     // mail validation
     public static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
     public static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
-    private static final String KEY_WAS_MAIL_VALIDATION_DONE = "SAVED_CREATION_MAIL_VALIDATION";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -238,7 +237,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // already registered
         if (hasCredentials()) {
-            Log.e(LOG_TAG, "goToSplash because the credentials are already provided.");
+            Log.e(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
             goToSplash();
             finish();
             return;
@@ -257,7 +256,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 processEmailValidationExtras(receivedBundle);
             }
         } else if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            Log.e(LOG_TAG, "Resume the application");
+            Log.e(LOG_TAG, "## onCreate(): Resume the application");
             finish();
             return;
         }
@@ -671,8 +670,7 @@ public class LoginActivity extends MXCActionBarActivity {
             Log.i(LOG_TAG, "## submitEmailToken(): calling submitEmailTokenValidation()..");
             mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Void>() {
                 private void errorHandler(String errorMessage) {
-                    Log.i(LOG_TAG, "## submitEmailToken(): errorHandler().");
-                    //mEmailValidationExtraParams = null;
+                    Log.w(LOG_TAG, "## submitEmailToken(): errorHandler().");
                     setFlowsMaskEnabled(false);
                     setLoginButtonsEnabled(false);
                     onRegistrationEnd();
@@ -683,7 +681,6 @@ public class LoginActivity extends MXCActionBarActivity {
                 public void onSuccess(Void info) {
                     // the validation of mail ownership succeed, just resume the registration flow
                     // next step: just register
-                    //mEmailValidationExtraParams = null;
                     Log.w(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
                     registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
                 }
@@ -742,10 +739,7 @@ public class LoginActivity extends MXCActionBarActivity {
         authParams.put("threepid_creds", thirdPartyIdsCredentialsAuth);
 
         registrationParams.auth = authParams;
-        // do not set the following registrationParams
-        /*registrationParams.username = "user";
-        registrationParams.password = "vector";
-        registrationParams.bind_email = true;*/
+        // Note: username, password and bind_email must not be set in registrationParams
 
         Log.d(LOG_TAG, "## registerAfterEmailValidation(): authParams=" + authParams);
         setFlowsMaskEnabled(true);
@@ -759,12 +753,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void register(final RegistrationParams params) {
 
-        if(null != params) {
-            Log.d(LOG_TAG,"## register(): IN - params.auth="+params.auth);
-            Log.d(LOG_TAG,"## register(): IN - params.password="+params.password);
-            Log.d(LOG_TAG,"## register(): IN - params.username="+params.username);
-            Log.d(LOG_TAG,"## register(): IN - params.bind_email="+params.bind_email);
-        }
+        Log.d(LOG_TAG,"## register(): IN");
 
         // should not check login flows
         if (mMode != MODE_ACCOUNT_CREATION) {
@@ -820,9 +809,9 @@ public class LoginActivity extends MXCActionBarActivity {
                                     // refresh the messages
                                     onRegistrationStart(getResources().getString(R.string.auth_email_validation_message));
 
-                                    // check if the next link paramters have been received
+                                    // check if the next link parameters have been received
                                     if (null != mEmailValidationExtraParams) {
-                                        Log.d(LOG_TAG, "## register(): Received UNAUTHORIZED - Wait for validation.. : the next link parameters have been received, please wait the end of the process");
+                                        Log.d(LOG_TAG, "## register(): Received UNAUTHORIZED - the next link parameters were received, stop polling on register()");
                                         mRegisterPollingRunnable = null;
                                     } else {
                                         Log.d(LOG_TAG, "## register(): Received UNAUTHORIZED - Wait for validation..");
@@ -841,7 +830,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                 } else {
                                     Log.d(LOG_TAG, "## register(): The registration continues");
 
-                                    // can
+                                    // reset polling handler
                                     mRegisterPollingRunnable = null;
 
                                     // detect if a parameter is expected
@@ -853,7 +842,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                             registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
                                             Log.d(LOG_TAG, "## register(): Received status 401 - RegResponse="+e.mErrorBodyAsString);
                                         } catch (Exception castExcept) {
-                                            Log.w(LOG_TAG, "## register(): Received status 401 - EXception - JsonUtils.toRegistrationFlowResponse()");
+                                            Log.w(LOG_TAG, "## register(): Received status 401 - Exception - JsonUtils.toRegistrationFlowResponse()");
                                         }
                                     } else {
                                         Log.d(LOG_TAG, "## register(): Received not expected status 401 ="+e.mStatus);
@@ -866,7 +855,6 @@ public class LoginActivity extends MXCActionBarActivity {
                                         // next step
                                         onRegisterClick(false);
                                     } else {
-                                        Log.e(LOG_TAG, "## register(): Received status 401 - Error - registrationFlowResponse=null");
                                         onRegistrationEnd();
                                         onFailureDuringAuthRequest(e);
                                     }
@@ -1001,7 +989,6 @@ public class LoginActivity extends MXCActionBarActivity {
                 @Override
                 public void run() {
                     if(null != mEmailValidationExtraParams) {
-                        Log.d(LOG_TAG,"## checkIfMailValidationPending(): Start mail validation flow..");
                         startEmailOwnershipValidation(mEmailValidationExtraParams);
                     }
                 }
@@ -1132,8 +1119,8 @@ public class LoginActivity extends MXCActionBarActivity {
     /**
      * The user clicks on the register button.
      */
-    private void onRegisterClick(boolean checkRegistraionValues) {
-        Log.d(LOG_TAG, "## onRegisterClick(): IN - checkRegistraionValues=" + checkRegistraionValues);
+    private void onRegisterClick(boolean checkRegistrationValues) {
+        Log.d(LOG_TAG, "## onRegisterClick(): IN - checkRegistrationValues=" + checkRegistrationValues);
         onClick();
 
         // the user switches to another mode
@@ -1155,7 +1142,7 @@ public class LoginActivity extends MXCActionBarActivity {
         final String password = mCreationPassword1TextView.getText().toString().trim();
         final String passwordCheck = mCreationPassword2TextView.getText().toString().trim();
 
-        if (checkRegistraionValues) {
+        if (checkRegistrationValues) {
             if (TextUtils.isEmpty(name)) {
                 Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_user_name), Toast.LENGTH_SHORT).show();
                 return;
@@ -1303,7 +1290,6 @@ public class LoginActivity extends MXCActionBarActivity {
                         Log.d(LOG_TAG, "## onRegisterClick(): captcha flow started AccountCreationCaptchaActivity");
                         return;
                     }
-                    Log.d(LOG_TAG, "## onRegisterClick(): captcha flow did not start AccountCreationCaptchaActivity");
                 }
             }
         } else {
@@ -1567,7 +1553,6 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         savedInstanceState.putInt(SAVED_MODE, mMode);
-        savedInstanceState.putBoolean(KEY_WAS_MAIL_VALIDATION_DONE, mIsMailValidationPending);
     }
 
     //==============================================================================================================
