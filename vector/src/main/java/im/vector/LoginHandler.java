@@ -259,7 +259,7 @@ public class LoginHandler {
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
 
-        pid.requestValidationToken(client, new ApiCallback<Void>() {
+        pid.requestValidationToken(client, null, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 callback.onSuccess(pid);
