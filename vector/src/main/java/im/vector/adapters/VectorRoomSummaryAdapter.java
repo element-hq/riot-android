@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -537,8 +538,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     private void refreshSummariesList() {
         if (null != mMxSession) {
+            // sanity check
+            MXDataHandler dataHandler = mMxSession.getDataHandler();
+            if((null == dataHandler) || (null == dataHandler.getStore())) {
+                Log.w(DBG_CLASS_NAME,"## refreshSummariesList(): unexpected null values - return");
+                return;
+            }
+
             // update/retrieve the complete summary list
-            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
+            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(dataHandler.getStore().getSummaries());
 
             // define comparator logic
             Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
