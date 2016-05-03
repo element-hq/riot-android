@@ -236,13 +236,6 @@ public class LoginActivity extends MXCActionBarActivity {
         // warn that the application has started.
         CommonActivityUtils.onApplicationStarted(this);
 
-        // the application is brought to front by the system
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            Log.e(LOG_TAG, "Resume the application");
-            finish();
-            return;
-        }
-
         // already registered
         if (hasCredentials()) {
             Log.e(LOG_TAG, "goToSplash because the credentials are already provided.");
@@ -263,6 +256,10 @@ public class LoginActivity extends MXCActionBarActivity {
                 Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
                 processEmailValidationExtras(receivedBundle);
             }
+        } else if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            Log.e(LOG_TAG, "Resume the application");
+            finish();
+            return;
         }
 
         // bind UI widgets
