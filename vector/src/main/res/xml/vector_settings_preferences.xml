@@ -59,6 +59,10 @@
 
     <PreferenceCategory android:title="@string/settings_other" >
 
+        <SwitchPreference
+            android:title="@string/ga_use_settings"
+            android:key="@string/ga_use_settings"/>
+
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_version"
             android:summary="1.2.3"

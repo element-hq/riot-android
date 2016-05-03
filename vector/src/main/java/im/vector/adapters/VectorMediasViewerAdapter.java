@@ -276,6 +276,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final String loadingUri = imageInfo.mMediaUrl;
         final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeserverConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType);
 
+        webView.getSettings().setDisplayZoomControls(false);
+
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
             pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
@@ -343,6 +345,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final WebView imageWebView = (WebView)view.findViewById(R.id.media_slider_image_webview);
         final View videoLayout = view.findViewById(R.id.media_slider_videolayout);
         final ImageView thumbView = (ImageView)view.findViewById(R.id.media_slider_video_thumbnail);
+
+        imageWebView.getSettings().setDisplayZoomControls(false);
 
         imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

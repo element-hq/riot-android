@@ -260,6 +260,7 @@ public class LoginHandler {
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
 
+
         // TODO define an application settings
         String webAppUrl = "https://vector.im/develop";
 
@@ -269,6 +270,7 @@ public class LoginHandler {
         nextLink += "&session_id=" + session;
 
         pid.requestValidationToken(client, nextLink, new ApiCallback<Void>() {
+
             @Override
             public void onSuccess(Void info) {
                 callback.onSuccess(pid);

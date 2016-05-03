@@ -65,7 +65,7 @@ import im.vector.util.VectorUtils;
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     public interface RoomEventListener {
-        void onJoinRoom(MXSession session, String roomId);
+        void onPreviewRoom(MXSession session, String roomId);
         void onRejectInvitation(MXSession session, String roomId);
 
         void onToggleRoomNotifications(MXSession session, String roomId);
@@ -691,7 +691,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
-        Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
+        Button preViewButton = (Button)convertView.findViewById(R.id.recents_invite_preview_button);
         Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
 
         View showMoreView = convertView.findViewById(R.id.roomSummaryAdapter_show_more_layout);
@@ -806,11 +806,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (isInvited) {
             actionClickArea.setVisibility(View.GONE);
 
-            joinButton.setOnClickListener(new View.OnClickListener() {
+            preViewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onJoinRoom(mMxSession, fRoomId);
+                        mListener.onPreviewRoom(mMxSession, fRoomId);
                     }
                 }
             });

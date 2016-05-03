@@ -42,23 +42,33 @@ import android.support.v4.util.LruCache;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.common.AccountPicker;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -75,6 +85,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -283,6 +294,41 @@ public class VectorUtils {
     }
 
     /**
+     * Return the char to display for a naem
+     * @param name the name
+     * @return teh first char
+     */
+    private static String getInitialLetter(String name) {
+        String firstChar = " ";
+
+        if (!TextUtils.isEmpty(name)) {
+            int idx = 0;
+            char initial = name.charAt(idx);
+
+            if ((initial == '@' || initial == '#') && (name.length() > 1)) {
+                idx++;
+            }
+
+            // string.codePointAt(0) would do this, but that isn't supported by
+            // some browsers (notably PhantomJS).
+            int chars = 1;
+            char first = name.charAt(idx);
+
+            // check if it’s the start of a surrogate pair
+            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > 2)) {
+                char second = name.charAt(idx+1);
+                if (second >= 0xDC00 && second <= 0xDFFF) {
+                    chars++;
+                }
+            }
+
+            firstChar = name.substring(idx, idx+chars);
+        }
+
+        return firstChar.toUpperCase();
+    }
+
+    /**
      * Returns an avatar from a text.
      * @param context the context.
      * @param aText the text.
@@ -290,17 +336,7 @@ public class VectorUtils {
      * @return the avatar.
      */
     public static Bitmap getAvatar(Context context, int backgroundColor, String aText, boolean create) {
-        // ignore some characters
-        if (!TextUtils.isEmpty(aText) && (aText.startsWith("@") || aText.startsWith("#"))) {
-            aText = aText.substring(1);
-        }
-
-        String firstChar = " ";
-
-        if (!TextUtils.isEmpty(aText)) {
-            firstChar = aText.substring(0, 1).toUpperCase();
-        }
-
+        String firstChar = getInitialLetter(aText);
         String key = firstChar + "_" + backgroundColor;
 
         // check if the avatar is already defined
@@ -479,45 +515,7 @@ public class VectorUtils {
     // About / terms and conditions
     //==============================================================================================================
 
-    // trick to trap the clink on the Licenses link
-    private static class MovementCheck extends LinkMovementMethod {
-
-        public Activity mActivity = null;
-
-        @Override
-        public boolean onTouchEvent(TextView widget,
-                                    Spannable buffer, MotionEvent event ) {
-            int action = event.getAction();
-
-            if (action == MotionEvent.ACTION_UP) {
-                int x = (int) event.getX();
-                int y = (int) event.getY();
-
-                x -= widget.getTotalPaddingLeft();
-                y -= widget.getTotalPaddingTop();
-
-                x += widget.getScrollX();
-                y += widget.getScrollY();
-
-                Layout layout = widget.getLayout();
-                int line = layout.getLineForVertical(y);
-                int off = layout.getOffsetForHorizontal(line, x);
-
-                URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
-                if (link.length != 0) {
-                    // display the license
-                    displayLicense(mActivity);
-                    return true;
-                }
-            }
-
-            return super.onTouchEvent(widget, buffer, event);
-        }
-    }
-
     private static AlertDialog mMainAboutDialog = null;
-    private static String mLicenseString = null;
-    private static MovementCheck mMovementCheck = null;
 
     /**
      * Provide the application version
@@ -529,42 +527,10 @@ public class VectorUtils {
     }
 
     /**
-     * Init the license text to display.
-     * It is extracted from a resource raw file.
-     * @param activity the activity
-     */
-    private static void initLicenseText(Activity activity) {
-
-        if (null == mLicenseString) {
-            // build a local license file
-            InputStream inputStream = activity.getResources().openRawResource(R.raw.all_licenses);
-            StringBuilder buf = new StringBuilder();
-
-            try {
-                String str;
-                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-                while ((str = in.readLine()) != null) {
-                    buf.append(str);
-                    buf.append("\n");
-                }
-
-                in.close();
-            } catch (Exception e) {
-
-            }
-
-            mLicenseString = buf.toString();
-        }
-    }
-
-    /**
      * Display the licenses text.
      * @param activity the activity
      */
-    public static void displayLicense(final Activity activity) {
-
-        initLicenseText(activity);
+    public static void displayLicenses(final Activity activity) {
 
         if (null != mMainAboutDialog) {
             mMainAboutDialog.dismiss();
@@ -574,12 +540,19 @@ public class VectorUtils {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final AlertDialog dialog = new AlertDialog.Builder(activity)
+                WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
+                view.loadUrl("file:///android_asset/open_source_licenses.html");
+
+                View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
+
+                view.setScrollbarFadingEnabled(false);
+                mMainAboutDialog = new AlertDialog.Builder(activity)
+                        .setCustomTitle(titleView)
+                        .setView(view)
                         .setPositiveButton(android.R.string.ok, null)
-                        .setMessage(mLicenseString)
-                        .setTitle("Third Part licenses")
                         .create();
-                dialog.show();
+
+                mMainAboutDialog.show();
             }
         });
     }
@@ -605,54 +578,6 @@ public class VectorUtils {
         alert.setView(wv);
         alert.setPositiveButton(android.R.string.ok, null);
         alert.show();
-    }
-
-    /**
-     * Display third party licenses
-     * @param activity the activity
-     */
-    public static void displayAbout(final Activity activity) {
-        initLicenseText(activity);
-
-        // sanity check
-        if (null == mLicenseString) {
-            return;
-        }
-
-        File cachedLicenseFile = new File(activity.getFilesDir(), "Licenses.txt");
-        // convert the file to content:// uri
-        Uri uri = VectorContentProvider.absolutePathToUri(activity, cachedLicenseFile.getAbsolutePath());
-
-        if (null == uri) {
-            return;
-        }
-
-        String message = "<div class=\"banner\"> <div class=\"l-page no-clear align-center\"> <h2 class=\"s-heading\">"+ activity.getString(R.string.settings_title_config) + "</h2> </div> </div>";
-
-        String versionName = getApplicationVersion(activity);
-
-        message += "<strong>Vector version</strong> <br>" + versionName;
-        message += "<p><strong>SDK version</strong> <br>" + versionName;
-        message += "<div class=\"banner\"> <div class=\"l-page no-clear align-center\"> <h2 class=\"s-heading\">Third Party Library Licenses</h2> </div> </div>";
-        message += "<a href=\"" + uri.toString() + "\">Licenses</a>";
-
-        Spanned text = Html.fromHtml(message);
-
-        mMainAboutDialog = new AlertDialog.Builder(activity)
-                .setPositiveButton(android.R.string.ok, null)
-                .setMessage(text)
-                .setIcon(R.drawable.ic_menu_small_matrix_transparent)
-                .create();
-        mMainAboutDialog.show();
-
-        if (null == mMovementCheck) {
-            mMovementCheck = new MovementCheck();
-        }
-
-        mMovementCheck.mActivity = activity;
-
-        // allow link to be clickable
-        ((TextView)mMainAboutDialog.findViewById(android.R.id.message)).setMovementMethod(mMovementCheck);
     }
 
     //==============================================================================================================
@@ -715,56 +640,103 @@ public class VectorUtils {
     //==============================================================================================================
 
     /**
+     * Format a time interval in seconds to a string
+     * @param context the context.
+     * @param secondsInterval the time interval.
+     * @return the formatted string
+     */
+    public static String formatSecondsIntervalFloored(Context context, long secondsInterval) {
+        String formattedString;
+
+        if (secondsInterval < 0) {
+            formattedString = "0" + context.getResources().getString(R.string.format_time_s);
+        } else {
+            if (secondsInterval < 60) {
+                formattedString = secondsInterval + context.getResources().getString(R.string.format_time_s);
+            } else if (secondsInterval < 3600) {
+                formattedString = (secondsInterval / 60) + context.getResources().getString(R.string.format_time_m);
+            } else if (secondsInterval < 86400) {
+                formattedString = (secondsInterval / 3600) + context.getResources().getString(R.string.format_time_h);
+            } else {
+                formattedString = (secondsInterval / 86400) + context.getResources().getString(R.string.format_time_d);
+            }
+        }
+
+        return formattedString;
+    }
+
+    /**
      * Provide the user online status from his user Id.
+     * if refreshCallback is set, try to refresh the user presence if it is not known
      * @param context the context.
      * @param session the session.
      * @param userId the userId.
+     * @param refreshCallback the presence callback.
      * @return the online status desrcription.
      */
-    public static String getUserOnlineStatus(Context context, MXSession session, String userId) {
+    public static String getUserOnlineStatus(final Context context, final MXSession session, final String userId, final SimpleApiCallback<Void> refreshCallback) {
+        String presenceText = context.getResources().getString(R.string.room_participants_unkown);
 
         // sanity checks
         if ((null == session) || (null == userId)) {
-            return null;
+            return presenceText;
         }
 
         User user = session.getDataHandler().getStore().getUser(userId);
 
+        if ((null != refreshCallback) && ((null == user) || (null == user.presence))) {
+            Log.d(LOG_TAG, "Get the user presence : " + userId);
+
+            session.refreshUserPresence(userId, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (null != refreshCallback) {
+                        Log.d(LOG_TAG, "Got the user presence : " + userId);
+                        try {
+                            refreshCallback.onSuccess(null);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "getUserOnlineStatus refreshCallback failed");
+                        }
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    Log.e(LOG_TAG, "getUserOnlineStatus onNetworkError " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    Log.e(LOG_TAG, "getUserOnlineStatus onMatrixError " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    Log.e(LOG_TAG, "getUserOnlineStatus onUnexpectedError " + e.getLocalizedMessage());
+                }
+            });
+        }
+
         // unknown user
         if (null == user) {
-            return null;
+            return presenceText;
         }
 
-        String onlineStatus = "";
-
-        if (null == user.presence) {
-            onlineStatus = "";
-        } else if ((null != user.currently_active) && user.currently_active) {
-            onlineStatus = context.getResources().getString(R.string.presence_online_now);
-        } else if (User.PRESENCE_ONLINE.equals(user.presence)) {
-            onlineStatus = context.getResources().getString(R.string.room_participants_active);
-        } else {
-            Long lastActiveMs = user.lastActiveAgo;
-
-            if (null == lastActiveMs) {
-                lastActiveMs = (long) -1;
-            }
-
-            if (-1 != lastActiveMs) {
-                long lastActivehour = lastActiveMs / 1000 / 60 / 60;
-                long lastActiveDays = lastActivehour / 24;
-
-                if (lastActivehour < 1) {
-                    onlineStatus = context.getString(R.string.room_participants_active_less_1_hour);
-                } else if (lastActivehour < 24) {
-                    onlineStatus = context.getString(R.string.room_participants_active_less_x_hours, lastActivehour);
-                } else {
-                    onlineStatus = context.getString(R.string.room_participants_active_less_x_days, lastActiveDays);
-                }
-            }
+        if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
+            presenceText = context.getResources().getString(R.string.room_participants_online);
+        } else if (TextUtils.equals(user.presence, User.PRESENCE_UNAVAILABLE)) {
+            presenceText = context.getResources().getString(R.string.room_participants_idle);
+        } else if (TextUtils.equals(user.presence, User.PRESENCE_OFFLINE) || (null == user.presence)) {
+            presenceText = context.getResources().getString(R.string.room_participants_offline);
         }
 
-        return onlineStatus;
+        if ((null != user.currently_active) && user.currently_active) {
+            presenceText += " " +  context.getResources().getString(R.string.room_participants_now);
+        } else if ((null != user.lastActiveAgo) && (user.lastActiveAgo > 0)) {
+            presenceText += " " + formatSecondsIntervalFloored(context, user.getRealLastActiveAgo() / 1000L) + " " + context.getResources().getString(R.string.room_participants_ago);
+        }
+
+        return presenceText;
     }
 
     //==============================================================================================================
