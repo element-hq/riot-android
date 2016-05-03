@@ -203,10 +203,21 @@ public class CommonActivityUtils {
 
     /**
      * Logout the current user.
+     * Jump to the login page when the logout is done.
      *
      * @param activity the caller activity
      */
     public static void logout(Activity activity) {
+        logout(activity, true);
+    }
+
+    /**
+     * Logout the current user.
+     *
+     * @param activity the caller activity
+     * @param goToLoginPage true to jump to the login page
+     */
+    public static void logout(Activity activity, boolean goToLoginPage) {
         stopEventStream(activity);
 
         try {
@@ -248,9 +259,11 @@ public class CommonActivityUtils {
 
         MXMediasCache.clearThumbnailsCache(activity);
 
-        // go to login page
-        activity.startActivity(new Intent(activity, LoginActivity.class));
-        activity.finish();
+        if (goToLoginPage) {
+            // go to login page
+            activity.startActivity(new Intent(activity, LoginActivity.class));
+            activity.finish();
+        }
     }
 
     /**

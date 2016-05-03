@@ -19,11 +19,8 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.util.HashMap;
 
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
@@ -44,6 +41,7 @@ public class VectorUniversalLinkActivity extends Activity {
         try {
             // dispatch on the right receiver
             if (VectorRegistrationReceiver.SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(getIntent().getData().getPath())) {
+                CommonActivityUtils.logout(this, false);
                 intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
             } else {
                 intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
