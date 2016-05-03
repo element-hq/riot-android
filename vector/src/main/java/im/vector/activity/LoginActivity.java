@@ -180,11 +180,13 @@ public class LoginActivity extends MXCActionBarActivity {
     // save the config because trust a certificate is asynchronous.
     private HomeserverConnectionConfig mHomeserverConnectionConfig;
 
-    //private BroadcastReceiver mBrdRcvResumeMailRegistration;
+    // next link parameters
     private HashMap<String, String> mEmailValidationExtraParams;
+
+    // the next link parameters were not managed
     private boolean mIsMailValidationPending;
-    private boolean mIsRegisterPollingInProgress;
-    private Runnable mRegisterPolerRunnable;
+
+    private Runnable mRegisterPollingRunnable;
     private Handler mHandler;
 
     @Override
@@ -822,23 +824,34 @@ public class LoginActivity extends MXCActionBarActivity {
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
                                 // waiting for email case
                                 if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
-                                    Log.d(LOG_TAG, "## register(): Received UNAUTHORIZED - Wait for validation.. mIsRegisterPollingInProgress="+ mIsRegisterPollingInProgress);
 
+                                    // refresh the messages
                                     onRegistrationStart(getResources().getString(R.string.auth_email_validation_message));
 
-                                    mIsRegisterPollingInProgress =true;
-                                    mRegisterPolerRunnable = new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            register(params);
-                                        }
-                                    };
+                                    // check if the next link paramters have been received
+                                    if (null != mEmailValidationExtraParams) {
+                                        Log.d(LOG_TAG, "## register(): Received UNAUTHORIZED - Wait for validation.. : the next link parameters have been received, please wait the end of the process");
+                                        mRegisterPollingRunnable = null;
+                                    } else {
+                                        Log.d(LOG_TAG, "## register(): Received UNAUTHORIZED - Wait for validation..");
+                                        mRegisterPollingRunnable = new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // check if the next link was not received
+                                                if ((MODE_ACCOUNT_CREATION == mMode) && (null == mEmailValidationExtraParams)) {
+                                                    register(params);
+                                                }
+                                            }
+                                        };
 
-                                    mHandler.postDelayed(mRegisterPolerRunnable, REGISTER_POLLING_PERIOD);
+                                        mHandler.postDelayed(mRegisterPollingRunnable, REGISTER_POLLING_PERIOD);
+                                    }
                                 } else {
-                                    mIsRegisterPollingInProgress =false;
-                                    mRegisterPolerRunnable = null;
-                                    Log.d(LOG_TAG, "## register(): The registration continues1");
+                                    Log.d(LOG_TAG, "## register(): The registration continues");
+
+                                    // can
+                                    mRegisterPollingRunnable = null;
+
                                     // detect if a parameter is expected
                                     RegistrationFlowResponse registrationFlowResponse = null;
 
@@ -985,8 +998,8 @@ public class LoginActivity extends MXCActionBarActivity {
             mIsMailValidationPending = false;
 
             // remove the pending polling register if any
-            if(null != mRegisterPolerRunnable){
-                mHandler.removeCallbacks(mRegisterPolerRunnable);
+            if (null != mRegisterPollingRunnable) {
+                mHandler.removeCallbacks(mRegisterPollingRunnable);
                 Log.w(LOG_TAG, "## checkIfMailValidationPending(): pending register() removed from handler");
             } else{
                 Log.w(LOG_TAG, "## checkIfMailValidationPending(): no registering polling on M_UNAUTHORIZED");
