@@ -50,8 +50,10 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -513,42 +515,6 @@ public class VectorUtils {
     // About / terms and conditions
     //==============================================================================================================
 
-    // trick to trap the clink on the Licenses link
-    private static class MovementCheck extends LinkMovementMethod {
-
-        public Activity mActivity = null;
-
-        @Override
-        public boolean onTouchEvent(TextView widget,
-                                    Spannable buffer, MotionEvent event ) {
-            int action = event.getAction();
-
-            if (action == MotionEvent.ACTION_UP) {
-                int x = (int) event.getX();
-                int y = (int) event.getY();
-
-                x -= widget.getTotalPaddingLeft();
-                y -= widget.getTotalPaddingTop();
-
-                x += widget.getScrollX();
-                y += widget.getScrollY();
-
-                Layout layout = widget.getLayout();
-                int line = layout.getLineForVertical(y);
-                int off = layout.getOffsetForHorizontal(line, x);
-
-                URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
-                if (link.length != 0) {
-                    // display the license
-                    displayLicenses(mActivity);
-                    return true;
-                }
-            }
-
-            return super.onTouchEvent(widget, buffer, event);
-        }
-    }
-
     private static AlertDialog mMainAboutDialog = null;
 
     /**
@@ -576,12 +542,16 @@ public class VectorUtils {
             public void run() {
                 WebView view = (WebView) LayoutInflater.from(activity).inflate(R.layout.dialog_licenses, null);
                 view.loadUrl("file:///android_asset/open_source_licenses.html");
+
+                View titleView = LayoutInflater.from(activity).inflate(R.layout.dialog_licenses_header, null);
+
                 view.setScrollbarFadingEnabled(false);
                 mMainAboutDialog = new AlertDialog.Builder(activity)
-                        .setTitle("Third party licences")
+                        .setCustomTitle(titleView)
                         .setView(view)
                         .setPositiveButton(android.R.string.ok, null)
                         .create();
+
                 mMainAboutDialog.show();
             }
         });
