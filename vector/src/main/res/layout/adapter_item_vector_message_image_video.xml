@@ -67,15 +67,15 @@
 
                         <!-- the media -->
                         <ImageView
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
                             android:id="@+id/messagesAdapter_image"
                             android:adjustViewBounds="true" />
 
                         <!-- the media type -->
                         <ImageView
-                            android:layout_width="@dimen/chat_avatar_keyboard_size"
-                            android:layout_height="@dimen/chat_avatar_keyboard_size"
+                            android:layout_width="@dimen/chat_avatar_size"
+                            android:layout_height="@dimen/chat_avatar_size"
                             android:id="@+id/messagesAdapter_image_type"
                             android:src="@drawable/filetype_image"/>
 

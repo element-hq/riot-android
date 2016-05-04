@@ -60,6 +60,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         public void onLeaveRoom(String roomId) {
             // test if the user reject the invitation
             if ((null != sRoomPreviewData) && TextUtils.equals(sRoomPreviewData.getRoomId(), roomId)) {
+                Log.d(LOG_TAG, "The room invitation has been declined from another client");
                 onDeclined();
             }
         }
@@ -71,6 +72,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(LOG_TAG, "The room invitation has been accepted from another client");
                         onJoined();
                     }
                 });
@@ -88,6 +90,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
 
         if (null == sRoomPreviewData) {
+            Log.e(LOG_TAG, "no sRoomPreviewData");
             finish();
             return;
         }
@@ -116,8 +119,13 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
             roomName = " ";
         }
 
+        Log.d(LOG_TAG, "Preview the room " + sRoomPreviewData.getRoomId());
+
+
         // if the room already exists
         if (null != room) {
+            Log.d(LOG_TAG, "The room is known");
+
             actionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, room));
             VectorUtils.loadRoomAvatar(this, mSession, actionBarHeaderRoomAvatar, room);
             actionBarHeaderRoomTopic.setText(room.getTopic());
@@ -143,15 +151,19 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
             declineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(LOG_TAG, "The user clicked on decline.");
+
                     progressLayout.setVisibility(View.VISIBLE);
 
                     room.leave(new ApiCallback<Void>() {
                         @Override
                         public void onSuccess(Void info) {
+                            Log.d(LOG_TAG, "The invitation is rejected");
                             onDeclined();
                         }
 
                         private void onError(String errorMessage) {
+                            Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
                             CommonActivityUtils.displayToast(VectorRoomPreviewActivity.this, errorMessage);
                             progressLayout.setVisibility(View.GONE);
                         }
@@ -213,6 +225,8 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
             declineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(LOG_TAG, "The invitation is declined (unknown room)");
+
                     sRoomPreviewData = null;
                     VectorRoomPreviewActivity.this.finish();
                 }
@@ -222,6 +236,8 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(LOG_TAG, "The user clicked on Join.");
+
                 Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
 
                 String signUrl = null;

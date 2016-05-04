@@ -238,6 +238,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private void manageRoom(final Context aContext) {
         String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
 
+        Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
+
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
             final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), mParameters);
 
@@ -247,11 +249,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             if (null != room) {
                 // either the user is invited
                 if (room.isInvited()) {
+                    Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+
                     VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
                     stopHomeActivitySpinner(aContext);
                     Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
                     VectorApp.getCurrentActivity().startActivity(intent);
                 } else {
+                    Log.d(LOG_TAG, "manageRoom : open the room");
                     stopHomeActivitySpinner(aContext);
                     openRoomActivity(aContext);
                 }
@@ -290,6 +295,8 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
         } else { // room ID is provided as a room alias: get corresponding room ID
 
+            Log.d(LOG_TAG, "manageRoom : it is a room Alias");
+
             // Start the home activity with the waiting view enabled, while the URL link
             // is processed in the receiver. The receiver, once the URL was parsed, will stop the waiting view.
             Intent intent = new Intent(aContext, VectorHomeActivity.class);
@@ -300,6 +307,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
                 @Override
                 public void onSuccess(final String roomId) {
+                    Log.d(LOG_TAG, "manageRoom : retrieve the room ID " + roomId);
                     if (!TextUtils.isEmpty(roomId)) {
                         mParameters.put(ULINK_ROOM_ID_KEY, roomId);
                         manageRoom(aContext);
