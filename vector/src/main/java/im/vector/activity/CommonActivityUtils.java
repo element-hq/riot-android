@@ -246,12 +246,17 @@ public class CommonActivityUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
         String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
+        Boolean useGa = VectorApp.getInstance().useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.putString(LoginActivity.PASSWORD_PREF, passwordVal);
         editor.putString(LoginActivity.LOGIN_PREF, loginVal);
         editor.commit();
+
+        if (null != useGa) {
+            VectorApp.getInstance().setUseGA(activity, useGa);
+        }
 
         // reset the GCM
         Matrix.getInstance(activity).getSharedGcmRegistrationManager().reset();
