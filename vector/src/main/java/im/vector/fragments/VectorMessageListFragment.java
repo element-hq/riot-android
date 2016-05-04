@@ -65,6 +65,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -644,7 +645,17 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @return true if the long click event is managed
      */
     public boolean onAvatarLongClick(String userId) {
-        return false;
+        if (getActivity() instanceof VectorRoomActivity) {
+            RoomState state = mRoom.getLiveState();
+
+            if (null != state) {
+                String displayName = state.getMemberName(userId);
+                if (!TextUtils.isEmpty(displayName)) {
+                    ((VectorRoomActivity)getActivity()).insertInTextEditor(displayName);
+                }
+            }
+        }
+        return true;
     }
 
     /**
