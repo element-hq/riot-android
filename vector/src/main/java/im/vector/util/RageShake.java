@@ -182,7 +182,6 @@ public class RageShake implements SensorEventListener {
 
                 if (null != screenUri) {
                     // attachments
-                    intent.setType("image/jpg");
                     attachmentUris.add(screenUri);
                 }
 
