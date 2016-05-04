@@ -885,11 +885,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             item.setIcon(null);
         }
 
-        item = popup.getMenu().getItem(3);
-        SpannableString s = new SpannableString(item.getTitle());
-        s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
-        item.setTitle(s);
-
         // force to display the icon
         try {
             Field[] fields = popup.getClass().getDeclaredFields();
