@@ -411,8 +411,8 @@
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
     <string name="room_participants_action_remove">Remove from this room</string>
-    <string name="room_participants_action_ban">Block</string>
-    <string name="room_participants_action_unban">Unblock</string>
+    <string name="room_participants_action_ban">Ban</string>
+    <string name="room_participants_action_unban">Unban</string>
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
