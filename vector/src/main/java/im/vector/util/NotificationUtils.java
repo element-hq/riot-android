@@ -43,12 +43,7 @@ public class NotificationUtils {
 
         builder.setContentTitle(roomName);
         builder.setContentText(context.getString(R.string.call_in_progress));
-
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.logo);
-        } else {
-            builder.setSmallIcon(R.drawable.logo_transparent);
-        }
+        builder.setSmallIcon(R.drawable.logo_transparent);
 
         // Build the pending intent for when the notification is clicked
         Intent roomIntent = new Intent(context, VectorRoomActivity.class);
@@ -132,12 +127,7 @@ public class NotificationUtils {
 
         builder.setContentText(body);
         builder.setAutoCancel(true);
-
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.logo);
-        } else {
-            builder.setSmallIcon(R.drawable.logo_transparent);
-        }
+        builder.setSmallIcon(R.drawable.logo_transparent);
 
         if (null != largeIcon) {
             largeIcon = createSquareBitmap(largeIcon);
