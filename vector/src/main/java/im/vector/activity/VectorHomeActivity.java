@@ -50,7 +50,6 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
@@ -113,6 +112,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     // call listener
     private MenuItem mCallMenuItem = null;
+
+    private AlertDialog.Builder mUseGAAlert;
+
 
     private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
         /**
@@ -277,6 +279,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // the home activity has been launched with an universal link
         if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+            Log.d(LOG_TAG, "Has an universal link");
+
             final Uri uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
             intent.removeExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
 
@@ -284,35 +288,50 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             HashMap<String, String> params = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
             if ((null != params) && params.containsKey(VectorUniversalLinkReceiver.ULINK_ROOM_ID_KEY)) {
+                Log.d(LOG_TAG, "Has a valid universal link");
+
                 final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_KEY);
 
                 // it is a room ID ?
                 if (roomIdOrAlias.startsWith("!")) {
+
+                    Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
                     Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
                     if (null != room) {
+                        Log.d(LOG_TAG, "Has a valid universal link to a known room");
                         // open the room asap
                         mUniversalLinkToOpen = uri;
                     } else {
+                        Log.d(LOG_TAG, "Has a valid universal link but the room is not yet known");
                         // wait the next sync
                         intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
                     }
                 } else {
+                    Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
+
                     // it is a room alias
                     // convert the room alias to room Id
                     mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new SimpleApiCallback<String>() {
                         @Override
                         public void onSuccess(String roomId) {
+                            Log.d(LOG_TAG, "Retrieve the room ID " + roomId);
+
                             getIntent().putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
 
                             // the room exists, opens it
                             if (null != mSession.getDataHandler().getRoom(roomId, false)) {
+                                Log.d(LOG_TAG, "Find the room from room ID : process it");
                                 processIntentUniversalLink();
+                            } else {
+                                Log.d(LOG_TAG, "Don't know the room");
                             }
                         }
                     });
                 }
             }
+        } else {
+            Log.d(LOG_TAG, "create with no universal link");
         }
 
         String action = intent.getAction();
@@ -480,13 +499,15 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         manageCallButton();
 
         // check if the GA accepts to send crash reports.
-        if (null == VectorApp.getInstance().useGA(this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // do not display this alert if there is an universal link management
+        if (null == VectorApp.getInstance().useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
+            mUseGAAlert = new AlertDialog.Builder(this);
 
-            builder.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
+                        mUseGAAlert = null;
                         VectorApp.getInstance().setUseGA(VectorHomeActivity.this, true);
                     }
                 }
@@ -494,6 +515,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
+                        mUseGAAlert = null;
                         VectorApp.getInstance().setUseGA(VectorHomeActivity.this, false);
                     }
                 }
@@ -627,8 +649,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private void processIntentUniversalLink() {
         Intent intent;
         Uri uri;
-        if(null != (intent = getIntent())) {
 
+        if (null != (intent = getIntent())) {
             if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
                 Log.d(LOG_TAG,"## processIntentUniversalLink(): EXTRA_UNIVERSAL_LINK_URI present1");
                 uri = intent.getParcelableExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
