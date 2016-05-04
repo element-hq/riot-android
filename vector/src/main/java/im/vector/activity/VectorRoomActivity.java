@@ -1120,7 +1120,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
                                         imageId = Long.parseLong(lastSegment);
 
-                                        thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
+                                        thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND, null);
                                     } catch (Exception e) {
                                         Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
                                     }
