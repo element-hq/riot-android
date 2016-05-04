@@ -129,7 +129,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             // No user is logged => no session. Just forward request to the login activity
             Intent intent = new Intent(aContext, LoginActivity.class);
             intent.putExtra(EXTRA_UNIVERSAL_LINK_URI, aIntent.getData());
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             aContext.startActivity(intent);
             return;
         }
