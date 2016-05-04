@@ -153,6 +153,8 @@
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
+    <string name="auth_email_check_name_in_use_message">"Checking if user name is available..</string>
+    <string name="auth_email_registration_resumes_message">"Wait while registration resumes..</string>
     <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">"Home Server:"</string>
@@ -165,6 +167,7 @@
     <string name="login_error_unable_login">Unable to login</string>
     <string name="login_error_registration_network_error">Unable to register: Network error</string>
     <string name="login_error_unable_register">Unable to register</string>
+    <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
     <string name="login_error_invalid_credentials">Enter valid credentials</string>
     <string name="login_error_invalid_home_server">Enter valid URL</string>
 
