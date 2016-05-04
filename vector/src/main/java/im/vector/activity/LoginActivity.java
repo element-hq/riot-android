@@ -58,7 +58,6 @@ import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
@@ -116,6 +115,7 @@ public class LoginActivity extends MXCActionBarActivity {
     // mail validation
     public static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
     public static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
+    public static final String KEY_SUBMIT_TOKEN_SUCCESS = "success";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -185,6 +185,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // the next link parameters were not managed
     private boolean mIsMailValidationPending;
+    private boolean mIsUserNameAvailable;
 
     private Runnable mRegisterPollingRunnable;
     private Handler mHandler;
@@ -324,6 +325,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mIsUserNameAvailable = false;
                 onRegisterClick(true);
             }
         });
@@ -590,7 +592,7 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         }
 
-        Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg="+message);
+        Log.e(LOG_TAG, "## onFailureDuringAuthRequest(): Msg= \""+message+"\"");
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
@@ -631,11 +633,13 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param aMapParams map containing the parameters
      */
     private void startEmailOwnershipValidation(HashMap<String, String> aMapParams) {
-        Log.i(LOG_TAG, "## startEmailOwnershipValidation(): IN");
+        Log.i(LOG_TAG, "## startEmailOwnershipValidation(): IN aMapParams="+aMapParams);
         if(null != aMapParams) {
             // display waiting UI..
             setFlowsMaskEnabled(true);
-            onRegistrationStart("Wait while registration resumes..");
+
+            // display wait screen with no text (same as iOS) for now..
+            onRegistrationStart("");
 
             // set register mode
             mMode = MODE_ACCOUNT_CREATION;
@@ -668,7 +672,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         if (mMode == MODE_ACCOUNT_CREATION) {
             Log.i(LOG_TAG, "## submitEmailToken(): calling submitEmailTokenValidation()..");
-            mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Void>() {
+            mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Map<String,Object>>() {
                 private void errorHandler(String errorMessage) {
                     Log.w(LOG_TAG, "## submitEmailToken(): errorHandler().");
                     setFlowsMaskEnabled(false);
@@ -678,11 +682,25 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
 
                 @Override
-                public void onSuccess(Void info) {
-                    // the validation of mail ownership succeed, just resume the registration flow
-                    // next step: just register
-                    Log.w(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
-                    registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
+                public void onSuccess(Map<String,Object> mapResp) {
+                    if(null != mapResp) {
+                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - respObject=" + mapResp.toString());
+
+                        Boolean status = (Boolean)mapResp.get(KEY_SUBMIT_TOKEN_SUCCESS);
+                        if (null != status) {
+                            if (status.booleanValue()) {
+                                // the validation of mail ownership succeed, just resume the registration flow
+                                // next step: just register
+                                Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
+                                registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
+                            } else {
+                                Log.w(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
+                                errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
+                            }
+                        } else {
+                            Log.w(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failded (parameter missing)");
+                        }
+                    }
                 }
 
                 @Override
@@ -724,8 +742,10 @@ public class LoginActivity extends MXCActionBarActivity {
 
         Log.w(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): IN aSessionId="+aSessionId);
         // set session
-        if(null != mRegistrationResponse)
+        if(null != mRegistrationResponse) {
+            Log.w(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): update session ID, old value="+mRegistrationResponse.session);
             mRegistrationResponse.session = aSessionId;
+        }
 
         // remove URL scheme
         aIdentityServer = CommonActivityUtils.removeUrlScheme(aIdentityServer);
@@ -741,7 +761,7 @@ public class LoginActivity extends MXCActionBarActivity {
         registrationParams.auth = authParams;
         // Note: username, password and bind_email must not be set in registrationParams
 
-        Log.d(LOG_TAG, "## registerAfterEmailValidation(): authParams=" + authParams);
+        Log.d(LOG_TAG, "## registerAfterEmailValidation(): start register() with authParams=" + authParams);
         setFlowsMaskEnabled(true);
         register(registrationParams);
     }
@@ -803,9 +823,9 @@ public class LoginActivity extends MXCActionBarActivity {
                         @Override
                         public void onMatrixError (MatrixError e){
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
+                                Log.d(LOG_TAG, "## register(): onMatrixError - Msg="+e.mErrorBodyAsString);
                                 // waiting for email case
                                 if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
-
                                     // refresh the messages
                                     onRegistrationStart(getResources().getString(R.string.auth_email_validation_message));
 
@@ -840,7 +860,6 @@ public class LoginActivity extends MXCActionBarActivity {
                                     if ((null != e.mStatus) && (e.mStatus == 401)) {
                                         try {
                                             registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
-                                            Log.d(LOG_TAG, "## register(): Received status 401 - RegResponse="+e.mErrorBodyAsString);
                                         } catch (Exception castExcept) {
                                             Log.w(LOG_TAG, "## register(): Received status 401 - Exception - JsonUtils.toRegistrationFlowResponse()");
                                         }
@@ -850,7 +869,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                                     // check if the server response can be casted
                                     if (null != registrationFlowResponse) {
-                                        Log.d(LOG_TAG, "## register(): Received status 401 - Registration continues to next onRegisterClick()");
+                                        Log.d(LOG_TAG, "## register(): Received status 401 - Registration continues to next onRegisterClick() for captcha..");
                                         mRegistrationResponse = registrationFlowResponse;
                                         // next step
                                         onRegisterClick(false);
@@ -859,6 +878,8 @@ public class LoginActivity extends MXCActionBarActivity {
                                         onFailureDuringAuthRequest(e);
                                     }
                                 }
+                            } else {
+                                Log.d(LOG_TAG, "## register(): onMatrixError - received session is different, mMode="+mMode+"(MODE_ACCOUNT_CREATION="+MODE_ACCOUNT_CREATION+")");
                             }
                         }
                     });
@@ -870,6 +891,119 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         } else {
             Log.e(LOG_TAG, "## register(): Exit  - mRegistrationResponse=null");
+        }
+    }
+
+    /**
+     * Perform a register operation to check if the user name provided for the registration
+     * is available (ie server must not return M_USER_IN_USE)
+     *
+     * @param params registration params
+     */
+    private void checkNameAvailability(final RegistrationParams params) {
+        Log.d(LOG_TAG,"## checkNameAvailability(): IN");
+
+        // should not check login flows
+        if (mMode != MODE_ACCOUNT_CREATION) {
+            Log.d(LOG_TAG,"## checkNameAvailability(): exit1");
+            return;
+        }
+        if (null != mRegistrationResponse) {
+            try {
+                final HomeserverConnectionConfig hsConfig = getHsConfig();
+
+                // invalid URL
+                if (null == hsConfig) {
+                    Log.d(LOG_TAG,"## checkNameAvailability(): exit2");
+                    return;
+                } else {
+                    final String fSession = mRegistrationResponse.session;
+
+                    // display wait screen with no text (same as iOS) for now..
+                    onRegistrationStart("");
+
+                    mLoginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>() {
+                        // common local error handler
+                        private void onError (String errorMessage){
+                            if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
+                                setFlowsMaskEnabled(false);
+                                setLoginButtonsEnabled(false);
+                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(HomeserverConnectionConfig homeserverConnectionConfig) {
+                            // should not happen..  given the request, only a 401 status is expected from the server
+                            if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
+                                onRegisterClick(false);
+                            }
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e){
+                            Log.e(LOG_TAG, "## checkNameAvailability(): Network Error: " + e.getMessage(), e);
+                            onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e){
+                            onError(getString(R.string.login_error_unable_register) + " : " + e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError aErrorParam){
+                            if ((mMode == MODE_ACCOUNT_CREATION)/* && TextUtils.equals(fSession, getRegistrationSession())*/) {
+                                Log.d(LOG_TAG, "## checkNameAvailability(): onMatrixError Response="+aErrorParam.mErrorBodyAsString);
+
+                                if (TextUtils.equals(aErrorParam.errcode, MatrixError.USER_IN_USE)) {
+                                    // user name is already taken, the registration process stops here (new user name should be provided)
+                                    // ex: {"errcode":"M_USER_IN_USE","error":"User ID already taken."}
+                                    Log.d(LOG_TAG, "## checkNameAvailability(): user name is used");
+                                    onRegistrationEnd();
+                                    setFlowsMaskEnabled(false);
+                                    onFailureDuringAuthRequest(aErrorParam);
+                                } else {
+                                    Log.d(LOG_TAG, "## checkNameAvailability(): The registration continues");
+                                    RegistrationFlowResponse registrationFlowResponse = null;
+
+                                    // expected status code is 401
+                                    if ((null != aErrorParam.mStatus) && (aErrorParam.mStatus == 401)) {
+                                        try {
+                                            registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(aErrorParam.mErrorBodyAsString);
+                                        } catch (Exception castExcept) {
+                                            Log.w(LOG_TAG, "## checkNameAvailability(): Received status 401 - Exception - JsonUtils.toRegistrationFlowResponse()");
+                                        }
+                                    } else {
+                                        Log.d(LOG_TAG, "## checkNameAvailability(): Received not expected status 401 ="+aErrorParam.mStatus);
+                                    }
+
+                                    // check if the server response can be casted
+                                    if (null != registrationFlowResponse) {
+                                        Log.d(LOG_TAG, "## checkNameAvailability(): Received status 401 - Registration continues to next onRegisterClick()");
+
+                                        // update with the new registration value and go to next step
+                                        mIsUserNameAvailable = true;
+                                        mRegistrationResponse = registrationFlowResponse;
+                                        onRegisterClick(false);
+                                    } else {
+                                        onRegistrationEnd();
+                                        onFailureDuringAuthRequest(aErrorParam);
+                                    }
+                                }
+                            } else {
+                                Log.d(LOG_TAG, "## checkNameAvailability(): Received status 401 - Registration continues to next onRegisterClick()");
+                            }
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
+                onRegistrationEnd();
+                setFlowsMaskEnabled(false);
+            }
+        } else {
+            Log.e(LOG_TAG, "## checkNameAvailability(): Exit  - mRegistrationResponse=null");
         }
     }
 
@@ -937,6 +1071,7 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         if (supportedFlows.size() > 0) {
+            Log.w(LOG_TAG, "## onRegistrationFlow(): mRegistrationResponse updated");
             mRegistrationResponse = registrationFlowResponse;
             registrationFlowResponse.flows = supportedFlows;
         } else {
@@ -1004,6 +1139,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * else switch to a fallback page
      */
     private void checkRegistrationFlows() {
+        Log.d(LOG_TAG,"## checkRegistrationFlows(): IN");
         // should not check login flows
         if (mMode != MODE_ACCOUNT_CREATION) {
             return;
@@ -1051,6 +1187,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         @Override
                         public void onMatrixError(MatrixError e) {
                             if (mMode == MODE_ACCOUNT_CREATION) {
+                                Log.d(LOG_TAG,"## checkRegistrationFlows(): onMatrixError - Resp="+e.mErrorBodyAsString);
                                 RegistrationFlowResponse registrationFlowResponse = null;
 
                                 // when a response is not completed the server returns an error message
@@ -1197,6 +1334,23 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         final String fsession = mRegistrationResponse.session;
+
+        // ask server if chosen user name is available before doing anything
+        if(!mIsUserNameAvailable && !isEmailIdentityFlowCompleted()) {
+            Log.d(LOG_TAG,"## onRegisterClick(): start check user name flow");
+            setFlowsMaskEnabled(true);
+
+            // set only name value
+            RegistrationParams params = new RegistrationParams();
+            //params.auth = authParams;
+            params.username = name;
+            params.password = password;
+            params.bind_email = !TextUtils.isEmpty(email);
+
+            checkNameAvailability(params);
+            Log.d(LOG_TAG, "## onRegisterClick(): check user name flow exit");
+            return;
+        }
 
         // require an email registration
         if (!TextUtils.isEmpty(email) && !isEmailIdentityFlowCompleted()) {
