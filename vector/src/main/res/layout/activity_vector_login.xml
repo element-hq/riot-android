@@ -54,6 +54,19 @@
             android:textColor="@android:color/white"
             android:text="@string/auth_send_reset_email"/>
 
+        <Button
+            android:id="@+id/button_forgot_email_validate"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            android:background="@color/vector_green_color"
+            android:textColor="@android:color/white"
+            android:text="@string/auth_send_reset_email"/>
+
     </RelativeLayout>
 
     <!-- the main body is defined in a scroll view to avoid split items -->

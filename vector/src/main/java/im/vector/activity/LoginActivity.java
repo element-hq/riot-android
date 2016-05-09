@@ -46,18 +46,22 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
+import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
+import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
@@ -88,6 +92,7 @@ public class LoginActivity extends MXCActionBarActivity {
     static final int MODE_LOGIN = 1;
     static final int MODE_ACCOUNT_CREATION = 2;
     static final int MODE_FORGOT_PASSWORD = 3;
+    static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
@@ -135,6 +140,9 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // forgot password button
     private Button mForgotPasswordButton;
+
+    // The email has been validated
+    private Button mForgotValidateEmailButton;
 
     // the login account name
     private TextView mLoginEmailTextView;
@@ -305,6 +313,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mLoginButton = (Button) findViewById(R.id.button_login);
         mRegisterButton = (Button) findViewById(R.id.button_register);
         mForgotPasswordButton = (Button) findViewById(R.id.button_reset_password);
+        mForgotValidateEmailButton = (Button) findViewById(R.id.button_forgot_email_validate);
 
         mDisplayHomeServerUrlView = findViewById(R.id.display_server_url_layout);
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
@@ -355,6 +364,13 @@ public class LoginActivity extends MXCActionBarActivity {
             @Override
             public void onClick(View view) {
                 onForgotPasswordClick();
+            }
+        });
+
+        mForgotValidateEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onForgotOnEmailValidated();
             }
         });
 
@@ -518,6 +534,8 @@ public class LoginActivity extends MXCActionBarActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((MODE_ACCOUNT_CREATION == mMode) && (null != mRegistrationResponse)) {
+                // display the main layout
+                mMainLayout.setVisibility(View.VISIBLE);
                 // cancel the registration flow
                 mEmailValidationExtraParams = null;
                 mRegistrationResponse = null;
@@ -527,7 +545,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 mMode = MODE_LOGIN;
                 refreshDisplay();
                 return true;
-            } else if (MODE_FORGOT_PASSWORD == mMode) {
+            } else if ((MODE_FORGOT_PASSWORD == mMode) || (MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode)) {
+                // display the main layout
+                mMainLayout.setVisibility(View.VISIBLE);
                 // cancel the forget password mode
                 setFlowsMaskEnabled(false);
                 mMode = MODE_LOGIN;
@@ -583,7 +603,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * check if the current page is supported by the current implementation
      */
     private void checkFlows() {
-        if ((mMode == MODE_LOGIN) || (mMode == MODE_FORGOT_PASSWORD)) {
+        if ((mMode == MODE_LOGIN) || (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION)) {
             checkLoginFlows();
         } else {
             checkRegistrationFlows();
@@ -598,7 +618,103 @@ public class LoginActivity extends MXCActionBarActivity {
      * the user forgot his password
      */
     private void onForgotPasswordClick() {
+        // parameters
+        final String email = mForgotEmailTextView.getText().toString().trim();
+        final String password = mForgotPassword1TextView.getText().toString().trim();
+        final String passwordCheck = mForgotPassword2TextView.getText().toString().trim();
 
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_reset_password_missing_email), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_reset_password_missing_password), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (password.length() < 6) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!TextUtils.equals(password,passwordCheck)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final HomeserverConnectionConfig hsConfig = getHsConfig();
+        final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+
+        ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
+
+        // check if there is an account linked to this email
+        // 3Pid does the job
+        pid.requestValidationToken(client, null, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+                refreshDisplay();
+
+                // refresh the messages
+                onRegistrationStart(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+
+              /*  NSURL *identServerURL = [NSURL URLWithString:restClient.identityServer];
+                parameters = @{
+                    @"auth": @{@"threepid_creds": @{@"client_secret": submittedEmail.clientSecret, @"id_server": identServerURL.host, @"sid": submittedEmail.sid}, @"type": kMXLoginFlowTypeEmailIdentity, @"new_password": self.passWordTextField.text}                                                                                      };
+
+              */
+            }
+
+            /**
+             * Display a toast to warn that the operation failed
+             * @param errorMessage
+             */
+            private void onError(String errorMessage) {
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkError(final Exception e) {
+                UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                if (unrecCertEx != null) {
+                    final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+
+                    UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                        @Override
+                        public void onAccept() {
+                            onForgotPasswordClick();
+                        }
+
+                        @Override
+                        public void onIgnore() {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onReject() {
+                            onError(e.getLocalizedMessage());
+                        }
+                    });
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
+            }
+
+            @Override
+            public void onUnexpectedError (Exception e){
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError (MatrixError e){
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
+     * The user warns the client that the reset password email has been received
+     */
+    private void onForgotOnEmailValidated() {
+        //
     }
 
     //==============================================================================================================
@@ -1796,11 +1912,13 @@ public class LoginActivity extends MXCActionBarActivity {
         forgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
 
         boolean isLoginMode = mMode == MODE_LOGIN;
-        boolean isForgetPasswordMode = mMode == MODE_FORGOT_PASSWORD;
+        boolean isForgetPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
 
+        mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
         mLoginButton.setVisibility(isForgetPasswordMode ? View.GONE : View.VISIBLE);
         mRegisterButton.setVisibility(isForgetPasswordMode ? View.GONE : View.VISIBLE);
-        mForgotPasswordButton.setVisibility(isForgetPasswordMode ? View.VISIBLE : View.GONE);
+        mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
+        mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
 
         mLoginButton.setBackgroundColor(getResources().getColor(isLoginMode ? R.color.vector_green_color : android.R.color.white));
         mLoginButton.setTextColor(getResources().getColor(!isLoginMode ? R.color.vector_green_color : android.R.color.white));
@@ -1838,15 +1956,21 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param enabled enabled/disabled the action buttons
      */
     private void setActionButtonsEnabled(boolean enabled) {
-        boolean isForgotPasswordMode = (mMode == MODE_FORGOT_PASSWORD);
+        boolean isForgotPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
+
 
         // forgot password mode
         // the register and the login buttons are hidden
         mRegisterButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
         mLoginButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
-        mForgotPasswordButton.setVisibility(isForgotPasswordMode ? View.VISIBLE : View.GONE);
+
+        mForgotPasswordButton.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
         mForgotPasswordButton.setAlpha(enabled ? 1.0f : 0.5f);
         mForgotPasswordButton.setEnabled(enabled);
+
+        mForgotValidateEmailButton.setVisibility((mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) ? View.VISIBLE : View.GONE);
+        mForgotValidateEmailButton.setAlpha(enabled ? 1.0f : 0.5f);
+        mForgotValidateEmailButton.setEnabled(enabled);
 
         // other mode : display the login password button
         mLoginButton.setEnabled(enabled || (mMode == MODE_ACCOUNT_CREATION));

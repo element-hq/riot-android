@@ -162,6 +162,7 @@
     <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">"Home Server:"</string>
     <string name="auth_identity_server">"Identity Server:</string>
+    <string name="auth_reset_password_next_step_button">I have verified my email address</string>
     <string name="auth_reset_password_message">"To reset your password, enter the email address linked to your account:</string>
     <string name="auth_reset_password_missing_email">"The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_missing_password">"A new password must be entered.</string>
