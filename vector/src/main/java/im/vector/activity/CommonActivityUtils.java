@@ -1060,9 +1060,10 @@ public class CommonActivityUtils {
      * @param activity
      */
     public static void onLowMemory(Activity activity) {
-
         if (!VectorApp.isAppInBackground()) {
             Log.e(LOW_MEMORY_LOG_TAG, "Active application : onLowMemory from " + activity);
+
+            displayMemoryInformation(activity);
 
             if (CommonActivityUtils.shouldRestartApp()) {
                 Log.e(LOW_MEMORY_LOG_TAG, "restart");
