@@ -4,7 +4,7 @@
     <string name="resouces_country">UK</string>
 
     <!-- titles -->
-    <string name="app_name">Vector</string>
+    <string name="app_name">Vector.im</string>
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
@@ -153,6 +153,8 @@
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
+    <string name="auth_email_check_name_in_use_message">"Checking if user name is available..</string>
+    <string name="auth_email_registration_resumes_message">"Wait while registration resumes..</string>
     <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">"Home Server:"</string>
@@ -165,6 +167,7 @@
     <string name="login_error_unable_login">Unable to login</string>
     <string name="login_error_registration_network_error">Unable to register: Network error</string>
     <string name="login_error_unable_register">Unable to register</string>
+    <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
     <string name="login_error_invalid_credentials">Enter valid credentials</string>
     <string name="login_error_invalid_home_server">Enter valid URL</string>
 
@@ -347,7 +350,15 @@
     <string name="back">Back</string>
     <string name="remove">Remove</string>
     <string name="join">Join</string>
+    <string name="preview">Preview</string>
     <string name="reject">Reject</string>
+
+    <!-- Room Preview -->
+    <string name="room_preview_invitation_format">You have been invited to join this room by %s</string>
+    <string name="room_preview_subtitle">This is a preview of this room. Files and other attachments have been disabled.</string>
+    <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
+    <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">a room</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
@@ -365,6 +376,14 @@
     <string name="room_creation_make_private">Make private</string>
     <string name="room_creation_name_mobile_email">name, mobile or email</string>
     <string name="room_header_active_members">%1$d/%2$d active members</string>
+    <string name="room_title_members">%1$d members</string>
+    <string name="room_title_one_member">1 member</string>
+
+    <!--  Time -->
+    <string name="format_time_s">s</string>
+    <string name="format_time_m">m</string>
+    <string name="format_time_h">h</string>
+    <string name="format_time_d">d</string>
 
     <!--  Chat participants -->
     <string name="room_participants_title">Participants</string>
@@ -380,19 +399,23 @@
     <string name="room_participants_invite_another_user">Invite another user</string>
 
     <string name="room_participants_active">Active</string>
+    <string name="room_participants_online">Online</string>
+    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_unkown">Unkwown</string>
+    <string name="room_participants_idle">Idle</string>
+    <string name="room_participants_now">now</string>
+    <string name="room_participants_ago">ago</string>
     <string name="room_participants_invite">Invite</string>
     <string name="room_participants_leave">Left</string>
     <string name="room_participants_ban">Banned</string>
-    <string name="room_participants_active_less_1_hour">Active less 1 hour ago</string>
-    <string name="room_participants_active_less_x_hours">Active less %d hours ago</string>
-    <string name="room_participants_active_less_x_days">Active less %d days ago</string>
+
     <string name="you">You</string>
 
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
     <string name="room_participants_action_remove">Remove from this room</string>
-    <string name="room_participants_action_ban">Block</string>
-    <string name="room_participants_action_unban">Unblock</string>
+    <string name="room_participants_action_ban">Ban</string>
+    <string name="room_participants_action_unban">Unban</string>
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
@@ -555,5 +578,10 @@
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
+
+    <!-- GA use -->
+    <string name="ga_use_alert_message">Do you accept to help us to improve the application behaviour and to send crash reports ?</string>
+    <string name="ga_use_settings">Automatically send crash reports</string>
+    <string name="ga_use_disable_alert_message">You need to restart the application to disable the crash reports.</string>
 
 </resources>

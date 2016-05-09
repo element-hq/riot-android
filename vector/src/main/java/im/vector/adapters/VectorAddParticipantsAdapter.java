@@ -21,19 +21,20 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
@@ -54,6 +55,8 @@ import im.vector.util.VectorUtils;
  */
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
 
+    private static final String LOG_TAG = "VectorAddPartsAdapt";
+
     // search events listener
     public interface OnParticipantsSearchListener {
         /**
@@ -72,6 +75,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private int mLayoutResourceId;
 
     private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
+    private ArrayList<String> mDisplayNamesList = null;
     private String mPattern = "";
 
     ParticipantAdapterItem mFirstEntry;
@@ -136,12 +140,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // list the used members IDs
         ArrayList<String> idsToIgnore = new ArrayList<String>();
 
-        if (null != mRoomId) {
+        if ((null != mRoomId) && (null != store)) {
             Room fromRoom = store.getRoom(mRoomId);
-            Collection<RoomMember> members = fromRoom.getMembers();
-            for(RoomMember member : members) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                    idsToIgnore.add(member.getUserId());
+
+            if (null != fromRoom) {
+                Collection<RoomMember> members = fromRoom.getMembers();
+                for (RoomMember member : members) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                        idsToIgnore.add(member.getUserId());
+                    }
                 }
             }
         }
@@ -172,6 +179,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         // retrieve the list
         mUnusedParticipants = map.values();
+
+        // list the display names
+        mDisplayNamesList = new ArrayList<>();
+
+        for(ParticipantAdapterItem item : mUnusedParticipants) {
+            if (!TextUtils.isEmpty(item.mDisplayName)) {
+                mDisplayNamesList.add(item.mDisplayName);
+            }
+        }
     }
 
     /**
@@ -186,6 +202,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param firstEntry the first entry in the result.
      */
     public void refresh(final ParticipantAdapterItem firstEntry, final OnParticipantsSearchListener searchListener) {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "refresh : the session is not anymore active");
+            return;
+        }
+
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -279,15 +300,19 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
                     // try to provide a better display for a participant when the user is known.
                     if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
-                        User user = mSession.getDataHandler().getStore().getUser(participant.mUserId);
+                        IMXStore store = mSession.getDataHandler().getStore();
 
-                        if (null != user) {
-                            if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
-                                participant.mDisplayName = user.displayname;
-                            }
+                        if (null != store) {
+                            User user = store.getUser(participant.mUserId);
 
-                            if (null == participant.mAvatarUrl) {
-                                participant.mAvatarUrl = user.avatar_url;
+                            if (null != user) {
+                                if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
+                                    participant.mDisplayName = user.displayname;
+                                }
+
+                                if (null == participant.mAvatarUrl) {
+                                    participant.mAvatarUrl = user.avatar_url;
+                                }
                             }
                         }
                     }
@@ -298,7 +323,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         // set the display name
-        nameTextView.setText(participant.mDisplayName);
+        String displayname = participant.mDisplayName;
+
+        // detect if the username is used by several users
+        int pos = mDisplayNamesList.indexOf(displayname);
+
+        if (pos >= 0) {
+            if (pos == mDisplayNamesList.lastIndexOf(displayname)) {
+                pos = -1;
+            }
+        }
+
+        if ((pos >= 0) && !TextUtils.isEmpty(participant.mUserId)) {
+            displayname += " (" + participant.mUserId + ")";
+        }
+
+        nameTextView.setText(displayname);
 
         // set the presence
         String status = "";
@@ -316,7 +356,12 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         if (null != user) {
-            status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId);
+            status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    VectorAddParticipantsAdapter.this.notifyDataSetChanged();
+                }
+            });
         }
 
         statusTextView.setText(status);

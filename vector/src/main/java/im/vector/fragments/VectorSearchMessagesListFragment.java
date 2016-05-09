@@ -77,22 +77,27 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     @Override
     public void onPause() {
         super.onPause();
-        cancelSearch();
 
-        if (mIsMediaSearch) {
-            mSession.cancelSearchMediaName();
-        } else {
-            mSession.cancelSearchMessageText();
+        if (mSession.isAlive()) {
+            cancelSearch();
+
+            if (mIsMediaSearch) {
+                mSession.cancelSearchMediaName();
+            } else {
+                mSession.cancelSearchMessageText();
+            }
+            mSearchingPattern = null;
         }
-        mSearchingPattern = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+        if (mSession.isAlive()) {
+            if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+                ((VectorBaseSearchActivity.IVectorSearchActivity) getActivity()).refreshSearch();
+            }
         }
     }
 

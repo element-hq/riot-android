@@ -183,20 +183,22 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     protected void onResume() {
         super.onResume();
 
-        // check if the room has been left from another client
-        if ((null == mRoom.getMember(mSession.getMyUserId())) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
-            // pop to the home activity
-            Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
-            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            VectorRoomDetailsActivity.this.startActivity(intent);
-            return;
+        if (mSession.isAlive()) {
+            // check if the room has been left from another client
+            if ((null == mRoom.getMember(mSession.getMyUserId())) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                // pop to the home activity
+                Intent intent = new Intent(VectorRoomDetailsActivity.this, VectorHomeActivity.class);
+                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                VectorRoomDetailsActivity.this.startActivity(intent);
+                return;
+            }
+
+            // listen for room leave event
+            mRoom.addEventListener(mEventListener);
+
+            // start the file search if the selected tab is the file one
+            startFileSearch();
         }
-
-        // listen for room leave event
-        mRoom.addEventListener(mEventListener);
-
-        // start the file search if the selected tab is the file one
-        startFileSearch();
     }
 
     /**

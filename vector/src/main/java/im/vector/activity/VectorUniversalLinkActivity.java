@@ -16,22 +16,44 @@
 
 package im.vector.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
 /**
- * Dummy activity used to dispatch an universal link.
+ * Dummy activity used to dispatch the vector URL links.
  */
+@SuppressLint("LongLogTag")
 public class VectorUniversalLinkActivity extends Activity {
+    private static final String LOG_TAG = "VectorUniversalLinkActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent myBroadcastIntent = new Intent(VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK, getIntent().getData());
+        String intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
+
+        try {
+            // dispatch on the right receiver
+            if (VectorRegistrationReceiver.SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION.equals(getIntent().getData().getPath())) {
+
+                // logout current session, before starting any mail validation
+                // to have the LoginActivity always in a "no credentials state".
+                CommonActivityUtils.logout(this, false);
+                intentAction = VectorRegistrationReceiver.BROADCAST_ACTION_REGISTRATION;
+            } else {
+                intentAction = VectorUniversalLinkReceiver.BROADCAST_ACTION_UNIVERSAL_LINK;
+            }
+        } catch (Exception ex){
+            Log.e(LOG_TAG,"## onCreate(): Exception - Msg="+ex.getMessage());
+        }
+
+        Intent myBroadcastIntent = new Intent(intentAction, getIntent().getData());
         sendBroadcast(myBroadcastIntent);
         finish();
     }

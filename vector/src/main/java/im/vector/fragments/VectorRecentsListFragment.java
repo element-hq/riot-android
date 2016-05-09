@@ -17,6 +17,7 @@
 package im.vector.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.RoomTag;
@@ -46,10 +48,13 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomPreviewActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
+import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
 
 import java.util.HashMap;
@@ -484,6 +489,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             @Override
             public void onLeaveRoom(final String roomId) {
+                // clear any pending notification for this room
+                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
                 onForceRefresh();
             }
 
@@ -521,16 +528,15 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void onJoinRoom(MXSession session, String roomId) {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-        CommonActivityUtils.goToRoomPage(getActivity(), session, params);
+    public void onPreviewRoom(MXSession session, String roomId) {
+        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, null);
+        VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
+        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+        VectorApp.getCurrentActivity().startActivity(intent);
     }
 
     @Override
-    public void onRejectInvitation(MXSession session, String roomId) {
+    public void onRejectInvitation(final MXSession session, final String roomId) {
         Room room = session.getDataHandler().getRoom(roomId);
 
         if (null != room) {
@@ -543,6 +549,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                // clear any pending notification for this room
+                                EventStreamService.cancelNotificationsForRoomId(mSession.getMyUserId(), roomId);
                                 hideWaitingView();
                             }
                         });

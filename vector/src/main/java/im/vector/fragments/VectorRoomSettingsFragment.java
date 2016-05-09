@@ -587,7 +587,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         }
                     });
                 }
-
             }
         }
     }

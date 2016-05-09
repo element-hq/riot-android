@@ -17,10 +17,13 @@
 package im.vector;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -95,7 +98,7 @@ public class VectorApp extends Application {
         LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
         LogUtilities.storeLogcat();
 
-        initGoogleAnalytics();
+        initGoogleAnalytics(getApplicationContext());
 
         // get the contact update at application launch
         ContactsManager.refreshLocalContactsSnapshot(this);
@@ -239,7 +242,54 @@ public class VectorApp extends Application {
         return (null == mCurrentActivity) && (null != getInstance()) && getInstance().mIsInBackground;
     }
 
-    private void initGoogleAnalytics() {
+    //==============================================================================================================
+    // Google analytics
+    //==============================================================================================================
+    /**
+     * Update the GA use.
+     * @param context the context
+     * @param value the new value
+     */
+    public void setUseGA(Context context, boolean value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(context.getString(R.string.ga_use_settings), value);
+        editor.commit();
+
+        initGoogleAnalytics(context);
+    }
+
+    /**
+     * Tells if GA can be used
+     * @param context the context
+     * @return null if not defined, true / false when defined
+     */
+    public Boolean useGA(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        if (preferences.contains(context.getString(R.string.ga_use_settings))) {
+            return preferences.getBoolean(context.getString(R.string.ga_use_settings), false);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Initialize the google analytics
+     */
+    public void initGoogleAnalytics(Context context) {
+        Boolean useGA = useGA(context);
+
+        if (null == useGA) {
+            Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
+            return;
+        }
+
+        if (!useGA) {
+            Log.e(LOG_TAG, "The user decides to do not use Google Analytics");
+            return;
+        }
+
         // pull tracker resource ID from res/values/analytics.xml
         int trackerResId = getResources().getIdentifier("ga_trackingId", "string", getPackageName());
         if (trackerResId == 0) {

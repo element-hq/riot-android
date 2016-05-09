@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -64,7 +65,7 @@ import im.vector.util.VectorUtils;
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     public interface RoomEventListener {
-        void onJoinRoom(MXSession session, String roomId);
+        void onPreviewRoom(MXSession session, String roomId);
         void onRejectInvitation(MXSession session, String roomId);
 
         void onToggleRoomNotifications(MXSession session, String roomId);
@@ -537,8 +538,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     private void refreshSummariesList() {
         if (null != mMxSession) {
+            // sanity check
+            MXDataHandler dataHandler = mMxSession.getDataHandler();
+            if((null == dataHandler) || (null == dataHandler.getStore())) {
+                Log.w(DBG_CLASS_NAME,"## refreshSummariesList(): unexpected null values - return");
+                return;
+            }
+
             // update/retrieve the complete summary list
-            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(mMxSession.getDataHandler().getStore().getSummaries()) ;
+            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(dataHandler.getStore().getSummaries());
 
             // define comparator logic
             Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
@@ -683,7 +691,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
-        Button joinButton = (Button)convertView.findViewById(R.id.recents_invite_join_button);
+        Button preViewButton = (Button)convertView.findViewById(R.id.recents_invite_preview_button);
         Button rejectButton = (Button)convertView.findViewById(R.id.recents_invite_reject_button);
 
         View showMoreView = convertView.findViewById(R.id.roomSummaryAdapter_show_more_layout);
@@ -798,11 +806,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (isInvited) {
             actionClickArea.setVisibility(View.GONE);
 
-            joinButton.setOnClickListener(new View.OnClickListener() {
+            preViewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onJoinRoom(mMxSession, fRoomId);
+                        mListener.onPreviewRoom(mMxSession, fRoomId);
                     }
                 }
             });
@@ -876,11 +884,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             item = popup.getMenu().getItem(2);
             item.setIcon(null);
         }
-
-        item = popup.getMenu().getItem(3);
-        SpannableString s = new SpannableString(item.getTitle());
-        s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.vector_text_gray_color)), 0, s.length(), 0);
-        item.setTitle(s);
 
         // force to display the icon
         try {

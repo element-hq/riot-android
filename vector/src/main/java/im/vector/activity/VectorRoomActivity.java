@@ -362,6 +362,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             return;
         }
 
+        Log.d(LOG_TAG, "Create the activity");
+
         // bind the widgets of the room header view. The room header view is displayed by
         // clicking on the title of the action bar
         mRoomHeaderView = (RelativeLayout) findViewById(R.id.action_bar_header);
@@ -425,8 +427,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
-        Log.i(LOG_TAG, "Displaying " + roomId);
-
+        Log.d(LOG_TAG, "Displaying " + roomId);
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
 
@@ -557,9 +558,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
 
         if (mVectorMessageListFragment == null) {
+            Log.d(LOG_TAG, "Create VectorMessageListFragment");
+
             // this fragment displays messages and handles all message logic
             mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), mEventId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
+        } else {
+            Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
         }
 
         // in timeline mode (i.e search in the forward and backward room history)
@@ -601,6 +606,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         refreshSelfAvatar();
+
+        Log.d(LOG_TAG, "End of create");
     }
 
     /**
@@ -783,6 +790,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     @Override
     protected void onResume() {
+        Log.d(LOG_TAG, "++ Resume the activity");
+
         super.onResume();
         ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
@@ -880,6 +889,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                             }
             );
         }
+
+        Log.d(LOG_TAG, "-- Resume the activity");
     }
 
     private void updateActionBarTitleAndTopic() {
@@ -890,7 +901,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        // GA : msession is null
+        if (CommonActivityUtils.shouldRestartApp() || (null == mSession)) {
             return false;
         }
 
@@ -994,7 +1006,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
     private void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if ((null != formattedBody) || !manageIRCCommand(body)) {
+            if (!manageIRCCommand(body)) {
                 mVectorMessageListFragment.cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
@@ -1108,7 +1120,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
                                         imageId = Long.parseLong(lastSegment);
 
-                                        thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
+                                        thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND, null);
                                     } catch (Exception e) {
                                         Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
                                     }
@@ -1498,23 +1510,33 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             }
 
             if (timerTimeoutInMs > 0) {
-                mTypingTimer = new Timer();
+
                 mTypingTimerTask = new TimerTask() {
                     public void run() {
-                        if (mTypingTimerTask != null) {
-                            mTypingTimerTask.cancel();
-                            mTypingTimerTask = null;
-                        }
+                        synchronized (LOG_TAG) {
+                            if (mTypingTimerTask != null){
+                                mTypingTimerTask.cancel();
+                                mTypingTimerTask = null;
+                            }
 
-                        if (mTypingTimer != null) {
-                            mTypingTimer.cancel();
-                            mTypingTimer = null;
+                            if (mTypingTimer != null) {
+                                mTypingTimer.cancel();
+                                mTypingTimer = null;
+                            }
+                            // Post a new typing notification
+                            VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                         }
-                        // Post a new typing notification
-                        VectorRoomActivity.this.handleTypingNotification(0 != mLastTypingDate);
                     }
                 };
-                mTypingTimer.schedule(mTypingTimerTask, TYPING_TIMEOUT_MS);
+
+                try {
+                    synchronized (LOG_TAG) {
+                        mTypingTimer = new Timer();
+                        mTypingTimer.schedule(mTypingTimerTask, TYPING_TIMEOUT_MS);
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "fails to launch typing timer " + e.getLocalizedMessage());
+                }
 
                 // Compute the notification timeout in ms (consider the double of the local typing timeout)
                 notificationTimeoutMS = TYPING_TIMEOUT_MS * 2;

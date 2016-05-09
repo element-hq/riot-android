@@ -39,6 +39,7 @@ import com.squareup.okhttp.internal.Platform;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
@@ -58,6 +59,7 @@ import im.vector.activity.LoginActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomPreviewActivity;
 
 @SuppressLint("LongLogTag")
 /**
@@ -127,7 +129,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             // No user is logged => no session. Just forward request to the login activity
             Intent intent = new Intent(aContext, LoginActivity.class);
             intent.putExtra(EXTRA_UNIVERSAL_LINK_URI, aIntent.getData());
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             aContext.startActivity(intent);
             return;
         }
@@ -184,12 +186,46 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         aContext.startActivity(intent);
                     } else {
                         mParameters = params;
-                        manageRoom(aContext);
+                        manageRoomOnActivity(aContext);
                     }
                 } else {
                     Log.e(LOG_TAG, "## onReceive() Path not supported: " + intentUri.getPath());
                 }
             }
+        }
+    }
+
+    /**
+     * Start the universal link management when the login process is done.
+     * If there is no active activity, launch the home activity
+     * @param aContext
+     */
+    private void manageRoomOnActivity(final Context aContext) {
+        final Activity currentActivity = VectorApp.getCurrentActivity();
+
+        if (null != currentActivity) {
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    manageRoom(aContext);
+                }
+            });
+        } else {
+            // clear the activity stack to home activity
+            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+            aContext.startActivity(intent);
+
+            final Timer wakeup = new Timer();
+
+            wakeup.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    wakeup.cancel();
+                    manageRoomOnActivity(aContext);
+                }
+            }, 200);
         }
     }
 
@@ -202,16 +238,64 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private void manageRoom(final Context aContext) {
         String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
 
+        Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
+
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), mParameters);
+
             Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
-            if ((null != room) && !room.isInvited()) {
-                stopHomeActivitySpinner(aContext);
-                openRoomActivity(aContext);
+            // if the room exists
+            if (null != room) {
+                // either the user is invited
+                if (room.isInvited()) {
+                    Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+
+                    VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
+                    stopHomeActivitySpinner(aContext);
+                    Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                    VectorApp.getCurrentActivity().startActivity(intent);
+                } else {
+                    Log.d(LOG_TAG, "manageRoom : open the room");
+                    stopHomeActivitySpinner(aContext);
+                    openRoomActivity(aContext);
+                }
             } else {
-                inviteToJoin(aContext);
+                roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+
+                    private void onDone() {
+                        VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
+                        stopHomeActivitySpinner(aContext);
+
+                        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                        VectorApp.getCurrentActivity().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onSuccess(Void info) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onDone();
+                    }
+                });
             }
+
         } else { // room ID is provided as a room alias: get corresponding room ID
+
+            Log.d(LOG_TAG, "manageRoom : it is a room Alias");
 
             // Start the home activity with the waiting view enabled, while the URL link
             // is processed in the receiver. The receiver, once the URL was parsed, will stop the waiting view.
@@ -223,6 +307,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
                 @Override
                 public void onSuccess(final String roomId) {
+                    Log.d(LOG_TAG, "manageRoom : retrieve the room ID " + roomId);
                     if (!TextUtils.isEmpty(roomId)) {
                         mParameters.put(ULINK_ROOM_ID_KEY, roomId);
                         manageRoom(aContext);
@@ -273,143 +358,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
         context.startActivity(intent);
     }
-
-    /**
-     * Display an invitation dialog to join the room.
-     * If there is no active activity, launch the home activity
-     * @param aContext
-     */
-    private void inviteToJoin(final Context aContext) {
-        final Activity currentActivity = VectorApp.getCurrentActivity();
-
-        if (null != currentActivity) {
-            currentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
-                    if (mParameters.containsKey(ULINK_EMAIL_ID_KEY)) {
-                        String inviterName = mParameters.get(ULINK_INVITER_NAME_KEY);
-
-                        // should never happen
-                        if (null == inviterName) {
-                            inviterName = " ";
-                        }
-
-                        String email = mParameters.get(ULINK_EMAIL_ID_KEY);
-
-                        // should never happen
-                        if (null == email) {
-                            email = " ";
-                        }
-
-                        String part1 = aContext.getString(R.string.universal_link_email_invitation_body_1, inviterName);
-                        String part2 = aContext.getString(R.string.universal_link_email_invitation_body_2);
-                        String part3 = aContext.getString(R.string.universal_link_email_invitation_body_3, email);
-
-                        String msg = part1 + "\n" + part2 + "\n\n" + part3;
-
-                        SpannableString message = new SpannableString(msg);
-
-                        // accept / reject red bold
-                        message.setSpan(new ForegroundColorSpan(Color.parseColor("#FF0000")), msg.indexOf(part2), msg.indexOf(part2) + part2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        message.setSpan(new StyleSpan(Typeface.BOLD), msg.indexOf(part2), msg.indexOf(part2) + part2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        // inviter in bold
-                        int pos =  msg.indexOf(inviterName);
-                        message.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + inviterName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        // email in bold
-                        pos =  msg.indexOf(email);
-                        message.setSpan(new StyleSpan(Typeface.BOLD), pos, pos + email.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        builder.setMessage(message);
-                    } else {
-                        builder.setTitle(R.string.universal_link_join_alert_title);
-                        builder.setMessage(R.string.universal_link_join_alert_body);
-                    }
-
-                    builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Room room = mSession.getDataHandler().getRoom(mParameters.get(ULINK_ROOM_ID_KEY), true);
-
-                            // try to join the room
-                            room.joinWithThirdPartySigned(mParameters.get(ULINK_SIGN_URL_KEY), new ApiCallback<Void>() {
-                                @Override
-                                public void onSuccess(Void info) {
-                                    currentActivity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            stopHomeActivitySpinner(aContext);
-                                            openRoomActivity(aContext);
-                                        }
-                                    });
-                                }
-
-                                private void onError(final String errorMessage) {
-                                    currentActivity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            CommonActivityUtils.displayToast(aContext, errorMessage);
-                                            stopHomeActivitySpinner(aContext);
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onNetworkError(Exception e) {
-                                    onError(e.getLocalizedMessage());
-                                }
-
-                                @Override
-                                public void onMatrixError(MatrixError e) {
-                                    onError(e.getLocalizedMessage());
-                                }
-
-                                @Override
-                                public void onUnexpectedError(Exception e) {
-                                    onError(e.getLocalizedMessage());
-                                }
-                            });
-                        }
-                    });
-
-                    builder.setNegativeButton(R.string.reject, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            stopHomeActivitySpinner(aContext);
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                    // Must call show() prior to fetching text view
-                    TextView messageView = (TextView)dialog.findViewById(android.R.id.message);
-                    messageView.setGravity(Gravity.CENTER);
-
-                }
-            });
-
-        } else {
-            // clear the activity stack to home activity
-            Intent intent = new Intent(aContext, VectorHomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
-            aContext.startActivity(intent);
-
-            final Timer wakeup = new Timer();
-
-            wakeup.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    wakeup.cancel();
-                    inviteToJoin(aContext);
-                }
-            }, 200);
-        }
-    }
-
+    
     /***
      * Tries to parse an universal link.
      * @param uri the uri to parse
@@ -495,6 +444,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         return map;
     }
 
+    /**
+     * Stop the spinner on the home activity
+     * @param aContext the context.
+     */
     private void stopHomeActivitySpinner(Context aContext){
         Intent myBroadcastIntent = new Intent(VectorHomeActivity.BROADCAST_ACTION_STOP_WAITING_VIEW);
         aContext.sendBroadcast(myBroadcastIntent);
