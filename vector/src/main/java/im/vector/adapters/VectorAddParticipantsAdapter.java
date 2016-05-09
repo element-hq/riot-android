@@ -21,13 +21,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +54,8 @@ import im.vector.util.VectorUtils;
  * The first list row can be customized.
  */
 public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
+
+    private static final String LOG_TAG = "VectorAddPartsAdapt";
 
     // search events listener
     public interface OnParticipantsSearchListener {
@@ -137,12 +139,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         // list the used members IDs
         ArrayList<String> idsToIgnore = new ArrayList<String>();
 
-        if (null != mRoomId) {
+        if ((null != mRoomId) && (null != store)) {
             Room fromRoom = store.getRoom(mRoomId);
-            Collection<RoomMember> members = fromRoom.getMembers();
-            for(RoomMember member : members) {
-                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                    idsToIgnore.add(member.getUserId());
+
+            if (null != fromRoom) {
+                Collection<RoomMember> members = fromRoom.getMembers();
+                for (RoomMember member : members) {
+                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                        idsToIgnore.add(member.getUserId());
+                    }
                 }
             }
         }
@@ -187,6 +192,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param firstEntry the first entry in the result.
      */
     public void refresh(final ParticipantAdapterItem firstEntry, final OnParticipantsSearchListener searchListener) {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "refresh : the session is not anymore active");
+            return;
+        }
+
         this.setNotifyOnChange(false);
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
@@ -280,15 +290,19 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
                     // try to provide a better display for a participant when the user is known.
                     if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
-                        User user = mSession.getDataHandler().getStore().getUser(participant.mUserId);
+                        IMXStore store = mSession.getDataHandler().getStore();
 
-                        if (null != user) {
-                            if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
-                                participant.mDisplayName = user.displayname;
-                            }
+                        if (null != store) {
+                            User user = store.getUser(participant.mUserId);
 
-                            if (null == participant.mAvatarUrl) {
-                                participant.mAvatarUrl = user.avatar_url;
+                            if (null != user) {
+                                if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
+                                    participant.mDisplayName = user.displayname;
+                                }
+
+                                if (null == participant.mAvatarUrl) {
+                                    participant.mAvatarUrl = user.avatar_url;
+                                }
                             }
                         }
                     }
