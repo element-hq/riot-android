@@ -438,9 +438,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mSession.getDataHandler().removeListener(mEventsListener);
         }
 
-        if (null != mRoomCreationViewTimer) {
-            mRoomCreationViewTimer.cancel();
-            mRoomCreationViewTimer = null;
+        synchronized (this) {
+            if (null != mRoomCreationViewTimer) {
+                mRoomCreationViewTimer.cancel();
+                mRoomCreationViewTimer = null;
+            }
         }
 
         VectorApp.setCurrentActivity(null);
@@ -786,27 +788,31 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      *
      */
     private void hideRoomCreationViewWithDelay() {
-        if (null != mRoomCreationViewTimer) {
-            mRoomCreationViewTimer.cancel();
-        }
-
-        mRoomCreationView.setVisibility(View.GONE);
-
-        mRoomCreationViewTimer = new Timer();
-        mRoomCreationViewTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
+        synchronized (this) {
+            if (null != mRoomCreationViewTimer) {
                 mRoomCreationViewTimer.cancel();
-                mRoomCreationViewTimer = null;
-
-                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRoomCreationView.setVisibility(View.VISIBLE);
-                    }
-                });
             }
-        }, 1000);
+
+            mRoomCreationView.setVisibility(View.GONE);
+
+            mRoomCreationViewTimer = new Timer();
+            mRoomCreationViewTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    synchronized (this) {
+                        mRoomCreationViewTimer.cancel();
+                        mRoomCreationViewTimer = null;
+                    }
+
+                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRoomCreationView.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            }, 1000);
+        }
     }
 
     // warn the user scrolls up
