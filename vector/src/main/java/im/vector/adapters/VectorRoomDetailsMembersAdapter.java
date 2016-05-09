@@ -97,7 +97,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed);
     }
 
-    private final String LOG_TAG ="VectorRoomDetailsMembersAdapter";
+    private final String LOG_TAG ="VectorRoomDlsMemAdapt";
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private final MXMediasCache mMediasCache;
@@ -280,6 +280,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * @param aSearchListener search events listener, set to null if search not enabled
      */
     private void updateRoomMembersDataModel(final OnRoomMembersSearchListener aSearchListener) {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "updateRoomMembersDataModel the session is not anymore valid");
+            return;
+        }
+
         boolean isSearchEnabled = false;
         int groupIndex = 0;
         ParticipantAdapterItem participantItem;
@@ -600,6 +605,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             aConvertView.setTag(viewHolder);
         } else {
             viewHolder = (ChildMemberViewHolder)aConvertView.getTag();
+        }
+
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "getChildView : the session is not anymore valid");
+            return aConvertView;
         }
 
         // 1 - display member avatar

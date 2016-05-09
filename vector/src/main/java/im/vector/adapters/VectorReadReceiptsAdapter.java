@@ -57,7 +57,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
     private int mLayoutResourceId;
     private MXSession mSession;
     private Room mRoom;
-    private MXMediasCache mMediasCache;
+    //private MXMediasCache mMediasCache;
 
     public VectorReadReceiptsAdapter(Context context,int layoutResourceId, MXSession session,  Room room, MXMediasCache mediasCache) {
         super(context, layoutResourceId);
@@ -66,7 +66,7 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         mLayoutInflater = LayoutInflater.from(mContext);
         mSession = session;
         mRoom = room;
-        mMediasCache = mediasCache;
+        //mMediasCache = mediasCache;
     }
 
     @Override

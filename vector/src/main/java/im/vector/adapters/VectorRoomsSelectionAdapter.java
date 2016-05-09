@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import org.matrix.androidsdk.data.RoomSummary;
  * An adapter which display the rooms list
  */
 public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
+    private static final String LOG_TAG = "VectRoomsSelectAdapt";
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -58,6 +60,11 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
+        }
+
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "getView : the session is not anymore valid");
+            return convertView;
         }
 
         RoomSummary roomSummary = getItem(position);

@@ -278,7 +278,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
-
             Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
         }
     }

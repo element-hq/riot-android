@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -75,6 +76,10 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_search_file_by_name, parent, false);
+        }
+
+        if (!mSession.isAlive()) {
+            return convertView;
         }
 
         MessageRow row = getItem(position);

@@ -185,6 +185,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param isVideo true if the call is a video call
      */
     private void startCall(Room room, boolean isVideo) {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "startCall : the session is not anymore valid");
+            return;
+        }
+
         // create the call object
         IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
 
@@ -214,6 +219,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      */
     @Override
     public void performItemAction(final int aActionType) {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "performItemAction : the session is not anymore valid");
+            return;
+        }
+
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
                 Log.d(LOG_TAG,"## performItemAction(): Start new room");
@@ -306,6 +316,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @return
      */
     private Room searchCallableRoom() {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "searchCallableRoom : the session is not anymore valid");
+            return null;
+        }
+
         mCallableRoom = null;
         Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
 
@@ -330,6 +345,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      */
     private ArrayList<Integer> supportedActionsList() {
         ArrayList<Integer> supportedActions = new ArrayList<Integer>();
+
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "supportedActionsList : the session is not anymore valid");
+            return supportedActions;
+        }
+
         String selfUserId = mSession.getMyUserId();
 
         // Check user's power level before allowing an action (kick, ban, ...)
@@ -674,6 +695,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * Update the UI
      */
     private void updateUi() {
+        if (!mSession.isAlive()) {
+            Log.e(LOG_TAG, "updateUi : the session is not anymore valid");
+            return;
+        }
+
         if (null != mMemberNameTextView) {
             if ((null != mRoomMember) && !TextUtils.isEmpty(mRoomMember.displayname)) {
                 mMemberNameTextView.setText(mRoomMember.displayname);
