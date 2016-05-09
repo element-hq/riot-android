@@ -75,6 +75,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private int mLayoutResourceId;
 
     private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
+    private ArrayList<String> mDisplayNamesList = null;
     private String mPattern = "";
 
     ParticipantAdapterItem mFirstEntry;
@@ -178,6 +179,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         // retrieve the list
         mUnusedParticipants = map.values();
+
+        // list the display names
+        mDisplayNamesList = new ArrayList<>();
+
+        for(ParticipantAdapterItem item : mUnusedParticipants) {
+            if (!TextUtils.isEmpty(item.mDisplayName)) {
+                mDisplayNamesList.add(item.mDisplayName);
+            }
+        }
     }
 
     /**
@@ -313,7 +323,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         // set the display name
-        nameTextView.setText(participant.mDisplayName);
+        String displayname = participant.mDisplayName;
+
+        // detect if the username is used by several users
+        int pos = mDisplayNamesList.indexOf(displayname);
+
+        if (pos >= 0) {
+            if (pos == mDisplayNamesList.lastIndexOf(displayname)) {
+                pos = -1;
+            }
+        }
+
+        if ((pos >= 0) && !TextUtils.isEmpty(participant.mUserId)) {
+            displayname += " (" + participant.mUserId + ")";
+        }
+
+        nameTextView.setText(displayname);
 
         // set the presence
         String status = "";
