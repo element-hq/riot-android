@@ -361,7 +361,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (TextUtils.equals(mMemberId, selfUserId)) {
             supportedActions.add(ITEM_ACTION_LEAVE);
 
-            if (selfPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS)) {
+            if ((null != powerLevels) && (selfPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS))) {
                 // Check whether the user is admin (in this case he may reduce his power level to become moderator).
                 if (selfPowerLevel >= VECTOR_ROOM_ADMIN_LEVEL) {
                     supportedActions.add(ITEM_ACTION_SET_MODERATOR);
