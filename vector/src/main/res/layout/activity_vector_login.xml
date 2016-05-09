@@ -191,7 +191,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:hint="@string/hs_url"
-                        android:text="https://matrix.org" />
+                        android:text="@string/vector_im_server_url" />
 
                     <TextView
                         android:layout_marginTop="10dp"
@@ -206,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:hint="@string/identity_url"
-                        android:text="https://vector.im"/>
+                        android:text="@string/vector_im_server_url"/>
                 </LinearLayout>
 
                 <TextView
