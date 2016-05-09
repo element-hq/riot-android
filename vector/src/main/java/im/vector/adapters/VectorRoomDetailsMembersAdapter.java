@@ -115,6 +115,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     private ArrayList<ArrayList<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
 
+    private ArrayList<String> mDisplaynamesList = new ArrayList<String>();
+
     private int mGroupIndexInvitedMembers = -1;  // "Invited" index
     private int mGroupIndexPresentMembers = -1; // "Favourites" index
 
@@ -300,6 +302,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             mRoomMembersListByGroupPosition.clear();
         }
 
+        mDisplaynamesList = new ArrayList<String>();
+
         // reset group indexes
         mGroupIndexPresentMembers = -1;
         mGroupIndexInvitedMembers = -1;
@@ -332,6 +336,10 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     // the other members..
                     actualParticipants.add(participantItem);
                 }
+            }
+
+            if (!TextUtils.isEmpty(participantItem.mDisplayName)) {
+                mDisplaynamesList.add(participantItem.mDisplayName);
             }
         }
 
@@ -645,6 +653,22 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         // Specific member name: member is "You" - at 0 position we must find the logged user, we then do not display its name, but R.string.you
         String memberName = (isLoggedUserPosition && !isSearchMode) ? (String)mContext.getText(R.string.you) : participant.mDisplayName;
 
+        // detect if the displayname is used several times
+        if (!TextUtils.isEmpty(memberName)) {
+            int pos = mDisplaynamesList.indexOf(memberName);
+
+            if (pos >= 0) {
+                if (pos == mDisplaynamesList.lastIndexOf(memberName)) {
+                    pos = -1;
+                }
+            }
+
+            if ((pos >= 0) && !TextUtils.isEmpty(participant.mUserId)) {
+                memberName += " (" + participant.mUserId + ")";
+            }
+        }
+        viewHolder.mMemberNameTextView.setText(memberName);
+        
         // 2b admin badge
         viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.GONE);
 
@@ -660,8 +684,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 }
             }
         }
-        viewHolder.mMemberNameTextView.setText(memberName);
-
         // 3 - display member status
         viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId,new SimpleApiCallback<Void>() {
             @Override
