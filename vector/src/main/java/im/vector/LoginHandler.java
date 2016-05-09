@@ -326,7 +326,7 @@ public class LoginHandler {
      * @param aSid the server identity session id
      * @param aRespCallback asynchronous callback response
      */
-    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig, final int aToken, final String aClientSecret, final int aSid, final ApiCallback<Map<String,Object>> aRespCallback) {
+    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig, final String aToken, final String aClientSecret, final String aSid, final ApiCallback<Map<String,Object>> aRespCallback) {
         final ThreePid pid = new ThreePid(null,  ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 

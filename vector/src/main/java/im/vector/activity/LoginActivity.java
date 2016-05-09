@@ -644,9 +644,9 @@ public class LoginActivity extends MXCActionBarActivity {
             // set register mode
             mMode = MODE_ACCOUNT_CREATION;
 
-            int token = Integer.parseInt(aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN));
+            String token = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_TOKEN);
             String clientSecret = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_CLIENT_SECRET);
-            int identityServerSessId = Integer.parseInt(aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_IDENTITY_SERVER_SESSION_ID));
+            String identityServerSessId = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_IDENTITY_SERVER_SESSION_ID);
             String sessionId = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_SESSION_ID);
             String homeServer = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_HOME_SERVER_URL);
             String identityServer = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_IDENTITY_SERVER_URL);
@@ -666,7 +666,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param aSessionId      session ID
      * @param aHomeServer     home server url
      */
-    private void submitEmailToken(int aToken, final String aClientSecret, final int aSid, final String aSessionId, final String aHomeServer, final String aIdentityServer) {
+    private void submitEmailToken(final String aToken, final String aClientSecret, final String aSid, final String aSessionId, final String aHomeServer, final String aIdentityServer) {
         final HomeserverConnectionConfig homeServerConfig = mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(aHomeServer), Uri.parse(aIdentityServer), null, new ArrayList<Fingerprint>(), false);
         Log.i(LOG_TAG, "## submitEmailToken(): IN");
 
@@ -734,7 +734,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param aIdentityServer identity server url
      * @param aSessionId      session ID
      */
-    private void registerAfterEmailValidation(String aClientSecret, int aSid, String aIdentityServer, String aSessionId) {
+    private void registerAfterEmailValidation(String aClientSecret, String aSid, String aIdentityServer, String aSessionId) {
         mMode = MODE_ACCOUNT_CREATION;
         HashMap<String, Object> authParams = new HashMap<String, Object>();
         HashMap<String, Object> thirdPartyIdsCredentialsAuth = new HashMap<String, Object>();
