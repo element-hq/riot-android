@@ -46,6 +46,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
@@ -212,6 +213,9 @@ public class LoginActivity extends MXCActionBarActivity {
     // the next link parameters were not managed
     private boolean mIsMailValidationPending;
     private boolean mIsUserNameAvailable;
+
+    // use to reset the password when the user click on the email validation
+    private HashMap<String, String> mForgotPid = null;
 
     private Runnable mRegisterPollingRunnable;
     private Handler mHandler;
@@ -641,13 +645,13 @@ public class LoginActivity extends MXCActionBarActivity {
         }
 
         final HomeserverConnectionConfig hsConfig = getHsConfig();
-        final ThreePid pid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+        final ThreePid thirdPid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
 
         // check if there is an account linked to this email
         // 3Pid does the job
-        pid.requestValidationToken(client, null, new ApiCallback<Void>() {
+        thirdPid.requestValidationToken(client, null, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
@@ -656,11 +660,17 @@ public class LoginActivity extends MXCActionBarActivity {
                 // refresh the messages
                 onRegistrationStart(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
 
-              /*  NSURL *identServerURL = [NSURL URLWithString:restClient.identityServer];
-                parameters = @{
-                    @"auth": @{@"threepid_creds": @{@"client_secret": submittedEmail.clientSecret, @"id_server": identServerURL.host, @"sid": submittedEmail.sid}, @"type": kMXLoginFlowTypeEmailIdentity, @"new_password": self.passWordTextField.text}                                                                                      };
+                mForgotPid = new HashMap<String, String>();
+                mForgotPid.put("client_secret", thirdPid.clientSecret);
+                String identityServerHost = mIdentityServerText.getText().toString().trim();
+                if (identityServerHost.startsWith("http://")) {
+                    identityServerHost = identityServerHost.substring("http://".length());
+                } else if (identityServerHost.startsWith("https://")) {
+                    identityServerHost = identityServerHost.substring("https://".length());
+                }
 
-              */
+                mForgotPid.put("id_server", identityServerHost);
+                mForgotPid.put("sid", thirdPid.sid);
             }
 
             /**
@@ -714,7 +724,28 @@ public class LoginActivity extends MXCActionBarActivity {
      * The user warns the client that the reset password email has been received
      */
     private void onForgotOnEmailValidated() {
-        //
+        ProfileRestClient profileRestClient = new ProfileRestClient(getHsConfig());
+
+        profileRestClient.resetPassword(mForgotPassword1TextView.getText().toString().trim(), mForgotPid, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+            }
+        });
     }
 
     //==============================================================================================================
