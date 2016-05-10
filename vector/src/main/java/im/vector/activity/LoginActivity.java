@@ -184,17 +184,23 @@ public class LoginActivity extends MXCActionBarActivity {
     // used to display a UI mask on the screen
     private RelativeLayout mLoginMaskView;
 
+    // a text displayed while there is progress
     private TextView mProgressTextView;
 
+    // the layout (there is a layout for each mode)
     private View mMainLayout;
 
+    // HS / identity URL layouts
+    // the IS and the HS have a dedicated editText to let the user customize them.
     private boolean mIsHomeServerUrlIsDisplayed;
     private View mDisplayHomeServerUrlView;
     private View mHomeServerUrlsLayout;
     private ImageView mExpandImageView;
 
+    // the pending universal link uri (if any)
     private Parcelable mUniversalLinkUri;
 
+    // the HS and the IS urls
     String mHomeServerUrl = null;
     String mIdentityServerUrl = null;
 
@@ -223,6 +229,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private boolean mIsPasswordResetted;
 
+    // there is a polling thread to monitor when the email has been validated.
     private Runnable mRegisterPollingRunnable;
     private Handler mHandler;
 
@@ -541,28 +548,35 @@ public class LoginActivity extends MXCActionBarActivity {
         checkFlows();
     }
 
+    /**
+     * Cancel the current mode to switch to the login one.
+     * It should restore the login UI
+     */
+    private void fallbackToLoginMode() {
+        // display the main layout
+        mMainLayout.setVisibility(View.VISIBLE);
+
+        // cancel the registration flow
+        mEmailValidationExtraParams = null;
+        mRegistrationResponse = null;
+        onRegistrationEnd();
+        setFlowsMaskEnabled(false);
+
+        mMode = MODE_LOGIN;
+        refreshDisplay();
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Log.d(LOG_TAG, "KEYCODE_BACK pressed");
             if ((MODE_ACCOUNT_CREATION == mMode) && (null != mRegistrationResponse)) {
-                // display the main layout
-                mMainLayout.setVisibility(View.VISIBLE);
-                // cancel the registration flow
-                mEmailValidationExtraParams = null;
-                mRegistrationResponse = null;
-                onRegistrationEnd();
-                setFlowsMaskEnabled(false);
-
-                mMode = MODE_LOGIN;
-                refreshDisplay();
+                Log.d(LOG_TAG, "## cancel the registration mode");
+                fallbackToLoginMode();
                 return true;
             } else if ((MODE_FORGOT_PASSWORD == mMode) || (MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode)) {
-                // display the main layout
-                mMainLayout.setVisibility(View.VISIBLE);
-                // cancel the forget password mode
-                setFlowsMaskEnabled(false);
-                mMode = MODE_LOGIN;
-                refreshDisplay();
+                Log.d(LOG_TAG, "## cancel the forgot password mode");
+                fallbackToLoginMode();
                 return true;
             }
         }
@@ -656,12 +670,16 @@ public class LoginActivity extends MXCActionBarActivity {
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
 
+        Log.d(LOG_TAG, "onForgotPasswordClick for email " + email);
+
         // check if there is an account linked to this email
         // 3Pid does the job
         thirdPid.requestValidationToken(client, null, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 if (mMode == MODE_FORGOT_PASSWORD) {
+                    Log.d(LOG_TAG, "onForgotPasswordClick : requestValidationToken succeeds");
+
                     displayLoadingScreen(false, null);
 
                     mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
@@ -689,6 +707,8 @@ public class LoginActivity extends MXCActionBarActivity {
              * @param errorMessage
              */
             private void onError(String errorMessage) {
+                Log.e(LOG_TAG, "onForgotPasswordClick : requestValidationToken fails with error " + errorMessage);
+
                 if (mMode == MODE_FORGOT_PASSWORD) {
                     displayLoadingScreen(false, null);
 
@@ -746,6 +766,8 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void onForgotOnEmailValidated(final HomeserverConnectionConfig hsConfig) {
         if (mIsPasswordResetted) {
+            Log.d(LOG_TAG, "onForgotOnEmailValidated : go back to login screen");
+
             mIsPasswordResetted = false;
             mMode = MODE_LOGIN;
             onRegistrationEnd();
@@ -754,10 +776,14 @@ public class LoginActivity extends MXCActionBarActivity {
             ProfileRestClient profileRestClient = new ProfileRestClient(hsConfig);
             displayLoadingScreen(true, null);
 
+            Log.d(LOG_TAG, "onForgotOnEmailValidated : try to reset the password");
+
             profileRestClient.resetPassword(mForgotPassword1TextView.getText().toString().trim(), mForgotPid, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
+                        Log.d(LOG_TAG, "onForgotOnEmailValidated : the password has been updated");
+
                         displayLoadingScreen(false, null);
 
                         // refresh the messages
@@ -774,6 +800,8 @@ public class LoginActivity extends MXCActionBarActivity {
                  */
                 private void onError(String errorMessage, boolean cancel) {
                     if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
+                        Log.d(LOG_TAG, "onForgotOnEmailValidated : failed " + errorMessage);
+
                         // display the dedicated
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                         displayLoadingScreen(false, null);
@@ -797,6 +825,8 @@ public class LoginActivity extends MXCActionBarActivity {
                 public void onMatrixError(MatrixError e) {
                     if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
                         if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
+                            Log.d(LOG_TAG, "onForgotOnEmailValidated : failed UNAUTHORIZED");
+
                             onError(getResources().getString(R.string.auth_reset_password_error_unauthorized), false);
                         } else if (TextUtils.equals(e.errcode, MatrixError.NOT_FOUND)) {
                             String hsUrlString = hsConfig.getHomeserverUri().toString();
@@ -806,6 +836,9 @@ public class LoginActivity extends MXCActionBarActivity {
                             if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url))) {
                                 hsConfig.setHomeserverUri(Uri.parse(getString(R.string.matrix_org_server_url)));
                                 onForgotOnEmailValidated(hsConfig);
+
+                                Log.d(LOG_TAG, "onForgotOnEmailValidated : test with matrix.org as HS");
+
                             } else {
                                 onError(e.getLocalizedMessage(), false);
                             }
@@ -1745,6 +1778,14 @@ public class LoginActivity extends MXCActionBarActivity {
         imm.hideSoftInputFromWindow(mHomeServerText.getWindowToken(), 0);
     }
 
+    /**
+     * The user clicks on the login button
+     * @param hsConfig the HS config
+     * @param hsUrlString the HS url
+     * @param identityUrlString the Identity server URL
+     * @param username the username
+     * @param password the user password
+     */
     private void onLoginClick(final HomeserverConnectionConfig hsConfig, final String hsUrlString, final String identityUrlString, final String username, final String password) {
         onClick();
 
@@ -1785,13 +1826,14 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.e(LOG_TAG, "Network Error: " + e.getMessage(), e);
+                    Log.e(LOG_TAG, "onLoginClick : Network Error: " + e.getMessage());
                     setFlowsMaskEnabled(false);
                     Toast.makeText(getApplicationContext(), getString(R.string.login_error_network_error), Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    Log.e(LOG_TAG, "onLoginClick : onUnexpectedError" + e.getMessage());
                     setFlowsMaskEnabled(false);
                     String msg = getString(R.string.login_error_unable_login) + " : " + e.getMessage();
                     Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
@@ -1802,9 +1844,11 @@ public class LoginActivity extends MXCActionBarActivity {
                     // if the registration is forbidden with matrix.org url
                     // try with the vector.im HS
                     if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url)) && TextUtils.equals(e.errcode, MatrixError.FORBIDDEN)) {
+                        Log.e(LOG_TAG, "onLoginClick : test with matrix.org as HS");
                         mHomeserverConnectionConfig = new HomeserverConnectionConfig(Uri.parse(getString(R.string.matrix_org_server_url)), Uri.parse(identityUrlString), null, new ArrayList<Fingerprint>(), false);
                         onLoginClick(mHomeserverConnectionConfig, getString(R.string.matrix_org_server_url), identityUrlString, username, password);
                     } else {
+                        Log.e(LOG_TAG, "onLoginClick : onMatrixError " + e.getLocalizedMessage());
                         setFlowsMaskEnabled(false);
                         onFailureDuringAuthRequest(e);
                     }
@@ -1894,6 +1938,10 @@ public class LoginActivity extends MXCActionBarActivity {
     // Instance backup
     //==============================================================================================================
 
+    /**
+     * Restore the saved instance data.
+     * @param savedInstanceState the instance state
+     */
     private void restoreSavedData(Bundle savedInstanceState) {
         if (null != savedInstanceState) {
             mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
