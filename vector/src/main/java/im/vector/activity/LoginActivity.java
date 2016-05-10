@@ -46,18 +46,23 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.LoginRestClient;
+import org.matrix.androidsdk.rest.client.ProfileRestClient;
+import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
 import org.matrix.androidsdk.rest.model.login.RegistrationFlowResponse;
 import org.matrix.androidsdk.rest.model.login.RegistrationParams;
+import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
+import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 
@@ -87,6 +92,8 @@ public class LoginActivity extends MXCActionBarActivity {
     static final int MODE_UNKNOWN = 0;
     static final int MODE_LOGIN = 1;
     static final int MODE_ACCOUNT_CREATION = 2;
+    static final int MODE_FORGOT_PASSWORD = 3;
+    static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
@@ -103,6 +110,11 @@ public class LoginActivity extends MXCActionBarActivity {
     private static final String SAVED_CREATION_PASSWORD1 = "SAVED_CREATION_PASSWORD1";
     private static final String SAVED_CREATION_PASSWORD2 = "SAVED_CREATION_PASSWORD2";
     private static final String SAVED_CREATION_REGISTRATION_RESPONSE = "SAVED_CREATION_REGISTRATION_RESPONSE";
+
+    // forgot password
+    private static final String SAVED_FORGOT_EMAIL_ADDRESS = "SAVED_FORGOT_EMAIL_ADDRESS";
+    private static final String SAVED_FORGOT_PASSWORD1 = "SAVED_FORGOT_PASSWORD1";
+    private static final String SAVED_FORGOT_PASSWORD2 = "SAVED_FORGOT_PASSWORD2";
 
     // mode
     private static final String SAVED_MODE = "SAVED_MODE";
@@ -127,6 +139,12 @@ public class LoginActivity extends MXCActionBarActivity {
     // create account button
     private Button mRegisterButton;
 
+    // forgot password button
+    private Button mForgotPasswordButton;
+
+    // The email has been validated
+    private Button mForgotValidateEmailButton;
+
     // the login account name
     private TextView mLoginEmailTextView;
 
@@ -147,6 +165,15 @@ public class LoginActivity extends MXCActionBarActivity {
 
     // forgot my password
     private TextView mPasswordForgottenTxtView;
+
+    // the forgot password email text view
+    private TextView mForgotEmailTextView;
+
+    // the password 1 name
+    private TextView mForgotPassword1TextView;
+
+    // the password 2 name
+    private TextView mForgotPassword2TextView;
 
     // the home server text
     private EditText mHomeServerText;
@@ -187,6 +214,15 @@ public class LoginActivity extends MXCActionBarActivity {
     private boolean mIsMailValidationPending;
     private boolean mIsUserNameAvailable;
 
+    // use to reset the password when the user click on the email validation
+    private HashMap<String, String> mForgotPid = null;
+
+    /**
+     Tell whether the password has been reseted with success.
+     Used to return on login screen on submit button pressed.
+     */
+    private boolean mIsPasswordResetted;
+
     private Runnable mRegisterPollingRunnable;
     private Handler mHandler;
 
@@ -214,7 +250,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         Bundle receivedBundle;
 
-        if(null ==aIntent){
+        if(null == aIntent){
             Log.w(LOG_TAG, "## onNewIntent(): Unexpected value - aIntent=null ");
         } else if(null == (receivedBundle = aIntent.getExtras())){
             Log.w(LOG_TAG, "## onNewIntent(): Unexpected value - extras are missing");
@@ -275,13 +311,19 @@ public class LoginActivity extends MXCActionBarActivity {
         mCreationPassword1TextView = (EditText) findViewById(R.id.creation_password1);
         mCreationPassword2TextView = (EditText) findViewById(R.id.creation_password2);
 
+        // forgot password
         mPasswordForgottenTxtView = (TextView) findViewById(R.id.login_forgot_password);
+        mForgotEmailTextView = (TextView) findViewById(R.id.forget_email_address);
+        mForgotPassword1TextView = (TextView) findViewById(R.id.forget_new_password);
+        mForgotPassword2TextView = (TextView) findViewById(R.id.forget_confirm_new_password);
 
         mHomeServerText = (EditText) findViewById(R.id.login_matrix_server_url);
         mIdentityServerText = (EditText) findViewById(R.id.login_identity_url);
 
         mLoginButton = (Button) findViewById(R.id.button_login);
         mRegisterButton = (Button) findViewById(R.id.button_register);
+        mForgotPasswordButton = (Button) findViewById(R.id.button_reset_password);
+        mForgotValidateEmailButton = (Button) findViewById(R.id.button_forgot_email_validate);
 
         mDisplayHomeServerUrlView = findViewById(R.id.display_server_url_layout);
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
@@ -299,9 +341,6 @@ public class LoginActivity extends MXCActionBarActivity {
             mLoginEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
             mLoginPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
         }
-
-        // TODO implement the forgot password
-        mPasswordForgottenTxtView.setVisibility(View.GONE);
 
         // trap the UI events
         mLoginMaskView.setOnClickListener(new View.OnClickListener() {
@@ -327,6 +366,21 @@ public class LoginActivity extends MXCActionBarActivity {
             public void onClick(View view) {
                 mIsUserNameAvailable = false;
                 onRegisterClick(true);
+            }
+        });
+
+        // forgot password button
+        mForgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onForgotPasswordClick();
+            }
+        });
+
+        mForgotValidateEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onForgotOnEmailValidated();
             }
         });
 
@@ -374,12 +428,12 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         });
 
-
         // "forgot password?" handler
         mPasswordForgottenTxtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this, "Not implemented..", Toast.LENGTH_SHORT).show();
+                mMode = MODE_FORGOT_PASSWORD;
+                refreshDisplay();
             }
         });
 
@@ -490,12 +544,22 @@ public class LoginActivity extends MXCActionBarActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((MODE_ACCOUNT_CREATION == mMode) && (null != mRegistrationResponse)) {
+                // display the main layout
+                mMainLayout.setVisibility(View.VISIBLE);
                 // cancel the registration flow
                 mEmailValidationExtraParams = null;
                 mRegistrationResponse = null;
                 onRegistrationEnd();
                 setFlowsMaskEnabled(false);
 
+                mMode = MODE_LOGIN;
+                refreshDisplay();
+                return true;
+            } else if ((MODE_FORGOT_PASSWORD == mMode) || (MODE_FORGOT_PASSWORD_WAITING_VALIDATION == mMode)) {
+                // display the main layout
+                mMainLayout.setVisibility(View.VISIBLE);
+                // cancel the forget password mode
+                setFlowsMaskEnabled(false);
                 mMode = MODE_LOGIN;
                 refreshDisplay();
                 return true;
@@ -549,10 +613,205 @@ public class LoginActivity extends MXCActionBarActivity {
      * check if the current page is supported by the current implementation
      */
     private void checkFlows() {
-        if (mMode == MODE_LOGIN) {
+        if ((mMode == MODE_LOGIN) || (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION)) {
             checkLoginFlows();
         } else {
             checkRegistrationFlows();
+        }
+    }
+
+    //==============================================================================================================
+    // Forgot password management
+    //==============================================================================================================
+
+    /**
+     * the user forgot his password
+     */
+    private void onForgotPasswordClick() {
+        // parameters
+        final String email = mForgotEmailTextView.getText().toString().trim();
+        final String password = mForgotPassword1TextView.getText().toString().trim();
+        final String passwordCheck = mForgotPassword2TextView.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_reset_password_missing_email), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_reset_password_missing_password), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (password.length() < 6) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_password), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!TextUtils.equals(password,passwordCheck)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_password_dont_match), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.auth_invalid_email), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        displayLoadingScreen(true, null);
+
+        final HomeserverConnectionConfig hsConfig = getHsConfig();
+        final ThreePid thirdPid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
+
+        ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
+
+        // check if there is an account linked to this email
+        // 3Pid does the job
+        thirdPid.requestValidationToken(client, null, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                if (mMode == MODE_FORGOT_PASSWORD) {
+                    displayLoadingScreen(false, null);
+
+                    mMode = MODE_FORGOT_PASSWORD_WAITING_VALIDATION;
+                    refreshDisplay();
+
+                    // refresh the messages
+                    onRegistrationStart(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+
+                    mForgotPid = new HashMap<String, String>();
+                    mForgotPid.put("client_secret", thirdPid.clientSecret);
+                    String identityServerHost = mIdentityServerText.getText().toString().trim();
+                    if (identityServerHost.startsWith("http://")) {
+                        identityServerHost = identityServerHost.substring("http://".length());
+                    } else if (identityServerHost.startsWith("https://")) {
+                        identityServerHost = identityServerHost.substring("https://".length());
+                    }
+
+                    mForgotPid.put("id_server", identityServerHost);
+                    mForgotPid.put("sid", thirdPid.sid);
+                }
+            }
+
+            /**
+             * Display a toast to warn that the operation failed
+             * @param errorMessage
+             */
+            private void onError(String errorMessage) {
+                if (mMode == MODE_FORGOT_PASSWORD) {
+                    displayLoadingScreen(false, null);
+
+                    // display the dedicated
+                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    mMode = MODE_LOGIN;
+                    onRegistrationEnd();
+                    refreshDisplay();
+                }
+            }
+
+            @Override
+            public void onNetworkError(final Exception e) {
+                if (mMode == MODE_FORGOT_PASSWORD) {
+                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                    if (unrecCertEx != null) {
+                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+
+                        UnrecognizedCertHandler.show(hsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                            @Override
+                            public void onAccept() {
+                                onForgotPasswordClick();
+                            }
+
+                            @Override
+                            public void onIgnore() {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onReject() {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
+                    } else {
+                        onError(e.getLocalizedMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onUnexpectedError (Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError (MatrixError e){
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
+     * The user warns the client that the reset password email has been received
+     */
+    private void onForgotOnEmailValidated() {
+        if (mIsPasswordResetted) {
+            mIsPasswordResetted = false;
+            mMode = MODE_LOGIN;
+            onRegistrationEnd();
+            refreshDisplay();
+        } else {
+            ProfileRestClient profileRestClient = new ProfileRestClient(getHsConfig());
+            displayLoadingScreen(true, null);
+
+            profileRestClient.resetPassword(mForgotPassword1TextView.getText().toString().trim(), mForgotPid, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
+                        displayLoadingScreen(false, null);
+
+                        // refresh the messages
+                        onRegistrationStart(getResources().getString(R.string.auth_reset_password_success_message));
+                        mIsPasswordResetted = true;
+                        refreshDisplay();
+                    }
+                }
+
+                /**
+                 * Display a toast to warn that the operation failed
+                 *
+                 * @param errorMessage
+                 */
+                private void onError(String errorMessage, boolean cancel) {
+                    if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
+                        // display the dedicated
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        displayLoadingScreen(false, null);
+
+                        if (cancel) {
+                            mMode = MODE_LOGIN;
+                            onRegistrationEnd();
+                            refreshDisplay();
+                        } else {
+                            onRegistrationStart(getResources().getString(R.string.auth_reset_password_success_message));
+                        }
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getLocalizedMessage(), false);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
+                        if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
+                            onError(getResources().getString(R.string.auth_reset_password_error_unauthorized), false);
+                        } else if (TextUtils.equals(e.errcode, MatrixError.NOT_FOUND)) {
+                            onError(getResources().getString(R.string.auth_reset_password_error_not_found), false);
+                        } else {
+                            onError(e.getLocalizedMessage(), true);
+                        }
+                    }
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getLocalizedMessage(), true);
+                }
+            });
         }
     }
 
@@ -676,7 +935,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 private void errorHandler(String errorMessage) {
                     Log.w(LOG_TAG, "## submitEmailToken(): errorHandler().");
                     setFlowsMaskEnabled(false);
-                    setLoginButtonsEnabled(false);
+                    setActionButtonsEnabled(false);
                     onRegistrationEnd();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 }
@@ -786,7 +1045,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 // invalid URL
                 if (null == hsConfig) {
-                    setLoginButtonsEnabled(false);
+                    setActionButtonsEnabled(false);
                 } else {
 
                     final String fSession = mRegistrationResponse.session;
@@ -927,7 +1186,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         private void onError (String errorMessage){
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
                                 setFlowsMaskEnabled(false);
-                                setLoginButtonsEnabled(false);
+                                setActionButtonsEnabled(false);
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -1044,7 +1303,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void onRegistrationFlow(HomeserverConnectionConfig hsConfig, RegistrationFlowResponse registrationFlowResponse) {
         setFlowsMaskEnabled(false);
-        setLoginButtonsEnabled(true);
+        setActionButtonsEnabled(true);
 
         ArrayList<LoginFlow> supportedFlows = new ArrayList<LoginFlow>();
 
@@ -1151,7 +1410,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 // invalid URL
                 if (null == hsConfig) {
-                    setLoginButtonsEnabled(false);
+                    setActionButtonsEnabled(false);
                 } else {
                     setFlowsMaskEnabled(true);
 
@@ -1392,7 +1651,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 private void onError (String errorMessage){
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fsession, getRegistrationSession()))) {
                         setFlowsMaskEnabled(false);
-                        setLoginButtonsEnabled(false);
+                        setActionButtonsEnabled(false);
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -1545,7 +1804,7 @@ public class LoginActivity extends MXCActionBarActivity {
         } catch (Exception e) {
             Toast.makeText(this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
             setFlowsMaskEnabled(false);
-            setLoginButtonsEnabled(true);
+            setActionButtonsEnabled(true);
         }
     }
 
@@ -1565,7 +1824,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
             // invalid URL
             if (null == hsConfig) {
-                setLoginButtonsEnabled(false);
+                setActionButtonsEnabled(false);
             } else {
                 setFlowsMaskEnabled(true);
 
@@ -1574,7 +1833,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     public void onSuccess(List<LoginFlow> flows) {
                         if (mMode == MODE_LOGIN) {
                             setFlowsMaskEnabled(false);
-                            setLoginButtonsEnabled(true);
+                            setActionButtonsEnabled(true);
                             boolean isSupported = true;
 
                             // supported only m.login.password by now
@@ -1594,7 +1853,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     private void onError(String errorMessage) {
                         if (mMode == MODE_LOGIN) {
                             setFlowsMaskEnabled(false);
-                            setLoginButtonsEnabled(false);
+                            setActionButtonsEnabled(false);
                             Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }
@@ -1638,6 +1897,10 @@ public class LoginActivity extends MXCActionBarActivity {
             mCreationUsernameTextView.setText(savedInstanceState.getString(SAVED_CREATION_USER_NAME));
             mCreationPassword1TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD1));
             mCreationPassword2TextView.setText(savedInstanceState.getString(SAVED_CREATION_PASSWORD2));
+
+            mForgotEmailTextView.setText(savedInstanceState.getString(SAVED_FORGOT_EMAIL_ADDRESS));
+            mForgotPassword1TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD1));
+            mForgotPassword2TextView.setText(savedInstanceState.getString(SAVED_FORGOT_PASSWORD2));
 
             mRegistrationResponse = (RegistrationFlowResponse) savedInstanceState.getSerializable(SAVED_CREATION_REGISTRATION_RESPONSE);
 
@@ -1697,6 +1960,18 @@ public class LoginActivity extends MXCActionBarActivity {
             savedInstanceState.putString(SAVED_CREATION_PASSWORD2, mCreationPassword2TextView.getText().toString().trim());
         }
 
+        if (!TextUtils.isEmpty(mForgotEmailTextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_FORGOT_EMAIL_ADDRESS, mForgotEmailTextView.getText().toString().trim());
+        }
+
+        if (!TextUtils.isEmpty(mForgotPassword1TextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_FORGOT_PASSWORD1, mForgotPassword1TextView.getText().toString().trim());
+        }
+
+        if (!TextUtils.isEmpty(mForgotPassword2TextView.getText().toString().trim())) {
+            savedInstanceState.putString(SAVED_FORGOT_PASSWORD2, mForgotPassword2TextView.getText().toString().trim());
+        }
+
         if (null != mRegistrationResponse) {
             savedInstanceState.putSerializable(SAVED_CREATION_REGISTRATION_RESPONSE, mRegistrationResponse);
         }
@@ -1725,18 +2000,31 @@ public class LoginActivity extends MXCActionBarActivity {
         mHomeServerUrlsLayout.setVisibility(mIsHomeServerUrlIsDisplayed ? View.VISIBLE : View.GONE);
         mExpandImageView.setImageResource(mIsHomeServerUrlIsDisplayed ? R.drawable.ic_material_arrow_drop_down_black : R.drawable.ic_material_arrow_drop_up_black);
 
-        //
-        boolean isLoginMode = mMode == MODE_LOGIN;
-
+        // views
         View loginLayout = findViewById(R.id.login_inputs_layout);
         View creationLayout = findViewById(R.id.creation_inputs_layout);
+        View forgetPasswordLayout = findViewById(R.id.forget_password_inputs_layout);
 
-        loginLayout.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
-        creationLayout.setVisibility(isLoginMode ? View.GONE : View.VISIBLE);
+        loginLayout.setVisibility((mMode == MODE_LOGIN) ? View.VISIBLE : View.GONE);
+        creationLayout.setVisibility((mMode == MODE_ACCOUNT_CREATION) ? View.VISIBLE : View.GONE);
+        forgetPasswordLayout.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
+
+        boolean isLoginMode = mMode == MODE_LOGIN;
+        boolean isForgetPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
+
+        mPasswordForgottenTxtView.setVisibility(isLoginMode ? View.VISIBLE : View.GONE);
+        mLoginButton.setVisibility(isForgetPasswordMode ? View.GONE : View.VISIBLE);
+        mRegisterButton.setVisibility(isForgetPasswordMode ? View.GONE : View.VISIBLE);
+        mForgotPasswordButton.setVisibility(mMode == MODE_FORGOT_PASSWORD ? View.VISIBLE : View.GONE);
+        mForgotValidateEmailButton.setVisibility(mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION ? View.VISIBLE : View.GONE);
+
+        // update the button text to the current status
+        // 1 - the user does not warn that he clicks on the email validation
+        // 2 - THe password has been resetted and the user is invited to swicth to the login screen
+        mForgotValidateEmailButton.setText(mIsPasswordResetted ? R.string.auth_return_to_login : R.string.auth_reset_password_next_step_button);
 
         mLoginButton.setBackgroundColor(getResources().getColor(isLoginMode ? R.color.vector_green_color : android.R.color.white));
         mLoginButton.setTextColor(getResources().getColor(!isLoginMode ? R.color.vector_green_color : android.R.color.white));
-
         mRegisterButton.setBackgroundColor(getResources().getColor(!isLoginMode ? R.color.vector_green_color : android.R.color.white));
         mRegisterButton.setTextColor(getResources().getColor(isLoginMode ? R.color.vector_green_color : android.R.color.white));
     }
@@ -1746,19 +2034,19 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param aIsMaskEnabled
      */
     private void setFlowsMaskEnabled(boolean aIsMaskEnabled) {
-        setFlowsMaskEnabled(aIsMaskEnabled, null);
+        displayLoadingScreen(aIsMaskEnabled, null);
     }
 
     /**
      * display a loading screen mask over the login screen
-     * @param aIsMaskEnabled true to enable the loading screen, false otherwise
+     * @param isVisible true to enable the loading screen, false otherwise
      */
-    private void setFlowsMaskEnabled(boolean aIsMaskEnabled, String progressText) {
+    private void displayLoadingScreen(boolean isVisible, String progressText) {
         // disable/enable login buttons
-        setLoginButtonsEnabled(!aIsMaskEnabled);
+        setActionButtonsEnabled(!isVisible);
 
-        if(null != mLoginMaskView) {
-            mLoginMaskView.setVisibility(aIsMaskEnabled ? View.VISIBLE : View.GONE);
+        if (null != mLoginMaskView) {
+            mLoginMaskView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         }
 
         if (null != mProgressTextView) {
@@ -1768,9 +2056,26 @@ public class LoginActivity extends MXCActionBarActivity {
     }
 
     /**
-     * @param enabled enabled/disabled the login buttons
+     * @param enabled enabled/disabled the action buttons
      */
-    private void setLoginButtonsEnabled(boolean enabled) {
+    private void setActionButtonsEnabled(boolean enabled) {
+        boolean isForgotPasswordMode = (mMode == MODE_FORGOT_PASSWORD) || (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION);
+
+
+        // forgot password mode
+        // the register and the login buttons are hidden
+        mRegisterButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
+        mLoginButton.setVisibility(isForgotPasswordMode ? View.GONE : View.VISIBLE);
+
+        mForgotPasswordButton.setVisibility((mMode == MODE_FORGOT_PASSWORD) ? View.VISIBLE : View.GONE);
+        mForgotPasswordButton.setAlpha(enabled ? 1.0f : 0.5f);
+        mForgotPasswordButton.setEnabled(enabled);
+
+        mForgotValidateEmailButton.setVisibility((mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) ? View.VISIBLE : View.GONE);
+        mForgotValidateEmailButton.setAlpha(enabled ? 1.0f : 0.5f);
+        mForgotValidateEmailButton.setEnabled(enabled);
+
+        // other mode : display the login password button
         mLoginButton.setEnabled(enabled || (mMode == MODE_ACCOUNT_CREATION));
         mRegisterButton.setEnabled(enabled || (mMode == MODE_LOGIN));
 
@@ -1893,7 +2198,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 Log.d(LOG_TAG,"## onActivityResult(): RESULT_CANCELED && FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE");
                 // reset the home server to let the user writes a valid one.
                 mHomeServerText.setText("https://");
-                setLoginButtonsEnabled(false);
+                setActionButtonsEnabled(false);
             }
         }
     }
