@@ -381,7 +381,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mForgotValidateEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onForgotOnEmailValidated();
+                onForgotOnEmailValidated(getHsConfig());
             }
         });
 
@@ -744,14 +744,14 @@ public class LoginActivity extends MXCActionBarActivity {
     /**
      * The user warns the client that the reset password email has been received
      */
-    private void onForgotOnEmailValidated() {
+    private void onForgotOnEmailValidated(final HomeserverConnectionConfig hsConfig) {
         if (mIsPasswordResetted) {
             mIsPasswordResetted = false;
             mMode = MODE_LOGIN;
             onRegistrationEnd();
             refreshDisplay();
         } else {
-            ProfileRestClient profileRestClient = new ProfileRestClient(getHsConfig());
+            ProfileRestClient profileRestClient = new ProfileRestClient(hsConfig);
             displayLoadingScreen(true, null);
 
             profileRestClient.resetPassword(mForgotPassword1TextView.getText().toString().trim(), mForgotPid, new ApiCallback<Void>() {
@@ -799,7 +799,16 @@ public class LoginActivity extends MXCActionBarActivity {
                         if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                             onError(getResources().getString(R.string.auth_reset_password_error_unauthorized), false);
                         } else if (TextUtils.equals(e.errcode, MatrixError.NOT_FOUND)) {
-                            onError(getResources().getString(R.string.auth_reset_password_error_not_found), false);
+                            String hsUrlString = hsConfig.getHomeserverUri().toString();
+
+                            // if the identifier is not found on vector.im
+                            // check if it was created with matrix.org
+                            if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url))) {
+                                hsConfig.setHomeserverUri(Uri.parse(getString(R.string.matrix_org_server_url)));
+                                onForgotOnEmailValidated(hsConfig);
+                            } else {
+                                onError(e.getLocalizedMessage(), false);
+                            }
                         } else {
                             onError(e.getLocalizedMessage(), true);
                         }
