@@ -356,7 +356,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_room);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;
@@ -902,7 +902,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
         // GA : msession is null
-        if (CommonActivityUtils.shouldRestartApp() || (null == mSession)) {
+        if (CommonActivityUtils.shouldRestartApp(this) || (null == mSession)) {
             return false;
         }
 

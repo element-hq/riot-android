@@ -193,7 +193,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_home);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;
@@ -543,7 +543,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
 

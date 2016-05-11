@@ -82,7 +82,7 @@ public class VectorRoomPreviewActivity extends MXCActionBarActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
         }

@@ -153,7 +153,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_medias_picker);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;

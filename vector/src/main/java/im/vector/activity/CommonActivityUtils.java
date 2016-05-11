@@ -150,7 +150,7 @@ public class CommonActivityUtils {
         }
     }
 
-    public static boolean shouldRestartApp() {
+    public static boolean shouldRestartApp(Context context) {
         EventStreamService eventStreamService = EventStreamService.getInstance();
 
         if (!Matrix.hasValidSessions()) {
@@ -158,10 +158,11 @@ public class CommonActivityUtils {
         }
 
         if (null == eventStreamService) {
-            Log.e(LOG_TAG, "shouldRestartApp : eventStreamService is null");
+            Log.e(LOG_TAG, "eventStreamService is null : restart the event stream");
+            CommonActivityUtils.startEventStreamService(context);
         }
 
-        return !Matrix.hasValidSessions() || (null == eventStreamService);
+        return !Matrix.hasValidSessions();
     }
 
     public static final String RESTART_IN_PROGRESS_KEY = "RESTART_IN_PROGRESS_KEY";
@@ -1067,7 +1068,7 @@ public class CommonActivityUtils {
 
             displayMemoryInformation(activity);
 
-            if (CommonActivityUtils.shouldRestartApp()) {
+            if (CommonActivityUtils.shouldRestartApp(activity)) {
                 Log.e(LOW_MEMORY_LOG_TAG, "restart");
                 CommonActivityUtils.restartApp(activity);
             } else {

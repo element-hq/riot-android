@@ -358,7 +358,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(getActivity())) {
             return;
         }
 

@@ -108,7 +108,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             CommonActivityUtils.restartApp(this);
             return;
         }
@@ -177,7 +177,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
 

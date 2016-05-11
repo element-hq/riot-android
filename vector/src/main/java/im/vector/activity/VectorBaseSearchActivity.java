@@ -140,7 +140,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
 
