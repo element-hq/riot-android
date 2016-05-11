@@ -272,10 +272,11 @@ public class LoginActivity extends MXCActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         if (null == getIntent()) {
-            Log.d(LOG_TAG, "## onCreate(): IN");
+            Log.d(LOG_TAG, "## onCreate(): IN with no intent");
         } else {
-            Log.d(LOG_TAG, "## onCreate(): with flags " + Integer.toHexString(getIntent().getFlags()));
+            Log.d(LOG_TAG, "## onCreate(): IN with flags " + Integer.toHexString(getIntent().getFlags()));
         }
 
         super.onCreate(savedInstanceState);
@@ -286,8 +287,13 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // already registered
         if (hasCredentials()) {
-            Log.e(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
-            goToSplash();
+            if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
+                Log.e(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
+                goToSplash();
+            } else {
+                Log.e(LOG_TAG, "## onCreate(): close the login screen because it is a temporary task");
+            }
+
             finish();
             return;
         }
