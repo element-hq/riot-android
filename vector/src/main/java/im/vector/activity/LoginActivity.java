@@ -272,7 +272,11 @@ public class LoginActivity extends MXCActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "## onCreate(): IN");
+        if (null == getIntent()) {
+            Log.d(LOG_TAG, "## onCreate(): IN");
+        } else {
+            Log.d(LOG_TAG, "## onCreate(): with flags " + Integer.toHexString(getIntent().getFlags()));
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_login);
