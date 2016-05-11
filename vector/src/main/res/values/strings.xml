@@ -41,6 +41,10 @@
     <string name="chat_with">Chat with </string>
     <string name="delete">Delete</string>
 
+    <!-- server urls -->
+    <string name="matrix_org_server_url">https://matrix.org</string>
+    <string name="vector_im_server_url">https://vector.im</string>
+
     <!-- actions -->
     <string name="action_settings">Settings</string>
     <string name="action_members">Members list</string>
