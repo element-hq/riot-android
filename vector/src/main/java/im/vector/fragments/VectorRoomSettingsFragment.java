@@ -331,10 +331,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // cannot refresh if there is no valid session / room
         if ((null != mRoom) && (null != mSession)) {
             PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
-            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-            canUpdateAvatar = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
-            canUpdateName = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
-            canUpdateTopic = powerLevel >=  powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+
+            if (null != powerLevels) {
+                int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+                canUpdateName = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_TOPIC);
+            }
         }
         else {
             Log.w(LOG_TAG, "## updatePreferenceAccessFromPowerLevel(): session or room may be missing");

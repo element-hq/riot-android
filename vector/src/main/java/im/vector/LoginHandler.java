@@ -314,7 +314,6 @@ public class LoginHandler {
         });
     }
 
-
     /**
      * Perform the validation of a mail ownership.
      * @param aCtx Android App context
