@@ -312,6 +312,8 @@ public class CommonActivityUtils {
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
 
+        Log.d(LOG_TAG, "sendEventStreamAction " + action);
+
         // kill active connections
         Intent killStreamService = new Intent(appContext, EventStreamService.class);
         killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());

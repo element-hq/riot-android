@@ -97,7 +97,7 @@ public class EventStreamService extends Service {
     // use to hide the "incoming call" notification
     private String mNotifiedCallId = null;
 
-    private Boolean mIsForegound = false;
+    private boolean mIsForegound = false;
 
     private Notification mLatestNotification = null;
 
@@ -500,6 +500,7 @@ public class EventStreamService extends Service {
                 start();
                 break;
             case STOP:
+                Log.d(LOG_TAG, "the service is stopped");
                 stop();
                 break;
             case PAUSE:
@@ -514,11 +515,12 @@ public class EventStreamService extends Service {
                 break;
         }
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        Log.d(LOG_TAG, "the service is destroyed");
         stop();
     }
 
@@ -557,6 +559,7 @@ public class EventStreamService extends Service {
             Log.e(LOG_TAG, "No valid MXSession.");
             return;
         }
+
         mActiveEventStreamService = this;
 
         for(MXSession session : mSessions) {
@@ -593,6 +596,8 @@ public class EventStreamService extends Service {
      * internal stop.
      */
     private void stop() {
+        Log.d(LOG_TAG, "the service is stopped.");
+
         if (mIsForegound) {
             stopForeground(true);
         }
