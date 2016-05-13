@@ -65,6 +65,7 @@ import im.vector.R;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -288,10 +289,16 @@ public class LoginActivity extends MXCActionBarActivity {
         // already registered
         if (hasCredentials()) {
             if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
-                Log.e(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
+                Log.d(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
                 goToSplash();
             } else {
-                Log.e(LOG_TAG, "## onCreate(): close the login screen because it is a temporary task");
+                // detect if the application has already been started
+                if (null == EventStreamService.getInstance()) {
+                    Log.d(LOG_TAG, "## onCreate(): goToSplash with credentials but there is no event stream service.");
+                    goToSplash();
+                } else {
+                    Log.d(LOG_TAG, "## onCreate(): close the login screen because it is a temporary task");
+                }
             }
 
             finish();
