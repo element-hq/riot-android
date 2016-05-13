@@ -64,13 +64,15 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final int ITEM_ACTION_KICK = 2;
     public static final int ITEM_ACTION_BAN = 3;
     public static final int ITEM_ACTION_UNBAN = 4;
-    public static final int ITEM_ACTION_SET_DEFAULT_POWER_LEVEL = 5;
-    public static final int ITEM_ACTION_SET_MODERATOR = 6;
-    public static final int ITEM_ACTION_SET_ADMIN = 7;
-    //public static final int ITEM_ACTION_SET_CUSTOM_POWER_LEVEL = 8;
-    public static final int ITEM_ACTION_START_CHAT = 9;
-    public static final int ITEM_ACTION_START_VOICE_CALL = 10;
-    public static final int ITEM_ACTION_START_VIDEO_CALL = 11;
+    public static final int ITEM_ACTION_IGNORE = 5;
+    public static final int ITEM_ACTION_UNIGNORE = 6;
+    public static final int ITEM_ACTION_SET_DEFAULT_POWER_LEVEL = 7;
+    public static final int ITEM_ACTION_SET_MODERATOR = 8;
+    public static final int ITEM_ACTION_SET_ADMIN = 9;
+    //public static final int ITEM_ACTION_SET_CUSTOM_POWER_LEVEL = 10;
+    public static final int ITEM_ACTION_START_CHAT = 11;
+    public static final int ITEM_ACTION_START_VOICE_CALL = 12;
+    public static final int ITEM_ACTION_START_VIDEO_CALL = 13;
 
     private static int VECTOR_ROOM_MODERATOR_LEVEL = 50;
     private static int VECTOR_ROOM_ADMIN_LEVEL = 100;
@@ -224,6 +226,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
+        ArrayList<String> idsList = new ArrayList<String>();
+
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
                 Log.d(LOG_TAG,"## performItemAction(): Start new room");
@@ -301,6 +305,39 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
                     mRoom.kick(mRoomMember.getUserId(), mRoomActionsListener);
                     Log.d(LOG_TAG, "## performItemAction(): Kick");
+                }
+                break;
+
+            case ITEM_ACTION_IGNORE:
+                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+
+                if (null != mRoomMember) {
+                    idsList.add(mRoomMember.getUserId());
+                } else if (null != mMemberId) {
+                    idsList.add(mMemberId);
+                }
+
+                if (0 != idsList.size()) {
+                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                    mSession.ignoreUsers(idsList, mRoomActionsListener);
+                    Log.d(LOG_TAG, "## performItemAction(): ignoreUsers");
+                }
+                break;
+
+            case ITEM_ACTION_UNIGNORE:
+                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+
+
+                if (null != mRoomMember) {
+                    idsList.add(mRoomMember.getUserId());
+                } else if (null != mMemberId) {
+                    idsList.add(mMemberId);
+                }
+
+                if (0 != idsList.size()) {
+                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                    mSession.unIgnoreUsers(idsList, mRoomActionsListener);
+                    Log.d(LOG_TAG, "## performItemAction(): unIgnoreUsers");
                 }
                 break;
 
@@ -449,6 +486,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         if ((selfPowerLevel == maxPowerLevel) && (memberPowerLevel != maxPowerLevel)) {
                             supportedActions.add(ITEM_ACTION_SET_ADMIN);
                         }
+
+                        if (!mSession.isUserIgnored(mRoomMember.getUserId())) {
+                            supportedActions.add(ITEM_ACTION_IGNORE);
+                        } else {
+                            supportedActions.add(ITEM_ACTION_UNIGNORE);
+                        }
                     }
                 } else if (TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE)) {
                     // Check conditions to be able to invite someone
@@ -468,6 +511,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         } else if (!TextUtils.isEmpty(mMemberId)) {
             supportedActions.add(ITEM_ACTION_START_CHAT);
+
+            if (!mSession.isUserIgnored(mMemberId)) {
+                supportedActions.add(ITEM_ACTION_IGNORE);
+            } else {
+                supportedActions.add(ITEM_ACTION_UNIGNORE);
+            }
         }
 
         return supportedActions;
@@ -556,6 +605,20 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 imageResource = R.drawable.ic_block_black;
                 actionText = getResources().getString(R.string.room_participants_action_ban);
                 mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
+            }
+
+            // build the "ignore" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
+                imageResource = R.drawable.ic_person_outline_black;
+                actionText = getResources().getString(R.string.room_participants_action_ignore);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
+            }
+
+            // build the "unignore" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_UNIGNORE) >= 0) {
+                imageResource = R.drawable.ic_person_black;
+                actionText = getResources().getString(R.string.room_participants_action_unignore);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
             }
         }
     }
