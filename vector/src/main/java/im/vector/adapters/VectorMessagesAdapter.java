@@ -517,6 +517,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
                         menu.findItem(R.id.ic_action_vector_save).setVisible(true);
                     }
+
+                    // offer to report a message content
+                    menu.findItem(R.id.ic_action_vector_report).setVisible(!TextUtils.equals(event.sender, mSession.getMyUserId()));
                 }
             }
         }
