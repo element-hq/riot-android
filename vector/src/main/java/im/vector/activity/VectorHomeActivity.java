@@ -376,14 +376,27 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // clear the notification if they are not anymore valid
         // i.e the event has been read from another client
-        // or deleted
+        // or deleted it
+        // + other actions which require a background listener
         mLiveEventListener = new MXEventListener() {
+            private boolean mClearCacheRequired = false;
+
+            @Override
+            public void onIgnoredUsersListUpdate() {
+                mClearCacheRequired = true;
+            }
+
             @Override
             public void onLiveEventsChunkProcessed() {
                 EventStreamService.checkDisplayedNotification();
 
                 // treat any pending URL link workflow, that was started previously
-               processIntentUniversalLink();
+                processIntentUniversalLink();
+
+                if (mClearCacheRequired) {
+                    mClearCacheRequired = false;
+                    Matrix.getInstance(VectorHomeActivity.this).reloadSessions(VectorHomeActivity.this);
+                }
             }
         };
 
