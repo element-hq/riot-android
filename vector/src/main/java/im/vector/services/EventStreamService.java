@@ -479,6 +479,18 @@ public class EventStreamService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (null == intent) {
+            Log.e(LOG_TAG, "onStartCommand : null intent");
+
+            if (null != mActiveEventStreamService) {
+                Log.e(LOG_TAG, "onStartCommand : null intent with an active events stream service");
+            } else {
+                Log.e(LOG_TAG, "onStartCommand : null intent with no events stream service");
+            }
+
+            return START_NOT_STICKY;
+        }
+
         StreamAction action = StreamAction.values()[intent.getIntExtra(EXTRA_STREAM_ACTION, StreamAction.UNKNOWN.ordinal())];
 
         if (intent.hasExtra(EXTRA_MATRIX_IDS)) {
