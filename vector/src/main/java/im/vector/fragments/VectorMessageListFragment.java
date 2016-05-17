@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
@@ -45,6 +46,8 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
@@ -55,6 +58,7 @@ import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.MXCActionBarActivity;
 import im.vector.activity.VectorHomeActivity;
@@ -337,7 +341,70 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             clipboard.setPrimaryClip(clip);
 
             Toast.makeText(getActivity(), this.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+        } else if  (action == R.id.ic_action_vector_report) {
+            onMessageReport(event);
         }
+    }
+
+    /**
+     * The user reports a content problem to the server
+     * @param event the event to report
+     */
+    private void onMessageReport(final Event event) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.room_event_action_report_prompt_reason);
+
+        // add a text input
+        final EditText input = new EditText(getActivity());
+        builder.setView(input);
+
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String reason = input.getText().toString();
+
+                mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
+                    @Override
+                    public void onSuccess(Void info) {
+                        // The user is trying to leave with unsaved changes. Warn about that
+                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                                .setMessage(R.string.room_event_action_report_prompt_ignore_user)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+
+                                        ArrayList<String> userIdsList = new ArrayList<String>();
+                                        userIdsList.add(event.sender);
+
+                                        mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void info) {
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .create()
+                                .show();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     /***
