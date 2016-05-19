@@ -247,12 +247,18 @@ public class CommonActivityUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
         String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
+
+        String serverUrlDefaultValue = activity.getResources().getString(R.string.vector_im_server_url);
+        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, serverUrlDefaultValue);
+        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, serverUrlDefaultValue);
         Boolean useGa = VectorApp.getInstance().useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.putString(LoginActivity.PASSWORD_PREF, passwordVal);
         editor.putString(LoginActivity.LOGIN_PREF, loginVal);
+        editor.putString(LoginActivity.HOME_SERVER_URL_PREF, homeServer);
+        editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, identityServer);
         editor.commit();
 
         if (null != useGa) {
@@ -447,6 +453,7 @@ public class CommonActivityUtils {
                                            // if the activity is not the home activity
                                            if (!(fromActivity instanceof VectorHomeActivity)) {
                                                // pop to the home activity
+                                               Log.d(LOG_TAG, "## goToRoomPage(): start VectorHomeActivity..");
                                                Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
                                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -455,6 +462,7 @@ public class CommonActivityUtils {
                                            } else {
                                                // already to the home activity
                                                // so just need to open the room activity
+                                               Log.d(LOG_TAG, "## goToRoomPage(): already in VectorHomeActivity..");
                                                Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
 
                                                for (String key : params.keySet()) {
@@ -549,6 +557,7 @@ public class CommonActivityUtils {
 
         // the room already exists -> switch to it
         if (null != room) {
+            Log.d(LOG_TAG,"## goToOneToOneRoom(): room already exists");
             HashMap<String, Object> params = new HashMap<String, Object>();
 
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
@@ -561,6 +570,7 @@ public class CommonActivityUtils {
                 callback.onSuccess(null);
             }
         } else {
+            Log.d(LOG_TAG,"## goToOneToOneRoom(): start createRoom()");
             session.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(fromActivity) {
 
                 @Override
@@ -574,6 +584,7 @@ public class CommonActivityUtils {
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
 
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
                             CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);
 
                             callback.onSuccess(null);
@@ -581,6 +592,7 @@ public class CommonActivityUtils {
 
                         @Override
                         public void onMatrixError(MatrixError e) {
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onMatrixError Msg="+e.getLocalizedMessage());
                             if (null != callback) {
                                 callback.onMatrixError(e);
                             }
@@ -588,6 +600,7 @@ public class CommonActivityUtils {
 
                         @Override
                         public void onNetworkError(Exception e) {
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onNetworkError Msg="+e.getLocalizedMessage());
                             if (null != callback) {
                                 callback.onNetworkError(e);
                             }
@@ -595,6 +608,7 @@ public class CommonActivityUtils {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onUnexpectedError Msg="+e.getLocalizedMessage());
                             if (null != callback) {
                                 callback.onUnexpectedError(e);
                             }
@@ -602,16 +616,19 @@ public class CommonActivityUtils {
 
                     };
 
-                    // check if the userId defines an meail address.
+                    // check if the userId defines an email address.
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches()) {
+                        Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite by mail");
                         room.inviteByEmail(otherUserId, inviteCallback);
                     } else {
+                        Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite");
                         room.invite(otherUserId, inviteCallback);
                     }
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
+                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onMatrixError Msg="+e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onMatrixError(e);
                     }
@@ -619,6 +636,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onNetworkError(Exception e) {
+                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onNetworkError Msg="+e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onNetworkError(e);
                     }
@@ -626,6 +644,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onUnexpectedError Msg="+e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onUnexpectedError(e);
                     }

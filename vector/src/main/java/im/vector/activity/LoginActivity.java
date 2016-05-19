@@ -98,6 +98,8 @@ public class LoginActivity extends MXCActionBarActivity {
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
+    public static final String HOME_SERVER_URL_PREF = "home_server_url";
+    public static final String IDENTITY_SERVER_URL_PREF = "identity_server_url";
 
     // saved parameters index
 
@@ -365,6 +367,10 @@ public class LoginActivity extends MXCActionBarActivity {
 
             mLoginEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
             mLoginPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
+
+            String serverUrlDefaultValue = getResources().getString(R.string.vector_im_server_url);
+            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, serverUrlDefaultValue));
+            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, serverUrlDefaultValue));
         }
 
         // trap the UI events
@@ -506,6 +512,46 @@ public class LoginActivity extends MXCActionBarActivity {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(PASSWORD_PREF, mLoginPasswordTextView.getText().toString());
+                editor.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mHomeServerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(HOME_SERVER_URL_PREF, mHomeServerText.getText().toString().trim());
+                editor.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mIdentityServerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(IDENTITY_SERVER_URL_PREF, mIdentityServerText.getText().toString().trim());
                 editor.commit();
             }
 

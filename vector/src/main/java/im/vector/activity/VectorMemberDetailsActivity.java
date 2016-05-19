@@ -230,7 +230,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
-                Log.d(LOG_TAG,"## performItemAction(): Start new room");
+                Log.d(LOG_TAG,"## performItemAction(): Start new room - start chat");
                 
                 enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
