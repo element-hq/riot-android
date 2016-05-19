@@ -20,10 +20,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -657,6 +656,22 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     }
 
     /**
+     * Apply a rounded (sides) rectangle as a background to the view provided in aTargetView.
+     * @param aTargetView view to apply the background
+     * @param aBackgroundColor background colour
+     */
+    private static void setUnreadBackground(View aTargetView, int aBackgroundColor)
+    {
+        if(null != aTargetView) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(100);
+            shape.setColor(aBackgroundColor);
+            aTargetView.setBackground(shape);
+        }
+    }
+
+    /**
      * Compute the View that should be used to render the child,
      * given its position and its group’s position
      */
@@ -678,6 +693,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
         int vectorDarkGreyColor = mContext.getResources().getColor(R.color.vector_4d_gray);
         int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
+        int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
+        int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
+
 
         // retrieve the UI items
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
@@ -689,6 +707,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         View separatorGroupView = convertView.findViewById(R.id.recents_groups_separator_line);
         final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
         final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
+        TextView unreadCountTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_unread_count);
+
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
         Button preViewButton = (Button)convertView.findViewById(R.id.recents_invite_preview_button);
@@ -748,46 +768,40 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name
-        int roomNameTextColor;
-        if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
-            roomNameTextColor = fushiaColor;
-        } else if ((0 != notificationCount) || (0 != unreadMsgCount)) {
-            roomNameTextColor = vectorDarkGreyColor;
-        } else {
-            roomNameTextColor = roomNameBlack;
-        }
         roomNameTxtView.setText(roomName);
-        roomNameTxtView.setTextColor(roomNameTextColor);
-        roomNameTxtView.setTypeface(null, (roomNameTextColor != roomNameBlack) ? Typeface.BOLD : Typeface.NORMAL);
+        roomNameTxtView.setTextColor(roomNameBlack);
+        roomNameTxtView.setTypeface(null, (0 != unreadMsgCount) ? Typeface.BOLD : Typeface.NORMAL);
 
         // display the last message
         roomMsgTxtView.setText(lastMsgToDisplay);
 
         // set the timestamp
-        // bing view
-        int timestampTextColor;
-        if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
-            timestampTextColor = fushiaColor;
-        } else if ((0 != notificationCount) || (0 != unreadMsgCount)) {
-            timestampTextColor = vectorDarkGreyColor;
-        } else {
-            timestampTextColor = vectorDefaultTimeStampColor;
-        }
-
         timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
-        timestampTxtView.setTextColor(timestampTextColor);
-        timestampTxtView.setTypeface(null, (timestampTextColor != vectorDefaultTimeStampColor) ? Typeface.BOLD : Typeface.NORMAL);
+        timestampTxtView.setTextColor(vectorDefaultTimeStampColor);
+        timestampTxtView.setTypeface(null, Typeface.NORMAL);
 
-        // bing view
+        // set bing view background colour
         int bingUnreadColor;
         if ((0 != highlightCount) || childRoomSummary.isHighlighted()) {
             bingUnreadColor = fushiaColor;
         } else if (0 != notificationCount) {
-            bingUnreadColor = vectorDarkGreyColor;
+            bingUnreadColor = vectorGreenColor;
+        } else if (0 != unreadMsgCount) {
+            bingUnreadColor = vectorSilverColor;
         } else {
             bingUnreadColor = Color.TRANSPARENT;
         }
         bingUnreadMsgView.setBackgroundColor(bingUnreadColor);
+
+        // display the unread badge counter
+        if( (0 != notificationCount)) {
+            unreadCountTxtView.setVisibility(View.VISIBLE);
+            unreadCountTxtView.setText(String.valueOf(notificationCount));
+            unreadCountTxtView.setTypeface(null, Typeface.BOLD);
+            setUnreadBackground(unreadCountTxtView,bingUnreadColor);
+        } else {
+            unreadCountTxtView.setVisibility(View.GONE);
+        }
 
         // some items are shown
         boolean isInvited = false;
