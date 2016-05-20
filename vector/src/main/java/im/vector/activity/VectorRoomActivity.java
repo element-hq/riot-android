@@ -144,6 +144,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
     private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
+    private static final String KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP = "KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP";
 
     // defines the command line operations
     // the user can write theses messages to perform some room events
@@ -242,6 +243,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private Boolean mIgnoreTextUpdate = false;
 
     private AlertDialog mImageSizesListDialog;
+    private boolean mImageQualityPopUpInProgress;
 
     private final MXEventListener mPresenceEventListener = new MXEventListener() {
         @Override
@@ -424,6 +426,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             if (savedInstanceState.containsKey(PENDING_FILENAME)) {
                 mPendingFilename = savedInstanceState.getString(PENDING_FILENAME);
             }
+
+            // indicate if an image camera upload was in progress (image quality "Send as" dialog displayed).
+            mImageQualityPopUpInProgress = savedInstanceState.getBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, false);
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -607,7 +612,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
 
         refreshSelfAvatar();
 
+        // in case a "Send as" dialog was in progress when the activity was destroyed (life cycle)
+        resumeResizeMediaAndSend();
+
         Log.d(LOG_TAG, "End of create");
+    }
+
+    /**
+     * Resume any camera image upload that could have been in progress and
+     * stopped due to activity lifecycle event.
+     */
+    private void resumeResizeMediaAndSend() {
+        if(mImageQualityPopUpInProgress){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    resizeMediaAndSend();
+                }
+            });
+        }
     }
 
     /**
@@ -735,6 +758,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         }
 
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mVectorMessageListFragment.mMessageListView.getFirstVisiblePosition());
+        savedInstanceState.putBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, mImageQualityPopUpInProgress);
     }
 
     @Override
@@ -1691,27 +1715,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                         final ArrayList<String> textsList = new ArrayList<String>();
                         final ArrayList<ImageSize> sizesList = new ArrayList<ImageSize>();
 
-                        textsList.add( getString(R.string.compression_opt_list_original) + ": " + android.text.format.Formatter.formatFileSize(this, fileSize) + "(" + fullImageSize.mWidth + "x" + fullImageSize.mHeight + ")");
+                        textsList.add( getString(R.string.compression_opt_list_original) + ": " + android.text.format.Formatter.formatFileSize(this, fileSize) + " (" + fullImageSize.mWidth + "x" + fullImageSize.mHeight + ")");
                         sizesList.add(fullImageSize);
 
                         if (null != largeImageSize) {
                             int estFileSize = largeImageSize.mWidth * largeImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            textsList.add( getString(R.string.compression_opt_list_large) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + largeImageSize.mWidth + "x" + largeImageSize.mHeight + ")");
+                            textsList.add( getString(R.string.compression_opt_list_large) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + " (" + largeImageSize.mWidth + "x" + largeImageSize.mHeight + ")");
                             sizesList.add(largeImageSize);
                         }
 
                         if (null != mediumImageSize) {
                             int estFileSize = mediumImageSize.mWidth * mediumImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            textsList.add( getString(R.string.compression_opt_list_medium) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + ")");
+                            textsList.add( getString(R.string.compression_opt_list_medium) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + " (" + mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + ")");
                             sizesList.add(mediumImageSize);
                         }
 
                         if (null != smallImageSize) {
                             int estFileSize = smallImageSize.mWidth * smallImageSize.mHeight * 2 / 10 / 1024 * 1024;
 
-                            textsList.add(getString(R.string.compression_opt_list_small) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + "(" + smallImageSize.mWidth + "x" + smallImageSize.mHeight + ")");
+                            textsList.add(getString(R.string.compression_opt_list_small) + ": " + android.text.format.Formatter.formatFileSize(this, estFileSize) + " (" + smallImageSize.mWidth + "x" + smallImageSize.mHeight + ")");
                             sizesList.add(smallImageSize);
                         }
 
@@ -1724,6 +1748,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             public void onClick(DialogInterface dialog, int which) {
                                 final int fPos = which;
 
+                                mImageQualityPopUpInProgress = false;
                                 mImageSizesListDialog.dismiss();
 
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -1793,10 +1818,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                             }
                         });
 
+                        mImageQualityPopUpInProgress = true;
                         mImageSizesListDialog = alert.show();
                         mImageSizesListDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
+                                mImageQualityPopUpInProgress = false;
                                 mImageSizesListDialog = null;
                             }
                         });
