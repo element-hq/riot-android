@@ -40,11 +40,9 @@ import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -100,7 +98,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private final int JPEG_QUALITY_MAX = 100;
     private final String MIME_TYPE_IMAGE_GIF = "image/gif";
     private final String MIME_TYPE_IMAGE = "image";
-    private int mRotationFromSensor = Surface.ROTATION_0;
 
     /**
      * define a recent media
@@ -676,7 +673,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCamera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
-                    Log.d(LOG_TAG, "onPictureTaken succceeds");
+                    Log.d(LOG_TAG, "## onPictureTaken(): success");
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
@@ -1102,10 +1099,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; Log.d(LOG_TAG,"## initCameraSettings(): ROTATION_0 degrees="+degrees); break; // portrait
-            case Surface.ROTATION_90: degrees = 90; Log.d(LOG_TAG,"## initCameraSettings(): ROTATION_90 degrees="+degrees); break; // landscape
-            case Surface.ROTATION_180: degrees = 180; Log.d(LOG_TAG,"## initCameraSettings(): ROTATION_180 degrees="+degrees); break;
-            case Surface.ROTATION_270: degrees = 270; Log.d(LOG_TAG,"## initCameraSettings(): ROTATION_270 degrees="+degrees); break; // landscape
+            case Surface.ROTATION_0: degrees = 0; break; // portrait
+            case Surface.ROTATION_90: degrees = 90; break; // landscape
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break; // landscape
         }
 
         int previewRotation;
@@ -1117,8 +1114,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         } else {  // back-facing
             imageRotation = previewRotation = (info.orientation - degrees + 360) % 360;
         }
-
-        Log.d(LOG_TAG,"## initCameraSettings(): imageRotation="+imageRotation+" previewRotation="+previewRotation);
 
         mCameraOrientation = previewRotation;
         mCamera.setDisplayOrientation(previewRotation);
