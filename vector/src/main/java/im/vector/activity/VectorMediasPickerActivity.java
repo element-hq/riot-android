@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -141,7 +142,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // lifecycle management variable
     private boolean mIsTakenImageDisplayed;
     private int mTakenImageOrigin;
-    private OrientationEventListener mOrientationListener;
 
     private String mShootedPicturePath;
     private int mCameraPreviewHeight = 0;
@@ -222,57 +222,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
         }
 
-        // Allow to obtain the screen orientation even when it is blocked in portrait by the user
-        mOrientationListener = new OrientationEventListener(getApplicationContext()) {
-            int mPrevOrient=0;
-
-            @Override
-            public void onOrientationChanged(int sensorOrientation) {
-                /* sensorOrientation parameter is in degrees, range: [0°,359°].
-                - 0 degrees when the device is oriented in its natural position,
-                - 180 degrees when it is upside down
-                - 90 degrees when its left side is at the top (Landscape)
-                - 270 degrees when its right side is to the top (Landscape)
-                - ORIENTATION_UNKNOWN is returned when the device is close to flat and the sensorOrientation cannot be determined.*/
-                try {
-                    if (sensorOrientation != OrientationEventListener.ORIENTATION_UNKNOWN) {
-                        String sensorComputedValue="NA";
-                        String getRotationVal="NA";
-                        if(Math.abs(mPrevOrient - sensorOrientation)>5) {
-                            int rotation = getWindowManager().getDefaultDisplay().getRotation();
-                            int degrees = 0;
-                            switch (rotation) {
-                                case Surface.ROTATION_0: degrees = 0; getRotationVal = "ROTATION_0";break; // portrait
-                                case Surface.ROTATION_90: degrees = 90; getRotationVal = "ROTATION_90"; break; // landscape
-                                case Surface.ROTATION_180: degrees = 180; getRotationVal = "ROTATION_180"; break;
-                                case Surface.ROTATION_270: degrees = 270; getRotationVal = "ROTATION_270"; break; // landscape
-                            }
-
-                             if (sensorOrientation >= 325 || sensorOrientation < 45) {
-                                sensorComputedValue = "Surface.ROTATION_0";
-                                 mRotationFromSensor = Surface.ROTATION_0;
-                            } else if (sensorOrientation >= 60 && sensorOrientation < 120) {
-                                sensorComputedValue = "Surface.ROTATION_270";
-                                 mRotationFromSensor = Surface.ROTATION_270;
-                            } else if (sensorOrientation >= 150 && sensorOrientation < 210) {
-                                sensorComputedValue = "Surface.ROTATION_180";
-                                 mRotationFromSensor = Surface.ROTATION_180;
-                            } else if (sensorOrientation >= 240 && sensorOrientation < 300) {
-                                sensorComputedValue = "Surface.ROTATION_90";
-                                 mRotationFromSensor = Surface.ROTATION_90;
-                            }
-
-                            Log.i(LOG_TAG, "## onOrientationChanged(): windowMgrValue="+getRotationVal+" sensorComputedValue="+sensorComputedValue+" sensorOrientation="+sensorOrientation);
-                        }
-                        mPrevOrient = sensorOrientation;
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onOrientationChanged(): exception Msg=" + e.getMessage());
-                }
-            }
-        };
-        mOrientationListener.enable();
-
+        // Force screen orientation be managed by the sensor in case user's setting turned off
+        // sensor-based rotation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
     /**
@@ -338,10 +290,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     protected void onPause() {
         super.onPause();
 
-        if(null != mOrientationListener) {
-            mOrientationListener.disable();
-        }
-
         // cancel the camera use
         // to avoid locking it
         if (null != mCamera) {
@@ -352,10 +300,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if(null != mOrientationListener) {
-            mOrientationListener.enable();
-        }
 
         // update the gallery height, to follow
         // the content of the device gallery
@@ -727,10 +671,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     private void takePhoto() {
         Log.d(LOG_TAG, "## takePhoto");
-
-        // In case of device orientation blocked, try to override configuration
-        // to fit the real orientation of the device.
-        initCameraSettingsWhenOrientationBlocked();
 
         try {
             mCamera.takePicture(null, null, new Camera.PictureCallback() {
@@ -1148,74 +1088,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 // assume that only one camera can be used.
                 mSwitchCameraImageView.setVisibility(View.GONE);
                 onSwitchCamera();
-            }
-        }
-    }
-
-
-    private void initCameraSettingsWhenOrientationBlocked(){
-        // detect if the orientation has been blocked in portrait mode
-        boolean isAutoRotationBlocked = (0==android.provider.Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0));
-
-        if(isAutoRotationBlocked) {
-            Log.d(LOG_TAG, "## initCameraSettingsWhenOrientationBlocked(): IN");
-
-            int windowMgrRotation = this.getWindowManager().getDefaultDisplay().getRotation();
-
-            if(windowMgrRotation != mRotationFromSensor) {
-                android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-                android.hardware.Camera.getCameraInfo(mCameraId, info);
-
-                int degrees = 0;
-                switch (mRotationFromSensor) {
-                    case Surface.ROTATION_0: // portrait
-                        degrees = 0;
-                        Log.d(LOG_TAG, "## initCameraSettingsWhenOrientationBlocked(): ROTATION_0");
-                        break;
-
-                    case Surface.ROTATION_90: // landscape
-                        degrees = 90;
-                        Log.d(LOG_TAG, "## initCameraSettingsWhenOrientationBlocked(): ROTATION_90");
-                        break;
-
-                    case Surface.ROTATION_180:
-                        degrees = 180;
-                        Log.d(LOG_TAG, "## initCameraSettingsWhenOrientationBlocked(): ROTATION_180");
-                        break;
-
-                    case Surface.ROTATION_270: // landscape
-                        degrees = 270;
-                        Log.d(LOG_TAG, "## initCameraSettingsWhenOrientationBlocked(): ROTATION_270");
-                        break;
-
-                    default:
-                        // unlikely case, just in case..
-                        Log.w(LOG_TAG, "## initCameraSettingsWhenOrientationBlocked(): unknown value for mRotationFromSensor =>"+mRotationFromSensor);
-                        return;
-                }
-
-                int previewRotation;
-                int imageRotation;
-
-                if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                    imageRotation = previewRotation = (info.orientation + degrees) % 360;
-                    previewRotation = (360 - previewRotation) % 360;  // compensate the mirror
-                } else {  // back-facing
-                    imageRotation = previewRotation = (info.orientation - degrees + 360) % 360;
-                }
-
-                //mCameraOrientation = previewRotation;
-                mCamera.setDisplayOrientation(previewRotation);
-
-                Camera.Parameters params = mCamera.getParameters();
-
-                // apply the rotation
-                params.setRotation(imageRotation);
-                try {
-                    mCamera.setParameters(params);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
-                }
             }
         }
     }
