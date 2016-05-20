@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -217,6 +218,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
         }
+
+        // Force screen orientation be managed by the sensor in case user's setting turned off
+        // sensor-based rotation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
     /**
@@ -668,7 +673,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCamera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
-                    Log.d(LOG_TAG, "onPictureTaken succceeds");
+                    Log.d(LOG_TAG, "## onPictureTaken(): success");
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
@@ -1094,10 +1099,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_0: degrees = 0; break; // portrait
+            case Surface.ROTATION_90: degrees = 90; break; // landscape
             case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_270: degrees = 270; break; // landscape
         }
 
         int previewRotation;
