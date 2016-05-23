@@ -57,6 +57,25 @@
             android:dependency="@string/settings_enable_all_notif"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/settings_advanced" >
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_logged_in"
+            android:summary="1.2.3"
+            android:key="@string/settings_logged_in"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_home_server"
+            android:summary="1.2.3"
+            android:key="@string/settings_home_server"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_identity_server"
+            android:summary="1.2.3"
+            android:key="@string/settings_identity_server"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/settings_other" >
 
         <SwitchPreference

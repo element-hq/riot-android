@@ -172,6 +172,24 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
         }
 
+        // user account
+        EditTextPreference accountIdTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_logged_in));
+        if (null != accountIdTextPreference) {
+            accountIdTextPreference.setSummary(mSession.getMyUserId());
+        }
+
+        // home server
+        EditTextPreference homeServerTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_home_server));
+        if (null != homeServerTextPreference) {
+            homeServerTextPreference.setSummary(mSession.getHomeserverConfig().getHomeserverUri().toString());
+        }
+
+        // identity server
+        EditTextPreference identityServerTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_identity_server));
+        if (null != identityServerTextPreference) {
+            identityServerTextPreference.setSummary(mSession.getHomeserverConfig().getIdentityServerUri().toString());
+        }
+
         // terms & conditions
         EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_term_conditions));
 

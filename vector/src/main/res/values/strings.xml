@@ -581,6 +581,11 @@
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
+    <string name="settings_advanced">Advanced</string>
+
+    <string name="settings_logged_in">Logged in as</string>
+    <string name="settings_home_server">Home Server</string>
+    <string name="settings_identity_server">Identity Server</string>
 
     <string name="account_email_validation_title">Verification Pending</string>
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
