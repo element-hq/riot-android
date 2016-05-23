@@ -1323,12 +1323,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                 if ((!isManaged) && (null != mediaUrl)) {
                                     final String fMediaUrl = mediaUrl;
                                     final String fMimeType = mimeType;
+                                    final boolean isVideo = ((null != fMimeType) && fMimeType.startsWith("video/"));
+                                    final String fThumbUrl = isVideo ? mVectorMessageListFragment.getVideoThumbailUrl(fMediaUrl) : null;
 
                                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             if ((null != fMimeType) && fMimeType.startsWith("video/")) {
-                                                mVectorMessageListFragment.uploadVideoContent(fMediaUrl, null, fMimeType);
+                                                mVectorMessageListFragment.uploadVideoContent(fMediaUrl, fThumbUrl, null, fMimeType);
                                             } else {
                                                 mVectorMessageListFragment.uploadFileContent(fMediaUrl, fMimeType, fFilename);
                                             }
