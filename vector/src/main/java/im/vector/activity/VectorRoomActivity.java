@@ -1129,6 +1129,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                     // try to retrieve the gallery thumbnail
                                     // if the image comes from the gallery..
                                     Bitmap thumbnailBitmap = null;
+                                    Bitmap defaultThumbnailBitmap = null;
 
                                     try {
                                         ContentResolver resolver = getContentResolver();
@@ -1143,10 +1144,29 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         }
 
                                         imageId = Long.parseLong(lastSegment);
-
+                                        defaultThumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
                                         thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND, null);
                                     } catch (Exception e) {
                                         Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
+                                    }
+
+                                    // the medias picker stores its own thumbnail to avoid inflating large one
+                                    if (null == thumbnailBitmap) {
+                                        try {
+                                            String thumbPath = VectorMediasPickerActivity.getThumbnailPath(mediaUri.getPath());
+
+                                            if (null != thumbPath) {
+                                                File thumbFile = new File(thumbPath);
+
+                                                if (thumbFile.exists()) {
+                                                    BitmapFactory.Options options = new BitmapFactory.Options();
+                                                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                                    thumbnailBitmap = BitmapFactory.decodeFile(thumbPath, options);
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            Log.e(LOG_TAG, "cannot restore the medias picker thumbnail " + e.getMessage());
+                                        }
                                     }
 
                                     double thumbnailWidth = mVectorMessageListFragment.getMaxThumbnailWith();
@@ -1242,6 +1262,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         }
                                     }
 
+                                    if (null == thumbnailBitmap) {
+                                        thumbnailBitmap = defaultThumbnailBitmap;
+                                    }
+
                                     String thumbnailURL = mMediasCache.saveBitmap(thumbnailBitmap, null);
 
                                     if (null != thumbnailBitmap) {
@@ -1328,12 +1352,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                 if ((!isManaged) && (null != mediaUrl)) {
                                     final String fMediaUrl = mediaUrl;
                                     final String fMimeType = mimeType;
+                                    final boolean isVideo = ((null != fMimeType) && fMimeType.startsWith("video/"));
+                                    final String fThumbUrl = isVideo ? mVectorMessageListFragment.getVideoThumbailUrl(fMediaUrl) : null;
 
                                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if ((null != fMimeType) && fMimeType.startsWith("video/")) {
-                                                mVectorMessageListFragment.uploadVideoContent(fMediaUrl, null, fMimeType);
+                                            if (isVideo) {
+                                                mVectorMessageListFragment.uploadVideoContent(fMediaUrl, fThumbUrl, null, fMimeType);
                                             } else {
                                                 mVectorMessageListFragment.uploadFileContent(fMediaUrl, fMimeType, fFilename);
                                             }
@@ -1356,6 +1382,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         };
 
         Thread t = new Thread(r);
+        t.setPriority(Thread.MIN_PRIORITY);
         t.start();
     }
 
@@ -2416,10 +2443,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             };
         }
 
-        if(aIsListenerEnabled)
+        if (aIsListenerEnabled) {
             vectorActivityRoomView.getViewTreeObserver().addOnGlobalLayoutListener(mKeyboardListener);
-        else
+        }
+        else {
             vectorActivityRoomView.getViewTreeObserver().removeOnGlobalLayoutListener(mKeyboardListener);
+        }
     }
 }
 
