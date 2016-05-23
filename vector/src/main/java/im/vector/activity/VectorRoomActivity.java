@@ -1105,6 +1105,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                     // try to retrieve the gallery thumbnail
                                     // if the image comes from the gallery..
                                     Bitmap thumbnailBitmap = null;
+                                    Bitmap defaultThumbnailBitmap = null;
 
                                     try {
                                         ContentResolver resolver = getContentResolver();
@@ -1119,13 +1120,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         }
 
                                         imageId = Long.parseLong(lastSegment);
-
+                                        defaultThumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
                                         thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND, null);
                                     } catch (Exception e) {
                                         Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
                                     }
 
-                                    // the mediaspicker stores its own thumbnail to avoid inflating large one
+                                    // the medias picker stores its own thumbnail to avoid inflating large one
                                     if (null == thumbnailBitmap) {
                                         try {
                                             String thumbPath = VectorMediasPickerActivity.getThumbnailPath(mediaUri.getPath());
@@ -1237,6 +1238,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         }
                                     }
 
+                                    if (null == thumbnailBitmap) {
+                                        thumbnailBitmap = defaultThumbnailBitmap;
+                                    }
+
                                     String thumbnailURL = mMediasCache.saveBitmap(thumbnailBitmap, null);
 
                                     if (null != thumbnailBitmap) {
@@ -1329,7 +1334,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if ((null != fMimeType) && fMimeType.startsWith("video/")) {
+                                            if (isVideo) {
                                                 mVectorMessageListFragment.uploadVideoContent(fMediaUrl, fThumbUrl, null, fMimeType);
                                             } else {
                                                 mVectorMessageListFragment.uploadFileContent(fMediaUrl, fMimeType, fFilename);
