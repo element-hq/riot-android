@@ -333,7 +333,16 @@ public class VectorApp extends Application {
     }
 
     public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview){
-        mSavedPickerImagePreview = aSavedCameraImagePreview;
+        if (aSavedCameraImagePreview != mSavedPickerImagePreview) {
+            // force to release memory
+            if (null != mSavedPickerImagePreview) {
+                mSavedPickerImagePreview.recycle();
+                mSavedPickerImagePreview = null;
+                System.gc();
+            }
+
+            mSavedPickerImagePreview = aSavedCameraImagePreview;
+        }
     }
 }
 

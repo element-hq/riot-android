@@ -1125,6 +1125,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                                         Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
                                     }
 
+                                    // the mediaspicker stores its own thumbnail to avoid inflating large one
+                                    if (null == thumbnailBitmap) {
+                                        try {
+                                            String thumbPath = VectorMediasPickerActivity.getThumbnailPath(mediaUri.getPath());
+
+                                            if (null != thumbPath) {
+                                                File thumbFile = new File(thumbPath);
+
+                                                if (thumbFile.exists()) {
+                                                    BitmapFactory.Options options = new BitmapFactory.Options();
+                                                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                                    thumbnailBitmap = BitmapFactory.decodeFile(thumbPath, options);
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                            Log.e(LOG_TAG, "cannot restore the medias picker thumbnail " + e.getMessage());
+                                        }
+                                    }
+
                                     double thumbnailWidth = mVectorMessageListFragment.getMaxThumbnailWith();
                                     double thumbnailHeight = mVectorMessageListFragment.getMaxThumbnailHeight();
 
@@ -1332,6 +1351,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         };
 
         Thread t = new Thread(r);
+        t.setPriority(Thread.MIN_PRIORITY);
         t.start();
     }
 
@@ -2389,10 +2409,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             };
         }
 
-        if(aIsListenerEnabled)
+        if (aIsListenerEnabled) {
             vectorActivityRoomView.getViewTreeObserver().addOnGlobalLayoutListener(mKeyboardListener);
-        else
+        }
+        else {
             vectorActivityRoomView.getViewTreeObserver().removeOnGlobalLayoutListener(mKeyboardListener);
+        }
     }
 }
 

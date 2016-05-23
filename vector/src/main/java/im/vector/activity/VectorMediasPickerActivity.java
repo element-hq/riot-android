@@ -333,7 +333,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mImagePreviewImageView.setTag(uriImage);
 
             // display a preview image?
-            if(mIsTakenImageDisplayed) {
+            if (mIsTakenImageDisplayed) {
                 Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
                 if (null != savedBitmap) {
                     // image preview from camera only
@@ -668,7 +668,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCamera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
-                    Log.d(LOG_TAG, "onPictureTaken succceeds");
+                    Log.d(LOG_TAG, "onPictureTaken succeeds");
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
@@ -688,8 +688,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                     // Copy source file to destination
                     FileOutputStream outputStream = null;
-                    try {
 
+                    try {
                         dstFile.createNewFile();
 
                         outputStream = new FileOutputStream(dstFile);
@@ -800,8 +800,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
 
         // sanity check
-        if(null != aImageUrl) {
-
+        if (null != aImageUrl) {
             Uri imageUri = Uri.fromFile(new File(aImageUrl));
             int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, imageUri);
 
@@ -885,7 +884,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         progressBar.setVisibility(View.GONE);
     }
 
-
     /**
      * Update the UI according to camera action. Two UIs are displayed:
      * the camera real time preview (default configuration) or the taken picture.
@@ -965,6 +963,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
+     * Returns the thumbnail path of shot image.
+     * @param picturePath the image path
+     * @return the thumbnail image path.
+     */
+    public static String getThumbnailPath(String picturePath) {
+        if (!TextUtils.isEmpty(picturePath) && picturePath.endsWith(".jpg")) {
+            return picturePath.replace(".jpg", "_thumb.jpg");
+        }
+
+        return null;
+    }
+
+    /**
      * Return the taken image from the camera to the calling activity.
      * This method returns to the calling activity.
      */
@@ -972,6 +983,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             // sanity check
             if (null != mShootedPicturePath) {
+                try {
+                    Bitmap previewBitmap = VectorApp.getSavedPickerImagePreview();
+                    String thumbnailPath = getThumbnailPath(mShootedPicturePath);
+
+                    File file = new File(thumbnailPath);
+                    FileOutputStream outStream = new FileOutputStream(file);
+                    previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
+                    outStream.flush();
+                    outStream.close();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file");
+                }
+
                 Uri uri = Uri.fromFile(new File(mShootedPicturePath));
 
                 // provide the Uri
@@ -1032,8 +1056,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         } else {
             // attach after a screen rotation, the file uri must was saved in the tag
             Uri uriSavedFromLifeCycle = (Uri) mImagePreviewImageView.getTag();
-            if(null != uriSavedFromLifeCycle)
+
+            if (null != uriSavedFromLifeCycle) {
                 intent.setData(uriSavedFromLifeCycle);
+            }
         }
 
         intent.putExtras(conData);
