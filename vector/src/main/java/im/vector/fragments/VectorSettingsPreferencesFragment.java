@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -62,6 +63,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.ResourceUtils;
@@ -72,6 +74,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
 
     private static final String EMAIL_PREREFENCE_KEY_BASE = "EMAIL_PREREFENCE_KEY_BASE";
+    private static final String PUSHER_PREREFENCE_KEY_BASE = "PUSHER_PREREFENCE_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
 
     // members
@@ -92,6 +95,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // displayed emails
     private PreferenceCategory mUserSettingsCategory;
     private List<String> mDisplayedEmails = new ArrayList<String>();
+
+    // displayed pushers
+    private PreferenceCategory mPushersSettingsCategory;
+    private List<Pusher> mDisplayedPushers = new ArrayList<Pusher>();
 
     // events listener
     private MXEventListener mEventsListener = new MXEventListener() {
@@ -285,6 +292,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         });
 
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
+        mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
+
+        refreshPushersList();
         refreshPreferences();
         refreshEmailsList();
         refreshDisplay();
@@ -325,7 +335,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 }
             });
 
-            // ensure that
+            Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager().refreshPushersList(Matrix.getInstance(getActivity()).getSessions(), new SimpleApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    refreshPushersList();
+                }
+            });
+
+            // refresh anything else
             refreshPreferences();
             refreshDisplay();
         }
@@ -724,6 +741,52 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
 
         editor.commit();
+    }
+
+    //==============================================================================================================
+    // pushers list management
+    //==============================================================================================================
+
+    /**
+     * Refresh the pushers list
+     */
+    private void refreshPushersList() {
+        GcmRegistrationManager registrationManager = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+        List<Pusher> pushersList = new ArrayList<>(registrationManager.mPushersList);
+
+        // check first if there is an update
+        boolean isNewList = true;
+        if ((null != mDisplayedPushers) && (pushersList.size() == mDisplayedPushers.size())) {
+            isNewList = !mDisplayedPushers.containsAll(pushersList);
+        }
+
+        if (isNewList) {
+            // remove the displayed one
+            for (int index = 0; ; index++) {
+                Preference preference = mPushersSettingsCategory.findPreference(PUSHER_PREREFENCE_KEY_BASE + index);
+
+                if (null != preference) {
+                    mPushersSettingsCategory.removePreference(preference);
+                } else {
+                    break;
+                }
+            }
+
+            // add new emails list
+            mDisplayedPushers = pushersList;
+
+            int index = 0;
+
+            for (Pusher pusher : mDisplayedPushers) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                preference.setTitle(pusher.deviceDisplayName);
+                preference.setSummary(pusher.appDisplayName);
+                preference.setKey(PUSHER_PREREFENCE_KEY_BASE + index);
+                index++;
+                mPushersSettingsCategory.addPreference(preference);
+            }
+        }
     }
 
     //==============================================================================================================

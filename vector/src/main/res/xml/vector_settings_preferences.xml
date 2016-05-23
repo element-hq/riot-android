@@ -57,6 +57,11 @@
             android:dependency="@string/settings_enable_all_notif"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_notifications_targets"
+        android:key="@string/settings_notifications_targets">
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/settings_advanced" >
 
         <im.vector.preference.VectorCustomActionEditTextPreference

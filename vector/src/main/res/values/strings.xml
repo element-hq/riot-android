@@ -582,6 +582,7 @@
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
+    <string name="settings_notifications_targets">Notification Targets</string>
 
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Home Server</string>

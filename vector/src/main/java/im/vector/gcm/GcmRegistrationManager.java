@@ -16,35 +16,32 @@
 
 package im.vector.gcm;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PushersResponse;
+
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.LoginActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Handler;
+import java.util.List;
 
 
 /**
@@ -93,6 +90,9 @@ public final class GcmRegistrationManager {
     private String mPusherLang = null;
     private ArrayList<GcmSessionRegistration> mSessionsregistrationListener = new ArrayList<GcmSessionRegistration>();
 
+    // the pushers list
+    public ArrayList<Pusher> mPushersList = new ArrayList<>();
+
     private enum RegistrationState {
         UNREGISTRATED,
         GCM_REGISTRATING,
@@ -107,13 +107,14 @@ public final class GcmRegistrationManager {
     private Context mContext;
     private RegistrationState mRegistrationState = RegistrationState.UNREGISTRATED;
 
-    private android.os.Handler mUIHandler;
     private String mPushKey = null;
 
-
+    /**
+     * Constructor
+     * @param appContext the application context.
+     */
     public GcmRegistrationManager(Context appContext) {
         mContext = appContext.getApplicationContext();
-        mUIHandler = new android.os.Handler(Looper.getMainLooper());
 
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
@@ -146,26 +147,45 @@ public final class GcmRegistrationManager {
         loadGcmData();
     }
 
-    public String pusherUrl() {
-        return mPusherUrl;
-    }
+    /**
+     * Refresh the pushers list
+     * @param sessions the sessions
+     * @param callback the callback;
+     */
+    public void refreshPushersList(List<MXSession> sessions, final ApiCallback<Void> callback) {
+        if ((null != sessions) && (sessions.size() > 0)) {
+            sessions.get(0).getPushersRestClient().getPushers(new ApiCallback<PushersResponse>() {
+                @Override
+                public void onSuccess(PushersResponse pushersResponse) {
+                    if (null == pushersResponse.pushers) {
+                        mPushersList = new ArrayList<>();
+                    } else {
+                        mPushersList = new ArrayList<>(pushersResponse.pushers);
+                    }
 
-    public void setPusherUrl(String pusherUrl) {
-        if (!TextUtils.isEmpty(pusherUrl) && !pusherUrl.equals(mPusherUrl)) {
-            mPusherUrl = pusherUrl;
-            SaveGCMData();
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    Log.e(LOG_TAG, "refreshPushersList failed " + e.getLocalizedMessage());
+                }
+            });
         }
-    }
 
-    public String pusherFileTag() {
-        return mPusherBaseFileTag;
-    }
 
-    public void setPusherFileTag(String pusherFileTag) {
-        if (!TextUtils.isEmpty(pusherFileTag) && !pusherFileTag.equals(mPusherBaseFileTag)) {
-            mPusherBaseFileTag = pusherFileTag;
-            SaveGCMData();
-        }
     }
 
     /**
@@ -213,6 +233,8 @@ public final class GcmRegistrationManager {
             if (useGCM()) {
                 registerSessions(appContext, null);
             }
+        } else if (mRegistrationState == RegistrationState.SERVER_REGISTERED) {
+            refreshPushersList(new ArrayList<MXSession>(Matrix.getInstance(mContext).getSessions()), null);
         }
     }
 
@@ -231,7 +253,6 @@ public final class GcmRegistrationManager {
                 registrationListener.onPusherRegistrationFailed();
             }
         } else {
-
             mRegistrationState = RegistrationState.GCM_REGISTRATING;
 
             new AsyncTask<Void, Void, String>() {
@@ -550,6 +571,9 @@ public final class GcmRegistrationManager {
             Log.d(LOG_TAG, "registerSessions : all the sessions are registred");
             mRegistrationState = RegistrationState.SERVER_REGISTERED;
             onSessionsRegistred();
+
+            // get the pushers list
+            refreshPushersList(sessions, null);
             return;
         }
 
