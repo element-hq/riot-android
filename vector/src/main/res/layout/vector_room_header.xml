@@ -9,7 +9,8 @@
         android:id="@+id/room_avatar_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp">
 
         <include layout="@layout/vector_room_header_round_avatar"
             android:layout_width="84dp"

@@ -109,6 +109,7 @@
 
         <activity
             android:name="im.vector.activity.VectorRoomActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_room"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"

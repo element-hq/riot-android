@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.HandlerThread;
@@ -36,6 +37,7 @@ import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.AndroidCharacter;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -185,6 +187,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     private EditText mEditText;
     private ImageView mAvatarImageView;
     // action bar header
+    private android.support.v7.widget.Toolbar mToolbar;
     private TextView mActionBarCustomTitle;
     private TextView mActionBarCustomTopic;
     private ImageView mActionBarCustomArrowImageView;
@@ -348,7 +351,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      */
     @Override
     public void onListTouch() {
-        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
     }
 
     // *********************************************************************************************
@@ -381,6 +383,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 return false;
             }
         });
+
+        // use a toolbar instead of the actionbar
+        // to be able to display an expandable avatar
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.room_toolbar);
+        this.setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // set the default custom action bar layout,
         // that will be displayed from the custom action bar layout
@@ -2222,21 +2230,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      *
      */
     private void setActionBarDefaultCustomLayout(){
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-
-        // sanity check
-        if (null == actionBar){
-            return;
-        }
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.support.v7.app.ActionBar.DISPLAY_SHOW_HOME | android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP);
-
-        // create the custom layout
-        android.support.v7.app.ActionBar.LayoutParams layout = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        View customLayout =  getLayoutInflater().inflate(R.layout.vector_message_action_bar_custo_layout, null);
-        actionBar.setCustomView(customLayout, layout);
-
         // binding the widgets of the custom view
         mActionBarCustomTitle = (TextView)findViewById(R.id.room_action_bar_title);
         mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
@@ -2244,8 +2237,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         mIsKeyboardDisplayed = false;
 
         // custom header
-        View headerTextsContainer = customLayout.findViewById(R.id.header_texts_container);
-        View openChatHeaderArrow = customLayout.findViewById(R.id.open_chat_header_arrow);
+        View headerTextsContainer = findViewById(R.id.header_texts_container);
+        View openChatHeaderArrow = findViewById(R.id.open_chat_header_arrow);
 
         // add click listener on custom action bar to display/hide the header view
         openChatHeaderArrow.setOnClickListener(new View.OnClickListener() {
@@ -2392,8 +2385,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed){
-
-        if(SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed){
+        if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed){
             if(true == mIsKeyboardDisplayed) {
                 Log.i(LOG_TAG, "## enableActionBarHeader(): action bar header canceled (keyboard is displayed)");
                 return;
@@ -2410,10 +2402,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_up_white);
             // enable the header view to make it visible
             mRoomHeaderView.setVisibility(View.VISIBLE);
-
+            mToolbar.setBackgroundColor(Color.TRANSPARENT);
         } else {
             // hide the room header only if it is displayed
-            if(View.VISIBLE== mRoomHeaderView.getVisibility()) {
+            if(View.VISIBLE == mRoomHeaderView.getVisibility()) {
                 // show the name and the topic in the action bar.
                 mActionBarCustomTitle.setVisibility(View.VISIBLE);
                 // if the topic is empty, do not show it
@@ -2427,6 +2419,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
+                mToolbar.setBackgroundColor(getResources().getColor(R.color.vector_green_color));
             }
         }
     }

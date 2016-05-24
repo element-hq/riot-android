@@ -30,8 +30,8 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
-            android:textColor="@android:color/white"
-            />
+            android:textColor="@android:color/white"/>
+
     </LinearLayout>
 
     <ImageView

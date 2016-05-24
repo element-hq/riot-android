@@ -451,7 +451,7 @@
 
     <!--  Chat -->
     <string name="room_menu_search">Search</string>
-    <string name="room_menu_call">Search</string>
+    <string name="room_menu_call">Call</string>
     <string name="room_menu_participants">Participants</string>
     <string name="room_menu_favourite">Favourite</string>
     <string name="room_menu_unfavourite">Unfavourite</string>
