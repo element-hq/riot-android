@@ -26,6 +26,8 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:textSize="20sp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:text="a room name here"
         android:textColor="@android:color/white"
         android:layout_marginTop="14dp" />

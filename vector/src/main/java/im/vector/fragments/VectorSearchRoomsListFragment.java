@@ -40,12 +40,14 @@ import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
@@ -93,6 +95,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
+        mWaitingView = v.findViewById(R.id.listView_spinner_views);
         mRecentsListView = (RecentsExpandableListView)v.findViewById(R.id.fragment_recents_list);
         // the chevron is managed in the header view
         mRecentsListView.setGroupIndicator(null);
@@ -116,16 +119,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
                     // detect if it is a room id
                     if (roomIdOrAlias.startsWith("!")) {
-                        Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
-
-                        if (null != room) {
-                            room.sendReadReceipt();
-                        }
-
-                        Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
-                        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomIdOrAlias);
-                        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        getActivity().startActivity(intent);
+                        previewRoom(roomIdOrAlias);
                     } else {
                         showWaitingView();
 
@@ -133,18 +127,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                         mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
                             @Override
                             public void onSuccess(String roomId) {
-                                Room aRoom = mSession.getDataHandler().getRoom(roomId, false);
-
-                                if (null != aRoom) {
-                                    aRoom.sendReadReceipt();
-                                }
-
-                                hideWaitingView();
-
-                                Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
-                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                                getActivity().startActivity(intent);
+                                previewRoom(roomId);
                             }
 
                             private void onError(String errorMessage) {
@@ -222,6 +205,68 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
         return v;
     }
+
+    /**
+     * Previe the dedicated room if it was not joined.
+     * @param roomId the roomId
+     */
+    private void previewRoom(final String roomId) {
+        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, null);
+
+        Room room = mSession.getDataHandler().getRoom(roomId, false);
+
+        // if the room exists
+        if (null != room) {
+            // either the user is invited
+            if (room.isInvited()) {
+                Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+
+                VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
+                Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                VectorApp.getCurrentActivity().startActivity(intent);
+            } else {
+                Log.d(LOG_TAG, "previewRoom : open the room");
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+            }
+
+            hideWaitingView();
+        } else {
+            roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+
+                private void onDone() {
+                    hideWaitingView();
+                    VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
+                    Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                    VectorApp.getCurrentActivity().startActivity(intent);
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+    }
+
 
     /**
      * Expands all existing sections.

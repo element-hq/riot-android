@@ -292,7 +292,6 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                     }
                 });
             }
-
         } else { // room ID is provided as a room alias: get corresponding room ID
 
             Log.d(LOG_TAG, "manageRoom : it is a room Alias");
