@@ -86,6 +86,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private final MXSession mMxSession;
     private ArrayList<ArrayList<RoomSummary>> mSummaryListByGroupPosition;
 
+    private int mRoomByAliasGroupPosition = -1; // the user wants to join  by room id or alias
     private int mDirectoryGroupPosition = -1;  // public rooms index
     private int mInvitedGroupPosition = -1;  // "Invited" index
     private int mFavouritesGroupPosition = -1;// "Favourites" index
@@ -158,7 +159,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private String getGroupTitle(int groupPosition) {
         String retValue;
 
-        if (mDirectoryGroupPosition == groupPosition) {
+        if (mRoomByAliasGroupPosition == groupPosition) {
+            retValue = mContext.getResources().getString(R.string.room_recents_join);
+        } else if (mDirectoryGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_directory);
         } else if (mFavouritesGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_favourites);
@@ -235,8 +238,17 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     }
 
     /**
+     * Tell if the group position is the join by
+     * @param groupPosition the group position to test.
+     * @return true if it is room id group
+     */
+    public boolean isRoomByIdGroupPosition(int groupPosition) {
+        return (mRoomByAliasGroupPosition == groupPosition);
+    }
+
+    /**
      * Test if the group position is the directory one.
-     * @param groupPosition the group position test.
+     * @param groupPosition the group position to test.
      * @return true if it is directory group.
      */
     public boolean isDirectoryGroupPosition(int groupPosition) {
@@ -299,6 +311,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         String roomSummaryId;
 
         // init index with default values
+        mRoomByAliasGroupPosition = -1;
         mDirectoryGroupPosition = -1;
         mInvitedGroupPosition = -1;
         mFavouritesGroupPosition = -1;
@@ -371,6 +384,37 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                         if (isMatchedPattern(publicRoom)) {
                             mMatchedPublicRooms.add(publicRoom);
                         }
+                    }
+                }
+
+                // detect if the pattern might a room ID or an alias
+                if (!TextUtils.isEmpty(mSearchedPattern)) {
+                    // a room id is !XXX:server.ext
+                    // a room alias is #XXX:server.ext
+
+                    boolean isRoomId = false;
+                    boolean isRoomAlias = false;
+
+                    if (mSearchedPattern.startsWith("!")) {
+                        int sep = mSearchedPattern.indexOf(":");
+
+                        if (sep > 0) {
+                            sep = mSearchedPattern.indexOf(".", sep);
+                        }
+
+                        isRoomId = sep > 0;
+                    } else if (mSearchedPattern.startsWith("#")) {
+                        int sep = mSearchedPattern.indexOf(":");
+
+                        if (sep > 0) {
+                            sep = mSearchedPattern.indexOf(".", sep);
+                        }
+
+                        isRoomAlias = sep > 0;
+                    }
+
+                    if (isRoomId || isRoomAlias) {
+                        mRoomByAliasGroupPosition = groupIndex++;
                     }
                 }
 
@@ -610,7 +654,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         // the directory section has always only one entry
-        if (mDirectoryGroupPosition == groupPosition) {
+        // same for the join by room alias or ID
+        if ((mDirectoryGroupPosition == groupPosition) || (mRoomByAliasGroupPosition == groupPosition)) {
             return 1;
         }
 
@@ -718,7 +763,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         View actionClickArea = convertView.findViewById(R.id.roomSummaryAdapter_action_click_area);
 
         // directory management
-        if (mDirectoryGroupPosition == groupPosition) {
+        if ((mDirectoryGroupPosition == groupPosition) || (mRoomByAliasGroupPosition == groupPosition)) {
             // some items are show
             bingUnreadMsgView.setVisibility(View.INVISIBLE);
             timestampTxtView.setVisibility(View.GONE);
@@ -729,20 +774,27 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             showMoreView.setVisibility(View.VISIBLE);
             actionClickArea.setVisibility(View.GONE);
 
-            if (null == mPublicRooms) {
-                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
-                roomMsgTxtView.setText("");
-            } else {
-                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
-
-                if (TextUtils.isEmpty(mSearchedPattern)) {
-                    roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result, mMatchedPublicRooms.size()));
+            if (mDirectoryGroupPosition == groupPosition) {
+                if (null == mPublicRooms) {
+                    roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
+                    roomMsgTxtView.setText("");
                 } else {
-                    roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                    roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
+
+                    if (TextUtils.isEmpty(mSearchedPattern)) {
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result, mMatchedPublicRooms.size()));
+                    } else {
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                    }
                 }
+
+                avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null, true));
+            } else {
+                roomNameTxtView.setText(mSearchedPattern);
+                roomMsgTxtView.setText("");
+                avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), "@", true));
             }
 
-            avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null, true));
             return convertView;
         }
 
@@ -1032,6 +1084,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // refresh the layout
             this.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * @return the searched pattern
+     */
+    public String getSearchedPattern() {
+        return mSearchedPattern;
     }
 
     /**

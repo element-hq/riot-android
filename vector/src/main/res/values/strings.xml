@@ -520,6 +520,7 @@
     <string name="tab_title_search_files">FILES</string>
 
     <!-- Room recents -->
+    <string name="room_recents_join">JOIN</string>
     <string name="room_recents_directory">DIRECTORY</string>
     <string name="room_recents_favourites">FAVORITES</string>
     <string name="room_recents_conversations">ROOMS</string>

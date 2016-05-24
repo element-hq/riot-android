@@ -289,7 +289,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
-    private void showWaitingView() {
+    protected void showWaitingView() {
         findWaitingView();
 
         if (null != mWaitingView) {
@@ -297,7 +297,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
-    private void hideWaitingView() {
+    protected void hideWaitingView() {
         findWaitingView();
 
         if (null != mWaitingView) {
