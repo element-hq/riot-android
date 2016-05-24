@@ -113,37 +113,19 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
                 if (mAdapter.isRoomByIdGroupPosition(groupPosition)) {
                     String roomIdOrAlias = mAdapter.getSearchedPattern();
-                    Room room = null;
 
                     // detect if it is a room id
                     if (roomIdOrAlias.startsWith("!")) {
-                        room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
-                    } else {
-                        // room alias
-                        Collection<Room> rooms =  mSession.getDataHandler().getStore().getRooms();
+                        Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
-                        for(Room r : rooms) {
-                            RoomState state = r.getLiveState();
-
-                            if (null != state) {
-                                if (TextUtils.equals(state.alias, roomIdOrAlias) || ((null != state.aliases) && (state.aliases.indexOf(roomIdOrAlias) >= 0))) {
-                                    room = r;
-                                    break;
-                                }
-                            }
+                        if (null != room) {
+                            room.sendReadReceipt();
                         }
-                    }
-
-                    // test if the room is already defined
-                    if (null != room) {
-                        // aknownledge messages
-                        room.sendReadReceipt();
 
                         Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
-                        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+                        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomIdOrAlias);
                         intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         getActivity().startActivity(intent);
-
                     } else {
                         showWaitingView();
 
@@ -151,11 +133,18 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                         mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
                             @Override
                             public void onSuccess(String roomId) {
+                                Room aRoom = mSession.getDataHandler().getRoom(roomId, false);
+
+                                if (null != aRoom) {
+                                    aRoom.sendReadReceipt();
+                                }
+
                                 hideWaitingView();
-                                final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, null);
-                                VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                                Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-                                VectorApp.getCurrentActivity().startActivity(intent);
+
+                                Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                                getActivity().startActivity(intent);
                             }
 
                             private void onError(String errorMessage) {
