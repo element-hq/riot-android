@@ -19,29 +19,37 @@ package im.vector.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
+import im.vector.activity.VectorRoomPreviewActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.view.RecentsExpandableListView;
 
@@ -103,8 +111,66 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
 
+                if (mAdapter.isRoomByIdGroupPosition(groupPosition)) {
+                    String roomIdOrAlias = mAdapter.getSearchedPattern();
+
+                    // detect if it is a room id
+                    if (roomIdOrAlias.startsWith("!")) {
+                        Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
+
+                        if (null != room) {
+                            room.sendReadReceipt();
+                        }
+
+                        Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomIdOrAlias);
+                        intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        getActivity().startActivity(intent);
+                    } else {
+                        showWaitingView();
+
+                        // test if the room Id / alias exists
+                        mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
+                            @Override
+                            public void onSuccess(String roomId) {
+                                Room aRoom = mSession.getDataHandler().getRoom(roomId, false);
+
+                                if (null != aRoom) {
+                                    aRoom.sendReadReceipt();
+                                }
+
+                                hideWaitingView();
+
+                                Intent intent = new Intent(getActivity(), VectorRoomActivity.class);
+                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                                getActivity().startActivity(intent);
+                            }
+
+                            private void onError(String errorMessage) {
+                                hideWaitingView();
+                                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
+                    }
+                }
                 // display the public rooms list
-                if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
+                else if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
                     List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
 
                     if ((null != matchedPublicRooms) && (matchedPublicRooms.size() > 0)) {
