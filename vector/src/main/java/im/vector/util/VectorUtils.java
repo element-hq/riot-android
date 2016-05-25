@@ -449,6 +449,9 @@ public class VectorUtils {
             return;
         }
 
+        // reset the imageview tag
+        imageView.setTag(null);
+
         if (session.getMediasCache().isAvartarThumbailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
             session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         } else {
@@ -479,31 +482,43 @@ public class VectorUtils {
                     });
                 }
             } else {
+                final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
+                imageView.setTag(tmpTag0);
+
                 // create the default avatar in the background thread
                 mImagesThreadHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        setDefaultMemberAvatar(imageView, userId, displayName);
+                        if (TextUtils.equals(tmpTag0, (String)imageView.getTag())) {
+                            imageView.setTag(null);
+                            setDefaultMemberAvatar(imageView, userId, displayName);
 
-                        if (!TextUtils.isEmpty(avatarUrl)) {
-                            // wait that it is rendered to load the right one
-                            mUIHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //
-                                    final String tag = avatarUrl + userId + displayName;
-                                    imageView.setTag(tag);
+                            if (!TextUtils.isEmpty(avatarUrl)) {
+                                final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
+                                imageView.setTag(tmpTag1);
 
-                                    mImagesThreadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
-                                            }
+                                // wait that it is rendered to load the right one
+                                mUIHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // test if the imageview tag has not been updated
+                                        if (TextUtils.equals(tmpTag1, (String)imageView.getTag())) {
+                                            final String tmptag2 = "22" + avatarUrl + userId + displayName;
+                                            imageView.setTag(tmptag2);
+
+                                            mImagesThreadHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    // test if the imageview tag has not been updated
+                                                    if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
+                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                                                    }
+                                                }
+                                            });
                                         }
-                                    });
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                     }
                 });
