@@ -51,6 +51,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
@@ -210,6 +212,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private TextView mNotificationsMessageTextView;
     private TextView mErrorMessageTextView;
     private String mLatestTypingMessage;
+
+    // room preview
+    private View mRoomPreviewLayout;
 
     private MenuItem mCallMenuItem;
     private MenuItem mResendUnsentMenuItem;
@@ -382,7 +387,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mActionBarHeaderRoomName = (TextView)findViewById(R.id.action_bar_header_room_title);
         mActionBarHeaderActiveMembers = (TextView)findViewById(R.id.action_bar_header_room_members);
         mActionBarHeaderRoomAvatar = (ImageView) mRoomHeaderView.findViewById(R.id.avatar_img);
-        // hide the header room as soon as the bootom layout (text edit zone) is touched
+        mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
+
+        // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -523,18 +530,20 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(android.text.Editable s) {
-                MXLatestChatMessageCache latestChatMessageCache = VectorRoomActivity.this.mLatestChatMessageCache;
+                if (null != mRoom) {
+                    MXLatestChatMessageCache latestChatMessageCache = VectorRoomActivity.this.mLatestChatMessageCache;
 
-                String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
+                    String textInPlace = latestChatMessageCache.getLatestText(VectorRoomActivity.this, mRoom.getRoomId());
 
-                // check if there is really an update
-                // avoid useless updates (initializations..)
-                if (!mIgnoreTextUpdate && !textInPlace.equals(mEditText.getText().toString())) {
-                    latestChatMessageCache.updateLatestMessage(VectorRoomActivity.this, mRoom.getRoomId(), mEditText.getText().toString());
-                    handleTypingNotification(mEditText.getText().length() != 0);
+                    // check if there is really an update
+                    // avoid useless updates (initializations..)
+                    if (!mIgnoreTextUpdate && !textInPlace.equals(mEditText.getText().toString())) {
+                        latestChatMessageCache.updateLatestMessage(VectorRoomActivity.this, mRoom.getRoomId(), mEditText.getText().toString());
+                        handleTypingNotification(mEditText.getText().length() != 0);
+                    }
+
+                    manageSendMoreButtons();
                 }
-
-                manageSendMoreButtons();
             }
 
             @Override
@@ -579,6 +588,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         } else {
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
         }
+
+        manageRoomPreview();
 
         // in timeline mode (i.e search in the forward and backward room history)
         // or in room preview mode
@@ -1986,7 +1997,15 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     private void updateRoomHeaderAvatar() {
-        VectorUtils.loadRoomAvatar(this, mSession, mActionBarHeaderRoomAvatar, mRoom);
+        if (null != mRoom) {
+            VectorUtils.loadRoomAvatar(this, mSession, mActionBarHeaderRoomAvatar, mRoom);
+        } else if (null != sRoomPreviewData) {
+            String roomName = sRoomPreviewData.getRoomName();
+            if (TextUtils.isEmpty(roomName)) {
+                roomName = " ";
+            }
+            VectorUtils.loadUserAvatar(this, sRoomPreviewData.getSession(), mActionBarHeaderRoomAvatar, sRoomPreviewData.getRoomAvatarUrl(), sRoomPreviewData.getRoomId(), roomName);
+        }
     }
 
     public void insertInTextEditor(String text) {
@@ -2306,10 +2325,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
      */
     private void setTitle() {
         String titleToApply = mDefaultRoomName;
-
-        if (null != sRoomPreviewData) {
-            titleToApply =sRoomPreviewData.getRoomName();
-        } else if((null != mSession) && (null != mRoom)) {
+        if((null != mSession) && (null != mRoom)) {
             if (mRoom.isReady()) {
                 titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
             }
@@ -2322,6 +2338,8 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             if (!TextUtils.isEmpty(mEventId)) {
                 titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
             }
+        } else if (null != sRoomPreviewData) {
+            titleToApply =sRoomPreviewData.getRoomName();
         }
 
         // set action bar title
@@ -2377,30 +2395,51 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     private void updateRoomHeaderMembersStatus() {
-        if ((null != mActionBarHeaderActiveMembers) && ((null != mRoom) || (null != sRoomPreviewData))) {
+        if (null != mActionBarHeaderActiveMembers) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
+                if ((null != mRoom) || (null != sRoomPreviewData)) {
+                    // update the members status: "active members"/"members"
+                    int joinedMembersCount = 0;
+                    int activeMembersCount = 0;
 
-                // update the members status: "active members"/"members"
-                int joinedMembersCount = 0;
-                int activeMembersCount = 0;
+                    RoomState roomState =  (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
 
-                Collection<RoomMember> members = (null != mRoom) ? mRoom.getMembers() : sRoomPreviewData.getRoomState().getMembers();
+                    if (null != roomState) {
+                        Collection<RoomMember> members = roomState.getMembers();
 
-                for (RoomMember member : members) {
-                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                        joinedMembersCount++;
+                        for (RoomMember member : members) {
+                            if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                                joinedMembersCount++;
 
-                        User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+                                User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
 
-                        if ((null != user) && user.isActive()) {
-                            activeMembersCount++;
+                                if ((null != user) && user.isActive()) {
+                                    activeMembersCount++;
+                                }
+                            }
                         }
+
+                        String text;
+
+                        if (null != sRoomPreviewData) {
+                            if (joinedMembersCount == 1) {
+                                text = getResources().getString(R.string.room_title_one_member);
+                            } else {
+                                text = getResources().getString(R.string.room_title_members, joinedMembersCount);
+                            }
+                        } else {
+                            text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                        }
+
+                        mActionBarHeaderActiveMembers.setText(text);
+                        mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
+                    } else {
+                        mActionBarHeaderActiveMembers.setVisibility(View.GONE);
                     }
                 }
-
-                String value = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
-                mActionBarHeaderActiveMembers.setText(value);
+            } else {
+                mActionBarHeaderActiveMembers.setVisibility(View.GONE);
             }
         }
     }
@@ -2429,6 +2468,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             mRoomHeaderView.setVisibility(View.VISIBLE);
             mToolbar.setBackgroundColor(Color.TRANSPARENT);
 
+            // the list automatically scrolls down when its top moves down
             if (mVectorMessageListFragment.mMessageListView instanceof AutoScrollDownListView) {
                 ((AutoScrollDownListView)mVectorMessageListFragment.mMessageListView).lockSelectionOnResize();
             }
@@ -2473,6 +2513,216 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         }
         else {
             vectorActivityRoomView.getViewTreeObserver().removeOnGlobalLayoutListener(mKeyboardListener);
+        }
+    }
+
+
+    //================================================================================
+    // Room preview management
+    //================================================================================
+
+    /**
+     *  Manage the room preview buttons area
+     */
+    private void manageRoomPreview() {
+        if (null != sRoomPreviewData) {
+            mRoomPreviewLayout.setVisibility(View.VISIBLE);
+
+            TextView invitationTextView = (TextView)findViewById(R.id.room_preview_invitation_textview);
+            TextView subInvitationTextView = (TextView)findViewById(R.id.room_preview_subinvitation_textview);
+
+            Button joinButton = (Button)findViewById(R.id.button_join_room);
+            Button declineButton = (Button)findViewById(R.id.button_decline);
+
+            final RoomEmailInvitation roomEmailInvitation = sRoomPreviewData.getRoomEmailInvitation();
+
+            String roomName = sRoomPreviewData.getRoomName();
+            if (TextUtils.isEmpty(roomName)) {
+                roomName = " ";
+            }
+
+            Log.d(LOG_TAG, "Preview the room " + sRoomPreviewData.getRoomId());
+
+
+            // if the room already exists
+            if (null != mRoom) {
+                Log.d(LOG_TAG, "manageRoomPreview : The room is known");
+
+                String inviter = "";
+
+                if (null != roomEmailInvitation) {
+                    inviter = roomEmailInvitation.inviterName;
+                }
+
+                if (TextUtils.isEmpty(inviter)) {
+                    Collection<RoomMember> members = mRoom.getActiveMembers();
+                    for (RoomMember member : members) {
+                        if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                            inviter = TextUtils.isEmpty(member.displayname) ? member.getUserId() : member.displayname;
+                        }
+                    }
+                }
+
+                invitationTextView.setText(getResources().getString(R.string.room_preview_invitation_format, inviter));
+
+                declineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(LOG_TAG, "The user clicked on decline.");
+
+                       // progressLayout.setVisibility(View.VISIBLE);
+                        mRoom.leave(new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                Log.d(LOG_TAG, "The invitation is rejected");
+                                onDeclined();
+                            }
+
+                            private void onError(String errorMessage) {
+                                Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
+                                CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                                //progressLayout.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onError(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onError(e.getLocalizedMessage());
+                            }
+                        });
+                    }
+                });
+
+            } else {
+                if ((null != roomEmailInvitation) && !TextUtils.isEmpty(roomEmailInvitation.email)) {
+                    invitationTextView.setText(getResources().getString(R.string.room_preview_invitation_format, roomEmailInvitation.inviterName));
+                    subInvitationTextView.setText(getResources().getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
+                } else {
+                    invitationTextView.setText(getResources().getString(R.string.room_preview_try_join_an_unknown_room, roomName));
+                }
+
+                declineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(LOG_TAG, "The invitation is declined (unknown room)");
+
+                        sRoomPreviewData = null;
+                        VectorRoomActivity.this.finish();
+                    }
+                });
+            }
+
+            joinButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(LOG_TAG, "The user clicked on Join.");
+
+                    Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+
+                    String signUrl = null;
+
+                    if (null != roomEmailInvitation) {
+                        signUrl = roomEmailInvitation.signUrl;
+                    }
+
+                    //progressLayout.setVisibility(View.VISIBLE);
+
+                    room.joinWithThirdPartySigned(signUrl, new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            onJoined();
+                        }
+
+                        private void onError(String errorMessage) {
+                            CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+                           // progressLayout.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+                    });
+
+                }
+            });
+
+
+        } else {
+            mRoomPreviewLayout.setVisibility(View.GONE);
+        }
+    }
+
+/*
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getSession())) {
+            sRoomPreviewData.getSession().getDataHandler().removeListener(mEventListener);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getSession())) {
+            sRoomPreviewData.getSession().getDataHandler().addListener(mEventListener);
+        }
+    }*/
+
+    /**
+     * The room invitation has been declined
+     */
+    private void onDeclined() {
+        if (null != sRoomPreviewData) {
+            VectorRoomActivity.this.finish();
+            sRoomPreviewData = null;
+        }
+    }
+
+    /**
+     * the room has been joined
+     */
+    private void onJoined() {
+        if (null != sRoomPreviewData) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
+
+            if (null != sRoomPreviewData.getEventId()) {
+                params.put(VectorRoomActivity.EXTRA_EVENT_ID, sRoomPreviewData.getEventId());
+            }
+
+            // clear the activity stack to home activity
+            Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            VectorRoomActivity.this.startActivity(intent);
+
+            sRoomPreviewData = null;
         }
     }
 }

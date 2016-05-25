@@ -530,9 +530,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onPreviewRoom(MXSession session, String roomId) {
         final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, null);
-        VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+
+        VectorRoomActivity.sRoomPreviewData = roomPreviewData;
+        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomActivity.class);
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomId);
         VectorApp.getCurrentActivity().startActivity(intent);
+
+        /*VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
+        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+        VectorApp.getCurrentActivity().startActivity(intent);*/
     }
 
     @Override
