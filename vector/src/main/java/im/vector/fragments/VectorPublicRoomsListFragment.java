@@ -137,8 +137,10 @@ public class VectorPublicRoomsListFragment extends Fragment {
                         roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                             private void onDone() {
                                 mSpinnerView.setVisibility(View.GONE);
-                                VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                                Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
+                                VectorRoomActivity.sRoomPreviewData = roomPreviewData;
+                                Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomActivity.class);
+                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
+                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
                                 VectorApp.getCurrentActivity().startActivity(intent);
                             }
 

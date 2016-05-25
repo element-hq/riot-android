@@ -64,6 +64,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -118,6 +119,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
+    public static final String EXTRA_ROOM_PREVIEW_ID = "EXTRA_ROOM_PREVIEW_ID";
 
     // display the room information while joining a room.
     // until the join is done.
@@ -173,6 +175,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private MXSession mSession;
     private Room mRoom;
     private String mMyUserId;
+    // the parameter is too big to be sent by the intent
+    // so use a static variable to send it
+    public static RoomPreviewData sRoomPreviewData = null;
     private String mEventId;
     private String mDefaultRoomName;
     private String mDefaultTopic;
@@ -241,7 +246,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     // scroll to a dedicated index
     private int mScrollToIndex = -1;
 
-    private Boolean mIgnoreTextUpdate = false;
+    private boolean mIgnoreTextUpdate = false;
 
     private AlertDialog mImageSizesListDialog;
     private boolean mImageQualityPopUpInProgress;
@@ -299,7 +304,9 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                         // do not send read receipt for the typing events
                         // they are ephemeral ones.
                         if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
-                            mRoom.sendReadReceipt();
+                            if (null != mRoom) {
+                                mRoom.sendReadReceipt();
+                            }
                         }
                     }
                 }
@@ -356,6 +363,18 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         Log.d(LOG_TAG, "Create the activity");
 
+        Intent intent = getIntent();
+        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
+            Log.e(LOG_TAG, "No room ID extra.");
+            finish();
+            return;
+        }
+
+        // ensure that the preview mode is really expected
+        if (!intent.hasExtra(EXTRA_ROOM_PREVIEW_ID)) {
+            sRoomPreviewData = null;
+        }
+
         // bind the widgets of the room header view. The room header view is displayed by
         // clicking on the title of the action bar
         mRoomHeaderView = (RelativeLayout) findViewById(R.id.action_bar_header);
@@ -381,13 +400,6 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         // set the default custom action bar layout,
         // that will be displayed from the custom action bar layout
         setActionBarDefaultCustomLayout();
-
-        Intent intent = getIntent();
-        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
-            Log.e(LOG_TAG, "No room ID extra.");
-            finish();
-            return;
-        }
 
         mCallId = intent.getStringExtra(EXTRA_START_CALL_ID);
         mEventId = intent.getStringExtra(EXTRA_EVENT_ID);
@@ -553,7 +565,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
 
         CommonActivityUtils.resumeEventStream(this);
 
-        mRoom = mSession.getDataHandler().getRoom(roomId);
+        mRoom = mSession.getDataHandler().getRoom(roomId, false);
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
@@ -562,15 +574,16 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             Log.d(LOG_TAG, "Create VectorMessageListFragment");
 
             // this fragment displays messages and handles all message logic
-            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, mRoom.getRoomId(), mEventId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+            mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, roomId, mEventId, (null == sRoomPreviewData) ? null : VectorMessageListFragment.PREVIEW_MODE_READ_ONLY, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         } else {
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
         }
 
         // in timeline mode (i.e search in the forward and backward room history)
-        // the edition is disabled.
-        if (!TextUtils.isEmpty(mEventId)) {
+        // or in room preview mode
+        // the edition items are not displayed
+        if (!TextUtils.isEmpty(mEventId) || (null != sRoomPreviewData)) {
             mNotificationsArea.setVisibility(View.GONE);
             findViewById(R.id.bottom_separator).setVisibility(View.GONE);
             findViewById(R.id.room_notification_separator).setVisibility(View.GONE);
@@ -783,8 +796,10 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         // warn other member that the typing is ended
         cancelTypingNotification();
 
-        // listen for room name or topic changes
-        mRoom.removeEventListener(mEventListener);
+        if (null != mRoom) {
+            // listen for room name or topic changes
+            mRoom.removeEventListener(mEventListener);
+        }
 
         Matrix.getInstance(this).removeNetworkEventListener(mNetworkEventListener);
 
@@ -816,39 +831,48 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         Log.d(LOG_TAG, "++ Resume the activity");
 
         super.onResume();
-        ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
+
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
-        // check if the room has been left from another client.
-        if (mRoom.isReady()) {
-            if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
-                VectorRoomActivity.this.finish();
-                return;
-            }
-        }
+        if (null != mRoom) {
+            ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
 
-        // listen for room name or topic changes
-        mRoom.addEventListener(mEventListener);
+            // check if the room has been left from another client.
+            if (mRoom.isReady()) {
+                if ((null == mRoom.getMember(mMyUserId)) || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+                    VectorRoomActivity.this.finish();
+                    return;
+                }
+            }
+
+            // listen for room name or topic changes
+            mRoom.addEventListener(mEventListener);
+        }
 
         mSession.getDataHandler().addListener(mPresenceEventListener);
 
         Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
 
-        EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
+        if (null != mRoom) {
+            EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
+        }
 
         // listen to keyboard display
         enableKeyboardShownListener(true);
 
-        // reset the unread messages counter
-        mRoom.sendReadReceipt();
+        if (null != mRoom) {
+            // reset the unread messages counter
+            mRoom.sendReadReceipt();
 
-        String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
-        if (!cachedText.equals(mEditText.getText().toString())) {
-            mIgnoreTextUpdate = true;
-            mEditText.setText("");
-            mEditText.append(cachedText);
-            mIgnoreTextUpdate = false;
+            String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
+
+            if (!cachedText.equals(mEditText.getText().toString())) {
+                mIgnoreTextUpdate = true;
+                mEditText.setText("");
+                mEditText.append(cachedText);
+                mIgnoreTextUpdate = false;
+            }
         }
 
         manageSendMoreButtons();
@@ -901,16 +925,18 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             mCallId = null;
         }
 
-        // check if the room has been left from another activity
-        if (mRoom.isLeaving() || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
+        if (null != mRoom) {
+            // check if the room has been left from another activity
+            if (mRoom.isLeaving() || !mSession.getDataHandler().doesRoomExist(mRoom.getRoomId())) {
 
-            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    VectorRoomActivity.this.finish();
-                                                }
-                                            }
-            );
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      VectorRoomActivity.this.finish();
+                                  }
+                              }
+                );
+            }
         }
 
         Log.d(LOG_TAG, "-- Resume the activity");
@@ -930,7 +956,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         }
 
         // the menu is only displayed when the current activity does not display a timeline search
-        if (TextUtils.isEmpty(mEventId)) {
+        if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.vector_room, menu);
 
@@ -1913,15 +1939,21 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     /**
-     * Set the topic value contained in the Room object.
+     * Set the topic
      */
     private void setTopic() {
         if (null != mRoom) {
             String topicValue = mRoom.getTopic();
             setTopic(topicValue);
+        } else if (null != sRoomPreviewData) {
+            setTopic(sRoomPreviewData.getRoomState().topic);
         }
     }
 
+    /**
+     * Set the topic.
+     * @param aTopicValue the new topic value
+     */
     private void setTopic(String aTopicValue){
         // in search mode, the topic is not displayed
         if (!TextUtils.isEmpty(mEventId)) {
@@ -1974,7 +2006,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     private void refreshNotificationsArea() {
         // sanity check
         // might happen when the application is logged out
-        if (null == mSession.getDataHandler()) {
+        if ((null == mSession.getDataHandler()) || (null == mRoom)) {
             return;
         }
 
@@ -2245,7 +2277,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         headerTextsContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(mEventId)) {
+                if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
                     launchRoomDetails();
                 }
             }
@@ -2256,7 +2288,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (TextUtils.isEmpty(mEventId)) {
+                    if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
                         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                             launchRoomDetails();
                         }
@@ -2272,10 +2304,12 @@ public class VectorRoomActivity extends MXCActionBarActivity {
      * Set the title value in the action bar and in the
      * room header layout
      */
-    private void setTitle(){
-        if((null != mSession) && (null != mRoom)) {
-            String titleToApply = null;
+    private void setTitle() {
+        String titleToApply = mDefaultRoomName;
 
+        if (null != sRoomPreviewData) {
+            titleToApply =sRoomPreviewData.getRoomName();
+        } else if((null != mSession) && (null != mRoom)) {
             if (mRoom.isReady()) {
                 titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
             }
@@ -2288,25 +2322,18 @@ public class VectorRoomActivity extends MXCActionBarActivity {
             if (!TextUtils.isEmpty(mEventId)) {
                 titleToApply = getResources().getText(R.string.search) + " : " + titleToApply;
             }
+        }
 
-            // set action bar title
-            if (null != mActionBarCustomTitle) {
-                mActionBarCustomTitle.setText(titleToApply);
-            } else {
-                setTitle(titleToApply);
-            }
+        // set action bar title
+        if (null != mActionBarCustomTitle) {
+            mActionBarCustomTitle.setText(titleToApply);
+        } else {
+            setTitle(titleToApply);
+        }
 
-            // set title in the room header (no matter if not displayed)
-            if (null != mActionBarHeaderRoomName) {
-                mActionBarHeaderRoomName.setText(titleToApply);
-            }
-        } else if (null != mDefaultRoomName) {
-            // set action bar title
-            if (null != mActionBarCustomTitle) {
-                mActionBarCustomTitle.setText(mDefaultRoomName);
-            } else {
-                setTitle(mDefaultRoomName);
-            }
+        // set title in the room header (no matter if not displayed)
+        if (null != mActionBarHeaderRoomName) {
+            mActionBarHeaderRoomName.setText(titleToApply);
         }
     }
 
@@ -2318,7 +2345,11 @@ public class VectorRoomActivity extends MXCActionBarActivity {
         updateRoomHeaderAvatar();
 
         // update the room name
-        mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
+        if (null != mRoom) {
+            mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
+        } else {
+            mActionBarHeaderRoomName.setText(sRoomPreviewData.getRoomName());
+        }
 
         // update topic and members status
         updateRoomHeaderTopic();
@@ -2326,8 +2357,14 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     private void updateRoomHeaderTopic() {
-        if((null != mActionBarCustomTopic) && (null != mRoom)) {
-            String value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
+        if (null != mActionBarCustomTopic) {
+            String value = null;
+
+            if (null != mRoom) {
+                value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
+            } else if (null != sRoomPreviewData){
+                value = sRoomPreviewData.getRoomState().topic;
+            }
 
             // if topic value is empty, just hide the topic TextView
             if (TextUtils.isEmpty(value)) {
@@ -2340,7 +2377,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     }
 
     private void updateRoomHeaderMembersStatus() {
-        if ((null != mActionBarHeaderActiveMembers) && (null != mRoom)) {
+        if ((null != mActionBarHeaderActiveMembers) && ((null != mRoom) || (null != sRoomPreviewData))) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
 
@@ -2348,7 +2385,7 @@ public class VectorRoomActivity extends MXCActionBarActivity {
                 int joinedMembersCount = 0;
                 int activeMembersCount = 0;
 
-                Collection<RoomMember> members = mRoom.getMembers();
+                Collection<RoomMember> members = (null != mRoom) ? mRoom.getMembers() : sRoomPreviewData.getRoomState().getMembers();
 
                 for (RoomMember member : members) {
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {

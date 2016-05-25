@@ -37,12 +37,69 @@
 
         </android.support.v7.widget.Toolbar>
     </RelativeLayout>
-    
+
+    <LinearLayout
+        android:id="@+id/room_preview_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/room_action_bar">
+
+        <TextView
+            android:id="@+id/room_preview_invitation_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="A text here"
+            android:textColor="@color/vector_text_black_color"/>
+
+        <RelativeLayout
+            android:id="@+id/preview_actions_bar"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="match_parent"
+            android:layout_height="65dp">
+
+            <Button
+                android:id="@+id/button_join_room"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="16dp"
+                android:layout_width="94dp"
+                android:layout_height="36dp"
+                android:background="@color/vector_green_color"
+                android:textColor="@android:color/white"
+                android:text="@string/join_room"/>
+
+            <Button
+                android:id="@+id/button_decline"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="94dp"
+                android:layout_height="36dp"
+                android:textColor="@color/vector_fuchsia_color"
+                android:background="@android:color/white"
+                android:text="@string/decline"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/room_preview_subinvitation_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text=""
+            android:textColor="@color/vector_silver_color"/>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/room_action_bar">
+        android:layout_below="@+id/room_preview_info_layout">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
