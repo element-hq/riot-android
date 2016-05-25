@@ -36,15 +36,12 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.text.AndroidCharacter;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,7 +68,6 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
-import org.matrix.androidsdk.listeners.IMXEventListener;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -84,6 +80,8 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.view.AutoScrollDownListView;
+
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -115,7 +113,7 @@ import java.util.regex.Pattern;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity implements VectorMessageListFragment.IListFragmentEventListener {
+public class VectorRoomActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
@@ -344,16 +342,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
     };
 
     // *********************************************************************************************
-    // IListFragmentEventListener implementation
-    /**
-     * Listener on the underlying fragment list view.
-     * When the list view is scrolled, the header room view must be hidden.
-     */
-    @Override
-    public void onListTouch() {
-    }
-
-    // *********************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -385,7 +373,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
         });
 
         // use a toolbar instead of the actionbar
-        // to be able to display an expandable avatar
+        // to be able to display an expandable header
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.room_toolbar);
         this.setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -2403,6 +2391,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements VectorMe
             // enable the header view to make it visible
             mRoomHeaderView.setVisibility(View.VISIBLE);
             mToolbar.setBackgroundColor(Color.TRANSPARENT);
+
+            if (mVectorMessageListFragment.mMessageListView instanceof AutoScrollDownListView) {
+                ((AutoScrollDownListView)mVectorMessageListFragment.mMessageListView).lockSelectionOnResize();
+            }
         } else {
             // hide the room header only if it is displayed
             if(View.VISIBLE == mRoomHeaderView.getVisibility()) {
