@@ -98,7 +98,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     protected View mForwardProgressView;
     protected View mMainProgressView;
 
-    public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, int layoutResId) {
+    public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
@@ -107,6 +107,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         if (null != eventId) {
             args.putString(ARG_EVENT_ID, eventId);
+        }
+
+        if (null != previewMode) {
+            args.putString(ARG_PREVIEW_MODE_ID, previewMode);
         }
 
         f.setArguments(args);
