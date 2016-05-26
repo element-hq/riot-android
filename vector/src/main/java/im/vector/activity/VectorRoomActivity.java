@@ -925,13 +925,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // the device has been rotated
         // so try to keep the same top/left item;
         if (mScrollToIndex > 0) {
-            mVectorMessageListFragment.mMessageListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mVectorMessageListFragment.mMessageListView.setSelection(mScrollToIndex);
-                    mScrollToIndex = -1;
-                }
-            });
+            mVectorMessageListFragment.scrollToIndexWhenLoaded(mScrollToIndex);
+            mScrollToIndex = -1;
         }
 
         if (null != mCallId) {
