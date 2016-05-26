@@ -583,15 +583,19 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                if (!mIsSearchMode) {
                     onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    mHighlightedEventId = eventId;
+                    notifyDataSetChanged();
                     return true;
                 }
+
                 return false;
             }
         });
     }
 
+    @Override
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         if (shouldBeMerged) {
             shouldBeMerged = null == headerMessage(position);
@@ -599,6 +603,36 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         return shouldBeMerged;
     }
+
+    @Override
+    protected void addContentViewListeners(final View convertView, final View contentView, final int position) {
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mMessagesAdapterEventsListener) {
+                    mMessagesAdapterEventsListener.onContentClick(position);
+                }
+            }
+        });
+
+        contentView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                MessageRow row = getItem(position);
+                Event event = row.getEvent();
+
+                if (!mIsSearchMode) {
+                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    mHighlightedEventId = event.eventId;
+                    notifyDataSetChanged();
+                    return true;
+                }
+
+                return true;
+            }
+        });
+    }
+
 
     @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {
