@@ -239,7 +239,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
 
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
-            CommonActivityUtils.previewRoom(VectorApp.getCurrentActivity(), mSession, roomIdOrAlias, null);
+            Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
+
+            // if the room exists
+            if ((null != room) && !room.isInvited()) {
+                openRoomActivity(aContext);
+            } else {
+                CommonActivityUtils.previewRoom(VectorApp.getCurrentActivity(), mSession, roomIdOrAlias, null);
+            }
         } else { // room ID is provided as a room alias: get corresponding room ID
 
             Log.d(LOG_TAG, "manageRoom : it is a room Alias");
