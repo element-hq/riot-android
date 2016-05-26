@@ -257,12 +257,36 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private AlertDialog mImageSizesListDialog;
     private boolean mImageQualityPopUpInProgress;
 
-    private final MXEventListener mPresenceEventListener = new MXEventListener() {
+    private final MXEventListener mGlobalEventListener = new MXEventListener() {
         @Override
         public void onPresenceUpdate(Event event, User user) {
             // the header displays active members
             updateRoomHeaderMembersStatus();
         }
+
+        @Override
+        public void onLeaveRoom(String roomId) {
+            // test if the user reject the invitation
+            if ((null != sRoomPreviewData) && TextUtils.equals(sRoomPreviewData.getRoomId(), roomId)) {
+                Log.d(LOG_TAG, "The room invitation has been declined from another client");
+                onDeclined();
+            }
+        }
+
+        @Override
+        public void onJoinRoom(String roomId) {
+            // test if the user accepts the invitation
+            if ((null != sRoomPreviewData) && TextUtils.equals(sRoomPreviewData.getRoomId(), roomId)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(LOG_TAG, "The room invitation has been accepted from another client");
+                        onJoined();
+                    }
+                });
+            }
+        }
+
     };
 
     private final MXEventListener mEventListener = new MXEventListener() {
@@ -818,7 +842,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (mSession.isAlive()) {
             // GA reports a null dataHandler instance event if it seems impossible
             if (null != mSession.getDataHandler()) {
-                mSession.getDataHandler().removeListener(mPresenceEventListener);
+                mSession.getDataHandler().removeListener(mGlobalEventListener);
             }
         }
 
@@ -861,7 +885,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mRoom.addEventListener(mEventListener);
         }
 
-        mSession.getDataHandler().addListener(mPresenceEventListener);
+        mSession.getDataHandler().addListener(mGlobalEventListener);
 
         Matrix.getInstance(this).addNetworkEventListener(mNetworkEventListener);
 
@@ -1065,6 +1089,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // medias sending
     //================================================================================
 
+    /**
+     * Update the spinner visibility
+     * @param visibility
+     */
+    private void setProgressVisibility(int visibility) {
+        View progressLayout = findViewById(R.id.main_progress_layout);
+
+        if (null != progressLayout) {
+            progressLayout.setVisibility(visibility);
+        }
+    }
+
     private void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
             if (!manageIRCCommand(body)) {
@@ -1081,8 +1117,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void sendMedias(final ArrayList<Uri> mediaUris) {
         mVectorMessageListFragment.cancelSelectionMode();
 
-        final View progressLayout = findViewById(R.id.main_progress_layout);
-        progressLayout.setVisibility(View.VISIBLE);
+        setProgressVisibility(View.VISIBLE);
 
         final HandlerThread handlerThread = new HandlerThread("MediasEncodingThread");
         handlerThread.start();
@@ -1142,7 +1177,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                         @Override
                                         public void run() {
                                             handlerThread.quit();
-                                            progressLayout.setVisibility(View.GONE);
+                                            setProgressVisibility(View.GONE);
 
                                             Toast.makeText(VectorRoomActivity.this,
                                                     getString(R.string.message_failed_to_upload),
@@ -1410,7 +1445,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             @Override
                             public void run() {
                                 handlerThread.quit();
-                                progressLayout.setVisibility(View.GONE);
+                                setProgressVisibility(View.GONE);
                             }
                         });
                     }
@@ -1818,8 +1853,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        final View progressLayout =  findViewById(R.id.main_progress_layout);
-                                        progressLayout.setVisibility(View.VISIBLE);
+                                        setProgressVisibility(View.VISIBLE);
 
                                         Thread thread = new Thread(new Runnable() {
                                             @Override
@@ -1863,7 +1897,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        progressLayout.setVisibility(View.GONE);
+                                                        setProgressVisibility(View.GONE);
                                                         mVectorMessageListFragment.uploadImageContent(mPendingThumbnailUrl, mPendingMediaUrl, mPendingFilename, mPendingMimeType);
                                                         mPendingThumbnailUrl = null;
                                                         mPendingMediaUrl = null;
@@ -2327,9 +2361,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void setTitle() {
         String titleToApply = mDefaultRoomName;
         if((null != mSession) && (null != mRoom)) {
-            if (mRoom.isReady()) {
-                titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
-            }
+            titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
 
             if (TextUtils.isEmpty(titleToApply)) {
                 titleToApply = mDefaultRoomName;
@@ -2576,7 +2608,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     public void onClick(View v) {
                         Log.d(LOG_TAG, "The user clicked on decline.");
 
-                       // progressLayout.setVisibility(View.VISIBLE);
+                        setProgressVisibility(View.VISIBLE);
+
                         mRoom.leave(new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
@@ -2587,7 +2620,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             private void onError(String errorMessage) {
                                 Log.d(LOG_TAG, "The invitation rejection failed " + errorMessage);
                                 CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                                //progressLayout.setVisibility(View.GONE);
+                                setProgressVisibility(View.GONE);
                             }
 
                             @Override
@@ -2640,7 +2673,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         signUrl = roomEmailInvitation.signUrl;
                     }
 
-                    //progressLayout.setVisibility(View.VISIBLE);
+                    setProgressVisibility(View.VISIBLE);
 
                     room.joinWithThirdPartySigned(signUrl, new ApiCallback<Void>() {
                         @Override
@@ -2650,7 +2683,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                         private void onError(String errorMessage) {
                             CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
-                           // progressLayout.setVisibility(View.GONE);
+                            setProgressVisibility(View.GONE);
                         }
 
                         @Override
@@ -2672,30 +2705,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
             });
 
+            enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
 
         } else {
             mRoomPreviewLayout.setVisibility(View.GONE);
         }
     }
-
-/*
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getSession())) {
-            sRoomPreviewData.getSession().getDataHandler().removeListener(mEventListener);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getSession())) {
-            sRoomPreviewData.getSession().getDataHandler().addListener(mEventListener);
-        }
-    }*/
 
     /**
      * The room invitation has been declined

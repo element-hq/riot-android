@@ -51,7 +51,6 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorRoomPreviewActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.view.RecentsExpandableListView;
 
@@ -207,66 +206,32 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     }
 
     /**
-     * Previe the dedicated room if it was not joined.
+     * Preview the dedicated room if it was not joined.
      * @param roomId the roomId
      */
     private void previewRoom(final String roomId) {
-        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, null);
-
-        Room room = mSession.getDataHandler().getRoom(roomId, false);
-
-        // if the room exists
-        if (null != room) {
-            // either the user is invited
-            if (room.isInvited()) {
-                Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
-
-                VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-                VectorApp.getCurrentActivity().startActivity(intent);
-            } else {
-                Log.d(LOG_TAG, "previewRoom : open the room");
-                HashMap<String, Object> params = new HashMap<String, Object>();
-                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-                CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
+        CommonActivityUtils.previewRoom(getActivity(), mSession, roomId, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                hideWaitingView();
             }
 
-            hideWaitingView();
-        } else {
-            roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+            @Override
+            public void onNetworkError(Exception e) {
+                hideWaitingView();
+            }
 
-                private void onDone() {
-                    hideWaitingView();
-                    VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                    Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-                    VectorApp.getCurrentActivity().startActivity(intent);
-                }
+            @Override
+            public void onMatrixError(MatrixError e) {
+                hideWaitingView();
+            }
 
-                @Override
-                public void onSuccess(Void info) {
-                    onDone();
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onDone();
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onDone();
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onDone();
-                }
-            });
-        }
+            @Override
+            public void onUnexpectedError(Exception e) {
+                hideWaitingView();
+            }
+        });
     }
-
 
     /**
      * Expands all existing sections.

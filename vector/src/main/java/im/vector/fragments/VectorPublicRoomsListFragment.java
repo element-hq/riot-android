@@ -39,7 +39,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorRoomPreviewActivity;
 import im.vector.adapters.VectorPublicRoomsAdapter;
 
 import java.util.ArrayList;
@@ -111,10 +110,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
                         // either the user is invited
                         if (room.isInvited()) {
                             Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
-
-                            VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                            Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-                            VectorApp.getCurrentActivity().startActivity(intent);
+                            CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                         } else {
                             Log.d(LOG_TAG, "manageRoom : open the room");
                             HashMap<String, Object> params = new HashMap<String, Object>();
@@ -137,11 +133,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
                         roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                             private void onDone() {
                                 mSpinnerView.setVisibility(View.GONE);
-                                VectorRoomActivity.sRoomPreviewData = roomPreviewData;
-                                Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomActivity.class);
-                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
-                                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
-                                VectorApp.getCurrentActivity().startActivity(intent);
+                                CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                             }
 
                             @Override

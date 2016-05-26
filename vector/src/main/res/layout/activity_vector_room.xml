@@ -45,8 +45,12 @@
         android:orientation="vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="16dp"
         android:layout_below="@+id/room_action_bar">
+        
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="16dp">
+        </View>
 
         <TextView
             android:id="@+id/room_preview_invitation_textview"
@@ -274,24 +278,23 @@
                 android:layout_alignBottom="@id/anchor_fragment_messages"
                 android:visibility="gone"
                 android:indeterminate="true" />
-
-            <RelativeLayout
-                android:id="@+id/main_progress_layout"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/chat_encoding_background"
-                android:visibility="gone">
-                <ProgressBar
-                    android:id="@+id/medias_processing_progress"
-                    android:layout_height="40dp"
-                    android:layout_width="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:indeterminate="true" />
-            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/main_progress_layout"
+        android:layout_alignTop="@+id/room_preview_info_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/chat_encoding_background"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/medias_processing_progress"
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true" />
+    </RelativeLayout>
 </RelativeLayout>

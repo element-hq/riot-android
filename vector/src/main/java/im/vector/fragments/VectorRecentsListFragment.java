@@ -52,7 +52,6 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorRoomPreviewActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
@@ -530,12 +529,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onPreviewRoom(MXSession session, String roomId) {
         final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, null);
-
-        VectorRoomActivity.sRoomPreviewData = roomPreviewData;
-        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomActivity.class);
-        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomId);
-        VectorApp.getCurrentActivity().startActivity(intent);
+        CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
     }
 
     @Override

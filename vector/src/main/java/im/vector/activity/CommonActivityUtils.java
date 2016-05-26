@@ -46,6 +46,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -408,6 +409,89 @@ public class CommonActivityUtils {
         }
     }
 
+    //==============================================================================================================
+    // Room preview methods.
+    //==============================================================================================================
+
+    /**
+     * Start a room activity in preview mode.
+     * @param fromActivity the caller activity.
+     * @param roomPreviewData the room preview information
+     */
+    public static void previewRoom(final Activity fromActivity, RoomPreviewData roomPreviewData) {
+        if ((null != fromActivity) && (null != roomPreviewData)) {
+            VectorRoomActivity.sRoomPreviewData = roomPreviewData;
+            Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
+            VectorApp.getCurrentActivity().startActivity(intent);
+        }
+    }
+
+    /**
+     * Start a room activity in preview mode.
+     * If the room is already joined, open it in edition mode.
+     * @param fromActivity the caller activity.
+     * @param session the session
+     * @param roomId the roomId
+     * @param callback the operation callback
+     */
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final ApiCallback<Void> callback) {
+        final RoomPreviewData roomPreviewData = new RoomPreviewData(session, roomId, null, null);
+
+        Room room = session.getDataHandler().getRoom(roomId, false);
+
+        // if the room exists
+        if (null != room) {
+            // either the user is invited
+            if (room.isInvited()) {
+                Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+                previewRoom(fromActivity, roomPreviewData);
+            } else {
+                Log.d(LOG_TAG, "previewRoom : open the room");
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+            }
+
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+        } else {
+            roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+                private void onDone() {
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+                    previewRoom(fromActivity, roomPreviewData);
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+
+
+    }
     //==============================================================================================================
     // Room jump methods.
     //==============================================================================================================
