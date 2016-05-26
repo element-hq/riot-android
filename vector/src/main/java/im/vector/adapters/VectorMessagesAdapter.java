@@ -367,6 +367,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             return;
         }
 
+        // hide the read receipts until there is a way to retrieve them
+        // without triggering a request per message
+        if (mIsPreviewMode) {
+            avatarsListView.setVisibility(View.GONE);
+            return;
+        }
+
         List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
 
         // if there is no receipt to display
