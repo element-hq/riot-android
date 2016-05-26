@@ -536,10 +536,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
         intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomId);
         VectorApp.getCurrentActivity().startActivity(intent);
-
-        /*VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-        VectorApp.getCurrentActivity().startActivity(intent);*/
     }
 
     @Override

@@ -71,6 +71,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
+import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -116,7 +117,7 @@ import java.util.regex.Pattern;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity {
+public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.RoomPreviewDataListener {
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
@@ -2520,6 +2521,11 @@ public class VectorRoomActivity extends MXCActionBarActivity {
     //================================================================================
     // Room preview management
     //================================================================================
+
+    @Override
+    public RoomPreviewData getRoomPreviewData() {
+        return sRoomPreviewData;
+    }
 
     /**
      *  Manage the room preview buttons area
