@@ -86,6 +86,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -795,5 +797,57 @@ public class VectorUtils {
         }*/
 
         return map;
+    }
+
+
+    //==============================================================================================================
+    // URL parser
+    //==============================================================================================================
+
+    private static final Pattern mUrlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+    /**
+     * List the URLs in a text.
+     * @param text the text to parse
+     * @return the list of URLss
+     */
+    public static List<String> listURLs(String text) {
+        ArrayList<String> URLs = new ArrayList<>();
+
+        // sanity checks
+        if (!TextUtils.isEmpty(text)) {
+            Matcher matcher = mUrlPattern.matcher(text);
+
+            while (matcher.find()) {
+                int matchStart = matcher.start(1);
+                int matchEnd = matcher.end();
+
+                String charBef = "";
+                String charAfter = "";
+
+                if (matchStart > 2) {
+                    charBef = text.substring(matchStart-2, matchStart);
+                }
+
+                if ((matchEnd-1) < text.length()) {
+                    charAfter = text.substring(matchEnd-1, matchEnd);
+                }
+
+                // keep the link between parenthesis, it might be a link [title](link)
+                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](") ) {
+                    String url = text.substring(matchStart, matchEnd);
+
+                    if (URLs.indexOf(url) < 0) {
+                        URLs.add(url);
+                    }
+                }
+            }
+        }
+
+        return URLs;
     }
 }
