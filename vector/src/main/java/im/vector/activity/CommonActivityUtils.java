@@ -440,7 +440,19 @@ public class CommonActivityUtils {
      * @param callback the operation callback
      */
     public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final ApiCallback<Void> callback) {
-        final RoomPreviewData roomPreviewData = new RoomPreviewData(session, roomId, null, null);
+        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, null), callback);
+    }
+
+    /**
+     * Start a room activity in preview mode.
+     * If the room is already joined, open it in edition mode.
+     * @param fromActivity the caller activity.
+     * @param session the session
+     * @param roomId the roomId
+     * @param roomPreviewData the room preview data
+     * @param callback the operation callback
+     */
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final RoomPreviewData roomPreviewData, final ApiCallback<Void> callback) {
         Room room = session.getDataHandler().getRoom(roomId, false);
 
         // if the room exists
