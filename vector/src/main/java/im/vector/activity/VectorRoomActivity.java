@@ -1984,12 +1984,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Set the topic
      */
     private void setTopic() {
+        String topic = null;
+
         if (null != mRoom) {
-            String topicValue = mRoom.getTopic();
-            setTopic(topicValue);
-        } else if (null != sRoomPreviewData) {
-            setTopic(sRoomPreviewData.getRoomState().topic);
+            topic = mRoom.getTopic();
+        } else if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getRoomState())) {
+            topic = sRoomPreviewData.getRoomState().topic;
         }
+
+        setTopic(topic);
     }
 
     /**
@@ -2425,7 +2428,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             if (null != mRoom) {
                 value = mRoom.isReady() ? mRoom.getTopic() : mDefaultTopic;
-            } else if (null != sRoomPreviewData){
+            } else if ((null != sRoomPreviewData) && (null != sRoomPreviewData.getRoomState())) {
                 value = sRoomPreviewData.getRoomState().topic;
             }
 
