@@ -403,6 +403,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // ensure that the preview mode is really expected
         if (!intent.hasExtra(EXTRA_ROOM_PREVIEW_ID)) {
             sRoomPreviewData = null;
+            Matrix.getInstance(this).clearTmpStoresList();
         }
 
         // bind the widgets of the room header view. The room header view is displayed by

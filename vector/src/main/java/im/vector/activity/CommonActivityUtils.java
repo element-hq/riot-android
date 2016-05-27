@@ -275,6 +275,9 @@ public class CommonActivityUtils {
         // ensure that corrupted values are cleared
         Matrix.getInstance(activity).getLoginStorage().clear();
 
+        // clear the tmp store list
+        Matrix.getInstance(activity).clearTmpStoresList();
+
         // reset the contacts
         PIDsRetriever.getIntance().reset();
         ContactsManager.reset();
@@ -424,7 +427,7 @@ public class CommonActivityUtils {
             Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
-            VectorApp.getCurrentActivity().startActivity(intent);
+            fromActivity.startActivity(intent);
         }
     }
 
@@ -438,7 +441,6 @@ public class CommonActivityUtils {
      */
     public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final ApiCallback<Void> callback) {
         final RoomPreviewData roomPreviewData = new RoomPreviewData(session, roomId, null, null);
-
         Room room = session.getDataHandler().getRoom(roomId, false);
 
         // if the room exists

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector;
 
 import android.app.Activity;
@@ -32,25 +48,40 @@ import java.util.Collection;
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
  */
 public class Matrix {
-
+    // the log tag
     private static final String LOG_TAG = "Matrix";
 
+    // static instance
     private static Matrix instance = null;
 
-    private LoginStorage mLoginStorage;
-    private ArrayList<MXSession> mMXSessions;
-    private GcmRegistrationManager mGcmRegistrationManager;
+    // the application context
     private Context mAppContext;
 
+    // login storage
+    private LoginStorage mLoginStorage;
+
+    // list of session
+    private ArrayList<MXSession> mMXSessions;
+
+    // GCM registration manager
+    private GcmRegistrationManager mGcmRegistrationManager;
+
+    // list of store : some sessions or activities use tmp stores
+    // provide an storage to exchange them
+    private ArrayList<IMXStore> mTmpStores;
+
+    // tell if the client should be logged out
     public boolean mHasBeenDisconnected = false;
 
     // network event manager
     private NetworkConnectivityReceiver mNetworkConnectivityReceiver;
 
+    // constructor
     protected Matrix(Context appContext) {
         mAppContext = appContext.getApplicationContext();
         mLoginStorage = new LoginStorage(mAppContext);
         mMXSessions = new ArrayList<MXSession>();
+        mTmpStores = new ArrayList<IMXStore>();
         mGcmRegistrationManager = new GcmRegistrationManager(mAppContext);
         RageShake.getInstance().start(mAppContext);
 
@@ -58,6 +89,12 @@ public class Matrix {
         appContext.registerReceiver(mNetworkConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
+    /**
+     * Retrieve the static instance.
+     * Create it if it does not exist yet.
+     * @param appContext the application context
+     * @return the shared instance
+     */
     public synchronized static Matrix getInstance(Context appContext) {
         if ((instance == null) && (null != appContext)) {
             instance = new Matrix(appContext);
@@ -65,6 +102,9 @@ public class Matrix {
         return instance;
     }
 
+    /**
+     * @return the loginstorage
+     */
     public LoginStorage getLoginStorage() {
         return mLoginStorage;
     }
@@ -448,5 +488,60 @@ public class Matrix {
      */
     public boolean isConnected() {
         return mNetworkConnectivityReceiver.isConnected();
+    }
+
+    //==============================================================================================================
+    // Tmp stores list management
+    //==============================================================================================================
+
+    /**
+     * Add a tmp IMXStore in the currently used stores list
+     * @param store the store
+     * @return the store index
+     */
+    public int addTmpStore(IMXStore store) {
+        // sanity check
+        if (null != store) {
+            int pos = mTmpStores.indexOf(store);
+
+            if (pos < 0) {
+                mTmpStores.add(store);
+                pos = mTmpStores.indexOf(store);
+            }
+
+            return pos;
+        }
+
+        return -1;
+    }
+
+    /**
+     * Remove the dedicated store from the tmp stores list.
+     * @param store the store to remove
+     */
+    public void removeTmpStore(IMXStore store) {
+        if (null != store) {
+            mTmpStores.remove(store);
+        }
+    }
+
+    /**
+     * Return a tmp store.
+     * @param storeIndex the store index.
+     * @return the store
+     */
+    public IMXStore getTmpStore(int storeIndex) {
+        if ((storeIndex >= 0) && (storeIndex < mTmpStores.size())) {
+            return mTmpStores.get(storeIndex);
+        }
+
+        return null;
+    }
+
+    /**
+     * Clear the tmp stores list.
+     */
+    public void clearTmpStoresList() {
+        mTmpStores = new ArrayList<>();
     }
 }

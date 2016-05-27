@@ -511,7 +511,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
                 }
             } else if (event.mSentState == Event.SentState.SENT) {
-                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(!mIsPreviewMode);
 
                 if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
                     Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
@@ -526,7 +526,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     }
 
                     // offer to report a message content
-                    menu.findItem(R.id.ic_action_vector_report).setVisible(!TextUtils.equals(event.sender, mSession.getMyUserId()));
+                    menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
                 }
             }
         }

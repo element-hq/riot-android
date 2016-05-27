@@ -218,6 +218,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (action == R.id.ic_action_vector_view_profile) {
             if (null != event.getSender()) {
                 Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+
+                // in preview mode
+                // the room is stored in a temporary store
+                // so provide an handle to retrieve it
+                if (null != getRoomPreviewData()) {
+                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+                }
+
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
@@ -704,6 +712,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     public void onAvatarClick(String userId) {
         Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        // in preview mode
+        // the room is stored in a temporary store
+        // so provide an handle to retrieve it
+        if (null != getRoomPreviewData()) {
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+        }
+
         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
