@@ -44,6 +44,7 @@
         android:ellipsize="end"
         android:text="a topic here"
         android:textSize="14sp"
+        android:autoLink="web"
         android:textColor="#FFFFFF"
         android:layout_marginLeft="44dp"
         android:layout_marginRight="44dp"
