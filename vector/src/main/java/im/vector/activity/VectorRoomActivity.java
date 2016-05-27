@@ -2328,7 +2328,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
-                    launchRoomDetails();
+                    enableActionBarHeader(SHOW_ACTION_BAR_HEADER);
                 }
             }
         });
@@ -2336,10 +2336,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // add touch listener on the header view itself
         if (null != mRoomHeaderView) {
             mRoomHeaderView.setOnTouchListener(new View.OnTouchListener() {
+                // last position
+                private float mStartX;
+                private float mStartY;
+
                 @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData)) {
-                        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        mStartX = event.getX();
+                        mStartY = event.getY();
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        float curX = event.getX();
+                        float curY = event.getY();
+
+                        float deltaX = curX - mStartX;
+                        float deltaY = curY - mStartY;
+
+                        // swipe up to hide room header
+                        if ((Math.abs(deltaY) > Math.abs(deltaX)) && (deltaY < 0)) {
+                            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                        } else {
+                            // wait the touch up to display the room settings page
                             launchRoomDetails();
                         }
                     }
@@ -2347,7 +2364,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 }
             });
         }
-
     }
 
     /**
