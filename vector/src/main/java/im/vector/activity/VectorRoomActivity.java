@@ -2659,6 +2659,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     subInvitationTextView.setText(getResources().getString(R.string.room_preview_unlinked_email_warning, roomEmailInvitation.email));
                 } else {
                     invitationTextView.setText(getResources().getString(R.string.room_preview_try_join_an_unknown_room, roomName));
+
+                    // the room preview has some messages
+                    if ((null != sRoomPreviewData.getRoomResponse()) && (null != sRoomPreviewData.getRoomResponse().messages)) {
+                        subInvitationTextView.setText(getResources().getString(R.string.room_preview_room_interactions_disabled));
+                    }
                 }
 
                 declineButton.setOnClickListener(new View.OnClickListener() {

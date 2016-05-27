@@ -376,6 +376,7 @@
     <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
     <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
     <string name="room_preview_try_join_an_unknown_room_default">a room</string>
+    <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
