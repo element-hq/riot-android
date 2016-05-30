@@ -86,6 +86,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an events chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
     public static final String EXTRA_WAITING_VIEW_STATUS = "VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS";
+
+    // the home activity is launched in shared files mode
+    // i.e the user tries to send several files with VECTOR
+    public static final String EXTRA_SHARED_INTENT_PARAMS = "VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS";
+
     public static final boolean WAITING_VIEW_STOP = false;
     public static final boolean WAITING_VIEW_START = true;
 
@@ -334,15 +339,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             Log.d(LOG_TAG, "create with no universal link");
         }
 
-        String action = intent.getAction();
-        String type = intent.getType();
-
-        // send files from external application
-        if ((Intent.ACTION_SEND.equals(action) || Intent.ACTION_SEND_MULTIPLE.equals(action)) && type != null) {
+        if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
+            final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, intent);
+                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
                 }
             });
         }

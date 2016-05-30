@@ -293,6 +293,22 @@
             </intent-filter>
         </receiver>
 
+        <!-- Shared items  -->
+        <activity android:name=".activity.VectorSharedFilesActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+
+            <intent-filter> 
+                <action android:name="android.intent.action.SEND" /> 
+                <category android:name="android.intent.category.DEFAULT" /> 
+                <data android:mimeType="*/*" /> 
+            </intent-filter>     <intent-filter> 
+
+            <action android:name="android.intent.action.SEND_MULTIPLE" /> 
+            <category android:name="android.intent.category.DEFAULT" /> 
+            <data android:mimeType="*/*" /> 
+        </intent-filter>
+        </activity>
+
         <!-- GCM components -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
