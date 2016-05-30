@@ -37,6 +37,8 @@ import im.vector.activity.VectorMemberDetailsActivity;
 
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.contacts.Contact;
+import im.vector.contacts.ContactsManager;
 
 
 public class VectorSearchPeopleListFragment extends Fragment {
@@ -54,6 +56,36 @@ public class VectorSearchPeopleListFragment extends Fragment {
     // wait the resume to perform the search
     private String mPendingPattern;
     private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
+
+    // contacts manager listener
+    // detect if a contact is a matrix user
+    private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
+        @Override
+        public void onRefresh() {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
+                        int lastIndex = mPeopleListView.getLastVisiblePosition();
+
+                        for(int index = firstIndex; index <= lastIndex; index++) {
+                            if (mAdapter.getItem(index).mContact == contact) {
+                                mAdapter.getItem(index).mUserId = matrixId;
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    };
 
     /**
      * Static constructor
@@ -142,6 +174,8 @@ public class VectorSearchPeopleListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mAdapter.setSearchedPattern(null, null, null);
+
+        ContactsManager.removeListener(mContactsListener);
     }
 
     @Override
@@ -157,5 +191,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
                 mPendingSearchResultListener = null;
             }
         }
+
+        ContactsManager.addListener(mContactsListener);
     }
 }

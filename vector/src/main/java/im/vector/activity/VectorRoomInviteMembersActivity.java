@@ -29,6 +29,8 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.contacts.Contact;
+import im.vector.contacts.ContactsManager;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -49,6 +51,33 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private ImageView mBackgroundImageView;
     private View mNoResultView;
     private View mLoadingView;
+
+    // retrieve a matrix Id from an email
+    private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
+        @Override
+        public void onRefresh() {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int firstIndex = mListView.getFirstVisiblePosition();
+                    int lastIndex = mListView.getLastVisiblePosition();
+
+                    for(int index = firstIndex; index <= lastIndex; index++) {
+                        if (mAdapter.getItem(index).mContact == contact) {
+                            mAdapter.getItem(index).mUserId = matrixId;
+                            mAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    };
 
     private VectorAddParticipantsAdapter mAdapter;
 
@@ -148,5 +177,19 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         mBackgroundImageView.setVisibility(emptyText ? View.VISIBLE : View.GONE);
         mListView.setVisibility(emptyText ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        ContactsManager.removeListener(mContactsListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ContactsManager.addListener(mContactsListener);
     }
 }

@@ -23,11 +23,19 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.User;
+
+import im.vector.Matrix;
+import im.vector.VectorApp;
 import im.vector.ga.Analytics;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Manage the local contacts
@@ -40,10 +48,87 @@ public class ContactsManager {
          * Called when the contacts list have been
          */
         void onRefresh();
+
+        /**
+         * Called when an user presence has been updated
+         */
+        void onContactPresenceUpdate(Contact contact, String matrixId);
     }
 
     private static Collection<Contact> mContactsList = null;
     private static ArrayList<ContactsManagerListener> mListeners = null;
+
+    // retriever listener
+    private static final PIDsRetriever.PIDsRetrieverListener mPIDsRetrieverListener = new PIDsRetriever.PIDsRetrieverListener() {
+        @Override
+        public void onPIDsRetrieved(final String accountId, final Contact contact, final boolean has3PIDs) {
+            Log.d(LOG_TAG, "onPIDsRetrieved : the contact " + contact + " retrieves its 3PIds.");
+
+            if (has3PIDs) {
+                MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
+
+                if (null != session) {
+                    Set<String> medias = contact.getMatrixIdMedias();
+
+                    Log.d(LOG_TAG, "medias " + medias);
+
+                    for(String media : medias) {
+                        final Contact.MXID mxid = contact.getMXID(media);
+
+                        mxid.mUser = session.getDataHandler().getUser(mxid.mMatrixId);
+
+                        // if the user is not known, get its presence
+                        if (null == mxid.mUser) {
+                            session.getPresenceApiClient().getPresence(mxid.mMatrixId, new ApiCallback<User>() {
+
+                                private void onContactPresenceUpdate() {
+                                    if(null != mListeners) {
+                                        for (ContactsManagerListener listener : mListeners) {
+                                            try {
+                                                listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onSuccess(User user) {
+                                    Log.d(LOG_TAG, "retrieve the presence of " + mxid.mMatrixId + " :"  + user);
+                                    mxid.mUser = user;
+                                    onContactPresenceUpdate();
+                                }
+
+                                /**
+                                 * Error method
+                                 * @param errorMessage the error description
+                                 */
+                                private void onError(String errorMessage) {
+                                    Log.e(LOG_TAG, "cannot retrieve the presence of " + mxid.mMatrixId + " :"  + errorMessage);
+                                    onContactPresenceUpdate();
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    onError(e.getLocalizedMessage());
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    };
 
     /**
      * Refresh the local contacts list snapshot.
@@ -216,6 +301,8 @@ public class ContactsManager {
             
             emailsCur.close();
         }
+
+        PIDsRetriever.getIntance().setPIDsRetrieverListener(mPIDsRetrieverListener);
 
         mContactsList = dict.values();
 
