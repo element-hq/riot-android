@@ -117,10 +117,16 @@ import java.util.TimerTask;
  */
 public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.RoomPreviewDataListener {
 
+    // the room id (string)
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
+    // the event id (universal link management - string)
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
+    // the forwarded data (list of media uris)
     public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
+    // the room is opened in preview mode (string)
     public static final String EXTRA_ROOM_PREVIEW_ID = "EXTRA_ROOM_PREVIEW_ID";
+    // expand the room header when the activity is launched (boolean)
+    public static final String EXTRA_EXPAND_ROOM_HEADER = "EXTRA_EXPAND_ROOM_HEADER";
 
     // display the room information while joining a room.
     // until the join is done.
@@ -658,6 +664,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // in case a "Send as" dialog was in progress when the activity was destroyed (life cycle)
         resumeResizeMediaAndSend();
+
+        // header visibility has launched
+        enableActionBarHeader(intent.getBooleanExtra(EXTRA_EXPAND_ROOM_HEADER, false) ? SHOW_ACTION_BAR_HEADER : HIDE_ACTION_BAR_HEADER);
+        // it is used once
+        intent.removeExtra(EXTRA_EXPAND_ROOM_HEADER);
 
         Log.d(LOG_TAG, "End of create");
     }

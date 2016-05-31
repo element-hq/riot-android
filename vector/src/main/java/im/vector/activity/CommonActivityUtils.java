@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -568,7 +569,9 @@ public class CommonActivityUtils {
 
                                                    if (value instanceof String) {
                                                        intent.putExtra(key, (String) value);
-                                                   } else {
+                                                   } else if (value instanceof Boolean) {
+                                                       intent.putExtra(key, (Boolean) value);
+                                                   } else if (value instanceof Parcelable) {
                                                        intent.putExtra(key, (Parcelable) value);
                                                    }
                                                }
@@ -681,6 +684,7 @@ public class CommonActivityUtils {
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
                             Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
                             CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);
