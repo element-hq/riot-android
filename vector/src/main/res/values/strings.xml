@@ -442,6 +442,7 @@
     <string name="room_participants_action_start_video_call">Start video call</string>
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
+    <string name="room_participants_invite_search_another_user">Invite/search by name, email, id</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>

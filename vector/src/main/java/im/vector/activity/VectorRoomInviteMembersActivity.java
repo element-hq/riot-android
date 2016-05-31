@@ -114,6 +114,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         setContentView(R.layout.activity_vector_invite_members);
 
+        // the user defines a
+        if (null != mPatternToSearchEditText) {
+            mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
+        }
+
         mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
         mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
