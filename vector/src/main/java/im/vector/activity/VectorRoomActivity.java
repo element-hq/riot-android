@@ -1428,27 +1428,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ArrayList<Uri> uris = new ArrayList<Uri>();
 
         if (null != data) {
-            ClipData clipData = null;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                clipData = data.getClipData();
-            }
-
-            // multiple data
-            if (null != clipData) {
-                int count = clipData.getItemCount();
-
-                for (int i = 0; i < count; i++) {
-                    ClipData.Item item = clipData.getItemAt(i);
-                    Uri uri = item.getUri();
-
-                    if (null != uri) {
-                        uris.add(uri);
-                    }
-                }
-            } else if (null != data.getData()) {
-                uris.add(data.getData());
-            }
+            uris = VectorUtils.listMediaUris(data);
         } else if (null != mLatestTakePictureCameraUri) {
             uris.add(Uri.parse(mLatestTakePictureCameraUri));
             mLatestTakePictureCameraUri = null;
@@ -1461,10 +1441,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(Intent.EXTRA_STREAM)) {
-                    Object streamUri = bundle.get(Intent.EXTRA_STREAM);
+                    try {
+                        Object streamUri = bundle.get(Intent.EXTRA_STREAM);
 
-                    if (streamUri instanceof Uri) {
-                        uris.add((Uri) streamUri);
+                        if (streamUri instanceof Uri) {
+                            uris.add((Uri) streamUri);
+                        } else if (streamUri instanceof List) {
+                            uris.addAll((List<Uri>) streamUri);
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "fail to extract the extra stream");
                     }
                 } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
                     this.sendMessage(bundle.getString(Intent.EXTRA_TEXT), null, null);
