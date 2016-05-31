@@ -598,8 +598,43 @@ public class VectorUtils {
     }
 
     //==============================================================================================================
-    // About / terms and conditions
+    // List uris from intent
     //==============================================================================================================
+
+    /**
+     * List the media Uris provided in an intent
+     * @param intent the intent.
+     * @return the media URIs list
+     */
+    public static  ArrayList<Uri> listMediaUris(Intent intent) {
+        ArrayList<Uri> uris = new ArrayList<Uri>();
+
+        if (null != intent) {
+            ClipData clipData = null;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                clipData = intent.getClipData();
+            }
+
+            // multiple data
+            if (null != clipData) {
+                int count = clipData.getItemCount();
+
+                for (int i = 0; i < count; i++) {
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Uri uri = item.getUri();
+
+                    if (null != uri) {
+                        uris.add(uri);
+                    }
+                }
+            } else if (null != intent.getData()) {
+                uris.add(intent.getData());
+            }
+        }
+
+        return uris;
+    }
 
     /**
      * Return a selected bitmap from an intent.
