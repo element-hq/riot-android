@@ -652,6 +652,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         } else {
             // setup UI view and bind the widgets
             setContentView(R.layout.activity_member_details);
+
+            // use a toolbar instead of the actionbar
+            // to be able to display a large header
+            android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.member_details_toolbar);
+            this.setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
             mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
             mMemberAvatarBadgeImageView = (ImageView) findViewById(R.id.member_avatar_badge);
 
