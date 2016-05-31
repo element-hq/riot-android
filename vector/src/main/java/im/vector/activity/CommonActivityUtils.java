@@ -684,7 +684,7 @@ public class CommonActivityUtils {
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
-                            params.put(VectorRoomActivity.EXTRA_ROOM_CREATION_MODE, true);
+                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
                             Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
                             CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);

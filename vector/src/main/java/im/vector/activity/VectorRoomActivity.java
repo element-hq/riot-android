@@ -127,9 +127,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public static final String EXTRA_ROOM_PREVIEW_ID = "EXTRA_ROOM_PREVIEW_ID";
     // expand the room header when the activity is launched (boolean)
     public static final String EXTRA_EXPAND_ROOM_HEADER = "EXTRA_EXPAND_ROOM_HEADER";
-    // tell if the activity is opened in creation mode
-    // i.e the header is expanded and the status (X/X active members) is replaced by a dedicated message
-    public static final String EXTRA_ROOM_CREATION_MODE = "EXTRA_ROOM_CREATION_MODE";
 
     // display the room information while joining a room.
     // until the join is done.
@@ -209,7 +206,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private TextView mActionBarHeaderRoomTopic;
     private ImageView mActionBarHeaderRoomAvatar;
     private View mActionBarHeaderInviteMemberView;
-    private boolean mIsDisplayedInCreationMode;
     private boolean mIsKeyboardDisplayed;
 
     // keyboard listener to detect when the keyboard is displayed
@@ -671,16 +667,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // in case a "Send as" dialog was in progress when the activity was destroyed (life cycle)
         resumeResizeMediaAndSend();
 
-        mIsDisplayedInCreationMode = intent.getBooleanExtra(EXTRA_ROOM_CREATION_MODE, false);
-
-        boolean expandHeader = mIsDisplayedInCreationMode || intent.getBooleanExtra(EXTRA_EXPAND_ROOM_HEADER, false);
-
         // header visibility has launched
-        enableActionBarHeader(expandHeader ? SHOW_ACTION_BAR_HEADER : HIDE_ACTION_BAR_HEADER);
+        enableActionBarHeader(intent.getBooleanExtra(EXTRA_EXPAND_ROOM_HEADER, false) ? SHOW_ACTION_BAR_HEADER : HIDE_ACTION_BAR_HEADER);
 
         // the both flags are only used once
         intent.removeExtra(EXTRA_EXPAND_ROOM_HEADER);
-        intent.removeExtra(EXTRA_ROOM_CREATION_MODE);
 
         Log.d(LOG_TAG, "End of create");
     }
@@ -767,9 +758,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // remove listener on keyboard display
         enableKeyboardShownListener(false);
-
-        // the creation mode is displayed once
-        mIsDisplayedInCreationMode = false;
     }
 
     @Override
@@ -2471,11 +2459,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mActionBarHeaderActiveMembers) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
-                if (mIsDisplayedInCreationMode) {
-                    mActionBarHeaderActiveMembers.setVisibility(View.GONE);
-                    mActionBarHeaderInviteMemberView.setVisibility(View.VISIBLE);
-                } else {
-                    mActionBarHeaderInviteMemberView.setVisibility(View.GONE);
 
                     if ((null != mRoom) || (null != sRoomPreviewData)) {
                         // update the members status: "active members"/"members"
@@ -2499,28 +2482,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 }
                             }
 
-                            String text;
+                            boolean displayInvite = TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && (1 == members.size());
 
-                            if (null != sRoomPreviewData) {
-                                if (joinedMembersCount == 1) {
-                                    text = getResources().getString(R.string.room_title_one_member);
-                                } else {
-                                    text = getResources().getString(R.string.room_title_members, joinedMembersCount);
-                                }
+                            if (displayInvite) {
+                                mActionBarHeaderActiveMembers.setVisibility(View.GONE);
+                                mActionBarHeaderInviteMemberView.setVisibility(View.VISIBLE);
                             } else {
-                                text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
-                            }
+                                mActionBarHeaderInviteMemberView.setVisibility(View.GONE);
+                                String text;
+                                if (null != sRoomPreviewData) {
+                                    if (joinedMembersCount == 1) {
+                                        text = getResources().getString(R.string.room_title_one_member);
+                                    } else {
+                                        text = getResources().getString(R.string.room_title_members, joinedMembersCount);
+                                    }
+                                } else {
+                                    text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                                }
 
-                            mActionBarHeaderActiveMembers.setText(text);
-                            mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
+                                mActionBarHeaderActiveMembers.setText(text);
+                                mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
+                            }
                         } else {
+                            mActionBarHeaderActiveMembers.setVisibility(View.GONE);
                             mActionBarHeaderActiveMembers.setVisibility(View.GONE);
                         }
                     }
-                }
+
             } else {
-                // the creation mode is displayed once
-                mIsDisplayedInCreationMode = false;
                 mActionBarHeaderActiveMembers.setVisibility(View.GONE);
             }
         }
@@ -2563,9 +2552,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 if (!TextUtils.isEmpty(mActionBarCustomTopic.getText())) {
                     mActionBarCustomTopic.setVisibility(View.VISIBLE);
                 }
-
-                // the creation mode is displayed once
-                mIsDisplayedInCreationMode = false;
 
                 // update title and topic (action bar)
                 updateActionBarTitleAndTopic();
