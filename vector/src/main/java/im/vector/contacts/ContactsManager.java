@@ -60,6 +60,22 @@ public class ContactsManager {
 
     // retriever listener
     private static final PIDsRetriever.PIDsRetrieverListener mPIDsRetrieverListener = new PIDsRetriever.PIDsRetrieverListener() {
+        /**
+         * Warn the listeners about a contact information update.
+         * @param contact the contact
+         * @param mxid the mxid
+         */
+        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid ) {
+            if(null != mListeners) {
+                for (ContactsManagerListener listener : mListeners) {
+                    try {
+                        listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
+
         @Override
         public void onPIDsRetrieved(final String accountId, final Contact contact, final boolean has3PIDs) {
             Log.d(LOG_TAG, "onPIDsRetrieved : the contact " + contact + " retrieves its 3PIds.");
@@ -75,28 +91,18 @@ public class ContactsManager {
                     for(String media : medias) {
                         final Contact.MXID mxid = contact.getMXID(media);
 
+                        onContactPresenceUpdate(contact, mxid);
+
                         mxid.mUser = session.getDataHandler().getUser(mxid.mMatrixId);
 
                         // if the user is not known, get its presence
                         if (null == mxid.mUser) {
                             session.getPresenceApiClient().getPresence(mxid.mMatrixId, new ApiCallback<User>() {
-
-                                private void onContactPresenceUpdate() {
-                                    if(null != mListeners) {
-                                        for (ContactsManagerListener listener : mListeners) {
-                                            try {
-                                                listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
-                                            } catch (Exception e) {
-                                            }
-                                        }
-                                    }
-                                }
-
                                 @Override
                                 public void onSuccess(User user) {
                                     Log.d(LOG_TAG, "retrieve the presence of " + mxid.mMatrixId + " :"  + user);
                                     mxid.mUser = user;
-                                    onContactPresenceUpdate();
+                                    onContactPresenceUpdate(contact, mxid);
                                 }
 
                                 /**
@@ -105,7 +111,7 @@ public class ContactsManager {
                                  */
                                 private void onError(String errorMessage) {
                                     Log.e(LOG_TAG, "cannot retrieve the presence of " + mxid.mMatrixId + " :"  + errorMessage);
-                                    onContactPresenceUpdate();
+                                    onContactPresenceUpdate(contact, mxid);
                                 }
 
                                 @Override
