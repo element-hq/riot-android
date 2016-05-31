@@ -230,7 +230,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                                 HashMap<String, Object> params = new HashMap<String, Object>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                                params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                                params.put(VectorRoomActivity.EXTRA_ROOM_CREATION_MODE, true);
                                 CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
                             }
                         });

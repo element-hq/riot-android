@@ -63,4 +63,31 @@
         android:layout_marginRight="66dp"
         android:layout_marginBottom="19dp"/>
 
+    <RelativeLayout
+        android:id="@+id/action_bar_header_invite_members"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/action_bar_header_room_topic"
+        android:visibility="gone"
+        android:layout_marginBottom="19dp">
+
+        <ImageView
+            android:id="@+id/header_invite_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_black"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/vector_0_54_black_color"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/header_invite_icon"
+            android:text="@string/room_header_invite_members"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>
