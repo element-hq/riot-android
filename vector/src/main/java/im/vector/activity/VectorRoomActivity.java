@@ -2061,7 +2061,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (null != mCallMenuItem) {
-            boolean isCallSupported = VectorHomeActivity.IS_VOIP_ENABLED && mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
             mCallMenuItem.setVisible(isCallSupported);
         }
     }

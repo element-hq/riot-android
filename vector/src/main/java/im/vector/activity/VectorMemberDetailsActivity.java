@@ -444,7 +444,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // 1:1 call
-            if ((null != searchCallableRoom()) && VectorHomeActivity.IS_VOIP_ENABLED && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
+            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);
