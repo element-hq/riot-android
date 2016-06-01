@@ -113,6 +113,7 @@ public class EventStreamService extends Service {
      * @param roomId
      */
     public static void cancelNotificationsForRoomId(String accountId, String roomId) {
+        Log.d(LOG_TAG, "cancelNotificationsForRoomId " + accountId + " - " + roomId);
         if (null != mActiveEventStreamService) {
             mActiveEventStreamService.cancelNotifications(accountId ,roomId);
         }
@@ -122,6 +123,8 @@ public class EventStreamService extends Service {
      * Clear any displayed notification.
      */
     private void clearNotification() {
+        Log.d(LOG_TAG, "clearNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId);
+
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancelAll();
 
@@ -138,8 +141,12 @@ public class EventStreamService extends Service {
      * @param roomId the room id.
      */
     private void cancelNotifications(String accountId, String roomId) {
+        Log.d(LOG_TAG, "cancelNotifications " + accountId + " - " + roomId);
+
         // sanity checks
         if ((null != accountId) && (null != roomId)) {
+            Log.d(LOG_TAG, "cancelNotifications expected " + mNotificationSessionId + " - " + mNotificationRoomId);
+
             // cancel the notifications
             if (TextUtils.equals(mNotificationRoomId, roomId) && TextUtils.equals(accountId, mNotificationSessionId)) {
                 clearNotification();
@@ -171,6 +178,8 @@ public class EventStreamService extends Service {
      * because it doesn't make sense anymore.
      */
     private void checkNotification() {
+        Log.d(LOG_TAG, "checkNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId);
+
         if (null != mNotificationRoomId) {
             boolean clearNotification = true;
 
@@ -180,12 +189,19 @@ public class EventStreamService extends Service {
                 Room room = session.getDataHandler().getRoom(mNotificationRoomId);
 
                 if (null != room) {
+                    Log.d(LOG_TAG, "checkNotification :  the room exists");
+
                     // invitation notification
                     if (null == mNotificationEventId) {
                         clearNotification = !room.isInvited();
                     } else {
                         clearNotification = room.isEventRead(mNotificationEventId);
                     }
+
+                    Log.d(LOG_TAG, "checkNotification :  clearNotification " + clearNotification);
+
+                } else {
+                    Log.d(LOG_TAG, "checkNotification :  the room does not exist");
                 }
             }
             

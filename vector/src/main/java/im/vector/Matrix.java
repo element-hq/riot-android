@@ -33,11 +33,14 @@ import org.matrix.androidsdk.data.MXMemoryStore;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.RageShake;
 
@@ -75,6 +78,22 @@ public class Matrix {
 
     // network event manager
     private NetworkConnectivityReceiver mNetworkConnectivityReceiver;
+
+    // i.e the event has been read from another client
+    private static final MXEventListener mLiveEventListener = new MXEventListener() {
+        @Override
+        public void onIgnoredUsersListUpdate() {
+            // the application cache will be cleared at next launch if the application is not yet launched
+            // else it will be done when onLiveEventsChunkProcessed will be called in VectorHomeActivity.
+            VectorHomeActivity.mClearCacheRequired = true;
+        }
+
+        @Override
+        public void onLiveEventsChunkProcessed() {
+            Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
+            EventStreamService.checkDisplayedNotification();
+        }
+    };
 
     // constructor
     protected Matrix(Context appContext) {
@@ -335,6 +354,7 @@ public class Matrix {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
 
+        session.getDataHandler().removeListener(mLiveEventListener);
         session.clear(context);
 
         synchronized (LOG_TAG) {
@@ -392,7 +412,7 @@ public class Matrix {
             store = new MXMemoryStore(hsConfig.getCredentials());
         }
 
-        return new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {
+        MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {
             @Override
             public void onTokenCorrupted() {
                 if (null != VectorApp.getCurrentActivity()) {
@@ -400,6 +420,10 @@ public class Matrix {
                 }
             }
         }), mAppContext);
+
+        session.getDataHandler().addListener(mLiveEventListener);
+
+        return session;
     }
 
     /**
