@@ -144,7 +144,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
     private static final String TAG_FRAGMENT_CALL_OPTIONS = "TAG_FRAGMENT_CALL_OPTIONS";
 
-
     private static final String LOG_TAG = "RoomActivity";
     private static final int TYPING_TIMEOUT_MS = 10000;
 
@@ -206,7 +205,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private TextView mActionBarHeaderActiveMembers;
     private TextView mActionBarHeaderRoomTopic;
     private ImageView mActionBarHeaderRoomAvatar;
+    private View mActionBarHeaderInviteMemberView;
     private boolean mIsKeyboardDisplayed;
+
     // keyboard listener to detect when the keyboard is displayed
     private ViewTreeObserver.OnGlobalLayoutListener mKeyboardListener;
 
@@ -419,6 +420,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mActionBarHeaderRoomName = (TextView)findViewById(R.id.action_bar_header_room_title);
         mActionBarHeaderActiveMembers = (TextView)findViewById(R.id.action_bar_header_room_members);
         mActionBarHeaderRoomAvatar = (ImageView) mRoomHeaderView.findViewById(R.id.avatar_img);
+        mActionBarHeaderInviteMemberView = mRoomHeaderView.findViewById(R.id.action_bar_header_invite_members);
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
@@ -667,7 +669,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // header visibility has launched
         enableActionBarHeader(intent.getBooleanExtra(EXTRA_EXPAND_ROOM_HEADER, false) ? SHOW_ACTION_BAR_HEADER : HIDE_ACTION_BAR_HEADER);
-        // it is used once
+
+        // the both flags are only used once
         intent.removeExtra(EXTRA_EXPAND_ROOM_HEADER);
 
         Log.d(LOG_TAG, "End of create");
@@ -2456,46 +2459,56 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mActionBarHeaderActiveMembers) {
             // refresh only if the action bar is hidden
             if (mActionBarCustomTitle.getVisibility() == View.GONE) {
-                if ((null != mRoom) || (null != sRoomPreviewData)) {
-                    // update the members status: "active members"/"members"
-                    int joinedMembersCount = 0;
-                    int activeMembersCount = 0;
 
-                    RoomState roomState =  (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
+                    if ((null != mRoom) || (null != sRoomPreviewData)) {
+                        // update the members status: "active members"/"members"
+                        int joinedMembersCount = 0;
+                        int activeMembersCount = 0;
 
-                    if (null != roomState) {
-                        Collection<RoomMember> members = roomState.getMembers();
+                        RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
 
-                        for (RoomMember member : members) {
-                            if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                                joinedMembersCount++;
+                        if (null != roomState) {
+                            Collection<RoomMember> members = roomState.getMembers();
 
-                                User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+                            for (RoomMember member : members) {
+                                if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                                    joinedMembersCount++;
 
-                                if ((null != user) && user.isActive()) {
-                                    activeMembersCount++;
+                                    User user = mSession.getDataHandler().getStore().getUser(member.getUserId());
+
+                                    if ((null != user) && user.isActive()) {
+                                        activeMembersCount++;
+                                    }
                                 }
                             }
-                        }
 
-                        String text;
+                            boolean displayInvite = TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && (1 == activeMembersCount);
 
-                        if (null != sRoomPreviewData) {
-                            if (joinedMembersCount == 1) {
-                                text = getResources().getString(R.string.room_title_one_member);
+                            if (displayInvite) {
+                                mActionBarHeaderActiveMembers.setVisibility(View.GONE);
+                                mActionBarHeaderInviteMemberView.setVisibility(View.VISIBLE);
                             } else {
-                                text = getResources().getString(R.string.room_title_members, joinedMembersCount);
+                                mActionBarHeaderInviteMemberView.setVisibility(View.GONE);
+                                String text;
+                                if (null != sRoomPreviewData) {
+                                    if (joinedMembersCount == 1) {
+                                        text = getResources().getString(R.string.room_title_one_member);
+                                    } else {
+                                        text = getResources().getString(R.string.room_title_members, joinedMembersCount);
+                                    }
+                                } else {
+                                    text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                                }
+
+                                mActionBarHeaderActiveMembers.setText(text);
+                                mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
                             }
                         } else {
-                            text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
+                            mActionBarHeaderActiveMembers.setVisibility(View.GONE);
+                            mActionBarHeaderActiveMembers.setVisibility(View.GONE);
                         }
-
-                        mActionBarHeaderActiveMembers.setText(text);
-                        mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
-                    } else {
-                        mActionBarHeaderActiveMembers.setVisibility(View.GONE);
                     }
-                }
+
             } else {
                 mActionBarHeaderActiveMembers.setVisibility(View.GONE);
             }
@@ -2506,7 +2519,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Show or hide the action bar header view according to aIsHeaderViewDisplayed
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
-    private void enableActionBarHeader(boolean aIsHeaderViewDisplayed){
+    private void enableActionBarHeader(boolean aIsHeaderViewDisplayed) {
         if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed){
             if(true == mIsKeyboardDisplayed) {
                 Log.i(LOG_TAG, "## enableActionBarHeader(): action bar header canceled (keyboard is displayed)");
@@ -2532,7 +2545,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         } else {
             // hide the room header only if it is displayed
-            if(View.VISIBLE == mRoomHeaderView.getVisibility()) {
+            if (View.VISIBLE == mRoomHeaderView.getVisibility()) {
                 // show the name and the topic in the action bar.
                 mActionBarCustomTitle.setVisibility(View.VISIBLE);
                 // if the topic is empty, do not show it
