@@ -120,6 +120,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private AlertDialog.Builder mUseGAAlert;
 
+    // when a member is banned, the session must be reloaded
+    public static boolean mClearCacheRequired = false;
 
     private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
         /**
@@ -381,18 +383,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // or deleted it
         // + other actions which require a background listener
         mLiveEventListener = new MXEventListener() {
-            private boolean mClearCacheRequired = false;
-
-            @Override
-            public void onIgnoredUsersListUpdate() {
-                mClearCacheRequired = true;
-            }
-
             @Override
             public void onLiveEventsChunkProcessed() {
-                Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
-                EventStreamService.checkDisplayedNotification();
-
                 // treat any pending URL link workflow, that was started previously
                 processIntentUniversalLink();
 
