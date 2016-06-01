@@ -390,6 +390,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
             @Override
             public void onLiveEventsChunkProcessed() {
+                Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
                 EventStreamService.checkDisplayedNotification();
 
                 // treat any pending URL link workflow, that was started previously
