@@ -97,7 +97,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // search mode
     private String mSearchedPattern;
-    private Boolean mIsSearchMode;
+    private boolean mIsSearchMode;
+    // when set to true, avoid empty history by displaying the directory group
+    private boolean mDisplayDirectoryGroupWhenEmpty;
 
     // public room search
     private List<PublicRoom> mPublicRooms;
@@ -114,11 +116,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param aContext the context.
      * @param session the linked session.
      * @param isSearchMode true if the adapter is in search mode
+     * @param displayDirectoryGroupWhenEmpty true to avoid empty history
      * @param aChildLayoutResourceId the room child layout
      * @param aGroupHeaderLayoutResourceId the room section header layout
      * @param listener the events listener
      */
-    public VectorRoomSummaryAdapter(Context aContext, MXSession session, boolean isSearchMode, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, RoomEventListener listener)  {
+    public VectorRoomSummaryAdapter(Context aContext, MXSession session, boolean isSearchMode, boolean displayDirectoryGroupWhenEmpty, int aChildLayoutResourceId, int aGroupHeaderLayoutResourceId, RoomEventListener listener)  {
         // init internal fields
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -131,6 +134,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         mListener = listener;
 
         mIsSearchMode = isSearchMode;
+        mDisplayDirectoryGroupWhenEmpty = displayDirectoryGroupWhenEmpty;
     }
 
     /**
@@ -255,6 +259,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         return (mDirectoryGroupPosition == groupPosition);
     }
 
+    /**
+     * @return true if the directory group is displayed
+     */
+    public boolean isDirectoryGroupDisplayed() {
+        return (-1 != mDirectoryGroupPosition);
+    }
+
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
@@ -376,7 +387,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             // in search mode
             // the public rooms have a dedicated section
-            if (mIsSearchMode) {
+            if (mIsSearchMode || mDisplayDirectoryGroupWhenEmpty) {
                 mMatchedPublicRooms = new ArrayList<PublicRoom>();
 
                 if (null != mPublicRooms) {
@@ -452,6 +463,19 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (0 != lowPriorityRoomSummaryList.size()) {
                 summaryListByGroupsRetValue.add(lowPriorityRoomSummaryList);
                 mLowPriorGroupPosition = groupIndex; // save section index
+                groupIndex++;
+            }
+
+            // in avoiding empty history mode
+            // check if there is really nothing else
+            if (mDisplayDirectoryGroupWhenEmpty && (groupIndex > 1)) {
+                summaryListByGroupsRetValue.remove(mDirectoryGroupPosition);
+                mRoomByAliasGroupPosition = -1;
+                mDirectoryGroupPosition = -1;
+                mInvitedGroupPosition--;
+                mFavouritesGroupPosition--;
+                mNoTagGroupPosition--;
+                mLowPriorGroupPosition--;
             }
         }
 
@@ -782,9 +806,17 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
                     if (TextUtils.isEmpty(mSearchedPattern)) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result, mMatchedPublicRooms.size()));
+                        if (mMatchedPublicRooms.size() > 1) {
+                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mMatchedPublicRooms.size()));
+                        } else {
+                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mMatchedPublicRooms.size()));
+                        }
                     } else {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_result_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                        if (mMatchedPublicRooms.size() > 1) {
+                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                        } else {
+                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRooms.size(), mSearchedPattern));
+                        }
                     }
                 }
 
