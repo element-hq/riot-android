@@ -100,7 +100,8 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
 
         convertView.findViewById(R.id.recents_groups_invitation_group).setVisibility(View.GONE);
 
-        boolean isWordReadable = (null != publicRoom.worldReadable) ? publicRoom.worldReadable : false;
+        // theses settings are not yet properly designed.
+       /*boolean isWordReadable = (null != publicRoom.worldReadable) ? publicRoom.worldReadable : false;
         boolean isGuessAccessed = (null != publicRoom.guestCanJoin) ? publicRoom.guestCanJoin : false;
 
         if (!isWordReadable && !isGuessAccessed) {
@@ -109,7 +110,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         } else {
             wordReadableView.setVisibility(isWordReadable ? View.VISIBLE : View.INVISIBLE);
             guestAccessView.setVisibility(isGuessAccessed ? View.VISIBLE : View.INVISIBLE);
-        }
+        }*/
 
         return convertView;
     }
