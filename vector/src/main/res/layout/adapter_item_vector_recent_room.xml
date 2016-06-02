@@ -133,9 +133,30 @@
                 android:layout_width="match_parent"
                 android:layout_weight="0.5"
                 android:layout_height="0dp">
+
+                <ImageView
+                    android:id="@+id/roomSummaryAdapter_guest_access"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_guest_access_black"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/roomSummaryAdapter_word_readable"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_guest_access"
+                    android:src="@drawable/ic_word_readable_black"
+                    android:visibility="gone" />
+
                 <!-- Last message of the room -->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_roomMessage"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,6 +164,7 @@
                     android:textSize="14sp"
                     android:textColor="@color/vector_0_54_black_color"
                     android:text="last room message" />
+
             </RelativeLayout>
 
         </LinearLayout>
