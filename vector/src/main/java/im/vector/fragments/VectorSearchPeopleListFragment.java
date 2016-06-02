@@ -28,6 +28,9 @@ import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -86,6 +89,30 @@ public class VectorSearchPeopleListFragment extends Fragment {
             }
         }
     };
+
+    // refresh the presence asap
+    private MXEventListener mEventsListener = new MXEventListener() {
+        @Override
+        public void onPresenceUpdate(final Event event, final User user) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
+                        int lastIndex = mPeopleListView.getLastVisiblePosition();
+
+                        for (int index = firstIndex; index <= lastIndex; index++) {
+                            if (TextUtils.equals(user.user_id, mAdapter.getItem(index).mUserId)) {
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    };
+
 
     /**
      * Static constructor
@@ -175,6 +202,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         super.onPause();
         mAdapter.setSearchedPattern(null, null, null);
 
+        mSession.getDataHandler().removeListener(mEventsListener);
         ContactsManager.removeListener(mContactsListener);
     }
 
@@ -192,6 +220,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
             }
         }
 
+        mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.addListener(mContactsListener);
     }
 }

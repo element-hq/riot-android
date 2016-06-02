@@ -25,6 +25,10 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.User;
+
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -51,6 +55,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private ImageView mBackgroundImageView;
     private View mNoResultView;
     private View mLoadingView;
+    private VectorAddParticipantsAdapter mAdapter;
+
 
     // retrieve a matrix Id from an email
     private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
@@ -79,7 +85,26 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
     };
 
-    private VectorAddParticipantsAdapter mAdapter;
+    // refresh the presence asap
+    private MXEventListener mEventsListener = new MXEventListener() {
+        @Override
+        public void onPresenceUpdate(final Event event, final User user) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int firstIndex = mListView.getFirstVisiblePosition();
+                    int lastIndex = mListView.getLastVisiblePosition();
+
+                    for(int index = firstIndex; index <= lastIndex; index++) {
+                        if (TextUtils.equals(user.user_id,  mAdapter.getItem(index).mUserId)) {
+                            mAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -188,6 +213,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     protected void onPause() {
         super.onPause();
 
+        mSession.getDataHandler().removeListener(mEventsListener);
         ContactsManager.removeListener(mContactsListener);
     }
 
@@ -195,6 +221,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     protected void onResume() {
         super.onResume();
 
+        mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.addListener(mContactsListener);
     }
 }
