@@ -80,6 +80,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
@@ -2480,6 +2481,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                         activeMembersCount++;
                                     }
                                 }
+                            }
+
+                            // in preview mode, the roomstate might be a publicRoom
+                            // so try to use the public room info.
+                            if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
+                                activeMembersCount = joinedMembersCount = ((PublicRoom)roomState).numJoinedMembers;
                             }
 
                             boolean displayInvite = TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && (1 == joinedMembersCount);

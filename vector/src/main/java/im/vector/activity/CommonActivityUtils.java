@@ -428,6 +428,7 @@ public class CommonActivityUtils {
             Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
             fromActivity.startActivity(intent);
         }
     }
