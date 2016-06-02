@@ -2728,13 +2728,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                     setProgressVisibility(View.VISIBLE);
 
-                    room.joinWithThirdPartySigned(signUrl, new ApiCallback<Void>() {
+                    room.joinWithThirdPartySigned(sRoomPreviewData.getRoomIdOrAlias(), signUrl, new ApiCallback<Void>() {
                         @Override
                         public void onSuccess(Void info) {
                             onJoined();
                         }
 
                         private void onError(String errorMessage) {
+                            // delete the created room.
+                            // it is a temporary room.
+                            // having it implies that the user has been invited or joined it.
+                            sRoomPreviewData.getSession().getDataHandler().getStore().deleteRoom(sRoomPreviewData.getRoomId());
                             CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
                             setProgressVisibility(View.GONE);
                         }

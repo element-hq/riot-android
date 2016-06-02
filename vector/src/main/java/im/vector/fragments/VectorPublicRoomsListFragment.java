@@ -101,7 +101,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
 
                 // launch corresponding room activity
                 if (null != publicRoom.roomId) {
-                    final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, null);
+                    final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.getAlias(), null);
 
                     Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
 

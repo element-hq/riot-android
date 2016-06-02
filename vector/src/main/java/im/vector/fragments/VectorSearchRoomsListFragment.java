@@ -114,11 +114,11 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                                         int groupPosition, int childPosition, long id) {
 
                 if (mAdapter.isRoomByIdGroupPosition(groupPosition)) {
-                    String roomIdOrAlias = mAdapter.getSearchedPattern();
+                    final String roomIdOrAlias = mAdapter.getSearchedPattern();
 
                     // detect if it is a room id
                     if (roomIdOrAlias.startsWith("!")) {
-                        previewRoom(roomIdOrAlias);
+                        previewRoom(roomIdOrAlias, null);
                     } else {
                         showWaitingView();
 
@@ -126,7 +126,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                         mSession.getDataHandler().roomIdByAlias(roomIdOrAlias, new ApiCallback<String>() {
                             @Override
                             public void onSuccess(String roomId) {
-                                previewRoom(roomId);
+                                previewRoom(roomId, roomIdOrAlias);
                             }
 
                             private void onError(String errorMessage) {
@@ -208,9 +208,10 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
     /**
      * Preview the dedicated room if it was not joined.
      * @param roomId the roomId
+     * @param roomAlias the room alias
      */
-    private void previewRoom(final String roomId) {
-        CommonActivityUtils.previewRoom(getActivity(), mSession, roomId, new ApiCallback<Void>() {
+    private void previewRoom(final String roomId, final String roomAlias) {
+        CommonActivityUtils.previewRoom(getActivity(), mSession, roomId, roomAlias, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 hideWaitingView();
