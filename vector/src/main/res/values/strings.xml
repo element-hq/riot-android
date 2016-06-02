@@ -620,15 +620,20 @@
     <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
     <string name="room_settings_tag_pref_entry_value_none">none</string>
 
-    <!-- Room settings: WHO CAN READ HISTORY? -->
-    <string name="room_settings_room_history_entry_anyone">Anyone</string>
-    <string name="room_settings_room_history_entry_members_only_t0">Members only (since the point in time of selecting this option)</string>
-    <string name="room_settings_room_history_entry_members_only_invited">Members only (since they were invited)</string>
-    <string name="room_settings_room_history_entry_members_only_joined">Members only (since they joined)</string>
-    <string name="room_settings_room_history_entry_value_anyone">world_readable</string>
-    <string name="room_settings_room_history_entry_value_members_only_t0">shared</string>
-    <string name="room_settings_room_history_entry_value_members_only_invited">invited</string>
-    <string name="room_settings_room_history_entry_value_members_only_joined">joined</string>
+    <!-- Room settings: WHO CAN READ HISTORY? (read rule) -->
+    <string name="room_settings_read_history_entry_anyone">Anyone</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Members only (since they were invited)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Members only (since they joined)</string>
+    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
+    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
+    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
+    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
+
+    <!-- Room settings: "Who can access this room?" (access rule) -->
+    <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
 
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>

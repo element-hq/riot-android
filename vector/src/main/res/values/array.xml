@@ -27,16 +27,16 @@
 
     <!-- read history rules: Who can read history? -->
     <string-array name="room_read_history_rules_entries">
-        <item>@string/room_settings_room_history_entry_anyone</item>
-        <item>@string/room_settings_room_history_entry_members_only_t0</item>
-        <item>@string/room_settings_room_history_entry_members_only_invited</item>
-        <item>@string/room_settings_room_history_entry_members_only_joined</item>
+        <item>@string/room_settings_read_history_entry_anyone</item>
+        <item>@string/room_settings_read_history_entry_members_only_option_time_shared</item>
+        <item>@string/room_settings_read_history_entry_members_only_invited</item>
+        <item>@string/room_settings_read_history_entry_members_only_joined</item>
     </string-array>
     <string-array name="room_read_history_rules_values">
-        <item>@string/room_settings_room_history_entry_value_anyone</item>
-        <item>@string/room_settings_room_history_entry_value_members_only_t0</item>
-        <item>@string/room_settings_room_history_entry_value_members_only_invited</item>
-        <item>@string/room_settings_room_history_entry_value_members_only_joined</item>
+        <item>@string/room_settings_read_history_entry_value_anyone</item>
+        <item>@string/room_settings_read_history_entry_value_members_only_option_time_shared</item>
+        <item>@string/room_settings_read_history_entry_value_members_only_invited</item>
+        <item>@string/room_settings_read_history_entry_value_members_only_joined</item>
     </string-array>
 
 </resources>
