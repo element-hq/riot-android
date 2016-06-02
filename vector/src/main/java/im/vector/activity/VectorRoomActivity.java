@@ -2482,7 +2482,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 }
                             }
 
-                            boolean displayInvite = TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && (1 == activeMembersCount);
+                            boolean displayInvite = TextUtils.isEmpty(mEventId) && (null == sRoomPreviewData) && (1 == joinedMembersCount);
 
                             if (displayInvite) {
                                 mActionBarHeaderActiveMembers.setVisibility(View.GONE);
