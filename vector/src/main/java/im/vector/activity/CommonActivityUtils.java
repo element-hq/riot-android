@@ -250,9 +250,8 @@ public class CommonActivityUtils {
         String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
         String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
 
-        String serverUrlDefaultValue = activity.getResources().getString(R.string.vector_im_server_url);
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, serverUrlDefaultValue);
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, serverUrlDefaultValue);
+        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
+        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
         Boolean useGa = VectorApp.getInstance().useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
