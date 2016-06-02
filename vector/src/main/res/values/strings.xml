@@ -146,7 +146,6 @@
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">Your name</string>
-    <string name="auth_optional_email_placeholder">Email address (optional)</string>
     <string name="auth_email_placeholder">Email address</string>
     <string name="auth_repeat_password_placeholder">Repeat password</string>
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>

@@ -180,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:inputType="textEmailAddress"
-                        android:hint="@string/auth_optional_email_placeholder" />
+                        android:hint="@string/auth_email_placeholder" />
 
                     <EditText
                         android:id="@+id/creation_your_name"
