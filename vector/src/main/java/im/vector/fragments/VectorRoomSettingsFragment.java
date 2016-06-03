@@ -59,93 +59,6 @@ import im.vector.util.VectorUtils;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
-// TAG: make room tag favourite (http://matrix.org/speculator/spec/HEAD/client_server/unstable.html#id63)
-// PUT https://matrix.org/_matrix/client/r0/user/%40rennes.tester%3Amatrix.org/rooms/!lHfJDoBlXavAeSvnnr%3Amatrix.org/tags/m.favourite?access_token=MDAx
-// resp = 200 {}
-// SDK OK
-
-// TAG: make room tag low priority
-// PUT https://matrix.org/_matrix/client/r0/user/%40rennes.tester%3Amatrix.org/rooms/!XvrTCTmOuMKLReWWjC%3Amatrix.org/tags/m.lowpriority?access_token=MDAxOGxvY2F0a
-// body = {}
-// resp = 200 {}
-// SDK OK
-
-// Room visibility: make room private/public (List this room in matrix.org's room directory)
-// PUT https://matrix.org/_matrix/client/r0/directory/list/room/!lHfJDoBlXavAeSvnnr%3Amatrix.org?access_token=MDAxOGxvY2F0
-// body = {"visibility":"private"} or {"visibility":"public"}
-// resp = 200 {}
-// SDK TBD
-
-// Room visibility: get room visibility
-// GET https://matrix.org/_matrix/client/r0/directory/list/room/!lHfJDoBlXavAeSvnnr%3Amatrix.org?access_token=MDAxOGxvY2F0aW9
-// Resp = 200 {"visibility":"private"}
-// SDK TBD
-
-// set read history visibility 1
-// PUT https://matrix.org/_matrix/client/r0/rooms/!lHfJDoBlXavAeSvnnr%3Amatrix.org/state/m.room.history_visibility/?access_token=MDA
-// body = {"history_visibility":"shared"}
-// Resp= 200 {"event_id":"$1464180593114076LALEw:matrix.org"}
-// SDK OK: Room.updateHistoryVisibility()
-
-
-// Room access: Anyone who knows the room's link, including guests
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.join_rules/?access_token=MDAx
-// body {"join_rule":"public"}
-// resp 200 {"event_id":"$1464270467247085JzWmD:matrix.org"}
-// si la room est plublic, alors après cette requête elle apparaît dans la liste "Directory"
-// SDK TBD
-
-// Room access: Anyone who knows the room's link, apart from guests
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.guest_access/?access_token=MDAxO
-// body {"guest_access":"forbidden"}
-// Resp 200 {"event_id":"$1464270774247672czlkr:matrix.org"}
-// SDK TBD
-
-// Room: Only people who have been invited
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.guest_access/?access_token=MDAxO
-// body {"guest_access":"can_join"}
-// resp 200 {"event_id":"$1464270963248022CUOhW:matrix.org"}
-// +
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.join_rules/?access_token=MDAxOGxv
-// body {"join_rule":"invite"}
-// resp 200 {"event_id":"$1464270963248025PSijR:matrix.org"}
-
-
-// 1 - Only people who have been invited => Anyone who knows the room's link, apart from guests
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.join_rules/?access_token=MD
-// body {join_rule: "public"}
-// resp 200 {"event_id":"$1464273655252479TRpbu:matrix.org"}
-// +
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.guest_access/?access_token=MD
-// body {guest_access: "forbidden"}
-// resp 200 {"event_id":"$1464273655252478lvDRP:matrix.org"}
-
-// 2 - Anyone who knows the room's link, apart from guests => Anyone who knows the room's link, including guests
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.guest_access/?access_token=MD
-// body {guest_access: "can_join"}
-// resp 200 {"event_id":"$1464274131253390miqOy:matrix.org"}
-
-// 3 - Anyone who knows the room's link, including guests => Only people who have been invited
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.join_rules/?access_token=MDAx
-// body {join_rule: "invite"}
-// resp 200 {"event_id":"$1464274298253701AbpZN:matrix.org"}
-
-// 4 - Only people who have been invited => Anyone who knows the room's link, apart from guests
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.join_rules/?access_token=MDA
-// body {join_rule: "public"}
-// resp 200 {"event_id":"$1464274511254148TfGvT:matrix.org"}
-// +
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.guest_access/?access_token=MD
-// body {guest_access: "forbidden"}
-// resp 200 {"event_id":"$1464274511254149XoFkE:matrix.org"}
-
-// 5 - Anyone who knows the room's link, apart from guests => Only people who have been invited
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.join_rules/?access_token=MDA
-// body {join_rule: "invite"}
-// +
-// PUT https://matrix.org/_matrix/client/r0/rooms/!ZLzAISmZnfMAiNAWyB%3Amatrix.org/state/m.room.guest_access/?access_token=MD
-// body {guest_access: "can_join"}
-
 public class VectorRoomSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     // internal constants values
     private static final String LOG_TAG = "VectorRoomSetFragment";
@@ -167,16 +80,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     public static final String PREF_KEY_ROOM_NAME = "roomNameEditText";
     public static final String PREF_KEY_ROOM_TOPIC = "roomTopicEditText";
     public static final String PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH = "roomNameListedInDirectorySwitch";
-    //public static final String PREF_KEY_ROOM_PRIVACY_INFO = "roomPrivacyInfo";
     public static final String PREF_KEY_ROOM_TAG_LIST = "roomTagList";
     public static final String PREF_KEY_ROOM_ACCESS_RULES_LIST = "roomAccessRulesList";
     public static final String PREF_KEY_ROOM_HISTORY_READABILITY_LIST = "roomReadHistoryRulesList";
     public static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
 
+    private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
+
     // business code
     private MXSession mSession;
     private Room mRoom;
     private BingRulesManager mBingRulesManager;
+    private boolean mIsUiUpdateSkipped;
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
@@ -191,7 +106,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private View mParentFragmentContainerView;
 
     // disable some updates if there is
-    private IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
+    private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
             updateUi();
@@ -199,7 +114,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     };
 
     // update field listener
-    private ApiCallback<Void> mUpdateCallback = new ApiCallback<Void>() {
+    private final ApiCallback<Void> mUpdateCallback = new ApiCallback<Void>() {
         /**
          * refresh the fragment.
          * @param mode true to force refresh
@@ -328,7 +243,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomNameEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
         mRoomTopicEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
         mRoomDirectoryVisibilitySwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
-        //mPrivacyInfoPreference = (Preference)findPreference(PREF_KEY_ROOM_PRIVACY_INFO); further use
         mRoomMuteNotificationsSwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
         mRoomTagListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
@@ -416,6 +330,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void enableSharedPreferenceListener(boolean aIsListenerEnabled) {
         Log.d(LOG_TAG, "## enableSharedPreferenceListener(): aIsListenerEnabled=" + aIsListenerEnabled);
+
+        mIsUiUpdateSkipped = !aIsListenerEnabled;
+
         try {
             //SharedPreferences prefMgr = getActivity().getSharedPreferences("VectorSettingsFile", Context.MODE_PRIVATE);
             SharedPreferences prefMgr = getDefaultSharedPreferences(getActivity());
@@ -439,7 +356,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // configure the preferences that are allowed to be modified by the user
         updatePreferenceAccessFromPowerLevel();
 
-        // need to run on the UI thread to be taken iinto account
+        // need to run on the UI thread to be taken into account
         // when updatePreferenceUiValues() will be performed
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -500,7 +417,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             // set checked status
                             // Note: the preference listener is disabled when the switch is updated, otherwise it will be seen
                             // as a user action on the preference
-                            boolean isChecked = RoomState.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue) ? true : false;
+                            boolean isChecked = RoomState.DIRECTORY_VISIBILITY_PUBLIC.equals(aVisibilityValue);
                             enableSharedPreferenceListener(false);
                             mRoomDirectoryVisibilitySwitch.setChecked(isChecked);
                             enableSharedPreferenceListener(true);
@@ -658,7 +575,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             String joinRule = mRoom.getLiveState().join_rule;
             String guestAccessRule = mRoom.getLiveState().guest_access;
 
-            if(RoomState.JOIN_RULE_INVITE.equals(joinRule) && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)) {
+            if(RoomState.JOIN_RULE_INVITE.equals(joinRule)/* && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)*/) {
                 // "Only people who have been invited" requires: {join_rule: "invite"} and {guest_access: "can_join"}
                 value = ACCESS_RULES_ONLY_PEOPLE_INVITED;
                 summary = resources.getString(R.string.room_settings_room_access_entry_only_invited);
@@ -680,6 +597,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             if(null != value){
                 mRoomAccessRulesListPreference.setValue(value);
                 mRoomAccessRulesListPreference.setSummary(summary);
+            } else {
+                mRoomHistoryReadabilityRulesListPreference.setValue(UNKNOWN_VALUE);
+                mRoomHistoryReadabilityRulesListPreference.setSummary("");
             }
         }
 
@@ -729,12 +649,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 } else {
                     // unknown value
                     Log.w(LOG_TAG, "## updatePreferenceUiValues(): unknown room read history value=" + value);
+                    summary = null;
                 }
+            }
 
-                if(null != summary) {
-                    mRoomHistoryReadabilityRulesListPreference.setValue(value);
-                    mRoomHistoryReadabilityRulesListPreference.setSummary(summary);
-                }
+            if(null != summary) {
+                mRoomHistoryReadabilityRulesListPreference.setValue(value);
+                mRoomHistoryReadabilityRulesListPreference.setSummary(summary);
+            } else {
+                mRoomHistoryReadabilityRulesListPreference.setValue(UNKNOWN_VALUE);
+                mRoomHistoryReadabilityRulesListPreference.setSummary("");
             }
         }
     }
@@ -749,6 +673,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences aSharedPreferences, String aKey) {
+
+        if(mIsUiUpdateSkipped){
+            Log.d(LOG_TAG,"## onSharedPreferenceChanged(): Skipped");
+            return;
+        }
 
         if (aKey.equals(PREF_KEY_ROOM_PHOTO_AVATAR)) {
             // unused flow: onSharedPreferenceChanged not triggered for room avatar photo
@@ -853,7 +782,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     }
 
     private void onRoomAccessPreferenceChanged() {
-        boolean isSupportedTag = true;
 
         if((null == mRoom) || (null == mRoomAccessRulesListPreference)) {
             Log.w(LOG_TAG,"## onRoomAccessPreferenceChanged(): not processed due to invalid parameters");
