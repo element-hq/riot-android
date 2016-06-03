@@ -52,6 +52,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -67,6 +68,7 @@ import im.vector.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -79,6 +81,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
+    // shared instance
+    // only one instance of VectorHomeActivity should be used.
+    private static VectorHomeActivity sharedInstance = null;
+
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
 
     // there are two ways to open an external link
@@ -86,12 +92,20 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an events chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
     public static final String EXTRA_WAITING_VIEW_STATUS = "VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS";
+
+    // call management
+    // the home activity is launched to start a call.
+    public static final String EXTRA_CALL_SESSION_ID = "VectorHomeActivity.EXTRA_CALL_SESSION_ID";
+    public static final String EXTRA_CALL_ID = "VectorHomeActivity.EXTRA_CALL_ID";
+
+    // the home activity is launched in shared files mode
+    // i.e the user tries to send several files with VECTOR
+    public static final String EXTRA_SHARED_INTENT_PARAMS = "VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS";
+
     public static final boolean WAITING_VIEW_STOP = false;
     public static final boolean WAITING_VIEW_START = true;
 
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
-
-    public static final boolean IS_VOIP_ENABLED = true;
 
     private static final String TAG_FRAGMENT_RECENTS_LIST = "VectorHomeActivity.TAG_FRAGMENT_RECENTS_LIST";
 
@@ -115,62 +129,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private AlertDialog.Builder mUseGAAlert;
 
-
-    private final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
-        /**
-         * Called when there is an incoming call within the room.
-         */
-        @Override
-        public void onIncomingCall(final IMXCall call) {
-            // can only manage one call instance.
-            if (null == CallViewActivity.getActiveCall()) {
-                // display the call activity only if the application is in background.
-                if (VectorHomeActivity.this.isScreenOn()) {
-                    // create the call object
-                    if (null != call) {
-                        final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
-
-                        intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                VectorHomeActivity.this.startActivity(intent);
-                            }
-                        });
-                    }
-                }
-            } else {
-                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        call.hangup("busy");
-                    }
-                });
-            }
-        }
-
-        /**
-         * Called when a called has been hung up
-         */
-        @Override
-        public void onCallHangUp(IMXCall call) {
-            final Boolean isActiveCall = CallViewActivity.isBackgroundedCallId(call.getCallId());
-
-            VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (isActiveCall) {
-                        VectorApp.getInstance().onCallEnd();
-                        VectorHomeActivity.this.manageCallButton();
-
-                        CallViewActivity.startEndCallSound(VectorHomeActivity.this);
-                    }
-                }
-            });
-        }
-    };
+    // when a member is banned, the session must be reloaded
+    public static boolean mClearCacheRequired = false;
 
     // sliding menu management
     private NavigationView mNavigationView = null;
@@ -188,16 +148,25 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     };
 
+    /**
+     * @return the current instance
+     */
+    public static VectorHomeActivity getInstance() {
+        return sharedInstance;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_home);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;
         }
+
+        sharedInstance = this;
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
 
@@ -225,7 +194,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                                 HashMap<String, Object> params = new HashMap<String, Object>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
+                                params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
                                 CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
                             }
                         });
@@ -265,6 +234,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // process intent parameters
         final Intent intent = getIntent();
+
+        if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
+            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID));
+        }
 
         // the activity could be started with a spinner
         // because there is a pending action (like universallink processing)
@@ -334,15 +307,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             Log.d(LOG_TAG, "create with no universal link");
         }
 
-        String action = intent.getAction();
-        String type = intent.getType();
-
-        // send files from external application
-        if ((Intent.ACTION_SEND.equals(action) || Intent.ACTION_SEND_MULTIPLE.equals(action)) && type != null) {
+        if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
+            final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, intent);
+                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
                 }
             });
         }
@@ -376,22 +346,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // clear the notification if they are not anymore valid
         // i.e the event has been read from another client
-        // or deleted
+        // or deleted it
+        // + other actions which require a background listener
         mLiveEventListener = new MXEventListener() {
             @Override
             public void onLiveEventsChunkProcessed() {
-                EventStreamService.checkDisplayedNotification();
-
                 // treat any pending URL link workflow, that was started previously
-               processIntentUniversalLink();
+                processIntentUniversalLink();
+
+                if (mClearCacheRequired) {
+                    mClearCacheRequired = false;
+                    Matrix.getInstance(VectorHomeActivity.this).reloadSessions(VectorHomeActivity.this);
+                }
             }
         };
 
         mSession.getDataHandler().addListener(mLiveEventListener);
-
-        if (IS_VOIP_ENABLED) {
-            mSession.mCallsManager.addListener(mCallsManagerListener);
-        }
 
         // initialize the public rooms list
         PublicRoomsManager.setSession(mSession);
@@ -414,13 +384,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public void onDestroy() {
         super.onDestroy();
 
+        // release the static instance if it is the current implementation
+        if (sharedInstance == this) {
+            sharedInstance = null;
+        }
+
         // GA issue : mSession was null
         if ((null != mSession) && mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mLiveEventListener);
-
-            if (null != mSession.mCallsManager) {
-                mSession.mCallsManager.removeListener(mCallsManagerListener);
-            }
         }
     }
 
@@ -543,7 +514,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
 
@@ -836,7 +807,65 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // VOIP call management
     //==============================================================================================================
 
+    /**
+     * Start a call with a session Id and a call Id
+     * @param sessionId the session Id
+     * @param callId teh call Id
+     */
+    public void startCall(String sessionId, String callId) {
+        // sanity checks
+        if ((null != sessionId) && (null != callId)) {
+            // display the call activity only if the application is in background.
+            if (isScreenOn()) {
+                final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
+
+                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, sessionId);
+                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, callId);
+
+                VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        VectorHomeActivity.this.startActivity(intent);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * End of call management.
+     * @param call the ended call/
+     */
+    public void onCallEnd(IMXCall call) {
+        if (null != call) {
+            String callId = call.getCallId();
+            // either the callview has been put in background
+            // or the ringing started because of a notified call in lockscreen (the callview was never created)
+            final boolean isActiveCall = CallViewActivity.isBackgroundedCallId(callId) ||
+                    (!mSession.mCallsManager.hasActiveCalls() && IMXCall.CALL_STATE_CREATED.equals(call.getCallState()));
+
+            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (isActiveCall) {
+                        // suspend the app if required
+                        VectorApp.getInstance().onCallEnd();
+                        // hide the call button in the menu bar
+                        VectorHomeActivity.this.manageCallButton();
+                        // clear call in progress notification
+                        EventStreamService.getInstance().checkDisplayedNotification();
+                        // and play a lovely sound
+                        CallViewActivity.startEndCallSound(VectorHomeActivity.this);
+                    }
+                }
+            });
+        }
+    }
+
     @SuppressLint("NewApi")
+    /**
+     * Tell if the screen is turned on
+     */
     private boolean isScreenOn() {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
 

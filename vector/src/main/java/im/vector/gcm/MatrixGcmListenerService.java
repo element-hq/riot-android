@@ -40,7 +40,6 @@ public class MatrixGcmListenerService extends GcmListenerService {
      */
     @Override
     public void onMessageReceived(final String from, final Bundle data) {
-        Log.d(LOG_TAG, " onMessageReceived ");
 
         if (null == mUIhandler) {
             mUIhandler = new android.os.Handler(VectorApp.getInstance().getMainLooper());
@@ -49,8 +48,9 @@ public class MatrixGcmListenerService extends GcmListenerService {
         mUIhandler.post(new Runnable() {
             @Override
             public void run() {
+                Log.d(LOG_TAG, "## onMessageReceived() --------------------------------");
                 for (String key : data.keySet()) {
-                    Log.e(LOG_TAG, " >>> " + key + " : " + data.get(key));
+                    Log.d(LOG_TAG, "## onMessageReceived() >>> " + key + " : " + data.get(key));
                 }
 
                 int unreadCount = 0;

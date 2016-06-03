@@ -82,7 +82,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_unified_search);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;

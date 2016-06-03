@@ -50,6 +50,17 @@
             android:layout_centerVertical="true" />
 
         <ImageView
+            android:id="@+id/filtered_list_matrix_user"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginRight="-7dp"
+            android:src="@drawable/logo"
+            android:layout_alignRight="@+id/filtered_list_avatar"
+            android:layout_alignTop="@+id/filtered_list_avatar"
+            android:visibility="gone" />
+
+        <ImageView
             android:id="@+id/filtered_list_avatar_badge"
             android:layout_width="20dp"
             android:layout_height="20dp"

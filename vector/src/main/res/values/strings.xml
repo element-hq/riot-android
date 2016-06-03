@@ -40,10 +40,13 @@
     <string name="more">More</string>
     <string name="chat_with">Chat with </string>
     <string name="delete">Delete</string>
+    <string name="report_content">Report content</string>
 
     <!-- server urls -->
-    <string name="matrix_org_server_url">https://matrix.org</string>
     <string name="vector_im_server_url">https://vector.im</string>
+    <string name="matrix_org_server_url">https://matrix.org</string>
+    <string name="default_hs_server_url">https://matrix.org</string>
+    <string name="default_identity_server_url">https://vector.im</string>
 
     <!-- actions -->
     <string name="action_settings">Settings</string>
@@ -145,7 +148,6 @@
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">Your name</string>
-    <string name="auth_optional_email_placeholder">Email address (optional)</string>
     <string name="auth_email_placeholder">Email address</string>
     <string name="auth_repeat_password_placeholder">Repeat password</string>
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
@@ -375,6 +377,7 @@
     <string name="room_preview_unlinked_email_warning">This invitation was sent to %s, which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
     <string name="room_preview_try_join_an_unknown_room">You are trying to access %s. Would you like to join in order to participate in the discussion?</string>
     <string name="room_preview_try_join_an_unknown_room_default">a room</string>
+    <string name="room_preview_room_interactions_disabled">This is a preview of this room. Room interactions have been disabled.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">New Chat</string>
@@ -392,6 +395,7 @@
     <string name="room_creation_make_private">Make private</string>
     <string name="room_creation_name_mobile_email">name, mobile or email</string>
     <string name="room_header_active_members">%1$d/%2$d active members</string>
+    <string name="room_header_invite_members">Invite members</string>
     <string name="room_title_members">%1$d members</string>
     <string name="room_title_one_member">1 member</string>
 
@@ -438,6 +442,9 @@
     <string name="room_participants_action_start_chat">Start chat</string>
     <string name="room_participants_action_start_voice_call">Start voice call</string>
     <string name="room_participants_action_start_video_call">Start video call</string>
+    <string name="room_participants_action_ignore">Hide all messages from this user</string>
+    <string name="room_participants_action_unignore">Show all messages from this user</string>
+    <string name="room_participants_invite_search_another_user">Search/invite by name, email, id</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>
@@ -448,7 +455,7 @@
 
     <!--  Chat -->
     <string name="room_menu_search">Search</string>
-    <string name="room_menu_call">Search</string>
+    <string name="room_menu_call">Call</string>
     <string name="room_menu_participants">Participants</string>
     <string name="room_menu_favourite">Favourite</string>
     <string name="room_menu_unfavourite">Unfavourite</string>
@@ -517,6 +524,7 @@
     <string name="tab_title_search_files">FILES</string>
 
     <!-- Room recents -->
+    <string name="room_recents_join">JOIN</string>
     <string name="room_recents_directory">DIRECTORY</string>
     <string name="room_recents_favourites">FAVORITES</string>
     <string name="room_recents_conversations">ROOMS</string>
@@ -525,8 +533,10 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory results</string>
-    <string name="directory_search_result">%1$d results found</string>
-    <string name="directory_search_result_for">%1$d results found for %2$s</string>
+    <string name="directory_search_room">%1$d room</string>
+    <string name="directory_search_rooms">%1$d rooms</string>
+    <string name="directory_search_room_for">%1$d room found for %2$s</string>
+    <string name="directory_search_rooms_for">%1$d rooms found for %2$s</string>
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
     <string name="splash_screen_display_text">Vector</string>
@@ -578,6 +588,12 @@
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_other">Other</string>
+    <string name="settings_advanced">Advanced</string>
+    <string name="settings_notifications_targets">Notification Targets</string>
+
+    <string name="settings_logged_in">Logged in as</string>
+    <string name="settings_home_server">Home Server</string>
+    <string name="settings_identity_server">Identity Server</string>
 
     <string name="account_email_validation_title">Verification Pending</string>
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
@@ -591,6 +607,9 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="room_settings_pref_category">Room settings</string>
     <string name="room_settings_room_photo">Room Photo</string>
+
+    <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
+    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>

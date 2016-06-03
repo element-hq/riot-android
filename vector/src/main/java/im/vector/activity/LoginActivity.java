@@ -65,6 +65,7 @@ import im.vector.R;
 import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.services.EventStreamService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,6 +98,8 @@ public class LoginActivity extends MXCActionBarActivity {
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
+    public static final String HOME_SERVER_URL_PREF = "home_server_url";
+    public static final String IDENTITY_SERVER_URL_PREF = "identity_server_url";
 
     // saved parameters index
 
@@ -272,7 +275,12 @@ public class LoginActivity extends MXCActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "## onCreate(): IN");
+
+        if (null == getIntent()) {
+            Log.d(LOG_TAG, "## onCreate(): IN with no intent");
+        } else {
+            Log.d(LOG_TAG, "## onCreate(): IN with flags " + Integer.toHexString(getIntent().getFlags()));
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_login);
@@ -282,8 +290,19 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // already registered
         if (hasCredentials()) {
-            Log.e(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
-            goToSplash();
+            if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
+                Log.d(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
+                goToSplash();
+            } else {
+                // detect if the application has already been started
+                if (null == EventStreamService.getInstance()) {
+                    Log.d(LOG_TAG, "## onCreate(): goToSplash with credentials but there is no event stream service.");
+                    goToSplash();
+                } else {
+                    Log.d(LOG_TAG, "## onCreate(): close the login screen because it is a temporary task");
+                }
+            }
+
             finish();
             return;
         }
@@ -348,6 +367,9 @@ public class LoginActivity extends MXCActionBarActivity {
 
             mLoginEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
             mLoginPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
+
+            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF,  getResources().getString(R.string.default_hs_server_url)));
+            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF,  getResources().getString(R.string.default_identity_server_url)));
         }
 
         // trap the UI events
@@ -489,6 +511,46 @@ public class LoginActivity extends MXCActionBarActivity {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(PASSWORD_PREF, mLoginPasswordTextView.getText().toString());
+                editor.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mHomeServerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(HOME_SERVER_URL_PREF, mHomeServerText.getText().toString().trim());
+                editor.commit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mIdentityServerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(IDENTITY_SERVER_URL_PREF, mIdentityServerText.getText().toString().trim());
                 editor.commit();
             }
 

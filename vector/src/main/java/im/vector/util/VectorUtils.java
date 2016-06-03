@@ -86,6 +86,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
@@ -449,6 +451,9 @@ public class VectorUtils {
             return;
         }
 
+        // reset the imageview tag
+        imageView.setTag(null);
+
         if (session.getMediasCache().isAvartarThumbailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
             session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
         } else {
@@ -479,31 +484,43 @@ public class VectorUtils {
                     });
                 }
             } else {
+                final String tmpTag0 = "00" + avatarUrl + "-" + userId + "--" + displayName;
+                imageView.setTag(tmpTag0);
+
                 // create the default avatar in the background thread
                 mImagesThreadHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        setDefaultMemberAvatar(imageView, userId, displayName);
+                        if (TextUtils.equals(tmpTag0, (String)imageView.getTag())) {
+                            imageView.setTag(null);
+                            setDefaultMemberAvatar(imageView, userId, displayName);
 
-                        if (!TextUtils.isEmpty(avatarUrl)) {
-                            // wait that it is rendered to load the right one
-                            mUIHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //
-                                    final String tag = avatarUrl + userId + displayName;
-                                    imageView.setTag(tag);
+                            if (!TextUtils.isEmpty(avatarUrl)) {
+                                final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
+                                imageView.setTag(tmpTag1);
 
-                                    mImagesThreadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (TextUtils.equals(tag, (String) imageView.getTag())) {
-                                                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
-                                            }
+                                // wait that it is rendered to load the right one
+                                mUIHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // test if the imageview tag has not been updated
+                                        if (TextUtils.equals(tmpTag1, (String)imageView.getTag())) {
+                                            final String tmptag2 = "22" + avatarUrl + userId + displayName;
+                                            imageView.setTag(tmptag2);
+
+                                            mImagesThreadHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    // test if the imageview tag has not been updated
+                                                    if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
+                                                        session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+                                                    }
+                                                }
+                                            });
                                         }
-                                    });
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                     }
                 });
@@ -581,8 +598,43 @@ public class VectorUtils {
     }
 
     //==============================================================================================================
-    // About / terms and conditions
+    // List uris from intent
     //==============================================================================================================
+
+    /**
+     * List the media Uris provided in an intent
+     * @param intent the intent.
+     * @return the media URIs list
+     */
+    public static  ArrayList<Uri> listMediaUris(Intent intent) {
+        ArrayList<Uri> uris = new ArrayList<Uri>();
+
+        if (null != intent) {
+            ClipData clipData = null;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                clipData = intent.getClipData();
+            }
+
+            // multiple data
+            if (null != clipData) {
+                int count = clipData.getItemCount();
+
+                for (int i = 0; i < count; i++) {
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Uri uri = item.getUri();
+
+                    if (null != uri) {
+                        uris.add(uri);
+                    }
+                }
+            } else if (null != intent.getData()) {
+                uris.add(intent.getData());
+            }
+        }
+
+        return uris;
+    }
 
     /**
      * Return a selected bitmap from an intent.
@@ -780,5 +832,57 @@ public class VectorUtils {
         }*/
 
         return map;
+    }
+
+
+    //==============================================================================================================
+    // URL parser
+    //==============================================================================================================
+
+    private static final Pattern mUrlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+    /**
+     * List the URLs in a text.
+     * @param text the text to parse
+     * @return the list of URLss
+     */
+    public static List<String> listURLs(String text) {
+        ArrayList<String> URLs = new ArrayList<>();
+
+        // sanity checks
+        if (!TextUtils.isEmpty(text)) {
+            Matcher matcher = mUrlPattern.matcher(text);
+
+            while (matcher.find()) {
+                int matchStart = matcher.start(1);
+                int matchEnd = matcher.end();
+
+                String charBef = "";
+                String charAfter = "";
+
+                if (matchStart > 2) {
+                    charBef = text.substring(matchStart-2, matchStart);
+                }
+
+                if ((matchEnd-1) < text.length()) {
+                    charAfter = text.substring(matchEnd-1, matchEnd);
+                }
+
+                // keep the link between parenthesis, it might be a link [title](link)
+                if (!TextUtils.equals(charAfter, ")") || !TextUtils.equals(charBef, "](") ) {
+                    String url = text.substring(matchStart, matchEnd);
+
+                    if (URLs.indexOf(url) < 0) {
+                        URLs.add(url);
+                    }
+                }
+            }
+        }
+
+        return URLs;
     }
 }

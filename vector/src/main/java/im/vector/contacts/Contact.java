@@ -22,22 +22,32 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.rest.model.User;
 import org.w3c.dom.Text;
+import org.w3c.dom.UserDataHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * A simple contact class
  */
 public class Contact {
     public static class MXID {
-        public String mMatrixId;
+        // the MXSession identifier
         public String mAccountId;
+
+        // the related Matrix ID
+        public String mMatrixId;
+
+        // the user description
+        public User mUser;
 
         public MXID(String matrixId, String accountId) {
             mMatrixId = matrixId;
             mAccountId = accountId;
+            mUser = null;
         }
     }
 
@@ -63,7 +73,7 @@ public class Contact {
      * @return true if some matrix IDs have been retrieved
      */
     public boolean hasMatridIds(Context context) {
-        Boolean localUpdateOnly = (null != mMXIDsByElement);
+        boolean localUpdateOnly = (null != mMXIDsByElement);
 
         // the PIDs are not yet retrieved
         if (null == mMXIDsByElement) {
@@ -146,6 +156,26 @@ public class Contact {
         }
 
         return matched;
+    }
+
+    /**
+     * @return the medias set which could match to a matrix Id.
+     */
+    public Set<String> getMatrixIdMedias() {
+        return mMXIDsByElement.keySet();
+    }
+
+    /**
+     * Retrieve a MXID from an identifier
+     * @param media the media
+     * @return the matched MXID if it exists.
+     */
+    public MXID getMXID(String media) {
+        if (!TextUtils.isEmpty(media)) {
+            return mMXIDsByElement.get(media);
+        }
+
+        return null;
     }
 
     /**

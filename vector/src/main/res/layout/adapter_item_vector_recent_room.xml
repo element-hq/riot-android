@@ -64,13 +64,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/roomSummaryAdapter_ts"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_unread_count"
                     android:singleLine="true"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-regular"
                     android:textColor="@color/vector_text_black_color"
                     android:layout_alignParentBottom="true"
                     android:text="Room Name" />
+
+                <!-- unread count badge -->
+                <TextView
+                    android:id="@+id/roomSummaryAdapter_unread_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:text="XXX"
+                    android:textSize="14sp"
+                    android:minWidth="25dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@android:color/white"
+                    android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_ts"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="5dp"/>
 
                 <!-- Message timestamp -->
                 <TextView
@@ -114,9 +133,30 @@
                 android:layout_width="match_parent"
                 android:layout_weight="0.5"
                 android:layout_height="0dp">
+
+                <ImageView
+                    android:id="@+id/roomSummaryAdapter_guest_access"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_guest_access_black"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/roomSummaryAdapter_word_readable"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_guest_access"
+                    android:src="@drawable/ic_word_readable_black"
+                    android:visibility="gone" />
+
                 <!-- Last message of the room -->
                 <TextView
                     android:id="@+id/roomSummaryAdapter_roomMessage"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_word_readable"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -124,6 +164,7 @@
                     android:textSize="14sp"
                     android:textColor="@color/vector_0_54_black_color"
                     android:text="last room message" />
+
             </RelativeLayout>
 
         </LinearLayout>

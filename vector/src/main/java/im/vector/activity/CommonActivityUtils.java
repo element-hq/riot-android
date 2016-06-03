@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +47,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -150,7 +152,7 @@ public class CommonActivityUtils {
         }
     }
 
-    public static boolean shouldRestartApp() {
+    public static boolean shouldRestartApp(Context context) {
         EventStreamService eventStreamService = EventStreamService.getInstance();
 
         if (!Matrix.hasValidSessions()) {
@@ -158,10 +160,11 @@ public class CommonActivityUtils {
         }
 
         if (null == eventStreamService) {
-            Log.e(LOG_TAG, "shouldRestartApp : eventStreamService is null");
+            Log.e(LOG_TAG, "eventStreamService is null : restart the event stream");
+            CommonActivityUtils.startEventStreamService(context);
         }
 
-        return !Matrix.hasValidSessions() || (null == eventStreamService);
+        return !Matrix.hasValidSessions();
     }
 
     public static final String RESTART_IN_PROGRESS_KEY = "RESTART_IN_PROGRESS_KEY";
@@ -246,12 +249,17 @@ public class CommonActivityUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
         String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
+
+        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
+        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
         Boolean useGa = VectorApp.getInstance().useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.putString(LoginActivity.PASSWORD_PREF, passwordVal);
         editor.putString(LoginActivity.LOGIN_PREF, loginVal);
+        editor.putString(LoginActivity.HOME_SERVER_URL_PREF, homeServer);
+        editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, identityServer);
         editor.commit();
 
         if (null != useGa) {
@@ -266,6 +274,9 @@ public class CommonActivityUtils {
 
         // ensure that corrupted values are cleared
         Matrix.getInstance(activity).getLoginStorage().clear();
+
+        // clear the tmp store list
+        Matrix.getInstance(activity).clearTmpStoresList();
 
         // reset the contacts
         PIDsRetriever.getIntance().reset();
@@ -311,6 +322,8 @@ public class CommonActivityUtils {
      */
     private static void sendEventStreamAction(Context context, EventStreamService.StreamAction action) {
         Context appContext = context.getApplicationContext();
+
+        Log.d(LOG_TAG, "sendEventStreamAction " + action);
 
         // kill active connections
         Intent killStreamService = new Intent(appContext, EventStreamService.class);
@@ -400,6 +413,102 @@ public class CommonActivityUtils {
     }
 
     //==============================================================================================================
+    // Room preview methods.
+    //==============================================================================================================
+
+    /**
+     * Start a room activity in preview mode.
+     * @param fromActivity the caller activity.
+     * @param roomPreviewData the room preview information
+     */
+    public static void previewRoom(final Activity fromActivity, RoomPreviewData roomPreviewData) {
+        if ((null != fromActivity) && (null != roomPreviewData)) {
+            VectorRoomActivity.sRoomPreviewData = roomPreviewData;
+            Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+            fromActivity.startActivity(intent);
+        }
+    }
+
+    /**
+     * Start a room activity in preview mode.
+     * If the room is already joined, open it in edition mode.
+     * @param fromActivity the caller activity.
+     * @param session the session
+     * @param roomId the roomId
+     * @param roomAlias the room alias
+     * @param callback the operation callback
+     */
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
+        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, roomAlias, null, null), callback);
+    }
+
+    /**
+     * Start a room activity in preview mode.
+     * If the room is already joined, open it in edition mode.
+     * @param fromActivity the caller activity.
+     * @param session the session
+     * @param roomId the roomId
+     * @param roomPreviewData the room preview data
+     * @param callback the operation callback
+     */
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final RoomPreviewData roomPreviewData, final ApiCallback<Void> callback) {
+        Room room = session.getDataHandler().getRoom(roomId, false);
+
+        // if the room exists
+        if (null != room) {
+            // either the user is invited
+            if (room.isInvited()) {
+                Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+                previewRoom(fromActivity, roomPreviewData);
+            } else {
+                Log.d(LOG_TAG, "previewRoom : open the room");
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+            }
+
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+        } else {
+            roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+                private void onDone() {
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+                    previewRoom(fromActivity, roomPreviewData);
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+
+
+    }
+    //==============================================================================================================
     // Room jump methods.
     //==============================================================================================================
 
@@ -444,6 +553,7 @@ public class CommonActivityUtils {
                                            // if the activity is not the home activity
                                            if (!(fromActivity instanceof VectorHomeActivity)) {
                                                // pop to the home activity
+                                               Log.d(LOG_TAG, "## goToRoomPage(): start VectorHomeActivity..");
                                                Intent intent = new Intent(fromActivity, VectorHomeActivity.class);
                                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -452,6 +562,7 @@ public class CommonActivityUtils {
                                            } else {
                                                // already to the home activity
                                                // so just need to open the room activity
+                                               Log.d(LOG_TAG, "## goToRoomPage(): already in VectorHomeActivity..");
                                                Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
 
                                                for (String key : params.keySet()) {
@@ -459,7 +570,9 @@ public class CommonActivityUtils {
 
                                                    if (value instanceof String) {
                                                        intent.putExtra(key, (String) value);
-                                                   } else {
+                                                   } else if (value instanceof Boolean) {
+                                                       intent.putExtra(key, (Boolean) value);
+                                                   } else if (value instanceof Parcelable) {
                                                        intent.putExtra(key, (Parcelable) value);
                                                    }
                                                }
@@ -546,6 +659,7 @@ public class CommonActivityUtils {
 
         // the room already exists -> switch to it
         if (null != room) {
+            Log.d(LOG_TAG,"## goToOneToOneRoom(): room already exists");
             HashMap<String, Object> params = new HashMap<String, Object>();
 
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
@@ -558,6 +672,7 @@ public class CommonActivityUtils {
                 callback.onSuccess(null);
             }
         } else {
+            Log.d(LOG_TAG,"## goToOneToOneRoom(): start createRoom()");
             session.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(fromActivity) {
 
                 @Override
@@ -570,7 +685,9 @@ public class CommonActivityUtils {
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
                             CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);
 
                             callback.onSuccess(null);
@@ -578,6 +695,7 @@ public class CommonActivityUtils {
 
                         @Override
                         public void onMatrixError(MatrixError e) {
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onMatrixError Msg="+e.getLocalizedMessage());
                             if (null != callback) {
                                 callback.onMatrixError(e);
                             }
@@ -585,6 +703,7 @@ public class CommonActivityUtils {
 
                         @Override
                         public void onNetworkError(Exception e) {
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onNetworkError Msg="+e.getLocalizedMessage());
                             if (null != callback) {
                                 callback.onNetworkError(e);
                             }
@@ -592,6 +711,7 @@ public class CommonActivityUtils {
 
                         @Override
                         public void onUnexpectedError(Exception e) {
+                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onUnexpectedError Msg="+e.getLocalizedMessage());
                             if (null != callback) {
                                 callback.onUnexpectedError(e);
                             }
@@ -599,16 +719,19 @@ public class CommonActivityUtils {
 
                     };
 
-                    // check if the userId defines an meail address.
+                    // check if the userId defines an email address.
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches()) {
+                        Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite by mail");
                         room.inviteByEmail(otherUserId, inviteCallback);
                     } else {
+                        Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite");
                         room.invite(otherUserId, inviteCallback);
                     }
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
+                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onMatrixError Msg="+e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onMatrixError(e);
                     }
@@ -616,6 +739,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onNetworkError(Exception e) {
+                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onNetworkError Msg="+e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onNetworkError(e);
                     }
@@ -623,6 +747,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onUnexpectedError Msg="+e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onUnexpectedError(e);
                     }
@@ -1065,7 +1190,7 @@ public class CommonActivityUtils {
 
             displayMemoryInformation(activity);
 
-            if (CommonActivityUtils.shouldRestartApp()) {
+            if (CommonActivityUtils.shouldRestartApp(activity)) {
                 Log.e(LOW_MEMORY_LOG_TAG, "restart");
                 CommonActivityUtils.restartApp(activity);
             } else {

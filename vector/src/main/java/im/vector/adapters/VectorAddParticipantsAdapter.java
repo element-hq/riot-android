@@ -163,17 +163,22 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 if (!TextUtils.isEmpty(email)) {
                     Contact dummyContact = new Contact(email);
                     dummyContact.setDisplayName(email);
+                    dummyContact.mEmails.add(email);
 
                     ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, getContext());
                     participant.mUserId = email;
 
-                    map.put(email, participant);
+                    // always use the member description over the contacts book one
+                    // it avoid matching email to matrix id.
+                    if (!map.containsKey(email)) {
+                        map.put(email, participant);
+                    }
                 }
             }
         }
 
         // remove the known users
-        for(String id : idsToIgnore ){
+        for(String id : idsToIgnore) {
             map.remove(id);
         }
 
@@ -241,6 +246,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             // check if each member matches the pattern
             for(ParticipantAdapterItem item: mUnusedParticipants) {
                 if (item.matchWithPattern(pattern)) {
+                    // for contact with emails, check if they are some matched matrix Id
+                    if (null != item.mContact) {
+                        // the email <-> matrix Ids matching is done asynchronously
+                        if (item.mContact.hasMatridIds(mContext)) {
+                            Log.d(LOG_TAG, "the contact " + item.mContact.getDisplayName() + " contains matrix ID");
+                            item.mUserId = item.mContact.getFirstMatrixId().mMatrixId;
+                        }
+                    }
+
                     nextMembersList.add(item);
                 }
             }
@@ -284,6 +298,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         final ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
         final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
+        final ImageView matrixUserBadge =  (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
 
         // set the avatar
         if (null != participant.mAvatarBitmap) {
@@ -364,7 +379,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             });
         }
 
-        statusTextView.setText(status);
+        // the contact defines a matrix user but there is no way to get more information (presence, avatar)
+        if ((participant.mContact != null) && (participant.mUserId != null) && !TextUtils.equals(participant.mUserId, participant.mDisplayName)) {
+            statusTextView.setText(participant.mUserId);
+            matrixUserBadge.setVisibility(View.VISIBLE);
+        }
+        else {
+            statusTextView.setText(status);
+            matrixUserBadge.setVisibility(View.GONE);
+        }
 
         View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
             @Override

@@ -56,7 +56,7 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vector_room_messages_search);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;

@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -41,6 +42,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
@@ -57,6 +59,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
+    public static final String EXTRA_STORE_ID = "EXTRA_STORE_ID";
 
     // list view items associated actions
     public static final int ITEM_ACTION_INVITE = 0;
@@ -64,18 +67,21 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final int ITEM_ACTION_KICK = 2;
     public static final int ITEM_ACTION_BAN = 3;
     public static final int ITEM_ACTION_UNBAN = 4;
-    public static final int ITEM_ACTION_SET_DEFAULT_POWER_LEVEL = 5;
-    public static final int ITEM_ACTION_SET_MODERATOR = 6;
-    public static final int ITEM_ACTION_SET_ADMIN = 7;
-    //public static final int ITEM_ACTION_SET_CUSTOM_POWER_LEVEL = 8;
-    public static final int ITEM_ACTION_START_CHAT = 9;
-    public static final int ITEM_ACTION_START_VOICE_CALL = 10;
-    public static final int ITEM_ACTION_START_VIDEO_CALL = 11;
+    public static final int ITEM_ACTION_IGNORE = 5;
+    public static final int ITEM_ACTION_UNIGNORE = 6;
+    public static final int ITEM_ACTION_SET_DEFAULT_POWER_LEVEL = 7;
+    public static final int ITEM_ACTION_SET_MODERATOR = 8;
+    public static final int ITEM_ACTION_SET_ADMIN = 9;
+    //public static final int ITEM_ACTION_SET_CUSTOM_POWER_LEVEL = 10;
+    public static final int ITEM_ACTION_START_CHAT = 11;
+    public static final int ITEM_ACTION_START_VOICE_CALL = 12;
+    public static final int ITEM_ACTION_START_VIDEO_CALL = 13;
 
     private static int VECTOR_ROOM_MODERATOR_LEVEL = 50;
     private static int VECTOR_ROOM_ADMIN_LEVEL = 100;
 
     // internal info
+    private IMXStore mStore;
     private Room mRoom;
     private String mRoomId;
     private String mMemberId;       // member whose details area displayed (provided in EXTRAS)
@@ -224,9 +230,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
+        ArrayList<String> idsList = new ArrayList<String>();
+
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
-                Log.d(LOG_TAG,"## performItemAction(): Start new room");
+                Log.d(LOG_TAG,"## performItemAction(): Start new room - start chat");
                 
                 enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
@@ -301,6 +309,39 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
                     mRoom.kick(mRoomMember.getUserId(), mRoomActionsListener);
                     Log.d(LOG_TAG, "## performItemAction(): Kick");
+                }
+                break;
+
+            case ITEM_ACTION_IGNORE:
+                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+
+                if (null != mRoomMember) {
+                    idsList.add(mRoomMember.getUserId());
+                } else if (null != mMemberId) {
+                    idsList.add(mMemberId);
+                }
+
+                if (0 != idsList.size()) {
+                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                    mSession.ignoreUsers(idsList, mRoomActionsListener);
+                    Log.d(LOG_TAG, "## performItemAction(): ignoreUsers");
+                }
+                break;
+
+            case ITEM_ACTION_UNIGNORE:
+                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+
+
+                if (null != mRoomMember) {
+                    idsList.add(mRoomMember.getUserId());
+                } else if (null != mMemberId) {
+                    idsList.add(mMemberId);
+                }
+
+                if (0 != idsList.size()) {
+                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                    mSession.unIgnoreUsers(idsList, mRoomActionsListener);
+                    Log.d(LOG_TAG, "## performItemAction(): unIgnoreUsers");
                 }
                 break;
 
@@ -403,7 +444,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // 1:1 call
-            if ((null != searchCallableRoom()) && VectorHomeActivity.IS_VOIP_ENABLED && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
+            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);
@@ -449,6 +490,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         if ((selfPowerLevel == maxPowerLevel) && (memberPowerLevel != maxPowerLevel)) {
                             supportedActions.add(ITEM_ACTION_SET_ADMIN);
                         }
+
+                        if (!mSession.isUserIgnored(mRoomMember.getUserId())) {
+                            supportedActions.add(ITEM_ACTION_IGNORE);
+                        } else {
+                            supportedActions.add(ITEM_ACTION_UNIGNORE);
+                        }
                     }
                 } else if (TextUtils.equals(membership, RoomMember.MEMBERSHIP_LEAVE)) {
                     // Check conditions to be able to invite someone
@@ -468,6 +515,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         } else if (!TextUtils.isEmpty(mMemberId)) {
             supportedActions.add(ITEM_ACTION_START_CHAT);
+
+            if (!mSession.isUserIgnored(mMemberId)) {
+                supportedActions.add(ITEM_ACTION_IGNORE);
+            } else {
+                supportedActions.add(ITEM_ACTION_UNIGNORE);
+            }
         }
 
         return supportedActions;
@@ -557,6 +610,20 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 actionText = getResources().getString(R.string.room_participants_action_ban);
                 mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
             }
+
+            // build the "ignore" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
+                imageResource = R.drawable.ic_person_outline_black;
+                actionText = getResources().getString(R.string.room_participants_action_ignore);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
+            }
+
+            // build the "unignore" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_UNIGNORE) >= 0) {
+                imageResource = R.drawable.ic_person_black;
+                actionText = getResources().getString(R.string.room_participants_action_unignore);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
+            }
         }
     }
 
@@ -564,7 +631,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application");
             CommonActivityUtils.restartApp(this);
             return;
@@ -585,6 +652,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         } else {
             // setup UI view and bind the widgets
             setContentView(R.layout.activity_member_details);
+
+            // use a toolbar instead of the actionbar
+            // to be able to display a large header
+            android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.member_details_toolbar);
+            this.setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
             mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
             mMemberAvatarBadgeImageView = (ImageView) findViewById(R.id.member_avatar_badge);
 
@@ -645,14 +719,26 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         Intent intent = getIntent();
         boolean isParamInitSucceed = false;
 
-        if(null != intent) {
-            mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
-
+        if (null != intent) {
             if (null == (mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID))) {
                 Log.e(LOG_TAG, "member ID missing in extra");
+                return isParamInitSucceed;
             } else if (null == (mSession = getSession(intent))) {
                 Log.e(LOG_TAG, "Invalid session");
-            } else if ((null != mRoomId) && (null == (mRoom = mSession.getDataHandler().getRoom(mRoomId)))) {
+                return isParamInitSucceed;
+            }
+
+            int storeIndex = intent.getIntExtra(EXTRA_STORE_ID, -1);
+
+            if (storeIndex >= 0) {
+                mStore = Matrix.getInstance(this).getTmpStore(storeIndex);
+            } else {
+                mStore = mSession.getDataHandler().getStore();
+            }
+
+            mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
+
+            if ((null != mRoomId) && (null == (mRoom = mStore.getRoom(mRoomId)))) {
                 Log.e(LOG_TAG, "The room is not found");
             } else {
                 // Everything is OK

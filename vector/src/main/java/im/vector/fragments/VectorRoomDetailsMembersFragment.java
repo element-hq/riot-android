@@ -51,6 +51,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.VectorApp;
 import im.vector.R;
@@ -96,6 +97,30 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                     }
                 }
             });
+        }
+
+        @Override
+        public void onPresenceUpdate(final Event event, final User user) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final int first = mParticipantsListView.getFirstVisiblePosition();
+                        final int last = mParticipantsListView.getLastVisiblePosition();
+
+                        for (int i = first; i <= last; i++) {
+                            Object object = mParticipantsListView.getItemAtPosition(i);
+
+                            if (object instanceof ParticipantAdapterItem) {
+                                if (TextUtils.equals(user.user_id, ((ParticipantAdapterItem) object).mUserId)) {
+                                    mAdapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
     };
 
@@ -358,7 +383,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // the application is in a weird state
-        if (CommonActivityUtils.shouldRestartApp()) {
+        if (CommonActivityUtils.shouldRestartApp(getActivity())) {
             return;
         }
 
