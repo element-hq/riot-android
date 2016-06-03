@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -249,9 +250,8 @@ public class CommonActivityUtils {
         String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
         String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
 
-        String serverUrlDefaultValue = activity.getResources().getString(R.string.vector_im_server_url);
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, serverUrlDefaultValue);
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, serverUrlDefaultValue);
+        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
+        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
         Boolean useGa = VectorApp.getInstance().useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
@@ -427,6 +427,7 @@ public class CommonActivityUtils {
             Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
             intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
             fromActivity.startActivity(intent);
         }
     }
@@ -437,10 +438,11 @@ public class CommonActivityUtils {
      * @param fromActivity the caller activity.
      * @param session the session
      * @param roomId the roomId
+     * @param roomAlias the room alias
      * @param callback the operation callback
      */
-    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final ApiCallback<Void> callback) {
-        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, null), callback);
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
+        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, roomAlias, null, null), callback);
     }
 
     /**
@@ -568,7 +570,9 @@ public class CommonActivityUtils {
 
                                                    if (value instanceof String) {
                                                        intent.putExtra(key, (String) value);
-                                                   } else {
+                                                   } else if (value instanceof Boolean) {
+                                                       intent.putExtra(key, (Boolean) value);
+                                                   } else if (value instanceof Parcelable) {
                                                        intent.putExtra(key, (Parcelable) value);
                                                    }
                                                }
@@ -681,6 +685,7 @@ public class CommonActivityUtils {
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
                             Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
                             CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);

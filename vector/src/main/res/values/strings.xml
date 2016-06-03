@@ -43,8 +43,10 @@
     <string name="report_content">Report content</string>
 
     <!-- server urls -->
-    <string name="matrix_org_server_url">https://matrix.org</string>
     <string name="vector_im_server_url">https://vector.im</string>
+    <string name="matrix_org_server_url">https://matrix.org</string>
+    <string name="default_hs_server_url">https://matrix.org</string>
+    <string name="default_identity_server_url">https://vector.im</string>
 
     <!-- actions -->
     <string name="action_settings">Settings</string>
@@ -146,7 +148,6 @@
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">Your name</string>
-    <string name="auth_optional_email_placeholder">Email address (optional)</string>
     <string name="auth_email_placeholder">Email address</string>
     <string name="auth_repeat_password_placeholder">Repeat password</string>
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
@@ -394,6 +395,7 @@
     <string name="room_creation_make_private">Make private</string>
     <string name="room_creation_name_mobile_email">name, mobile or email</string>
     <string name="room_header_active_members">%1$d/%2$d active members</string>
+    <string name="room_header_invite_members">Invite members</string>
     <string name="room_title_members">%1$d members</string>
     <string name="room_title_one_member">1 member</string>
 
@@ -442,6 +444,7 @@
     <string name="room_participants_action_start_video_call">Start video call</string>
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
+    <string name="room_participants_invite_search_another_user">Search/invite by name, email, id</string>
     <string name="room_participants_action_mention">Mention</string>
 
     <!-- Presence status-->
@@ -531,8 +534,10 @@
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory results</string>
-    <string name="directory_search_result">%1$d results found</string>
-    <string name="directory_search_result_for">%1$d results found for %2$s</string>
+    <string name="directory_search_room">%1$d room</string>
+    <string name="directory_search_rooms">%1$d rooms</string>
+    <string name="directory_search_room_for">%1$d room found for %2$s</string>
+    <string name="directory_search_rooms_for">%1$d rooms found for %2$s</string>
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
     <string name="splash_screen_display_text">Vector</string>

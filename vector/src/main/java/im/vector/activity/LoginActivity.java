@@ -368,9 +368,8 @@ public class LoginActivity extends MXCActionBarActivity {
             mLoginEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
             mLoginPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
 
-            String serverUrlDefaultValue = getResources().getString(R.string.vector_im_server_url);
-            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF, serverUrlDefaultValue));
-            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF, serverUrlDefaultValue));
+            mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF,  getResources().getString(R.string.default_hs_server_url)));
+            mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF,  getResources().getString(R.string.default_identity_server_url)));
         }
 
         // trap the UI events

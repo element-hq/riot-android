@@ -22,27 +22,37 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
+import android.os.Looper;
 import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MXFileStore;
 import org.matrix.androidsdk.data.MXMemoryStore;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
 import org.matrix.androidsdk.rest.model.login.Credentials;
+
+import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.RageShake;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
+import java.util.logging.Handler;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -75,6 +85,101 @@ public class Matrix {
 
     // network event manager
     private NetworkConnectivityReceiver mNetworkConnectivityReceiver;
+
+    // i.e the event has been read from another client
+    private static final MXEventListener mLiveEventListener = new MXEventListener() {
+        @Override
+        public void onIgnoredUsersListUpdate() {
+            // the application cache will be cleared at next launch if the application is not yet launched
+            // else it will be done when onLiveEventsChunkProcessed will be called in VectorHomeActivity.
+            VectorHomeActivity.mClearCacheRequired = true;
+        }
+
+        @Override
+        public void onLiveEventsChunkProcessed() {
+            Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
+            EventStreamService.checkDisplayedNotification();
+        }
+    };
+
+    // a common call events listener
+    private static final MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+        private android.os.Handler mUIHandler = null;
+
+        /**
+         * @return the UI handler
+         */
+        private android.os.Handler getUIHandler() {
+            if (null == mUIHandler) {
+                mUIHandler = new android.os.Handler(Looper.getMainLooper());
+            }
+
+            return mUIHandler;
+        }
+
+        /**
+         * Called when there is an incoming call within the room.
+         */
+        @Override
+        public void onIncomingCall(final IMXCall call) {
+            if (null != call) {
+                getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // can only manage one call instance.
+                        if (null == CallViewActivity.getActiveCall()) {
+                            Log.d(LOG_TAG, "onIncomingCall with no active call");
+
+                            VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();
+
+                            // if the home activity does not exist : the application has been woken up by a notification)
+                            if (null == homeActivity) {
+                                Log.d(LOG_TAG, "onIncomingCall : the home activity does not exist -> launch it");
+
+                                Context context = VectorApp.getInstance();
+
+                                // clear the activity stack to home activity
+                                Intent intent = new Intent(context, VectorHomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, call.getSession().getMyUserId());
+                                intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
+                                context.startActivity(intent);
+                            } else {
+                                Log.d(LOG_TAG, "onIncomingCall : the home activity exists : use it");
+                                // the home activity does the job
+                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
+                            }
+                        } else {
+                            Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
+                            call.hangup("busy");
+                        }
+                    }
+                });
+            }
+        }
+
+        /**
+         * Called when a called has been hung up
+         */
+        @Override
+        public void onCallHangUp(final IMXCall call) {
+            Log.d(LOG_TAG, "onCallHangUp");
+
+            final VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();
+
+            if (null != homeActivity) {
+                getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(LOG_TAG, "onCallHangUp : onCallHangunp");
+                        homeActivity.onCallEnd(call);
+                    }
+                });
+            } else {
+                Log.d(LOG_TAG, "onCallHangUp : homeactivity does not exist -> don't know what to do");
+            }
+        }
+    };
 
     // constructor
     protected Matrix(Context appContext) {
@@ -335,6 +440,8 @@ public class Matrix {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
 
+        session.getDataHandler().removeListener(mLiveEventListener);
+        session.mCallsManager.removeListener(mCallsManagerListener);
         session.clear(context);
 
         synchronized (LOG_TAG) {
@@ -392,7 +499,7 @@ public class Matrix {
             store = new MXMemoryStore(hsConfig.getCredentials());
         }
 
-        return new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {
+        MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {
             @Override
             public void onTokenCorrupted() {
                 if (null != VectorApp.getCurrentActivity()) {
@@ -400,6 +507,10 @@ public class Matrix {
                 }
             }
         }), mAppContext);
+
+        session.getDataHandler().addListener(mLiveEventListener);
+        session.mCallsManager.addListener(mCallsManagerListener);
+        return session;
     }
 
     /**

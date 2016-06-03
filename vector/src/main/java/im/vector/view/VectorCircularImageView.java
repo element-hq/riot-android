@@ -79,6 +79,7 @@ public class VectorCircularImageView extends ImageView {
 
             // create a rounded bitmap
             RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(), bm);
+            img.setAntiAlias(true);
             img.setCornerRadius(height / 2.0f);
 
             // apply it to the image

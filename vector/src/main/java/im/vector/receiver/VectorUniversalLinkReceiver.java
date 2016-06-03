@@ -234,12 +234,22 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param aContext the context
      */
     private void manageRoom(final Context aContext) {
-        String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
+        manageRoom(aContext, null);
+    }
+
+    /**
+     * Manage the room presence.
+     * Check the URL room ID format: if room ID is provided as an alias, we translate it
+     * into its corresponding room ID.
+     * @param aContext the context
+     */
+    private void manageRoom(final Context aContext, final String roomAlias) {
+        final String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
 
         Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
 
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
-            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), mParameters);
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, roomAlias, mParameters.get(ULINK_EVENT_ID_KEY), mParameters);
             Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
             // if the room exists
@@ -266,7 +276,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                     Log.d(LOG_TAG, "manageRoom : retrieve the room ID " + roomId);
                     if (!TextUtils.isEmpty(roomId)) {
                         mParameters.put(ULINK_ROOM_ID_KEY, roomId);
-                        manageRoom(aContext);
+                        manageRoom(aContext, roomIdOrAlias);
                     }
                 }
 

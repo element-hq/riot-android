@@ -28,6 +28,9 @@ import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -37,6 +40,8 @@ import im.vector.activity.VectorMemberDetailsActivity;
 
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.contacts.Contact;
+import im.vector.contacts.ContactsManager;
 
 
 public class VectorSearchPeopleListFragment extends Fragment {
@@ -54,6 +59,60 @@ public class VectorSearchPeopleListFragment extends Fragment {
     // wait the resume to perform the search
     private String mPendingPattern;
     private MatrixMessageListFragment.OnSearchResultListener mPendingSearchResultListener;
+
+    // contacts manager listener
+    // detect if a contact is a matrix user
+    private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
+        @Override
+        public void onRefresh() {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
+                        int lastIndex = mPeopleListView.getLastVisiblePosition();
+
+                        for(int index = firstIndex; index <= lastIndex; index++) {
+                            if (mAdapter.getItem(index).mContact == contact) {
+                                mAdapter.getItem(index).mUserId = matrixId;
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    // refresh the presence asap
+    private MXEventListener mEventsListener = new MXEventListener() {
+        @Override
+        public void onPresenceUpdate(final Event event, final User user) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
+                        int lastIndex = mPeopleListView.getLastVisiblePosition();
+
+                        for (int index = firstIndex; index <= lastIndex; index++) {
+                            if (TextUtils.equals(user.user_id, mAdapter.getItem(index).mUserId)) {
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    };
+
 
     /**
      * Static constructor
@@ -142,6 +201,9 @@ public class VectorSearchPeopleListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mAdapter.setSearchedPattern(null, null, null);
+
+        mSession.getDataHandler().removeListener(mEventsListener);
+        ContactsManager.removeListener(mContactsListener);
     }
 
     @Override
@@ -157,5 +219,8 @@ public class VectorSearchPeopleListFragment extends Fragment {
                 mPendingSearchResultListener = null;
             }
         }
+
+        mSession.getDataHandler().addListener(mEventsListener);
+        ContactsManager.addListener(mContactsListener);
     }
 }

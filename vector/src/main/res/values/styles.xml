@@ -3,6 +3,9 @@
     <!-- no action bar window -->
     <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light">
 
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
+
         <!-- hide the action bar -->
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
@@ -60,6 +63,9 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+
+        <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
+        <item name="android:overScrollMode">never</item>
 
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>

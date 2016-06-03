@@ -97,11 +97,11 @@ public class VectorPublicRoomsListFragment extends Fragment {
         mRecentsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PublicRoom publicRoom = mAdapter.getItem(position);
+                final PublicRoom publicRoom = mAdapter.getItem(position);
 
                 // launch corresponding room activity
                 if (null != publicRoom.roomId) {
-                    final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, null);
+                    final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, publicRoom.roomId, null, publicRoom.getAlias(), null);
 
                     Room room = mSession.getDataHandler().getRoom(publicRoom.roomId, false);
 
@@ -141,19 +141,25 @@ public class VectorPublicRoomsListFragment extends Fragment {
                                 onDone();
                             }
 
+                            private void onError() {
+                                roomPreviewData.setRoomState(publicRoom);
+                                roomPreviewData.setRoomName(publicRoom.name);
+                                onDone();
+                            }
+
                             @Override
                             public void onNetworkError(Exception e) {
-                                onDone();
+                                onError();
                             }
 
                             @Override
                             public void onMatrixError(MatrixError e) {
-                                onDone();
+                                onError();
                             }
 
                             @Override
                             public void onUnexpectedError(Exception e) {
-                                onDone();
+                                onError();
                             }
                         });
                     }
