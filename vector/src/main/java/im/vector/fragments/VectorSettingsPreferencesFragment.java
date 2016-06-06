@@ -39,6 +39,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
@@ -145,11 +148,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mPushesRuleByResourceId = new HashMap<String, String>();
 
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_my_display_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_my_user_name), BingRule.RULE_ID_CONTAIN_USER_NAME);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_sent_to_me), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_invited_to_room), BingRule.RULE_ID_INVITE_ME);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_call_invitations), BingRule.RULE_ID_CALL);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_sent_by_bot), BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS);
         }
 
         final PreferenceManager preferenceManager = getPreferenceManager();
@@ -554,7 +558,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         // check if there is an update
         boolean curValue = ((null != rule) && rule.isEnabled);
 
-        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
             curValue = !curValue;
         }
 
@@ -581,7 +585,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                                 BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
                                 boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-                                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
                                     isEnabled = !isEnabled;
                                 }
 
@@ -739,10 +743,24 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 String ruleId = mPushesRuleByResourceId.get(resourceText);
 
                 BingRule rule = mBingRuleSet.findDefaultRule(ruleId);
-                Boolean isEnabled = ((null != rule) && rule.isEnabled);
+                boolean isEnabled = ((null != rule) && rule.isEnabled);
 
-                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL)) {
+                if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
                     isEnabled = !isEnabled;
+                }
+                // check if the rule is only defined by don't notify
+                else if (isEnabled) {
+                    List<JsonElement> actions = rule.actions;
+
+                    // no action -> noting will be done
+                    if ((null == actions) || (0 == actions.size())) {
+                        isEnabled = false;
+                    } else if (1 == actions.size()) {
+                        try {
+                            isEnabled = !TextUtils.equals(actions.get(0).getAsString(), BingRule.ACTION_DONT_NOTIFY);
+                        } catch (Exception e) {
+                        }
+                    }
                 }
 
                 editor.putBoolean(resourceText, isEnabled);
