@@ -571,7 +571,7 @@
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
 
-    <string name="settings_enable_all_notif">Enable all notifications</string>
+    <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_containing_my_name">Msgs containing my name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
