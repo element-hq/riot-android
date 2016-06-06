@@ -624,28 +624,26 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         if (null != participant.mAvatarBitmap) {
             viewHolder.mMemberAvatarImageView.setImageBitmap(participant.mAvatarBitmap);
         } else {
-            {
-                if (TextUtils.isEmpty(participant.mUserId)) {
-                    VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
-                } else {
+            if (TextUtils.isEmpty(participant.mUserId)) {
+                VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
+            } else {
 
-                    // try to provide a better display for a participant when the user is known.
-                    if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
-                        User user = mSession.getDataHandler().getStore().getUser(participant.mUserId);
+                // try to provide a better display for a participant when the user is known.
+                if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
+                    User user = mSession.getDataHandler().getStore().getUser(participant.mUserId);
 
-                        if (null != user) {
-                            if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
-                                participant.mDisplayName = user.displayname;
-                            }
+                    if (null != user) {
+                        if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
+                            participant.mDisplayName = user.displayname;
+                        }
 
-                            if (null == participant.mAvatarUrl) {
-                                participant.mAvatarUrl = user.avatar_url;
-                            }
+                        if (null == participant.mAvatarUrl) {
+                            participant.mAvatarUrl = user.avatar_url;
                         }
                     }
-
-                    VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
                 }
+
+                VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
             }
         }
 
