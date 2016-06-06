@@ -188,6 +188,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 if (pattern.indexOf(".", pos) >= 0) {
                     firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
                 }
+            } else {
+                // email
+                if (null != android.util.Patterns.EMAIL_ADDRESS.matcher(pattern)) {
+                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
+                }
             }
         }
 
