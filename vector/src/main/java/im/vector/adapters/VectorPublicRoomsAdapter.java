@@ -64,6 +64,8 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
+        ImageView wordReadableView = (ImageView)convertView.findViewById(R.id.roomSummaryAdapter_word_readable);
+        ImageView guestAccessView = (ImageView)convertView.findViewById(R.id.roomSummaryAdapter_guest_access);
 
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
@@ -97,6 +99,18 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         convertView.findViewById(R.id.roomSummaryAdapter_action_image).setVisibility(View.GONE);
 
         convertView.findViewById(R.id.recents_groups_invitation_group).setVisibility(View.GONE);
+
+        // theses settings are not yet properly designed.
+       /*boolean isWordReadable = (null != publicRoom.worldReadable) ? publicRoom.worldReadable : false;
+        boolean isGuessAccessed = (null != publicRoom.guestCanJoin) ? publicRoom.guestCanJoin : false;
+
+        if (!isWordReadable && !isGuessAccessed) {
+            wordReadableView.setVisibility(View.GONE);
+            guestAccessView.setVisibility(View.GONE);
+        } else {
+            wordReadableView.setVisibility(isWordReadable ? View.VISIBLE : View.INVISIBLE);
+            guestAccessView.setVisibility(isGuessAccessed ? View.VISIBLE : View.INVISIBLE);
+        }*/
 
         return convertView;
     }

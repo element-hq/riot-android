@@ -52,14 +52,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import im.vector.Matrix;
-import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
-import im.vector.activity.VectorRoomPreviewActivity;
 
 @SuppressLint("LongLogTag")
 /**
@@ -236,63 +234,31 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param aContext the context
      */
     private void manageRoom(final Context aContext) {
-        String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
+        manageRoom(aContext, null);
+    }
+
+    /**
+     * Manage the room presence.
+     * Check the URL room ID format: if room ID is provided as an alias, we translate it
+     * into its corresponding room ID.
+     * @param aContext the context
+     */
+    private void manageRoom(final Context aContext, final String roomAlias) {
+        final String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
 
         Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
 
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
-            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), mParameters);
-
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), roomAlias, mParameters);
             Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
             // if the room exists
-            if (null != room) {
-                // either the user is invited
-                if (room.isInvited()) {
-                    Log.d(LOG_TAG, "manageRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
-
-                    VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                    stopHomeActivitySpinner(aContext);
-                    Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-                    VectorApp.getCurrentActivity().startActivity(intent);
-                } else {
-                    Log.d(LOG_TAG, "manageRoom : open the room");
-                    stopHomeActivitySpinner(aContext);
-                    openRoomActivity(aContext);
-                }
+            if ((null != room) && !room.isInvited()) {
+                openRoomActivity(aContext);
             } else {
-                roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
 
-                    private void onDone() {
-                        VectorRoomPreviewActivity.sRoomPreviewData = roomPreviewData;
-                        stopHomeActivitySpinner(aContext);
-
-                        Intent intent = new Intent(VectorApp.getCurrentActivity(), VectorRoomPreviewActivity.class);
-                        VectorApp.getCurrentActivity().startActivity(intent);
-                    }
-
-                    @Override
-                    public void onSuccess(Void info) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onDone();
-                    }
-                });
+                CommonActivityUtils.previewRoom(VectorApp.getCurrentActivity(), mSession, roomIdOrAlias, roomPreviewData, null);
             }
-
         } else { // room ID is provided as a room alias: get corresponding room ID
 
             Log.d(LOG_TAG, "manageRoom : it is a room Alias");
@@ -310,7 +276,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                     Log.d(LOG_TAG, "manageRoom : retrieve the room ID " + roomId);
                     if (!TextUtils.isEmpty(roomId)) {
                         mParameters.put(ULINK_ROOM_ID_KEY, roomId);
-                        manageRoom(aContext);
+                        manageRoom(aContext, roomIdOrAlias);
                     }
                 }
 

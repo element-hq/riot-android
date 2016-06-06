@@ -98,7 +98,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     protected View mForwardProgressView;
     protected View mMainProgressView;
 
-    public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, int layoutResId) {
+    public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
@@ -107,6 +107,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         if (null != eventId) {
             args.putString(ARG_EVENT_ID, eventId);
+        }
+
+        if (null != previewMode) {
+            args.putString(ARG_PREVIEW_MODE_ID, previewMode);
         }
 
         f.setArguments(args);
@@ -214,6 +218,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         if (action == R.id.ic_action_vector_view_profile) {
             if (null != event.getSender()) {
                 Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+
+                // in preview mode
+                // the room is stored in a temporary store
+                // so provide an handle to retrieve it
+                if (null != getRoomPreviewData()) {
+                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+                }
+
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
                 startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
@@ -700,6 +712,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      */
     public void onAvatarClick(String userId) {
         Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        // in preview mode
+        // the room is stored in a temporary store
+        // so provide an handle to retrieve it
+        if (null != getRoomPreviewData()) {
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+        }
+
         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);

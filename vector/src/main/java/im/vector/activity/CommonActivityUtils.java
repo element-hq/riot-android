@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +47,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -248,9 +250,8 @@ public class CommonActivityUtils {
         String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
         String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
 
-        String serverUrlDefaultValue = activity.getResources().getString(R.string.vector_im_server_url);
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, serverUrlDefaultValue);
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, serverUrlDefaultValue);
+        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
+        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
         Boolean useGa = VectorApp.getInstance().useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
@@ -273,6 +274,9 @@ public class CommonActivityUtils {
 
         // ensure that corrupted values are cleared
         Matrix.getInstance(activity).getLoginStorage().clear();
+
+        // clear the tmp store list
+        Matrix.getInstance(activity).clearTmpStoresList();
 
         // reset the contacts
         PIDsRetriever.getIntance().reset();
@@ -409,6 +413,102 @@ public class CommonActivityUtils {
     }
 
     //==============================================================================================================
+    // Room preview methods.
+    //==============================================================================================================
+
+    /**
+     * Start a room activity in preview mode.
+     * @param fromActivity the caller activity.
+     * @param roomPreviewData the room preview information
+     */
+    public static void previewRoom(final Activity fromActivity, RoomPreviewData roomPreviewData) {
+        if ((null != fromActivity) && (null != roomPreviewData)) {
+            VectorRoomActivity.sRoomPreviewData = roomPreviewData;
+            Intent intent = new Intent(fromActivity, VectorRoomActivity.class);
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, roomPreviewData.getRoomId());
+            intent.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+            fromActivity.startActivity(intent);
+        }
+    }
+
+    /**
+     * Start a room activity in preview mode.
+     * If the room is already joined, open it in edition mode.
+     * @param fromActivity the caller activity.
+     * @param session the session
+     * @param roomId the roomId
+     * @param roomAlias the room alias
+     * @param callback the operation callback
+     */
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
+        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, roomAlias, null), callback);
+    }
+
+    /**
+     * Start a room activity in preview mode.
+     * If the room is already joined, open it in edition mode.
+     * @param fromActivity the caller activity.
+     * @param session the session
+     * @param roomId the roomId
+     * @param roomPreviewData the room preview data
+     * @param callback the operation callback
+     */
+    public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final RoomPreviewData roomPreviewData, final ApiCallback<Void> callback) {
+        Room room = session.getDataHandler().getRoom(roomId, false);
+
+        // if the room exists
+        if (null != room) {
+            // either the user is invited
+            if (room.isInvited()) {
+                Log.d(LOG_TAG, "previewRoom : the user is invited -> display the preview " + VectorApp.getCurrentActivity());
+                previewRoom(fromActivity, roomPreviewData);
+            } else {
+                Log.d(LOG_TAG, "previewRoom : open the room");
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                CommonActivityUtils.goToRoomPage(fromActivity, session, params);
+            }
+
+            if (null != callback) {
+                callback.onSuccess(null);
+            }
+        } else {
+            roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
+                private void onDone() {
+                    if (null != callback) {
+                        callback.onSuccess(null);
+                    }
+                    previewRoom(fromActivity, roomPreviewData);
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
+        }
+
+
+
+    }
+    //==============================================================================================================
     // Room jump methods.
     //==============================================================================================================
 
@@ -470,7 +570,9 @@ public class CommonActivityUtils {
 
                                                    if (value instanceof String) {
                                                        intent.putExtra(key, (String) value);
-                                                   } else {
+                                                   } else if (value instanceof Boolean) {
+                                                       intent.putExtra(key, (Boolean) value);
+                                                   } else if (value instanceof Parcelable) {
                                                        intent.putExtra(key, (Parcelable) value);
                                                    }
                                                }
@@ -583,6 +685,7 @@ public class CommonActivityUtils {
                             HashMap<String, Object> params = new HashMap<String, Object>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
                             Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
                             CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);

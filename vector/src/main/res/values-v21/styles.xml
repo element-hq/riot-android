@@ -3,6 +3,9 @@
     <!-- no action bar window -->
     <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light">
 
+        <!-- overscroll color -->
+        <item name="android:colorEdgeEffect">@color/vector_green_color</item>
+
         <!-- hide the action bar -->
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
@@ -50,6 +53,9 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+
+        <!-- overscroll color -->
+        <item name="android:colorEdgeEffect">@color/vector_green_color</item>
 
         <!-- with action bar -->
         <item name="android:windowActionBar">true</item>

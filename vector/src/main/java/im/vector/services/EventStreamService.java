@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCall;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -88,14 +90,11 @@ public class EventStreamService extends Service {
     private String mNotificationSessionId = null;
     private String mNotificationRoomId = null;
     private String mNotificationEventId = null;
+    private String mNotificationCallId = null;
 
     // call in progress
     // foreground notification
-    private String mCallId = null;
-
-    // current displayed notification
-    // use to hide the "incoming call" notification
-    private String mNotifiedCallId = null;
+    private String mBackgroundNotificationCallId = null;
 
     private boolean mIsForegound = false;
 
@@ -113,6 +112,7 @@ public class EventStreamService extends Service {
      * @param roomId
      */
     public static void cancelNotificationsForRoomId(String accountId, String roomId) {
+        Log.d(LOG_TAG, "cancelNotificationsForRoomId " + accountId + " - " + roomId);
         if (null != mActiveEventStreamService) {
             mActiveEventStreamService.cancelNotifications(accountId ,roomId);
         }
@@ -122,6 +122,8 @@ public class EventStreamService extends Service {
      * Clear any displayed notification.
      */
     private void clearNotification() {
+        Log.d(LOG_TAG, "clearNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId + " - " + mNotificationCallId);
+
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancelAll();
 
@@ -129,6 +131,7 @@ public class EventStreamService extends Service {
         mNotificationSessionId = null;
         mNotificationRoomId = null;
         mNotificationEventId = null;
+        mNotificationCallId = null;
         mLatestNotification = null;
     }
 
@@ -138,8 +141,12 @@ public class EventStreamService extends Service {
      * @param roomId the room id.
      */
     private void cancelNotifications(String accountId, String roomId) {
+        Log.d(LOG_TAG, "cancelNotifications " + accountId + " - " + roomId);
+
         // sanity checks
         if ((null != accountId) && (null != roomId)) {
+            Log.d(LOG_TAG, "cancelNotifications expected " + mNotificationSessionId + " - " + mNotificationRoomId);
+
             // cancel the notifications
             if (TextUtils.equals(mNotificationRoomId, roomId) && TextUtils.equals(accountId, mNotificationSessionId)) {
                 clearNotification();
@@ -171,6 +178,8 @@ public class EventStreamService extends Service {
      * because it doesn't make sense anymore.
      */
     private void checkNotification() {
+        Log.d(LOG_TAG, "checkNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId);
+
         if (null != mNotificationRoomId) {
             boolean clearNotification = true;
 
@@ -180,12 +189,25 @@ public class EventStreamService extends Service {
                 Room room = session.getDataHandler().getRoom(mNotificationRoomId);
 
                 if (null != room) {
+                    Log.d(LOG_TAG, "checkNotification :  the room exists");
+
                     // invitation notification
                     if (null == mNotificationEventId) {
+                        Log.d(LOG_TAG, "checkNotification :  room invitation case");
                         clearNotification = !room.isInvited();
+                    } else if (null != mNotificationCallId) {
+                        Log.d(LOG_TAG, "checkNotification :  call case");
+                        IMXCall call =  CallViewActivity.getActiveCall();
+                        clearNotification  = (null != call) && !TextUtils.equals(call.getCallId(), mNotificationCallId);
                     } else {
+                        Log.d(LOG_TAG, "checkNotification :  event case");
                         clearNotification = room.isEventRead(mNotificationEventId);
                     }
+
+                    Log.d(LOG_TAG, "checkNotification :  clearNotification " + clearNotification);
+
+                } else {
+                    Log.d(LOG_TAG, "checkNotification :  the room does not exist");
                 }
             }
             
@@ -292,10 +314,10 @@ public class EventStreamService extends Service {
                 return;
             }
 
-            Boolean isInvitationEvent = false;
+            boolean isInvitationEvent = false;
             String body;
 
-            mNotifiedCallId = null;
+            String notifiedCallId = null;
 
             // call invitation
             if (event.isCallEvent()) {
@@ -303,8 +325,10 @@ public class EventStreamService extends Service {
                     body = getApplicationContext().getString(R.string.incoming_call);
 
                     try {
-                        mNotifiedCallId = event.getContentAsJsonObject().get("call_id").getAsString();
+                        mNotificationCallId = notifiedCallId = event.getContentAsJsonObject().get("call_id").getAsString();
                      } catch (Exception e) {}
+
+
                 } else {
                     EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, room.getLiveState());
                     body = eventDisplay.getTextualDisplay().toString();
@@ -379,7 +403,7 @@ public class EventStreamService extends Service {
             mLatestNotification = NotificationUtils.buildMessageNotification(
                     EventStreamService.this,
                     from, session.getCredentials().userId,
-                    mNotifiedCallId,
+                    notifiedCallId,
                     Matrix.getMXSessions(getApplicationContext()).size() > 1,
                     largeBitmap,
                     CommonActivityUtils.getBadgeCount(),
@@ -753,7 +777,7 @@ public class EventStreamService extends Service {
         if (null != callId) {
             Notification notification = NotificationUtils.buildCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
             startForeground(PENDING_CALL_ID, notification);
-            mCallId = callId;
+            mBackgroundNotificationCallId = callId;
         }
     }
 
@@ -761,17 +785,17 @@ public class EventStreamService extends Service {
      * @param callId the ended call call id
      */
     public void hidePendingCallNotification(String callId) {
-        if (TextUtils.equals(mCallId, callId)) {
+        if (TextUtils.equals(mBackgroundNotificationCallId, callId)) {
             stopForeground(true);
             updateListenerNotification();
-            mCallId = null;
+            mBackgroundNotificationCallId = null;
         }
 
         // hide the "incoming call" notification
-        if (TextUtils.equals(mNotifiedCallId, callId)) {
+        if (TextUtils.equals(mNotificationCallId, callId)) {
             NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
             nm.cancelAll();
-            mNotifiedCallId = null;
+            mNotificationCallId = null;
         }
     }
 }

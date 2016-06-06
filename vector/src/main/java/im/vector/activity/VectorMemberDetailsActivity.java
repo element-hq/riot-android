@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -41,6 +42,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
@@ -57,6 +59,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
+    public static final String EXTRA_STORE_ID = "EXTRA_STORE_ID";
 
     // list view items associated actions
     public static final int ITEM_ACTION_INVITE = 0;
@@ -78,6 +81,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private static int VECTOR_ROOM_ADMIN_LEVEL = 100;
 
     // internal info
+    private IMXStore mStore;
     private Room mRoom;
     private String mRoomId;
     private String mMemberId;       // member whose details area displayed (provided in EXTRAS)
@@ -440,7 +444,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // 1:1 call
-            if ((null != searchCallableRoom()) && VectorHomeActivity.IS_VOIP_ENABLED && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
+            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);
@@ -648,6 +652,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         } else {
             // setup UI view and bind the widgets
             setContentView(R.layout.activity_member_details);
+
+            // use a toolbar instead of the actionbar
+            // to be able to display a large header
+            android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.member_details_toolbar);
+            this.setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
             mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
             mMemberAvatarBadgeImageView = (ImageView) findViewById(R.id.member_avatar_badge);
 
@@ -708,14 +719,26 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         Intent intent = getIntent();
         boolean isParamInitSucceed = false;
 
-        if(null != intent) {
-            mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
-
+        if (null != intent) {
             if (null == (mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID))) {
                 Log.e(LOG_TAG, "member ID missing in extra");
+                return isParamInitSucceed;
             } else if (null == (mSession = getSession(intent))) {
                 Log.e(LOG_TAG, "Invalid session");
-            } else if ((null != mRoomId) && (null == (mRoom = mSession.getDataHandler().getRoom(mRoomId)))) {
+                return isParamInitSucceed;
+            }
+
+            int storeIndex = intent.getIntExtra(EXTRA_STORE_ID, -1);
+
+            if (storeIndex >= 0) {
+                mStore = Matrix.getInstance(this).getTmpStore(storeIndex);
+            } else {
+                mStore = mSession.getDataHandler().getStore();
+            }
+
+            mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
+
+            if ((null != mRoomId) && (null == (mRoom = mStore.getRoom(mRoomId)))) {
                 Log.e(LOG_TAG, "The room is not found");
             } else {
                 // Everything is OK

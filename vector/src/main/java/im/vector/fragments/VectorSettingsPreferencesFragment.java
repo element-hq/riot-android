@@ -610,14 +610,22 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     /**
      * Update the displayname.
      */
-    private void onDisplayNameClick(String value) {
+    private void onDisplayNameClick(final String value) {
         if (!TextUtils.equals(mSession.getMyUser().displayname, value)) {
             displayLoadingView();
 
             mSession.getMyUser().updateDisplayName(value, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
+                    // refresh the settings value
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(getResources().getString(R.string.settings_display_name), value);
+                    editor.commit();
+
                     onCommonDone(null);
+
+                    refreshDisplay();
                 }
 
                 @Override
@@ -683,6 +691,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                                         @Override
                                         public void onSuccess(Void info) {
                                             onCommonDone(null);
+                                            refreshDisplay();
                                         }
 
                                         @Override

@@ -214,14 +214,16 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             return;
         }
 
-        if ((member != null) && (null == url)) {
-            url = member.avatarUrl;
+        String avatarUrl = url;
+
+        if ((null != member) && (null != member.avatarUrl)) {
+            avatarUrl = member.avatarUrl;
         }
 
         if (null != member) {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), member.displayname);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, avatarUrl, member.getUserId(), member.displayname);
         } else {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, null);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, avatarUrl, userId, null);
         }
     }
 
@@ -367,6 +369,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             return;
         }
 
+        // hide the read receipts until there is a way to retrieve them
+        // without triggering a request per message
+        if (mIsPreviewMode) {
+            avatarsListView.setVisibility(View.GONE);
+            return;
+        }
+
         List<ReceiptData> receipts = store.getEventReceipts(roomState.roomId, eventId, true, true);
 
         // if there is no receipt to display
@@ -504,7 +513,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
                 }
             } else if (event.mSentState == Event.SentState.SENT) {
-                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(!mIsPreviewMode);
 
                 if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
                     Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
@@ -519,7 +528,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     }
 
                     // offer to report a message content
-                    menu.findItem(R.id.ic_action_vector_report).setVisible(!TextUtils.equals(event.sender, mSession.getMyUserId()));
+                    menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
                 }
             }
         }
@@ -583,15 +592,19 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (TextUtils.equals(eventId, mHighlightedEventId)) {
+                if (!mIsSearchMode) {
                     onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    mHighlightedEventId = eventId;
+                    notifyDataSetChanged();
                     return true;
                 }
+
                 return false;
             }
         });
     }
 
+    @Override
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         if (shouldBeMerged) {
             shouldBeMerged = null == headerMessage(position);
@@ -599,6 +612,36 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         return shouldBeMerged;
     }
+
+    @Override
+    protected void addContentViewListeners(final View convertView, final View contentView, final int position) {
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mMessagesAdapterEventsListener) {
+                    mMessagesAdapterEventsListener.onContentClick(position);
+                }
+            }
+        });
+
+        contentView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                MessageRow row = getItem(position);
+                Event event = row.getEvent();
+
+                if (!mIsSearchMode) {
+                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    mHighlightedEventId = event.eventId;
+                    notifyDataSetChanged();
+                    return true;
+                }
+
+                return true;
+            }
+        });
+    }
+
 
     @Override
     protected boolean manageSubView(int position, View convertView, View subView, int msgType) {

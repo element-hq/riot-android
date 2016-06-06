@@ -55,6 +55,8 @@ public class VectorUniversalLinkActivity extends Activity {
 
         Intent myBroadcastIntent = new Intent(intentAction, getIntent().getData());
         sendBroadcast(myBroadcastIntent);
+
+
         finish();
     }
 }

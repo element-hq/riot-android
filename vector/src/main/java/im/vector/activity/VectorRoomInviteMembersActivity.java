@@ -25,10 +25,16 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.User;
+
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.contacts.Contact;
+import im.vector.contacts.ContactsManager;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -49,8 +55,56 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private ImageView mBackgroundImageView;
     private View mNoResultView;
     private View mLoadingView;
-
     private VectorAddParticipantsAdapter mAdapter;
+
+
+    // retrieve a matrix Id from an email
+    private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
+        @Override
+        public void onRefresh() {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int firstIndex = mListView.getFirstVisiblePosition();
+                    int lastIndex = mListView.getLastVisiblePosition();
+
+                    for(int index = firstIndex; index <= lastIndex; index++) {
+                        if (mAdapter.getItem(index).mContact == contact) {
+                            mAdapter.getItem(index).mUserId = matrixId;
+                            mAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    // refresh the presence asap
+    private MXEventListener mEventsListener = new MXEventListener() {
+        @Override
+        public void onPresenceUpdate(final Event event, final User user) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int firstIndex = mListView.getFirstVisiblePosition();
+                    int lastIndex = mListView.getLastVisiblePosition();
+
+                    for(int index = firstIndex; index <= lastIndex; index++) {
+                        if (TextUtils.equals(user.user_id,  mAdapter.getItem(index).mUserId)) {
+                            mAdapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +138,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
 
         setContentView(R.layout.activity_vector_invite_members);
+
+        // the user defines a
+        if (null != mPatternToSearchEditText) {
+            mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
+        }
 
         mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
         mNoResultView = findViewById(R.id.search_no_result_textview);
@@ -148,5 +207,21 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         mBackgroundImageView.setVisibility(emptyText ? View.VISIBLE : View.GONE);
         mListView.setVisibility(emptyText ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mSession.getDataHandler().removeListener(mEventsListener);
+        ContactsManager.removeListener(mContactsListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mSession.getDataHandler().addListener(mEventsListener);
+        ContactsManager.addListener(mContactsListener);
     }
 }

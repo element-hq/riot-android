@@ -79,8 +79,9 @@ public class PIDsRetriever {
      * @param context the context.
      * @param contact The contact to update.
      * @param localUpdateOnly true to only support refresh from local information.
+     * @return true if the matrix Ids have been retrieved
      */
-    public void retrieveMatrixIds(Context context, final Contact contact, boolean localUpdateOnly) {
+    public boolean retrieveMatrixIds(Context context, final Contact contact, boolean localUpdateOnly) {
         ArrayList<String> requestedAddresses = new ArrayList<String>();
 
         // check if the emails have only been checked
@@ -155,6 +156,9 @@ public class PIDsRetriever {
                 });
             }
         }
+
+        // detect if the matrix Ids have been cached.
+        return (0 == requestedAddresses.size());
     }
 }
 
