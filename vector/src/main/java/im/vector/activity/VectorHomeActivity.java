@@ -43,16 +43,15 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -68,7 +67,7 @@ import im.vector.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -88,8 +87,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public static final String EXTRA_JUMP_TO_ROOM_PARAMS = "VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS";
 
     // there are two ways to open an external link
-    // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened asap there is an events check processed (application is launched when clicking on the link)
-    // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an events chunck is processed.
+    // 1- EXTRA_UNIVERSAL_LINK_URI : the link is opened as soon there is an event check processed (application is launched when clicking on the URI link)
+    // 2- EXTRA_JUMP_TO_UNIVERSAL_LINK : do not wait that an event chunck is processed.
     public static final String EXTRA_JUMP_TO_UNIVERSAL_LINK = "VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK";
     public static final String EXTRA_WAITING_VIEW_STATUS = "VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS";
 
@@ -140,6 +139,36 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private MXSession mSession;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private Iterator mReadReceiptSessionlistIterator;
+    private Iterator mReadReceiptSummarylistIterator;
+    private IMXStore mReadReceiptstore;
+
+    private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            Log.d(LOG_TAG, "## onSuccess() - mSendReceiptCallback");
+            stopWaitingView();
+            markAllMessagesAsRead();
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            Log.d(LOG_TAG,"## onNetworkError() - mSendReceiptCallback: Exception Msg="+e.getLocalizedMessage());
+            stopWaitingView();
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            Log.d(LOG_TAG,"## onMatrixError() - mSendReceiptCallback: Exception Msg="+e.getLocalizedMessage());
+            stopWaitingView();
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            Log.d(LOG_TAG,"## onUnexpectedError() - mSendReceiptCallback: Exception Msg="+e.getLocalizedMessage());
+            stopWaitingView();
+        }
+    };
 
     private final BroadcastReceiver mBrdRcvStopWaitingView = new BroadcastReceiver() {
         @Override
@@ -585,31 +614,81 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     /**
-     * Send a read receipt for each room
+     * Send a read receipt for each room.
+     * Recursive method to serialize read receipts processing.
+     * Sessions and summaries are all parsed through iterators.
+     * This method is based on the call back {@link #mSendReceiptCallback} that
+     * will stop the downloading spinner screen after each read receipt be sent.
+     * See also {@link #sendReadReceipt()}.
      */
     private void markAllMessagesAsRead() {
-        // flush the summaries
-        ArrayList<MXSession> sessions = new ArrayList<MXSession>(Matrix.getMXSessions(this));
+        Log.d(LOG_TAG, "## markAllMessagesAsRead(): IN");
 
-        for (int index = 0; index < sessions.size(); index++) {
-            MXSession session = sessions.get(index);
+        // sanity check
+        if(null == mReadReceiptSessionlistIterator) {
+            ArrayList<MXSession> sessionsList = new ArrayList<MXSession>(Matrix.getMXSessions(this));
+            if(null == (mReadReceiptSessionlistIterator = sessionsList.iterator())) {
+                return;
+            }
+        }
 
-            IMXStore store = session.getDataHandler().getStore();
+        // 1 - init summary iterator
+        if (null == mReadReceiptSummarylistIterator) {
+            if (mReadReceiptSessionlistIterator.hasNext()) {
+                MXSession session = (MXSession) mReadReceiptSessionlistIterator.next();
 
-            ArrayList<RoomSummary> summaries = new ArrayList<RoomSummary>(store.getSummaries());
+                if (null != session) {
+                    mReadReceiptstore = session.getDataHandler().getStore();
+                    ArrayList<RoomSummary> summaries = new ArrayList<RoomSummary>(mReadReceiptstore.getSummaries());
 
-            for(RoomSummary summary : summaries) {
+                    if (null != (mReadReceiptSummarylistIterator = summaries.iterator())) {
+                        if (mReadReceiptSummarylistIterator.hasNext()) {
+                            sendReadReceipt();
+                        }
+                    }
+                }
+            } else {
+                // no more sessions: session list is empty, reset used fields.
+                Log.d(LOG_TAG, "## markAllMessagesAsRead(): no more sessions - end");
+                mReadReceiptSessionlistIterator = null;
+                mReadReceiptSummarylistIterator = null;
+            }
+        // 2 - loop on next summary
+        } else if (mReadReceiptSummarylistIterator.hasNext()) {
+            sendReadReceipt();
+        } else {
+            //re start processing to loop on he next session
+            Log.d(LOG_TAG, "## markAllMessagesAsRead(): no more summaries");
+            mReadReceiptSummarylistIterator = null;
+            markAllMessagesAsRead();
+        }
+     }
+
+    /**
+     * Send a read receipt and manage the spinner screen.
+     * If the read receipt is effective the waiting spinner is started,
+     * otherwise {@link #markAllMessagesAsRead()} is resumed to go through
+     * all the summary iterator.
+     */
+    private void sendReadReceipt(){
+        if((null != mReadReceiptSummarylistIterator) && (null != mReadReceiptstore)) {
+            RoomSummary summary = (RoomSummary) mReadReceiptSummarylistIterator.next();
+
+            if (null != summary) {
                 summary.setHighlighted(false);
-
-                Room room = store.getRoom(summary.getRoomId());
-
+                Room room = mReadReceiptstore.getRoom(summary.getRoomId());
                 if (null != room) {
-                    room.sendReadReceipt();
+                    if(room.sendReadReceipt(mSendReceiptCallback)) {
+                        // send recepit has been sent, start the spinner waiting screen
+                        showWaitingView();
+                    } else {
+                        // the read receipt has not been sent, just go to the next iteration
+                        markAllMessagesAsRead();
+                    }
                 }
             }
         }
     }
-
 
     /**
      * Process the content of the current intent to detect universal link data.
