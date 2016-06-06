@@ -230,6 +230,7 @@ public class CommonActivityUtils {
      * @param goToLoginPage true to jump to the login page
      */
     public static void logout(Activity activity, boolean goToLoginPage) {
+        EventStreamService.getInstance().removeNotification();
         stopEventStream(activity);
 
         try {
