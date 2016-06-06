@@ -340,6 +340,10 @@ public class EventStreamService extends Service {
                     isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
                 } catch (Exception e) {}
 
+                if (isInvitationEvent) {
+
+                }
+
             } else {
                 body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
             }

@@ -1070,7 +1070,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         CharSequence messageToDisplayRetValue=null;
         EventDisplay eventDisplay;
 
-        if(null != aChildRoomSummary) {
+        if (null != aChildRoomSummary) {
             if (aChildRoomSummary.getLatestEvent() != null) {
                 eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
@@ -1092,8 +1092,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     myName = getMemberDisplayNameFromUserId(aChildRoomSummary.getMatrixId(), myName);
                 }
 
-                // format returned message
-                messageToDisplayRetValue = mContext.getString(org.matrix.androidsdk.R.string.notice_room_invite, inviterUserId, myName);
+                if (TextUtils.equals(mMxSession.getMyUserId(), aChildRoomSummary.getMatrixId())) {
+                    messageToDisplayRetValue = mContext.getString(org.matrix.androidsdk.R.string.notice_room_invite_you, inviterUserId);
+                } else {
+                    messageToDisplayRetValue = mContext.getString(org.matrix.androidsdk.R.string.notice_room_invite, inviterUserId, myName);
+                }
             }
         }
 
