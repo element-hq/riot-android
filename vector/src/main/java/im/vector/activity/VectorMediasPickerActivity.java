@@ -746,24 +746,41 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         if (null != mCamera) {
             try {
-                mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        if (!success) {
-                            Log.e(LOG_TAG, "## autoFocus(): fails");
-                        } else {
-                            Log.d(LOG_TAG, "## autoFocus(): succeeds");
+                List<String> supportedFocusModes = null;
+
+                if (null != mCamera.getParameters()) {
+                    supportedFocusModes = mCamera.getParameters().getSupportedFocusModes();
+                }
+
+                Log.d(LOG_TAG, "onClickTakeImage : supported focus modes " + supportedFocusModes);
+
+                if ((null != supportedFocusModes) && (supportedFocusModes.indexOf(Camera.Parameters.FOCUS_MODE_AUTO) >= 0)) {
+                    Log.d(LOG_TAG, "onClickTakeImage : autofocus starts");
+
+                    mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            if (!success) {
+                                Log.e(LOG_TAG, "## autoFocus(): fails");
+                            } else {
+                                Log.d(LOG_TAG, "## autoFocus(): succeeds");
+                            }
+
+                            playShutterSound();
+
+                            // take a photo event if the autofocus fails
+                            takePhoto();
                         }
-
-                        playShutterSound();
-
-                        // take a photo event if the autofocus fails
-                        takePhoto();
-                    }
-                });
+                    });
+                } else {
+                    Log.d(LOG_TAG, "onClickTakeImage : no autofocus : take photo");
+                    playShutterSound();
+                    takePhoto();
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage());
 
                 // take a photo event if the autofocus fails
+                playShutterSound();
                 takePhoto();
             }
         }
