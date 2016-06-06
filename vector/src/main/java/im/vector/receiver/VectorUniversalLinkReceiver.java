@@ -249,7 +249,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
 
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
-            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, roomAlias, mParameters.get(ULINK_EVENT_ID_KEY), mParameters);
+            final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), roomAlias, mParameters);
             Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
             // if the room exists

@@ -442,7 +442,7 @@ public class CommonActivityUtils {
      * @param callback the operation callback
      */
     public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
-        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, roomAlias, null, null), callback);
+        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, roomAlias, null), callback);
     }
 
     /**
