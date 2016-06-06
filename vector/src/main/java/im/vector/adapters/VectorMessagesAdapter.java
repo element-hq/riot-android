@@ -214,16 +214,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             return;
         }
 
-        String avatarUrl = url;
-
-        if ((null != member) && (null != member.avatarUrl)) {
-            avatarUrl = member.avatarUrl;
+        if ((member != null) && (null == url)) {
+            url = member.avatarUrl;
         }
 
         if (null != member) {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, avatarUrl, member.getUserId(), member.displayname);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), member.displayname);
         } else {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, avatarUrl, userId, null);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, null);
         }
     }
 
