@@ -288,9 +288,23 @@ public class LoginActivity extends MXCActionBarActivity {
         // warn that the application has started.
         CommonActivityUtils.onApplicationStarted(this);
 
-        // already registered
+        Intent intent = getIntent();
+        Bundle receivedBundle = (null != intent) ?  getIntent().getExtras() : null;
+
+        // resume the application
+        if (null != receivedBundle) {
+            if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
+                Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
+                // activity has been launched from an universal link
+            } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
+                Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
+                processEmailValidationExtras(receivedBundle);
+            }
+        }
+            // already registered
         if (hasCredentials()) {
-            if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
+            if ((null != intent) && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) == 0) {
                 Log.d(LOG_TAG, "## onCreate(): goToSplash because the credentials are already provided.");
                 goToSplash();
             } else {
@@ -303,24 +317,6 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
             }
 
-            finish();
-            return;
-        }
-
-        Bundle receivedBundle = getIntent().getExtras();
-
-        // resume the application
-        if (null != receivedBundle) {
-            if (receivedBundle.containsKey(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                mUniversalLinkUri = receivedBundle.getParcelable(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI);
-                Log.d(LOG_TAG, "## onCreate() Login activity started by universal link");
-                // activity has been launched from an universal link
-            } else if (receivedBundle.containsKey(VectorRegistrationReceiver.EXTRA_EMAIL_VALIDATION_PARAMS)) {
-                Log.d(LOG_TAG, "## onCreate() Login activity started by email verification for registration");
-                processEmailValidationExtras(receivedBundle);
-            }
-        } else if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            Log.e(LOG_TAG, "## onCreate(): Resume the application");
             finish();
             return;
         }
