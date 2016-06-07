@@ -43,6 +43,7 @@ import com.google.gson.JsonElement;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -69,12 +70,10 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
-import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
@@ -217,19 +216,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     public void onEventAction(final Event event, final int action) {
         if (action == R.id.ic_action_vector_view_profile) {
             if (null != event.getSender()) {
-                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-
-                // in preview mode
-                // the room is stored in a temporary store
-                // so provide an handle to retrieve it
-                if (null != getRoomPreviewData()) {
-                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
-                }
-
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, event.getSender());
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                getActivity().startActivity(startRoomInfoIntent);
+                onAvatarClick(event.getSender());
             }
         } else if (action == R.id.ic_action_vector_direct_message) {
             if (null != event.getSender()) {
@@ -711,18 +698,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param userId the user ID
      */
     public void onAvatarClick(String userId) {
-        Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
         // in preview mode
         // the room is stored in a temporary store
         // so provide an handle to retrieve it
         if (null != getRoomPreviewData()) {
-            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
         }
 
-        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-        getActivity().startActivity(startRoomInfoIntent);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
     }
 
     /**

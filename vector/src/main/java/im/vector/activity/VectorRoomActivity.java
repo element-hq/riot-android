@@ -166,9 +166,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String CMD_SET_USER_POWER_LEVEL = "/op";
     private static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
 
-    private static final int REQUEST_FILES = 0;
-    private static final int TAKE_IMAGE = 1;
-    private static final int CREATE_DOCUMENT = 2;
+    // activity result request code
+    public static final int REQUEST_FILES_REQUEST_CODE = 0;
+    public static final int TAKE_IMAGE_REQUEST_CODE = 1;
+    public static final int CREATE_DOCUMENT_REQUEST_CODE = 2;
+    public static final int GET_MENTION_REQUEST_CODE = 3;
 
     // max image sizes
     private static final int LARGE_IMAGE_SIZE  = 2000;
@@ -889,15 +891,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if ((requestCode == REQUEST_FILES) || (requestCode == TAKE_IMAGE)) {
+            if ((requestCode == REQUEST_FILES_REQUEST_CODE) || (requestCode == TAKE_IMAGE_REQUEST_CODE)) {
                 sendMediasIntent(data);
-            } else if (requestCode == CREATE_DOCUMENT) {
+            } else if (requestCode == CREATE_DOCUMENT_REQUEST_CODE) {
                 Uri currentUri = data.getData();
                 writeMediaUrl(currentUri);
+            } else if (requestCode == GET_MENTION_REQUEST_CODE) {
+                appendInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
             }
         }
 
-        if (requestCode == CREATE_DOCUMENT) {
+        if (requestCode == CREATE_DOCUMENT_REQUEST_CODE) {
             mPendingMediaUrl = null;
             mPendingMimeType = null;
         }
@@ -1511,7 +1515,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 .setType(mediaMimeType)
                 .putExtra(Intent.EXTRA_TITLE, filename);
 
-        startActivityForResult(intent, CREATE_DOCUMENT);
+        startActivityForResult(intent, CREATE_DOCUMENT_REQUEST_CODE);
     }
 
     /**
@@ -1923,7 +1927,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             Intent intent = new Intent(VectorRoomActivity.this, VectorRoomDetailsActivity.class);
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
             intent.putExtra(VectorRoomDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            VectorRoomActivity.this.startActivity(intent);
+            startActivityForResult(intent, GET_MENTION_REQUEST_CODE);
         }
     }
 
@@ -1938,7 +1942,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         fileIntent.setType("*/*");
-        startActivityForResult(fileIntent, REQUEST_FILES);
+        startActivityForResult(fileIntent, REQUEST_FILES_REQUEST_CODE);
     }
 
     /**
@@ -1948,7 +1952,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
         Intent intent = new Intent(this, VectorMediasPickerActivity.class);
-        startActivityForResult(intent, TAKE_IMAGE);
+        startActivityForResult(intent, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
@@ -1982,6 +1986,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mEditText.append(text + ": ");
             } else {
                 mEditText.getText().insert(mEditText.getSelectionStart(), text);
+            }
+        }
+    }
+
+    /**
+     * Append a text in the message editor.
+     * @param text the text to append
+     */
+    public void appendInTextEditor(String text) {
+        if (null != text) {
+            if (TextUtils.isEmpty(mEditText.getText())) {
+                mEditText.append(text + ": ");
+            } else {
+                mEditText.append(text + " ");
             }
         }
     }

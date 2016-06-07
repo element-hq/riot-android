@@ -68,7 +68,10 @@ import java.util.HashMap;
 public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
 
+    // activity request codes
+    private static final int GET_MENTION_REQUEST_CODE = 666;
     private static final int INVITE_USER_REQUEST_CODE = 777;
+
     private static final boolean REFRESH_FORCED = true;
     private static final boolean REFRESH_NOT_FORCED = false;
 
@@ -599,11 +602,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         mAdapter.setOnParticipantsListener(new VectorRoomDetailsMembersAdapter.OnParticipantsListener() {
             @Override
             public void onClick(final ParticipantAdapterItem participantItem) {
-                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, participantItem.mUserId);
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                startActivity(startRoomInfoIntent);
+                Intent memberDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, participantItem.mUserId);
+                memberDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                getActivity().startActivityForResult(memberDetailsIntent, GET_MENTION_REQUEST_CODE);
             }
 
             @Override
@@ -788,6 +791,16 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         }
                     }
                 }, 100);
+            }
+        } else if ((requestCode == GET_MENTION_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
+            final String mention = data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID);
+
+            if (!TextUtils.isEmpty(mention) && (null != getActivity())) {
+                // provide the mention name
+                Intent intent = new Intent();
+                intent.putExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID, mention);
+                getActivity().setResult(Activity.RESULT_OK, intent);
+                getActivity().finish();
             }
         }
     }
