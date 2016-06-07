@@ -19,6 +19,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,6 +45,7 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
 import im.vector.util.VectorUtils;
@@ -61,6 +63,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final String EXTRA_MEMBER_ID = "EXTRA_MEMBER_ID";
     public static final String EXTRA_STORE_ID = "EXTRA_STORE_ID";
 
+    public static final String RESULT_MENTION_ID = "RESULT_MENTION_ID";
+
     // list view items associated actions
     public static final int ITEM_ACTION_INVITE = 0;
     public static final int ITEM_ACTION_LEAVE = 1;
@@ -76,6 +80,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final int ITEM_ACTION_START_CHAT = 11;
     public static final int ITEM_ACTION_START_VOICE_CALL = 12;
     public static final int ITEM_ACTION_START_VIDEO_CALL = 13;
+    public static final int ITEM_ACTION_MENTION = 14;
+
 
     private static int VECTOR_ROOM_MODERATOR_LEVEL = 50;
     private static int VECTOR_ROOM_ADMIN_LEVEL = 100;
@@ -345,6 +351,17 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
                 break;
 
+            case ITEM_ACTION_MENTION:
+                String displayName = TextUtils.isEmpty( mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname;
+
+                // provide the mention name
+                Intent intent = new Intent();
+                intent.putExtra(RESULT_MENTION_ID, displayName);
+                setResult(RESULT_OK, intent);
+                finish();
+
+                break;
+
             default:
                 // unknown action
                 Log.w(LOG_TAG,"## performItemAction(): unknown action type = " + aActionType);
@@ -513,6 +530,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     }
                 }
             }
+
+            // copy the user displayname in the VectorRoomActivity EditText
+            // do not show "mention" fro
+            if (!TextUtils.equals(mRoomMember.membership, mSession.getMyUserId())) {
+                supportedActions.add(ITEM_ACTION_MENTION);
+            }
         } else if (!TextUtils.isEmpty(mMemberId)) {
             supportedActions.add(ITEM_ACTION_START_CHAT);
 
@@ -623,6 +646,13 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 imageResource = R.drawable.ic_person_black;
                 actionText = getResources().getString(R.string.room_participants_action_unignore);
                 mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
+            }
+
+            // build the "mention" item
+            if (supportedActionsList.indexOf(ITEM_ACTION_MENTION) >= 0) {
+                imageResource = R.drawable.ic_comment_black;
+                actionText = getResources().getString(R.string.room_participants_action_mention);
+                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
             }
         }
     }

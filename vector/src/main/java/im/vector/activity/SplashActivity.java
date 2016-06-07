@@ -89,6 +89,11 @@ public class SplashActivity extends MXCActionBarActivity {
                     intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
                 }
 
+                // launch from a shared files menu
+                if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
+                    intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
+                }
+
                 startActivity(intent);
 
                 SplashActivity.this.finish();

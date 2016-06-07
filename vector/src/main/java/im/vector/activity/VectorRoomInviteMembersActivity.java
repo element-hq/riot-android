@@ -177,7 +177,23 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         ParticipantAdapterItem firstEntry = null;
 
         if (!TextUtils.isEmpty(pattern)) {
-            firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
+            // remove useless spaces
+            pattern = pattern.trim();
+
+            // test if the pattern could describe a matrix id.
+            // matrix id syntax @XXX:XXX.XX
+            if (pattern.startsWith("@")) {
+                int pos = pattern.indexOf(":");
+
+                if (pattern.indexOf(".", pos) >= 0) {
+                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
+                }
+            } else {
+                // email
+                if (null != android.util.Patterns.EMAIL_ADDRESS.matcher(pattern)) {
+                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
+                }
+            }
         }
 
         mLoadingView.setVisibility(View.VISIBLE);

@@ -141,6 +141,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    // a shared files intent is waiting the store init
+    private Intent mSharedFilesIntent = null;
+
     private final BroadcastReceiver mBrdRcvStopWaitingView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -309,12 +312,20 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         if (intent.hasExtra(EXTRA_SHARED_INTENT_PARAMS)) {
             final Intent sharedFilesIntent = intent.getParcelableExtra(EXTRA_SHARED_INTENT_PARAMS);
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
-                }
-            });
+
+            if (mSession.getDataHandler().getStore().isReady()) {
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
+                    }
+                });
+            }  else {
+                mSharedFilesIntent = sharedFilesIntent;
+            }
+
+            // ensure that it should be called once
+            intent.removeExtra(EXTRA_SHARED_INTENT_PARAMS);
         }
 
         // check if  there is some valid session
@@ -357,6 +368,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 if (mClearCacheRequired) {
                     mClearCacheRequired = false;
                     Matrix.getInstance(VectorHomeActivity.this).reloadSessions(VectorHomeActivity.this);
+                }
+            }
+
+            @Override
+            public void onStoreReady() {
+                if (null != mSharedFilesIntent) {
+                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
+                            mSharedFilesIntent = null;
+                        }
+                    });
                 }
             }
         };

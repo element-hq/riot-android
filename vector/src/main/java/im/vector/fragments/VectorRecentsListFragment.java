@@ -592,7 +592,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             roomAlias = room.getLiveState().getAlias();
         }
 
-        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, roomAlias, null, null);
+        final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomId, null, roomAlias, null);
         CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
     }
 

@@ -727,7 +727,7 @@ public class VectorUtils {
      * @return the online status desrcription.
      */
     public static String getUserOnlineStatus(final Context context, final MXSession session, final String userId, final SimpleApiCallback<Void> refreshCallback) {
-        String presenceText = context.getResources().getString(R.string.room_participants_unkown);
+        String presenceText = context.getResources().getString(R.string.room_participants_offline);
 
         // sanity checks
         if ((null == session) || (null == userId)) {

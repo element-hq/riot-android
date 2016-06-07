@@ -445,6 +445,7 @@
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
     <string name="room_participants_invite_search_another_user">Search/invite by name, email, id</string>
+    <string name="room_participants_action_mention">Mention</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>
@@ -571,13 +572,13 @@
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
 
-    <string name="settings_enable_all_notif">Enable all notifications</string>
-    <string name="settings_general_messages">General messages</string>
-    <string name="settings_messages_my_display_name">Msg containing my display name</string>
-    <string name="settings_messages_my_user_name">Msg containing my user name</string>
-    <string name="settings_messages_sent_to_me">Messages sent to me</string>
-    <string name="settings_invited_to_room">When i m invited to a room</string>
+    <string name="settings_enable_all_notif">Enable notifications for this account</string>
+    <string name="settings_containing_my_name">Msgs containing my name</string>
+    <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
+    <string name="settings_messages_in_group_chat">Msgs in group chats</string>
+    <string name="settings_invited_to_room">When i\'m invited to a room</string>
     <string name="settings_call_invitations">Call invitations</string>
+    <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
     <string name="settings_version">Version</string>
     <string name="settings_term_conditions">Terms &amp; conditions</string>

@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.ContentUtils;
 
 import java.io.File;
@@ -62,16 +63,22 @@ public class VectorSharedFilesActivity extends Activity {
             // send files from external application
             // check the params
             if ((Intent.ACTION_SEND.equals(action) || Intent.ACTION_SEND_MULTIPLE.equals(action)) && type != null) {
-                boolean isAppLaunched = false;
+                boolean hasCredentials = false;
+                boolean isLaunched = false;
 
                 try {
-                    isAppLaunched = Matrix.getInstance(this).getDefaultSession() != null;
+                    MXSession session = Matrix.getInstance(this).getDefaultSession();
+
+                    if (null != session) {
+                        hasCredentials = true;
+                        isLaunched = session.getDataHandler().getStore().isReady();
+                    }
                 } catch (Exception e) {
                 }
 
                 // go to the home screen if the application is launched
-                if (isAppLaunched) {
-                    launchHomeActivity(anIntent);
+                if (hasCredentials) {
+                    launchActivity(anIntent, isLaunched);
                 } else {
                     Log.d(LOG_TAG, "onCreate : go to login screen");
 
@@ -100,8 +107,9 @@ public class VectorSharedFilesActivity extends Activity {
     /**
      * Extract the medias list, copy them into a tmp directory and provide them to the home activity
      * @param intent the intent
+     * @param isAppLaunched true if the application is resumed
      */
-    private void launchHomeActivity(Intent intent) {
+    private void launchActivity(Intent intent, boolean isAppLaunched) {
         File sharedFolder = new File(getCacheDir(), SHARED_FOLDER);
 
         /**
@@ -176,8 +184,15 @@ public class VectorSharedFilesActivity extends Activity {
 
         Log.d(LOG_TAG, "onCreate : launch home activity with the files list " + cachedFiles.size() + " files");
 
-        Intent homeIntent = new Intent(this, VectorHomeActivity.class);
-        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent activityIntent;
+
+        if (isAppLaunched) {
+            activityIntent = new Intent(this, VectorHomeActivity.class);
+        } else {
+            activityIntent = new Intent(this, SplashActivity.class);
+        }
+
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (0 != cachedFiles.size()) {
             Intent shareIntent = new Intent();
@@ -186,9 +201,10 @@ public class VectorSharedFilesActivity extends Activity {
             shareIntent.setType("*/*");
 
             // files to share
-            homeIntent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, shareIntent);
+            activityIntent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, shareIntent);
         }
-        startActivity(homeIntent);
+
+        startActivity(activityIntent);
     }
 
     /**

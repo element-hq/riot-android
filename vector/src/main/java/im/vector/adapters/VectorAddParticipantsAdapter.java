@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -75,6 +76,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     private int mLayoutResourceId;
 
     private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
+    private ArrayList<String> mMemberUserIds = null;
     private ArrayList<String> mDisplayNamesList = null;
     private String mPattern = "";
 
@@ -138,7 +140,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         IMXStore store = mSession.getDataHandler().getStore();
 
         // list the used members IDs
-        ArrayList<String> idsToIgnore = new ArrayList<String>();
+        mMemberUserIds = new ArrayList<String>();
 
         if ((null != mRoomId) && (null != store)) {
             Room fromRoom = store.getRoom(mRoomId);
@@ -147,7 +149,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 Collection<RoomMember> members = fromRoom.getMembers();
                 for (RoomMember member : members) {
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                        idsToIgnore.add(member.getUserId());
+                        mMemberUserIds.add(member.getUserId());
                     }
                 }
             }
@@ -178,7 +180,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         }
 
         // remove the known users
-        for(String id : idsToIgnore) {
+        for(String id : mMemberUserIds) {
             map.remove(id);
         }
 
@@ -204,9 +206,9 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
     /**
      * Refresh the display.
-     * @param firstEntry the first entry in the result.
+     * @param theFirstEntry the first entry in the result.
      */
-    public void refresh(final ParticipantAdapterItem firstEntry, final OnParticipantsSearchListener searchListener) {
+    public void refresh(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "refresh : the session is not anymore active");
             return;
@@ -228,7 +230,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                refresh(firstEntry, searchListener);
+                                refresh(theFirstEntry, searchListener);
                             }
                         });
                     }
@@ -259,6 +261,15 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
             }
 
+            ParticipantAdapterItem firstEntry = theFirstEntry;
+
+            // detect if the user ID is defined in the known members list
+            if ((null != mMemberUserIds) && (null != firstEntry)) {
+                if (mMemberUserIds.indexOf(theFirstEntry.mUserId) >= 0) {
+                    firstEntry = null;
+                }
+            }
+
             Collections.sort(nextMembersList, ParticipantAdapterItem.alphaComparator);
 
             if (null != firstEntry) {
@@ -275,6 +286,8 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
 
                 mFirstEntry = firstEntry;
+            } else {
+                mFirstEntry = null;
             }
 
             if (null != searchListener) {

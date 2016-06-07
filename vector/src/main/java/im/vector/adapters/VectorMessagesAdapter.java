@@ -477,58 +477,39 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         // before enabling them
         // according to the event type.
-        if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type) ||
-                Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
-                Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type) ||
-                Message.MSGTYPE_EMOTE.equals(event.type)
-                ) {
+        if (TextUtils.equals(event.type, Event.EVENT_TYPE_MESSAGE)) {
+            Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
-            if (!isSelfMessage) {
-                menu.findItem(R.id.ic_action_vector_view_profile).setVisible(true);
-                menu.findItem(R.id.ic_action_vector_direct_message).setVisible(true);
-                menu.findItem(R.id.ic_action_vector_paste_user_name).setVisible(true);
+            if (Message.MSGTYPE_TEXT.equals(message.msgtype)) {
+                menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
             }
-        } else {
-            if (TextUtils.equals(event.type, Event.EVENT_TYPE_MESSAGE)) {
+        }
 
-                if (!isSelfMessage) {
-                    menu.findItem(R.id.ic_action_vector_view_profile).setVisible(true);
-                    menu.findItem(R.id.ic_action_vector_direct_message).setVisible(true);
-                    menu.findItem(R.id.ic_action_vector_paste_user_name).setVisible(true);
-                }
+        if (event.canBeResent()) {
+            menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
 
+            if (event.isUndeliverable()) {
+                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
+            }
+        } else if (event.mSentState == Event.SentState.SENT) {
+            menu.findItem(R.id.ic_action_vector_delete_message).setVisible(!mIsPreviewMode);
+
+            if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
-                if (Message.MSGTYPE_TEXT.equals(message.msgtype)) {
-                    menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
+                // share / forward the message
+                menu.findItem(R.id.ic_action_vector_share).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
+
+                // save the media in the downloads directory
+                if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
+                    menu.findItem(R.id.ic_action_vector_save).setVisible(true);
                 }
+
+                // offer to report a message content
+                menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
             }
 
-            if (event.canBeResent()) {
-                menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
-
-                if (event.isUndeliverable()) {
-                    menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
-                }
-            } else if (event.mSentState == Event.SentState.SENT) {
-                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(!mIsPreviewMode);
-
-                if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
-                    Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
-
-                    // share / forward the message
-                    menu.findItem(R.id.ic_action_vector_share).setVisible(true);
-                    menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
-
-                    // save the media in the downloads directory
-                    if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || Message.MSGTYPE_VIDEO.equals(message.msgtype) || Message.MSGTYPE_FILE.equals(message.msgtype)) {
-                        menu.findItem(R.id.ic_action_vector_save).setVisible(true);
-                    }
-
-                    // offer to report a message content
-                    menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
-                }
-            }
         }
 
         // display the menu

@@ -230,6 +230,7 @@ public class CommonActivityUtils {
      * @param goToLoginPage true to jump to the login page
      */
     public static void logout(Activity activity, boolean goToLoginPage) {
+        EventStreamService.getInstance().removeNotification();
         stopEventStream(activity);
 
         try {
@@ -442,7 +443,7 @@ public class CommonActivityUtils {
      * @param callback the operation callback
      */
     public static void previewRoom(final Activity fromActivity, final MXSession session, final String roomId, final String roomAlias, final ApiCallback<Void> callback) {
-        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, roomAlias, null, null), callback);
+        previewRoom(fromActivity, session, roomId, new RoomPreviewData(session, roomId, null, roomAlias, null), callback);
     }
 
     /**
