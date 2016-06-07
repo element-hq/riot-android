@@ -186,7 +186,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             public void onClick(View v) {
                 mWaitingView.setVisibility(View.VISIBLE);
 
-                mSession.createRoom(null, null, RoomState.VISIBILITY_PRIVATE, null, new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                mSession.createRoom(null, null, RoomState.DIRECTORY_VISIBILITY_PRIVATE, null, RoomState.GUEST_ACCESS_CAN_JOIN, new SimpleApiCallback<String>(VectorHomeActivity.this) {
                     @Override
                     public void onSuccess(final String roomId) {
                         mWaitingView.post(new Runnable() {
@@ -628,7 +628,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 Room room = store.getRoom(summary.getRoomId());
 
                 if (null != room) {
-                    room.sendReadReceipt();
+                    room.sendReadReceipt(null);
                 }
             }
         }

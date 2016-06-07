@@ -103,8 +103,8 @@
             android:key="@string/settings_term_conditions"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
-            android:title="@string/settings_privacy_policy"
-            android:key="@string/settings_privacy_policy"/>
+            android:title="@string/settings_directory_visibility"
+            android:key="@string/settings_directory_visibility"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_clear_cache"

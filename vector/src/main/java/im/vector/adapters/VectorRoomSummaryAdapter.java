@@ -506,7 +506,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if(null != roomSummary) {
             Room room = this.roomFromRoomSummary(roomSummary);
             if(null != room) {
-                room.sendReadReceipt();
+                room.sendReadReceipt(null);
             }
 
             // reset the highlight

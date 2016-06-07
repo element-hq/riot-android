@@ -343,7 +343,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         // they are ephemeral ones.
                         if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
                             if (null != mRoom) {
-                                mRoom.sendReadReceipt();
+                                mRoom.sendReadReceipt(null);
                             }
                         }
                     }
@@ -811,7 +811,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (null != mRoom) {
             // reset the unread messages counter
-            mRoom.sendReadReceipt();
+            mRoom.sendReadReceipt(null);
 
 
             String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
