@@ -214,24 +214,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param action an action ic_action_vector_XXX
      */
     public void onEventAction(final Event event, final int action) {
-        if (action == R.id.ic_action_vector_view_profile) {
-            if (null != event.getSender()) {
-                onAvatarClick(event.getSender());
-            }
-        } else if (action == R.id.ic_action_vector_direct_message) {
-            if (null != event.getSender()) {
-                CommonActivityUtils.goToOneToOneRoom(mSession, event.getSender(), getActivity(), null);
-            }
-        } else if (action == R.id.ic_action_vector_paste_user_name) {
-            String displayName = event.getSender();
-            RoomState state = mRoom.getLiveState();
-
-            if (null != state) {
-                displayName = state.getMemberName(displayName);
-            }
-
-            onSenderNameClick(event.getSender(), displayName);
-        } else if (action == R.id.ic_action_vector_paste_user_name) {
+        if (action == R.id.ic_action_vector_resend_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
