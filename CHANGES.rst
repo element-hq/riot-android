@@ -1,3 +1,21 @@
+Changes in Vector 0.3.1 (2016-06-07)
+===================================================
+
+Bugfixes:
+* issue #156 Option to autocomplete nicknames from their member info page 
+* issue #195 Joining a room by alias fails
+* The inviter avatar was the invited one.
+* issue #188 Universal link failed if App removed from task stack
+* issue #187 ZE550kl / integrated camera application : taking a photo with the front camera does nothing
+* issue #184 the user account informations are sometimes corrupted 
+* issue #185 Add member : should not offer to join by matrix id if the user already in the members list 
+* Shared files from external applications : the rooms list was empty when the application was not launched.
+* issue #191 The push rules on the webclient don't match to the android ones 
+* issue #179 Avoid "unknown" presence	
+* issue #180 Some invited emails are stuck (invitation from a non matrix user)
+* Clear the notications wwhen the client is logged out	
+* issue #194 Public room preview : some public rooms have no display name
+
 Changes in Vector 0.3.0 (2016-06-03)
 ===================================================
 

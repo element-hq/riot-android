@@ -15,7 +15,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 13
-        versionName "0.3.1-dev"
+        versionName "0.3.1"
     }
 
     signingConfigs {
@@ -54,7 +54,7 @@ android {
         alpha {
             applicationId "im.vector.alpha"
             versionCode 13
-            versionName "0.3.1-dev"
+            versionName "0.3.1"
         }
     }
 
