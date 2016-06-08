@@ -37,6 +37,7 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.util.ResourceUtils;
+import im.vector.util.SharedDataItem;
 import im.vector.util.VectorUtils;
 
 /**
@@ -121,64 +122,11 @@ public class VectorSharedFilesActivity extends Activity {
 
         sharedFolder.mkdir();
 
-        ArrayList<Uri> cachedFiles = new ArrayList<Uri>();
-        List<Uri> uris = VectorUtils.listMediaUris(intent);
+        ArrayList<SharedDataItem> cachedFiles = new ArrayList<SharedDataItem>(SharedDataItem.listSharedDataItems(intent));
 
-        // for security reason, the files must be copied before being forwarded to another activity
-        // else it is not possible to read them
-        if (null != uris) {
-            Log.d(LOG_TAG, "launchHomeActivity : " + uris.size() + " media uris");
-
-            for(Uri mediaUri : uris) {
-                String filename = null;
-
-                if (mediaUri.toString().startsWith("content://")) {
-                    Cursor cursor = null;
-                    try {
-                        cursor = getContentResolver().query(mediaUri, null, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "cursor.getString " + e.getMessage());
-                    } finally {
-                        if (null != cursor) {
-                            cursor.close();
-                        }
-                    }
-
-                    if (TextUtils.isEmpty(filename)) {
-                        List uriPath = mediaUri.getPathSegments();
-                        filename = (String) uriPath.get(uriPath.size() - 1);
-                    }
-                } else if (mediaUri.toString().startsWith("file://")) {
-                    // try to retrieve the filename from the file url.
-                    try {
-                        filename = mediaUri.getLastPathSegment();
-                    } catch (Exception e) {
-                    }
-
-                    if (TextUtils.isEmpty(filename)) {
-                        filename = null;
-                    }
-                }
-
-                try {
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(this, mediaUri);
-
-                    if (null == resource) {
-
-                    } else {
-                        Uri savedMediaUri = saveFile(sharedFolder, resource.contentStream, filename, resource.mimeType);
-
-                        if (null != savedMediaUri) {
-                            cachedFiles.add(savedMediaUri);
-                        }
-                        resource.contentStream.close();
-                    }
-                } catch (Exception e) {
-
-                }
+        if (null != cachedFiles) {
+            for(SharedDataItem sharedDataItem : cachedFiles) {
+                sharedDataItem.saveMedia(this, sharedFolder);
             }
         }
 
@@ -198,6 +146,7 @@ public class VectorSharedFilesActivity extends Activity {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, cachedFiles);
+            shareIntent.setExtrasClassLoader(SharedDataItem.class.getClassLoader());
             shareIntent.setType("*/*");
 
             // files to share
@@ -205,62 +154,5 @@ public class VectorSharedFilesActivity extends Activity {
         }
 
         startActivity(activityIntent);
-    }
-
-    /**
-     * Save a file in a dedicated directory.
-     * The filename is optional.
-     * @param folder the destinated folder
-     * @param stream teh file stream
-     * @param defaultFileName the filename, null to generate a new one
-     * @param mimeType the file mimetype.
-     * @return the file uri
-     */
-    private static final Uri saveFile(File folder, InputStream stream, String defaultFileName, String mimeType) {
-        String filename = defaultFileName;
-
-        if (null == filename) {
-            filename = "file" + System.currentTimeMillis();
-
-            if (null != mimeType) {
-                String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
-
-                if (null != extension) {
-                    filename += "." + extension;
-                }
-            }
-        }
-
-        Uri fileUri = null;
-
-        try {
-            File file = new File(folder, filename);
-
-            // if the file exits, delete it
-            if (file.exists()) {
-                file.delete();
-            }
-
-            FileOutputStream fos = new FileOutputStream(file.getPath());
-
-            try {
-                byte[] buf = new byte[1024 * 32];
-
-                int len;
-                while ((len = stream.read(buf)) != -1) {
-                    fos.write(buf, 0, len);
-                }
-            } catch (Exception e) {
-            }
-
-            fos.flush();
-            fos.close();
-            stream.close();
-
-            fileUri = Uri.fromFile(file);
-        } catch (Exception e) {
-        }
-
-        return fileUri;
     }
 }

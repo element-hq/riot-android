@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,10 +36,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * SharedDataItem defines the 3rd party shared items
  */
-public class SharedDataItem {
+public class SharedDataItem implements Parcelable {
 
     private static String LOG_TAG = "SharedDataItem";
 
@@ -50,6 +53,8 @@ public class SharedDataItem {
 
     // the filename
     private String mFileName;
+
+    private static final Uri sDummyUri = Uri.parse("http://www.matrixdummy.org");
 
     /**
      * Constructor
@@ -70,6 +75,111 @@ public class SharedDataItem {
     public SharedDataItem(Uri uri) {
         mUri = uri;
     }
+
+    /**
+     * Unformat parcelled String
+     * @param string the string to unformat
+     * @return the unformatted string
+     */
+    private static String unformatNullString(final String string) {
+        if (TextUtils.isEmpty(string)) {
+            return null;
+        }
+
+        return string;
+    }
+
+    /**
+     * Convert null uri to a dummy one
+     * @param uri the uri to unformat
+     * @return the unformatted
+     */
+    private static Uri unformatNullUri(final Uri uri) {
+        if ((null == uri) || sDummyUri.equals(uri)) {
+            return null;
+        }
+
+        return uri;
+    }
+
+    /**
+     * Constructor from a parcel
+     * @param source the parcel
+     */
+    public SharedDataItem(Parcel source) {
+        mUri = unformatNullUri((Uri)source.readParcelable(Uri.class.getClassLoader()));
+        mMimeType = unformatNullString(source.readString());
+
+        CharSequence clipDataItemText = unformatNullString(source.readString());
+        String clipDataItemHtml =  unformatNullString(source.readString());
+        Uri clipDataItemUri = unformatNullUri((Uri)source.readParcelable(Uri.class.getClassLoader()));
+        mClipDataItem = new ClipData.Item(clipDataItemText, clipDataItemHtml, null, clipDataItemUri);
+
+        mFileName = unformatNullString(source.readString());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Convert null string to ""
+     * @param string the string to format
+     * @return the formatted string
+     */
+    private static String formatNullString(final String string) {
+        if (TextUtils.isEmpty(string)) {
+            return "";
+        }
+
+        return string;
+    }
+
+    private static String formatNullString(final CharSequence charSequence) {
+        if (TextUtils.isEmpty(charSequence)) {
+            return "";
+        }
+
+        return charSequence.toString();
+    }
+
+    /**
+     * Convert null uri to a dummy one
+     * @param uri the uri to format
+     * @return the formatted
+     */
+    private static Uri formatNullUri(final Uri uri) {
+        if (null == uri) {
+            return sDummyUri;
+        }
+
+        return uri;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(formatNullUri(mUri), 0);
+        dest.writeString(formatNullString(mMimeType));
+
+        dest.writeString(formatNullString(mClipDataItem.getText()));
+        dest.writeString(formatNullString(mClipDataItem.getHtmlText()));
+        dest.writeParcelable(formatNullUri(mClipDataItem.getUri()), 0);
+
+        dest.writeString(formatNullString(mFileName));
+    }
+
+    // Creator
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public SharedDataItem createFromParcel(Parcel in) {
+            return new SharedDataItem(in);
+        }
+
+        public SharedDataItem[] newArray(int size) {
+            return new SharedDataItem[size];
+        }
+    };
+
 
     /**
      * Retrieve the raw text contained in this Item.
@@ -140,7 +250,7 @@ public class SharedDataItem {
             }
         }
 
-        return null;
+        return mMimeType;
     }
 
     /**

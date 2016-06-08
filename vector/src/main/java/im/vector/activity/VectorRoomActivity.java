@@ -1092,7 +1092,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Send a list of images from their URIs
      * @param sharedDataItems the media URIs
      */
-    private void sendMedias(final ArrayList<SharedDataItem> sharedDataItems) {
+    private void sendMedias(final List<SharedDataItem> sharedDataItems) {
         mVectorMessageListFragment.cancelSelectionMode();
 
         setProgressVisibility(View.VISIBLE);
@@ -1110,15 +1110,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         final int mediaCount = sharedDataItems.size();
 
                         for (SharedDataItem sharedDataItem : sharedDataItems) {
-                            // crash from Google Analytics : null URI on a nexus 5
-                            if (null != sharedDataItem) {
                                 String mimeType = sharedDataItem.getMimeType(VectorRoomActivity.this);
 
                                 if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_INTENT, mimeType)) {
                                     // don't know how to manage it
                                     break;
                                 } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
-                                    sendMessage(sharedDataItem.getText().toString(), sharedDataItem.getHtmlText(), "org.matrix.custom.html");
+                                    final String text = sharedDataItem.getText().toString();
+                                    final String htmlText = sharedDataItem.getHtmlText();
+
+                                    VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            sendMessage(text, htmlText, "org.matrix.custom.html");
+                                        }
+                                    });
+
                                     break;
                                 }
 
@@ -1397,7 +1404,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                         }
                                     });
                                 }
-                            }
+
                         }
 
                         VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -1443,6 +1450,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             // sanity checks
             if (null != bundle) {
+                bundle.setClassLoader(SharedDataItem.class.getClassLoader());
+
                 if (bundle.containsKey(Intent.EXTRA_STREAM)) {
                     try {
                         Object streamUri = bundle.get(Intent.EXTRA_STREAM);
