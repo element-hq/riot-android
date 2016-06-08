@@ -1147,7 +1147,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                             setProgressVisibility(View.GONE);
 
                                             Toast.makeText(VectorRoomActivity.this,
-                                                    getString(R.string.message_failed_to_upload),
+                                                    getString(R.string.room_message_file_not_found),
                                                     Toast.LENGTH_LONG).show();
                                         }
 

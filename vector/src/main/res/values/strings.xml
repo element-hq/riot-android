@@ -474,6 +474,7 @@
     <string name="room_prompt_resent">Resend now?</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
+    <string name="room_message_file_not_found">File not found</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
