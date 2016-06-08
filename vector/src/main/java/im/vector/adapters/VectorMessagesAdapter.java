@@ -462,8 +462,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } catch (Exception e) {
         }
 
-        boolean isSelfMessage = TextUtils.equals(event.getSender(), mSession.getMyUserId());
-
         Menu menu = popup.getMenu();
 
         // hide entries
@@ -598,7 +596,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             @Override
             public void onClick(View v) {
                 if (null != mMessagesAdapterEventsListener) {
-                    mMessagesAdapterEventsListener.onContentClick(position);
+                    // GA issue
+                    if (position < getCount()) {
+                        mMessagesAdapterEventsListener.onContentClick(position);
+                    }
                 }
             }
         });
@@ -606,14 +607,17 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         contentView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                MessageRow row = getItem(position);
-                Event event = row.getEvent();
+                // GA issue
+                if (position < getCount()) {
+                    MessageRow row = getItem(position);
+                    Event event = row.getEvent();
 
-                if (!mIsSearchMode) {
-                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
-                    mHighlightedEventId = event.eventId;
-                    notifyDataSetChanged();
-                    return true;
+                    if (!mIsSearchMode) {
+                        onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                        mHighlightedEventId = event.eventId;
+                        notifyDataSetChanged();
+                        return true;
+                    }
                 }
 
                 return true;
