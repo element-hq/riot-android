@@ -51,6 +51,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.VectorApp;
@@ -396,6 +397,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         mRemoveMembersMenuItem = menu.findItem(R.id.ic_action_room_details_delete);
         mSwitchDeletionMenuItem = menu.findItem(R.id.ic_action_room_details_edition_mode);
 
+        // after data model was refreshed, update the edit icon
+        processEditionMode();
+
         refreshMenuEntries();
     }
 
@@ -413,6 +417,48 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
+     * Compute if the current user is admin of the room.
+     * @return true if user is admin, false otherwise
+     */
+    private boolean isUserAdmin(){
+        boolean isAdmin = false;
+        PowerLevels powerLevels = null;
+
+        if ((null != mRoom) && (null != mSession)) {
+            if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
+                String userId = mSession.getMyUserId();
+                isAdmin = (null != userId)?(powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN):false;
+            }
+        }
+        return isAdmin;
+    }
+
+    /**
+     * Determine if the edit icon must be displayed or not.
+     * The edit icon must be hidden in the following cases:
+     * <ul>
+     *     <li>the user is not admin </li>
+     *     <li>only one member is present in the room</li>
+     * </ul>
+     */
+    private void processEditionMode() {
+        boolean isEnabled;
+
+        if(null != mSwitchDeletionMenuItem) {
+            if(!isUserAdmin()){
+                isEnabled = false;
+            } else if(1 == mAdapter.getItemsCount()){
+                isEnabled = false;
+            } else {
+                isEnabled = true;
+            }
+
+            mSwitchDeletionMenuItem.setVisible(isEnabled);
+            mSwitchDeletionMenuItem.setEnabled(isEnabled);
+        }
+    }
+
+    /**
      * Refresh the menu entries according to the edition mode
      */
     private void refreshMenuEntries() {
@@ -420,7 +466,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             mRemoveMembersMenuItem.setVisible(mIsMultiSelectionMode);
         }
 
-        if (null != mSwitchDeletionMenuItem) {
+        if ((null != mSwitchDeletionMenuItem) && (mSwitchDeletionMenuItem.isEnabled())){
             mSwitchDeletionMenuItem.setVisible(!mIsMultiSelectionMode);
         }
     }
@@ -755,6 +801,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         } else {
             Log.w(LOG_TAG, "## refreshRoomMembersList(): search failure - adapter not initialized");
         }
+
+        // after data model was refreshed, update the edit icon
+        processEditionMode();
     }
 
     /**
