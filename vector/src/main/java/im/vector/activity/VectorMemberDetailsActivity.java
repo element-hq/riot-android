@@ -156,6 +156,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // display an avatar it it was not used
+                        updateMemberAvatarUi();
+                        // refresh the presence
                         updatePresenceInfoUi();
                     }
                 });
@@ -866,10 +869,28 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      */
     private void updateMemberAvatarUi() {
         if (null != mMemberAvatarImageView) {
-
             // use the room member if it exists
             if (null != mRoomMember) {
-                VectorUtils.loadRoomMemberAvatar(this, mSession, mMemberAvatarImageView, mRoomMember);
+                String displayname = mRoomMember.displayname;
+                String avatarUrl =  mRoomMember.avatarUrl;
+
+                // if there is no avatar or displayname , try to find one from the known user
+                // it is always better than the vector avatar or the matrid id.
+                if (TextUtils.isEmpty(avatarUrl) || TextUtils.isEmpty(displayname)) {
+                    User user = mSession.getDataHandler().getStore().getUser(mRoomMember.getUserId());
+
+                    if (null != user) {
+                        if (TextUtils.isEmpty(avatarUrl)) {
+                            avatarUrl = user.avatar_url;
+                        }
+
+                        if (TextUtils.isEmpty(displayname)) {
+                            displayname = user.displayname;
+                        }
+                    }
+                }
+
+                VectorUtils.loadUserAvatar(this, mSession, mMemberAvatarImageView, avatarUrl, mRoomMember.getUserId(), displayname);
             } else {
                 User user = mSession.getDataHandler().getStore().getUser(mMemberId);
 
