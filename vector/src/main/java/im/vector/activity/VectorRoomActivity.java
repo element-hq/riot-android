@@ -1137,7 +1137,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                                 final String fFilename = sharedDataItem.getFileName(VectorRoomActivity.this);
 
-                                ResourceUtils.Resource resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri());
+                                ResourceUtils.Resource resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri(), sharedDataItem.getMimeType(VectorRoomActivity.this));
 
                                 if (null == resource) {
                                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -1215,7 +1215,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                         // need to decompress the high res image
                                         BitmapFactory.Options options = new BitmapFactory.Options();
                                         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                                        resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri());
+                                        resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri(), sharedDataItem.getMimeType(VectorRoomActivity.this));
 
                                         // get the full size bitmap
                                         Bitmap fullSizeBitmap = null;
@@ -1273,7 +1273,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                                     }
 
                                                     resource.contentStream.close();
-                                                    resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri());
+                                                    resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri(), sharedDataItem.getMimeType(VectorRoomActivity.this));
 
                                                     try {
                                                         mMediasCache.saveMedia(resource.contentStream, uri.getPath(), mimeType);

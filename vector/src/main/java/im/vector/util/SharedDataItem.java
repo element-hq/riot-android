@@ -309,7 +309,7 @@ public class SharedDataItem implements Parcelable {
 
         if (null != mediaUri) {
             try {
-                ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+                ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri, getMimeType(context));
 
                 if (null == resource) {
                 } else {
