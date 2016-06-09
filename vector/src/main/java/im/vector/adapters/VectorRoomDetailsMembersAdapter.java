@@ -816,14 +816,13 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                             float x = event.getX() + v.getTranslationX();
 
                             // assume it is a tap
-                            if (Math.abs(x - mStartX) < 3) {
+                            if (Math.abs(x - mStartX) < 10) {
                                 if (null != mOnParticipantsListener) {
                                     mOnParticipantsListener.onClick(participant);
                                 }
                                 isMotionTrapped = false;
                             } else {
                                 float deltaX = -Math.max(Math.min(x - mStartX, 0), -hiddenViewWidth);
-
 
                                 if (deltaX > (hiddenViewWidth / 2)) {
                                     viewHolder.mSwipeCellLayout.setTranslationX(-hiddenViewWidth);
