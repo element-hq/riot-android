@@ -21,6 +21,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -49,8 +51,10 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.VectorApp;
@@ -61,9 +65,14 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomDetailsMembersAdapter;
+import im.vector.util.VectorUtils;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
@@ -88,6 +97,15 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private boolean mIsMultiSelectionMode;
     private MenuItem mRemoveMembersMenuItem;
     private MenuItem mSwitchDeletionMenuItem;
+
+    // the UI handler to refresh the
+    private Handler mUIHandler;
+    private boolean mIsFirstPresenceRefresh = true;
+
+    // the member presences trigger refresh only after a delay
+    // to avoid lags
+    private Timer mRefreshTimer;
+    private TimerTask mRefreshTimerTask;
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -116,7 +134,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
                             if (object instanceof ParticipantAdapterItem) {
                                 if (TextUtils.equals(user.user_id, ((ParticipantAdapterItem) object).mUserId)) {
-                                    mAdapter.notifyDataSetChanged();
+                                    delayedUpdateRoomMembersDataModel();
                                     break;
                                 }
                             }
@@ -266,6 +284,12 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if (mIsMultiSelectionMode) {
             toggleMultiSelectionMode();
         }
+
+        if (null != mRefreshTimer) {
+            mRefreshTimer.cancel();
+            mRefreshTimer = null;
+            mRefreshTimerTask = null;
+        }
     }
 
     @Override
@@ -301,6 +325,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         updateListExpandingState();
 
         refreshMenuEntries();
+
+
     }
 
     @SuppressLint("LongLogTag")
@@ -380,6 +406,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        mUIHandler = new Handler(Looper.getMainLooper());
+
         return mViewHierarchy;
     }
 
@@ -410,6 +438,62 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
 
         return false;
+    }
+
+    /**
+     * Trigger an UI refresh but it is only triggered after a delay
+     * to avoid lags.
+     */
+    private void delayedUpdateRoomMembersDataModel() {
+        if (null != mRefreshTimer) {
+            mRefreshTimer.cancel();
+            mRefreshTimer = null;
+            mRefreshTimerTask = null;
+        }
+
+        mRefreshTimer = new Timer();
+        mRefreshTimerTask = new TimerTask() {
+            public void run() {
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != mRefreshTimer) {
+                            mRefreshTimer.cancel();
+                        }
+                        mRefreshTimer = null;
+                        mRefreshTimerTask = null;
+                        mAdapter.updateRoomMembersDataModel(null);
+                    }
+                });
+            }
+        };
+
+        mRefreshTimer.schedule(mRefreshTimerTask, 1000);
+    }
+
+    /**
+     * The room member presences are init to avoid invalid presence statuses.
+     */
+    private void refreshMemberPresence()  {
+        if (mIsFirstPresenceRefresh) {
+            mIsFirstPresenceRefresh = false;
+            // refresh the refresh
+            Collection<RoomMember> members = mRoom.getMembers();
+
+            for(RoomMember member : members) {
+                VectorUtils.getUserOnlineStatus(getActivity(), mSession, member.getUserId(), new SimpleApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        mUIHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                delayedUpdateRoomMembersDataModel();
+                            }
+                        });
+                    }
+                });
+            }
+        }
     }
 
     /**
