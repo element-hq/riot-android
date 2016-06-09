@@ -245,6 +245,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private TextView mSearchNoResultTextView;
     private ImageView mClearSearchImageView;
     private String mPatternValue;
+    private View mAddMembersFloatingActionButton;
 
     public static VectorRoomDetailsMembersFragment newInstance() {
         return new VectorRoomDetailsMembersFragment();
@@ -464,6 +465,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private void refreshMenuEntries() {
         if (null != mRemoveMembersMenuItem) {
             mRemoveMembersMenuItem.setVisible(mIsMultiSelectionMode);
+
+            // fix https://github.com/vector-im/vector-android/issues/196
+            if((null != mAddMembersFloatingActionButton)){
+                mAddMembersFloatingActionButton.setVisibility(mIsMultiSelectionMode?View.GONE:View.VISIBLE);
+            }
         }
 
         if ((null != mSwitchDeletionMenuItem) && (mSwitchDeletionMenuItem.isEnabled())){
@@ -588,9 +594,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private void finalizeInit() {
         MXMediasCache mxMediasCache = mSession.getMediasCache();
 
-        View addMembersButton = mViewHierarchy.findViewById(R.id.add_participants_create_view);
+        mAddMembersFloatingActionButton = mViewHierarchy.findViewById(R.id.add_participants_create_view);
 
-        addMembersButton.setOnClickListener(new View.OnClickListener() {
+        mAddMembersFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // pop to the home activity
