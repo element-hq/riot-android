@@ -156,6 +156,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // display an avatar it it was not used
+                        updateMemberAvatarUi();
+                        // refresh the presence
                         updatePresenceInfoUi();
                     }
                 });
@@ -866,7 +869,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      */
     private void updateMemberAvatarUi() {
         if (null != mMemberAvatarImageView) {
-
             // use the room member if it exists
             if (null != mRoomMember) {
                 String displayname = mRoomMember.displayname;

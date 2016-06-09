@@ -21,6 +21,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -49,8 +52,10 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.User;
 
@@ -62,9 +67,15 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomDetailsMembersAdapter;
+import im.vector.util.VectorUtils;
 
+import java.lang.reflect.Member;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
@@ -90,6 +101,17 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private MenuItem mRemoveMembersMenuItem;
     private MenuItem mSwitchDeletionMenuItem;
 
+    // the UI handler to refresh the
+    private Handler mUIHandler;
+
+    // the member presences trigger refresh only after a delay
+    // to avoid lags
+    private Timer mRefreshTimer;
+    private TimerTask mRefreshTimerTask;
+
+    // list the up to date presence to avoid refreshing it twice
+    private ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<String>();
+
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
@@ -109,18 +131,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final int first = mParticipantsListView.getFirstVisiblePosition();
-                        final int last = mParticipantsListView.getLastVisiblePosition();
-
-                        for (int i = first; i <= last; i++) {
-                            Object object = mParticipantsListView.getItemAtPosition(i);
-
-                            if (object instanceof ParticipantAdapterItem) {
-                                if (TextUtils.equals(user.user_id, ((ParticipantAdapterItem) object).mUserId)) {
-                                    mAdapter.notifyDataSetChanged();
-                                    break;
-                                }
-                            }
+                        // test if the user is a member of the room
+                        if (mAdapter.getUserIdsList().indexOf(user.user_id) >= 0) {
+                            delayedUpdateRoomMembersDataModel();
                         }
                     }
                 });
@@ -268,6 +281,12 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if (mIsMultiSelectionMode) {
             toggleMultiSelectionMode();
         }
+
+        if (null != mRefreshTimer) {
+            mRefreshTimer.cancel();
+            mRefreshTimer = null;
+            mRefreshTimerTask = null;
+        }
     }
 
     @Override
@@ -303,6 +322,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         updateListExpandingState();
 
         refreshMenuEntries();
+
+        refreshMemberPresences();
     }
 
     @SuppressLint("LongLogTag")
@@ -382,6 +403,8 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        mUIHandler = new Handler(Looper.getMainLooper());
+
         return mViewHierarchy;
     }
 
@@ -456,6 +479,76 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
             mSwitchDeletionMenuItem.setVisible(isEnabled);
             mSwitchDeletionMenuItem.setEnabled(isEnabled);
+        }
+    }
+
+    
+    /**
+     * Trigger an UI refresh but it is only triggered after a delay
+     * to avoid lags.
+     */
+    private void delayedUpdateRoomMembersDataModel() {
+        if (null != mRefreshTimer) {
+            mRefreshTimer.cancel();
+            mRefreshTimer = null;
+            mRefreshTimerTask = null;
+        }
+
+        mRefreshTimer = new Timer();
+        mRefreshTimerTask = new TimerTask() {
+            public void run() {
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != mRefreshTimer) {
+                            mRefreshTimer.cancel();
+                        }
+                        mRefreshTimer = null;
+                        mRefreshTimerTask = null;
+                        mAdapter.updateRoomMembersDataModel(null);
+                    }
+                });
+            }
+        };
+
+        mRefreshTimer.schedule(mRefreshTimerTask, 1000);
+    }
+
+    /**
+     * Refresh the member presences of the displayed members
+     * if they are not yet known.
+     * It might happen if the client did not receive any presence from this user
+     * because they did not change since the application launch.
+     */
+    private void refreshMemberPresences()  {
+        int firstPos = mParticipantsListView.getFirstVisiblePosition();
+        int lastPos = mParticipantsListView.getLastVisiblePosition() + 20; // add a margin to efresh more
+        int count = mParticipantsListView.getCount();
+
+        for(int i = firstPos; (i <= lastPos) && (i < count); i++) {
+            Object item = mParticipantsListView.getItemAtPosition(i);
+
+            if (item instanceof ParticipantAdapterItem) {
+                ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+
+                // test if a request has been done
+                if (mUpdatedPresenceUserIds.indexOf(participantAdapterItem.mUserId) < 0) {
+                    mUpdatedPresenceUserIds.add(participantAdapterItem.mUserId);
+
+                    VectorUtils.getUserOnlineStatus(getActivity(), mSession, participantAdapterItem.mUserId, new SimpleApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            mUIHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    delayedUpdateRoomMembersDataModel();
+                                }
+                            });
+                        }
+                    });
+
+                }
+            }
         }
     }
 
@@ -650,6 +743,18 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         // the group indicator is managed in the adapter (group view creation)
         mParticipantsListView.setGroupIndicator(null);
 
+        mParticipantsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                refreshMemberPresences();
+            }
+        });
+
         // set all the listener handlers called from the adapter
         mAdapter.setOnParticipantsListener(new VectorRoomDetailsMembersAdapter.OnParticipantsListener() {
             @Override
@@ -803,7 +908,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
              // start waiting wheel during the search
              mProgressView.setVisibility(View.VISIBLE);
              mAdapter.setSearchedPattern(aSearchedPattern, mSearchListener, aIsRefreshForced);
-
         } else {
             Log.w(LOG_TAG, "## refreshRoomMembersList(): search failure - adapter not initialized");
         }

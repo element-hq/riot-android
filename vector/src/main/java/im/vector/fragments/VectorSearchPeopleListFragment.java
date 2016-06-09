@@ -44,7 +44,7 @@ import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 
 
-public class VectorSearchPeopleListFragment extends Fragment {
+public class  VectorSearchPeopleListFragment extends Fragment {
 
     public static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
     public static final String ARG_LAYOUT_ID = "VectorSearchPeopleListFragment.ARG_LAYOUT_ID";

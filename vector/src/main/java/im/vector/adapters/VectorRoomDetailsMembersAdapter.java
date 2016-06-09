@@ -20,6 +20,8 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +38,9 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.RoomThirdPartyInvite;
@@ -46,8 +50,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.util.VectorUtils;
@@ -125,7 +130,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
     //ParticipantAdapterItem mFirstEntry;
     private OnParticipantsListener mOnParticipantsListener;
-
 
     /**
      * Recycle view holder class.
@@ -281,7 +285,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * Update the data model of the adapter which is based on a set of ParticipantAdapterItem objects.
      * @param aSearchListener search events listener, set to null if search not enabled
      */
-    private void updateRoomMembersDataModel(final OnRoomMembersSearchListener aSearchListener) {
+    public void updateRoomMembersDataModel(final OnRoomMembersSearchListener aSearchListener) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "updateRoomMembersDataModel the session is not anymore valid");
             return;
@@ -459,7 +463,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     public ArrayList<String> getUserIdsList() {
         ArrayList<String> idsListRetValue = new ArrayList<String>();
 
-        if(mGroupIndexPresentMembers >= 0) {
+        if (mGroupIndexPresentMembers >= 0) {
             int listSize = mRoomMembersListByGroupPosition.get(mGroupIndexPresentMembers).size();
 
             // the first item is always oneself, so skipp first element
@@ -683,12 +687,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             }
         }
         // 3 - display member status
-        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId,new SimpleApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                // do nothing because the members are sorted by presence.
-            }
-        }));
+        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId, null));
 
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
