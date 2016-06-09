@@ -573,13 +573,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         // room guest access rules
         if((null != mRoomAccessRulesListPreference)&& (null != resources)) {
             String joinRule = mRoom.getLiveState().join_rule;
-            String guestAccessRule = mRoom.getLiveState().guest_access;
-
-            // assume that forbidden is the default guest access
-            // in some rooms, it is set to null whereas it should not
-            if (null == guestAccessRule) {
-                guestAccessRule = RoomState.GUEST_ACCESS_FORBIDDEN;
-            }
+            String guestAccessRule = mRoom.getLiveState().getGuestAccess();
 
             if(RoomState.JOIN_RULE_INVITE.equals(joinRule)/* && RoomState.GUEST_ACCESS_CAN_JOIN.equals(guestAccessRule)*/) {
                 // "Only people who have been invited" requires: {join_rule: "invite"} and {guest_access: "can_join"}
@@ -639,7 +633,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         // room history readability
         if (null != mRoomHistoryReadabilityRulesListPreference) {
-            value = mRoom.getLiveState().history_visibility;
+            value = mRoom.getLiveState().getHistoryVisibility();
             summary = null;
 
             if((null != value) && (null != resources)) {
@@ -725,7 +719,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         String previousValue = mRoom.getLiveState().history_visibility;
         String newValue = mRoomHistoryReadabilityRulesListPreference.getValue();
 
-        if(!newValue.equals(previousValue)) {
+        if(!TextUtils.equals(newValue, previousValue)) {
             String historyVisibility;
 
             if(newValue.equals(getResources().getString(R.string.room_settings_read_history_entry_value_anyone))) {
@@ -797,7 +791,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
             // get new and previous values
             String previousJoinRule = mRoom.getLiveState().join_rule;
-            String previousGuestAccessRule = mRoom.getLiveState().guest_access;
+            String previousGuestAccessRule = mRoom.getLiveState().getGuestAccess();
             String newValue = mRoomAccessRulesListPreference.getValue();
 
             if(ACCESS_RULES_ONLY_PEOPLE_INVITED.equals(newValue)) {
