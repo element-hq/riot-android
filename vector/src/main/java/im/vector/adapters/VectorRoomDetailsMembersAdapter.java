@@ -463,7 +463,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     public ArrayList<String> getUserIdsList() {
         ArrayList<String> idsListRetValue = new ArrayList<String>();
 
-        if(mGroupIndexPresentMembers >= 0) {
+        if (mGroupIndexPresentMembers >= 0) {
             int listSize = mRoomMembersListByGroupPosition.get(mGroupIndexPresentMembers).size();
 
             // the first item is always oneself, so skipp first element
@@ -687,12 +687,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             }
         }
         // 3 - display member status
-        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId,new SimpleApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void info) {
-                // nothing here
-            }
-        }));
+        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId, null));
 
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {

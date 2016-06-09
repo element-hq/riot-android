@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -67,6 +68,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomDetailsMembersAdapter;
 import im.vector.util.VectorUtils;
 
+import java.lang.reflect.Member;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -100,12 +102,14 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     // the UI handler to refresh the
     private Handler mUIHandler;
-    private boolean mIsFirstPresenceRefresh = true;
 
     // the member presences trigger refresh only after a delay
     // to avoid lags
     private Timer mRefreshTimer;
     private TimerTask mRefreshTimerTask;
+
+    // list the up to date presence to avoid refreshing it twice
+    private ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<String>();
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -126,18 +130,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final int first = mParticipantsListView.getFirstVisiblePosition();
-                        final int last = mParticipantsListView.getLastVisiblePosition();
-
-                        for (int i = first; i <= last; i++) {
-                            Object object = mParticipantsListView.getItemAtPosition(i);
-
-                            if (object instanceof ParticipantAdapterItem) {
-                                if (TextUtils.equals(user.user_id, ((ParticipantAdapterItem) object).mUserId)) {
-                                    delayedUpdateRoomMembersDataModel();
-                                    break;
-                                }
-                            }
+                        // test if the user is a member of the room
+                        if (mAdapter.getUserIdsList().indexOf(user.user_id) >= 0) {
+                            delayedUpdateRoomMembersDataModel();
                         }
                     }
                 });
@@ -326,7 +321,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         refreshMenuEntries();
 
-
+        refreshMemberPresences();
     }
 
     @SuppressLint("LongLogTag")
@@ -472,26 +467,39 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     * The room member presences are init to avoid invalid presence statuses.
+     * Refresh the member presences of the displayed members
+     * if they are not yet known.
+     * It might happen if the client did not receive any presence from this user
+     * because they did not change since the application launch.
      */
-    private void refreshMemberPresence()  {
-        if (mIsFirstPresenceRefresh) {
-            mIsFirstPresenceRefresh = false;
-            // refresh the refresh
-            Collection<RoomMember> members = mRoom.getMembers();
+    private void refreshMemberPresences()  {
+        int firstPos = mParticipantsListView.getFirstVisiblePosition();
+        int lastPos = mParticipantsListView.getLastVisiblePosition() + 20; // add a margin to efresh more
+        int count = mParticipantsListView.getCount();
 
-            for(RoomMember member : members) {
-                VectorUtils.getUserOnlineStatus(getActivity(), mSession, member.getUserId(), new SimpleApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        mUIHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                delayedUpdateRoomMembersDataModel();
-                            }
-                        });
-                    }
-                });
+        for(int i = firstPos; (i <= lastPos) && (i < count); i++) {
+            Object item = mParticipantsListView.getItemAtPosition(i);
+
+            if (item instanceof ParticipantAdapterItem) {
+                ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+
+                // test if a request has been done
+                if (mUpdatedPresenceUserIds.indexOf(participantAdapterItem.mUserId) < 0) {
+                    mUpdatedPresenceUserIds.add(participantAdapterItem.mUserId);
+
+                    VectorUtils.getUserOnlineStatus(getActivity(), mSession, participantAdapterItem.mUserId, new SimpleApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            mUIHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    delayedUpdateRoomMembersDataModel();
+                                }
+                            });
+                        }
+                    });
+
+                }
             }
         }
     }
@@ -682,6 +690,18 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         // the group indicator is managed in the adapter (group view creation)
         mParticipantsListView.setGroupIndicator(null);
 
+        mParticipantsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                refreshMemberPresences();
+            }
+        });
+
         // set all the listener handlers called from the adapter
         mAdapter.setOnParticipantsListener(new VectorRoomDetailsMembersAdapter.OnParticipantsListener() {
             @Override
@@ -835,7 +855,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
              // start waiting wheel during the search
              mProgressView.setVisibility(View.VISIBLE);
              mAdapter.setSearchedPattern(aSearchedPattern, mSearchListener, aIsRefreshForced);
-
         } else {
             Log.w(LOG_TAG, "## refreshRoomMembersList(): search failure - adapter not initialized");
         }
