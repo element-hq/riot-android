@@ -788,15 +788,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         if (isNewList) {
             // remove the displayed one
-            for (int index = 0; ; index++) {
-                Preference preference = mPushersSettingsCategory.findPreference(PUSHER_PREREFENCE_KEY_BASE + index);
-
-                if (null != preference) {
-                    mPushersSettingsCategory.removePreference(preference);
-                } else {
-                    break;
-                }
-            }
+            mPushersSettingsCategory.removeAll();
 
             // add new emails list
             mDisplayedPushers = pushersList;
@@ -806,11 +798,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             for (Pusher pusher : mDisplayedPushers) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
-                preference.setTitle(pusher.deviceDisplayName);
-                preference.setSummary(pusher.appDisplayName);
-                preference.setKey(PUSHER_PREREFENCE_KEY_BASE + index);
-                index++;
-                mPushersSettingsCategory.addPreference(preference);
+                // fix https://github.com/vector-im/vector-android/issues/192
+                // It appears that the server sends some invalid pushers where the device and the app are
+                // invalid. In all these cases the language is set to null.
+                if(null != pusher.lang) {
+                    preference.setTitle(pusher.deviceDisplayName);
+                    preference.setSummary(pusher.appDisplayName);
+                    preference.setKey(PUSHER_PREREFENCE_KEY_BASE + index);
+                    index++;
+                    mPushersSettingsCategory.addPreference(preference);
+                }
             }
         }
     }
