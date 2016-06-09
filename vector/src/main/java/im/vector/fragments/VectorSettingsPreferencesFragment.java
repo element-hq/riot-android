@@ -674,7 +674,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             if (null != thumbnailUri) {
                 displayLoadingView();
 
-                ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri);
+                ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
                 mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
                     @Override

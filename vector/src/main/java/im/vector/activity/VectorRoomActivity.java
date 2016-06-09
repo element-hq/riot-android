@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
@@ -96,6 +98,7 @@ import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
+import im.vector.util.SharedDataItem;
 import im.vector.util.VectorUtils;
 
 import java.io.File;
@@ -1087,9 +1090,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     /**
      * Send a list of images from their URIs
-     * @param mediaUris the media URIs
+     * @param sharedDataItems the media URIs
      */
-    private void sendMedias(final ArrayList<Uri> mediaUris) {
+    private void sendMedias(final List<SharedDataItem> sharedDataItems) {
         mVectorMessageListFragment.cancelSelectionMode();
 
         setProgressVisibility(View.VISIBLE);
@@ -1104,48 +1107,37 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        final int mediaCount = mediaUris.size();
+                        final int mediaCount = sharedDataItems.size();
 
-                        for (Uri anUri : mediaUris) {
-                            // crash from Google Analytics : null URI on a nexus 5
-                            if (null != anUri) {
-                                final Uri mediaUri = anUri;
-                                String filename = null;
+                        for (SharedDataItem sharedDataItem : sharedDataItems) {
+                                String mimeType = sharedDataItem.getMimeType(VectorRoomActivity.this);
 
-                                if (mediaUri.toString().startsWith("content://")) {
-                                    Cursor cursor = null;
-                                    try {
-                                        cursor = VectorRoomActivity.this.getContentResolver().query(mediaUri, null, null, null, null);
-                                        if (cursor != null && cursor.moveToFirst()) {
-                                            filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                                if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_INTENT, mimeType)) {
+                                    // don't know how to manage it
+                                    break;
+                                } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
+                                    final String text = sharedDataItem.getText().toString();
+                                    final String htmlText = sharedDataItem.getHtmlText();
+
+                                    VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            sendMessage(text, htmlText, "org.matrix.custom.html");
                                         }
-                                    } catch (Exception e) {
-                                        Log.e(LOG_TAG, "cursor.getString " + e.getMessage());
-                                    } finally {
-                                        if (null != cursor) {
-                                            cursor.close();
-                                        }
-                                    }
+                                    });
 
-                                    if (TextUtils.isEmpty(filename)) {
-                                        List uriPath = mediaUri.getPathSegments();
-                                        filename = (String) uriPath.get(uriPath.size() - 1);
-                                    }
-                                } else if (mediaUri.toString().startsWith("file://")) {
-                                    // try to retrieve the filename from the file url.
-                                    try {
-                                        filename = anUri.getLastPathSegment();
-                                    } catch (Exception e) {
-                                    }
-
-                                    if (TextUtils.isEmpty(filename)) {
-                                        filename = null;
-                                    }
+                                    break;
                                 }
 
-                                final String fFilename = filename;
+                                // check if it is an uri
+                                // else we don't know what to do
+                                if (null == sharedDataItem.getUri()) {
+                                    return;
+                                }
 
-                                ResourceUtils.Resource resource = ResourceUtils.openResource(VectorRoomActivity.this, mediaUri);
+                                final String fFilename = sharedDataItem.getFileName(VectorRoomActivity.this);
+
+                                ResourceUtils.Resource resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri(), sharedDataItem.getMimeType(VectorRoomActivity.this));
 
                                 if (null == resource) {
                                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -1155,7 +1147,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                             setProgressVisibility(View.GONE);
 
                                             Toast.makeText(VectorRoomActivity.this,
-                                                    getString(R.string.message_failed_to_upload),
+                                                    getString(R.string.room_message_file_not_found),
                                                     Toast.LENGTH_LONG).show();
                                         }
 
@@ -1166,7 +1158,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                                 // save the file in the filesystem
                                 String mediaUrl = mMediasCache.saveMedia(resource.contentStream, null, resource.mimeType);
-                                String mimeType = resource.mimeType;
                                 Boolean isManaged = false;
 
                                 if ((null != resource.mimeType) && resource.mimeType.startsWith("image/")) {
@@ -1181,7 +1172,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                     try {
                                         ContentResolver resolver = getContentResolver();
 
-                                        List uriPath = mediaUri.getPathSegments();
+                                        List uriPath = sharedDataItem.getUri().getPathSegments();
                                         long imageId;
                                         String lastSegment = (String) uriPath.get(uriPath.size() - 1);
 
@@ -1200,7 +1191,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                     // the medias picker stores its own thumbnail to avoid inflating large one
                                     if (null == thumbnailBitmap) {
                                         try {
-                                            String thumbPath = VectorMediasPickerActivity.getThumbnailPath(mediaUri.getPath());
+                                            String thumbPath = VectorMediasPickerActivity.getThumbnailPath(sharedDataItem.getUri().getPath());
 
                                             if (null != thumbPath) {
                                                 File thumbFile = new File(thumbPath);
@@ -1224,7 +1215,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                         // need to decompress the high res image
                                         BitmapFactory.Options options = new BitmapFactory.Options();
                                         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                                        resource = ResourceUtils.openResource(VectorRoomActivity.this, mediaUri);
+                                        resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri(), sharedDataItem.getMimeType(VectorRoomActivity.this));
 
                                         // get the full size bitmap
                                         Bitmap fullSizeBitmap = null;
@@ -1282,7 +1273,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                                     }
 
                                                     resource.contentStream.close();
-                                                    resource = ResourceUtils.openResource(VectorRoomActivity.this, mediaUri);
+                                                    resource = ResourceUtils.openResource(VectorRoomActivity.this, sharedDataItem.getUri(), sharedDataItem.getMimeType(VectorRoomActivity.this));
 
                                                     try {
                                                         mMediasCache.saveMedia(resource.contentStream, uri.getPath(), mimeType);
@@ -1413,7 +1404,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                         }
                                     });
                                 }
-                            }
+
                         }
 
                         VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -1438,35 +1429,45 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Send the medias defined in the intent.
      * They are listed, checked and sent when it is possible.
      */
-    private void sendMediasIntent(final Intent data) {
+    private void sendMediasIntent(final Intent intent) {
         // sanity check
-        if ((null == data) && (null == mLatestTakePictureCameraUri)) {
+        if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
             return;
         }
 
-        ArrayList<Uri> uris = new ArrayList<Uri>();
+        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<SharedDataItem>();
 
-        if (null != data) {
-            uris = VectorUtils.listMediaUris(data);
+        if (null != intent) {
+            sharedDataItems = new ArrayList<SharedDataItem>(SharedDataItem.listSharedDataItems(intent));
         } else if (null != mLatestTakePictureCameraUri) {
-            uris.add(Uri.parse(mLatestTakePictureCameraUri));
+            sharedDataItems.add(new SharedDataItem(Uri.parse(mLatestTakePictureCameraUri)));
             mLatestTakePictureCameraUri = null;
         }
 
         // check the extras
-        if (0 == uris.size()) {
-            Bundle bundle = data.getExtras();
+        if (0 == sharedDataItems.size()) {
+            Bundle bundle = intent.getExtras();
 
             // sanity checks
             if (null != bundle) {
+                bundle.setClassLoader(SharedDataItem.class.getClassLoader());
+
                 if (bundle.containsKey(Intent.EXTRA_STREAM)) {
                     try {
                         Object streamUri = bundle.get(Intent.EXTRA_STREAM);
 
                         if (streamUri instanceof Uri) {
-                            uris.add((Uri) streamUri);
+                            sharedDataItems.add(new SharedDataItem((Uri) streamUri));
                         } else if (streamUri instanceof List) {
-                            uris.addAll((List<Uri>) streamUri);
+                            List<Object> streams = (List<Object>)streamUri;
+
+                            for(Object object : streams) {
+                                if (object instanceof Uri) {
+                                    sharedDataItems.add(new SharedDataItem((Uri) object));
+                                } else if (object instanceof SharedDataItem) {
+                                    sharedDataItems.add((SharedDataItem)object);
+                                }
+                            }
                         }
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "fail to extract the extra stream");
@@ -1474,14 +1475,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
                     this.sendMessage(bundle.getString(Intent.EXTRA_TEXT), null, null);
                 }
-            } else {
-                uris.add( mLatestTakePictureCameraUri == null ? null : Uri.parse(mLatestTakePictureCameraUri));
-                mLatestTakePictureCameraUri = null;
             }
         }
 
-        if (0 != uris.size()) {
-            sendMedias(uris);
+        if (0 != sharedDataItems.size()) {
+            sendMedias(sharedDataItems);
         }
     }
 

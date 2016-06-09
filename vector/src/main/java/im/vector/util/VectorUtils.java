@@ -663,7 +663,7 @@ public class VectorUtils {
 
             if (null != thumbnailUri) {
                 try {
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri);
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri, null);
 
                     // sanity check
                     if (null != resource) {
