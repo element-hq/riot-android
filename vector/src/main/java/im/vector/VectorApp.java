@@ -298,6 +298,7 @@ public class VectorApp extends Application {
                     return false;
                 }
             } catch (Exception e) {
+                Log.e(LOG_TAG, "useGA " + e.getLocalizedMessage());
             }
 
             return null;

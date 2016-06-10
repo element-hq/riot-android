@@ -627,7 +627,7 @@ public class EventStreamService extends Service {
             }
         }
 
-        updateListenerNotification();
+        updateListener();
 
         mState = StreamAction.START;
     }
@@ -729,13 +729,13 @@ public class EventStreamService extends Service {
             mIsForegound = false;
         }
 
-        updateListenerNotification();
+        updateListener();
     }
 
     /**
      * polling listener when the GCM is disabled
      */
-    private void updateListenerNotification() {
+    private void updateListener() {
         GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
         // detect if the polling thread must be started
@@ -797,7 +797,7 @@ public class EventStreamService extends Service {
     public void hidePendingCallNotification(String callId) {
         if (TextUtils.equals(mBackgroundNotificationCallId, callId)) {
             stopForeground(true);
-            updateListenerNotification();
+            updateListener();
             mBackgroundNotificationCallId = null;
         }
 

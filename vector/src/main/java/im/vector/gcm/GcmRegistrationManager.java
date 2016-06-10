@@ -109,7 +109,7 @@ public final class GcmRegistrationManager {
 
     private String mPushKey = null;
 
-    private static Boolean sUseGCM;
+    private static Boolean mUseGCM;
 
     /**
      * Constructor
@@ -318,16 +318,16 @@ public final class GcmRegistrationManager {
      * @return true to use GCM before using the events polling thread
      */
     public boolean useGCM() {
-        if (null == sUseGCM) {
-            sUseGCM = true;
+        if (null == mUseGCM) {
+            mUseGCM = true;
 
             try {
-                sUseGCM = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
+                mUseGCM = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
             } catch (Exception e) {
+                Log.e(LOG_TAG, "useGCM " + e.getLocalizedMessage());
             }
-
         }
-        return sUseGCM;
+        return mUseGCM;
     }
 
     /**
