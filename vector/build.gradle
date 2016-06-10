@@ -28,7 +28,6 @@ android {
     }
 
     buildTypes {
-
         debug {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
@@ -55,6 +54,16 @@ android {
             applicationId "im.vector.alpha"
             versionCode 14
             versionName "0.3.2-dev"
+            resValue "string", "allow_gcm_use", "true"
+            resValue "string", "allow_ga_use", "true"
+        }
+
+        alphaFDroid {
+            applicationId "im.vector.alpha"
+            versionCode 14
+            versionName "0.3.2-dev"
+            resValue "string", "allow_gcm_use", "false"
+            resValue "string", "allow_ga_use", "false"
         }
     }
 
