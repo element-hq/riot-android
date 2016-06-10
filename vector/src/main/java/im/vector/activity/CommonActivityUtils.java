@@ -33,19 +33,15 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.annotation.BoolRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
@@ -60,13 +56,11 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
-import im.vector.adapters.VectorPublicRoomsAdapter;
 import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.services.EventStreamService;
-import im.vector.util.RageShake;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,7 +73,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -128,6 +121,7 @@ public class CommonActivityUtils {
     // power levels
     public static final float UTILS_POWER_LEVEL_ADMIN = 100;
     public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
+    public static final int ROOM_SIZE_ONE_TO_ONE = 2;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
@@ -236,6 +230,7 @@ public class CommonActivityUtils {
         try {
             ShortcutBadger.setBadge(activity, 0);
         } catch (Exception e) {
+            Log.d(LOG_TAG,"## logout(): Exception Msg="+e.getMessage());
         }
 
         // warn that the user logs out
@@ -584,10 +579,10 @@ public class CommonActivityUtils {
                                                    Room room = finalSession.getDataHandler().getRoom((String) params.get(VectorRoomActivity.EXTRA_ROOM_ID));
 
                                                    if ((null != room) && room.isInvited()) {
-                                                       String displayname = VectorUtils.getRoomDisplayname(fromActivity, finalSession, room);
+                                                       String displayName = VectorUtils.getRoomDisplayname(fromActivity, finalSession, room);
 
-                                                       if (null != displayname) {
-                                                           intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayname);
+                                                       if (null != displayName) {
+                                                           intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayName);
                                                        }
                                                    }
                                                }
@@ -615,7 +610,7 @@ public class CommonActivityUtils {
         for (Room room : rooms) {
             Collection<RoomMember> members = room.getMembers();
 
-            if (members.size() == 2) {
+            if (members.size() == ROOM_SIZE_ONE_TO_ONE) {
                 for (RoomMember member : members) {
                     if (member.getUserId().equals(otherUserId)) {
                         return room;
@@ -625,6 +620,104 @@ public class CommonActivityUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Return all the 1:1 rooms joined by the searched user and by the current logged in user.
+     * This method go through all the rooms, and for each room, tests if the searched user
+     * and the logged in user are present.
+     * @param aSession session
+     * @param aSearchedUserId the searched user ID
+     * @return an array containing the found rooms
+     */
+    public static ArrayList<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
+        ArrayList<Room> listRetValue = new ArrayList<>();
+        List<RoomMember> roomMembersList;
+        String userId0, userId1;
+
+        if((null!=aSession) && (null!=aSearchedUserId)) {
+            Collection<Room> roomsList = aSession.getDataHandler().getStore().getRooms();
+
+            for (Room room : roomsList) {
+                roomMembersList = (List<RoomMember>)room.getJoinedMembers();
+
+                if ((null != roomMembersList) && (ROOM_SIZE_ONE_TO_ONE == roomMembersList.size())) {
+                    userId0 = roomMembersList.get(0).getUserId();
+                    userId1 = roomMembersList.get(1).getUserId();
+
+                    // add the room where the second member is the searched one
+                    if (userId0.equals(aSearchedUserId) || userId1.equals(aSearchedUserId)) {
+                            listRetValue.add(room);
+                    }
+                }
+            }
+        }
+
+        return listRetValue;
+    }
+
+    /**
+     * Return the 1:1 room with the most recent message, that the searched user and the current
+     * logged user have joined.
+     * Among the list of the 1:1 rooms, joined by the user, the room with the most recent
+     * posted message is chosen to be returned.
+     * @param aSession session
+     * @param aSearchedUserId the searched user ID
+     * @return 1:1 room joined by the user with the most recent message, null otherwise
+     */
+    public static Room findLatestOneToOneRoom(final MXSession aSession, final String aSearchedUserId) {
+        long serverTimeStamp = 0, newServerTimeStamp;
+        RoomSummary summary;
+        Room mostRecentRoomRetValue = null;
+        IMXStore mStore = aSession.getDataHandler().getStore();
+
+        // get all the "one to one" rooms where the user has joined
+        ArrayList<Room> roomsFoundList = findOneToOneRoomList(aSession, aSearchedUserId);
+
+        // parse all the 1:1 rooms and take the one with the most recent message.
+        if (!roomsFoundList.isEmpty()) {
+            for (Room room : roomsFoundList) {
+
+                summary = mStore.getSummary(room.getRoomId());
+                try {
+                    // test on the most recent time stamp
+                    if ((null != summary) && ((newServerTimeStamp = summary.getLatestEvent().getOriginServerTs()) > serverTimeStamp)) {
+                        mostRecentRoomRetValue = room;
+                        serverTimeStamp = newServerTimeStamp;
+                    }
+                } catch(Exception ex) {
+                    Log.e(LOG_TAG,"## findLatestOneToOneRoom(): Exception Msg="+ex.getMessage());
+                }
+            }
+        }
+
+        return mostRecentRoomRetValue;
+    }
+
+    /**
+     * Check if the room is a 1:1 room and if the searched user has joined this room.
+     * The user ID is searched in the room only if the room is a 1:1 room.
+     * This method is useful to check if we can create a new 1:1 room when it is
+     * asked from a already existing room (see {@link VectorMemberDetailsActivity#ITEM_ACTION_START_CHAT}).
+     * @param aRoom room to be checked
+     * @param aSearchedUserId the user ID to be searched in the room
+     * @return true if the room is a 1:1 room where the user ID is present, false otherwise
+     */
+    public static boolean isOneToOneRoomJoinedByUserId(final Room aRoom, final String aSearchedUserId) {
+        boolean retVal = false;
+        List<RoomMember> memberList;
+
+        if((null != aRoom) && (null != (memberList=(List<RoomMember>)aRoom.getJoinedMembers()))){
+            if(CommonActivityUtils.ROOM_SIZE_ONE_TO_ONE == memberList.size()) {
+                for (RoomMember member : memberList) {
+                    if (member.getUserId().equals(aSearchedUserId)) {
+                        retVal = true;
+                    }
+                }
+            }
+        }
+
+        return retVal;
     }
 
     /**
@@ -656,7 +749,7 @@ public class CommonActivityUtils {
         }
 
         final MXSession fSession = session;
-        Room room = findOneToOneRoom(session, otherUserId);
+        Room room = findLatestOneToOneRoom(session, otherUserId);
 
         // the room already exists -> switch to it
         if (null != room) {
@@ -930,6 +1023,7 @@ public class CommonActivityUtils {
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
+                        Log.d(LOG_TAG,"## openMedia(): Exception Msg="+e.getMessage());
                     }
                 }
             });
@@ -1003,6 +1097,7 @@ public class CommonActivityUtils {
                 if (inputStream != null) inputStream.close();
                 if (outputStream != null) outputStream.close();
             } catch (Exception e) {
+                Log.e(LOG_TAG,"## saveFileInto(): Exception Msg="+e.getMessage());
             }
         }
 
@@ -1033,6 +1128,7 @@ public class CommonActivityUtils {
                     File file = new File(fullFilePath);
                     downloadManager.addCompletedDownload(file.getName(), file.getName(), true, mimeType, file.getAbsolutePath(), file.length(), true);
                 } catch (Exception e) {
+                    Log.e(LOG_TAG,"## saveMediaIntoDownloads(): Exception Msg="+e.getMessage());
                 }
             }
         }
@@ -1129,11 +1225,12 @@ public class CommonActivityUtils {
             mBadgeValue = badgeValue;
             ShortcutBadger.setBadge(context, badgeValue);
         } catch (Exception e) {
+            Log.e(LOG_TAG,"## updateBadgeCount(): Exception Msg="+e.getMessage());
         }
     }
 
     /**
-     * @return the bagde value
+     * @return the badge value
      */
     public static int getBadgeCount() {
         return mBadgeValue;
@@ -1183,7 +1280,7 @@ public class CommonActivityUtils {
     /**
      * Manage the low memory case
      *
-     * @param activity
+     * @param activity activity instance
      */
     public static void onLowMemory(Activity activity) {
         if (!VectorApp.isAppInBackground()) {

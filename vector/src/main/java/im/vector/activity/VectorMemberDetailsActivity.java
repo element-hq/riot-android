@@ -19,7 +19,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,7 +44,6 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
 import im.vector.util.VectorUtils;
@@ -456,10 +454,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
         } else if (null != mRoomMember) {
             // offer to start a new chat only if the room is not a 1:1 room with this user
-            // it does not make sense : it would open the same room
-            Room room = CommonActivityUtils.findOneToOneRoom(mSession, mRoomMember.getUserId());
-
-            if ((null == room) || !TextUtils.equals(room.getRoomId(), mRoomId)) {
+            if (!CommonActivityUtils.isOneToOneRoomJoinedByUserId(mRoom, mRoomMember.getUserId())) {
                 supportedActions.add(ITEM_ACTION_START_CHAT);
             }
 
