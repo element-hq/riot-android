@@ -115,10 +115,24 @@ public class VectorApp extends Application {
      * Suspend background threads.
      */
     private void suspendApp() {
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager();
+
         // suspend the events thread if the client uses GCM
-        if (Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager().useGCM()) {
+        if (gcmRegistrationManager.useGCM() && !gcmRegistrationManager.usePollingThread()) {
+            Log.d(LOG_TAG, "suspendApp ; pause the event stream");
             CommonActivityUtils.pauseEventStream(VectorApp.this);
+        } else {
+            Log.d(LOG_TAG, "suspendApp ; the event stream is not paused because GCM is disabled.");
         }
+
+        // the sessions are not anymore seen as "online"
+        ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
+        for(MXSession session : sessions) {
+            if (session.isAlive()) {
+                session.setIsOnline(false);
+            }
+        }
+
         PIDsRetriever.getIntance().onAppBackgrounded();
 
         MyPresenceManager.advertiseAllUnavailable();
@@ -187,6 +201,7 @@ public class VectorApp extends Application {
                 // try to perform a GCM registration if it failed
                 // or if the GCM server generated a new push key
                 GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+
                 if (null != gcmRegistrationManager) {
                     gcmRegistrationManager.checkPusherRegistration(this);
                 }
@@ -198,6 +213,7 @@ public class VectorApp extends Application {
             ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
             for(MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
+                session.setIsOnline(true);
             }
         }
 
@@ -270,6 +286,20 @@ public class VectorApp extends Application {
         if (preferences.contains(context.getString(R.string.ga_use_settings))) {
             return preferences.getBoolean(context.getString(R.string.ga_use_settings), false);
         } else {
+            try {
+                // test if the client should not use GA
+                boolean allowGA = TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
+
+                if (!allowGA) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(context.getString(R.string.ga_use_settings), false);
+                    editor.commit();
+
+                    return false;
+                }
+            } catch (Exception e) {
+            }
+
             return null;
         }
     }

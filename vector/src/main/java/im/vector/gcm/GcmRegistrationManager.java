@@ -109,6 +109,8 @@ public final class GcmRegistrationManager {
 
     private String mPushKey = null;
 
+    private static Boolean sUseGCM;
+
     /**
      * Constructor
      * @param appContext the application context.
@@ -184,8 +186,6 @@ public final class GcmRegistrationManager {
                 }
             });
         }
-
-
     }
 
     /**
@@ -199,13 +199,17 @@ public final class GcmRegistrationManager {
         registerPusher(appContext, registrationListener);
     }
 
-
     /**
      * Check if the GCM registration has been broken with a new token ID.
      * The GCM could have resetted it (onTokenRefresh).
      * @param appContext the application context
      */
     public void checkPusherRegistration(final Context appContext) {
+        if (!useGCM()) {
+            Log.d(LOG_TAG, "checkPusherRegistration : GCM is disabled");
+            return;
+        }
+
         if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             Log.d(LOG_TAG, "checkPusherRegistration : try to register to GCM server");
 
@@ -213,12 +217,7 @@ public final class GcmRegistrationManager {
                 @Override
                 public void onPusherRegistered() {
                     Log.d(LOG_TAG, "checkPusherRegistration : reregistered");
-                    // vector always uses GCM.
-                    // there is no way to enable / disable it in the application settings
-                    if (!useGCM()) {
-                        setUseGCM(true);
-                        CommonActivityUtils.onGcmUpdate(mContext);
-                    }
+                    CommonActivityUtils.onGcmUpdate(mContext);
                 }
 
                 @Override
@@ -243,6 +242,23 @@ public final class GcmRegistrationManager {
      * @param registrationListener the events listener.
      */
     public void registerPusher(final Context appContext, final GcmRegistrationIdListener registrationListener) {
+        // do not use GCM
+        if (!useGCM()) {
+            Log.d(LOG_TAG, "registerPusher : GCM is disabled");
+
+            mPusherAppId = mPusherUrl = mPusherBaseFileTag = null;
+
+            // warn the listener
+            if (null != registrationListener) {
+                try {
+                    registrationListener.onPusherRegistrationFailed();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "registerPusher : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
+                }
+            }
+            return;
+        }
+
         // already registred
         if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
             if (null != registrationListener) {
@@ -269,7 +285,6 @@ public final class GcmRegistrationManager {
 
                 @Override
                 protected void onPostExecute(String pushKey) {
-
                     mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
                     setStoredPushKey(pushKey);
 
@@ -299,35 +314,49 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * @return true if use GCM
+     * Tells if the client prefers GCM over events polling thread.
+     * @return true to use GCM before using the events polling thread
      */
-    public Boolean useGCM() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return preferences.getBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), true);
+    public boolean useGCM() {
+        if (null == sUseGCM) {
+            sUseGCM = true;
+
+            try {
+                sUseGCM = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
+            } catch (Exception e) {
+            }
+
+        }
+        return sUseGCM;
     }
 
     /**
-     * Update the GCM status
-     * @param use
+     * Tell if the events polling thread should be used.
+     * It should be used only if GCM is disabled or failed.
      */
-    public void setUseGCM(Boolean use) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-        editor.putBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), use);
-        editor.apply();
+    public boolean usePollingThread() {
+        return !isGCMRegistred() && !isGCMRegistrating();
     }
 
+    /**
+     * Tell if GCM is rregistred i.e. ready to use
+     */
     public boolean isGCMRegistred() {
         return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
-    public boolean is3rdPartyServerRegistred() {
-        return mRegistrationState == RegistrationState.SERVER_REGISTERED;
-    }
-
-    public boolean isRegistrating() {
+    /**
+     * Tells if the GCM is registrating
+     */
+    public boolean isGCMRegistrating() {
         return (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_UNREGISTRATING);
     }
 
+    /**
+     * Retrieve the GCM push key.
+     * @param appContext the application context
+     * @return the GCM pushKey
+     */
     private String getPushKey(Context appContext) {
         String pushKey = getStoredPushKey();
 

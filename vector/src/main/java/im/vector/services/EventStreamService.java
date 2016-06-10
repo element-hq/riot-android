@@ -51,13 +51,13 @@ import im.vector.ViewedRoomTracker;
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -682,8 +682,8 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "catchup with state " + mState + " CurrentActivity " + VectorApp.getCurrentActivity());
 
         // the catchup should only be done when the thread is suspended
-        Boolean canCatchup = (mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP);
-        //
+        boolean canCatchup = (mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP);
+
 
         // other use case
         // the application has been launched by a push
@@ -736,7 +736,13 @@ public class EventStreamService extends Service {
      * polling listener when the GCM is disabled
      */
     private void updateListenerNotification() {
-        if (!Matrix.getInstance(this).getSharedGcmRegistrationManager().useGCM()) {
+        GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+
+        // detect if the polling thread must be started
+        // i.e a session must be defined
+        // and GCM disabled or GCM registration failed
+        if ((null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) &&
+                (!gcmGcmRegistrationManager.useGCM() || gcmGcmRegistrationManager.usePollingThread())) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForegound = true;
@@ -751,8 +757,8 @@ public class EventStreamService extends Service {
      */
     private Notification buildNotification() {
         Notification notification = new Notification(
-                (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) ? R.drawable.ic_menu_small_matrix : R.drawable.ic_menu_small_matrix_transparent,
-                "Matrix",
+                R.drawable.logo_transparent,
+                "Vector",
                 System.currentTimeMillis()
         );
 
