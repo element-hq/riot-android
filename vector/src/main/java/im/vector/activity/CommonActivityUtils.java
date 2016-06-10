@@ -767,8 +767,7 @@ public class CommonActivityUtils {
             }
         } else {
             Log.d(LOG_TAG,"## goToOneToOneRoom(): start createRoom()");
-            session.createRoom(null, null, RoomState.DIRECTORY_VISIBILITY_PRIVATE, null, RoomState.GUEST_ACCESS_CAN_JOIN, new SimpleApiCallback<String>(fromActivity) {
-
+            session.createRoom(new SimpleApiCallback<String>(fromActivity) {
                 @Override
                 public void onSuccess(String roomId) {
                     final Room room = fSession.getDataHandler().getRoom(roomId);
