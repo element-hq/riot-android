@@ -19,13 +19,11 @@ package im.vector.activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
-import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -33,9 +31,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
-import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.text.Html;
@@ -82,6 +78,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
@@ -201,6 +198,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private ImageButton mAttachmentsButton;
     private EditText mEditText;
     private ImageView mAvatarImageView;
+    private View mMessageButtonLayout;
+    private View mCanNotPostTextview;
+
     // action bar header
     private android.support.v7.widget.Toolbar mToolbar;
     private TextView mActionBarCustomTitle;
@@ -325,6 +325,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         setTitle();
                         refreshNotificationsArea();
                         updateRoomHeaderMembersStatus();
+                    }
+                    else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
+                        checkSendEventStatus();
                     }
                     else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
                         Log.d(LOG_TAG, "Updating room topic.");
@@ -599,6 +602,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mNotificationsMessageTextView = (TextView)findViewById(R.id.room_notification_message);
         mErrorIcon = findViewById(R.id.room_error_icon);
         mErrorMessageTextView = (TextView)findViewById(R.id.room_notification_error_message);
+        mMessageButtonLayout = findViewById(R.id.buttons_layout);
+        mCanNotPostTextview = findViewById(R.id.room_cannot_post_textview);
 
         mSession = getSession(intent);
 
@@ -834,6 +839,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         refreshNotificationsArea();
 
         updateRoomHeaderMembersStatus();
+
+        checkSendEventStatus();
 
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
@@ -2440,8 +2447,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // update the room name
         if (null != mRoom) {
             mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
-        } else {
+        } else if (null != sRoomPreviewData) {
             mActionBarHeaderRoomName.setText(sRoomPreviewData.getRoomName());
+        } else {
+            mActionBarHeaderRoomName.setText("");
         }
 
         // update topic and members status
@@ -2466,6 +2475,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mActionBarHeaderRoomTopic.setVisibility(View.VISIBLE);
                 mActionBarHeaderRoomTopic.setText(value);
             }
+        }
+    }
+
+    /**
+     * Check if the user can send a message in this room
+     */
+    private void checkSendEventStatus() {
+        if (null != mRoom) {
+            boolean canSendMessage = true;
+
+            PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+            if (null != powerLevels) {
+                canSendMessage = powerLevels.maySendMessage(mMyUserId);
+            }
+
+            mEditText.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
+            mMessageButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
+            mCanNotPostTextview.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
         }
     }
 
