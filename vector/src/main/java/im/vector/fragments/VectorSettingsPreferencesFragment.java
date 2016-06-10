@@ -658,7 +658,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             @Override
             public void run() {
                 Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                 startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
             }
         });

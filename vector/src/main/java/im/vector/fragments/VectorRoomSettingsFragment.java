@@ -930,7 +930,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             @Override
             public void run() {
                 Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_SINGLE_IMAGE_MODE, "");
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                 startActivityForResult(intent, REQ_CODE_UPDATE_ROOM_AVATAR);
             }
         });
