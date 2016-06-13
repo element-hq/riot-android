@@ -1,5 +1,6 @@
 #!/bin/bash
+rm *.apk
 ./gradlew clean build
 #cp app/build/outputs/apk/app-alpha-matrixorg.apk ./alpha.apk
-cp vector/build/outputs/apk/vector-alpha-matrixorg.apk ./alphaGooglePlay.apk
-cp vector/build/outputs/apk/vector-alphaFDroid-matrixorg.apk ./alphaFDroid.apk
+cp vector/build/outputs/apk/vector-vectorApp-matrixorg.apk ./vectorAppGooglePlay.apk
+cp vector/build/outputs/apk/vector-vectorAppFDroid-matrixorg.apk ./vectorAppFDroid.apk

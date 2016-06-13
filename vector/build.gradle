@@ -50,7 +50,7 @@ android {
     }
 
     productFlavors {
-        alpha {
+        vectorApp {
             applicationId "im.vector.alpha"
             versionCode 14
             versionName "0.3.2-dev"
@@ -58,7 +58,7 @@ android {
             resValue "string", "allow_ga_use", "true"
         }
 
-        alphaFDroid {
+        vectorAppFDroid {
             applicationId "im.vector.alpha"
             versionCode 14
             versionName "0.3.2-dev"
