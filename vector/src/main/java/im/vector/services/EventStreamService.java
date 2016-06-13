@@ -265,6 +265,13 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "onBingEvent : the event " + event);
             Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
 
+            GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+
+            if (!gcmGcmRegistrationManager.isPushRegistrationAllowed()) {
+                Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
+                return;
+            }
+
             final String roomId = event.roomId;
 
             // Just don't bing for the room the user's currently in
