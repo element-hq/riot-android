@@ -277,21 +277,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         if (null != useBackgroundSyncPref) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
 
-            // only enabled when GCM is disabled
-            if (gcmMgr.useGCM()) {
-                PreferenceCategory categiory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
-                categiory.removePreference(useBackgroundSyncPref);
-            } else {
-                useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
+            useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
 
-                useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        gcmMgr.setIsBackgroundSyncAllowed((boolean)newValue);
-                        return true;
-                    }
-                });
-            }
+            useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    gcmMgr.setIsBackgroundSyncAllowed((boolean)newValue);
+                    return true;
+                }
+            });
         }
         
         final SwitchPreference useGaPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
@@ -454,10 +448,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
                     GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
 
-                    // disable the notifications for this device
-                    // if GCM is disabled or the registration or unregistration is in progress
-                    switchPreference.setEnabled(gcmMgr.useGCM() && (gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred()) && isConnected);
-                    switchPreference.setChecked(gcmMgr.isServerRegistred());
+                    if (gcmMgr.useGCM()) {
+                        // disable the notifications for this device
+                        // if GCM is disabled or the registration or unregistration is in progress
+                        switchPreference.setEnabled((gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred()) && isConnected);
+                        switchPreference.setChecked(gcmMgr.isServerRegistred() && gcmMgr.isNotificationsAllowed());
+                    } else {
+                        switchPreference.setChecked(gcmMgr.isNotificationsAllowed());
+                    }
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
                     switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -587,7 +585,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
         if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
-            final boolean isAllowed = gcmMgr.isPushRegistrationAllowed();
+            final boolean isAllowed = gcmMgr.isNotificationsAllowed();
 
             final GcmRegistrationManager.GcmSessionRegistration listener = new GcmRegistrationManager.GcmSessionRegistration() {
 
@@ -611,7 +609,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 @Override
                 public void onSessionRegistrationFailed() {
-                    gcmMgr.setIsPushRegistrationAllowed(isAllowed);
+                    gcmMgr.setIsNotificationsAllowed(isAllowed);
                     onDone();
                 }
 
@@ -622,19 +620,22 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 @Override
                 public void onSessionUnregistrationFailed() {
-                    gcmMgr.setIsPushRegistrationAllowed(isAllowed);
+                    gcmMgr.setIsNotificationsAllowed(isAllowed);
                     onDone();
                 }
             };
 
-            displayLoadingView();
+            gcmMgr.setIsNotificationsAllowed(!isAllowed);
 
-            gcmMgr.setIsPushRegistrationAllowed(!isAllowed);
-
-            if (gcmMgr.isServerRegistred()) {
-                gcmMgr.unregisterSessions(listener);
-            } else {
-                gcmMgr.registerSessions(getActivity(), listener);
+            // when using GCM
+            // need to register on servers
+            if (gcmMgr.useGCM()) {
+                displayLoadingView();
+                if (gcmMgr.isServerRegistred()) {
+                    gcmMgr.unregisterSessions(listener);
+                } else {
+                    gcmMgr.registerSessions(getActivity(), listener);
+                }
             }
 
             return;
