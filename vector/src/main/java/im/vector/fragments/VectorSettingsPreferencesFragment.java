@@ -79,6 +79,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     private static final String PUSHER_PREREFENCE_KEY_BASE = "PUSHER_PREREFENCE_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
 
+    private static final String DUMMY_RULE = "DUMMY_RULE";
+
     // members
     private MXSession mSession;
     private View mLoadingView;
@@ -147,6 +149,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mPushesRuleByResourceId = new HashMap<String, String>();
 
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_this_device), DUMMY_RULE);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
@@ -426,8 +429,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
-                switchPreference.setEnabled((null != rules) && isConnected);
-                switchPreference.setChecked(preferences.getBoolean(resourceText, false));
+                if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
+                    GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+
+                    // disable the notifications for this device
+                    // if GCM is disabled or the registration or unregistration is in progress
+                    switchPreference.setEnabled(gcmMgr.useGCM() && (gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred()) && isConnected);
+                    switchPreference.setChecked(gcmMgr.isServerRegistred());
+                } else {
+                    switchPreference.setEnabled((null != rules) && isConnected);
+                    switchPreference.setChecked(preferences.getBoolean(resourceText, false));
+                }
             }
         }
     }
@@ -551,6 +563,61 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
      * Update a push rule.
      */
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
+        if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
+            final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+            final boolean isAllowed = gcmMgr.isPushRegistrationAllowed();
+
+            final GcmRegistrationManager.GcmSessionRegistration listener = new GcmRegistrationManager.GcmSessionRegistration() {
+
+                private void onDone() {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideLoadingView(true);
+                                refreshPushersList();
+                            }
+                        });
+
+                    }
+                }
+
+                @Override
+                public void onSessionRegistred() {
+                    onDone();
+                }
+
+                @Override
+                public void onSessionRegistrationFailed() {
+                    gcmMgr.setIsPushRegistrationAllowed(isAllowed);
+                    onDone();
+                }
+
+                @Override
+                public void onSessionUnregistred() {
+                    onDone();
+                }
+
+                @Override
+                public void onSessionUnregistrationFailed() {
+                    gcmMgr.setIsPushRegistrationAllowed(isAllowed);
+                    onDone();
+                }
+            };
+
+            displayLoadingView();
+
+            gcmMgr.setIsPushRegistrationAllowed(!isAllowed);
+
+            if (gcmMgr.isServerRegistred()) {
+                gcmMgr.unregisterSessions(listener);
+            } else {
+                gcmMgr.registerSessions(getActivity(), listener);
+            }
+
+            return;
+        }
+
         final String ruleId = mPushesRuleByResourceId.get(fResourceText);
         BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
 

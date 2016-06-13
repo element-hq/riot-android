@@ -32,6 +32,10 @@
             android:key="@string/settings_enable_all_notif"/>
 
         <SwitchPreference
+            android:title="@string/settings_enable_this_device"
+            android:key="@string/settings_enable_this_device"/>
+
+        <SwitchPreference
             android:title="@string/settings_containing_my_name"
             android:key="@string/settings_containing_my_name"
             android:dependency="@string/settings_enable_all_notif"/>

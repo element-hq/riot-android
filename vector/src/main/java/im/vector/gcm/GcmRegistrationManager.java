@@ -57,6 +57,8 @@ public final class GcmRegistrationManager {
     public static final String PREFS_SENDER_ID_KEY = "GcmRegistrationManager.senderId";
     public static final String PREFS_PUSHER_URL_KEY = "GcmRegistrationManager.pusherUrl";
     public static final String PREFS_PUSHER_FILE_TAG_KEY = "GcmRegistrationManager.pusherFileTag";
+    public static final String PREFS_ALLOW_PUSH_REGISTRATION = "GcmRegistrationManager.PREFS_ALLOW_PUSH_REGISTRATION";
+
 
     private static String DEFAULT_PUSHER_APP_ID = "im.vector.app.android";
     private static String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
@@ -331,6 +333,23 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * @return true if the push registration is allowed on this device
+     */
+    public boolean isPushRegistrationAllowed() {
+        return getSharedPreferences().getBoolean(PREFS_ALLOW_PUSH_REGISTRATION, true);
+    }
+
+    /**
+     * Update the push registration management
+     * @param isAllowed true to allow the server registration
+     */
+    public void setIsPushRegistrationAllowed(boolean isAllowed) {
+        getSharedPreferences().edit()
+                .putBoolean(PREFS_ALLOW_PUSH_REGISTRATION, isAllowed)
+                .apply();
+    }
+
+    /**
      * Tell if the events polling thread should be used.
      * It should be used only if GCM is disabled or failed.
      */
@@ -350,6 +369,20 @@ public final class GcmRegistrationManager {
      */
     public boolean isGCMRegistrating() {
         return (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_UNREGISTRATING);
+    }
+
+    /**
+     * Tells if the GCM is registrered on server
+     */
+    public boolean isServerRegistred() {
+        return mRegistrationState == RegistrationState.SERVER_REGISTERED;
+    }
+
+    /**
+     * Tells if the GCM is unregistrered on server
+     */
+    public boolean isServerUnRegistred() {
+        return mRegistrationState == RegistrationState.GCM_REGISTRED;
     }
 
     /**
@@ -406,6 +439,21 @@ public final class GcmRegistrationManager {
      * @param listener the registration listener
      */
     public void registerSession(final MXSession session, boolean append, final GcmSessionRegistration listener) {
+        // test if the push server registration is allowed
+        if (! isPushRegistrationAllowed()) {
+
+            Log.d(LOG_TAG, "registerPusher : the user disabled it.");
+
+            if (null != listener) {
+                try {
+                    listener.onSessionRegistrationFailed();
+                }  catch (Exception e) {
+                }
+            }
+
+            return;
+        }
+
         session.getPushersRestClient()
                 .addHttpPusher(mPushKey, mPusherAppId, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
