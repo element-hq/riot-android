@@ -91,7 +91,13 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_other" >
+    <PreferenceCategory
+        android:title="@string/settings_other"
+        android:key="@string/settings_other" >
+
+        <SwitchPreference
+            android:title="@string/settings_enable_background_sync"
+            android:key="@string/settings_enable_background_sync"/>
 
         <SwitchPreference
             android:title="@string/ga_use_settings"
@@ -107,8 +113,8 @@
             android:key="@string/settings_term_conditions"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
-            android:title="@string/settings_directory_visibility"
-            android:key="@string/settings_directory_visibility"/>
+            android:title="@string/room_sliding_privacy_policy"
+            android:key="@string/room_sliding_privacy_policy"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_clear_cache"

@@ -217,7 +217,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
 
         // terms & conditions
-        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_directory_visibility));
+        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_sliding_privacy_policy));
 
         if (null != termConditionsPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -272,6 +272,28 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         }
 
+        final SwitchPreference useBackgroundSyncPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
+
+        if (null != useBackgroundSyncPref) {
+            final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+
+            // only enabled when GCM is disabled
+            if (gcmMgr.useGCM()) {
+                PreferenceCategory categiory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
+                categiory.removePreference(useBackgroundSyncPref);
+            } else {
+                useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
+
+                useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        gcmMgr.setIsBackgroundSyncAllowed((boolean)newValue);
+                        return true;
+                    }
+                });
+            }
+        }
+        
         final SwitchPreference useGaPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
         useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

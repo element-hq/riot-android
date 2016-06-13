@@ -58,7 +58,7 @@ public final class GcmRegistrationManager {
     public static final String PREFS_PUSHER_URL_KEY = "GcmRegistrationManager.pusherUrl";
     public static final String PREFS_PUSHER_FILE_TAG_KEY = "GcmRegistrationManager.pusherFileTag";
     public static final String PREFS_ALLOW_PUSH_REGISTRATION = "GcmRegistrationManager.PREFS_ALLOW_PUSH_REGISTRATION";
-
+    public static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
 
     private static String DEFAULT_PUSHER_APP_ID = "im.vector.app.android";
     private static String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
@@ -332,7 +332,7 @@ public final class GcmRegistrationManager {
         return mUseGCM;
     }
 
-    /**
+/**
      * @return true if the push registration is allowed on this device
      */
     public boolean isPushRegistrationAllowed() {
@@ -346,6 +346,23 @@ public final class GcmRegistrationManager {
     public void setIsPushRegistrationAllowed(boolean isAllowed) {
         getSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_PUSH_REGISTRATION, isAllowed)
+                .apply();
+    }
+
+    /**
+     * @return true if the background sync is allowed
+     */
+    public boolean isBackgroundSyncAllowed() {
+        return getSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true) || useGCM();
+    }
+
+    /**
+     * Allow the background sync
+     * @param isAllowed true to allow the background sync.
+     */
+    public void setIsBackgroundSyncAllowed(boolean isAllowed) {
+        getSharedPreferences().edit()
+                .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
                 .apply();
     }
 
@@ -440,9 +457,12 @@ public final class GcmRegistrationManager {
      */
     public void registerSession(final MXSession session, boolean append, final GcmSessionRegistration listener) {
         // test if the push server registration is allowed
-        if (! isPushRegistrationAllowed()) {
-
-            Log.d(LOG_TAG, "registerPusher : the user disabled it.");
+        if (! isPushRegistrationAllowed() || !useGCM()) {
+            if (!isPushRegistrationAllowed()) {
+                Log.d(LOG_TAG, "registerPusher : the user disabled it.");
+            }  else {
+                Log.d(LOG_TAG, "registerPusher : GCM is disabled.");
+            }
 
             if (null != listener) {
                 try {
