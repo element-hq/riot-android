@@ -1123,13 +1123,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                     // don't know how to manage it
                                     break;
                                 } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
-                                    final String text = sharedDataItem.getText().toString();
-                                    final String htmlText = sharedDataItem.getHtmlText();
+                                    CharSequence sequence = sharedDataItem.getText();
+                                    String htmlText = sharedDataItem.getHtmlText();
+                                    String text;
+
+                                    if (null == sequence) {
+                                        if (null != htmlText) {
+                                            text = Html.fromHtml(htmlText).toString();
+                                        } else {
+                                            text = htmlText;
+                                        }
+                                    } else {
+                                        text = sequence.toString();
+                                    }
+
+                                    final String fText = text;
+                                    final String fHtmlText = htmlText;
 
                                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            sendMessage(text, htmlText, "org.matrix.custom.html");
+                                            sendMessage(fText, fHtmlText, "org.matrix.custom.html");
                                         }
                                     });
 
