@@ -359,18 +359,34 @@ public class VectorApp extends Application {
         }
     }
 
+    /**
+     * The image taken from the medias picker is stored in a static variable because
+     * saving it would take too much time.
+     * @return the saved image from medias picker
+     */
     public static Bitmap getSavedPickerImagePreview(){
         return mSavedPickerImagePreview;
     }
 
+    /**
+     * Save the image taken in the medias picker
+     * @param aSavedCameraImagePreview
+     */
     public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview){
         if (aSavedCameraImagePreview != mSavedPickerImagePreview) {
             // force to release memory
-            if (null != mSavedPickerImagePreview) {
+            // reported by GA
+            // it seems that the medias picker might be refreshed
+            // while leaving the activity
+            // recycle the bitmap trigger a rendering issue
+            // Canvas: trying to use a recycled bitmap...
+
+            /*if (null != mSavedPickerImagePreview) {
                 mSavedPickerImagePreview.recycle();
                 mSavedPickerImagePreview = null;
                 System.gc();
-            }
+            }*/
+
 
             mSavedPickerImagePreview = aSavedCameraImagePreview;
         }
