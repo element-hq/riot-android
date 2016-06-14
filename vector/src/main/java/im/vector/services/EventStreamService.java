@@ -743,13 +743,19 @@ public class EventStreamService extends Service {
      * polling listener when the GCM is disabled
      */
     private void updateListener() {
-        GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+        MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
+
+        if (null == session) {
+            Log.e(LOG_TAG, "updateListener : no session");
+            return;
+        }
+
+        GcmRegistrationManager gcmnMgr = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
         // detect if the polling thread must be started
         // i.e a session must be defined
         // and GCM disabled or GCM registration failed
-        if ((null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) &&
-                (!gcmGcmRegistrationManager.useGCM() || gcmGcmRegistrationManager.usePollingThread())) {
+        if ((!gcmnMgr.useGCM() || gcmnMgr.usePollingThread()) && gcmnMgr.isBackgroundSyncAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForegound = true;

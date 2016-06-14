@@ -56,6 +56,7 @@ android {
             versionName "0.3.2-dev"
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
+            resValue "string", "flavor_description", ""
         }
 
         appFDroid {
@@ -64,6 +65,7 @@ android {
             versionName "0.3.2-dev"
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
+            resValue "string", "flavor_description", "FDroid version"
         }
     }
 

@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
@@ -222,6 +223,12 @@ public class Matrix {
         try {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
+
+            String flavor = mAppContext.getResources().getString(R.string.flavor_description);
+
+            if (!TextUtils.isEmpty(flavor)) {
+                versionName += " (" + flavor +")";
+            }
         } catch (Exception e) {
         }
 

@@ -38,6 +38,7 @@ import org.matrix.androidsdk.rest.model.PushersResponse;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.util.VectorUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -364,6 +365,9 @@ public final class GcmRegistrationManager {
         getSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
                 .apply();
+
+        // when GCM is disabled, enable / disable the "Listen for events" notifications
+        CommonActivityUtils.onGcmUpdate(mContext);
     }
 
     /**
