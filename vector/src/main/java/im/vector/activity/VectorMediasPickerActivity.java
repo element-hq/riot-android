@@ -1470,8 +1470,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        mCamera.stopPreview();
-        mCamera.release();
+        if (null != mCamera) {
+            mCamera.stopPreview();
+            mCamera.release();
+        }
         mSurfaceTexture = null;
         mCamera = null;
         return true;
