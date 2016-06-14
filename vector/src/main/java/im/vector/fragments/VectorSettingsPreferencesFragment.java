@@ -448,7 +448,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
                     GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
 
-                    if (gcmMgr.useGCM()) {
+                    if (gcmMgr.useGCM() && !gcmMgr.usePollingThread()) {
                         // disable the notifications for this device
                         // if GCM is disabled or the registration or unregistration is in progress
                         switchPreference.setEnabled((gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred()) && isConnected);
@@ -629,7 +629,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
             // when using GCM
             // need to register on servers
-            if (gcmMgr.useGCM()) {
+            if (gcmMgr.useGCM() && !gcmMgr.usePollingThread()) {
                 displayLoadingView();
                 if (gcmMgr.isServerRegistred()) {
                     gcmMgr.unregisterSessions(listener);
