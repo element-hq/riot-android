@@ -315,7 +315,7 @@ public final class GcmRegistrationManager {
 
     /**
      * Tells if the client prefers GCM over events polling thread.
-     * @return true to use GCM before using the events polling thread
+     * @return true to use GCM before using the events polling thread, false otherwise
      */
     public boolean useGCM() {
         if (null == mUseGCM) {
@@ -333,6 +333,7 @@ public final class GcmRegistrationManager {
     /**
      * Tell if the events polling thread should be used.
      * It should be used only if GCM is disabled or failed.
+     * @return true if the polling thread approach must be used, false otherwise
      */
     public boolean usePollingThread() {
         return !isGCMRegistred() && !isGCMRegistrating();
