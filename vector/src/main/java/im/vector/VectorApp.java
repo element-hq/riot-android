@@ -118,7 +118,7 @@ public class VectorApp extends Application {
         GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager();
 
         // suspend the events thread if the client uses GCM
-        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || gcmRegistrationManager.useGCM()) {
+        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasPushKey())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
             CommonActivityUtils.pauseEventStream(VectorApp.this);
         } else {
@@ -233,7 +233,7 @@ public class VectorApp extends Application {
                 matrixInstance.refreshPushRules();
             }
 
-            Log.e("debackground", "The application is resumed");
+            Log.d("debackground", "The application is resumed");
             // display the memory usage when the application is debackgrounded.
             CommonActivityUtils.displayMemoryInformation(activity);
         }

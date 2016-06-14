@@ -52,8 +52,6 @@ import im.vector.util.RageShake;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
-import java.util.logging.Handler;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.

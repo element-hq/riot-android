@@ -333,7 +333,14 @@ public final class GcmRegistrationManager {
         return mUseGCM;
     }
 
-/**
+    /**
+     * Tells if GCM has a push key.
+     */
+    public boolean hasPushKey() {
+        return null != mPushKey;
+    }
+
+    /**
      * @return true if the push registration is allowed on this device
      */
     public boolean isNotificationsAllowed() {
@@ -422,7 +429,6 @@ public final class GcmRegistrationManager {
 
                 pushKey = instanceID.getToken(appContext.getString(R.string.gcm_defaultSenderId),
                         GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
 
                 Log.d(LOG_TAG, "GCM Registration Token: " + pushKey);
 

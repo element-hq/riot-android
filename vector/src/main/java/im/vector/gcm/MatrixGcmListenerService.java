@@ -62,7 +62,14 @@ public class MatrixGcmListenerService extends GcmListenerService {
                 // update the badge counter
                 CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
 
-                if (!Matrix.getInstance(MatrixGcmListenerService.this).getSharedGcmRegistrationManager().isBackgroundSyncAllowed()) {
+                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+
+                if (!gcmManager.isNotificationsAllowed()) {
+                    Log.d(LOG_TAG, "## onMessageReceived() : teh notifications are disabled");
+                    return;
+                }
+
+                if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
                     Log.d(LOG_TAG, "## onMessageReceived() : the background sync is disabled");
                     return;
                 }

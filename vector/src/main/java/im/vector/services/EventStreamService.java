@@ -634,7 +634,9 @@ public class EventStreamService extends Service {
             }
         }
 
-        updateListener();
+        if (!Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager().useGCM()) {
+            updateListener();
+        }
 
         mState = StreamAction.START;
     }
