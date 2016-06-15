@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 package im.vector.ga;
-
-import android.app.Activity;
+;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
-import android.util.Log;
-
-import im.vector.R;
-import im.vector.VectorApp;
 
 public class GAHelper {
 

@@ -16,10 +16,6 @@
 package im.vector.gcm;
 
 import android.content.Context;
-import android.util.Log;
-import java.io.IOException;
-
-import im.vector.R;
 
 public class GCMHelper {
 
