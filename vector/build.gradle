@@ -59,7 +59,7 @@ android {
             resValue "string", "flavor_description", ""
         }
 
-        appFDroid {
+        appfdroid {
             applicationId "im.vector.alpha"
             versionCode 14
             versionName "0.3.2-dev"
