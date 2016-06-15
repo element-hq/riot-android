@@ -22,12 +22,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Pusher;
@@ -38,9 +34,9 @@ import org.matrix.androidsdk.rest.model.PushersResponse;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.util.VectorUtils;
+import im.vector.gcm.GCMHelper;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -422,24 +418,7 @@ public final class GcmRegistrationManager {
         String pushKey = getStoredPushKey();
 
         if (pushKey == null) {
-            try {
-                Log.d(LOG_TAG, "Getting the GCM Registration Token");
-
-                InstanceID instanceID = InstanceID.getInstance(appContext);
-
-                pushKey = instanceID.getToken(appContext.getString(R.string.gcm_defaultSenderId),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-                Log.d(LOG_TAG, "GCM Registration Token: " + pushKey);
-
-                //setStoredRegistrationId(registrationId);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
-                pushKey = null;
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
-                pushKey = null;
-            }
+            pushKey = GCMHelper.getPushKey(appContext);
         }
         return pushKey;
     }

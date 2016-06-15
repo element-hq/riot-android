@@ -37,17 +37,6 @@
     <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT"/>
     <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE"/>
 
-
-
-    <!-- Google Cloud Messaging -->
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission
-        android:name="${applicationId}.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission
-        android:name="${applicationId}.permission.C2D_MESSAGE" />
-
     <!-- libjingle is designed for API >= 15 but the app should work from API >= 11 -->
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
 
@@ -59,23 +48,6 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
-
-        <!-- google analytics -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background dispatching on non-Google Play devices -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false"/>
 
         <!-- activities list starts here -->
         <activity
@@ -315,35 +287,6 @@
                 <data android:mimeType="*/*" /> 
             </intent-filter>
         </activity>
-
-        <!-- GCM components -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <!-- for registration for SDK < kitkat -->
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="im.vector.gcm" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="im.vector.gcm.MatrixGcmListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="im.vector.gcm.MatrixInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
-            </intent-filter>
-        </service>
 
         <service android:name="im.vector.services.EventStreamService" />
 

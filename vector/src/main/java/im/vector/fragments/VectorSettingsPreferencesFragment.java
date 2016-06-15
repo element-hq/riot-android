@@ -65,6 +65,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
@@ -292,7 +293,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Boolean useGA = VectorApp.getInstance().useGA(getActivity());
+                Boolean useGA = GAHelper.useGA(getActivity());
                 boolean newGa = (boolean)newValue;
 
                 if ((null != useGA) && (useGA != newGa)) {
@@ -306,7 +307,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                             }
                         }).show();
                     }
-                    VectorApp.getInstance().setUseGA(getActivity(), newGa);
+                    GAHelper.setUseGA(getActivity(), newGa);
                 }
 
                 return true;

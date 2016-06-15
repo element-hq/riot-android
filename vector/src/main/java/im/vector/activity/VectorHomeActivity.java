@@ -59,6 +59,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.fragments.VectorRecentsListFragment;
+import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.RageShake;
@@ -533,7 +534,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // check if the GA accepts to send crash reports.
         // do not display this alert if there is an universal link management
-        if (null == VectorApp.getInstance().useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
+        if (null == GAHelper.useGA(this) && (null == mUseGAAlert) && (null == mUniversalLinkToOpen) && (null == mAutomaticallyOpenedRoomParams)) {
             mUseGAAlert = new AlertDialog.Builder(this);
 
             mUseGAAlert.setMessage(getApplicationContext().getString(R.string.ga_use_alert_message)).setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -541,7 +542,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
                         mUseGAAlert = null;
-                        VectorApp.getInstance().setUseGA(VectorHomeActivity.this, true);
+                        GAHelper.setUseGA(VectorHomeActivity.this, true);
                     }
                 }
             }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -549,7 +550,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 public void onClick(DialogInterface dialog, int which) {
                     if (null != VectorApp.getInstance()) {
                         mUseGAAlert = null;
-                        VectorApp.getInstance().setUseGA(VectorHomeActivity.this, false);
+                        GAHelper.setUseGA(VectorHomeActivity.this, false);
                     }
                 }
             }).show();

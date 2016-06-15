@@ -60,6 +60,7 @@ import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
+import im.vector.ga.GAHelper;
 import im.vector.services.EventStreamService;
 
 import java.io.File;
@@ -248,7 +249,7 @@ public class CommonActivityUtils {
 
         String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
         String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
-        Boolean useGa = VectorApp.getInstance().useGA(activity);
+        Boolean useGa = GAHelper.useGA(activity);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
@@ -259,7 +260,7 @@ public class CommonActivityUtils {
         editor.commit();
 
         if (null != useGa) {
-            VectorApp.getInstance().setUseGA(activity, useGa);
+            GAHelper.setUseGA(activity, useGa);
         }
 
         // reset the GCM

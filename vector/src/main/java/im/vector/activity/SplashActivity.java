@@ -25,7 +25,6 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.ga.Analytics;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -148,8 +147,6 @@ public class SplashActivity extends MXCActionBarActivity {
                         mListeners.remove(fSession);
                         noMoreListener = mInitialSyncComplete = (mListeners.size() == 0);
                     }
-
-                    Analytics.sendEvent("Account", "Loading", fSession.getDataHandler().getStore().getRooms().size() + " rooms", System.currentTimeMillis() - startTime);
 
                     if (noMoreListener) {
                         finishIfReady();
