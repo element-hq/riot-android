@@ -627,7 +627,7 @@ public class EventStreamService extends Service {
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
                         startEventStream(fSession, store);
                     }
                 });

@@ -295,7 +295,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
                     if (null != powerLevels) {
-                        defaultPowerLevel = powerLevels.usersDefault;
+                        defaultPowerLevel = powerLevels.users_default;
                     }
 
                     mRoom.updateUserPowerLevels(mMemberId, defaultPowerLevel, mRoomActionsListener);
