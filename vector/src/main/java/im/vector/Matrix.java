@@ -34,11 +34,14 @@ import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MXFileStore;
 import org.matrix.androidsdk.data.MXMemoryStore;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import im.vector.activity.CallViewActivity;
@@ -94,8 +97,46 @@ public class Matrix {
             VectorHomeActivity.mClearCacheRequired = true;
         }
 
+        private boolean mRefreshUnreadCounter = false;
+
+        @Override
+        public void onLiveEvent(Event event, RoomState roomState) {
+            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.type) || Event.EVENT_TYPE_RECEIPT.equals(event.type);
+        }
+
         @Override
         public void onLiveEventsChunkProcessed() {
+            // when the client does not use GCM
+            // we need to compute the application badge values
+
+            if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
+                GcmRegistrationManager gcmMgr = instance.getSharedGcmRegistrationManager();
+
+                // check if the GCM is not available
+                if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasPushKey())) {
+                    int unreadCount = 0;
+
+                    for(MXSession session :  instance.mMXSessions) {
+                        if (session.isAlive()) {
+                            Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
+
+                            if (null != rooms) {
+                                for(Room room : rooms) {
+                                    if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
+                                        unreadCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update the badge counter
+                    CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                }
+            }
+
+            mRefreshUnreadCounter = false;
+
             Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
             EventStreamService.checkDisplayedNotification();
         }
