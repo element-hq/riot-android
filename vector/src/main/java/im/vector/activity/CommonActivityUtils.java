@@ -170,15 +170,36 @@ public class CommonActivityUtils {
      * Thus, the activity could have an invalid behaviour.
      * It seems safer to go to splash screen and to wait for the end of the initialisation.
      * @param activity the caller activity
-     * @return true if
+     * @return true if go to splash screen
      */
     public static boolean isGoingToSplash(Activity activity) {
+        return isGoingToSplash(activity, null, null);
+    }
+
+    /**
+     * With android M, the permissions kills the backgrounded application
+     * and try to restart the last opened activity.
+     * But, the sessions are not initialised (i.e the stores are not ready and so on).
+     * Thus, the activity could have an invalid behaviour.
+     * It seems safer to go to splash screen and to wait for the end of the initialisation.
+     * @param activity the caller activity
+     * @param sessionId the session id
+     * @param roomId the room id
+     * @return true if go to splash screen
+     */
+    public static boolean isGoingToSplash(Activity activity, String sessionId, String roomId) {
         if (Matrix.hasValidSessions()) {
             List<MXSession> sessions = Matrix.getInstance(activity).getSessions();
 
             for(MXSession session : sessions) {
                 if (session.isAlive() && !session.getDataHandler().getStore().isReady()) {
                     Intent intent = new Intent(activity, SplashActivity.class);
+
+                    if ((null != sessionId) && (null != roomId)) {
+                        intent.putExtra(SplashActivity.EXTRA_MATRIX_ID, sessionId);
+                        intent.putExtra(SplashActivity.EXTRA_ROOM_ID, roomId);
+                    }
+
                     activity.startActivity(intent);
                     activity.finish();
                     return true;

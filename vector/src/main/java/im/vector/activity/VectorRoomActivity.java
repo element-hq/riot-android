@@ -407,11 +407,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        if (CommonActivityUtils.isGoingToSplash(this)) {
-            Log.d(LOG_TAG, "onCreate : Going to splash screen");
-            return;
-        }
-
         Intent intent = getIntent();
         if (!intent.hasExtra(EXTRA_ROOM_ID)) {
             Log.e(LOG_TAG, "No room ID extra.");
@@ -419,10 +414,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
+        mSession = getSession(intent);
+
+        if (mSession == null) {
+            Log.e(LOG_TAG, "No MXSession.");
+            finish();
+            return;
+        }
+
+        String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
+
         // ensure that the preview mode is really expected
         if (!intent.hasExtra(EXTRA_ROOM_PREVIEW_ID)) {
             sRoomPreviewData = null;
             Matrix.getInstance(this).clearTmpStoresList();
+        }
+
+        if (CommonActivityUtils.isGoingToSplash(this, mSession.getMyUserId(), roomId)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
         }
 
         // bind the widgets of the room header view. The room header view is displayed by
@@ -492,7 +502,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mImageQualityPopUpInProgress = savedInstanceState.getBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, false);
         }
 
-        String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
         Log.d(LOG_TAG, "Displaying " + roomId);
 
         mEditText = (EditText) findViewById(R.id.editText_messageBox);
@@ -607,14 +616,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mErrorMessageTextView = (TextView)findViewById(R.id.room_notification_error_message);
         mMessageButtonLayout = findViewById(R.id.buttons_layout);
         mCanNotPostTextview = findViewById(R.id.room_cannot_post_textview);
-
-        mSession = getSession(intent);
-
-        if (mSession == null) {
-            Log.e(LOG_TAG, "No MXSession.");
-            finish();
-            return;
-        }
 
         mMyUserId = mSession.getCredentials().userId;
 
