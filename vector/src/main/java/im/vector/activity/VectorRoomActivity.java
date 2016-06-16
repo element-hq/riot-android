@@ -402,12 +402,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         setContentView(R.layout.activity_vector_room);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
-            Log.e(LOG_TAG, "Restart the application.");
+            Log.e(LOG_TAG, "onCreate : Restart the application.");
             CommonActivityUtils.restartApp(this);
             return;
         }
 
-        Log.d(LOG_TAG, "Create the activity");
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
 
         Intent intent = getIntent();
         if (!intent.hasExtra(EXTRA_ROOM_ID)) {
@@ -786,7 +789,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
-
         super.onResume();
 
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);

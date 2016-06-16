@@ -206,6 +206,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         sharedInstance = this;
 
         mWaitingView = findViewById(R.id.listView_spinner_views);

@@ -62,6 +62,11 @@ public class VectorRoomMessagesSearchActivity extends VectorBaseSearchActivity {
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         Intent intent = getIntent();
 
         mSession = getSession(intent);

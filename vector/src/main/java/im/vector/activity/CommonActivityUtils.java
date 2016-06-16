@@ -61,6 +61,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.ga.GAHelper;
+import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 
 import java.io.File;
@@ -160,6 +161,32 @@ public class CommonActivityUtils {
         }
 
         return !Matrix.hasValidSessions();
+    }
+
+    /**
+     * With android M, the permissions kills the backgrounded application
+     * and try to restart the last opened activity.
+     * But, the sessions are not initialised (i.e the stores are not ready and so on).
+     * Thus, the activity could have an invalid behaviour.
+     * It seems safer to go to splash screen and to wait for the end of the initialisation.
+     * @param activity the caller activity
+     * @return true if
+     */
+    public static boolean isGoingToSplash(Activity activity) {
+        if (Matrix.hasValidSessions()) {
+            List<MXSession> sessions = Matrix.getInstance(activity).getSessions();
+
+            for(MXSession session : sessions) {
+                if (session.isAlive() && !session.getDataHandler().getStore().isReady()) {
+                    Intent intent = new Intent(activity, SplashActivity.class);
+                    activity.startActivity(intent);
+                    activity.finish();
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public static final String RESTART_IN_PROGRESS_KEY = "RESTART_IN_PROGRESS_KEY";

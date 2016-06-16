@@ -173,6 +173,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         Intent intent = getIntent();
         mIsAvatarMode = intent.getBooleanExtra(EXTRA_AVATAR_MODE, false);
 
