@@ -587,7 +587,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             shouldBeMerged = null == headerMessage(position);
         }
 
-        return shouldBeMerged;
+        return shouldBeMerged && !event.isCallEvent();
+    }
+
+    @Override
+    protected boolean isMergeableEvent(Event event) {
+        return super.isMergeableEvent(event) && !event.isCallEvent();
     }
 
     @Override
