@@ -227,7 +227,7 @@ public class CallViewActivity extends FragmentActivity {
      * @return true if the call is the active callId
      */
     public static boolean isBackgroundedCallId(String callId) {
-        Boolean res = false;
+        boolean res = false;
 
         if ((null != mCall) && (null == instance)) {
             res = mCall.getCallId().equals(callId);

@@ -64,6 +64,7 @@ public class VectorApp extends Application {
 
     @Override
     public void onCreate() {
+        Log.d(LOG_TAG, "onCreate");
         super.onCreate();
 
         instance = this;
@@ -226,7 +227,7 @@ public class VectorApp extends Application {
                 matrixInstance.refreshPushRules();
             }
 
-            Log.d("debackground", "The application is resumed");
+            Log.d(LOG_TAG, "The application is resumed");
             // display the memory usage when the application is debackgrounded.
             CommonActivityUtils.displayMemoryInformation(activity);
         }
