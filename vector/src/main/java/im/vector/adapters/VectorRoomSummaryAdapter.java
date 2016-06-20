@@ -100,6 +100,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private boolean mIsSearchMode;
     // when set to true, avoid empty history by displaying the directory group
     private boolean mDisplayDirectoryGroupWhenEmpty;
+    // force to display the directory group
+    private boolean mForceDirectoryGroupDisplay;
 
     // public room search
     private List<PublicRoom> mPublicRooms;
@@ -135,6 +137,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         mIsSearchMode = isSearchMode;
         mDisplayDirectoryGroupWhenEmpty = displayDirectoryGroupWhenEmpty;
+    }
+
+    /**
+     * Set to true to always display the directory group.
+     * @param forceDirectoryGroupDisplay
+     */
+    public void setForceDirectoryGroupDisplay(boolean forceDirectoryGroupDisplay) {
+        mForceDirectoryGroupDisplay = forceDirectoryGroupDisplay;
     }
 
     /**
@@ -257,6 +267,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     public boolean isDirectoryGroupPosition(int groupPosition) {
         return (mDirectoryGroupPosition == groupPosition);
+    }
+
+    /**
+     * @return the directory group position
+     */
+    public int getDirectoryGroupPosition() {
+        return mDirectoryGroupPosition;
     }
 
     /**
@@ -387,7 +404,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             // in search mode
             // the public rooms have a dedicated section
-            if (mIsSearchMode || mDisplayDirectoryGroupWhenEmpty) {
+            if (mIsSearchMode || mDisplayDirectoryGroupWhenEmpty || mForceDirectoryGroupDisplay) {
                 mMatchedPublicRooms = new ArrayList<PublicRoom>();
 
                 if (null != mPublicRooms) {
@@ -468,7 +485,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             // in avoiding empty history mode
             // check if there is really nothing else
-            if (mDisplayDirectoryGroupWhenEmpty && (groupIndex > 1)) {
+            if (mDisplayDirectoryGroupWhenEmpty && !mForceDirectoryGroupDisplay && (groupIndex > 1)) {
                 summaryListByGroupsRetValue.remove(mDirectoryGroupPosition);
                 mRoomByAliasGroupPosition = -1;
                 mDirectoryGroupPosition = -1;

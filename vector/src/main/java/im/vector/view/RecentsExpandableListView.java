@@ -18,6 +18,7 @@ package im.vector.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ExpandableListView;
 
@@ -40,6 +41,15 @@ public class RecentsExpandableListView extends ExpandableListView {
          * The user ends the move
          */
         void onDrop();
+
+        /**
+         * Called the list view is overscrolled
+         * @param scrollX New X scroll value in pixels
+         * @param scrollY New Y scroll value in pixels
+         * @param clampedX True if scrollX was clamped to an over-scroll boundary
+         * @param clampedY True if scrollY was clamped to an over-scroll boundary
+         */
+        void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY);
     }
 
     // the touched child view
@@ -55,6 +65,14 @@ public class RecentsExpandableListView extends ExpandableListView {
     // default constructor
     public RecentsExpandableListView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+
+    @Override
+    protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        if (null != mDragAndDropEventsListener) {
+            mDragAndDropEventsListener.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+        }
     }
 
     @Override

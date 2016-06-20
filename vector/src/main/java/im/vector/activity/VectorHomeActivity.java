@@ -119,6 +119,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private Timer mRoomCreationViewTimer = null;
     private View mRoomCreationView = null;
 
+    // the public rooms are displayed when the user overscroll after 0.5s
+    private long mOverscrollStartTime = -1;
+
     private MXEventListener mEventsListener;
     private MXEventListener mLiveEventListener;
 
@@ -481,6 +484,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 mRoomCreationViewTimer = null;
             }
         }
+
+        mRecentsListFragment.setIsDirectoryDisplayed(false);
 
         VectorApp.setCurrentActivity(null);
     }
@@ -877,7 +882,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     /**
-     *
+     * Hide the (+) button for 1 second.
      */
     private void hideRoomCreationViewWithDelay() {
         synchronized (this) {
@@ -907,17 +912,38 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     }
 
+    // display the directory group if the user overscrolls for about 0.5 s
+    @Override
+    public void onRecentsListOverScrollUp() {
+        if (!mRecentsListFragment.isDirectoryGroupDisplayed()) {
+            if (-1 == mOverscrollStartTime) {
+                mOverscrollStartTime = System.currentTimeMillis();
+            } else if ((System.currentTimeMillis() - mOverscrollStartTime) > 500) {
+                mRecentsListFragment.setIsDirectoryDisplayed(true);
+            }
+        }
+    }
+
     // warn the user scrolls up
+    @Override
     public void onRecentsListScrollUp() {
+        // reset overscroll timer
+        mOverscrollStartTime = -1;
+        // hide the (+) button for a short time
         hideRoomCreationViewWithDelay();
     }
 
     // warn when the user scrolls downs
+    @Override
     public void onRecentsListScrollDown() {
+        // reset overscroll timer
+        mOverscrollStartTime = -1;
+        // hide the (+) button for a short time
         hideRoomCreationViewWithDelay();
     }
 
     // warn when the list content can be fully displayed without scrolling
+    @Override
     public void onRecentsListFitsScreen() {
         if (mRoomCreationView.getVisibility() != View.VISIBLE) {
             mRoomCreationView.setVisibility(View.VISIBLE);
