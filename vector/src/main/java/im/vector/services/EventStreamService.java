@@ -24,18 +24,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCall;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -51,13 +53,14 @@ import im.vector.ViewedRoomTracker;
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorUtils;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -73,6 +76,9 @@ public class EventStreamService extends Service {
         CATCHUP,
         GCM_STATUS_UPDATE
     }
+
+    // notification sub title,  when sync polling thread is enabled:
+    private static final String NOTIFICATION_SUB_TITLE = "Listening for events";
 
     public static final String EXTRA_STREAM_ACTION = "EventStreamService.EXTRA_STREAM_ACTION";
     public static final String EXTRA_MATRIX_IDS = "EventStreamService.EXTRA_MATRIX_IDS";
@@ -220,30 +226,14 @@ public class EventStreamService extends Service {
     // this imageView is used to preload the avatar thumbnail
     static private ImageView mDummyImageView;
 
-    // live events listener
-    private MXEventListener mListener = new MXEventListener() {
+    private MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+
         /**
          * Manage hangup event.
          * The ringing sound is disabled and pending incoming call is dismissed.
-         * @param event the hangup event.
+         * @param callId the callId
          */
-        private void manageHangUpEvent(Event event) {
-            // check if the user answer from another device
-            if (Event.EVENT_TYPE_CALL_ANSWER.equals(event.type)) {
-                MXSession session = Matrix.getMXSession(getApplicationContext(), event.getMatrixId());
-
-                // ignore the answer event if it was sent by another member
-                if (!TextUtils.equals(event.getSender(), session.getCredentials().userId)) {
-                    return;
-                }
-            }
-
-            String callId = null;
-
-            try {
-                callId = event.getContentAsJsonObject().get("call_id").getAsString();
-            } catch (Exception e) {}
-
+        private void manageHangUpEvent(String callId) {
             if (null != callId) {
                 // hide the "call in progress notification"
                 hidePendingCallNotification(callId);
@@ -254,16 +244,66 @@ public class EventStreamService extends Service {
         }
 
         @Override
-        public void onLiveEvent(Event event, RoomState roomState) {
-            if (Event.EVENT_TYPE_CALL_HANGUP.equals(event.type) || Event.EVENT_TYPE_CALL_ANSWER.equals(event.type)) {
-                manageHangUpEvent(event);
-            }
+        public void onIncomingCall(final IMXCall call) {
+            Log.d(LOG_TAG, "onIncomingCall " + call.getCallId());
+
+            IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
+                @Override
+                public void onStateDidChange(String state) {
+                    Log.d(LOG_TAG, "onStateDidChange " + call.getCallId() + " : " + state);
+                }
+
+                @Override
+                public void onCallError(String error) {
+                    Log.d(LOG_TAG, "onCallError " + call.getCallId() + " : " + error);
+                    manageHangUpEvent(call.getCallId());
+                }
+
+                @Override
+                public void onViewLoading(View callview) {
+                }
+
+                @Override
+                public void onViewReady() {
+                }
+
+                @Override
+                public void onCallAnsweredElsewhere() {
+                    Log.d(LOG_TAG, "onCallAnsweredElsewhere " + call.getCallId());
+                    manageHangUpEvent(call.getCallId());
+                }
+
+                @Override
+                public void onCallEnd() {
+                    Log.d(LOG_TAG, "onCallEnd " + call.getCallId());
+                    manageHangUpEvent(call.getCallId());
+                }
+            };
+
+            call.addListener(callListener);
         }
 
+        @Override
+        public void onCallHangUp(final IMXCall call) {
+            Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
+
+            manageHangUpEvent(call.getCallId());
+        }
+    };
+
+    // live events listener
+    private MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingEvent(Event event, RoomState roomState, BingRule bingRule) {
             Log.d(LOG_TAG, "onBingEvent : the event " + event);
             Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
+
+            GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+
+            if (!gcmGcmRegistrationManager.isNotificationsAllowed()) {
+                Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
+                return;
+            }
 
             final String roomId = event.roomId;
 
@@ -285,11 +325,6 @@ public class EventStreamService extends Service {
                 // display only the invitation messages by now
                 // because the other ones are not displayed.
                 if (event.isCallEvent() && !event.type.equals(Event.EVENT_TYPE_CALL_INVITE)) {
-                    // dismiss the call notifications
-                    if (event.type.equals(Event.EVENT_TYPE_CALL_HANGUP)) {
-                        manageHangUpEvent(event);
-                    }
-
                     Log.d(LOG_TAG, "onBingEvent : don't bing - Call invite");
                     return;
                 }
@@ -340,9 +375,6 @@ public class EventStreamService extends Service {
                     isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
                 } catch (Exception e) {}
 
-                if (isInvitationEvent) {
-
-                }
 
             } else {
                 body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
@@ -459,6 +491,8 @@ public class EventStreamService extends Service {
                 if (hasActiveCalls) {
                     Log.d(LOG_TAG, "Catchup again because there are active calls");
                     catchup();
+                } else {
+                    Log.d(LOG_TAG, "no Active call");
                 }
             }
         }
@@ -476,7 +510,8 @@ public class EventStreamService extends Service {
 
                 mSessions.add(session);
                 mMatrixIds.add(matrixId);
-                session.getDataHandler().addListener(mListener);
+                session.getDataHandler().addListener(mEventsListener);
+                session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
                 // perform a full sync
                 session.startEventStream(null);
             }
@@ -496,7 +531,8 @@ public class EventStreamService extends Service {
                 if (null != session) {
 
                     session.stopEventStream();
-                    session.getDataHandler().removeListener(mListener);
+                    session.getDataHandler().removeListener(mEventsListener);
+                    session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
 
                     mSessions.remove(session);
                     mMatrixIds.remove(matrixId);
@@ -603,7 +639,8 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for(MXSession session : mSessions) {
-            session.getDataHandler().addListener(mListener);
+            session.getDataHandler().addListener(mEventsListener);
+            session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
             final IMXStore store = session.getDataHandler().getStore();
 
             // the store is ready (no data loading in progress...)
@@ -620,14 +657,16 @@ public class EventStreamService extends Service {
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
                         startEventStream(fSession, store);
                     }
                 });
             }
         }
 
-        updateListenerNotification();
+        if (!Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager().useGCM()) {
+            updateListener();
+        }
 
         mState = StreamAction.START;
     }
@@ -636,7 +675,7 @@ public class EventStreamService extends Service {
      * internal stop.
      */
     private void stop() {
-        Log.d(LOG_TAG, "the service is stopped.");
+        Log.d(LOG_TAG, "## stop(): the service is stopped");
 
         if (mIsForegound) {
             stopForeground(true);
@@ -646,7 +685,8 @@ public class EventStreamService extends Service {
             for(MXSession session : mSessions) {
                 if (session.isAlive()) {
                     session.stopEventStream();
-                    session.getDataHandler().removeListener(mListener);
+                    session.getDataHandler().removeListener(mEventsListener);
+                    session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
                 }
             }
         }
@@ -682,8 +722,8 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "catchup with state " + mState + " CurrentActivity " + VectorApp.getCurrentActivity());
 
         // the catchup should only be done when the thread is suspended
-        Boolean canCatchup = (mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP);
-        //
+        boolean canCatchup = (mState == StreamAction.PAUSE) || (mState == StreamAction.CATCHUP);
+
 
         // other use case
         // the application has been launched by a push
@@ -729,14 +769,26 @@ public class EventStreamService extends Service {
             mIsForegound = false;
         }
 
-        updateListenerNotification();
+        updateListener();
     }
 
     /**
      * polling listener when the GCM is disabled
      */
-    private void updateListenerNotification() {
-        if (!Matrix.getInstance(this).getSharedGcmRegistrationManager().useGCM()) {
+    private void updateListener() {
+        MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
+
+        if (null == session) {
+            Log.e(LOG_TAG, "updateListener : no session");
+            return;
+        }
+
+        GcmRegistrationManager gcmnMgr = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+
+        // detect if the polling thread must be started
+        // i.e a session must be defined
+        // and GCM disabled or GCM registration failed
+        if ((!gcmnMgr.useGCM() || gcmnMgr.usePollingThread()) && gcmnMgr.isBackgroundSyncAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForegound = true;
@@ -750,24 +802,36 @@ public class EventStreamService extends Service {
      * @return the polling thread listener notification
      */
     private Notification buildNotification() {
-        Notification notification = new Notification(
-                (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) ? R.drawable.ic_menu_small_matrix : R.drawable.ic_menu_small_matrix_transparent,
-                "Matrix",
-                System.currentTimeMillis()
-        );
-
-        // go to the home screen if this is clicked.
+        // build the pending intent go to the home screen if this is clicked.
         Intent i = new Intent(this, VectorHomeActivity.class);
-
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-        notification.setLatestEventInfo(this, getString(R.string.app_name),
-                "Listening for events",
-                pi);
+        // build the notification builder
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this);
+        notifBuilder.setSmallIcon(R.drawable.logo_transparent);
+        notifBuilder.setWhen(System.currentTimeMillis());
+        notifBuilder.setContentTitle(getString(R.string.app_name));
+        notifBuilder.setContentText(NOTIFICATION_SUB_TITLE);
+        notifBuilder.setContentIntent(pi);
+
+        Notification notification = notifBuilder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
+
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // some devices crash if this field is not set
+            // even if it is deprecated
+
+            // setLatestEventInfo() is deprecated on Android M, so we try to use
+            // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
+            try {
+                Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
+                deprecatedMethod.invoke(notification, this, getString(R.string.app_name), NOTIFICATION_SUB_TITLE, pi);
+            } catch (Exception ex) {
+                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg="+ex.getMessage());
+            }
+        }
+
         return notification;
     }
 
@@ -791,7 +855,7 @@ public class EventStreamService extends Service {
     public void hidePendingCallNotification(String callId) {
         if (TextUtils.equals(mBackgroundNotificationCallId, callId)) {
             stopForeground(true);
-            updateListenerNotification();
+            updateListener();
             mBackgroundNotificationCallId = null;
         }
 

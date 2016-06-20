@@ -18,13 +18,18 @@
         <include layout="@layout/vector_room_round_avatar"
             android:id="@+id/messagesAdapter_roundAvatar_left"/>
 
+        <View android:id="@+id/messagesAdapter_highlight_message_marker"
+            android:layout_marginLeft="5dp"
+            android:layout_width="6dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="match_parent" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
             android:paddingBottom="5dp">
 
             <RelativeLayout

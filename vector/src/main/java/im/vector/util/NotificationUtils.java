@@ -10,21 +10,25 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
+import android.util.Log;
 
 import im.vector.R;
 import im.vector.activity.LockScreenActivity;
 import im.vector.activity.VectorRoomActivity;
 
+import java.lang.reflect.Method;
 import java.util.Random;
 
 /**
  * Util class for creating notifications.
  */
 public class NotificationUtils {
+    private static final String LOG_TAG = "NotificationUtils";
 
     public static final String QUICK_LAUNCH_ACTION = "EventStreamService.QUICK_LAUNCH_ACTION";
     public static final String TAP_TO_VIEW_ACTION = "EventStreamService.TAP_TO_VIEW_ACTION";
@@ -285,9 +289,19 @@ public class NotificationUtils {
             n.defaults |= Notification.DEFAULT_SOUND;
         }
 
-        // some devices crash if this field is not set
-        // even if it is deprecated
-        n.setLatestEventInfo(context, from, body, pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // some devices crash if this field is not set
+            // even if it is deprecated
+
+            // setLatestEventInfo() is deprecated on Android M, so we try to use
+            // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
+            try {
+                Method deprecatedMethod = n.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
+                deprecatedMethod.invoke(n, context, from, body, pendingIntent);
+            } catch (Exception ex) {
+                Log.e(LOG_TAG, "## buildMessageNotification(): Exception - setLatestEventInfo() Msg="+ex.getMessage());
+            }
+        }
 
         return n;
     }

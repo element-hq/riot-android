@@ -158,7 +158,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-
                 if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
                     List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
 
@@ -172,6 +171,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 } else {
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+
+                    // sanity check : should never happen
+                    // but it happened.
+                    if ((null == session) || (null == session.getDataHandler())) {
+                        return true;
+                    }
 
                     String roomId = roomSummary.getRoomId();
                     Room room = session.getDataHandler().getRoom(roomId);

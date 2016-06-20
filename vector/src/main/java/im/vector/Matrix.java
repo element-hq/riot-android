@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
@@ -33,11 +34,14 @@ import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MXFileStore;
 import org.matrix.androidsdk.data.MXMemoryStore;
+import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import im.vector.activity.CallViewActivity;
@@ -51,8 +55,6 @@ import im.vector.util.RageShake;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
-import java.util.logging.Handler;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -95,8 +97,46 @@ public class Matrix {
             VectorHomeActivity.mClearCacheRequired = true;
         }
 
+        private boolean mRefreshUnreadCounter = false;
+
+        @Override
+        public void onLiveEvent(Event event, RoomState roomState) {
+            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.type) || Event.EVENT_TYPE_RECEIPT.equals(event.type);
+        }
+
         @Override
         public void onLiveEventsChunkProcessed() {
+            // when the client does not use GCM
+            // we need to compute the application badge values
+
+            if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
+                GcmRegistrationManager gcmMgr = instance.getSharedGcmRegistrationManager();
+
+                // check if the GCM is not available
+                if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasPushKey())) {
+                    int unreadCount = 0;
+
+                    for(MXSession session :  instance.mMXSessions) {
+                        if (session.isAlive()) {
+                            Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
+
+                            if (null != rooms) {
+                                for(Room room : rooms) {
+                                    if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
+                                        unreadCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update the badge counter
+                    CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                }
+            }
+
+            mRefreshUnreadCounter = false;
+
             Log.d(LOG_TAG, "onLiveEventsChunkProcessed ");
             EventStreamService.checkDisplayedNotification();
         }
@@ -145,9 +185,9 @@ public class Matrix {
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
                                 context.startActivity(intent);
                             } else {
-                                Log.d(LOG_TAG, "onIncomingCall : the home activity exists : use it");
-                                // the home activity does the job
-                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
+                                Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
+                                // check incoming call required permissions, before allowing the call..
+                                homeActivity.startIncomingCallCheckPermissions(call, call.getSession().getMyUserId(), call.getCallId());
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
@@ -222,6 +262,12 @@ public class Matrix {
         try {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
+
+            String flavor = mAppContext.getResources().getString(R.string.flavor_description);
+
+            if (!TextUtils.isEmpty(flavor)) {
+                versionName += " (" + flavor +")";
+            }
         } catch (Exception e) {
         }
 

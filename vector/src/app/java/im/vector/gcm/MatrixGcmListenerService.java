@@ -52,7 +52,6 @@ public class MatrixGcmListenerService extends GcmListenerService {
                 for (String key : data.keySet()) {
                     Log.d(LOG_TAG, "## onMessageReceived() >>> " + key + " : " + data.get(key));
                 }
-
                 int unreadCount = 0;
 
                 Object unreadCounterAsVoid = data.get("unread");
@@ -62,6 +61,18 @@ public class MatrixGcmListenerService extends GcmListenerService {
 
                 // update the badge counter
                 CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
+
+                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+
+                if (!gcmManager.isNotificationsAllowed()) {
+                    Log.d(LOG_TAG, "## onMessageReceived() : teh notifications are disabled");
+                    return;
+                }
+
+                if (!gcmManager.isBackgroundSyncAllowed() && VectorApp.isAppInBackground()) {
+                    Log.d(LOG_TAG, "## onMessageReceived() : the background sync is disabled");
+                    return;
+                }
 
                 // check if the application has been launched once
                 // the first GCM event could have been triggered whereas the application is not yet launched.

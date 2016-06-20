@@ -15,28 +15,18 @@
  */
 package im.vector.util;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
-import im.vector.R;
 
 /**
  * Static resource utility methods.
@@ -60,18 +50,22 @@ public class ResourceUtils {
      *
      * @param context the context.
      * @param uri     the URI
+     * @param mimetype the mimetype
      * @return a {@link Resource} encapsulating the opened resource stream and associated metadata
      * or {@code null} if opening the resource stream failed.
      */
-    public static Resource openResource(Context context, Uri uri) {
+    public static Resource openResource(Context context, Uri uri, String mimetype) {
         try {
-            String mimetype = context.getContentResolver().getType(uri);
+            // if the mime type is not provided, try to find it out
+            if (TextUtils.isEmpty(mimetype)) {
+                mimetype = context.getContentResolver().getType(uri);
 
-            // try to find the mimetype from the filename
-            if (null == mimetype) {
-                String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
-                if (extension != null) {
-                    mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                // try to find the mimetype from the filename
+                if (null == mimetype) {
+                    String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
+                    if (extension != null) {
+                        mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    }
                 }
             }
 
@@ -95,7 +89,7 @@ public class ResourceUtils {
      */
     public static Bitmap getThumbnailBitmap(Context context, Uri mediaUri) {
         Bitmap thumbnailBitmap = null;
-        ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri);
+        ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri, null);
 
         // check if the resource can be i
         if (null == resource) {
@@ -131,7 +125,7 @@ public class ResourceUtils {
                 // need to decompress the high res image
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                resource = ResourceUtils.openResource(context, mediaUri);
+                resource = ResourceUtils.openResource(context, mediaUri, null);
 
                 // get the full size bitmap
                 Bitmap fullSizeBitmap = null;

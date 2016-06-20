@@ -138,6 +138,19 @@
                 android:layout_marginLeft="16dp"
                 android:layout_alignParentBottom="true">
 
+                <RelativeLayout
+                    android:id="@+id/room_self_avatar_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp">
+
+                    <include layout="@layout/vector_room_round_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/room_self_avatar"/>
+
+                </RelativeLayout>
+
                 <LinearLayout
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -162,19 +175,6 @@
                         android:contentDescription="@string/send"/>
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/room_self_avatar_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp">
-
-                    <include layout="@layout/vector_room_round_avatar"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_centerVertical="true"
-                        android:id="@+id/room_self_avatar"/>
-
-                </RelativeLayout>
-
                 <EditText
                     android:layout_marginLeft="16dp"
                     android:layout_toLeftOf="@id/buttons_layout"
@@ -190,6 +190,20 @@
                     android:background="@android:color/transparent"
                     android:textCursorDrawable="@drawable/searches_cursor_background"
                     android:textColorHint="@color/vector_0_54_black_color"/>
+
+                <TextView
+                    android:id="@+id/room_cannot_post_textview"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@id/room_self_avatar_container"
+                    android:text="@string/room_do_not_have_permission_to_post"
+                    android:textSize="14sp"
+                    android:textColor="@color/vector_text_black_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
             </RelativeLayout>
 
             <View

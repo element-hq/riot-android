@@ -24,8 +24,12 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.SurfaceTexture;
 import android.media.MediaActionSound;
 import android.net.Uri;
@@ -34,6 +38,7 @@ import android.os.Bundle;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.util.ResourceUtils;
 import im.vector.view.RecentMediaLayout;
 
 import android.hardware.Camera;
@@ -56,6 +61,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -77,7 +83,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String LOG_TAG = "VectorMedPicker";
 
     // public keys
-    public static final String EXTRA_SINGLE_IMAGE_MODE = "EXTRA_SINGLE_IMAGE_MODE";
+    // boolean, display a mask to show the avatar rendering
+    public static final String EXTRA_AVATAR_MODE = "EXTRA_AVATAR_MODE";
 
     // internal keys
     private static final String KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED = "IS_TAKEN_IMAGE_DISPLAYED";
@@ -86,6 +93,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL = "TAKEN_IMAGE_CAMERA_URL";
     private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
     private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
+    private static final String KEY_IS_AVATAR_MODE = "KEY_IS_AVATAR_MODE";
 
     private final int IMAGE_ORIGIN_CAMERA = 1;
     private final int IMAGE_ORIGIN_GALLERY = 2;
@@ -128,13 +136,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private TableLayout mGalleryTableLayout;
     private RelativeLayout mCameraPreviewLayout;
     private TextureView mCameraTextureView;
+    private ImageView mCameraTextureMaskView;
     private SurfaceTexture mSurfaceTexture;
 
     private View mImagePreviewLayout;
     private ImageView mImagePreviewImageView;
+    private ImageView mImagePreviewImageMaskView;
     private RelativeLayout mPreviewAndGalleryLayout;
     private int mGalleryImageCount;
     private int mScreenWidth;
+
+    // display a mask to create a good avatar
+    private boolean mIsAvatarMode;
 
     // lifecycle management variable
     private boolean mIsTakenImageDisplayed;
@@ -160,6 +173,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
+        Intent intent = getIntent();
+        mIsAvatarMode = intent.getBooleanExtra(EXTRA_AVATAR_MODE, false);
+
         mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
         // camera preview
@@ -167,10 +188,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mSwitchCameraImageView = (ImageView) findViewById(R.id.medias_picker_switch_camera);
         mCameraTextureView =  (TextureView) findViewById(R.id.medias_picker_texture_view);
         mCameraTextureView.setSurfaceTextureListener(this);
+        mCameraTextureMaskView = (ImageView) findViewById(R.id.medias_picker_texture_mask_view);
 
         // image preview
         mImagePreviewLayout = findViewById(R.id.medias_picker_preview);
         mImagePreviewImageView = (ImageView) findViewById(R.id.medias_picker_preview_image_view);
+        mImagePreviewImageMaskView = (ImageView) findViewById(R.id.medias_picker_preview_image_mask_view);
         mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
         mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
 
@@ -314,6 +337,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // save camera UI configuration
         outState.putBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED, mIsTakenImageDisplayed);
+        outState.putBoolean(KEY_IS_AVATAR_MODE, mIsAvatarMode);
         outState.putInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN, mTakenImageOrigin);
         outState.putInt(KEY_EXTRA_CAMERA_SIDE, mCameraId);
 
@@ -329,6 +353,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         boolean isRestoredInstance = false;
         if(null != savedInstanceState){
             isRestoredInstance = true;
+            mIsAvatarMode = savedInstanceState.getBoolean(KEY_IS_AVATAR_MODE);
             mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
             mShootedPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL);
             mTakenImageOrigin = savedInstanceState.getInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN);
@@ -340,12 +365,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // display a preview image?
             if (mIsTakenImageDisplayed) {
                 Bitmap savedBitmap = VectorApp.getSavedPickerImagePreview();
-                if (null != savedBitmap) {
+                if ((null != savedBitmap) && !mIsAvatarMode) {
                     // image preview from camera only
                     mImagePreviewImageView.setImageBitmap(savedBitmap);
                 } else {
                     // image preview from gallery or camera (mShootedPicturePath)
-                    displayImagePreview(mShootedPicturePath, uriImage, mTakenImageOrigin);
+                    displayImagePreview(savedBitmap, mShootedPicturePath, uriImage, mTakenImageOrigin);
                 }
             }
 
@@ -640,21 +665,27 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    /**
+     * The user clicked on a gallery image
+     * @param aMediaItem
+     */
     private void onClickGalleryImage(final RecentMedia aMediaItem){
-        mCamera.stopPreview();
+        if (null != mCamera) {
+            mCamera.stopPreview();
+        }
 
         // add the selected image to be returned by the activity
         mSelectedGalleryItemsList.add(aMediaItem);
 
         // display the image as preview
-        if (null != aMediaItem.mThumbnail) {
+        if ((null != aMediaItem.mThumbnail) && !mIsAvatarMode) {
             updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_GALLERY);
             mImagePreviewImageView.setImageBitmap(aMediaItem.mThumbnail);
             // save bitmap to speed up UI restore (life cycle)
             VectorApp.setSavedCameraImagePreview(aMediaItem.mThumbnail);
-        } else if(null != aMediaItem.mFileUri) {
+        } else if (null != aMediaItem.mFileUri) {
             // fall back in case bitmap is not available (unlikely..)
-            displayImagePreview(null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
+            displayImagePreview(null, null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
         } else {
             Log.e(LOG_TAG, "## onClickGalleryImage(): no image to display");
         }
@@ -674,6 +705,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     Log.d(LOG_TAG, "## onPictureTaken(): success");
+
+                    // replace the high res picture with the preview one
+                    // because the aspect ratio is not the same
+                    // and the user would not understand that the shooted image is not the previewed one
+                    if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 0, bos);
+                        data = bos.toByteArray();
+                    }
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
                     File dstFile;
@@ -706,7 +746,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         }
 
                         mShootedPicturePath = dstFile.getAbsolutePath();
-                        displayImagePreview(mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
+                        displayImagePreview(null, mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
 
                         // force to stop preview:
                         // some devices do not stop preview after the picture was taken (ie. G6 edge)
@@ -812,6 +852,46 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
+     * Create a thumbnail from an image stream with a rotation angle.
+     * @param imageStream the image stream
+     * @param rotationAngle the rotation angle
+     * @return the thumbnail
+     */
+    private Bitmap createPhotoThumbnail(InputStream imageStream, int rotationAngle) {
+        Bitmap bitmapRetValue = null;
+        final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.outWidth = -1;
+        options.outHeight = -1;
+
+        try {
+            // create a thumbnail
+            InputStream stream = ImageUtils.resizeImage(imageStream, MAX_SIZE, SAMPLE_SIZE, QUALITY);
+            imageStream.close();
+
+            bitmapRetValue = BitmapFactory.decodeStream(stream, null, options);
+
+            if (0 != rotationAngle) {
+                // apply a rotation
+                android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                bitmapMatrix.postRotate(rotationAngle);
+                bitmapRetValue = Bitmap.createBitmap(bitmapRetValue, 0, 0, bitmapRetValue.getWidth(), bitmapRetValue.getHeight(), bitmapMatrix, false);
+            }
+
+            System.gc();
+
+        } catch (OutOfMemoryError e) {
+            Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
+        }
+
+        return bitmapRetValue;
+    }
+
+    /**
      * Create a thumbnail bitmap from an image URL if there is some exif metadata which implies to rotate
      * the image. This method is used to process the image taken by the from the camera.
      * @param aImageUrl the image url
@@ -819,45 +899,27 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     private Bitmap createPhotoThumbnail(final String aImageUrl) {
         Bitmap bitmapRetValue = null;
-        final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
 
         // sanity check
         if (null != aImageUrl) {
             Uri imageUri = Uri.fromFile(new File(aImageUrl));
             int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, imageUri);
 
-            // the exif metadata implies a rotation
-            if (0 != rotationAngle) {
-                // create a thumbnail
+            try {
+                final String filename = imageUri.getPath();
 
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                options.outWidth = -1;
-                options.outHeight = -1;
+                FileInputStream imageStream = new FileInputStream(new File(filename));
+                bitmapRetValue = createPhotoThumbnail(imageStream, rotationAngle);
+                imageStream.close();
 
-                try {
-                    final String filename = imageUri.getPath();
-                    FileInputStream imageStream = new FileInputStream(new File(filename));
+                System.gc();
 
-                    // create a thumbnail
-                    InputStream stream = ImageUtils.resizeImage(imageStream, MAX_SIZE, SAMPLE_SIZE, QUALITY);
-                    imageStream.close();
-
-                    Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
-
-                    // apply a rotation
-                    android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
-                    bitmapMatrix.postRotate(rotationAngle);
-                    bitmapRetValue = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), bitmapMatrix, false);
-
-                    System.gc();
-
-                } catch (OutOfMemoryError e) {
-                    Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
-                }
+            } catch (OutOfMemoryError e) {
+                Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
             }
+
         }
 
         return bitmapRetValue;
@@ -866,38 +928,97 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Display the image preview.
      *
+     * @param bitmap the bitmap.
      * @param aCameraImageUrl image from camera
      * @param aGalleryImageUri image ref as an Uri
      * @param aOrigin CAMERA or GALLERY
      */
-    private void displayImagePreview(final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
+    private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
         final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
 
-        Bitmap newBitmap = null;
-        Uri defaultUri;
+        Bitmap newBitmap = bitmap;
+        Uri defaultUri = null;
 
-        if (IMAGE_ORIGIN_CAMERA == aOrigin) {
-            newBitmap = mCameraTextureView.getBitmap();
-            if (null == newBitmap) {
-                newBitmap = createPhotoThumbnail(aCameraImageUrl);
+        if (null == newBitmap) {
+            if (IMAGE_ORIGIN_CAMERA == aOrigin) {
+                newBitmap = mCameraTextureView.getBitmap();
+                if (null == newBitmap) {
+                    newBitmap = createPhotoThumbnail(aCameraImageUrl);
+                }
+                defaultUri = Uri.fromFile(new File(aCameraImageUrl));
+            } else {
+                // in gallery
+                defaultUri = aGalleryImageUri;
             }
-            defaultUri = Uri.fromFile(new File(aCameraImageUrl));
-        } else {
-            // in gallery
-            defaultUri = aGalleryImageUri;
         }
 
         // save bitmap to speed up UI restore (life cycle)
         VectorApp.setSavedCameraImagePreview(newBitmap);
 
-        // update the UI part
-        if (null != newBitmap) {// from camera
-            mImagePreviewImageView.setImageBitmap(newBitmap);
+        mImagePreviewImageMaskView.setVisibility(View.GONE);
+
+        if (!mIsAvatarMode) {
+            // update the UI part
+            if (null != newBitmap) {// from camera
+                mImagePreviewImageView.setImageBitmap(newBitmap);
+            } else {
+                if(null != defaultUri) {
+                    mImagePreviewImageView.setImageURI(defaultUri);
+                }
+            }
         } else {
-            if(null != defaultUri) {
-                mImagePreviewImageView.setImageURI(defaultUri);
+            // not bitmap but
+            if ((null == newBitmap) && (null != defaultUri)) {
+                try {
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(this, defaultUri, null);
+
+                    if ((null != resource) && (null != resource.contentStream)) {
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, defaultUri);
+                        newBitmap = createPhotoThumbnail(resource.contentStream, rotationAngle);
+                        resource.contentStream.close();
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri");
+                }
+            }
+
+            // update the UI part
+            if (null != newBitmap) {// from camera
+                mImagePreviewImageView.setImageBitmap(newBitmap);
+
+                // compute the image size in the screen
+                int imageW = newBitmap.getWidth();
+                int imageH = newBitmap.getHeight();
+
+                int screenHeight = this.getWindow().getDecorView().getHeight();
+                int screenWidth = this.getWindow().getDecorView().getWidth();
+
+                if ((0 == screenHeight) || (0 == screenWidth)) {
+                    mImagePreviewImageView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayImagePreview(bitmap, aCameraImageUrl, aGalleryImageUri, aOrigin);
+                        }
+                    });
+
+                    return;
+                }
+
+                int newWidth;
+                int newHeight;
+
+                newHeight = screenHeight;
+                newWidth = (int) (((float) newHeight) * imageW/ imageH);
+
+                if (newWidth > screenWidth) {
+                    newWidth = screenWidth;
+                    newHeight = (int) (((float) newWidth) * imageH / imageW);
+                }
+
+                mImagePreviewImageMaskView.setVisibility(View.VISIBLE);
+                drawCircleMask(mImagePreviewImageMaskView, newWidth, newHeight);
             }
         }
 
@@ -1214,9 +1335,37 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    /**
+     * Play the camera shutter shound
+     */
     private void playShutterSound() {
         MediaActionSound sound = new MediaActionSound();
         sound.play(MediaActionSound.SHUTTER_CLICK);
+    }
+
+    /**
+     * Compute the avatar mask bitmap and apply it to the provided ImageView
+     * @param maskView the mask view
+     * @param width the image width to hide
+     * @param height the image height to hide
+     */
+    private void drawCircleMask(ImageView maskView, int width, int height) {
+        // create a bitmap with a transparent hole
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        canvas.drawColor(getResources().getColor(android.R.color.black));
+
+        Paint eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
+        eraser.setStyle(Paint.Style.FILL);
+        // require to make a transparent hole
+        eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        eraser.setColor(Color.TRANSPARENT);
+
+        canvas.drawCircle(width/2, height/2, Math.min(width/2, height/2), eraser);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+
+        maskView.setImageBitmap(bitmap);
     }
 
     @Override
@@ -1281,6 +1430,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 layout.height = newHeight;
                 mCameraTextureView.setLayoutParams(layout);
 
+                if (mIsAvatarMode) {
+                    mCameraTextureMaskView.setVisibility(View.VISIBLE);
+                    drawCircleMask(mCameraTextureMaskView, newWidth, newHeight);
+                } else {
+                    mCameraTextureMaskView.setVisibility(View.GONE);
+                }
+
                 if (layout.height < mCameraPreviewHeight) {
                     mCameraPreviewHeight = layout.height;
 
@@ -1319,8 +1475,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        mCamera.stopPreview();
-        mCamera.release();
+        if (null != mCamera) {
+            mCamera.stopPreview();
+            mCamera.release();
+        }
         mSurfaceTexture = null;
         mCamera = null;
         return true;
