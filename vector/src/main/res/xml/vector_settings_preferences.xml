@@ -32,6 +32,10 @@
             android:key="@string/settings_enable_all_notif"/>
 
         <SwitchPreference
+            android:title="@string/settings_enable_this_device"
+            android:key="@string/settings_enable_this_device"/>
+
+        <SwitchPreference
             android:title="@string/settings_containing_my_name"
             android:key="@string/settings_containing_my_name"
             android:dependency="@string/settings_enable_all_notif"/>
@@ -84,10 +88,33 @@
             android:title="@string/settings_identity_server"
             android:summary="1.2.3"
             android:key="@string/settings_identity_server"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/settings_background_sync"
+        android:title="@string/settings_background_sync" >
+
+        <SwitchPreference
+            android:title="@string/settings_enable_background_sync"
+            android:key="@string/settings_enable_background_sync"/>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_timeout"
+            android:key="@string/settings_set_sync_timeout"/>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay"
+            android:key="@string/settings_set_sync_delay"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_other" >
+    <PreferenceCategory
+        android:title="@string/settings_other"
+        android:key="@string/settings_other" >
 
         <SwitchPreference
             android:title="@string/ga_use_settings"
@@ -108,8 +135,8 @@
             android:key="@string/settings_term_conditions"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
-            android:title="@string/settings_directory_visibility"
-            android:key="@string/settings_directory_visibility"/>
+            android:title="@string/room_sliding_privacy_policy"
+            android:key="@string/room_sliding_privacy_policy"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_clear_cache"

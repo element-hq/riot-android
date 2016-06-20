@@ -35,12 +35,15 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.Excluder;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
@@ -65,6 +68,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
@@ -79,6 +83,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     private static final String PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
     private static final String APP_INFO_LINK_PREFERENCE_KEY = "application_info_link";
+
+    private static final String DUMMY_RULE = "DUMMY_RULE";
 
     // members
     private MXSession mSession;
@@ -102,6 +108,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // displayed pushers
     private PreferenceCategory mPushersSettingsCategory;
     private List<Pusher> mDisplayedPushers = new ArrayList<Pusher>();
+
+    // background sync category
+    private PreferenceCategory mBackgroundSyncCategory;
+    private EditTextPreference mSyncRequestTimeoutPreference;
+    private EditTextPreference mSyncRequestDelayPreference;
 
     // events listener
     private MXEventListener mEventsListener = new MXEventListener() {
@@ -148,6 +159,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mPushesRuleByResourceId = new HashMap<String, String>();
 
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_this_device), DUMMY_RULE);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
@@ -215,7 +227,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
 
         // terms & conditions
-        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_directory_visibility));
+        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_sliding_privacy_policy));
 
         if (null != termConditionsPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -270,11 +282,27 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         }
 
+        final SwitchPreference useBackgroundSyncPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
+
+        if (null != useBackgroundSyncPref) {
+            final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+
+            useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
+
+            useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    gcmMgr.setIsBackgroundSyncAllowed((boolean)newValue);
+                    return true;
+                }
+            });
+        }
+        
         final SwitchPreference useGaPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
         useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Boolean useGA = VectorApp.getInstance().useGA(getActivity());
+                Boolean useGA = GAHelper.useGA(getActivity());
                 boolean newGa = (boolean)newValue;
 
                 if ((null != useGA) && (useGA != newGa)) {
@@ -288,7 +316,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                             }
                         }).show();
                     }
-                    VectorApp.getInstance().setUseGA(getActivity(), newGa);
+                    GAHelper.setUseGA(getActivity(), newGa);
                 }
 
                 return true;
@@ -317,9 +345,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         });
 
+        // background sync management
+        mBackgroundSyncCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
+        mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
+        mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
+
         refreshPushersList();
         refreshPreferences();
         refreshEmailsList();
+        refreshBackgroundSyncPrefs();
         refreshDisplay();
     }
 
@@ -368,6 +402,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             // refresh anything else
             refreshPreferences();
             refreshDisplay();
+            refreshBackgroundSyncPrefs();
         }
     }
 
@@ -446,8 +481,21 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
-                switchPreference.setEnabled((null != rules) && isConnected);
-                switchPreference.setChecked(preferences.getBoolean(resourceText, false));
+                if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
+                    GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+
+                    if (gcmMgr.useGCM() && !gcmMgr.usePollingThread()) {
+                        // disable the notifications for this device
+                        // if GCM is disabled or the registration or unregistration is in progress
+                        switchPreference.setEnabled((gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred()) && isConnected);
+                        switchPreference.setChecked(gcmMgr.isServerRegistred() && gcmMgr.isNotificationsAllowed());
+                    } else {
+                        switchPreference.setChecked(gcmMgr.isNotificationsAllowed());
+                    }
+                } else {
+                    switchPreference.setEnabled((null != rules) && isConnected);
+                    switchPreference.setChecked(preferences.getBoolean(resourceText, false));
+                }
             }
         }
     }
@@ -571,6 +619,64 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
      * Update a push rule.
      */
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
+        if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
+            final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+            final boolean isAllowed = gcmMgr.isNotificationsAllowed();
+
+            final GcmRegistrationManager.GcmSessionRegistration listener = new GcmRegistrationManager.GcmSessionRegistration() {
+
+                private void onDone() {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideLoadingView(true);
+                                refreshPushersList();
+                            }
+                        });
+
+                    }
+                }
+
+                @Override
+                public void onSessionRegistred() {
+                    onDone();
+                }
+
+                @Override
+                public void onSessionRegistrationFailed() {
+                    gcmMgr.setIsNotificationsAllowed(isAllowed);
+                    onDone();
+                }
+
+                @Override
+                public void onSessionUnregistred() {
+                    onDone();
+                }
+
+                @Override
+                public void onSessionUnregistrationFailed() {
+                    gcmMgr.setIsNotificationsAllowed(isAllowed);
+                    onDone();
+                }
+            };
+
+            gcmMgr.setIsNotificationsAllowed(!isAllowed);
+
+            // when using GCM
+            // need to register on servers
+            if (gcmMgr.useGCM() && !gcmMgr.usePollingThread()) {
+                displayLoadingView();
+                if (gcmMgr.isServerRegistred()) {
+                    gcmMgr.unregisterSessions(listener);
+                } else {
+                    gcmMgr.registerSessions(getActivity(), listener);
+                }
+            }
+
+            return;
+        }
+
         final String ruleId = mPushesRuleByResourceId.get(fResourceText);
         BingRule rule = mSession.getDataHandler().pushRules().findDefaultRule(ruleId);
 
@@ -1050,5 +1156,110 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    //==============================================================================================================
+    // background sync management
+    //==============================================================================================================
+
+    /**
+     * Convert a delay in seconds to string
+     * @param seconds the delay in seconds
+     * @return the text
+     */
+    private String secondsToText(int seconds) {
+        if (seconds > 1) {
+            return seconds + " " + getActivity().getString(R.string.settings_seconds);
+        } else {
+            return seconds + " " + getActivity().getString(R.string.settings_second);
+        }
+    }
+
+    /**
+     * Refresh the background sync preference
+     */
+    private void refreshBackgroundSyncPrefs() {
+        // sanity check
+        if (null == getActivity()) {
+            return;
+        }
+
+        final GcmRegistrationManager gcmmgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+
+        final int timeout = gcmmgr.getBackgroundSyncTimeOut() / 1000;
+        final int delay = gcmmgr.getBackgroundSyncDelay() / 1000;
+
+        // update the settings
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(this.getResources().getString(R.string.settings_set_sync_timeout), timeout + "");
+        editor.putString(this.getResources().getString(R.string.settings_set_sync_delay), delay + "");
+        editor.commit();
+
+        if (null != mSyncRequestTimeoutPreference) {
+            mSyncRequestTimeoutPreference.setSummary(secondsToText(timeout));
+
+            mSyncRequestTimeoutPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int newTimeOut = timeout;
+
+                    try {
+                        newTimeOut = Integer.parseInt((String) newValue);
+                    } catch(Exception e) {
+                    }
+
+                    if (newTimeOut != timeout) {
+                        gcmmgr.setBackgroundSyncTimeOut(newTimeOut * 1000);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshBackgroundSyncPrefs();
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+
+        }
+
+        if (null != mSyncRequestDelayPreference) {
+            mSyncRequestDelayPreference.setSummary(secondsToText(delay));
+
+            mSyncRequestDelayPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                    int newDelay = delay;
+
+                    try {
+                        newDelay = Integer.parseInt((String) newValue);
+                    } catch(Exception e) {
+                    }
+
+                    if (newDelay != delay) {
+                        gcmmgr.setBackgroundSyncDelay(newDelay * 1000);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshBackgroundSyncPrefs();
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+        }
+
+        // theses both settings are dedicated when a client does not support GCM
+        if (gcmmgr.hasPushKey()) {
+            mBackgroundSyncCategory.removePreference(mSyncRequestTimeoutPreference);
+            mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
+        }
     }
 }

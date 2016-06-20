@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -82,6 +83,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     protected Date mReferenceDate = new Date();
     protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
     protected Handler mUiHandler;
+
+    // when the adapter is used in search mode
+    // the searched message should be highlighted
+    protected String mSearchedEventId = null;
 
     protected HashMap<String, String> mEventFormattedTsMap = new HashMap<String, String>();
 
@@ -137,6 +142,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
             notifyDataSetChanged();
         }
+    }
+
+    /**
+     * Display a bar to the left of the message
+     * @param eventId the event id
+     */
+    public void setSearchedEventId(String eventId) {
+       mSearchedEventId = eventId;
     }
 
     /**
@@ -587,7 +600,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             shouldBeMerged = null == headerMessage(position);
         }
 
-        return shouldBeMerged;
+        return shouldBeMerged && !event.isCallEvent();
+    }
+
+    @Override
+    protected boolean isMergeableEvent(Event event) {
+        return super.isMergeableEvent(event) && !event.isCallEvent();
     }
 
     @Override
@@ -632,7 +650,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         Event event = row.getEvent();
 
         // mother class implementation
-        Boolean isMergedView = super.manageSubView(position, convertView, subView, msgType);
+        boolean isMergedView = super.manageSubView(position, convertView, subView, msgType);
 
         // remove the message separator when it is not required
         View view = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_message_separator);
@@ -681,6 +699,38 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         // selection mode
         manageSelectionMode(convertView, event);
+
+
+        // search message mode
+        View highlightMakerView = convertView.findViewById(R.id.messagesAdapter_highlight_message_marker);
+
+        if (null != highlightMakerView) {
+            if (TextUtils.equals(mSearchedEventId, event.eventId)) {
+                View avatarView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_roundAvatar_left);
+                ViewGroup.LayoutParams avatarLayout = avatarView.getLayoutParams();
+
+                // align marker view with the message
+                ViewGroup.MarginLayoutParams highlightMakerLayout = (ViewGroup.MarginLayoutParams) highlightMakerView.getLayoutParams();
+
+                if (isMergedView) {
+                    highlightMakerLayout.setMargins(avatarLayout.width + 5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+
+                } else {
+                    highlightMakerLayout.setMargins(5, highlightMakerLayout.topMargin, 5, highlightMakerLayout.bottomMargin);
+                }
+
+                highlightMakerView.setLayoutParams(highlightMakerLayout);
+
+                // move left the body
+                View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
+                ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+                bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
+
+                highlightMakerView.setBackgroundColor(mContext.getResources().getColor(R.color.vector_green_color));
+            } else {
+                highlightMakerView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
+            }
+        }
 
         return isMergedView;
     }

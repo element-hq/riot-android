@@ -91,6 +91,11 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         // the session should be passed in parameter
         // but the current design does not describe how the multi accounts will be managed.
         mSession = Matrix.getInstance(this).getDefaultSession();

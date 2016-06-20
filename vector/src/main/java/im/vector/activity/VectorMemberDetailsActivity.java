@@ -699,6 +699,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         // retrieve the parameters contained extras and setup other
         // internal state values such as the; session, room..
         if(!initContextStateValues()){

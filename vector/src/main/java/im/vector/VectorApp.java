@@ -17,17 +17,10 @@
 package im.vector;
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
-
-import com.google.android.gms.analytics.ExceptionParser;
 
 import org.matrix.androidsdk.MXSession;
 
@@ -35,7 +28,7 @@ import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
-import im.vector.ga.Analytics;
+import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
@@ -56,10 +49,10 @@ public class VectorApp extends Application {
     private boolean mIsInBackground = true;
     private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
 
-    // google analytics
-    private int VERSION_BUILD = -1;
-    private String VECTOR_VERSION_STRING = "";
-    private String SDK_VERSION_STRING = "";
+    // google analytics info
+    public static int VERSION_BUILD = -1;
+    public static String VECTOR_VERSION_STRING = "";
+    public static String SDK_VERSION_STRING = "";
 
     private Boolean mIsCallingInBackground = false;
 
@@ -71,6 +64,7 @@ public class VectorApp extends Application {
 
     @Override
     public void onCreate() {
+        Log.d(LOG_TAG, "onCreate");
         super.onCreate();
 
         instance = this;
@@ -98,7 +92,7 @@ public class VectorApp extends Application {
         LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
         LogUtilities.storeLogcat();
 
-        initGoogleAnalytics(getApplicationContext());
+        GAHelper.initGoogleAnalytics(getApplicationContext());
 
         // get the contact update at application launch
         ContactsManager.refreshLocalContactsSnapshot(this);
@@ -118,7 +112,7 @@ public class VectorApp extends Application {
         GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager();
 
         // suspend the events thread if the client uses GCM
-        if (gcmRegistrationManager.useGCM() && !gcmRegistrationManager.usePollingThread()) {
+        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasPushKey())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
             CommonActivityUtils.pauseEventStream(VectorApp.this);
         } else {
@@ -130,6 +124,8 @@ public class VectorApp extends Application {
         for(MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
+                session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
             }
         }
 
@@ -214,6 +210,8 @@ public class VectorApp extends Application {
             for(MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
+                session.setSyncDelay(0);
+                session.setSyncTimeout(0);
             }
         }
 
@@ -233,7 +231,7 @@ public class VectorApp extends Application {
                 matrixInstance.refreshPushRules();
             }
 
-            Log.e("debackground", "The application is resumed");
+            Log.d(LOG_TAG, "The application is resumed");
             // display the memory usage when the application is debackgrounded.
             CommonActivityUtils.displayMemoryInformation(activity);
         }
@@ -257,108 +255,6 @@ public class VectorApp extends Application {
     public static boolean isAppInBackground() {
         return (null == mCurrentActivity) && (null != getInstance()) && getInstance().mIsInBackground;
     }
-
-    //==============================================================================================================
-    // Google analytics
-    //==============================================================================================================
-    /**
-     * Update the GA use.
-     * @param context the context
-     * @param value the new value
-     */
-    public void setUseGA(Context context, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(context.getString(R.string.ga_use_settings), value);
-        editor.commit();
-
-        initGoogleAnalytics(context);
-    }
-
-    /**
-     * Tells if GA can be used
-     * @param context the context
-     * @return null if not defined, true / false when defined
-     */
-    public Boolean useGA(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (preferences.contains(context.getString(R.string.ga_use_settings))) {
-            return preferences.getBoolean(context.getString(R.string.ga_use_settings), false);
-        } else {
-            try {
-                // test if the client should not use GA
-                boolean allowGA = TextUtils.equals(context.getResources().getString(R.string.allow_ga_use), "true");
-
-                if (!allowGA) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(context.getString(R.string.ga_use_settings), false);
-                    editor.commit();
-
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "useGA " + e.getLocalizedMessage());
-            }
-
-            return null;
-        }
-    }
-
-    /**
-     * Initialize the google analytics
-     */
-    public void initGoogleAnalytics(Context context) {
-        Boolean useGA = useGA(context);
-
-        if (null == useGA) {
-            Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
-            return;
-        }
-
-        if (!useGA) {
-            Log.e(LOG_TAG, "The user decides to do not use Google Analytics");
-            return;
-        }
-
-        // pull tracker resource ID from res/values/analytics.xml
-        int trackerResId = getResources().getIdentifier("ga_trackingId", "string", getPackageName());
-        if (trackerResId == 0) {
-            Log.e(LOG_TAG, "Unable to find tracker id for Google Analytics");
-            return;
-        }
-
-        String trackerId = getString(trackerResId);
-        Log.d(LOG_TAG, "Tracker ID: "+trackerId);
-        // init google analytics with this tracker ID
-        if (!TextUtils.isEmpty(trackerId)) {
-            Analytics.initialiseGoogleAnalytics(this, trackerId, new ExceptionParser() {
-                @Override
-                public String getDescription(String threadName, Throwable throwable) {
-                    StringBuilder b = new StringBuilder();
-
-                    b.append("Vector Build : " + VERSION_BUILD + "\n");
-                    b.append("Vector Version : " + VECTOR_VERSION_STRING + "\n");
-                    b.append("SDK Version : " + SDK_VERSION_STRING + "\n");
-                    b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
-                    b.append("Thread: ");
-                    b.append(threadName);
-
-                    Activity a = VectorApp.getCurrentActivity();
-                    if (a != null) {
-                        b.append(", Activity:");
-                        b.append(a.getLocalClassName());
-                    }
-
-                    b.append(", Exception: ");
-                    b.append(Analytics.getStackTrace(throwable));
-                    Log.e("FATAL EXCEPTION", b.toString());
-                    return b.toString();
-                }
-            });
-        }
-    }
-
     /**
      * The image taken from the medias picker is stored in a static variable because
      * saving it would take too much time.

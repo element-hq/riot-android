@@ -173,6 +173,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         Intent intent = getIntent();
         mIsAvatarMode = intent.getBooleanExtra(EXTRA_AVATAR_MODE, false);
 
@@ -1470,8 +1475,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        mCamera.stopPreview();
-        mCamera.release();
+        if (null != mCamera) {
+            mCamera.stopPreview();
+            mCamera.release();
+        }
         mSurfaceTexture = null;
         mCamera = null;
         return true;

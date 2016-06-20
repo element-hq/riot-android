@@ -30,7 +30,6 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.VectorApp;
-import im.vector.ga.Analytics;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -314,8 +313,6 @@ public class ContactsManager {
         PIDsRetriever.getIntance().setPIDsRetrieverListener(mPIDsRetrieverListener);
 
         mContactsList = dict.values();
-
-        Analytics.sendEvent("Contacts", "Refresh", mContactsList.size() + " Contacts", System.currentTimeMillis() - startTime);
 
         if (null != mListeners) {
             for(ContactsManagerListener listener : mListeners) {

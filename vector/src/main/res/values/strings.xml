@@ -41,6 +41,7 @@
     <string name="chat_with">Chat with </string>
     <string name="delete">Delete</string>
     <string name="report_content">Report content</string>
+    <string name="decline">Decline</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
@@ -147,7 +148,7 @@
     <string name="auth_user_id_placeholder">Email or user name</string>
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
-    <string name="auth_user_name_placeholder">Your name</string>
+    <string name="auth_user_name_placeholder">User name</string>
     <string name="auth_email_placeholder">Email address</string>
     <string name="auth_repeat_password_placeholder">Repeat password</string>
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
@@ -586,12 +587,21 @@
     <string name="settings_title_app_info_link">Application info</string>
 
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
+    <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_containing_my_name">Msgs containing my name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
     <string name="settings_invited_to_room">When i\'m invited to a room</string>
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+
+    <string name="settings_background_sync">Background synchronization</string>
+    <string name="settings_enable_background_sync">Enable background sync</string>
+    <string name="settings_set_sync_timeout">Sync request timeout</string>
+    <string name="settings_set_sync_delay">Delay between two sync requests</string>
+    <string name="settings_second">second</string>
+    <string name="settings_seconds">seconds</string>
+
 
     <string name="settings_version">Version</string>
     <string name="settings_term_conditions">Terms &amp; conditions</string>

@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.PublicRoom;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
  * Displays a list of public rooms
  */
 public class VectorPublicRoomsActivity extends MXCActionBarActivity {
+
+    private static final String LOG_TAG = "VectorPublicRoomsAct";
 
     private static final String TAG_FRAGMENT_PUBLIC_ROOMS_LIST = "VectorPublicRoomsActivity.TAG_FRAGMENT_PUBLIC_ROOMS_LIST";
 
@@ -46,6 +49,12 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             CommonActivityUtils.restartApp(this);
+            Log.d(LOG_TAG, "onCreate : restart the application");
+            return;
+        }
+
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
             return;
         }
 

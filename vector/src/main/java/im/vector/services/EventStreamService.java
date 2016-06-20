@@ -30,11 +30,14 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCall;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -223,30 +226,14 @@ public class EventStreamService extends Service {
     // this imageView is used to preload the avatar thumbnail
     static private ImageView mDummyImageView;
 
-    // live events listener
-    private MXEventListener mListener = new MXEventListener() {
+    private MXCallsManager.MXCallsManagerListener mCallsManagerListener = new MXCallsManager.MXCallsManagerListener() {
+
         /**
          * Manage hangup event.
          * The ringing sound is disabled and pending incoming call is dismissed.
-         * @param event the hangup event.
+         * @param callId the callId
          */
-        private void manageHangUpEvent(Event event) {
-            // check if the user answer from another device
-            if (Event.EVENT_TYPE_CALL_ANSWER.equals(event.type)) {
-                MXSession session = Matrix.getMXSession(getApplicationContext(), event.getMatrixId());
-
-                // ignore the answer event if it was sent by another member
-                if (!TextUtils.equals(event.getSender(), session.getCredentials().userId)) {
-                    return;
-                }
-            }
-
-            String callId = null;
-
-            try {
-                callId = event.getContentAsJsonObject().get("call_id").getAsString();
-            } catch (Exception e) {}
-
+        private void manageHangUpEvent(String callId) {
             if (null != callId) {
                 // hide the "call in progress notification"
                 hidePendingCallNotification(callId);
@@ -257,16 +244,66 @@ public class EventStreamService extends Service {
         }
 
         @Override
-        public void onLiveEvent(Event event, RoomState roomState) {
-            if (Event.EVENT_TYPE_CALL_HANGUP.equals(event.type) || Event.EVENT_TYPE_CALL_ANSWER.equals(event.type)) {
-                manageHangUpEvent(event);
-            }
+        public void onIncomingCall(final IMXCall call) {
+            Log.d(LOG_TAG, "onIncomingCall " + call.getCallId());
+
+            IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
+                @Override
+                public void onStateDidChange(String state) {
+                    Log.d(LOG_TAG, "onStateDidChange " + call.getCallId() + " : " + state);
+                }
+
+                @Override
+                public void onCallError(String error) {
+                    Log.d(LOG_TAG, "onCallError " + call.getCallId() + " : " + error);
+                    manageHangUpEvent(call.getCallId());
+                }
+
+                @Override
+                public void onViewLoading(View callview) {
+                }
+
+                @Override
+                public void onViewReady() {
+                }
+
+                @Override
+                public void onCallAnsweredElsewhere() {
+                    Log.d(LOG_TAG, "onCallAnsweredElsewhere " + call.getCallId());
+                    manageHangUpEvent(call.getCallId());
+                }
+
+                @Override
+                public void onCallEnd() {
+                    Log.d(LOG_TAG, "onCallEnd " + call.getCallId());
+                    manageHangUpEvent(call.getCallId());
+                }
+            };
+
+            call.addListener(callListener);
         }
 
+        @Override
+        public void onCallHangUp(final IMXCall call) {
+            Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
+
+            manageHangUpEvent(call.getCallId());
+        }
+    };
+
+    // live events listener
+    private MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingEvent(Event event, RoomState roomState, BingRule bingRule) {
             Log.d(LOG_TAG, "onBingEvent : the event " + event);
             Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
+
+            GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+
+            if (!gcmGcmRegistrationManager.isNotificationsAllowed()) {
+                Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
+                return;
+            }
 
             final String roomId = event.roomId;
 
@@ -288,11 +325,6 @@ public class EventStreamService extends Service {
                 // display only the invitation messages by now
                 // because the other ones are not displayed.
                 if (event.isCallEvent() && !event.type.equals(Event.EVENT_TYPE_CALL_INVITE)) {
-                    // dismiss the call notifications
-                    if (event.type.equals(Event.EVENT_TYPE_CALL_HANGUP)) {
-                        manageHangUpEvent(event);
-                    }
-
                     Log.d(LOG_TAG, "onBingEvent : don't bing - Call invite");
                     return;
                 }
@@ -343,9 +375,6 @@ public class EventStreamService extends Service {
                     isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
                 } catch (Exception e) {}
 
-                if (isInvitationEvent) {
-
-                }
 
             } else {
                 body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
@@ -462,6 +491,8 @@ public class EventStreamService extends Service {
                 if (hasActiveCalls) {
                     Log.d(LOG_TAG, "Catchup again because there are active calls");
                     catchup();
+                } else {
+                    Log.d(LOG_TAG, "no Active call");
                 }
             }
         }
@@ -479,7 +510,8 @@ public class EventStreamService extends Service {
 
                 mSessions.add(session);
                 mMatrixIds.add(matrixId);
-                session.getDataHandler().addListener(mListener);
+                session.getDataHandler().addListener(mEventsListener);
+                session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
                 // perform a full sync
                 session.startEventStream(null);
             }
@@ -499,7 +531,8 @@ public class EventStreamService extends Service {
                 if (null != session) {
 
                     session.stopEventStream();
-                    session.getDataHandler().removeListener(mListener);
+                    session.getDataHandler().removeListener(mEventsListener);
+                    session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
 
                     mSessions.remove(session);
                     mMatrixIds.remove(matrixId);
@@ -606,7 +639,8 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for(MXSession session : mSessions) {
-            session.getDataHandler().addListener(mListener);
+            session.getDataHandler().addListener(mEventsListener);
+            session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
             final IMXStore store = session.getDataHandler().getStore();
 
             // the store is ready (no data loading in progress...)
@@ -623,14 +657,16 @@ public class EventStreamService extends Service {
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
                         startEventStream(fSession, store);
                     }
                 });
             }
         }
 
-        updateListener();
+        if (!Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager().useGCM()) {
+            updateListener();
+        }
 
         mState = StreamAction.START;
     }
@@ -649,7 +685,8 @@ public class EventStreamService extends Service {
             for(MXSession session : mSessions) {
                 if (session.isAlive()) {
                     session.stopEventStream();
-                    session.getDataHandler().removeListener(mListener);
+                    session.getDataHandler().removeListener(mEventsListener);
+                    session.getDataHandler().getCallsManager().removeListener(mCallsManagerListener);
                 }
             }
         }
@@ -739,13 +776,19 @@ public class EventStreamService extends Service {
      * polling listener when the GCM is disabled
      */
     private void updateListener() {
-        GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+        MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
+
+        if (null == session) {
+            Log.e(LOG_TAG, "updateListener : no session");
+            return;
+        }
+
+        GcmRegistrationManager gcmnMgr = Matrix.getInstance(this).getSharedGcmRegistrationManager();
 
         // detect if the polling thread must be started
         // i.e a session must be defined
         // and GCM disabled or GCM registration failed
-        if ((null != Matrix.getInstance(getApplicationContext()).getDefaultSession()) &&
-                (!gcmGcmRegistrationManager.useGCM() || gcmGcmRegistrationManager.usePollingThread())) {
+        if ((!gcmnMgr.useGCM() || gcmnMgr.usePollingThread()) && gcmnMgr.isBackgroundSyncAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForegound = true;
