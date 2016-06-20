@@ -1003,7 +1003,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mIncomingCallId = aCallId;
         mIncomingCall = aCurrentCall;
 
-        if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, this)){
+        if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, VectorHomeActivity.this)){
             startCall(aSessionId,aCallId);
         }
     }
