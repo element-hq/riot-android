@@ -48,15 +48,21 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     // exclude the room ID
     public static final String EXTRA_ROOM_ID = "VectorRoomDetailsActivity.EXTRA_ROOM_ID";
+    // open a dedicated tab at launch
+    public static final String EXTRA_SELECTED_TAB_ID = "VectorRoomDetailsActivity.EXTRA_SELECTED_TAB_ID";
 
     // tab related items
     private static final String TAG_FRAGMENT_PEOPLE_ROOM_DETAILS = "im.vector.activity.TAG_FRAGMENT_PEOPLE_ROOM_DETAILS";
     private static final String TAG_FRAGMENT_FILES_DETAILS = "im.vector.activity.TAG_FRAGMENT_FILES_DETAILS";
     private static final String TAG_FRAGMENT_SETTINGS_ROOM_DETAIL = "im.vector.activity.TAG_FRAGMENT_SETTINGS_ROOM_DETAIL";
     private static final String KEY_FRAGMENT_TAG = "KEY_FRAGMENT_TAG";
-    private int mPeopleTabIndex = -1;
-    private int mFileTabIndex = -1;
-    private int mSettingsTabIndex = -1;
+
+    // a tab can be selected at launch (with EXTRA_SELECTED_TAB_ID)
+    // so the tab index must be fixed.
+    public static final int PEOPLE_TAB_INDEX = 0;
+    public static final int FILE_TAB_INDEX = 1;
+    public static final int SETTINGS_TAB_INDEX = 2;
+
     private int mCurrentTabIndex = -1;
     private ActionBar mActionBar;
     private VectorRoomDetailsMembersFragment mAddPeopleFragment;
@@ -125,6 +131,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
         mRoom = mSession.getDataHandler().getRoom(mRoomId);
+        int selectedTab = intent.getIntExtra(EXTRA_SELECTED_TAB_ID, -1);
 
         setContentView(R.layout.activity_vector_room_details);
 
@@ -134,7 +141,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
         // tab creation and restore tabs UI context
         mActionBar = getSupportActionBar();
-        createNavigationTabs(savedInstanceState);
+        createNavigationTabs(savedInstanceState, selectedTab);
     }
 
     @Override
@@ -167,7 +174,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     public void onBackPressed() {
         boolean isTrapped = false;
 
-        if (mPeopleTabIndex == mCurrentTabIndex) {
+        if (PEOPLE_TAB_INDEX == mCurrentTabIndex) {
             isTrapped = mAddPeopleFragment.onBackPressed();
         }
 
@@ -245,8 +252,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     // =============================================================================================
     // Tabs logic implementation
-    private void createNavigationTabs(Bundle aSavedInstanceState) {
-        int tabIndex = 0;
+    private void createNavigationTabs(Bundle aSavedInstanceState, int defaultSelectedTab) {
         int tabIndexToRestore;
 
         // Set the tabs navigation mode
@@ -260,7 +266,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         Bundle tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
         tabToBeadded.setTag(tabBundle);
-        mPeopleTabIndex = tabIndex++; // set tab index
         mActionBar.addTab(tabToBeadded);
 
         // Files tab creation: display the file list in the room history
@@ -271,7 +276,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_FILES_DETAILS);
         tabToBeadded.setTag(tabBundle);
-        mFileTabIndex = tabIndex++; // set tab index
         mActionBar.addTab(tabToBeadded);
 
 
@@ -283,14 +287,18 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL);
         tabToBeadded.setTag(tabBundle);
-        mSettingsTabIndex = tabIndex; // set tab index
         mActionBar.addTab(tabToBeadded);
 
         // set the default tab to be displayed
         tabIndexToRestore = (null != aSavedInstanceState) ? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, -1) : -1;
+
+        if (-1 == tabIndexToRestore) {
+            tabIndexToRestore = defaultSelectedTab;
+        }
+
         if (-1 == tabIndexToRestore) {
             // default value: display the search in rooms tab
-            tabIndexToRestore = mPeopleTabIndex;
+            tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
 
         // set the tab to display & set current tab index
@@ -326,11 +334,11 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 ft.attach(mAddPeopleFragment);
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
             }
-            mCurrentTabIndex = mPeopleTabIndex;
+            mCurrentTabIndex = PEOPLE_TAB_INDEX;
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabSelectSettingsFragment();
-            mCurrentTabIndex = mSettingsTabIndex;
+            mCurrentTabIndex = SETTINGS_TAB_INDEX;
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
@@ -343,12 +351,12 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 Log.d(LOG_TAG, "## onTabSelected() file frag attach");
             }
 
-            mCurrentTabIndex = mFileTabIndex;
+            mCurrentTabIndex = FILE_TAB_INDEX;
             startFileSearch();
         }
         else {
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
-            mCurrentTabIndex = mSettingsTabIndex;
+            mCurrentTabIndex = SETTINGS_TAB_INDEX;
             Log.w(LOG_TAG, "## onTabSelected() unknown tab selected!!");
         }
 
@@ -359,18 +367,21 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         }
     }
 
+    /**
+     * Start a file search
+     */
     private void startFileSearch() {
-        if (mCurrentTabIndex == mFileTabIndex) {
+        if (mCurrentTabIndex == FILE_TAB_INDEX) {
             mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
             mSearchFilesFragment.startFilesSearch(new MatrixMessageListFragment.OnSearchResultListener() {
                 @Override
                 public void onSearchSucceed(int nbrMessages) {
-                    onSearchEnd(mFileTabIndex, nbrMessages);
+                    onSearchEnd(FILE_TAB_INDEX, nbrMessages);
                 }
 
                 @Override
                 public void onSearchFailed() {
-                    onSearchEnd(mFileTabIndex, 0);
+                    onSearchEnd(FILE_TAB_INDEX, 0);
                 }
             });
         }
