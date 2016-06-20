@@ -99,9 +99,18 @@
             android:title="@string/settings_enable_background_sync"
             android:key="@string/settings_enable_background_sync"/>
 
+        <string name="settings_set_sync_timeout">Sync request timeout</string>
+        <string name="settings_set_sync_delay">Delay between two sync requests</string>
+
         <SwitchPreference
             android:title="@string/ga_use_settings"
             android:key="@string/ga_use_settings"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_change_password"
+            android:summary="********"
+            android:key="@string/settings_change_password"/>
+
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_version"

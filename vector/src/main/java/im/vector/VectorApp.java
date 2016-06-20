@@ -124,6 +124,8 @@ public class VectorApp extends Application {
         for(MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
+                session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
+                session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
             }
         }
 
@@ -208,6 +210,8 @@ public class VectorApp extends Application {
             for(MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
+                session.setSyncDelay(0);
+                session.setSyncTimeout(0);
             }
         }
 
