@@ -393,7 +393,7 @@ public final class GcmRegistrationManager {
     /**
      * @param syncDelay the new sync delay in ms.
      */
-    public void setBackgroundSyncTimeOutSeconds(int syncDelay) {
+    public void setBackgroundSyncTimeOut(int syncDelay) {
         getSharedPreferences().edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
                 .apply();

@@ -583,9 +583,14 @@
     <string name="settings_invited_to_room">When i\'m invited to a room</string>
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+
+    <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_enable_background_sync">Enable background sync</string>
     <string name="settings_set_sync_timeout">Sync request timeout</string>
     <string name="settings_set_sync_delay">Delay between two sync requests</string>
+    <string name="settings_second">second</string>
+    <string name="settings_seconds">seconds</string>
+
 
     <string name="settings_version">Version</string>
     <string name="settings_term_conditions">Terms &amp; conditions</string>
