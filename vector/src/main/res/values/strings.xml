@@ -355,6 +355,15 @@
     <string name="media_picker_choose_from_library">Choose from library"</string>
     <string name="media_picker_library">Library"</string>
 
+    <!-- permissions Android M -->
+    <string name="permissions_rationale_popup_title">Vector permissions</string>
+    <string name="permissions_rationale_msg_title">You are about to be asked to grant permissions..</string>
+    <string name="permissions_rationale_msg_storage">Vector needs access to media files to display photos in the media picker\n\n</string>
+    <string name="permissions_rationale_msg_camera">Vector needs access to the camera to take pictures, video calls..</string>
+    <string name="permissions_rationale_msg_record_audio">Vector needs access to the microphone to perform audio calls</string>
+    <string name="permissions_rationale_msg_contacts">Vector needs access to the contact list to find Vector members</string>
+    <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
+
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
     <string name="media_slider_saved_message">Save to downloads</string>
@@ -573,6 +582,8 @@
     <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
+    <string name="settings_summary_app_info_link">Application system info screen</string>
+    <string name="settings_title_app_info_link">Application info</string>
 
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
     <string name="settings_containing_my_name">Msgs containing my name</string>

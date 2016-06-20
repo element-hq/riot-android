@@ -24,18 +24,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCall;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -56,6 +55,7 @@ import im.vector.util.NotificationUtils;
 import im.vector.util.VectorUtils;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +73,9 @@ public class EventStreamService extends Service {
         CATCHUP,
         GCM_STATUS_UPDATE
     }
+
+    // notification sub title,  when sync polling thread is enabled:
+    private static final String NOTIFICATION_SUB_TITLE = "Listening for events";
 
     public static final String EXTRA_STREAM_ACTION = "EventStreamService.EXTRA_STREAM_ACTION";
     public static final String EXTRA_MATRIX_IDS = "EventStreamService.EXTRA_MATRIX_IDS";
@@ -636,7 +639,7 @@ public class EventStreamService extends Service {
      * internal stop.
      */
     private void stop() {
-        Log.d(LOG_TAG, "the service is stopped.");
+        Log.d(LOG_TAG, "## stop(): the service is stopped");
 
         if (mIsForegound) {
             stopForeground(true);
@@ -756,24 +759,36 @@ public class EventStreamService extends Service {
      * @return the polling thread listener notification
      */
     private Notification buildNotification() {
-        Notification notification = new Notification(
-                R.drawable.logo_transparent,
-                "Vector",
-                System.currentTimeMillis()
-        );
-
-        // go to the home screen if this is clicked.
+        // build the pending intent go to the home screen if this is clicked.
         Intent i = new Intent(this, VectorHomeActivity.class);
-
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-        notification.setLatestEventInfo(this, getString(R.string.app_name),
-                "Listening for events",
-                pi);
+        // build the notification builder
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this);
+        notifBuilder.setSmallIcon(R.drawable.logo_transparent);
+        notifBuilder.setWhen(System.currentTimeMillis());
+        notifBuilder.setContentTitle(getString(R.string.app_name));
+        notifBuilder.setContentText(NOTIFICATION_SUB_TITLE);
+        notifBuilder.setContentIntent(pi);
+
+        Notification notification = notifBuilder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
+
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            // some devices crash if this field is not set
+            // even if it is deprecated
+
+            // setLatestEventInfo() is deprecated on Android M, so we try to use
+            // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
+            try {
+                Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
+                deprecatedMethod.invoke(notification, this, getString(R.string.app_name), NOTIFICATION_SUB_TITLE, pi);
+            } catch (Exception ex) {
+                Log.e(LOG_TAG, "## buildNotification(): Exception - setLatestEventInfo() Msg="+ex.getMessage());
+            }
+        }
+
         return notification;
     }
 

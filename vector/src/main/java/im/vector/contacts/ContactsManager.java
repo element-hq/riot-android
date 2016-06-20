@@ -201,7 +201,7 @@ public class ContactsManager {
                     ContactsContract.Data.MIMETYPE + " = ?",
                     new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "cr.query ContactsContract.Data.CONTENT_URI fails " + e.getMessage());
+            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage());
         }
 
         if (namesCur != null) {
@@ -229,6 +229,7 @@ public class ContactsManager {
                     }
                 }
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage());
             }
 
             namesCur.close();
@@ -244,7 +245,7 @@ public class ContactsManager {
                     },
                     null, null, null);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "cr.query ContactsContract.Phone.CONTENT_URI fails " + e.getMessage());
+            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage());
         }
 
         if (null != phonesCur) {
@@ -267,6 +268,7 @@ public class ContactsManager {
                     }
                 }
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage());
             }
 
             phonesCur.close();
@@ -281,7 +283,7 @@ public class ContactsManager {
                             ContactsContract.CommonDataKinds.Email.CONTACT_ID},
                     null, null, null);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "cr.query ContactsContract.Email.CONTENT_URI fails " + e.getMessage());
+            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage());
         }
 
         if (emailsCur != null) {
@@ -303,6 +305,7 @@ public class ContactsManager {
                     }
                 }
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage());
             }
             
             emailsCur.close();

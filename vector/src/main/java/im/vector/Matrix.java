@@ -146,8 +146,8 @@ public class Matrix {
                                 context.startActivity(intent);
                             } else {
                                 Log.d(LOG_TAG, "onIncomingCall : the home activity exists : use it");
-                                // the home activity does the job
-                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
+                                // check incoming call required permissions, before allowing the call..
+                                homeActivity.startIncomingCallCheckPermissions(call.getSession().getMyUserId(), call.getCallId());
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");

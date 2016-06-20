@@ -16,6 +16,7 @@
 
 package im.vector.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -23,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +48,6 @@ import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -142,6 +143,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private Iterator mReadReceiptSessionlistIterator;
     private Iterator mReadReceiptSummarylistIterator;
     private IMXStore mReadReceiptstore;
+    // incoming call management with permissions
+    private String mIncomingCallSessionId;
+    private String mIncomingCallId;
 
     private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
         @Override
@@ -603,9 +607,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         switch(item.getItemId()) {
             // search in rooms content
             case R.id.ic_action_search_room:
-                // launch the "search in rooms" activity
-                final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorUnifiedSearchActivity.class);
-                VectorHomeActivity.this.startActivity(searchIntent);
+                // Check permission to access contacts
+                if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_SEARCH_ROOM, this)){
+                    startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_GRANTED);
+                }
                 break;
 
             // search in rooms content
@@ -635,6 +640,42 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 break;
         }
         return retCode;
+    }
+
+    /**
+     * Start the VectorUnifiedSearchActivity.
+     * See {@link #onRequestPermissionsResult(int, String[], int[])}
+     * @param aIsContactPermissionGranted true to indicate the contact permission is granted, false otherwise
+     */
+    private void startUnifiedSearchActivity(boolean aIsContactPermissionGranted) {
+        // launch the "search in rooms" activity
+        final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorUnifiedSearchActivity.class);
+        searchIntent.putExtra(CommonActivityUtils.KEY_PERMISSIONS_READ_CONTACTS,aIsContactPermissionGranted);
+        VectorHomeActivity.this.startActivity(searchIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+        if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_SEARCH_ROOM){
+            if(Manifest.permission.READ_CONTACTS.equals(aPermissions[0])) {
+                if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                    Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                    startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_GRANTED);
+                } else {
+                    Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                    CommonActivityUtils.displayToast(this, "Due to missing permissions, some features may be missing..");
+                    startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_DENIED);
+                }
+            } else {
+                Log.w(LOG_TAG, "## onRequestPermissionsResult(): unexpected permission = " + aPermissions[0]);
+            }
+        } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
+            if(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+                startCall(mIncomingCallSessionId,mIncomingCallId);
+            }
+        } else {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
+        }
     }
 
     // RoomEventListener
@@ -944,6 +985,16 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 });
             }
+        }
+    }
+
+    public void startIncomingCallCheckPermissions(String aSessionId, String aCallId) {
+        // sanity checks
+        mIncomingCallSessionId = aSessionId;
+        mIncomingCallId = aCallId;
+
+        if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, this)){
+            startCall(aSessionId,aCallId);
         }
     }
 

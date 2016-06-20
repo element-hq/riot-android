@@ -81,8 +81,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final int ITEM_ACTION_MENTION = 14;
 
 
-    private static int VECTOR_ROOM_MODERATOR_LEVEL = 50;
-    private static int VECTOR_ROOM_ADMIN_LEVEL = 100;
+    private static final int VECTOR_ROOM_MODERATOR_LEVEL = 50;
+    private static final int VECTOR_ROOM_ADMIN_LEVEL = 100;
 
     // internal info
     private IMXStore mStore;
@@ -226,6 +226,40 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     /**
+     * Check the permissions to establish an audio/video call.
+     * If permissions are already granted, the call is established, otherwise
+     * the permissions are checked against the system. Final result is provided in
+     * {@link #onRequestPermissionsResult(int, String[], int[])}.
+     *
+     * @param aCallableRoom the room the call belongs to
+     * @param aIsVideoCall true if video call, false if audio call
+     */
+    private void startCheckCallPermissions(Room aCallableRoom, boolean aIsVideoCall) {
+        int requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+
+        if(aIsVideoCall){
+            requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+        }
+
+        if(CommonActivityUtils.checkPermissions(requestCode, this)){
+            startCall(aCallableRoom, aIsVideoCall);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+        if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
+            if( CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
+                startCall(mCallableRoom, false);
+            }
+        } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
+            if( CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+                startCall(mCallableRoom, true);
+            }
+        }
+    }
+
+    /**
      * Start the corresponding action given by aActionType value.
      *
      * @param aActionType the action associated to the list row
@@ -256,7 +290,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             case ITEM_ACTION_START_VIDEO_CALL:
             case ITEM_ACTION_START_VOICE_CALL:
                 Log.d(LOG_TAG,"## performItemAction(): Start call");
-                startCall(mCallableRoom, ITEM_ACTION_START_VIDEO_CALL == aActionType);
+                startCheckCallPermissions(mCallableRoom, ITEM_ACTION_START_VIDEO_CALL == aActionType);
                 break;
 
             case ITEM_ACTION_INVITE:
@@ -295,7 +329,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                     PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
                     if (null != powerLevels) {
-                        defaultPowerLevel = powerLevels.usersDefault;
+                        defaultPowerLevel = powerLevels.users_default;
                     }
 
                     mRoom.updateUserPowerLevels(mMemberId, defaultPowerLevel, mRoomActionsListener);
@@ -372,7 +406,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     /**
      * Search the first callable room with this member
-     * @return
+     * @return a valid Room instance, null if no room found
      */
     private Room searchCallableRoom() {
         if (!mSession.isAlive()) {
@@ -740,7 +774,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     /**
      * Retrieve all the state values required to run the activity.
      * If values are not provided in the intent extars or are some are
-     * null, then the activiy can not continue to run and must be finished
+     * null, then the activity can not continue to run and must be finished
      * @return true if init succeed, false otherwise
      */
     private boolean initContextStateValues(){

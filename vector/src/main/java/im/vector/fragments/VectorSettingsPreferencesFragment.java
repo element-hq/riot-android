@@ -30,6 +30,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -40,7 +41,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
@@ -75,9 +75,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // arguments indexes
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
 
-    private static final String EMAIL_PREREFENCE_KEY_BASE = "EMAIL_PREREFENCE_KEY_BASE";
-    private static final String PUSHER_PREREFENCE_KEY_BASE = "PUSHER_PREREFENCE_KEY_BASE";
+    private static final String EMAIL_PREFERENCE_KEY_BASE = "EMAIL_PREFERENCE_KEY_BASE";
+    private static final String PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
+    private static final String APP_INFO_LINK_PREFERENCE_KEY = "application_info_link";
 
     // members
     private MXSession mSession;
@@ -296,6 +297,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
+
+        // preference to start the App info screen, to facilitate App permissions access
+        Preference applicationInfoLInkPref = (Preference) findPreference(APP_INFO_LINK_PREFERENCE_KEY);
+        applicationInfoLInkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+
+                if(null != getActivity()) {
+                    getActivity().getApplicationContext().startActivity(intent);
+                }
+
+                return true;
+            }
+        });
 
         refreshPushersList();
         refreshPreferences();
@@ -804,7 +824,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 if(null != pusher.lang) {
                     preference.setTitle(pusher.deviceDisplayName);
                     preference.setSummary(pusher.appDisplayName);
-                    preference.setKey(PUSHER_PREREFENCE_KEY_BASE + index);
+                    preference.setKey(PUSHER_PREFERENCE_KEY_BASE + index);
                     index++;
                     mPushersSettingsCategory.addPreference(preference);
                 }
@@ -831,7 +851,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         if (isNewList) {
             // remove the displayed one
             for (int index = 0; ; index++) {
-                Preference preference = mUserSettingsCategory.findPreference(EMAIL_PREREFENCE_KEY_BASE + index);
+                Preference preference = mUserSettingsCategory.findPreference(EMAIL_PREFERENCE_KEY_BASE + index);
 
                 if (null != preference) {
                     mUserSettingsCategory.removePreference(preference);
@@ -856,7 +876,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 preference.setTitle(getResources().getString(R.string.settings_email_address));
                 preference.setSummary(email);
-                preference.setKey(EMAIL_PREREFENCE_KEY_BASE + index);
+                preference.setKey(EMAIL_PREFERENCE_KEY_BASE + index);
                 index++;
                 mUserSettingsCategory.addPreference(preference);
             }

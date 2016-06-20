@@ -58,10 +58,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private int mSearchInFilesTabIndex = -1;
     private int mCurrentTabIndex = -1;
 
+    private boolean mIsPermissionGranted;
+
     // activity life cycle management:
     // - Bundle keys
     private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
     private static final String KEY_STATE_SEARCH_PATTERN = "SEARCH_PATTERN";
+    private static final String KEY_STATE_IS_PERMISSIONS_GRANTED = "PERMISSIONS_STATUS";
 
     // search fragments
     private VectorSearchMessagesListFragment mSearchInMessagesFragment;
@@ -95,6 +98,17 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             Log.e(LOG_TAG, "No MXSession.");
             finish();
             return;
+        }
+
+        if(null != getIntent()){
+            mIsPermissionGranted = getIntent().getBooleanExtra(CommonActivityUtils.KEY_PERMISSIONS_READ_CONTACTS,CommonActivityUtils.PERMISSIONS_DENIED);
+        } else {
+            mIsPermissionGranted = CommonActivityUtils.PERMISSIONS_DENIED;
+        }
+
+        if(null != savedInstanceState){
+            // restore permissions status
+            mIsPermissionGranted = savedInstanceState.getBoolean(KEY_STATE_IS_PERMISSIONS_GRANTED,CommonActivityUtils.PERMISSIONS_DENIED);
         }
 
         // UI widgets binding & init fields
@@ -423,6 +437,9 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if (!TextUtils.isEmpty(searchPattern)) {
             outState.putString(KEY_STATE_SEARCH_PATTERN, searchPattern);
         }
+
+        // save permissions status
+        outState.putBoolean(KEY_STATE_IS_PERMISSIONS_GRANTED, mIsPermissionGranted);
     }
 
     //==============================================================================================================
