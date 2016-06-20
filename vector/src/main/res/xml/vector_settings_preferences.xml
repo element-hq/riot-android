@@ -88,16 +88,33 @@
             android:title="@string/settings_identity_server"
             android:summary="1.2.3"
             android:key="@string/settings_identity_server"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/settings_background_sync"
+        android:title="@string/settings_background_sync" >
+
+        <SwitchPreference
+            android:title="@string/settings_enable_background_sync"
+            android:key="@string/settings_enable_background_sync"/>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_timeout"
+            android:key="@string/settings_set_sync_timeout"/>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay"
+            android:key="@string/settings_set_sync_delay"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/settings_other"
         android:key="@string/settings_other" >
-
-        <SwitchPreference
-            android:title="@string/settings_enable_background_sync"
-            android:key="@string/settings_enable_background_sync"/>
 
         <SwitchPreference
             android:title="@string/ga_use_settings"

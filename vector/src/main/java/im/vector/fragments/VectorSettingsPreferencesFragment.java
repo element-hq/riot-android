@@ -34,6 +34,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.Excluder;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
@@ -104,6 +106,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // displayed pushers
     private PreferenceCategory mPushersSettingsCategory;
     private List<Pusher> mDisplayedPushers = new ArrayList<Pusher>();
+
+    // background sync category
+    private PreferenceCategory mBackgroundSyncCategory;
+    private EditTextPreference mSyncRequestTimeoutPreference;
+    private EditTextPreference mSyncRequestDelayPreference;
 
     // events listener
     private MXEventListener mEventsListener = new MXEventListener() {
@@ -317,9 +324,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
 
+        // background sync management
+        mBackgroundSyncCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
+        mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
+        mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
+
         refreshPushersList();
         refreshPreferences();
         refreshEmailsList();
+        refreshBackgroundSyncPrefs();
         refreshDisplay();
     }
 
@@ -368,6 +381,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             // refresh anything else
             refreshPreferences();
             refreshDisplay();
+            refreshBackgroundSyncPrefs();
         }
     }
 
@@ -1121,5 +1135,110 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    //==============================================================================================================
+    // background sync management
+    //==============================================================================================================
+
+    /**
+     * Convert a delay in seconds to string
+     * @param seconds the delay in seconds
+     * @return the text
+     */
+    private String secondsToText(int seconds) {
+        if (seconds > 1) {
+            return seconds + " " + getActivity().getString(R.string.settings_seconds);
+        } else {
+            return seconds + " " + getActivity().getString(R.string.settings_second);
+        }
+    }
+
+    /**
+     * Refresh the background sync preference
+     */
+    private void refreshBackgroundSyncPrefs() {
+        // sanity check
+        if (null == getActivity()) {
+            return;
+        }
+
+        final GcmRegistrationManager gcmmgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+
+        final int timeout = gcmmgr.getBackgroundSyncTimeOut() / 1000;
+        final int delay = gcmmgr.getBackgroundSyncDelay() / 1000;
+
+        // update the settings
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(this.getResources().getString(R.string.settings_set_sync_timeout), timeout + "");
+        editor.putString(this.getResources().getString(R.string.settings_set_sync_delay), delay + "");
+        editor.commit();
+
+        if (null != mSyncRequestTimeoutPreference) {
+            mSyncRequestTimeoutPreference.setSummary(secondsToText(timeout));
+
+            mSyncRequestTimeoutPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int newTimeOut = timeout;
+
+                    try {
+                        newTimeOut = Integer.parseInt((String) newValue);
+                    } catch(Exception e) {
+                    }
+
+                    if (newTimeOut != timeout) {
+                        gcmmgr.setBackgroundSyncTimeOut(newTimeOut * 1000);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshBackgroundSyncPrefs();
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+
+        }
+
+        if (null != mSyncRequestDelayPreference) {
+            mSyncRequestDelayPreference.setSummary(secondsToText(delay));
+
+            mSyncRequestDelayPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                    int newDelay = delay;
+
+                    try {
+                        newDelay = Integer.parseInt((String) newValue);
+                    } catch(Exception e) {
+                    }
+
+                    if (newDelay != delay) {
+                        gcmmgr.setBackgroundSyncDelay(newDelay * 1000);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshBackgroundSyncPrefs();
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+        }
+
+        // theses both settings are dedicated when a client does not support GCM
+        if (gcmmgr.hasPushKey()) {
+            mBackgroundSyncCategory.removePreference(mSyncRequestTimeoutPreference);
+            mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
+        }
     }
 }

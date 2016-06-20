@@ -57,6 +57,9 @@ public final class GcmRegistrationManager {
     public static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
     public static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
 
+    public static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
+    public static final String PREFS_SYNC_DELAY = "GcmRegistrationManager.PREFS_SYNC_DELAY";
+
     private static String DEFAULT_PUSHER_APP_ID = "im.vector.app.android";
     private static String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
     private static String DEFAULT_PUSHER_FILE_TAG = "mobile";
@@ -371,6 +374,52 @@ public final class GcmRegistrationManager {
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
+    }
+
+    /**
+     * @return the sync timeout in ms.
+     */
+    public int getBackgroundSyncTimeOut() {
+        int currentValue = 30000;
+
+        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
+
+        if (null != session) {
+            currentValue = session.getSyncTimeout();
+        }
+        return getSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
+    }
+
+    /**
+     * @param syncDelay the new sync delay in ms.
+     */
+    public void setBackgroundSyncTimeOut(int syncDelay) {
+        getSharedPreferences().edit()
+                .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
+                .apply();
+    }
+
+    /**
+     * @return the delay between two syncs in ms.
+     */
+    public int getBackgroundSyncDelay() {
+        int currentValue = 0;
+
+        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
+
+        if (null != session) {
+            currentValue = session.getSyncDelay();
+        }
+        return getSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
+    }
+
+    /**
+     * @aparam syncDelay the delay between two syncs in ms..
+     */
+    public void setBackgroundSyncDelay(int syncDelay) {
+        getSharedPreferences().edit()
+                .putInt(PREFS_SYNC_DELAY, syncDelay)
+                .apply();
     }
 
     /**
