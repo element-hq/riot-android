@@ -17,6 +17,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipDescription;
@@ -74,6 +75,7 @@ import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -82,6 +84,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.ImageUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
@@ -171,6 +174,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public static final int TAKE_IMAGE_REQUEST_CODE = 1;
     public static final int CREATE_DOCUMENT_REQUEST_CODE = 2;
     public static final int GET_MENTION_REQUEST_CODE = 3;
+    public static final int REQUEST_ROOM_AVATAR_CODE = 4;
 
     // max image sizes
     private static final int LARGE_IMAGE_SIZE  = 2000;
@@ -537,6 +541,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
+        // tap on the expanded room avatar
+        View roomAvatarView = findViewById(R.id.room_avatar);
+        roomAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
+            }
+        });
+
         mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
         mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
 
@@ -899,6 +914,78 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         Log.d(LOG_TAG, "-- Resume the activity");
     }
 
+    /**
+     * Update the avatar from the data provided the medias picker.
+     * @param aData the provided data.
+     */
+    private void onActivityResultRoomAvatarUpdate(final Intent aData) {
+        // sanity check
+        if(null == mSession){
+            return;
+        }
+
+        Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(this, aData, mSession.getMediasCache());
+
+        if (null != thumbnailUri) {
+            setProgressVisibility(View.VISIBLE);
+
+            // save the bitmap URL on the server
+            ResourceUtils.Resource resource = ResourceUtils.openResource(this, thumbnailUri, null);
+            if (null != resource) {
+                mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
+                    @Override
+                    public void onUploadStart(String uploadId) {
+                    }
+
+                    @Override
+                    public void onUploadProgress(String anUploadId, int percentageProgress) {
+                    }
+
+                    @Override
+                    public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
+                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
+                                    Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
+                                    mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+
+                                        private void onDone() {
+                                            setProgressVisibility(View.GONE);
+                                            updateRoomHeaderAvatar();
+                                        }
+
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            onDone();
+                                        }
+
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            onDone();
+                                        }
+
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            onDone();
+                                        }
+
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            onDone();
+                                        }
+                                    });
+                                } else {
+                                    Log.e(LOG_TAG, "Fail to upload the avatar");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -911,6 +998,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 writeMediaUrl(currentUri);
             } else if (requestCode == GET_MENTION_REQUEST_CODE) {
                 appendInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
+            } else if (requestCode == REQUEST_ROOM_AVATAR_CODE) {
+                onActivityResultRoomAvatarUpdate(data);
             }
         }
 
