@@ -42,6 +42,7 @@ import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -543,14 +544,75 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // tap on the expanded room avatar
         View roomAvatarView = findViewById(R.id.room_avatar);
-        roomAvatarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
-            }
-        });
+        if (null != roomAvatarView) {
+            roomAvatarView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean canUpdateAvatar = false;
+                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+                    if (null != powerLevels) {
+                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                        canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+                    }
+
+                    if (canUpdateAvatar) {
+                        Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
+                        intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                        startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
+                    } else {
+                        launchRoomDetails();
+                    }
+                }
+            });
+        }
+
+        // tap on the room name to update it
+        View titleText = findViewById(R.id.action_bar_header_room_title);
+        if (null != titleText) {
+            titleText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean canUpdateTitle = false;
+                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+                    if (null != powerLevels) {
+                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                        canUpdateTitle = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                    }
+
+                    if (canUpdateTitle) {
+                        onRoomTitleClick();
+                    } else {
+                        launchRoomDetails();
+                    }
+                }
+            });
+        }
+
+        // tap on the room name to update it
+        View topicText = findViewById(R.id.action_bar_header_room_topic);
+        if (null != topicText) {
+            topicText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean canUpdateTopic = false;
+                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+
+                    if (null != powerLevels) {
+                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                        canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                    }
+
+                    if (canUpdateTopic) {
+                        onRoomTopicClick();
+                    } else {
+                        launchRoomDetails();
+                    }
+                }
+            });
+        }
+
 
         mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
         mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
@@ -920,7 +982,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void onActivityResultRoomAvatarUpdate(final Intent aData) {
         // sanity check
-        if(null == mSession){
+        if(null == mSession) {
             return;
         }
 
@@ -950,29 +1012,33 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                     Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
                                     mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
 
-                                        private void onDone() {
+                                        private void onDone(String message) {
+                                            if (!TextUtils.isEmpty(message)) {
+                                                CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                            }
+
                                             setProgressVisibility(View.GONE);
                                             updateRoomHeaderAvatar();
                                         }
 
                                         @Override
                                         public void onSuccess(Void info) {
-                                            onDone();
+                                            onDone(null);
                                         }
 
                                         @Override
                                         public void onNetworkError(Exception e) {
-                                            onDone();
+                                            onDone(e.getLocalizedMessage());
                                         }
 
                                         @Override
                                         public void onMatrixError(MatrixError e) {
-                                            onDone();
+                                            onDone(e.getLocalizedMessage());
                                         }
 
                                         @Override
                                         public void onUnexpectedError(Exception e) {
-                                            onDone();
+                                            onDone(e.getLocalizedMessage());
                                         }
                                     });
                                 } else {
@@ -984,6 +1050,152 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 });
             }
         }
+    }
+
+    /**
+     * The user clicks on the room title.
+     * Assume he wants to update it.
+     */
+    private void onRoomTitleClick() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        View dialogView = inflater.inflate(R.layout.dialog_text_edittext, null);
+        alertDialogBuilder.setView(dialogView);
+
+        TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
+        titleText.setText(getResources().getString(R.string.room_info_room_name));
+
+        final EditText textInput = (EditText) dialogView.findViewById(R.id.dialog_edit_text);
+        textInput.setText(mRoom.getLiveState().name);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                setProgressVisibility(View.VISIBLE);
+
+                                mRoom.updateName(textInput.getText().toString(), new ApiCallback<Void>() {
+
+                                    private void onDone(String message) {
+                                        if (!TextUtils.isEmpty(message)) {
+                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                        }
+
+                                        setProgressVisibility(View.GONE);
+                                        updateActionBarTitleAndTopic();
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        onDone(null);
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    /**
+     * The user clicks on the room topic.
+     * Assume he wants to update it.
+     */
+    private void onRoomTopicClick() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        View dialogView = inflater.inflate(R.layout.dialog_text_edittext, null);
+        alertDialogBuilder.setView(dialogView);
+
+        TextView titleText = (TextView) dialogView.findViewById(R.id.dialog_title);
+        titleText.setText(getResources().getString(R.string.room_info_room_topic));
+
+        final EditText textInput = (EditText) dialogView.findViewById(R.id.dialog_edit_text);
+        textInput.setText(mRoom.getLiveState().topic);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                setProgressVisibility(View.VISIBLE);
+
+                                mRoom.updateTopic(textInput.getText().toString(), new ApiCallback<Void>() {
+
+                                    private void onDone(String message) {
+                                        if (!TextUtils.isEmpty(message)) {
+                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
+                                        }
+
+                                        setProgressVisibility(View.GONE);
+                                        updateActionBarTitleAndTopic();
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        onDone(null);
+                                    }
+
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 
     @Override
