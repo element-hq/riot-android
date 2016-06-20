@@ -145,9 +145,9 @@ public class Matrix {
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
                                 context.startActivity(intent);
                             } else {
-                                Log.d(LOG_TAG, "onIncomingCall : the home activity exists : use it");
+                                Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
                                 // check incoming call required permissions, before allowing the call..
-                                homeActivity.startIncomingCallCheckPermissions(call.getSession().getMyUserId(), call.getCallId());
+                                homeActivity.startIncomingCallCheckPermissions(call, call.getSession().getMyUserId(), call.getCallId());
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");

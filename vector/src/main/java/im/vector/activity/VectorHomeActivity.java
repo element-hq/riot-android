@@ -146,6 +146,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // incoming call management with permissions
     private String mIncomingCallSessionId;
     private String mIncomingCallId;
+    private IMXCall mIncomingCall;
 
     private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
         @Override
@@ -672,6 +673,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
             if(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
                 startCall(mIncomingCallSessionId,mIncomingCallId);
+            } else if(null != mIncomingCall) {
+                mIncomingCall.hangup("busy");
             }
         } else {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
@@ -988,10 +991,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     }
 
-    public void startIncomingCallCheckPermissions(String aSessionId, String aCallId) {
-        // sanity checks
+    public void startIncomingCallCheckPermissions(IMXCall aCurrentCall, String aSessionId, String aCallId) {
+        // saved incoming call context to be processed once permissions result are obtained
         mIncomingCallSessionId = aSessionId;
         mIncomingCallId = aCallId;
+        mIncomingCall = aCurrentCall;
 
         if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, this)){
             startCall(aSessionId,aCallId);
