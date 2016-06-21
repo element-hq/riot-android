@@ -19,7 +19,6 @@ package im.vector.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -51,7 +50,6 @@ import org.matrix.androidsdk.util.EventUtils;
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorPublicRoomsActivity;
@@ -75,6 +73,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      * warns the activity when there is a scroll in the recents
      */
     public interface IVectorRecentsScrollEventListener {
+        // warn the user over scrolls up
+        void onRecentsListOverScrollUp();
         // warn the user scrolls up
         void onRecentsListScrollUp();
         // warn when the user scrolls downs
@@ -127,6 +127,9 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private boolean mIsLoadingPublicRooms = false;
     private long mLatestPublicRoomsRefresh = System.currentTimeMillis();
 
+    // scroll events listener
+    IVectorRecentsScrollEventListener mScrollEventListener = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -158,7 +161,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-
                 if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
                     List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
 
@@ -172,6 +174,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 } else {
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
+
+                    // sanity check : should never happen
+                    // but it happened.
+                    if ((null == session) || (null == session.getDataHandler())) {
+                        return true;
+                    }
 
                     String roomId = roomSummary.getRoomId();
                     Room room = session.getDataHandler().getRoom(roomId);
@@ -209,17 +217,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         });
 
         mRecentsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            IVectorRecentsScrollEventListener mScrollEventListener = null;
-
-            private IVectorRecentsScrollEventListener getListener() {
-                if (null == mScrollEventListener) {
-                    if (getActivity() instanceof IVectorRecentsScrollEventListener) {
-                        mScrollEventListener = (IVectorRecentsScrollEventListener) getActivity();
-                    }
-                }
-
-                return mScrollEventListener;
-            }
 
             private void onScrollUp() {
                 if (null != getListener()) {
@@ -360,6 +357,47 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         if (null != mWaitingView) {
             mWaitingView.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * @return true if the directory group is displayed
+     */
+    public boolean isDirectoryGroupDisplayed() {
+        return mAdapter.isDirectoryGroupDisplayed();
+    }
+
+    /**
+     * Set the directory group visibility
+     * @param isDisplayed true to display the directory group.
+     */
+    public void setIsDirectoryDisplayed(boolean isDisplayed) {
+        mAdapter.setForceDirectoryGroupDisplay(isDisplayed);
+        mAdapter.notifyDataSetChanged();
+
+        if (isDisplayed) {
+            mRecentsListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (-1 != mAdapter.getDirectoryGroupPosition()) {
+                        mRecentsListView.expandGroup(mAdapter.getDirectoryGroupPosition());
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Test if the attached activity managed IVectorRecentsScrollEventListener.
+     * @return the listener, null if it is not suppported
+     */
+    private IVectorRecentsScrollEventListener getListener() {
+        if (null == mScrollEventListener) {
+            if (getActivity() instanceof IVectorRecentsScrollEventListener) {
+                mScrollEventListener = (IVectorRecentsScrollEventListener) getActivity();
+            }
+        }
+
+        return mScrollEventListener;
     }
 
     /**
@@ -799,6 +837,15 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         mIgnoreScrollEvent = false;
                     }
                 }, 100);
+            }
+        }
+    }
+
+    @Override
+    public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        if (clampedY && (0 == scrollY)) {
+            if (null != getListener()) {
+                mScrollEventListener.onRecentsListOverScrollUp();
             }
         }
     }

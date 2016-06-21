@@ -52,6 +52,8 @@ import im.vector.util.SlidableMediaInfo;
 
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
+    public static final String LOG_TAG = "VectorMediasViewerActivity";
+
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";
 
@@ -109,7 +111,13 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
+            Log.d(LOG_TAG, "onCreate : restart the application");
             CommonActivityUtils.restartApp(this);
+            return;
+        }
+
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
             return;
         }
 

@@ -26,14 +26,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -114,6 +118,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         f.setArguments(args);
         return f;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreateView");
+
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+
+        Bundle args = getArguments();
+
+        // when an event id is defined, display a thick green line to its left
+        if (args.containsKey(ARG_EVENT_ID) && (mAdapter instanceof VectorMessagesAdapter)) {
+            ((VectorMessagesAdapter) mAdapter).setSearchedEventId(args.getString(ARG_EVENT_ID, ""));
+        }
+
+        return v;
     }
 
     /**

@@ -22,12 +22,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Pusher;
@@ -38,8 +34,9 @@ import org.matrix.androidsdk.rest.model.PushersResponse;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.gcm.GCMHelper;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +54,11 @@ public final class GcmRegistrationManager {
     public static final String PREFS_SENDER_ID_KEY = "GcmRegistrationManager.senderId";
     public static final String PREFS_PUSHER_URL_KEY = "GcmRegistrationManager.pusherUrl";
     public static final String PREFS_PUSHER_FILE_TAG_KEY = "GcmRegistrationManager.pusherFileTag";
+    public static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
+    public static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
+
+    public static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
+    public static final String PREFS_SYNC_DELAY = "GcmRegistrationManager.PREFS_SYNC_DELAY";
 
     private static String DEFAULT_PUSHER_APP_ID = "im.vector.app.android";
     private static String DEFAULT_PUSHER_URL = "https://matrix.org/_matrix/push/v1/notify";
@@ -108,6 +110,8 @@ public final class GcmRegistrationManager {
     private RegistrationState mRegistrationState = RegistrationState.UNREGISTRATED;
 
     private String mPushKey = null;
+
+    private static Boolean mUseGCM;
 
     /**
      * Constructor
@@ -184,8 +188,6 @@ public final class GcmRegistrationManager {
                 }
             });
         }
-
-
     }
 
     /**
@@ -199,13 +201,17 @@ public final class GcmRegistrationManager {
         registerPusher(appContext, registrationListener);
     }
 
-
     /**
      * Check if the GCM registration has been broken with a new token ID.
      * The GCM could have resetted it (onTokenRefresh).
      * @param appContext the application context
      */
     public void checkPusherRegistration(final Context appContext) {
+        if (!useGCM()) {
+            Log.d(LOG_TAG, "checkPusherRegistration : GCM is disabled");
+            return;
+        }
+
         if (mRegistrationState == RegistrationState.UNREGISTRATED) {
             Log.d(LOG_TAG, "checkPusherRegistration : try to register to GCM server");
 
@@ -213,12 +219,7 @@ public final class GcmRegistrationManager {
                 @Override
                 public void onPusherRegistered() {
                     Log.d(LOG_TAG, "checkPusherRegistration : reregistered");
-                    // vector always uses GCM.
-                    // there is no way to enable / disable it in the application settings
-                    if (!useGCM()) {
-                        setUseGCM(true);
-                        CommonActivityUtils.onGcmUpdate(mContext);
-                    }
+                    CommonActivityUtils.onGcmUpdate(mContext);
                 }
 
                 @Override
@@ -243,6 +244,23 @@ public final class GcmRegistrationManager {
      * @param registrationListener the events listener.
      */
     public void registerPusher(final Context appContext, final GcmRegistrationIdListener registrationListener) {
+        // do not use GCM
+        if (!useGCM()) {
+            Log.d(LOG_TAG, "registerPusher : GCM is disabled");
+
+            mPusherAppId = mPusherUrl = mPusherBaseFileTag = null;
+
+            // warn the listener
+            if (null != registrationListener) {
+                try {
+                    registrationListener.onPusherRegistrationFailed();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "registerPusher : onPusherRegistered/onPusherRegistrationFailed failed " + e.getLocalizedMessage());
+                }
+            }
+            return;
+        }
+
         // already registred
         if (mRegistrationState == RegistrationState.GCM_REGISTRED) {
             if (null != registrationListener) {
@@ -269,7 +287,6 @@ public final class GcmRegistrationManager {
 
                 @Override
                 protected void onPostExecute(String pushKey) {
-
                     mRegistrationState = (pushKey != null) ? RegistrationState.GCM_REGISTRED : RegistrationState.UNREGISTRATED;
                     setStoredPushKey(pushKey);
 
@@ -299,58 +316,159 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * @return true if use GCM
+     * Tells if the client prefers GCM over events polling thread.
+     * @return true to use GCM before using the events polling thread, false otherwise
      */
-    public Boolean useGCM() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return preferences.getBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), true);
+    public boolean useGCM() {
+        if (null == mUseGCM) {
+            mUseGCM = true;
+
+            try {
+                mUseGCM = TextUtils.equals(mContext.getResources().getString(R.string.allow_gcm_use), "true");
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "useGCM " + e.getLocalizedMessage());
+            }
+        }
+        return mUseGCM;
     }
 
     /**
-     * Update the GCM status
-     * @param use
+     * Tells if GCM has a push key.
      */
-    public void setUseGCM(Boolean use) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mContext).edit();
-        editor.putBoolean(mContext.getString(R.string.settings_key_use_google_cloud_messaging), use);
-        editor.apply();
+    public boolean hasPushKey() {
+        return null != mPushKey;
     }
 
+    /**
+     * @return true if the push registration is allowed on this device
+     */
+    public boolean isNotificationsAllowed() {
+        return getSharedPreferences().getBoolean(PREFS_ALLOW_NOTIFICATIONS, true);
+    }
+
+    /**
+     * Update the push registration management
+     * @param isAllowed true to allow the server registration
+     */
+    public void setIsNotificationsAllowed(boolean isAllowed) {
+        getSharedPreferences().edit()
+                .putBoolean(PREFS_ALLOW_NOTIFICATIONS, isAllowed)
+                .apply();
+    }
+
+    /**
+     * @return true if the background sync is allowed
+     */
+    public boolean isBackgroundSyncAllowed() {
+        return getSharedPreferences().getBoolean(PREFS_ALLOW_BACKGROUND_SYNC, true);
+    }
+
+    /**
+     * Allow the background sync
+     * @param isAllowed true to allow the background sync.
+     */
+    public void setIsBackgroundSyncAllowed(boolean isAllowed) {
+        getSharedPreferences().edit()
+                .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
+                .apply();
+
+        // when GCM is disabled, enable / disable the "Listen for events" notifications
+        CommonActivityUtils.onGcmUpdate(mContext);
+    }
+
+    /**
+     * @return the sync timeout in ms.
+     */
+    public int getBackgroundSyncTimeOut() {
+        int currentValue = 30000;
+
+        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
+
+        if (null != session) {
+            currentValue = session.getSyncTimeout();
+        }
+        return getSharedPreferences().getInt(PREFS_SYNC_TIMEOUT, currentValue);
+    }
+
+    /**
+     * @param syncDelay the new sync delay in ms.
+     */
+    public void setBackgroundSyncTimeOut(int syncDelay) {
+        getSharedPreferences().edit()
+                .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
+                .apply();
+    }
+
+    /**
+     * @return the delay between two syncs in ms.
+     */
+    public int getBackgroundSyncDelay() {
+        int currentValue = 0;
+
+        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
+
+        if (null != session) {
+            currentValue = session.getSyncDelay();
+        }
+        return getSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
+    }
+
+    /**
+     * @aparam syncDelay the delay between two syncs in ms..
+     */
+    public void setBackgroundSyncDelay(int syncDelay) {
+        getSharedPreferences().edit()
+                .putInt(PREFS_SYNC_DELAY, syncDelay)
+                .apply();
+    }
+
+    /**
+     * Tell if the events polling thread should be used.
+     * It should be used only if GCM is disabled or failed.
+     * @return true if the polling thread approach must be used, false otherwise
+     */
+    public boolean usePollingThread() {
+        return !isGCMRegistred() && !isGCMRegistrating();
+    }
+
+    /**
+     * Tell if GCM is rregistred i.e. ready to use
+     */
     public boolean isGCMRegistred() {
         return (mRegistrationState == RegistrationState.GCM_REGISTRED) || (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_REGISTERED);
     }
 
-    public boolean is3rdPartyServerRegistred() {
-        return mRegistrationState == RegistrationState.SERVER_REGISTERED;
-    }
-
-    public boolean isRegistrating() {
+    /**
+     * Tells if the GCM is registrating
+     */
+    public boolean isGCMRegistrating() {
         return (mRegistrationState == RegistrationState.SERVER_REGISTRATING) || (mRegistrationState == RegistrationState.SERVER_UNREGISTRATING);
     }
 
+    /**
+     * Tells if the GCM is registrered on server
+     */
+    public boolean isServerRegistred() {
+        return mRegistrationState == RegistrationState.SERVER_REGISTERED;
+    }
+
+    /**
+     * Tells if the GCM is unregistrered on server
+     */
+    public boolean isServerUnRegistred() {
+        return mRegistrationState == RegistrationState.GCM_REGISTRED;
+    }
+
+    /**
+     * Retrieve the GCM push key.
+     * @param appContext the application context
+     * @return the GCM pushKey
+     */
     private String getPushKey(Context appContext) {
         String pushKey = getStoredPushKey();
 
         if (pushKey == null) {
-            try {
-                Log.d(LOG_TAG, "Getting the GCM Registration Token");
-
-                InstanceID instanceID = InstanceID.getInstance(appContext);
-
-                pushKey = instanceID.getToken(appContext.getString(R.string.gcm_defaultSenderId),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-
-                Log.d(LOG_TAG, "GCM Registration Token: " + pushKey);
-
-                //setStoredRegistrationId(registrationId);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
-                pushKey = null;
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
-                pushKey = null;
-            }
+            pushKey = GCMHelper.getPushKey(appContext);
         }
         return pushKey;
     }
@@ -377,6 +495,24 @@ public final class GcmRegistrationManager {
      * @param listener the registration listener
      */
     public void registerSession(final MXSession session, boolean append, final GcmSessionRegistration listener) {
+        // test if the push server registration is allowed
+        if (! isNotificationsAllowed() || !useGCM()) {
+            if (!isNotificationsAllowed()) {
+                Log.d(LOG_TAG, "registerPusher : the user disabled it.");
+            }  else {
+                Log.d(LOG_TAG, "registerPusher : GCM is disabled.");
+            }
+
+            if (null != listener) {
+                try {
+                    listener.onSessionRegistrationFailed();
+                }  catch (Exception e) {
+                }
+            }
+
+            return;
+        }
+
         session.getPushersRestClient()
                 .addHttpPusher(mPushKey, mPusherAppId, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,

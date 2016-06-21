@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- tab framents container -->
+        <!-- tab fragments container -->
         <FrameLayout
             android:id="@+id/room_details_fragment_container"
             android:layout_width="match_parent"

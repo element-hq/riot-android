@@ -41,6 +41,7 @@
     <string name="chat_with">Chat with </string>
     <string name="delete">Delete</string>
     <string name="report_content">Report content</string>
+    <string name="decline">Decline</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
@@ -147,7 +148,7 @@
     <string name="auth_user_id_placeholder">Email or user name</string>
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
-    <string name="auth_user_name_placeholder">Your name</string>
+    <string name="auth_user_name_placeholder">User name</string>
     <string name="auth_email_placeholder">Email address</string>
     <string name="auth_repeat_password_placeholder">Repeat password</string>
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
@@ -355,6 +356,15 @@
     <string name="media_picker_choose_from_library">Choose from library"</string>
     <string name="media_picker_library">Library"</string>
 
+    <!-- permissions Android M -->
+    <string name="permissions_rationale_popup_title">Vector permissions</string>
+    <string name="permissions_rationale_msg_title">You are about to be asked to grant permissions..</string>
+    <string name="permissions_rationale_msg_storage">Vector needs access to media files to display photos in the media picker\n\n</string>
+    <string name="permissions_rationale_msg_camera">Vector needs access to the camera to take pictures, video calls..</string>
+    <string name="permissions_rationale_msg_record_audio">Vector needs access to the microphone to perform audio calls</string>
+    <string name="permissions_rationale_msg_contacts">Vector needs access to the contact list to find Vector members</string>
+    <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
+
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
     <string name="media_slider_saved_message">Save to downloads</string>
@@ -474,6 +484,8 @@
     <string name="room_prompt_resent">Resend now?</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
+    <string name="room_message_file_not_found">File not found</string>
+    <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>
@@ -491,7 +503,7 @@
 
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
-    <string name="room_details_mute_notifs">Mute notifications</string>
+    <string name="room_details_mute_notifs">Mute Notifications</string>
     <string name="room_details_photo">Room Photo</string>
     <string name="room_details_room_name">Room Name</string>
     <string name="room_details_topic">Topic</string>
@@ -501,8 +513,8 @@
     <string name="room_details_fail_to_update_topic">Fail to update the topic</string>
     <string name="room_details_fail_to_update_room_name">Fail to update the room name</string>
     <string name="room_details_with_updates">The updates will be lost : are you sure to leave ?</string>
-    <string name="room_details_room_is_public">This room is public</string>
-    <string name="room_details_room_is_private">This room is private</string>
+    <string name="room_details_room_listed_in_directory">room listed</string>
+    <string name="room_details_room_not_listed_in_directory">room not listed</string>
     <string name="room_details_selected">selected</string>
     <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITED</string>
@@ -571,8 +583,11 @@
     <string name="settings_add_email_address">Add email address</string>
     <string name="settings_phone_number">Phone Number</string>
     <string name="settings_night_mode">Night Mode</string>
+    <string name="settings_summary_app_info_link">Application system info screen</string>
+    <string name="settings_title_app_info_link">Application info</string>
 
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
+    <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_containing_my_name">Msgs containing my name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
@@ -580,9 +595,17 @@
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
 
+    <string name="settings_background_sync">Background synchronization</string>
+    <string name="settings_enable_background_sync">Enable background sync</string>
+    <string name="settings_set_sync_timeout">Sync request timeout</string>
+    <string name="settings_set_sync_delay">Delay between two sync requests</string>
+    <string name="settings_second">second</string>
+    <string name="settings_seconds">seconds</string>
+
+
     <string name="settings_version">Version</string>
     <string name="settings_term_conditions">Terms &amp; conditions</string>
-    <string name="settings_privacy_policy">Privacy</string>
+    <string name="settings_directory_visibility">List this room in room directory</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_room_privacy_label">Privacy</string>
 
@@ -608,6 +631,39 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="room_settings_pref_category">Room settings</string>
     <string name="room_settings_room_photo">Room Photo</string>
+
+    <string name="room_settings_tag_pref_title">Room Tag</string>
+    <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
+    <string name="room_settings_room_access_rules_pref_title">Room Access</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_prefcat_access_visibility_title">Access and visibility</string>
+
+    <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
+
+    <!-- Room settings: Room tag -->
+    <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Low priority</string>
+    <string name="room_settings_tag_pref_entry_none">None</string>
+    <string name="room_settings_tag_pref_no_tag">not tagged</string>
+    <string name="room_settings_tag_pref_entry_value_favourite">favourite</string>
+    <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
+    <string name="room_settings_tag_pref_entry_value_none">none</string>
+
+    <!-- Room settings: WHO CAN READ HISTORY? (read rule) -->
+    <string name="room_settings_read_history_entry_anyone">Anyone</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Members only (since they were invited)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Members only (since they joined)</string>
+    <string name="room_settings_read_history_entry_value_anyone">world_readable</string>
+    <string name="room_settings_read_history_entry_value_members_only_option_time_shared">shared</string>
+    <string name="room_settings_read_history_entry_value_members_only_invited">invited</string>
+    <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
+
+    <!-- Room settings: "Who can access this room?" (access rule) -->
+    <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
 
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>

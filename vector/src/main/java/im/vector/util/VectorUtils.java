@@ -19,16 +19,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -37,32 +32,16 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.v4.util.LruCache;
-import android.text.Html;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
-import android.text.util.Linkify;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.android.gms.common.AccountPicker;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -74,10 +53,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.ImageUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -85,15 +61,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.contacts.Contact;
-import im.vector.contacts.ContactsManager;
-import im.vector.db.VectorContentProvider;
 
 public class VectorUtils {
 
@@ -663,7 +635,7 @@ public class VectorUtils {
 
             if (null != thumbnailUri) {
                 try {
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri);
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri, null);
 
                     // sanity check
                     if (null != resource) {
@@ -734,16 +706,36 @@ public class VectorUtils {
             return presenceText;
         }
 
-        User user = session.getDataHandler().getStore().getUser(userId);
+        final User user = session.getDataHandler().getStore().getUser(userId);
 
-        if ((null != refreshCallback) && ((null == user) || (null == user.presence))) {
+        // refresh the presence with this conditions
+        boolean triggerRefresh = (null == user) || (null == user.presence);
+
+        if ((null != refreshCallback) && triggerRefresh) {
             Log.d(LOG_TAG, "Get the user presence : " + userId);
+
+            final String fPresence = user.presence;
 
             session.refreshUserPresence(userId, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    if (null != refreshCallback) {
+                    boolean isUpdated = false;
+                    User updatedUser = session.getDataHandler().getStore().getUser(userId);
+
+                    // don't find any info for the user
+                    if ((null == user) && (null == updatedUser)) {
+                        Log.d(LOG_TAG, "Don't find any presence info of " + userId);
+                    } else if ((null == user) && (null != updatedUser)) {
                         Log.d(LOG_TAG, "Got the user presence : " + userId);
+                        isUpdated = true;
+                    } else if (!TextUtils.equals(fPresence, updatedUser.presence)) {
+                        isUpdated = true;
+                        Log.d(LOG_TAG, "Got some new user presence info : " + userId);
+                        Log.d(LOG_TAG, "currently_active : " + updatedUser.currently_active);
+                        Log.d(LOG_TAG, "lastActiveAgo : " + updatedUser.lastActiveAgo);
+                    }
+
+                    if (isUpdated && (null != refreshCallback)) {
                         try {
                             refreshCallback.onSuccess(null);
                         } catch (Exception e) {

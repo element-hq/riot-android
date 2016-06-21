@@ -8,18 +8,17 @@
         android:background="@color/room_background"
         android:id="@+id/vector_settings_page" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/vector_settings_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="#449D9D9D">
+        android:background="@color/chat_encoding_background">
         <ProgressBar
-            android:id="@+id/listView_spinner"
+            android:id="@+id/vector_settings_spinner"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:visibility="visible"/>
-    </RelativeLayout>
+    </FrameLayout>
 </FrameLayout>

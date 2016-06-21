@@ -116,6 +116,11 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             return;
         }
 
+        if (CommonActivityUtils.isGoingToSplash(this)) {
+            Log.d(LOG_TAG, "onCreate : Going to splash screen");
+            return;
+        }
+
         Intent intent = getIntent();
 
         if (!intent.hasExtra(EXTRA_ROOM_ID)) {
