@@ -52,7 +52,7 @@ import im.vector.util.SlidableMediaInfo;
 
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
-    public static final String LOG_TAG = "VectorMediasViewerActivity";
+    public static final String LOG_TAG = "VectorMediasViewerAct";
 
     public static final String KEY_INFO_LIST = "ImageSliderActivity.KEY_INFO_LIST";
     public static final String KEY_INFO_LIST_INDEX = "ImageSliderActivity.KEY_INFO_LIST_INDEX";
