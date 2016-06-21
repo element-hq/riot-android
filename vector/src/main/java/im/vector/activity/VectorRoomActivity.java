@@ -16,6 +16,7 @@
 
 package im.vector.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +26,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -575,7 +577,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         if (selectedVal == R.string.option_send_files) {
                             VectorRoomActivity.this.launchFileSelectionIntent();
                         } else if (selectedVal == R.string.option_take_photo) {
-                            VectorRoomActivity.this.launchCamera();
+                            if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
+                                launchCamera();
+                            }
                         }
                     }
                 });
@@ -979,46 +983,75 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_delete_unsent) {
             mVectorMessageListFragment.deleteUnsentMessages();
             refreshNotificationsArea();
-        } else if (id == R.id.ic_action_call_in_room) {
-            // hide the header room
-            enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-            final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
-            final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
-
-            IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
-            fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                @Override
-                public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-                    // create the call object
-                    IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
-
-                    if (null != call) {
-                        call.setIsVideo((1 == position));
-                        call.setRoom(mRoom);
-                        call.setIsIncoming(false);
-
-                        final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
-
-                        intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                        intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                VectorRoomActivity.this.startActivity(intent);
-                            }
-                        });
-                    }
-                }
-            });
-
-            fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
+        } else if (id == R.id.ic_action_call_in_room){
+            displayVideoCallIpDialog();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Start an IP call with the management of the corresponding permissions.
+     * According to the IP call, the corresponding permissions are asked: {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_AUDIO_IP_CALL}
+     * or {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_VIDEO_IP_CALL}.
+     */
+    private void displayVideoCallIpDialog() {
+        // hide the header room
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        final Integer[] lIcons = new Integer[]{ R.drawable.voice_call_black, R.drawable.video_call_black};
+        final Integer[] lTexts = new Integer[]{ R.string.action_voice_call, R.string.action_video_call};
+
+        IconAndTextDialogFragment fragment = IconAndTextDialogFragment.newInstance(lIcons, lTexts);
+        fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+            @Override
+            public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                boolean isVideoCall = false;
+                int requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
+
+                if(1 == position){
+                    isVideoCall = true;
+                    requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL;
+                }
+
+                if(CommonActivityUtils.checkPermissions(requestCode, VectorRoomActivity.this)){
+                    startIpCall(isVideoCall);
+                }
+            }
+        });
+
+        // display the fragment dialog
+        fragment.show(getSupportFragmentManager(), TAG_FRAGMENT_CALL_OPTIONS);
+    }
+
+    /**
+     * Start an IP call: audio call if aIsVideoCall is false or video call if aIsVideoCall
+     * is true.
+     * @param aIsVideoCall true to video call, false to audio call
+     */
+    private void startIpCall(boolean aIsVideoCall){
+        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+
+        // create the call object
+        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+
+        if (null != call) {
+            call.setIsVideo(aIsVideoCall);
+            call.setRoom(mRoom);
+            call.setIsIncoming(false);
+
+            final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+
+            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+            VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    VectorRoomActivity.this.startActivity(intent);
+                }
+            });
+        }
     }
 
     //================================================================================
@@ -1984,6 +2017,52 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         Intent intent = new Intent(this, VectorMediasPickerActivity.class);
         startActivityForResult(intent, TAKE_IMAGE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+           if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
+               boolean isCameraPermissionGranted = false;
+
+            for( int i = 0; i < aPermissions.length; i++ ) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): "+aPermissions[i]+"="+aGrantResults[i]);
+
+                if( Manifest.permission.CAMERA.equals(aPermissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
+                        isCameraPermissionGranted = true;
+                    } else {
+                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission not granted");
+                    }
+                }
+
+                if( Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(aPermissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission granted");
+                    } else {
+                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): WRITE_EXTERNAL_STORAGE permission not granted");
+                    }
+                }
+            }
+
+            // Because external storage permission is not mandatory to launch the camera,
+            // external storage permission is not tested.
+            if(isCameraPermissionGranted){
+                launchCamera();
+            } else {
+                CommonActivityUtils.displayToast(this, "Sorry.. Action not performed due to missing permissions");
+            }
+        } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
+           if( CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
+               startIpCall(false);
+           }
+        } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
+           if( CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+               startIpCall(true);
+           }
+        } else {
+           Log.w(LOG_TAG, "## onRequestPermissionsResult(): Unknown requestCode =" + aRequestCode);
+        }
     }
 
     /**

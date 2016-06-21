@@ -120,6 +120,11 @@
             android:title="@string/ga_use_settings"
             android:key="@string/ga_use_settings"/>
 
+        <Preference
+            android:key="application_info_link"
+            android:title="@string/settings_title_app_info_link"
+            android:summary="@string/settings_summary_app_info_link" />
+
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_version"
             android:summary="1.2.3"
