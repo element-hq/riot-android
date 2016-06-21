@@ -28,6 +28,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -543,7 +544,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mRoomCreationView.setVisibility(View.VISIBLE);
 
-        refreshSlidingMenu();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                refreshSlidingMenu();
+            }
+        });
 
         manageCallButton();
 
@@ -907,7 +913,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
 
         // init the main menu
-        TextView displaynameTextView = (TextView)  mNavigationView.findViewById(R.id.home_menu_main_displayname);
+        TextView displaynameTextView = (TextView) mNavigationView.findViewById(R.id.home_menu_main_displayname);
 
         if (null != displaynameTextView) {
             displaynameTextView.setText(mSession.getMyUser().displayname);
@@ -922,6 +928,15 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         if (null != mainAvatarView) {
             VectorUtils.loadUserAvatar(this, mSession, mainAvatarView, mSession.getMyUser());
+        } else if (null != mNavigationView) {
+            // on Android M, the mNavigationView is not loaded at launch
+            // so launch asap it is rendered.
+            mNavigationView.post(new Runnable() {
+                @Override
+                public void run() {
+                    refreshSlidingMenu();
+                }
+            });
         }
     }
 
