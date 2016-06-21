@@ -605,6 +605,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
+        mActionBarHeaderInviteMemberView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
+            }
+        });
+
         // notifications area
         mNotificationsArea = findViewById(R.id.room_notifications_area);
         mTypingIcon = findViewById(R.id.room_typing_animation);
