@@ -18,6 +18,9 @@
     <!-- shared files from external application -->
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
 
+    <!-- to be able to turn on display when a notification is received-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <!-- videocall feature-->
     <!-- android.permission.CAMERA defines android.hardware.camera -->
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
