@@ -103,6 +103,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
+import im.vector.util.SlashComandsParser;
 import im.vector.util.VectorUtils;
 
 import java.io.File;
@@ -161,17 +162,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
     private static final String KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP = "KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP";
-
-    // defines the command line operations
-    // the user can write theses messages to perform some room events
-    private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
-    private static final String CMD_EMOTE = "/me";
-    private static final String CMD_JOIN_ROOM = "/join";
-    private static final String CMD_KICK_USER = "/kick";
-    private static final String CMD_BAN_USER = "/ban";
-    private static final String CMD_UNBAN_USER = "/unban";
-    private static final String CMD_SET_USER_POWER_LEVEL = "/op";
-    private static final String CMD_RESET_USER_POWER_LEVEL = "/deop";
 
     // activity result request code
     public static final int REQUEST_FILES_REQUEST_CODE = 0;
@@ -1131,10 +1121,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if (!manageIRCCommand(body)) {
+            if (!SlashComandsParser.manageSplashCommand(this, mSession, mRoom, body)) {
                 mVectorMessageListFragment.cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
+        }
+    }
+
+    /**
+     * Send an emote in the opened room
+     * @param emote
+     */
+    public void sendEmote(String emote) {
+        if (null != mVectorMessageListFragment) {
+            mVectorMessageListFragment.sendEmote(emote);
         }
     }
 
@@ -2231,135 +2231,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         refreshNotificationsArea();
-    }
-
-    //================================================================================
-    // IRC command management
-    //================================================================================
-
-    /**
-     * check if the text message is an IRC command.
-     * If it is an IRC command, it is executed
-     * @param body message to be parsed
-     * @return true if body defines an IRC command
-     */
-    private boolean manageIRCCommand(String body) {
-        boolean isIRCCmd = false;
-
-        // check if it has the IRC marker
-        if ((null != body) && (body.startsWith("/"))) {
-            final ApiCallback callback = new SimpleApiCallback<Void>(this) {
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    if (MatrixError.FORBIDDEN.equals(e.errcode)) {
-                        Toast.makeText(VectorRoomActivity.this, e.error, Toast.LENGTH_LONG).show();
-                    }
-                }
-            };
-
-            if (body.startsWith(CMD_CHANGE_DISPLAY_NAME)) {
-                isIRCCmd = true;
-
-                String newDisplayname = body.substring(CMD_CHANGE_DISPLAY_NAME.length()).trim();
-
-                if (newDisplayname.length() > 0) {
-                    MyUser myUser = mSession.getMyUser();
-
-                    myUser.updateDisplayName(newDisplayname, callback);
-                }
-            } else if (body.startsWith(CMD_EMOTE)) {
-                isIRCCmd = true;
-
-                String message = body.substring(CMD_EMOTE.length()).trim();
-
-                if (message.length() > 0) {
-                    mVectorMessageListFragment.sendEmote(message);
-                }
-            } else if (body.startsWith(CMD_JOIN_ROOM)) {
-                isIRCCmd = true;
-
-                String roomAlias = body.substring(CMD_JOIN_ROOM.length()).trim();
-
-                if (roomAlias.length() > 0) {
-                    mSession.joinRoom(roomAlias,new SimpleApiCallback<String>(this) {
-
-                        @Override
-                        public void onSuccess(String roomId) {
-                            if (null != roomId) {
-                                HashMap<String, Object> params = new HashMap<String, Object>();
-                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-                                CommonActivityUtils.goToRoomPage(VectorRoomActivity.this, mSession, params);
-                            }
-                        }
-                    });
-                }
-            } else if (body.startsWith(CMD_KICK_USER)) {
-                isIRCCmd = true;
-
-                String params = body.substring(CMD_KICK_USER.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String kickedUserID = paramsList[0];
-
-                if (kickedUserID.length() > 0) {
-                    mRoom.kick(kickedUserID, callback);
-                }
-            } else if (body.startsWith(CMD_BAN_USER)) {
-                isIRCCmd = true;
-
-                String params = body.substring(CMD_BAN_USER.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String bannedUserID = paramsList[0];
-                String reason = params.substring(bannedUserID.length()).trim();
-
-                if (bannedUserID.length() > 0) {
-                    mRoom.ban(bannedUserID, reason, callback);
-                }
-            } else if (body.startsWith(CMD_UNBAN_USER)) {
-                isIRCCmd = true;
-
-                String params = body.substring(CMD_UNBAN_USER.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String unbannedUserID = paramsList[0];
-
-                if (unbannedUserID.length() > 0) {
-                    mRoom.unban(unbannedUserID, callback);
-                }
-            } else if (body.startsWith(CMD_SET_USER_POWER_LEVEL)) {
-                isIRCCmd = true;
-
-                String params = body.substring(CMD_SET_USER_POWER_LEVEL.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String userID = paramsList[0];
-                String powerLevelsAsString  = params.substring(userID.length()).trim();
-
-                try {
-                    if ((userID.length() > 0) && (powerLevelsAsString.length() > 0)) {
-                        mRoom.updateUserPowerLevels(userID, Integer.parseInt(powerLevelsAsString), callback);
-                    }
-                } catch(Exception e){
-                    Log.e(LOG_TAG, "mRoom.updateUserPowerLevels " + e.getMessage());
-                }
-            } else if (body.startsWith(CMD_RESET_USER_POWER_LEVEL)) {
-                isIRCCmd = true;
-
-                String params = body.substring(CMD_RESET_USER_POWER_LEVEL.length()).trim();
-                String[] paramsList = params.split(" ");
-
-                String userID = paramsList[0];
-
-                if (userID.length() > 0) {
-                    mRoom.updateUserPowerLevels(userID, 0, callback);
-                }
-            }
-        }
-
-        return isIRCCmd;
     }
 
     //================================================================================
