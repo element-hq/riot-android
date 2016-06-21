@@ -1126,20 +1126,33 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             // sanity check
             if (null != mShootedPicturePath) {
+                Uri uri = Uri.fromFile(new File(mShootedPicturePath));
+
                 try {
                     Bitmap previewBitmap = VectorApp.getSavedPickerImagePreview();
                     String thumbnailPath = getThumbnailPath(mShootedPicturePath);
+
+                    int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, uri);
+
+                    // detect exif rotation
+                    if (0 != rotationAngle) {
+                        android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                        bitmapMatrix.postRotate(360 - rotationAngle);
+                        previewBitmap = Bitmap.createBitmap(previewBitmap, 0, 0, previewBitmap.getWidth(), previewBitmap.getHeight(), bitmapMatrix, false);
+                    }
 
                     File file = new File(thumbnailPath);
                     FileOutputStream outStream = new FileOutputStream(file);
                     previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
                     outStream.flush();
                     outStream.close();
+
+
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file");
                 }
 
-                Uri uri = Uri.fromFile(new File(mShootedPicturePath));
+
 
                 // provide the Uri
                 Bundle conData = new Bundle();
