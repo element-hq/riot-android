@@ -465,7 +465,7 @@ public class EventStreamService extends Service {
 
                         // turn the screen on for 3 seconds
                         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MXEventListener");
+                        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
                         wl.acquire(3000);
                         wl.release();
                     } catch (Exception e) {
