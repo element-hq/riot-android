@@ -51,7 +51,6 @@ public class AccountsSelectionDialogFragment extends DialogFragment {
         return f;
     }
 
-    private ListView mListView;
     private AccountsAdapter mAdapter;
     private Collection<MXSession>  mSessions = null;
 
@@ -95,7 +94,7 @@ public class AccountsSelectionDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_dialog_accounts_list, container, false);
-        mListView = ((ListView)v.findViewById(R.id.listView_accounts));
+        ListView listView = ((ListView)v.findViewById(R.id.listView_accounts));
 
         mAdapter = new AccountsAdapter(getActivity(), R.layout.adapter_item_account, getMXMediasCache());
 

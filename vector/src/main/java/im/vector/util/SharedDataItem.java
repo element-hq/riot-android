@@ -330,7 +330,7 @@ public class SharedDataItem implements Parcelable {
      * @param mimeType the file mimetype.
      * @return the file uri
      */
-    private static final Uri saveFile(File folder, InputStream stream, String defaultFileName, String mimeType) {
+    private static Uri saveFile(File folder, InputStream stream, String defaultFileName, String mimeType) {
         String filename = defaultFileName;
 
         if (null == filename) {

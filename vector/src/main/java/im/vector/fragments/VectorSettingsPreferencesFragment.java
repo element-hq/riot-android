@@ -327,7 +327,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
 
         // preference to start the App info screen, to facilitate App permissions access
-        Preference applicationInfoLInkPref = (Preference) findPreference(APP_INFO_LINK_PREFERENCE_KEY);
+        Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
         applicationInfoLInkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
