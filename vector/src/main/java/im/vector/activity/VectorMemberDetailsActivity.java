@@ -473,7 +473,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         // Check user's power level before allowing an action (kick, ban, ...)
         if (TextUtils.equals(mMemberId, selfUserId)) {
-            supportedActions.add(ITEM_ACTION_LEAVE);
+            if (null != mRoom) {
+                supportedActions.add(ITEM_ACTION_LEAVE);
+            }
 
             if ((null != powerLevels) && (selfPowerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS))) {
                 // Check whether the user is admin (in this case he may reduce his power level to become moderator).
