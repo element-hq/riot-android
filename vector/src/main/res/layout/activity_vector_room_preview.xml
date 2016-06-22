@@ -48,8 +48,6 @@
 
                         <RelativeLayout
                             android:id="@+id/preview_actions_bar"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentRight="true"
                             android:layout_width="match_parent"
                             android:layout_height="65dp">
 
@@ -90,8 +88,6 @@
 
         <RelativeLayout
             android:id="@+id/room_preview_progress_layout"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/chat_encoding_background"

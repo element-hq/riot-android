@@ -62,8 +62,6 @@
 
         <RelativeLayout
             android:id="@+id/preview_actions_bar"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
             android:layout_width="match_parent"
             android:layout_height="65dp">
 
