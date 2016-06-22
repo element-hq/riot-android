@@ -1934,6 +1934,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     /**
      * Launch the files selection intent
      */
+    @SuppressLint("NewApi")
     private void launchFileSelectionIntent() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
