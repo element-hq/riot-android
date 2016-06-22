@@ -427,7 +427,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 String savedMediaPath = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), file, filename, mediaMimeType);
 
                 if (null != savedMediaPath) {
-
                     if (menuAction == ACTION_VECTOR_SAVE) {
                         Toast.makeText(getActivity(), getText(R.string.media_slider_saved), Toast.LENGTH_LONG).show();
                     } else {
@@ -629,10 +628,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return -1;
     }
 
-    /**
-     * Call when the row is clicked.
-     * @param position the cell position.
-     */
+    @Override
     public void onRowClick(int position) {
         MessageRow row = mAdapter.getItem(position);
         Event event = row.getEvent();
@@ -641,10 +637,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         ((VectorMessagesAdapter)mAdapter).onEventTap(event.eventId);
     }
 
-    /**
-     * Called when a click is performed on the message content
-     * @param position the cell position
-     */
+    @Override
     public void onContentClick(int position) {
         MessageRow row = mAdapter.getItem(position);
         Event event = row.getEvent();
@@ -687,19 +680,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
     }
 
-    /**
-     * Called when a long click is performed on the message content
-     * @param position the cell position
-     * @return true if managed
-     */
+    @Override
     public boolean onContentLongClick(int position) {
         return onRowLongClick(position);
     }
 
-    /**
-     * Define the action to perform when the user tap on an avatar
-     * @param userId the user ID
-     */
+    @Override
     public void onAvatarClick(String userId) {
         Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
         // in preview mode
@@ -715,11 +701,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
     }
 
-    /**
-     * Define the action to perform when the user performs a long tap on an avatar
-     * @param userId the user ID
-     * @return true if the long click event is managed
-     */
+    @Override
     public boolean onAvatarLongClick(String userId) {
         if (getActivity() instanceof VectorRoomActivity) {
             RoomState state = mRoom.getLiveState();
@@ -734,105 +716,18 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         return true;
     }
 
-    /**
-     * Define the action to perform when the user taps on the message sender
-     * @param userId
-     * @param displayName
-     */
+    @Override
     public void onSenderNameClick(String userId, String displayName) {
         if (getActivity() instanceof VectorRoomActivity) {
             ((VectorRoomActivity)getActivity()).insertInTextEditor(displayName);
         }
     }
 
-    /**
-     * A media download is done
-     * @param position
-     */
+    @Override
     public void onMediaDownloaded(int position) {
     }
 
-
-    /**
-     * Save the message the message content into a dedicated folder.
-     * @param message the message.
-     * @param mediaUrl the media url.
-     * @param mediaMimeType the media mimetype.
-     */
-    protected void save(final Message message, final String mediaUrl, final String mediaMimeType) {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-
-        builderSingle.setTitle(getActivity().getText(R.string.save_files_in));
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.dialog_room_selection);
-
-        ArrayList<String> entries = new ArrayList<String>();
-
-        entries.add(getActivity().getText(R.string.downloads).toString());
-
-        if ((null == mediaMimeType) || mediaMimeType.startsWith("image/")) {
-            entries.add(getActivity().getText(R.string.gallery).toString());
-        }
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            entries.add(getActivity().getText(R.string.other).toString());
-        }
-
-        arrayAdapter.addAll(entries);
-
-        final ArrayList<String> fEntries = entries;
-
-        builderSingle.setNegativeButton(getActivity().getText(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        builderSingle.setAdapter(arrayAdapter,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, final int which) {
-                        dialog.dismiss();
-
-                        MXMediasCache cache = getMXMediasCache();
-                        File cacheFile = cache.mediaCacheFile(mediaUrl, mediaMimeType);
-
-                        String entry = fEntries.get(which);
-                        String savedFilename = null;
-
-                        if (getActivity().getText(R.string.gallery).toString().equals(entry)) {
-                            // save in the gallery
-                            savedFilename = CommonActivityUtils.saveImageIntoGallery(getActivity(), cacheFile);
-                        } else if (getActivity().getText(R.string.downloads).toString().equals(entry)) {
-                            String filename = null;
-
-                            if (message instanceof FileMessage)  {
-                                filename = ((FileMessage)message).body;
-                            }
-
-                            // save into downloads
-                            savedFilename = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), cacheFile, filename, mediaMimeType);
-                        } else {
-                            if (getActivity() instanceof VectorRoomActivity) {
-                                ((VectorRoomActivity)getActivity()).createDocument(message, mediaUrl, mediaMimeType);
-                            }
-                        }
-
-                        if (null != savedFilename) {
-                            final String fSavedFilename = new File(savedFilename).getName();
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getActivity(), getActivity().getString(R.string.file_is_saved, fSavedFilename), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });
-        builderSingle.show();
-    }
-
+    @Override
     public void onMoreReadReceiptClick(String eventId) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
 
@@ -844,10 +739,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
     }
 
-    /**
-     * The user taps on an URI.
-     * @param uri the URI
-     */
+    @Override
     public void onURLClick(Uri uri) {
         if (null != uri) {
             if (null != VectorUniversalLinkReceiver.parseUniversalLink(uri)) {

@@ -166,7 +166,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // activity result request code
     public static final int REQUEST_FILES_REQUEST_CODE = 0;
     public static final int TAKE_IMAGE_REQUEST_CODE = 1;
-    public static final int CREATE_DOCUMENT_REQUEST_CODE = 2;
     public static final int GET_MENTION_REQUEST_CODE = 3;
     public static final int REQUEST_ROOM_AVATAR_CODE = 4;
 
@@ -912,19 +911,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (resultCode == RESULT_OK) {
             if ((requestCode == REQUEST_FILES_REQUEST_CODE) || (requestCode == TAKE_IMAGE_REQUEST_CODE)) {
                 sendMediasIntent(data);
-            } else if (requestCode == CREATE_DOCUMENT_REQUEST_CODE) {
-                Uri currentUri = data.getData();
-                writeMediaUrl(currentUri);
             } else if (requestCode == GET_MENTION_REQUEST_CODE) {
                 appendInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
             } else if (requestCode == REQUEST_ROOM_AVATAR_CODE) {
                 onActivityResultRoomAvatarUpdate(data);
             }
-        }
-
-        if (requestCode == CREATE_DOCUMENT_REQUEST_CODE) {
-            mPendingMediaUrl = null;
-            mPendingMimeType = null;
         }
     }
 
@@ -1551,68 +1542,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (0 != sharedDataItems.size()) {
             sendMedias(sharedDataItems);
-        }
-    }
-
-    /**
-     * Open the message attachment.
-     * @param message the message.
-     * @param mediaUrl the media URL.
-     * @param mediaMimeType the media mimetype.
-     */
-    public void createDocument(Message message, final String mediaUrl, final String mediaMimeType) {
-        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        String filename = "Vector_" + System.currentTimeMillis();
-
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        filename += "." + mime.getExtensionFromMimeType(mediaMimeType);
-
-        if (message instanceof FileMessage) {
-            FileMessage fileMessage = (FileMessage)message;
-
-            if (null != fileMessage.body) {
-                filename = fileMessage.body;
-            }
-        }
-
-        mPendingMediaUrl = mediaUrl;
-        mPendingMimeType = mediaMimeType;
-
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
-                .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType(mediaMimeType)
-                .putExtra(Intent.EXTRA_TITLE, filename);
-
-        startActivityForResult(intent, CREATE_DOCUMENT_REQUEST_CODE);
-    }
-
-    /**
-     * Save the media to the destUri.
-     * @param destUri the path to store the media.
-     */
-    private void writeMediaUrl(Uri destUri) {
-        try {
-            ParcelFileDescriptor pfd = this.getContentResolver().openFileDescriptor(destUri, "w");
-
-            FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-
-            File sourceFile = mMediasCache.mediaCacheFile(mPendingMediaUrl, mPendingMimeType);
-
-            FileInputStream inputStream = new FileInputStream(sourceFile);
-
-            byte[] buffer = new byte[1024 * 10];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                fileOutputStream.write(buffer, 0, len);
-            }
-
-            fileOutputStream.close();
-            pfd.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
