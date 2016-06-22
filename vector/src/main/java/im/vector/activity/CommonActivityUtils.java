@@ -132,7 +132,7 @@ public class CommonActivityUtils {
     // Android M permission request code management
     public static final boolean PERMISSIONS_GRANTED = true;
     public static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
-    public static final int PERMISSION_CAMERA = 0x1<<0;
+    public static final int PERMISSION_CAMERA = 0x1;
     public static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1<<1;
     public static final int PERMISSION_RECORD_AUDIO = 0x1<<2;
     public static final int PERMISSION_READ_CONTACTS = 0x1<<3;
@@ -291,7 +291,7 @@ public class CommonActivityUtils {
      * @param goToLoginPage true to jump to the login page
      */
     public static void logout(Activity activity, boolean goToLoginPage) {
-        EventStreamService.getInstance().removeNotification();
+        EventStreamService.removeNotification();
         stopEventStream(activity);
 
         try {
@@ -379,6 +379,26 @@ public class CommonActivityUtils {
     //==============================================================================================================
 
     /**
+     * Indicate if a user is logged out or not. If no default session is enabled,
+     * no user is logged.
+     * @param aContext App context
+     * @return true if no user is logged in, false otherwise
+     */
+    private static boolean isUserLogout(Context aContext){
+        boolean retCode = false;
+
+        if(null == aContext) {
+            retCode = true;
+        } else {
+            if (null == Matrix.getInstance(aContext.getApplicationContext()).getDefaultSession()) {
+                retCode = true;
+            }
+        }
+
+        return retCode;
+    }
+
+    /**
      * Send an action to the events service.
      * @param context the context.
      * @param action the action to send.
@@ -388,10 +408,16 @@ public class CommonActivityUtils {
 
         Log.d(LOG_TAG, "sendEventStreamAction " + action);
 
-        // kill active connections
-        Intent killStreamService = new Intent(appContext, EventStreamService.class);
-        killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
-        appContext.startService(killStreamService);
+        if(!isUserLogout(appContext)) {
+            // Fix https://github.com/vector-im/vector-android/issues/230
+            // Only start the service if a session is in progress, otherwise
+            // starting the service is useless
+            Intent killStreamService = new Intent(appContext, EventStreamService.class);
+            killStreamService.putExtra(EventStreamService.EXTRA_STREAM_ACTION, action.ordinal());
+            appContext.startService(killStreamService);
+        } else {
+            Log.d(LOG_TAG,"## sendEventStreamAction(): \""+action+"\" action not sent - user logged out");
+        }
     }
 
     /**
@@ -593,8 +619,8 @@ public class CommonActivityUtils {
      * Helper method used in {@link #checkPermissions(int, Activity)} to populate the list of the
      * permissions to be granted (aPermissionsListToBeGranted_out) and the list of the permissions already denied (aPermissionAlreadyDeniedList_out).
      * @param aCallingActivity calling activity
-     * @param[out] aPermissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
-     * @param[out] aPermissionsListToBeGranted_out list to be updated with the permissions to be granted
+     * @param aPermissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
+     * @param aPermissionsListToBeGranted_out list to be updated with the permissions to be granted
      * @param permissionType the permission to be checked
      * @return true if the permission requires to be granted, false otherwise
      */
@@ -1319,15 +1345,14 @@ public class CommonActivityUtils {
     /**
      * Copy a file into a dstPath directory.
      * The output filename can be provided.
-     * The output file is not overriden if it is already exist.
+     * The output file is not overridden if it is already exist.
      *
-     * @param context        the context
      * @param sourceFile     the file source path
      * @param dstDirPath     the dst path
      * @param outputFilename optional the output filename
      * @return the downloads file path if the file exists or has been properly saved
      */
-    public static String saveFileInto(Context context, File sourceFile, String dstDirPath, String outputFilename) {
+    public static String saveFileInto(File sourceFile, String dstDirPath, String outputFilename) {
         // sanity check
         if ((null == sourceFile) || (null == dstDirPath)) {
             return null;
@@ -1404,7 +1429,7 @@ public class CommonActivityUtils {
      */
     @SuppressLint("NewApi")
     public static String saveMediaIntoDownloads(Context context, File srcFile, String filename, String mimeType) {
-        String fullFilePath = saveFileInto(context, srcFile, Environment.DIRECTORY_DOWNLOADS, filename);
+        String fullFilePath = saveFileInto(srcFile, Environment.DIRECTORY_DOWNLOADS, filename);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             if (null != fullFilePath) {
@@ -1429,7 +1454,7 @@ public class CommonActivityUtils {
      * @param sourceFile the image path to save.
      */
     public static String saveImageIntoGallery(Context context, File sourceFile) {
-        String filePath = saveFileInto(context, sourceFile, Environment.DIRECTORY_PICTURES, null);
+        String filePath = saveFileInto(sourceFile, Environment.DIRECTORY_PICTURES, null);
 
         if (null != filePath) {
             // This broadcasts that there's been a change in the media directory

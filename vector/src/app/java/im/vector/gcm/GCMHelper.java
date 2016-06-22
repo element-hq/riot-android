@@ -29,7 +29,7 @@ public class GCMHelper {
     private static final String LOG_TAG = "GCMHelper";
 
     /**
-     * Retrieve the GCM push key.
+     * Retrieve the GCM push key (registration token).
      * @param appContext the application context
      * @return the GCM pushKey
      */
