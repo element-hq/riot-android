@@ -257,7 +257,7 @@ public class SharedDataItem implements Parcelable {
      * @return the filename
      */
     public String getFileName(Context context) {
-        if ((null != mFileName) && (null != getUri())) {
+        if ((null == mFileName) && (null != getUri())) {
             Uri mediaUri = getUri();
 
             if (null != mediaUri) {
