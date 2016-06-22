@@ -2328,10 +2328,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // custom header
         View headerTextsContainer = findViewById(R.id.header_texts_container);
-        View openChatHeaderArrow = findViewById(R.id.open_chat_header_arrow);
 
         // add click listener on custom action bar to display/hide the header view
-        openChatHeaderArrow.setOnClickListener(new View.OnClickListener() {
+        mActionBarCustomArrowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null != mRoomHeaderView) {
