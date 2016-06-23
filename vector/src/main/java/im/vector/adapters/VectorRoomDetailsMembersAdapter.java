@@ -407,17 +407,17 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 long lastActiveAgoA = (null != userA) ? userA.getAbsoluteLastActiveAgo() : 0;
                 long lastActiveAgoB = (null != userB) ? userB.getAbsoluteLastActiveAgo() : 0;
 
+                long diff = lastActiveAgoA - lastActiveAgoB;
+
+                if (diff == 0) {
+                    return alphaComparator(userADisplayName, userBDisplayName);
+                }
+
                 // if only one member has a lastActiveAgo, prefer it
                 if (0 == lastActiveAgoA) {
                     return +1;
                 } else if (0 == lastActiveAgoB) {
                     return -1;
-                }
-
-                long diff = lastActiveAgoA - lastActiveAgoB;
-
-                if (diff == 0) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
                 }
 
                 return (diff > 0) ? +1 : -1;
