@@ -768,7 +768,8 @@ public class EventStreamService extends Service {
                 body,
                 event.roomId,
                 roomName,
-                bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+                bingRule.isDefaultNotificationSound(bingRule.notificationSound()),
+                isInvitationEvent);
 
     }
 
