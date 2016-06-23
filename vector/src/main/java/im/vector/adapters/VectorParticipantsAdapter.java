@@ -247,7 +247,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
      */
     private static boolean match(ParticipantAdapterItem item, String searchMethod, String pattern) {
         if (TextUtils.equals(searchMethod, SEARCH_METHOD_CONTAINS)) {
-            return item.matchWithPattern(pattern);
+            return item.contains(pattern);
         } else {
             return item.startsWith(pattern);
         }

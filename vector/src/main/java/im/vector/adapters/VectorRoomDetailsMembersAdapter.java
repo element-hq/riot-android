@@ -393,7 +393,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     if (powerLevelA == powerLevelB) {
                         return alphaComparator(userADisplayName, userBDisplayName);
                     } else {
-                        return powerLevelB - powerLevelA;
+                        return (powerLevelB - powerLevelA) > 0 ? +1 : -1;
                     }
                 }
 
