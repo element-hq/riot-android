@@ -68,7 +68,7 @@ import java.util.List;
  */
 public class EventStreamService extends Service {
     public enum StreamAction {
-        UNKNOWN,
+        IDLE,
         STOP,
         START,
         PAUSE,
@@ -90,7 +90,7 @@ public class EventStreamService extends Service {
 
     private ArrayList<MXSession> mSessions;
     private ArrayList<String> mMatrixIds;
-    private StreamAction mState = StreamAction.UNKNOWN;
+    private StreamAction mState = StreamAction.IDLE;
 
     // store the notifications description
     private String mNotificationSessionId = null;
@@ -286,7 +286,7 @@ public class EventStreamService extends Service {
             return START_NOT_STICKY;
         }
 
-        StreamAction action = StreamAction.values()[intent.getIntExtra(EXTRA_STREAM_ACTION, StreamAction.UNKNOWN.ordinal())];
+        StreamAction action = StreamAction.values()[intent.getIntExtra(EXTRA_STREAM_ACTION, StreamAction.IDLE.ordinal())];
 
         if (intent.hasExtra(EXTRA_MATRIX_IDS)) {
             if (null == mMatrixIds) {
@@ -307,8 +307,8 @@ public class EventStreamService extends Service {
                 start();
                 break;
             case STOP:
-                Log.d(LOG_TAG, "the service is stopped");
-                stop();
+                Log.d(LOG_TAG, "## onStartCommand(): service stopped");
+                stopSelf();
                 break;
             case PAUSE:
                 pause();
@@ -396,7 +396,7 @@ public class EventStreamService extends Service {
         }
 
         if (!Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager().useGCM()) {
-            updateListener();
+            updateServiceForegroundState();
         }
 
         mState = StreamAction.START;
@@ -500,17 +500,19 @@ public class EventStreamService extends Service {
             mIsForeground = false;
         }
 
-        updateListener();
+        updateServiceForegroundState();
     }
 
     /**
-     * polling listener when the GCM is disabled
+     * Enable/disable the service to be in foreground or not.
+     * The service is put in foreground when a sync polling is used,
+     * to strongly reduce the likelihood of the App being killed.
      */
-    private void updateListener() {
+    private void updateServiceForegroundState() {
         MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
         if (null == session) {
-            Log.e(LOG_TAG, "updateListener : no session");
+            Log.e(LOG_TAG, "updateServiceForegroundState : no session");
             return;
         }
 
@@ -933,7 +935,7 @@ public class EventStreamService extends Service {
     public void hidePendingCallNotification(String callId) {
         if (TextUtils.equals(mBackgroundNotificationCallId, callId)) {
             stopForeground(true);
-            updateListener();
+            updateServiceForegroundState();
             mBackgroundNotificationCallId = null;
         }
 

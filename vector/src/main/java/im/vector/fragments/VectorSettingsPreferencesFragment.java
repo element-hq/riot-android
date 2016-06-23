@@ -351,10 +351,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
 
         refreshPushersList();
-        refreshPreferences();
         refreshEmailsList();
-        refreshBackgroundSyncPrefs();
-        refreshDisplay();
     }
 
     @Override
