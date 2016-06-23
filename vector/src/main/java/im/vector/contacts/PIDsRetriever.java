@@ -38,8 +38,12 @@ public class PIDsRetriever {
         void onPIDsRetrieved(String accountId, Contact contact, boolean has3PIDs);
     }
 
+    // current instance
     private static PIDsRetriever mPIDsRetriever = null;
 
+    /**
+     * @return the PIDsRetriever instance.
+     */
     public static PIDsRetriever getIntance() {
         if (null == mPIDsRetriever) {
             mPIDsRetriever = new PIDsRetriever();
@@ -49,10 +53,15 @@ public class PIDsRetriever {
     }
 
     // MatrixID <-> email
-    private HashMap<String, Contact.MXID> mMatrixIdsByElement = new HashMap<String, Contact.MXID>();
+    private HashMap<String, Contact.MXID> mMatrixIdsByElement = new HashMap<>();
 
+    // listeners list
     private PIDsRetrieverListener mListener = null;
 
+    /**
+     * Set the listener.
+     * @param listener the listener.
+     */
     public void setPIDsRetrieverListener(PIDsRetrieverListener listener) {
         mListener = listener;
     }
@@ -86,7 +95,7 @@ public class PIDsRetriever {
 
         // check if the emails have only been checked
         // i.e. requested their match PID to the identity server.
-        for(String email : contact.mEmails) {
+        for(String email : contact.getEmails()) {
             if (mMatrixIdsByElement.containsKey(email)) {
                Contact.MXID mxid = mMatrixIdsByElement.get(email);
 

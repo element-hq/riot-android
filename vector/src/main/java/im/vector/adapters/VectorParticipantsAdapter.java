@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ import org.matrix.androidsdk.rest.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -54,7 +54,7 @@ import im.vector.util.VectorUtils;
  * This class displays the users search results list.
  * The first list row can be customized.
  */
-public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
+public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
 
     private static final String LOG_TAG = "VectorAddPartsAdapt";
 
@@ -67,20 +67,35 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         void onSearchEnd(int count);
     }
 
-    //
+    // defines the search method
+    // contains the pattern
+    public static String SEARCH_METHOD_CONTAINS = "SEARCH_METHOD_CONTAINS";
+    // starts with
+    public static String SEARCH_METHOD_STARTS_WITH = "SEARCH_METHOD_STARTS_WITH";
+
+    // layout info
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
+    // account info
     private MXSession mSession;
     private String mRoomId;
+
+    // used layout
     private int mLayoutResourceId;
 
+    // participants list
     private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
     private ArrayList<String> mMemberUserIds = null;
     private ArrayList<String> mDisplayNamesList = null;
     private String mPattern = "";
+    private String mSearchMethod = SEARCH_METHOD_CONTAINS;
 
-    ParticipantAdapterItem mFirstEntry;
+    // the participant sort method
+    private Comparator<ParticipantAdapterItem> mSortMethod = ParticipantAdapterItem.alphaComparator;
+
+    // define the first entry to set
+    private ParticipantAdapterItem mFirstEntry;
 
     /**
      * Create a room member adapter.
@@ -91,7 +106,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
      * @param session the session.
      * @param roomId the room id.
      */
-    public VectorAddParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId) {
+    public VectorParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId) {
         super(context, layoutResourceId);
 
         mContext = context;
@@ -105,26 +120,44 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
     /**
      * Search a pattern in the known members list.
      * @param pattern the pattern to search
+     * @param searchMethod the search method
+     * @param searchListener the search result listener
      */
-    public void setSearchedPattern(String pattern, final OnParticipantsSearchListener searchListener) {
-        setSearchedPattern(pattern, null, searchListener);
+    public void setSearchedPattern(String pattern, String searchMethod, final OnParticipantsSearchListener searchListener) {
+        setSearchedPattern(pattern, searchMethod, null, searchListener);
     }
 
     /**
      * Search a pattern in the known members list.
      * @param pattern the pattern to search
+     * @param searchMethod the search method
      * @param firstEntry the entry to display in the results list.
+     * @param searchListener the search result listener
      */
-    public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry, OnParticipantsSearchListener searchListener) {
+    public void setSearchedPattern(String pattern, String searchMethod, ParticipantAdapterItem firstEntry, OnParticipantsSearchListener searchListener) {
         if (null == pattern) {
             pattern = "";
+        } else {
+            pattern = pattern.toLowerCase();
         }
 
         if (!pattern.trim().equals(mPattern)) {
             mPattern = pattern.trim().toLowerCase();
-            refresh(firstEntry, searchListener);
+            refresh(searchMethod, firstEntry, searchListener);
         } else if (null != searchListener) {
             searchListener.onSearchEnd(getCount());
+        }
+    }
+
+    /**
+     * Set the sort method.
+     * @param comparator the sort method
+     */
+    public void setSortMethod(Comparator<ParticipantAdapterItem> comparator) {
+        if (null == comparator) {
+            mSortMethod = ParticipantAdapterItem.alphaComparator;
+        } else {
+            mSortMethod = comparator;
         }
     }
 
@@ -161,11 +194,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
         Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(getContext());
 
         for(Contact contact : contacts) {
-            for(String email : contact.mEmails) {
+            for(String email : contact.getEmails()) {
                 if (!TextUtils.isEmpty(email)) {
                     Contact dummyContact = new Contact(email);
                     dummyContact.setDisplayName(email);
-                    dummyContact.mEmails.add(email);
+                    dummyContact.addEmailAdress(email);
 
                     ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, getContext());
                     participant.mUserId = email;
@@ -192,27 +225,46 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         for(ParticipantAdapterItem item : mUnusedParticipants) {
             if (!TextUtils.isEmpty(item.mDisplayName)) {
-                mDisplayNamesList.add(item.mDisplayName);
+                mDisplayNamesList.add(item.mDisplayName.toLowerCase());
             }
         }
     }
 
     /**
      * refresh the display
+     * @param searchMethod the search method
      */
-    public void refresh() {
-        refresh(null, null);
+    public void refresh(final String searchMethod) {
+        refresh(searchMethod, null, null);
+    }
+
+    /**
+     * Tells an item fullfill the search method.
+     * @param item the item to test
+     * @param searchMethod the search method
+     * @param pattern the pattern
+     * @return true if match the search method
+     */
+    private static boolean match(ParticipantAdapterItem item, String searchMethod, String pattern) {
+        if (TextUtils.equals(searchMethod, SEARCH_METHOD_CONTAINS)) {
+            return item.matchWithPattern(pattern);
+        } else {
+            return item.startsWith(pattern);
+        }
     }
 
     /**
      * Refresh the display.
+     * @param searchMethod the search method
      * @param theFirstEntry the first entry in the result.
+     * @param searchListener the search result listener
      */
-    public void refresh(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
+    public void refresh(final String searchMethod, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "refresh : the session is not anymore active");
             return;
         }
+        mSearchMethod = searchMethod;
 
         this.setNotifyOnChange(false);
         this.clear();
@@ -230,7 +282,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                refresh(theFirstEntry, searchListener);
+                                refresh(searchMethod, theFirstEntry, searchListener);
                             }
                         });
                     }
@@ -247,7 +299,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
             // check if each member matches the pattern
             for(ParticipantAdapterItem item: mUnusedParticipants) {
-                if (item.matchWithPattern(pattern)) {
+                if (match(item, searchMethod, pattern)) {
                     // for contact with emails, check if they are some matched matrix Id
                     if (null != item.mContact) {
                         // the email <-> matrix Ids matching is done asynchronously
@@ -270,7 +322,7 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
                 }
             }
 
-            Collections.sort(nextMembersList, ParticipantAdapterItem.alphaComparator);
+            Collections.sort(nextMembersList, mSortMethod);
 
             if (null != firstEntry) {
                 nextMembersList.add(0, firstEntry);
@@ -352,12 +404,13 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
 
         // set the display name
         String displayname = participant.mDisplayName;
+        String lowerCaseDisplayname = displayname.toLowerCase();
 
         // detect if the username is used by several users
-        int pos = mDisplayNamesList.indexOf(displayname);
+        int pos = mDisplayNamesList.indexOf(lowerCaseDisplayname);
 
         if (pos >= 0) {
-            if (pos == mDisplayNamesList.lastIndexOf(displayname)) {
+            if (pos == mDisplayNamesList.lastIndexOf(lowerCaseDisplayname)) {
                 pos = -1;
             }
         }
@@ -387,7 +440,11 @@ public class VectorAddParticipantsAdapter extends ArrayAdapter<ParticipantAdapte
             status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    VectorAddParticipantsAdapter.this.notifyDataSetChanged();
+                    if (mSortMethod == ParticipantAdapterItem.alphaComparator) {
+                        VectorParticipantsAdapter.this.notifyDataSetChanged();
+                    } else {
+                        VectorParticipantsAdapter.this.refresh(mSearchMethod, mFirstEntry, null);
+                    }
                 }
             });
         }
