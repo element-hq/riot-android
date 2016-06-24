@@ -99,9 +99,9 @@ public class AccountsSelectionDialogFragment extends DialogFragment {
         mAdapter = new AccountsAdapter(getActivity(), R.layout.adapter_item_account, getMXMediasCache());
 
         mAdapter.addAll(mSessions);
-        mListView.setAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
