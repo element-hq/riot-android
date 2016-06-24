@@ -32,7 +32,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.HandlerThread;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -51,7 +50,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -64,7 +62,6 @@ import com.commonsware.cwac.anddown.AndDown;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -79,9 +76,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -97,7 +92,6 @@ import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
 import im.vector.fragments.VectorMessageListFragment;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
-import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
@@ -107,9 +101,6 @@ import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -163,10 +154,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP = "KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP";
 
     // activity result request code
-    public static final int REQUEST_FILES_REQUEST_CODE = 0;
-    public static final int TAKE_IMAGE_REQUEST_CODE = 1;
-    public static final int GET_MENTION_REQUEST_CODE = 3;
-    public static final int REQUEST_ROOM_AVATAR_CODE = 4;
+    private static final int REQUEST_FILES_REQUEST_CODE = 0;
+    private static final int TAKE_IMAGE_REQUEST_CODE = 1;
+    public static final int GET_MENTION_REQUEST_CODE = 2;
+    private static final int REQUEST_ROOM_AVATAR_CODE = 3;
 
     // max image sizes
     private static final int LARGE_IMAGE_SIZE = 2000;
@@ -195,7 +186,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private EditText mEditText;
     private ImageView mAvatarImageView;
     private View mMessageButtonLayout;
-    private View mCanNotPostTextview;
+    private View mCanNotPostTextView;
 
     // action bar header
     private android.support.v7.widget.Toolbar mToolbar;
@@ -229,7 +220,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private MenuItem mResendDeleteMenuItem;
 
     // network events
-    private IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
+    private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
             refreshNotificationsArea();
@@ -617,7 +608,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mErrorIcon = findViewById(R.id.room_error_icon);
         mErrorMessageTextView = (TextView) findViewById(R.id.room_notification_error_message);
         mMessageButtonLayout = findViewById(R.id.buttons_layout);
-        mCanNotPostTextview = findViewById(R.id.room_cannot_post_textview);
+        mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
 
         mMyUserId = mSession.getCredentials().userId;
 
@@ -925,7 +916,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // the application is in a weird state
-        // GA : msession is null
+        // GA : mSession is null
         if (CommonActivityUtils.shouldRestartApp(this) || (null == mSession)) {
             return false;
         }
@@ -1054,7 +1045,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // markdownToHtml does not manage properly urls with underscores
         // so we replace the urls by a tmp value before parsing it.
         List<String> urls = VectorUtils.listURLs(body);
-        List<String> tmpUrlsValue = new ArrayList<String>();
+        List<String> tmpUrlsValue = new ArrayList<>();
 
         String modifiedBody = new String(body);
 
@@ -1083,7 +1074,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 html = html.replace(tmpUrlsValue.get(index), urls.get(index));
             }
 
-            html.trim();
+            html = html.trim();
 
             if (html.startsWith("<p>")) {
                 html = html.substring("<p>".length());
@@ -1127,7 +1118,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     /**
      * Send an emote in the opened room
-     * @param emote
+     * @param emote the emote
      */
     public void sendEmote(String emote) {
         if (null != mVectorMessageListFragment) {
@@ -1436,6 +1427,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                                                 }
 
                                                             } catch (Exception e) {
+                                                                Log.e(LOG_TAG, "sendMedias failed " + e.getLocalizedMessage());
                                                             }
                                                         }
                                                     }
@@ -1496,10 +1488,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<SharedDataItem>();
+        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
-            sharedDataItems = new ArrayList<SharedDataItem>(SharedDataItem.listSharedDataItems(intent));
+            sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent));
         } else if (null != mLatestTakePictureCameraUri) {
             sharedDataItems.add(new SharedDataItem(Uri.parse(mLatestTakePictureCameraUri)));
             mLatestTakePictureCameraUri = null;
@@ -1555,7 +1547,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void handleTypingNotification(boolean isTyping) {
         int notificationTimeoutMS = -1;
         if (isTyping) {
-            // Check whether a typing event has been already reported to server (We wait for the end of the local timout before considering this new event)
+            // Check whether a typing event has been already reported to server (We wait for the end of the local timeout before considering this new event)
             if (null != mTypingTimer) {
                 // Refresh date of the last observed typing
                 System.currentTimeMillis();
@@ -1763,8 +1755,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             fragment.dismissAllowingStateLoss();
                         }
 
-                        final ArrayList<String> textsList = new ArrayList<String>();
-                        final ArrayList<ImageSize> sizesList = new ArrayList<ImageSize>();
+                        final ArrayList<String> textsList = new ArrayList<>();
+                        final ArrayList<ImageSize> sizesList = new ArrayList<>();
 
                         textsList.add( getString(R.string.compression_opt_list_original) + ": " + android.text.format.Formatter.formatFileSize(this, fileSize) + " (" + fullImageSize.mWidth + "x" + fullImageSize.mHeight + ")");
                         sizesList.add(fullImageSize);
@@ -1902,8 +1894,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     //================================================================================
 
     /**
-     * Update the spinner visibility
-     * @param visibility
+     * Update the spinner visibility.
+     * @param visibility  the visibility.
      */
     private void setProgressVisibility(int visibility) {
         View progressLayout = findViewById(R.id.main_progress_layout);
@@ -1914,8 +1906,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Launch the room details activity with a selected tab
-     * @param selectedTab
+     * Launch the room details activity with a selected tab.
+     * @param selectedTab the selected tab index.
      */
     private void launchRoomDetails(int selectedTab) {
         if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
@@ -2143,7 +2135,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             String myUserId = mSession.getMyUserId();
 
             // get the room member names
-            ArrayList<String> names = new ArrayList<String>();
+            ArrayList<String> names = new ArrayList<>();
 
             for(int i = 0; i < typingUsers.size(); i++) {
                 RoomMember member = mRoom.getMember(typingUsers.get(i));
@@ -2404,7 +2396,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             mEditText.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mMessageButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
-            mCanNotPostTextview.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
+            mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -2438,7 +2430,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 }
                             }
 
-                            // in preview mode, the roomstate might be a publicRoom
+                            // in preview mode, the room state might be a publicRoom
                             // so try to use the public room info.
                             if ((roomState instanceof PublicRoom) && (0 == joinedMembersCount)) {
                                 activeMembersCount = joinedMembersCount = ((PublicRoom)roomState).numJoinedMembers;
@@ -2739,7 +2731,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void onJoined() {
         if (null != sRoomPreviewData) {
-            HashMap<String, Object> params = new HashMap<String, Object>();
+            HashMap<String, Object> params = new HashMap<>();
 
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
