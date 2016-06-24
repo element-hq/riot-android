@@ -19,9 +19,11 @@ package im.vector.util;
 import android.app.AlertDialog;
 import android.content.ClipDescription;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.HandlerThread;
@@ -69,11 +71,6 @@ public class VectorRoomMediasSender {
     private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
     private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP = "KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP";
-
-    // max image sizes
-    private static final int LARGE_IMAGE_SIZE = 2000;
-    private static final int MEDIUM_IMAGE_SIZE = 1000;
-    private static final int SMALL_IMAGE_SIZE = 500;
 
     // pending infos
     private String mPendingThumbnailUrl;
@@ -525,13 +522,136 @@ public class VectorRoomMediasSender {
      * Class storing the image information
      */
     private class ImageSize {
-        public final int mWidth;
-        public final int mHeight;
+        public int mWidth;
+        public int mHeight;
 
         public ImageSize(int width, int height) {
             mWidth = width;
             mHeight = height;
         }
+    }
+
+    // max image sizes
+    private static final int MAX_IMAGE_SIZE = 1000000;
+    private static final int LARGE_IMAGE_SIZE = 2048;
+    private static final int MEDIUM_IMAGE_SIZE = 1024;
+    private static final int SMALL_IMAGE_SIZE = 512;
+
+    /**
+     * Class storing an image compression size
+     */
+    private class ImageCompressionSizes {
+        // high res image size
+        public ImageSize mFullImageSize;
+        // large image size (i.e MEDIUM_IMAGE_SIZE < side < LARGE_IMAGE_SIZE)
+        public ImageSize mLargeImageSize;
+        // medium  image size (i.e SMALL_IMAGE_SIZE < side < MEDIUM_IMAGE_SIZE)
+        public ImageSize mMediumImageSize;
+        // small  image size (i.e side < SMALL_IMAGE_SIZE)
+        public ImageSize mSmallImageSize;
+
+        /**
+         * @return the image sizes list.
+         */
+        public List<ImageSize> getImageSizesList() {
+            ArrayList<ImageSize> imagesSizesList = new ArrayList<>();
+
+            if (null != mFullImageSize) {
+                imagesSizesList.add(mFullImageSize);
+            }
+
+            if (null != mLargeImageSize) {
+                imagesSizesList.add(mLargeImageSize);
+            }
+
+            if (null != mMediumImageSize) {
+                imagesSizesList.add(mMediumImageSize);
+            }
+
+            if (null != mSmallImageSize) {
+                imagesSizesList.add(mSmallImageSize);
+            }
+
+            return imagesSizesList;
+        }
+    }
+
+    /**
+     * Compute the compressed image sizes.
+     * @param imageWidth the image width
+     * @param imageHeight the image height
+     * @return the compression sizes
+     */
+    private ImageCompressionSizes computeImageSizes(int imageWidth, int imageHeight) {
+        ImageCompressionSizes imageCompressionSizes = new ImageCompressionSizes();
+
+        imageCompressionSizes.mFullImageSize = new ImageSize(imageWidth, imageHeight);
+
+        int maxSide = (imageHeight > imageWidth) ? imageHeight : imageWidth;
+
+        // can be rescaled ?
+        if (maxSide > SMALL_IMAGE_SIZE) {
+            int divider = 2;
+
+            if (maxSide > LARGE_IMAGE_SIZE) {
+                imageCompressionSizes.mLargeImageSize = new ImageSize((imageWidth + (divider - 1)) / divider, (imageHeight + (divider - 1)) / divider);
+                divider *= 2;
+            }
+
+            if (maxSide > MEDIUM_IMAGE_SIZE) {
+                imageCompressionSizes.mMediumImageSize = new ImageSize((imageWidth + (divider - 1)) / divider, (imageHeight + (divider - 1)) / divider);
+                divider *= 2;
+            }
+
+            if (maxSide > SMALL_IMAGE_SIZE) {
+                imageCompressionSizes.mSmallImageSize = new ImageSize((imageWidth + (divider - 1)) / divider, (imageHeight + (divider - 1)) / divider);
+            }
+        }
+
+        return imageCompressionSizes;
+    }
+
+    /**
+     * @return the estimated file size (in bytes)
+     */
+    private static int estimateFileSize(ImageSize imageSize) {
+        if (null != imageSize) {
+            return imageSize.mWidth * imageSize.mHeight * 2 / 10 / 1024 * 1024;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Add an entry in the dialog lists.
+     * @param context the context.
+     * @param textsList the texts list.
+     * @param descriptionText the image description text
+     * @param imageSize the image size.
+     * @param fileSize the file size (in bytes)
+     */
+    private static void addDialogEntry (Context context, ArrayList<String> textsList, String descriptionText, ImageSize imageSize, int fileSize) {
+        if (null != imageSize) {
+            textsList.add(descriptionText + ": " + android.text.format.Formatter.formatFileSize(context, fileSize) + " (" + imageSize.mWidth + "x" + imageSize.mHeight + ")");
+        }
+    }
+
+    /**
+     * Create the image compression texts list.
+     * @param context  the context
+     * @param imageSizes the image compressions
+     * @param imagefileSize the image file size
+     * @return the texts list to display
+     */
+    private static String[] getImagesCompressionTextsList(Context context, ImageCompressionSizes imageSizes, int imagefileSize) {
+        final ArrayList<String> textsList = new ArrayList<>();
+
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_original), imageSizes.mFullImageSize, imagefileSize);
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, estimateFileSize(imageSizes.mLargeImageSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, estimateFileSize(imageSizes.mMediumImageSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, estimateFileSize(imageSizes.mSmallImageSize));
+
+        return textsList.toArray(new String[textsList.size()]);
     }
 
     /**
@@ -570,35 +690,12 @@ public class VectorRoomMediasSender {
                         Log.e(LOG_TAG, "Onclick BitmapFactory.decodeStream : " + e.getMessage());
                     }
 
-                    final ImageSize fullImageSize = new ImageSize(options.outWidth, options.outHeight);
+                    final ImageCompressionSizes imageSizes = computeImageSizes(options.outWidth, options.outHeight);
 
                     imageStream.close();
 
-                    int maxSide = (fullImageSize.mHeight > fullImageSize.mWidth) ? fullImageSize.mHeight : fullImageSize.mWidth;
-
                     // can be rescaled ?
-                    if (maxSide > SMALL_IMAGE_SIZE) {
-                        ImageSize largeImageSize = null;
-
-                        int divider = 2;
-
-                        if (maxSide > LARGE_IMAGE_SIZE) {
-                            largeImageSize = new ImageSize((fullImageSize.mWidth + (divider - 1)) / divider, (fullImageSize.mHeight + (divider - 1)) / divider);
-                            divider *= 2;
-                        }
-
-                        ImageSize mediumImageSize = null;
-
-                        if (maxSide > MEDIUM_IMAGE_SIZE) {
-                            mediumImageSize = new ImageSize((fullImageSize.mWidth + (divider - 1)) / divider, (fullImageSize.mHeight + (divider - 1)) / divider);
-                            divider *= 2;
-                        }
-
-                        ImageSize smallImageSize = null;
-
-                        if (maxSide > SMALL_IMAGE_SIZE) {
-                            smallImageSize = new ImageSize((fullImageSize.mWidth + (divider - 1)) / divider, (fullImageSize.mHeight + (divider - 1)) / divider);
-                        }
+                    if (null != imageSizes.mSmallImageSize) {
 
                         FragmentManager fm = mVectorRoomActivity.getSupportFragmentManager();
                         ImageSizeSelectionDialogFragment fragment = (ImageSizeSelectionDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_IMAGE_SIZE_DIALOG);
@@ -607,38 +704,11 @@ public class VectorRoomMediasSender {
                             fragment.dismissAllowingStateLoss();
                         }
 
-                        final ArrayList<String> textsList = new ArrayList<>();
-                        final ArrayList<ImageSize> sizesList = new ArrayList<>();
-
-                        textsList.add(mVectorRoomActivity.getString(R.string.compression_opt_list_original) + ": " + android.text.format.Formatter.formatFileSize(mVectorRoomActivity, fileSize) + " (" + fullImageSize.mWidth + "x" + fullImageSize.mHeight + ")");
-                        sizesList.add(fullImageSize);
-
-                        if (null != largeImageSize) {
-                            int estFileSize = largeImageSize.mWidth * largeImageSize.mHeight * 2 / 10 / 1024 * 1024;
-
-                            textsList.add(mVectorRoomActivity.getString(R.string.compression_opt_list_large) + ": " + android.text.format.Formatter.formatFileSize(mVectorRoomActivity, estFileSize) + " (" + largeImageSize.mWidth + "x" + largeImageSize.mHeight + ")");
-                            sizesList.add(largeImageSize);
-                        }
-
-                        if (null != mediumImageSize) {
-                            int estFileSize = mediumImageSize.mWidth * mediumImageSize.mHeight * 2 / 10 / 1024 * 1024;
-
-                            textsList.add(mVectorRoomActivity.getString(R.string.compression_opt_list_medium) + ": " + android.text.format.Formatter.formatFileSize(mVectorRoomActivity, estFileSize) + " (" + mediumImageSize.mWidth + "x" + mediumImageSize.mHeight + ")");
-                            sizesList.add(mediumImageSize);
-                        }
-
-                        if (null != smallImageSize) {
-                            int estFileSize = smallImageSize.mWidth * smallImageSize.mHeight * 2 / 10 / 1024 * 1024;
-
-                            textsList.add(mVectorRoomActivity.getString(R.string.compression_opt_list_small) + ": " + android.text.format.Formatter.formatFileSize(mVectorRoomActivity, estFileSize) + " (" + smallImageSize.mWidth + "x" + smallImageSize.mHeight + ")");
-                            sizesList.add(smallImageSize);
-                        }
-
-                        String[] stringsArray = new String[textsList.size()];
+                        String[] stringsArray = getImagesCompressionTextsList(mVectorRoomActivity, imageSizes, fileSize);
 
                         final AlertDialog.Builder alert = new AlertDialog.Builder(mVectorRoomActivity);
                         alert.setTitle(mVectorRoomActivity.getString(im.vector.R.string.compression_options));
-                        alert.setSingleChoiceItems(textsList.toArray(stringsArray), -1, new DialogInterface.OnClickListener() {
+                        alert.setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final int fPos = which;
@@ -655,15 +725,15 @@ public class VectorRoomMediasSender {
                                             @Override
                                             public void run() {
                                                 try {
-                                                    // pos == 0 -> original
+                                                    // pos == 0 -> genuine
                                                     if (0 != fPos) {
                                                         FileInputStream imageStream = new FileInputStream(new File(filename));
 
-                                                        ImageSize imageSize = sizesList.get(fPos);
+                                                        ImageSize imageSize = imageSizes.getImageSizesList().get(fPos);
                                                         InputStream resizeBitmapStream = null;
 
                                                         try {
-                                                            resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (fullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
+                                                            resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (imageSizes.mFullImageSize.mWidth + imageSize.mWidth - 1) / imageSize.mWidth, 75);
                                                         } catch (OutOfMemoryError ex) {
                                                             Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
                                                         } catch (Exception e) {
