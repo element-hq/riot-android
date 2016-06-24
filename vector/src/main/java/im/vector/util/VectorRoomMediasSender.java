@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
@@ -63,17 +64,23 @@ public class VectorRoomMediasSender {
 
     private static final String TAG_FRAGMENT_IMAGE_SIZE_DIALOG = "TAG_FRAGMENT_IMAGE_SIZE_DIALOG";
 
+    private static final String PENDING_THUMBNAIL_URL = "PENDING_THUMBNAIL_URL";
+    private static final String PENDING_MEDIA_URL = "PENDING_MEDIA_URL";
+    private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
+    private static final String PENDING_FILENAME = "PENDING_FILENAME";
+    private static final String KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP = "KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP";
+
     // max image sizes
     private static final int LARGE_IMAGE_SIZE = 2000;
     private static final int MEDIUM_IMAGE_SIZE = 1000;
     private static final int SMALL_IMAGE_SIZE = 500;
 
     // pending infos
-    public String mPendingThumbnailUrl;
-    public String mPendingMediaUrl;
-    public String mPendingMimeType;
-    public String mPendingFilename;
-    public boolean mImageQualityPopUpInProgress;
+    private String mPendingThumbnailUrl;
+    private String mPendingMediaUrl;
+    private String mPendingMimeType;
+    private String mPendingFilename;
+    private boolean mImageQualityPopUpInProgress;
 
     private AlertDialog mImageSizesListDialog;
 
@@ -94,6 +101,54 @@ public class VectorRoomMediasSender {
         mVectorRoomActivity = roomActivity;
         mVectorMessageListFragment = vectorMessageListFragment;
         mMediasCache = mediasCache;
+    }
+
+    /**
+     * Restore some saved info.
+     * @param savedInstanceState the bundle
+     */
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (null != savedInstanceState) {
+            if (savedInstanceState.containsKey(PENDING_THUMBNAIL_URL)) {
+                mPendingThumbnailUrl = savedInstanceState.getString(PENDING_THUMBNAIL_URL);
+            }
+
+            if (savedInstanceState.containsKey(PENDING_MEDIA_URL)) {
+                mPendingMediaUrl = savedInstanceState.getString(PENDING_MEDIA_URL);
+            }
+
+            if (savedInstanceState.containsKey(PENDING_MIMETYPE)) {
+                mPendingMimeType = savedInstanceState.getString(PENDING_MIMETYPE);
+            }
+
+            if (savedInstanceState.containsKey(PENDING_FILENAME)) {
+                mPendingFilename = savedInstanceState.getString(PENDING_FILENAME);
+            }
+
+            // indicate if an image camera upload was in progress (image quality "Send as" dialog displayed).
+            mImageQualityPopUpInProgress = savedInstanceState.getBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, false);
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        if (null != mPendingThumbnailUrl) {
+            savedInstanceState.putString(PENDING_THUMBNAIL_URL, mPendingThumbnailUrl);
+        }
+
+        if (null != mPendingMediaUrl) {
+            savedInstanceState.putString(PENDING_MEDIA_URL, mPendingMediaUrl);
+        }
+
+        if (null != mPendingMimeType) {
+            savedInstanceState.putString(PENDING_MIMETYPE, mPendingMimeType);
+        }
+
+        if (null != mPendingFilename) {
+            savedInstanceState.putString(PENDING_FILENAME, mPendingFilename);
+        }
+
+        savedInstanceState.putBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, mImageQualityPopUpInProgress);
     }
 
     /**

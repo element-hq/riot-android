@@ -134,12 +134,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private static final String LOG_TAG = "RoomActivity";
     private static final int TYPING_TIMEOUT_MS = 10000;
 
-    private static final String PENDING_THUMBNAIL_URL = "PENDING_THUMBNAIL_URL";
-    private static final String PENDING_MEDIA_URL = "PENDING_MEDIA_URL";
-    private static final String PENDING_MIMETYPE = "PENDING_MIMETYPE";
-    private static final String PENDING_FILENAME = "PENDING_FILENAME";
     private static final String FIRST_VISIBLE_ROW = "FIRST_VISIBLE_ROW";
-    private static final String KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP = "KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP";
 
     // activity result request code
     private static final int REQUEST_FILES_REQUEST_CODE = 0;
@@ -584,27 +579,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, mMediasCache);
-
-        if (null != savedInstanceState) {
-            if (savedInstanceState.containsKey(PENDING_THUMBNAIL_URL)) {
-                mVectorRoomMediasSender.mPendingThumbnailUrl = savedInstanceState.getString(PENDING_THUMBNAIL_URL);
-            }
-
-            if (savedInstanceState.containsKey(PENDING_MEDIA_URL)) {
-                mVectorRoomMediasSender.mPendingMediaUrl = savedInstanceState.getString(PENDING_MEDIA_URL);
-            }
-
-            if (savedInstanceState.containsKey(PENDING_MIMETYPE)) {
-                mVectorRoomMediasSender.mPendingMimeType = savedInstanceState.getString(PENDING_MIMETYPE);
-            }
-
-            if (savedInstanceState.containsKey(PENDING_FILENAME)) {
-                mVectorRoomMediasSender.mPendingFilename = savedInstanceState.getString(PENDING_FILENAME);
-            }
-
-            // indicate if an image camera upload was in progress (image quality "Send as" dialog displayed).
-            mVectorRoomMediasSender.mImageQualityPopUpInProgress = savedInstanceState.getBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, false);
-        }
+        mVectorRoomMediasSender.onRestoreInstanceState(savedInstanceState);
 
         manageRoomPreview();
 
@@ -667,35 +642,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
 
-        if (null != mVectorRoomMediasSender.mPendingThumbnailUrl) {
-            savedInstanceState.putString(PENDING_THUMBNAIL_URL, mVectorRoomMediasSender.mPendingThumbnailUrl);
-        }
-
-        if (null != mVectorRoomMediasSender.mPendingMediaUrl) {
-            savedInstanceState.putString(PENDING_MEDIA_URL, mVectorRoomMediasSender.mPendingMediaUrl);
-        }
-
-        if (null != mVectorRoomMediasSender.mPendingMimeType) {
-            savedInstanceState.putString(PENDING_MIMETYPE, mVectorRoomMediasSender.mPendingMimeType);
-        }
-
-        if (null != mVectorRoomMediasSender.mPendingFilename) {
-            savedInstanceState.putString(PENDING_FILENAME, mVectorRoomMediasSender.mPendingFilename);
-        }
-
+        mVectorRoomMediasSender.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(FIRST_VISIBLE_ROW, mVectorMessageListFragment.mMessageListView.getFirstVisiblePosition());
-        savedInstanceState.putBoolean(KEY_BUNDLE_PENDING_QUALITY_IMAGE_POPUP, mVectorRoomMediasSender.mImageQualityPopUpInProgress);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if (savedInstanceState.containsKey(FIRST_VISIBLE_ROW)) {
-            // the scroll will be done in resume.
-            // the listView will be refreshed so the offset might be lost.
-            mScrollToIndex = savedInstanceState.getInt(FIRST_VISIBLE_ROW);
-        }
+        // the listView will be refreshed so the offset might be lost.
+        mScrollToIndex = savedInstanceState.getInt(FIRST_VISIBLE_ROW, -1);
     }
 
     @Override
