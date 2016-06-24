@@ -41,8 +41,6 @@ import java.util.HashMap;
 public class AccountCreationActivity extends Activity {
     public static String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
 
-    // use a webview to create the account
-    private WebView mWebView;
     // home server url
     private String mHomeServerUrl;
 
@@ -65,8 +63,8 @@ public class AccountCreationActivity extends Activity {
 
         setContentView(R.layout.activity_account_creation);
 
-        mWebView = (WebView) findViewById(R.id.account_creation_webview);
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        final WebView webView = (WebView) findViewById(R.id.account_creation_webview);
+        webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
 
@@ -81,9 +79,9 @@ public class AccountCreationActivity extends Activity {
             mHomeServerUrl += "/";
         }
 
-        mWebView.loadUrl(mHomeServerUrl + "_matrix/static/client/register/");
+        webView.loadUrl(mHomeServerUrl + "_matrix/static/client/register/");
 
-        mWebView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {

@@ -240,8 +240,7 @@
                     android:id="@+id/login_matrix_server_options_layout"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/display_server_url_layout">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_marginTop="10dp"
@@ -274,7 +273,6 @@
 
                 <TextView
                     android:id="@+id/login_forgot_password"
-                    android:layout_below="@+id/login_matrix_server_options_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"

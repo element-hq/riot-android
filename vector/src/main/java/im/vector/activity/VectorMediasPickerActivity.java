@@ -1171,6 +1171,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    @SuppressLint("NewApi")
     private void openFileExplorer() {
         try {
             Intent fileIntent = new Intent(Intent.ACTION_PICK);
