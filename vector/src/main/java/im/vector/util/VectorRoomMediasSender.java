@@ -529,6 +529,41 @@ public class VectorRoomMediasSender {
             mWidth = width;
             mHeight = height;
         }
+
+        public ImageSize(ImageSize anotherOne) {
+            mWidth = anotherOne.mWidth;
+            mHeight = anotherOne.mHeight;
+        }
+
+        /**
+         * Compute the image size to fit in a square.
+         * @param maxSide the square to fit size
+         * @return the image size
+         */
+        private ImageSize computeSizeToFit(float maxSide) {
+            if (0 == maxSide) {
+                return new ImageSize(0, 0);
+            }
+
+            ImageSize resized = new ImageSize(this);
+
+            if ((this.mWidth > maxSide) || (this.mHeight > maxSide)) {
+                double ratioX = maxSide / this.mWidth;
+                double ratioY = maxSide / this.mHeight;
+
+                double scale = Math.min(ratioX, ratioY);
+
+                // the ratio must a power of 2
+                scale = 1.0d / Integer.highestOneBit((int)Math.floor(1.0 / scale));
+
+                // apply the scale factor and padding to 2
+                resized.mWidth  = (int)(Math.floor(resized.mWidth * scale / 2) * 2);
+                resized.mHeight = (int)(Math.floor(resized.mHeight * scale / 2) * 2);
+            }
+
+            return resized;
+        }
+
     }
 
     // max image sizes
@@ -591,20 +626,17 @@ public class VectorRoomMediasSender {
 
         // can be rescaled ?
         if (maxSide > SMALL_IMAGE_SIZE) {
-            int divider = 2;
 
             if (maxSide > LARGE_IMAGE_SIZE) {
-                imageCompressionSizes.mLargeImageSize = new ImageSize((imageWidth + (divider - 1)) / divider, (imageHeight + (divider - 1)) / divider);
-                divider *= 2;
+                imageCompressionSizes.mLargeImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(LARGE_IMAGE_SIZE);
             }
 
             if (maxSide > MEDIUM_IMAGE_SIZE) {
-                imageCompressionSizes.mMediumImageSize = new ImageSize((imageWidth + (divider - 1)) / divider, (imageHeight + (divider - 1)) / divider);
-                divider *= 2;
+                imageCompressionSizes.mMediumImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(MEDIUM_IMAGE_SIZE);
             }
 
             if (maxSide > SMALL_IMAGE_SIZE) {
-                imageCompressionSizes.mSmallImageSize = new ImageSize((imageWidth + (divider - 1)) / divider, (imageHeight + (divider - 1)) / divider);
+                imageCompressionSizes.mSmallImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(SMALL_IMAGE_SIZE);
             }
         }
 
