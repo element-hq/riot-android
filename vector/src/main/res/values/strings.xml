@@ -359,7 +359,7 @@
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Vector permissions</string>
     <string name="permissions_rationale_msg_title">You are about to be asked to grant permissions..</string>
-    <string name="permissions_rationale_msg_storage">Vector needs access to media files to display photos in the media picker\n\n</string>
+    <string name="permissions_rationale_msg_storage">Vector needs access to media files to display photos in the media picker or to store your medias.\n\n</string>
     <string name="permissions_rationale_msg_camera">Vector needs access to the camera to take pictures, video calls..</string>
     <string name="permissions_rationale_msg_record_audio">Vector needs access to the microphone to perform audio calls</string>
     <string name="permissions_rationale_msg_contacts">Vector needs access to the contact list to find Vector members</string>

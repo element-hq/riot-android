@@ -140,6 +140,9 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_SEARCH_ROOM = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
+
     // start activity intent parameters
     public static final String KEY_PERMISSIONS_READ_CONTACTS = "KEY_PERMISSIONS_READ_CONTACTS";
 
@@ -526,7 +529,10 @@ public class CommonActivityUtils {
         } else if((REQUEST_CODE_PERMISSION_TAKE_PHOTO!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_SEARCH_ROOM !=aPermissionsToBeGrantedBitMap)) {
+                && (REQUEST_CODE_PERMISSION_SEARCH_ROOM !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
+                ) {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
         } else {
@@ -539,22 +545,22 @@ public class CommonActivityUtils {
             String permissionType;
 
             // retrieve the permissions to be granted according to the request code bit map
-            if(PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap&PERMISSION_CAMERA)){
+            if(PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap & PERMISSION_CAMERA)){
                 permissionType = Manifest.permission.CAMERA;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap&PERMISSION_RECORD_AUDIO)){
+            if(PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap & PERMISSION_RECORD_AUDIO)){
                 permissionType = Manifest.permission.RECORD_AUDIO;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap&PERMISSION_WRITE_EXTERNAL_STORAGE)){
+            if(PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap & PERMISSION_WRITE_EXTERNAL_STORAGE)){
                 permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap&PERMISSION_READ_CONTACTS)){
+            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)){
                 permissionType = Manifest.permission.READ_CONTACTS;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
@@ -568,9 +574,9 @@ public class CommonActivityUtils {
 
                     // add the user info text to be displayed to explain why the permission is required by the App
                     for(String permissionAlreadyDenied : permissionListAlreadyDenied) {
-                        if(Manifest.permission.CAMERA.equals(permissionAlreadyDenied))
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_camera);
-                        else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
+                        if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
+                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera);
+                        } else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
                             explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio);
                         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)){
                             explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage);
@@ -597,6 +603,7 @@ public class CommonActivityUtils {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
+                            //ContactsManager.refreshLocalContactsSnapshot(aCallingActivity);
                             ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
                         }
                     }

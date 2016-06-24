@@ -60,6 +60,7 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
@@ -152,6 +153,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private String mIncomingCallSessionId;
     private String mIncomingCallId;
     private IMXCall mIncomingCall;
+
+    private boolean mStorePermissionCheck = false;
 
     private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
         @Override
@@ -576,6 +579,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 }
             }).show();
         }
+
+        if (!mStorePermissionCheck) {
+            mStorePermissionCheck = true;
+            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
+        }
     }
 
     @Override
@@ -684,6 +692,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     CommonActivityUtils.displayToast(this, "Due to missing permissions, some features may be missing..");
                     startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_DENIED);
                 }
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
             } else {
                 Log.w(LOG_TAG, "## onRequestPermissionsResult(): unexpected permission = " + aPermissions[0]);
             }
@@ -693,6 +702,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             } else if(null != mIncomingCall) {
                 mIncomingCall.hangup("busy");
             }
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
+            Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY = " + aPermissions[0]);
         } else {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
         }

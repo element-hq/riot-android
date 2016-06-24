@@ -70,6 +70,7 @@ public class ContactsManager {
                     try {
                         listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getLocalizedMessage());
                     }
                 }
             }
@@ -161,7 +162,7 @@ public class ContactsManager {
      */
     public static void addListener(ContactsManagerListener listener) {
         if (null == mListeners) {
-            mListeners = new ArrayList<ContactsManagerListener>();
+            mListeners = new ArrayList<>();
         }
 
         mListeners.add(listener);
@@ -180,13 +181,10 @@ public class ContactsManager {
     /**
      * List the local contacts.
      * @param context the context.
-     * @return a list of contacts.
      */
     public static void refreshLocalContactsSnapshot (Context context) {
-        long startTime = System.currentTimeMillis();
-
         ContentResolver cr = context.getContentResolver();
-        HashMap<String, Contact> dict = new HashMap<String, Contact>();
+        HashMap<String, Contact> dict = new HashMap<>();
 
         // get the names
         Cursor namesCur = null;
@@ -223,7 +221,7 @@ public class ContactsManager {
                         }
 
                         if (null != thumbnailUri) {
-                            contact.mThumbnailUri = thumbnailUri;
+                            contact.setThumbnailUri(thumbnailUri);
                         }
                     }
                 }
@@ -262,7 +260,7 @@ public class ContactsManager {
                                 dict.put(contactId, contact);
                             }
 
-                            contact.mPhoneNumbers.add(phone);
+                            contact.addPhonenumber(phone);
                         }
                     }
                 }
@@ -299,7 +297,7 @@ public class ContactsManager {
                                 dict.put(contactId, contact);
                             }
 
-                            contact.mEmails.add(email);
+                            contact.addEmailAdress(email);
                         }
                     }
                 }
@@ -318,8 +316,8 @@ public class ContactsManager {
             for(ContactsManagerListener listener : mListeners) {
                 try {
                     listener.onRefresh();
-
                 } catch (Exception e) {
+                    Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getLocalizedMessage());
                 }
             }
         }

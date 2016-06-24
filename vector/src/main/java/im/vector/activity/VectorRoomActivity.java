@@ -18,7 +18,6 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ClipDescription;
@@ -973,7 +972,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
             }
         } else if (id == R.id.ic_action_room_settings) {
-            launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+            launchRoomDetails(VectorRoomDetailsActivity.PEOPLE_TAB_INDEX);
         } else if (id == R.id.ic_action_room_resend_unsent) {
             mVectorMessageListFragment.resendUnsentMessages();
             refreshNotificationsArea();
