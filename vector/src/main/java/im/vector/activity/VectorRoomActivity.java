@@ -1247,7 +1247,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public void setProgressVisibility(int visibility) {
         View progressLayout = findViewById(R.id.main_progress_layout);
 
-        if (null != progressLayout) {
+        if ((null != progressLayout) && (progressLayout.getVisibility() != visibility)) {
             progressLayout.setVisibility(visibility);
         }
     }
