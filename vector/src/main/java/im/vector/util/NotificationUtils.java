@@ -20,6 +20,7 @@ import android.util.Log;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LockScreenActivity;
+import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorRoomActivity;
 
 import java.lang.reflect.Method;
@@ -199,6 +200,7 @@ public class NotificationUtils {
                     // get the new bitmap
                     largeIcon = bitmapCopy;
                 } catch (Exception e) {
+                    Log.e(LOG_TAG,"## buildMessageNotification(): Exception Msg="+e.getMessage());
                 }
             }
 
@@ -270,7 +272,7 @@ public class NotificationUtils {
             Intent roomIntentTap;
             if(isInvitationEvent) {
                 // for invitation the room preview must be displayed
-                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(matrixId, roomId, context);
+                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(matrixId, roomId, context, VectorFakeRoomPreviewActivity.class);
             } else{
                 roomIntentTap = new Intent(context, VectorRoomActivity.class);
                 roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
@@ -279,13 +281,13 @@ public class NotificationUtils {
             roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
 
             // Recreate the back stack
-            TaskStackBuilder stackBuildertap = TaskStackBuilder.create(context)
+            TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
                     .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntentTap);
             builder.addAction(
                     R.drawable.ic_material_message_green_vector,
                     context.getString(R.string.action_open),
-                    stackBuildertap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }
 
         extendForCar(context, builder, roomId, roomName, from, body);

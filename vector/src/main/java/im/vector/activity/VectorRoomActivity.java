@@ -126,15 +126,17 @@ import java.util.TimerTask;
  */
 public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.RoomPreviewDataListener {
 
-    // the room id (string)
+    /** the room id (string) **/
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
-    // the event id (universal link management - string)
+    /** the event id (universal link management - string) **/
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
-    // the forwarded data (list of media uris)
+    /** the forwarded data (list of media uris) **/
     public static final String EXTRA_ROOM_INTENT = "EXTRA_ROOM_INTENT";
-    // the room is opened in preview mode (string)
+    /** the room is opened in preview mode (string) **/
     public static final String EXTRA_ROOM_PREVIEW_ID = "EXTRA_ROOM_PREVIEW_ID";
-    // expand the room header when the activity is launched (boolean)
+    /** the room alias of the room in preview mode (string) **/
+    public static final String EXTRA_ROOM_PREVIEW_ROOM_ALIAS = "EXTRA_ROOM_PREVIEW_ROOM_ALIAS";
+    /** expand the room header when the activity is launched (boolean) **/
     public static final String EXTRA_EXPAND_ROOM_HEADER = "EXTRA_EXPAND_ROOM_HEADER";
 
     // display the room information while joining a room.

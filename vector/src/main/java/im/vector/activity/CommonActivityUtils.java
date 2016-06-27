@@ -742,14 +742,14 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Helper method to build an intent to trigger a room preview.
-     * The returned intent will trigger a room activity in preview mode.
+     * Helper method used to build an intent to trigger a room preview.
      * @param aMatrixId matrix ID of the user
      * @param aRoomId room ID
      * @param aContext application context
+     * @param aTargetActivity the activity set in the returned intent
      * @return a valid intent if operation succeed, null otherwise
      */
-    public static Intent buildIntentPreviewRoom(String aMatrixId, String aRoomId, Context aContext) {
+    public static Intent buildIntentPreviewRoom(String aMatrixId, String aRoomId, Context aContext, Class<?> aTargetActivity) {
         Intent intentRetCode;
 
         // sanity check
@@ -775,14 +775,14 @@ public class CommonActivityUtils {
                     roomAlias = room.getLiveState().getAlias();
                 }
 
-                // set preview data object
-                RoomPreviewData roomPreviewData = new RoomPreviewData(session, aRoomId, null, roomAlias, null);
-                VectorRoomActivity.sRoomPreviewData = roomPreviewData;
-
-                intentRetCode = new Intent(aContext, VectorRoomActivity.class);
+                intentRetCode = new Intent(aContext, aTargetActivity);
+                // extra required by VectorRoomActivity
                 intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, aRoomId);
                 intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, aRoomId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, aMatrixId);
                 intentRetCode.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                // extra only required by VectorFakeRoomPreviewActivity
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ROOM_ALIAS, roomAlias);
             }
         }
         return intentRetCode;
