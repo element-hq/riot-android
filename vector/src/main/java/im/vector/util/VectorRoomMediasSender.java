@@ -223,6 +223,33 @@ public class VectorRoomMediasSender {
     }
 
     /**
+     * Retrieves the image thumbnail saved by the medias picker.
+     * @param sharedDataItem the sharedItem
+     * @return the thumbnail if it exits.
+     */
+    private Bitmap getMediasPickerThumbnail(SharedDataItem sharedDataItem) {
+        Bitmap thumbnailBitmap = null;
+
+        try {
+            String thumbPath = VectorMediasPickerActivity.getThumbnailPath(sharedDataItem.getUri().getPath());
+
+            if (null != thumbPath) {
+                File thumbFile = new File(thumbPath);
+
+                if (thumbFile.exists()) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    thumbnailBitmap = BitmapFactory.decodeFile(thumbPath, options);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "cannot restore the medias picker thumbnail " + e.getMessage());
+        }
+
+        return thumbnailBitmap;
+    }
+
+    /**
      * Send a list of images from their URIs
      * @param sharedDataItems the media URIs
      */
@@ -299,234 +326,93 @@ public class VectorRoomMediasSender {
                         return;
                     }
 
-                    if (mimeType.startsWith("video/")) {
-                        mVectorMessageListFragment.uploadVideoContent(fMediaUrl, fThumbUrl, null, fMimeType);
+                    // not an image
+                    if (!mimeType.startsWith("image/")) {
+                        final ResourceUtils.Resource fResource = resource;
+                        final String fMimeType = mimeType;
+
+                        mVectorRoomActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String mediaUrl = mMediasCache.saveMedia(fResource.contentStream, null, fResource.mimeType);
+
+                                if (fMimeType.startsWith("video/")) {
+                                    mVectorMessageListFragment.uploadVideoContent(mediaUrl, mVectorMessageListFragment.getVideoThumbailUrl(mediaUrl), null, fResource.mimeType);
+                                } else {
+                                    mVectorMessageListFragment.uploadFileContent(mediaUrl, fResource.mimeType, fFilename);
+                                }
+                                try {
+                                    fResource.contentStream.close();
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, "Sending video / file : got an exception " + e.getLocalizedMessage());
+                                }
+                            }
+                        });
+
+
+                        // manage others
+                        sendMedias(sharedDataItems);
+                        return;
                     }
 
+                    // save the file in the filesystem
+                    String mediaUrl = mMediasCache.saveMedia(resource.contentStream, null, resource.mimeType);
+                    resource.close();
+
+                    // compute the thumbnail
+                    Bitmap thumbnailBitmap = sharedDataItem.getFullScreenImageKindThumbnail(mVectorRoomActivity);
+
+                    if (null == thumbnailBitmap) {
+                        thumbnailBitmap = getMediasPickerThumbnail(sharedDataItem);
+                    }
+
+                    if (null == thumbnailBitmap) {
+                        thumbnailBitmap = ResourceUtils.createThumbnailBitmap(mVectorRoomActivity, sharedDataItem.getUri(), mVectorMessageListFragment.getMaxThumbnailWith(), mVectorMessageListFragment.getMaxThumbnailHeight());
+                    }
+
+                    if (null == thumbnailBitmap) {
+                        thumbnailBitmap = sharedDataItem.getMiniKindImageThumbnail(mVectorRoomActivity);
+                    }
+
+                    String thumbnailURL = null;
+
+                    if (null != thumbnailBitmap) {
+                        thumbnailURL = mMediasCache.saveBitmap(thumbnailBitmap, null);
+                    }
+
+                    // get the exif rotation angle
+                    final int rotationAngle = ImageUtils.getRotationAngleForBitmap(mVectorRoomActivity, Uri.parse(mediaUrl));
+
+                    if (0 != rotationAngle) {
+                        // always apply the rotation to the image
+                        ImageUtils.rotateImage(mVectorRoomActivity, thumbnailURL, rotationAngle, mMediasCache);
+                    }
+
+                    final String fThumbnailURL = thumbnailURL;
                     final String fMediaUrl = mediaUrl;
                     final String fMimeType = mimeType;
-                    final boolean isVideo = ((null != fMimeType) && fMimeType.startsWith("video/"));
-                    final String fThumbUrl = isVideo ? mVectorMessageListFragment.getVideoThumbailUrl(fMediaUrl) : null;
 
                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (isVideo) {
-
-                            } else {
-                                mVectorMessageListFragment.uploadFileContent(fMediaUrl, fMimeType, fFilename);
-                            }
-                        }
-                    });
-
-
-                    // save the file in the filesystem
-                    String mediaUrl = mMediasCache.saveMedia(resource.contentStream, null, resource.mimeType);
-                    boolean isManaged = false;
-
-                    if ((null != resource.mimeType) && resource.mimeType.startsWith("image/")) {
-                        // manage except if there is an error
-                        isManaged = true;
-
-                        // try to retrieve the gallery thumbnail
-                        // if the image comes from the gallery..
-                        Bitmap thumbnailBitmap = null;
-                        Bitmap defaultThumbnailBitmap = null;
-
-                        try {
-                            ContentResolver resolver = mVectorRoomActivity.getContentResolver();
-
-                            List uriPath = sharedDataItem.getUri().getPathSegments();
-                            long imageId;
-                            String lastSegment = (String) uriPath.get(uriPath.size() - 1);
-
-                            // > Kitkat
-                            if (lastSegment.startsWith("image:")) {
-                                lastSegment = lastSegment.substring("image:".length());
-                            }
-
-                            imageId = Long.parseLong(lastSegment);
-                            defaultThumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.MINI_KIND, null);
-                            thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND, null);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
-                        }
-
-                        // the medias picker stores its own thumbnail to avoid inflating large one
-                        if (null == thumbnailBitmap) {
-                            try {
-                                String thumbPath = VectorMediasPickerActivity.getThumbnailPath(sharedDataItem.getUri().getPath());
-
-                                if (null != thumbPath) {
-                                    File thumbFile = new File(thumbPath);
-
-                                    if (thumbFile.exists()) {
-                                        BitmapFactory.Options options = new BitmapFactory.Options();
-                                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                                        thumbnailBitmap = BitmapFactory.decodeFile(thumbPath, options);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "cannot restore the medias picker thumbnail " + e.getMessage());
-                            }
-                        }
-
-                        double thumbnailWidth = mVectorMessageListFragment.getMaxThumbnailWith();
-                        double thumbnailHeight = mVectorMessageListFragment.getMaxThumbnailHeight();
-
-                        // no thumbnail has been found or the mimetype is unknown
-                        if ((null == thumbnailBitmap) || (thumbnailBitmap.getHeight() > thumbnailHeight) || (thumbnailBitmap.getWidth() > thumbnailWidth)) {
-                            // need to decompress the high res image
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                            resource = ResourceUtils.openResource(mVectorRoomActivity, sharedDataItem.getUri(), sharedDataItem.getMimeType(mVectorRoomActivity));
-
-                            // get the full size bitmap
-                            Bitmap fullSizeBitmap = null;
-
-                            if (null == thumbnailBitmap) {
-                                fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
-                            }
-
-                            if ((fullSizeBitmap != null) || (thumbnailBitmap != null)) {
-                                double imageWidth;
-                                double imageHeight;
-
-                                if (null == thumbnailBitmap) {
-                                    imageWidth = fullSizeBitmap.getWidth();
-                                    imageHeight = fullSizeBitmap.getHeight();
-                                } else {
-                                    imageWidth = thumbnailBitmap.getWidth();
-                                    imageHeight = thumbnailBitmap.getHeight();
-                                }
-
-                                if (imageWidth > imageHeight) {
-                                    thumbnailHeight = thumbnailWidth * imageHeight / imageWidth;
-                                } else {
-                                    thumbnailWidth = thumbnailHeight * imageWidth / imageHeight;
-                                }
-
-                                try {
-                                    thumbnailBitmap = Bitmap.createScaledBitmap((null == fullSizeBitmap) ? thumbnailBitmap : fullSizeBitmap, (int) thumbnailWidth, (int) thumbnailHeight, false);
-                                } catch (OutOfMemoryError ex) {
-                                    Log.e(LOG_TAG, "Bitmap.createScaledBitmap " + ex.getMessage());
-                                }
-                            }
-
-                            // the valid mimetype is not provided
-                            if ("image/*".equals(mimeType)) {
-                                // make a jpg snapshot.
-                                mimeType = null;
-                            }
-
-                            // unknown mimetype
-                            if ((null == mimeType) || (mimeType.startsWith("image/"))) {
-                                try {
-                                    // try again
-                                    if (null == fullSizeBitmap) {
-                                        System.gc();
-                                        fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
-                                    }
-
-                                    if (null != fullSizeBitmap) {
-                                        Uri uri = Uri.parse(mediaUrl);
-
-                                        if (null == mimeType) {
-                                            // the images are save in jpeg format
-                                            mimeType = "image/jpeg";
-                                        }
-
-                                        resource.contentStream.close();
-                                        resource = ResourceUtils.openResource(mVectorRoomActivity, sharedDataItem.getUri(), sharedDataItem.getMimeType(mVectorRoomActivity));
-
-                                        try {
-                                            mMediasCache.saveMedia(resource.contentStream, uri.getPath(), mimeType);
-                                        } catch (OutOfMemoryError ex) {
-                                            Log.e(LOG_TAG, "mMediasCache.saveMedia" + ex.getMessage());
-                                        }
-
-                                    } else {
-                                        isManaged = false;
-                                    }
-
-                                    resource.contentStream.close();
-
-                                } catch (Exception e) {
-                                    isManaged = false;
-                                    Log.e(LOG_TAG, "sendMedias " + e.getMessage());
-                                }
-                            }
-
-                            // reduce the memory consumption
-                            if (null != fullSizeBitmap) {
-                                fullSizeBitmap.recycle();
-                                System.gc();
-                            }
-                        }
-
-                        if (null == thumbnailBitmap) {
-                            thumbnailBitmap = defaultThumbnailBitmap;
-                        }
-
-                        String thumbnailURL = mMediasCache.saveBitmap(thumbnailBitmap, null);
-
-                        if (null != thumbnailBitmap) {
-                            thumbnailBitmap.recycle();
-                        }
-
-                        //
-                        if (("image/jpg".equals(mimeType) || "image/jpeg".equals(mimeType)) && (null != mediaUrl)) {
-
-                            Uri imageUri = Uri.parse(mediaUrl);
-                            // get the exif rotation angle
-                            final int rotationAngle = ImageUtils.getRotationAngleForBitmap(mVectorRoomActivity, imageUri);
-
-                            if (0 != rotationAngle) {
-                                // always apply the rotation to the image
-                                ImageUtils.rotateImage(mVectorRoomActivity, thumbnailURL, rotationAngle, mMediasCache);
-
-                                // the high res media orientation should be not be done on uploading
-                                //ImageUtils.rotateImage(RoomActivity.this, mediaUrl, rotationAngle, mMediasCache))
-                            }
-                        }
-
-                        // is the image content valid ?
-                        if (isManaged && (null != thumbnailURL)) {
-
-                            final String fThumbnailURL = thumbnailURL;
-                            final String fMediaUrl = mediaUrl;
-                            final String fMimeType = mimeType;
-
-                            mVectorRoomActivity.runOnUiThread(new Runnable() {
+                            sendImageMessage(fThumbnailURL, fMediaUrl, fFilename, fMimeType, new OnImageUploadListener() {
                                 @Override
-                                public void run() {
+                                public void onDone() {
+                                    // go to the next item
+                                    sendMedias(sharedDataItems);
+                                }
 
-                                    sendImageMessage(fThumbnailURL, fMediaUrl, fFilename, fMimeType, new OnImageUploadListener() {
-                                        @Override
-                                        public void onDone() {
-
-                                        }
-
-                                        @Override
-                                        public void onCancel() {
-
-                                        }
-                                    });
+                                @Override
+                                public void onCancel() {
+                                    sendMedias(null);
                                 }
                             });
                         }
-                    }
+                    });
 
-                    // default behaviour
-                    if ((!isManaged) && (null != mediaUrl)) {
-
-                    }
                 }
             }
-
-        };
-
-
+        });
     }
 
 
@@ -719,10 +605,7 @@ public class VectorRoomMediasSender {
         boolean isManaged = false;
 
         // check if the media could be resized
-        if ("image/jpeg".equals(anImageMimeType)) {
-
-            System.gc();
-
+        if ((null != aThumbnailURL) && ("image/jpeg".equals(anImageMimeType) || "image/jpg".equals(anImageMimeType) || "image/*".equals(anImageMimeType))) {
             System.gc();
             FileInputStream imageStream;
 
@@ -820,8 +703,16 @@ public class VectorRoomMediasSender {
                                                 Log.e(LOG_TAG, "Onclick " + e.getMessage());
                                             }
 
-                                            mVectorMessageListFragment.uploadImageContent(aThumbnailURL, imageUrl, anImageFilename, anImageMimeType);
-                                            aListener.onDone();
+                                            final String fImageUrl = imageUrl;
+
+                                            mVectorRoomActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mVectorMessageListFragment.uploadImageContent(aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
+                                                    aListener.onDone();
+                                                }
+                                            });
+
                                         }
                                     });
 
@@ -844,12 +735,17 @@ public class VectorRoomMediasSender {
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Onclick " + e.getMessage());
             }
+        }
 
-            // cannot resize, let assumes that it has been done
-            if (!isManaged) {
-                mVectorMessageListFragment.uploadImageContent(aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
-                aListener.onDone();
-            }
+        // cannot resize, let assumes that it has been done
+        if (!isManaged) {
+            mVectorRoomActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mVectorMessageListFragment.uploadImageContent(aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
+                    aListener.onDone();
+                }
+            });
         }
     }
 }
