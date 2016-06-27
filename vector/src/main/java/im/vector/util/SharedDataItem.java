@@ -370,7 +370,7 @@ public class SharedDataItem implements Parcelable {
 
                 if (null == resource) {
                 } else {
-                    mUri = saveFile(folder, resource.contentStream, mFileName, resource.mimeType);
+                    mUri = saveFile(folder, resource.contentStream, getFileName(context), resource.mimeType);
                     resource.contentStream.close();
                 }
             } catch (Exception e) {
