@@ -714,7 +714,7 @@ public class VectorUtils {
         if ((null != refreshCallback) && triggerRefresh) {
             Log.d(LOG_TAG, "Get the user presence : " + userId);
 
-            final String fPresence = user.presence;
+            final String fPresence = (null != user) ? user.presence : null;
 
             session.refreshUserPresence(userId, new ApiCallback<Void>() {
                 @Override
