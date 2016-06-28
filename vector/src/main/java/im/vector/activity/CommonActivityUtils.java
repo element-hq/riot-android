@@ -92,6 +92,8 @@ public class CommonActivityUtils {
     /**
      * Mime types
      **/
+    public static final String MIME_TYPE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_JPG =  "image/jpg";
     public static final String MIME_TYPE_IMAGE_ALL = "image/*";
     public static final String MIME_TYPE_ALL_CONTENT = "*/*";
 

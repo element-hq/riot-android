@@ -248,6 +248,11 @@ public class SharedDataItem implements Parcelable {
                         mMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
                     }
                 }
+
+                if (null != mMimeType) {
+                    // the mimetype is sometimes in uppercase.
+                    mMimeType = mMimeType.toLowerCase();
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Failed to open resource input stream", e);
             }
@@ -370,8 +375,8 @@ public class SharedDataItem implements Parcelable {
 
                 if (null == resource) {
                 } else {
-                    mUri = saveFile(folder, resource.contentStream, getFileName(context), resource.mimeType);
-                    resource.contentStream.close();
+                    mUri = saveFile(folder, resource.mContentStream, getFileName(context), resource.mMimeType);
+                    resource.mContentStream.close();
                 }
             } catch (Exception e) {
             }

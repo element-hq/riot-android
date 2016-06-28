@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
@@ -172,6 +173,12 @@ public class VectorRoomMediasSender {
      * Send a list of images from their URIs
      */
     private void sendMedias() {
+        // sanity checks
+        if ((null == mVectorRoomActivity) || (null == mVectorMessageListFragment) || (null == mMediasCache)) {
+            Log.d(LOG_TAG, "sendMedias : null parameters");
+            return;
+        }
+
         // detect end of messages sending
         if ((null == mSharedDataItems) || (0 == mSharedDataItems.size())) {
             Log.d(LOG_TAG, "sendMedias : done");
@@ -197,6 +204,7 @@ public class VectorRoomMediasSender {
         Log.d(LOG_TAG, "sendMedias : " + mSharedDataItems.size() + " items to send");
 
         mMediasSendingHandler.post(new Runnable() {
+            @Override
             public void run() {
                 SharedDataItem sharedDataItem = mSharedDataItems.get(0);
                 String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
@@ -209,6 +217,7 @@ public class VectorRoomMediasSender {
                 if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_INTENT, mimeType)) {
                     Log.d(LOG_TAG, "sendMedias :  unsupported mime type");
                     // don't know how to manage it -> skip it
+                    mSharedDataItems.remove(0);
                     sendMedias();
                 } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
                     sendTextMessage(sharedDataItem);
@@ -313,7 +322,7 @@ public class VectorRoomMediasSender {
                 String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
                 String filename =  sharedDataItem.getFileName(mVectorRoomActivity);
 
-                String mediaUrl = mMediasCache.saveMedia(resource.contentStream, null, mimeType);
+                String mediaUrl = mMediasCache.saveMedia(resource.mContentStream, null, mimeType);
                 mVectorMessageListFragment.uploadVideoContent(mediaUrl, mVectorMessageListFragment.getVideoThumbailUrl(mediaUrl), filename, mimeType);
                 resource.close();
             }
@@ -340,7 +349,7 @@ public class VectorRoomMediasSender {
                 String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
                 String filename =  sharedDataItem.getFileName(mVectorRoomActivity);
 
-                String mediaUrl = mMediasCache.saveMedia(resource.contentStream, null, mimeType);
+                String mediaUrl = mMediasCache.saveMedia(resource.mContentStream, null, mimeType);
                 mVectorMessageListFragment.uploadFileContent(mediaUrl, mimeType, filename);
                 resource.close();
             }
@@ -364,7 +373,7 @@ public class VectorRoomMediasSender {
         String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
 
         // save the file in the filesystem
-        String mediaUrl = mMediasCache.saveMedia(resource.contentStream, null, mimeType);
+        String mediaUrl = mMediasCache.saveMedia(resource.mContentStream, null, mimeType);
         resource.close();
 
         // compute the thumbnail
@@ -648,6 +657,7 @@ public class VectorRoomMediasSender {
      */
     private static int estimateFileSize(ImageSize imageSize) {
         if (null != imageSize) {
+            // rounded the size in 1024 multiplier
             return imageSize.mWidth * imageSize.mHeight * 2 / 10 / 1024 * 1024;
         } else {
             return 0;
@@ -663,7 +673,7 @@ public class VectorRoomMediasSender {
      * @param fileSize the file size (in bytes)
      */
     private static void addDialogEntry (Context context, ArrayList<String> textsList, String descriptionText, ImageSize imageSize, int fileSize) {
-        if (null != imageSize) {
+        if ((null != imageSize) && (null != textsList)) {
             textsList.add(descriptionText + ": " + android.text.format.Formatter.formatFileSize(context, fileSize) + " (" + imageSize.mWidth + "x" + imageSize.mHeight + ")");
         }
     }
@@ -709,13 +719,13 @@ public class VectorRoomMediasSender {
                 try {
                     resizeBitmapStream = ImageUtils.resizeImage(imageStream, -1, (srcImageSize.mWidth + dstImageSize.mWidth - 1) / dstImageSize.mWidth, 75);
                 } catch (OutOfMemoryError ex) {
-                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap : " + ex.getMessage());
+                    Log.e(LOG_TAG, "resizeImage out of memory : " + ex.getMessage());
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "Onclick BitmapFactory.createScaledBitmap failed : " + e.getMessage());
+                    Log.e(LOG_TAG, "resizeImage failed : " + e.getMessage());
                 }
 
                 if (null != resizeBitmapStream) {
-                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, "image/jpeg");
+                    String bitmapURL = mMediasCache.saveMedia(resizeBitmapStream, null, CommonActivityUtils.MIME_TYPE_JPEG);
 
                     if (null != bitmapURL) {
                         imageUrl = bitmapURL;
@@ -754,7 +764,7 @@ public class VectorRoomMediasSender {
         boolean isManaged = false;
 
         // check if the media could be resized
-        if ((null != aThumbnailURL) && ("image/jpeg".equals(anImageMimeType) || "image/jpg".equals(anImageMimeType) || "image/*".equals(anImageMimeType))) {
+        if ((null != aThumbnailURL) && (CommonActivityUtils.MIME_TYPE_JPEG.equals(anImageMimeType) || CommonActivityUtils.MIME_TYPE_JPG.equals(anImageMimeType) || CommonActivityUtils.MIME_TYPE_IMAGE_ALL.equals(anImageMimeType))) {
             System.gc();
             FileInputStream imageStream;
 
@@ -778,7 +788,7 @@ public class VectorRoomMediasSender {
                 try {
                     BitmapFactory.decodeStream(imageStream, null, options);
                 } catch (OutOfMemoryError e) {
-                    Log.e(LOG_TAG, "Onclick BitmapFactory.decodeStream : " + e.getMessage());
+                    Log.e(LOG_TAG, "sendImageMessage out of memory error : " + e.getMessage());
                 }
 
                 final ImageCompressionSizes imageSizes = computeImageSizes(options.outWidth, options.outHeight);
@@ -869,7 +879,7 @@ public class VectorRoomMediasSender {
                     });
                 }
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Onclick " + e.getMessage());
+                Log.e(LOG_TAG, "sendImageMessage failed " + e.getMessage());
             }
         }
 

@@ -2121,7 +2121,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // save the bitmap URL on the server
             ResourceUtils.Resource resource = ResourceUtils.openResource(this, thumbnailUri, null);
             if (null != resource) {
-                mSession.getContentManager().uploadContent(resource.contentStream, null, resource.mimeType, null, new ContentManager.UploadCallback() {
+                mSession.getContentManager().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new ContentManager.UploadCallback() {
                     @Override
                     public void onUploadStart(String uploadId) {
                     }

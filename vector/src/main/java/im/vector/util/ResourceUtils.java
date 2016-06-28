@@ -25,6 +25,8 @@ import android.webkit.MimeTypeMap;
 
 import java.io.InputStream;
 
+import im.vector.activity.CommonActivityUtils;
+
 /**
  * Static resource utility methods.
  */
@@ -33,12 +35,12 @@ public class ResourceUtils {
     private static final String LOG_TAG = "ResourceUtils";
 
     public static class Resource {
-        public InputStream contentStream;
-        public String mimeType;
+        public InputStream mContentStream;
+        public String mMimeType;
 
         public Resource(InputStream contentStream, String mimeType) {
-            this.contentStream = contentStream;
-            this.mimeType = mimeType;
+            this.mContentStream = contentStream;
+            this.mMimeType = mimeType;
         }
 
         /**
@@ -46,16 +48,24 @@ public class ResourceUtils {
          */
         public void close() {
             try {
-                mimeType = null;
+                mMimeType = null;
 
-                if (null != contentStream) {
-                    contentStream.close();
-                    contentStream = null;
+                if (null != mContentStream) {
+                    mContentStream.close();
+                    mContentStream = null;
                 }
 
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Resource.close failed " + e.getLocalizedMessage());
             }
+        }
+
+        /**
+         * Tells if the opened resource is a jpeg one.
+         * @return true if the opened resource is a jpeg one.
+         */
+        public boolean isJpegResource() {
+            return CommonActivityUtils.MIME_TYPE_JPEG.equals(mMimeType) || CommonActivityUtils.MIME_TYPE_JPG.equals(mMimeType);
         }
     }
 
@@ -122,7 +132,7 @@ public class ResourceUtils {
             Bitmap fullSizeBitmap = null;
 
             try {
-                fullSizeBitmap = BitmapFactory.decodeStream(resource.contentStream, null, options);
+                fullSizeBitmap = BitmapFactory.decodeStream(resource.mContentStream, null, options);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "BitmapFactory.decodeStream fails " + e.getLocalizedMessage());
             }
@@ -161,7 +171,7 @@ public class ResourceUtils {
             }
 
             if (null != resource) {
-                resource.contentStream.close();
+                resource.mContentStream.close();
             }
 
         } catch (Exception e) {
