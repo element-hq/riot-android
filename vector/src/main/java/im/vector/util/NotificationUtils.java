@@ -18,7 +18,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LockScreenActivity;
+import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorRoomActivity;
 
 import java.lang.reflect.Method;
@@ -114,7 +116,8 @@ public class NotificationUtils {
 
     public static Notification buildMessageNotification(
             Context context, String from, String matrixId, String callId, Boolean displayMatrixId, Bitmap largeIcon, int globalUnseen, int memberUnseen, String body, String roomId, String roomName,
-            boolean shouldPlaySound) {
+            boolean shouldPlaySound,
+            boolean isInvitationEvent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
 
@@ -197,6 +200,7 @@ public class NotificationUtils {
                     // get the new bitmap
                     largeIcon = bitmapCopy;
                 } catch (Exception e) {
+                    Log.e(LOG_TAG,"## buildMessageNotification(): Exception Msg="+e.getMessage());
                 }
             }
 
@@ -265,18 +269,25 @@ public class NotificationUtils {
                     pIntent);
 
             // Build the pending intent for when the notification is clicked
-            Intent roomIntentTap = new Intent(context, VectorRoomActivity.class);
-            roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            Intent roomIntentTap;
+            if(isInvitationEvent) {
+                // for invitation the room preview must be displayed
+                roomIntentTap = CommonActivityUtils.buildIntentPreviewRoom(matrixId, roomId, context, VectorFakeRoomPreviewActivity.class);
+            } else{
+                roomIntentTap = new Intent(context, VectorRoomActivity.class);
+                roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            }
             // the action must be unique else the parameters are ignored
             roomIntentTap.setAction(TAP_TO_VIEW_ACTION + ((int) (System.currentTimeMillis())));
+
             // Recreate the back stack
-            TaskStackBuilder stackBuildertap = TaskStackBuilder.create(context)
+            TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
                     .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntentTap);
             builder.addAction(
                     R.drawable.ic_material_message_green_vector,
                     context.getString(R.string.action_open),
-                    stackBuildertap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+                    stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }
 
         extendForCar(context, builder, roomId, roomName, from, body);

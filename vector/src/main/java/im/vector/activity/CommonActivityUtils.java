@@ -749,6 +749,53 @@ public class CommonActivityUtils {
     }
 
     /**
+     * Helper method used to build an intent to trigger a room preview.
+     * @param aMatrixId matrix ID of the user
+     * @param aRoomId room ID
+     * @param aContext application context
+     * @param aTargetActivity the activity set in the returned intent
+     * @return a valid intent if operation succeed, null otherwise
+     */
+    public static Intent buildIntentPreviewRoom(String aMatrixId, String aRoomId, Context aContext, Class<?> aTargetActivity) {
+        Intent intentRetCode;
+
+        // sanity check
+        if ((null == aContext) || (null == aRoomId) || (null == aMatrixId)){
+            intentRetCode = null;
+        } else {
+            MXSession session;
+
+            // get the session
+            if(null == (session = Matrix.getInstance(aContext).getSession(aMatrixId))) {
+                session = Matrix.getInstance(aContext).getDefaultSession();
+            }
+
+            // check session validity
+            if ((null == session) || !session.isAlive()) {
+                intentRetCode = null;
+            } else {
+                String roomAlias = null;
+                Room room = session.getDataHandler().getRoom(aRoomId);
+
+                // get the room alias (if any) for the preview data
+                if ((null != room) && (null != room.getLiveState())) {
+                    roomAlias = room.getLiveState().getAlias();
+                }
+
+                intentRetCode = new Intent(aContext, aTargetActivity);
+                // extra required by VectorRoomActivity
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, aRoomId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, aRoomId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, aMatrixId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                // extra only required by VectorFakeRoomPreviewActivity
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ROOM_ALIAS, roomAlias);
+            }
+        }
+        return intentRetCode;
+    }
+
+    /**
      * Start a room activity in preview mode.
      * If the room is already joined, open it in edition mode.
      * @param fromActivity the caller activity.
