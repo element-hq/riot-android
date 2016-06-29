@@ -52,7 +52,7 @@ import im.vector.ViewedRoomTracker;
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.gcm.GCMRegistrationManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorUtils;
 
@@ -395,7 +395,7 @@ public class EventStreamService extends Service {
             }
         }
 
-        if (!Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager().useGCM()) {
+        if (!Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager().useGCM()) {
             updateServiceForegroundState();
         }
 
@@ -516,7 +516,7 @@ public class EventStreamService extends Service {
             return;
         }
 
-        GcmRegistrationManager gcmnMgr = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+        GCMRegistrationManager gcmnMgr = Matrix.getInstance(this).getSharedGCMRegistrationManager();
 
         // detect if the polling thread must be started
         // i.e a session must be defined
@@ -607,9 +607,9 @@ public class EventStreamService extends Service {
             bingRule = mDefaultBingRule;
         }
 
-        GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+        GCMRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
-        if (!gcmGcmRegistrationManager.areDeviceNotificationsAllowed()) {
+        if (!gcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
             return;
         }

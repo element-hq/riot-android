@@ -108,7 +108,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
                 // update the badge counter
                 CommonActivityUtils.updateBadgeCount(getApplicationContext(), unreadCount);
 
-                GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
+                GCMRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
                 if (!gcmManager.areDeviceNotificationsAllowed()) {
                     Log.d(LOG_TAG, "## onMessageReceived() : the notifications are disabled");

@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * Helper class to store the GCM registration ID in {@link SharedPreferences}
  */
-public final class GcmRegistrationManager {
+public final class GCMRegistrationManager {
     private static final String LOG_TAG = "GcmRegistrationManager";
 
     private static final String PREFS_GCM = "GcmRegistrationManager";
@@ -136,7 +136,7 @@ public final class GcmRegistrationManager {
      * Constructor
      * @param appContext the application context.
      */
-    public GcmRegistrationManager(final Context appContext) {
+    public GCMRegistrationManager(final Context appContext) {
         mContext = appContext.getApplicationContext();
 
         try {

@@ -66,10 +66,9 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.gcm.GCMRegistrationManager;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.ResourceUtils;
@@ -285,7 +284,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         final SwitchPreference useBackgroundSyncPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
 
         if (null != useBackgroundSyncPref) {
-            final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+            final GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
 
             useBackgroundSyncPref.setChecked(gcmMgr.isBackgroundSyncAllowed());
 
@@ -389,7 +388,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 }
             });
 
-            Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager().refreshPushersList(Matrix.getInstance(getActivity()).getSessions(), new SimpleApiCallback<Void>() {
+            Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager().refreshPushersList(Matrix.getInstance(getActivity()).getSessions(), new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     refreshPushersList();
@@ -479,7 +478,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
             if (null != switchPreference) {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
-                    GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+                    GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
                     switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
@@ -609,7 +608,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
      */
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
         if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
-            final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+            final GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
             final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
 
@@ -619,7 +618,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             // need to register on servers
             if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred())) {
 
-                final GcmRegistrationManager.ThirdPartyRegistrationListener listener = new GcmRegistrationManager.ThirdPartyRegistrationListener() {
+                final GCMRegistrationManager.ThirdPartyRegistrationListener listener = new GCMRegistrationManager.ThirdPartyRegistrationListener() {
 
                     private void onDone() {
                         if (null != getActivity()) {
@@ -893,7 +892,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
      * Refresh the pushers list
      */
     private void refreshPushersList() {
-        GcmRegistrationManager registrationManager = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+        GCMRegistrationManager registrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
         List<Pusher> pushersList = new ArrayList<>(registrationManager.mPushersList);
 
         // check first if there is an update
@@ -1174,7 +1173,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             return;
         }
 
-        final GcmRegistrationManager gcmmgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
+        final GCMRegistrationManager gcmmgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
 
         final int timeout = gcmmgr.getBackgroundSyncTimeOut() / 1000;
         final int delay = gcmmgr.getBackgroundSyncDelay() / 1000;

@@ -48,7 +48,7 @@ import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.gcm.GCMRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.RageShake;
@@ -76,7 +76,7 @@ public class Matrix {
     private ArrayList<MXSession> mMXSessions;
 
     // GCM registration manager
-    private GcmRegistrationManager mGcmRegistrationManager;
+    private GCMRegistrationManager mGCMRegistrationManager;
 
     // list of store : some sessions or activities use tmp stores
     // provide an storage to exchange them
@@ -110,7 +110,7 @@ public class Matrix {
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
-                GcmRegistrationManager gcmMgr = instance.getSharedGcmRegistrationManager();
+                GCMRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
                 // check if the GCM is not available
                 if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
@@ -225,9 +225,9 @@ public class Matrix {
     protected Matrix(Context appContext) {
         mAppContext = appContext.getApplicationContext();
         mLoginStorage = new LoginStorage(mAppContext);
-        mMXSessions = new ArrayList<MXSession>();
-        mTmpStores = new ArrayList<IMXStore>();
-        mGcmRegistrationManager = new GcmRegistrationManager(mAppContext);
+        mMXSessions = new ArrayList<>();
+        mTmpStores = new ArrayList<>();
+        mGCMRegistrationManager = new GCMRegistrationManager(mAppContext);
         RageShake.getInstance().start(mAppContext);
 
         mNetworkConnectivityReceiver = new NetworkConnectivityReceiver();
@@ -591,8 +591,11 @@ public class Matrix {
         fromActivity.finish();
     }
 
-    public GcmRegistrationManager getSharedGcmRegistrationManager() {
-        return mGcmRegistrationManager;
+    /**
+     * @return the GCM registration manager
+     */
+    public GCMRegistrationManager getSharedGCMRegistrationManager() {
+        return mGCMRegistrationManager;
     }
 
     //==============================================================================================================

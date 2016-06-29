@@ -25,10 +25,9 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.gcm.GcmRegistrationManager;
+import im.vector.gcm.GCMRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +44,7 @@ public class SplashActivity extends MXCActionBarActivity {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
     private Collection<MXSession> mSessions;
-    private GcmRegistrationManager mGcmRegistrationManager;
+    private GCMRegistrationManager mGCMRegistrationManager;
 
     private boolean mInitialSyncComplete = false;
     private boolean mPusherRegistrationComplete = false;
@@ -199,12 +198,11 @@ public class SplashActivity extends MXCActionBarActivity {
             EventStreamService.getInstance().startAccounts(matrixIds);
         }
 
-        mGcmRegistrationManager = Matrix.getInstance(getApplicationContext())
-                .getSharedGcmRegistrationManager();
-        mPusherRegistrationComplete = mGcmRegistrationManager.isGCMRegistred();
+        mGCMRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        mPusherRegistrationComplete = mGCMRegistrationManager.isGCMRegistred();
 
         if (!mPusherRegistrationComplete) {
-            mGcmRegistrationManager.registerToGCM(new GcmRegistrationManager.GCMRegistrationListener() {
+            mGCMRegistrationManager.registerToGCM(new GCMRegistrationManager.GCMRegistrationListener() {
                 /**
                  * Common behaviour.
                  */
@@ -232,8 +230,8 @@ public class SplashActivity extends MXCActionBarActivity {
                     onDone();
                 }
             });
-        } else if (mGcmRegistrationManager.useGCM()) {
-            mGcmRegistrationManager.forceSessionsRegistration(null);
+        } else if (mGCMRegistrationManager.useGCM()) {
+            mGCMRegistrationManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;
