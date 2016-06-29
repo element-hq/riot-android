@@ -638,14 +638,12 @@ public class VectorUtils {
                     ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri, null);
 
                     // sanity check
-                    if (null != resource) {
-                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
-                            InputStream stream = resource.contentStream;
-                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
+                    if ((null != resource) && resource.isJpegResource()) {
+                        InputStream stream = resource.mContentStream;
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
 
-                            String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
-                            thumbnailUri = Uri.parse(mediaUrl);
-                        }
+                        String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mMimeType, 1024, rotationAngle, mediasCache);
+                        thumbnailUri = Uri.parse(mediaUrl);
                     }
 
                     return thumbnailUri;
