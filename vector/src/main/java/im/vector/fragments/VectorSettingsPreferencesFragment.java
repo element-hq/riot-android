@@ -34,16 +34,14 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.internal.Excluder;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.MyUser;
@@ -75,6 +73,8 @@ import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
 public class VectorSettingsPreferencesFragment extends PreferenceFragment {
+    private static final String LOG_TAG = "VPreferenceFragment";
+
     // arguments indexes
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
 
@@ -159,6 +159,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_this_device), DUMMY_RULE);
+            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_turn_screen_on), DUMMY_RULE);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
@@ -473,13 +474,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         BingRuleSet rules = mSession.getDataHandler().pushRules();
 
+        GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+
         for(String resourceText : mPushesRuleByResourceId.keySet()) {
             SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
-                    GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
                     switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
+                } else if (resourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
+                    switchPreference.setChecked(gcmMgr.doNotificationsTurnScreenOn());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
                     switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -607,8 +611,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
      * Update a push rule.
      */
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
+        final GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
+
+        Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
+
+        if (fResourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
+            gcmMgr.setNotificationsTurnScreenOn(newValue);
+            return;
+        }
+
         if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
-            final GCMRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
             final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
 
@@ -617,7 +629,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             // when using GCM
             // need to register on servers
             if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred())) {
-
                 final GCMRegistrationManager.ThirdPartyRegistrationListener listener = new GCMRegistrationManager.ThirdPartyRegistrationListener() {
 
                     private void onDone() {

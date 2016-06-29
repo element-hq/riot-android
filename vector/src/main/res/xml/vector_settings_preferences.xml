@@ -33,15 +33,13 @@
 
         <SwitchPreference
             android:title="@string/settings_enable_this_device"
-            android:key="@string/settings_enable_this_device"/>
+            android:key="@string/settings_enable_this_device"
+            android:dependency="@string/settings_enable_all_notif"/>
 
         <SwitchPreference
             android:title="@string/settings_turn_screen_on"
-            android:key="@string/settings_turn_screen_on"/>
-
-        <SwitchPreference
-            android:title="@string/settings_prioritise_audio_notifs"
-            android:key="@string/settings_prioritise_audio_notifs"/>
+            android:key="@string/settings_turn_screen_on"
+            android:dependency="@string/settings_enable_all_notif"/>
 
         <SwitchPreference
             android:title="@string/settings_containing_my_name"

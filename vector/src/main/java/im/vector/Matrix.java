@@ -223,15 +223,18 @@ public class Matrix {
 
     // constructor
     protected Matrix(Context appContext) {
+        instance = this;
+
         mAppContext = appContext.getApplicationContext();
         mLoginStorage = new LoginStorage(mAppContext);
         mMXSessions = new ArrayList<>();
         mTmpStores = new ArrayList<>();
-        mGCMRegistrationManager = new GCMRegistrationManager(mAppContext);
         RageShake.getInstance().start(mAppContext);
 
         mNetworkConnectivityReceiver = new NetworkConnectivityReceiver();
         appContext.registerReceiver(mNetworkConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+        mGCMRegistrationManager = new GCMRegistrationManager(mAppContext);
     }
 
     /**

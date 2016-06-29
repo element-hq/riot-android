@@ -58,7 +58,6 @@ public final class GCMRegistrationManager {
     private static final String PREFS_PUSHER_FILE_TAG_KEY = "GcmRegistrationManager.pusherFileTag";
     private static final String PREFS_ALLOW_NOTIFICATIONS = "GcmRegistrationManager.PREFS_ALLOW_NOTIFICATIONS";
     private static final String PREFS_TURN_SCREEN_ON = "GcmRegistrationManager.PREFS_TURN_SCREEN_ON";
-    private static final String PREFS_KEEP_NOTIFS_WITH_SOUND = "GcmRegistrationManager.PREFS_KEEP_NOTIFS_WITH_SOUND";
     private static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
 
     private static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
@@ -172,6 +171,8 @@ public final class GCMRegistrationManager {
      * reset the Registration
      */
     public void reset() {
+        Log.d(LOG_TAG, "Reset the registration");
+
         // unregister
         unregister(null);
 
@@ -190,6 +191,8 @@ public final class GCMRegistrationManager {
      * The GCM could have cleared it (onTokenRefresh).
      */
     public void checkRegistrations() {
+        Log.d(LOG_TAG, "checkRegistrations with state " + mRegistrationState);
+
         if (!useGCM()) {
             Log.d(LOG_TAG, "checkPusherRegistration : GCM is disabled");
             return;
@@ -244,6 +247,8 @@ public final class GCMRegistrationManager {
      * @param gcmRegistrationListener the events listener.
      */
     public void registerToGCM(final GCMRegistrationListener gcmRegistrationListener) {
+        Log.d(LOG_TAG, "registerToGCM with state " + mRegistrationState);
+
         // do not use GCM
         if (!useGCM()) {
             Log.d(LOG_TAG, "registerPusher : GCM is disabled");
@@ -361,8 +366,8 @@ public final class GCMRegistrationManager {
      * @param session the session
      * @return the profile tag
      */
-    private String computePushTag(final MXSession session) {
-        String tag =  DEFAULT_PUSHER_FILE_TAG + "_" + Math.abs(session.getMyUserId().hashCode());
+    private static String computePushTag(final MXSession session) {
+        String tag = DEFAULT_PUSHER_FILE_TAG + "_" + Math.abs(session.getMyUserId().hashCode());
 
         // tag max length : 32 bytes
         if (tag.length() > 32) {
@@ -396,6 +401,8 @@ public final class GCMRegistrationManager {
 
             return;
         }
+
+        Log.d(LOG_TAG, "registerToThirdPartyServer of " + session.getMyUserId());
 
         session.getPushersRestClient()
                 .addHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
@@ -510,6 +517,8 @@ public final class GCMRegistrationManager {
      * @param listener the registration listener.
      */
     public void register(final ThirdPartyRegistrationListener listener) {
+        Log.d(LOG_TAG, "register with state " + mRegistrationState);
+
         addSessionsRegistrationListener(listener);
 
         if (mRegistrationState == RegistrationState.SERVER_REGISTRATING) {
@@ -605,6 +614,8 @@ public final class GCMRegistrationManager {
      * @param listener the registration listener.
      */
     public void unregister(final ThirdPartyRegistrationListener listener) {
+        Log.d(LOG_TAG, "unregister with state " + mRegistrationState);
+
         addSessionsRegistrationListener(listener);
 
         if (mRegistrationState == RegistrationState.SERVER_UNREGISTRATING) {
@@ -667,6 +678,8 @@ public final class GCMRegistrationManager {
      * @param listener the lisneter
      */
     public void unregister(final MXSession session, final ThirdPartyRegistrationListener listener) {
+        Log.d(LOG_TAG, "unregister " + session.getMyUserId());
+
         session.getPushersRestClient()
                 .removeHttpPusher(mRegistrationToken, DEFAULT_PUSHER_APP_ID, computePushTag(session),
                         mPusherLang, mPusherAppName, mBasePusherDeviceName,
@@ -816,23 +829,6 @@ public final class GCMRegistrationManager {
     public void setNotificationsTurnScreenOn(boolean flag) {
         getSharedPreferences().edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
-                .apply();
-    }
-
-    /**
-     * @return true if a new notification does not have sound and the current displayed one has.
-     */
-    public boolean preferNotificationWithSound() {
-        return getSharedPreferences().getBoolean(PREFS_KEEP_NOTIFS_WITH_SOUND, false);
-    }
-
-    /**
-     * Update the notificatioon with sound preference
-     * @param flag true to prefer notification with sound.
-     */
-    public void setPreferNotificationWithSound(boolean flag) {
-        getSharedPreferences().edit()
-                .putBoolean(PREFS_KEEP_NOTIFS_WITH_SOUND, flag)
                 .apply();
     }
 
