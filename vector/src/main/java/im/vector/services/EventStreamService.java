@@ -609,7 +609,7 @@ public class EventStreamService extends Service {
 
         GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
 
-        if (!gcmGcmRegistrationManager.isNotificationsAllowed()) {
+        if (!gcmGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
             return;
         }

@@ -19,14 +19,12 @@ import android.content.Context;
 
 public class GCMHelper {
 
-    private static final String LOG_TAG = "GCMHelper";
-
     /**
-     * Retrieve the GCM push key.
+     * Retrieve the GCM registration token.
      * @param appContext the application context
-     * @return the GCM pushKey
+     * @return the registration token.
      */
-    public static String getPushKey(Context appContext) {
+    public static String getRegisrationToken(Context appContext) {
         return null;
     }
 }

@@ -34,6 +34,6 @@ public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
     @Override
     public void onTokenRefresh() {
         Log.d(LOG_TAG, "onTokenRefresh");
-        Matrix.getInstance(this).getSharedGcmRegistrationManager().refreshPushToken(this, null);
+        Matrix.getInstance(this).getSharedGcmRegistrationManager().resetGCMRegistration();
     }
 }

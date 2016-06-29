@@ -204,10 +204,11 @@ public class SplashActivity extends MXCActionBarActivity {
         mPusherRegistrationComplete = mGcmRegistrationManager.isGCMRegistred();
 
         if (!mPusherRegistrationComplete) {
-            mGcmRegistrationManager.registerPusher(getApplicationContext(), new GcmRegistrationManager.GcmRegistrationIdListener() {
-                @Override
-                public void onPusherRegistered() {
-                    Log.d(LOG_TAG, "The GCM registration is done");
+            mGcmRegistrationManager.registerToGCM(new GcmRegistrationManager.GCMRegistrationListener() {
+                /**
+                 * Common behaviour.
+                 */
+                private void onDone() {
                     SplashActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -220,22 +221,19 @@ public class SplashActivity extends MXCActionBarActivity {
                 }
 
                 @Override
-                public void onPusherRegistrationFailed() {
+                public void onGCMRegistered() {
+                    Log.d(LOG_TAG, "The GCM registration is done");
+                    onDone();
+                }
+
+                @Override
+                public void onGCMRegistrationFailed() {
                     Log.d(LOG_TAG, "The GCM registration failed");
-
-                    SplashActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CommonActivityUtils.onGcmUpdate(SplashActivity.this);
-                        }
-                    });
-
-                    // can register it ignore
-                    onPusherRegistered();
+                    onDone();
                 }
             });
         } else if (mGcmRegistrationManager.useGCM()) {
-            mGcmRegistrationManager.reregisterSessions(SplashActivity.this, null);
+            mGcmRegistrationManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;

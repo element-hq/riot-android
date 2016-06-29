@@ -162,7 +162,7 @@ public class CommonActivityUtils {
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
+            Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregister(session, null);
 
             // clear credentials
             Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);

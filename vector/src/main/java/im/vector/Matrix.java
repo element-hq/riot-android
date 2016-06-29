@@ -113,7 +113,7 @@ public class Matrix {
                 GcmRegistrationManager gcmMgr = instance.getSharedGcmRegistrationManager();
 
                 // check if the GCM is not available
-                if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasPushKey())) {
+                if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
                     int unreadCount = 0;
 
                     for(MXSession session :  instance.mMXSessions) {

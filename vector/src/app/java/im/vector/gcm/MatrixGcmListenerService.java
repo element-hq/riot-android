@@ -110,7 +110,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
 
                 GcmRegistrationManager gcmManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
 
-                if (!gcmManager.isNotificationsAllowed()) {
+                if (!gcmManager.areDeviceNotificationsAllowed()) {
                     Log.d(LOG_TAG, "## onMessageReceived() : the notifications are disabled");
                     return;
                 }

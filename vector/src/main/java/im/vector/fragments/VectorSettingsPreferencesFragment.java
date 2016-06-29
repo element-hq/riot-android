@@ -480,15 +480,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             if (null != switchPreference) {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
                     GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
-
-                    if (gcmMgr.useGCM() && !gcmMgr.usePollingThread()) {
-                        // disable the notifications for this device
-                        // if GCM is disabled or the registration or unregistration is in progress
-                        switchPreference.setEnabled((gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred()) && isConnected);
-                        switchPreference.setChecked(gcmMgr.isServerRegistred() && gcmMgr.isNotificationsAllowed());
-                    } else {
-                        switchPreference.setChecked(gcmMgr.isNotificationsAllowed());
-                    }
+                    switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
                     switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -618,56 +610,57 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     private void onPushRuleClick(final String fResourceText, final boolean newValue) {
         if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGcmRegistrationManager();
-            final boolean isAllowed = gcmMgr.isNotificationsAllowed();
+            boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
+            final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
 
-            final GcmRegistrationManager.GcmSessionRegistration listener = new GcmRegistrationManager.GcmSessionRegistration() {
-
-                private void onDone() {
-                    if (null != getActivity()) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideLoadingView(true);
-                                refreshPushersList();
-                            }
-                        });
-
-                    }
-                }
-
-                @Override
-                public void onSessionRegistred() {
-                    onDone();
-                }
-
-                @Override
-                public void onSessionRegistrationFailed() {
-                    gcmMgr.setIsNotificationsAllowed(isAllowed);
-                    onDone();
-                }
-
-                @Override
-                public void onSessionUnregistred() {
-                    onDone();
-                }
-
-                @Override
-                public void onSessionUnregistrationFailed() {
-                    gcmMgr.setIsNotificationsAllowed(isAllowed);
-                    onDone();
-                }
-            };
-
-            gcmMgr.setIsNotificationsAllowed(!isAllowed);
+            gcmMgr.setAreDeviceNotificationsAllowed(!isAllowed);
 
             // when using GCM
             // need to register on servers
-            if (gcmMgr.useGCM() && !gcmMgr.usePollingThread()) {
+            if (isConnected && gcmMgr.useGCM() && (gcmMgr.isServerRegistred() || gcmMgr.isServerUnRegistred())) {
+
+                final GcmRegistrationManager.ThirdPartyRegistrationListener listener = new GcmRegistrationManager.ThirdPartyRegistrationListener() {
+
+                    private void onDone() {
+                        if (null != getActivity()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoadingView(true);
+                                    refreshPushersList();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onThirdPartyRegistered() {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onThirdPartyRegistrationFailed() {
+                        gcmMgr.setAreDeviceNotificationsAllowed(isAllowed);
+                        onDone();
+                    }
+
+                    @Override
+                    public void onThirdPartyUnregistered() {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onThirdPartyUnregistrationFailed() {
+                        gcmMgr.setAreDeviceNotificationsAllowed(isAllowed);
+                        onDone();
+                    }
+                };
+
                 displayLoadingView();
                 if (gcmMgr.isServerRegistred()) {
-                    gcmMgr.unregisterSessions(listener);
+                    gcmMgr.unregister(listener);
                 } else {
-                    gcmMgr.registerSessions(getActivity(), listener);
+                    gcmMgr.register(listener);
                 }
             }
 
@@ -1254,7 +1247,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
 
         // theses both settings are dedicated when a client does not support GCM
-        if (gcmmgr.hasPushKey()) {
+        if (gcmmgr.hasRegistrationToken()) {
             mBackgroundSyncCategory.removePreference(mSyncRequestTimeoutPreference);
             mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
         }
