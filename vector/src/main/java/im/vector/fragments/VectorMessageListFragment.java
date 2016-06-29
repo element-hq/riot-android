@@ -24,10 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
 import android.content.SharedPreferences;
@@ -38,7 +35,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -47,11 +43,9 @@ import com.google.gson.JsonElement;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
-import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
@@ -59,7 +53,6 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.VideoMessage;
-import org.matrix.androidsdk.util.EventDisplay;
 import org.matrix.androidsdk.util.JsonUtils;
 import im.vector.Matrix;
 import im.vector.R;
@@ -91,15 +84,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     private IListFragmentEventListener mHostActivityListener;
 
     // onMediaAction actions
-    protected static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
-    protected static final int ACTION_VECTOR_FORWARD = R.id.ic_action_vector_forward;
-    protected static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
-    protected static final int ACTION_VECTOR_OPEN = 123456;
+    // private static final int ACTION_VECTOR_SHARE = R.id.ic_action_vector_share;
+    private static final int ACTION_VECTOR_FORWARD = R.id.ic_action_vector_forward;
+    private static final int ACTION_VECTOR_SAVE = R.id.ic_action_vector_save;
+    public static final int ACTION_VECTOR_OPEN = 123456;
 
     // spinners
-    protected View mBackProgressView;
-    protected View mForwardProgressView;
-    protected View mMainProgressView;
+    private View mBackProgressView;
+    private View mForwardProgressView;
+    private View mMainProgressView;
 
     public static VectorMessageListFragment newInstance(String matrixId, String roomId, String eventId, String previewMode, int layoutResId) {
         VectorMessageListFragment f = new VectorMessageListFragment();
@@ -137,7 +130,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * @return the fragment tag to use to restore the matrix messages fragement
+     * @return the fragment tag to use to restore the matrix messages fragment
      */
     protected String getMatrixMessagesFragmentTag() {
         return getClass().getName() + ".MATRIX_MESSAGE_FRAGMENT_TAG";
@@ -231,9 +224,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     /**
      * An action has been  triggered on an event.
      * @param event the event.
+     * @param textMsg the event text
      * @param action an action ic_action_vector_XXX
      */
-    public void onEventAction(final Event event, final int action) {
+    public void onEventAction(final Event event, final String textMsg, final int action) {
         if (action == R.id.ic_action_vector_resend_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -258,32 +252,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     }
                 }
             });
-        } else if (action == R.id.ic_action_vector_resend_message) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    resend(event);
-                }
-            });
         } else if (action == R.id.ic_action_vector_copy) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                    String text;
 
-                    if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type) ||
-                            Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
-                            Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)) {
-
-                        RoomState roomState = mRoom.getLiveState();
-                        EventDisplay display = new EventDisplay(getActivity(), event, roomState);
-                        text = display.getTextualDisplay().toString();
-                    } else {
-                        text = JsonUtils.toMessage(event.content).body;
-                    }
-
-                    ClipData clip = ClipData.newPlainText("", text);
+                    ClipData clip = ClipData.newPlainText("", textMsg);
                     clipboard.setPrimaryClip(clip);
 
                     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
@@ -377,7 +352,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
 
-                                        ArrayList<String> userIdsList = new ArrayList<String>();
+                                        ArrayList<String> userIdsList = new ArrayList<>();
                                         userIdsList.add(event.sender);
 
                                         mSession.ignoreUsers(userIdsList, new SimpleApiCallback<Void>() {
@@ -410,7 +385,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /***
-     * Manage save / share / foward actions on a media file
+     * Manage save / share / forward actions on a media file
      * @param menuAction the menu action ACTION_VECTOR__XXX
      * @param mediaUrl the media URL (must be not null)
      * @param mediaMimeType the mime type
@@ -439,7 +414,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                 File renamedFile = file;
 
-                if (!TextUtils.isEmpty(filename))
+                if (!TextUtils.isEmpty(filename)) {
                     try {
                         InputStream fin = new FileInputStream(file);
                         String tmpUrl = mediasCache.saveMedia(fin, filename, mediaMimeType);
@@ -448,13 +423,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             renamedFile = mediasCache.mediaCacheFile(tmpUrl, mediaMimeType);
                         }
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "onMediaAction shared / forward failed : " + e.getLocalizedMessage());
                     }
-
+                }
 
                 if (null != renamedFile) {
                     try {
                         mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), renamedFile.getAbsolutePath());
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getLocalizedMessage());
                     }
                 }
 
@@ -566,7 +543,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @return the image and video messages list
      */
     protected ArrayList<SlidableMediaInfo> listSlidableMessages() {
-        ArrayList<SlidableMediaInfo> res = new ArrayList<SlidableMediaInfo>();
+        ArrayList<SlidableMediaInfo> res = new ArrayList<>();
 
         for(int position = 0; position < mAdapter.getCount(); position++) {
             MessageRow row = mAdapter.getItem(position);
@@ -600,7 +577,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * Returns the mediageMessage position in listMediaMessages.
+     * Returns the mediaMessage position in listMediaMessages.
      * @param mediaMessagesList the media messages list
      * @param mediaMessage the imageMessage
      * @return the imageMessage position. -1 if not found.
