@@ -10,23 +10,25 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="72dp"
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:layout_gravity="center_vertical"
             android:layout_width="40dp"
             android:layout_height="40dp">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_alignParentLeft="true"
                 android:src="@drawable/ic_material_call_white"
                 android:layout_centerInParent="true" />
         </RelativeLayout>
 
-
         <LinearLayout
             android:orientation="vertical"
-            android:paddingLeft="4dp"
+            android:paddingLeft="16dp"
             android:paddingRight="4dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

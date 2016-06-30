@@ -17,6 +17,8 @@
 package im.vector.view;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -44,13 +46,10 @@ public class VectorPendingCallView extends RelativeLayout {
     private MXSession mSession;
 
     private IMXCall mCall;
-    private String mCallId;
+    private Handler mUIHandler;
 
     private TextView mCallDescriptionTextView;
     private TextView mCallStatusTextView;
-
-    private Timer mCallRefreshTimer;
-    private TimerTask mCallRefreshTimerTask;
 
     private IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
         @Override
@@ -107,10 +106,13 @@ public class VectorPendingCallView extends RelativeLayout {
 
         mCallStatusTextView = (TextView) findViewById(R.id.pending_call_status_textview);
         mCallStatusTextView.setVisibility(View.GONE);
+
+        mUIHandler = new Handler(Looper.getMainLooper());
     }
 
     /**
      * Start the call monitoring
+     *
      * @param session the session
      */
     public void start(MXSession session) {
@@ -124,34 +126,35 @@ public class VectorPendingCallView extends RelativeLayout {
             // replace the previous one
             mCall = call;
 
-            if (null != mCallRefreshTimer) {
-                mCallRefreshTimer.cancel();
-                mCallRefreshTimer = null;
-            }
-
-            if (null != mCallRefreshTimerTask) {
-                mCallRefreshTimerTask.cancel();
-                mCallRefreshTimerTask = null;
-            }
-
             if (null != call) {
                 call.addListener(mCallListener);
-
-                mCallRefreshTimer = new Timer();
-                mCallRefreshTimerTask = new TimerTask() {
-                    public void run() {
-                        refreshCallStatus();
-                    }
-                };
-
-                refreshCallDescription();
-                refreshCallDescription();
-                mCallRefreshTimer.schedule(mCallRefreshTimerTask, 1000);
+                refresh();
             }
         } else if (null != mCall) {
-            refreshCallDescription();
-            refreshCallDescription();
+            refresh();
         }
+    }
+
+    /**
+     * Refresh the call information.
+     */
+    private void refresh() {
+        mUIHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (null != mCall) {
+                    refreshCallDescription();
+                    refreshCallStatus();
+
+                    mUIHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refresh();
+                        }
+                    }, 1000);
+                }
+            }
+        });
     }
 
     /**
@@ -159,16 +162,6 @@ public class VectorPendingCallView extends RelativeLayout {
      * Terminates the refresh processes.
      */
     private void onCallTerminated() {
-        if (null != mCallRefreshTimer) {
-            mCallRefreshTimer.cancel();
-            mCallRefreshTimer = null;
-        }
-
-        if (null != mCallRefreshTimerTask) {
-            mCallRefreshTimerTask.cancel();
-            mCallRefreshTimerTask = null;
-        }
-
         mCall = null;
         // should hide from parent view
     }

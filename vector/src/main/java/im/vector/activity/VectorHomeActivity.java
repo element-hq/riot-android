@@ -67,6 +67,7 @@ import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.RageShake;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -153,6 +154,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private String mIncomingCallSessionId;
     private String mIncomingCallId;
     private IMXCall mIncomingCall;
+    private VectorPendingCallView mVectorPendingCallView;
 
     private boolean mStorePermissionCheck = false;
 
@@ -226,6 +228,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         sharedInstance = this;
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
+        mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.listView_pending_callview);
 
         // use a toolbar instead of the actionbar
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.home_toolbar);
@@ -1110,6 +1113,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      */
     private void manageCallButton() {
         if (null != mCallMenuItem) {
+
+            if (CallViewActivity.getActiveCall() != null) {
+                mVectorPendingCallView.start(mSession);
+            }
+
             mCallMenuItem.setVisible(CallViewActivity.getActiveCall() != null);
         }
     }
