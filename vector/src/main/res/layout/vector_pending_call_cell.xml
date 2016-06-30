@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/vector_green_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/pending_call_main_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_material_call_white"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-bold"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_gravity="left"
+                android:textColor="@android:color/white"
+                android:text="Room name - call active"
+                android:id="@+id/pending_call_roomname_textview"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:textIsSelectable="false"
+                android:text="Elapsed time"
+                android:textColor="@android:color/white"
+                android:id="@+id/pending_call_status_textview"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
