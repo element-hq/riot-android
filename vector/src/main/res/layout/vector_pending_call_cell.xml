@@ -43,7 +43,7 @@
                 android:layout_gravity="left"
                 android:textColor="@android:color/white"
                 android:text="Room name - call active"
-                android:id="@+id/pending_call_roomname_textview"/>
+                android:id="@+id/pending_call_room_name_textview"/>
 
             <TextView
                 android:layout_height="wrap_content"
