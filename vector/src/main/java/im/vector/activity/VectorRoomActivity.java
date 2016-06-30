@@ -2338,20 +2338,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             roomAvatarView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean canUpdateAvatar = false;
-                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                    // sanity checks : reported by GA
+                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                        boolean canUpdateAvatar = false;
 
-                    if (null != powerLevels) {
-                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-                        canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
-                    }
+                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-                    if (canUpdateAvatar) {
-                        Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
-                        intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                        startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
-                    } else {
-                        launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                        if (null != powerLevels) {
+                            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                            canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
+                        }
+
+                        if (canUpdateAvatar) {
+                            Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
+                            intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                            startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
+                        } else {
+                            launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                        }
                     }
                 }
             });
@@ -2363,18 +2367,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             titleText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean canUpdateTitle = false;
-                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                    // sanity checks : reported by GA
+                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                        boolean canUpdateTitle = false;
+                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-                    if (null != powerLevels) {
-                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-                        canUpdateTitle = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
-                    }
+                        if (null != powerLevels) {
+                            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                            canUpdateTitle = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                        }
 
-                    if (canUpdateTitle) {
-                        onRoomTitleClick();
-                    } else {
-                        launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                        if (canUpdateTitle) {
+                            onRoomTitleClick();
+                        } else {
+                            launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                        }
                     }
                 }
             });
@@ -2387,18 +2394,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             topicText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    boolean canUpdateTopic = false;
-                    PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+                    // sanity checks : reported by GA
+                    if ((null != mRoom) && (null != mRoom.getLiveState())) {
+                        boolean canUpdateTopic = false;
+                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
-                    if (null != powerLevels) {
-                        int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-                        canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
-                    }
+                        if (null != powerLevels) {
+                            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                            canUpdateTopic = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_NAME);
+                        }
 
-                    if (canUpdateTopic) {
-                        onRoomTopicClick();
-                    } else {
-                        launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                        if (canUpdateTopic) {
+                            onRoomTopicClick();
+                        } else {
+                            launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+                        }
                     }
                 }
             });
