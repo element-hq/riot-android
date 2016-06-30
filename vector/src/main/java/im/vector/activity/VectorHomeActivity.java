@@ -131,9 +131,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private VectorRecentsListFragment mRecentsListFragment;
 
-    // call listener
-    private MenuItem mCallMenuItem = null;
-
     private AlertDialog.Builder mUseGAAlert;
 
     // when a member is banned, the session must be reloaded
@@ -229,6 +226,25 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.listView_pending_callview);
+
+        mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMXCall call = CallViewActivity.getActiveCall();
+                if (null != call) {
+                    final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
+                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            VectorHomeActivity.this.startActivity(intent);
+                        }
+                    });
+                }
+            }
+        });
 
         // use a toolbar instead of the actionbar
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.home_toolbar);
@@ -557,7 +573,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         });
 
-        manageCallButton();
+        checkPendingCallView();
 
         // check if the GA accepts to send crash reports.
         // do not display this alert if there is an universal link management
@@ -613,10 +629,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vector_home, menu);
-
-        mCallMenuItem = menu.findItem(R.id.ic_action_resume_call);
-        manageCallButton();
-
         return true;
     }
 
@@ -645,22 +657,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             // search in rooms content
             case R.id.ic_action_mark_all_as_read:
                 markAllMessagesAsRead();
-                break;
-
-            case R.id.ic_action_resume_call:
-                IMXCall call = CallViewActivity.getActiveCall();
-                if (null != call) {
-                    final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
-                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
-                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
-
-                    VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            VectorHomeActivity.this.startActivity(intent);
-                        }
-                    });
-                }
                 break;
 
             default:
@@ -1082,7 +1078,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // suspend the app if required
                         VectorApp.getInstance().onCallEnd();
                         // hide the call button in the menu bar
-                        VectorHomeActivity.this.manageCallButton();
+                        VectorHomeActivity.this.checkPendingCallView();
                         // clear call in progress notification
                         EventStreamService.getInstance().checkDisplayedNotification();
                         // and play a lovely sound
@@ -1111,14 +1107,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * Display or hide the the call button.
      * it is used to resume a call.
      */
-    private void manageCallButton() {
-        if (null != mCallMenuItem) {
-
-            if (CallViewActivity.getActiveCall() != null) {
-                mVectorPendingCallView.start(mSession);
-            }
-
-            mCallMenuItem.setVisible(CallViewActivity.getActiveCall() != null);
+    private void checkPendingCallView() {
+        if (CallViewActivity.getActiveCall() != null) {
+            mVectorPendingCallView.setVisibility(View.VISIBLE);
+            mVectorPendingCallView.start(mSession);
+        } else {
+            mVectorPendingCallView.setVisibility(View.GONE);
         }
     }
 }

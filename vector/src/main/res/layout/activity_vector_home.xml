@@ -19,6 +19,12 @@
             android:layout_height="wrap_content"
             style="@style/VectorToolbarStyle"/>
 
+        <im.vector.view.VectorPendingCallView
+            android:id="@+id/listView_pending_callview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
         <!-- The main content view -->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -56,12 +62,6 @@
                     android:layout_gravity="center"
                     android:visibility="visible"/>
             </FrameLayout>
-
-            <im.vector.view.VectorPendingCallView
-                android:id="@+id/listView_pending_callview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
         </RelativeLayout>
     </LinearLayout>
 

@@ -35,14 +35,12 @@ import org.matrix.androidsdk.data.Room;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Pending call cell
  */
 public class VectorPendingCallView extends RelativeLayout {
-    //
+    // the de
     private MXSession mSession;
 
     private IMXCall mCall;
