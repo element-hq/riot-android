@@ -42,6 +42,7 @@
     <string name="delete">Delete</string>
     <string name="report_content">Report content</string>
     <string name="decline">Decline</string>
+    <string name="active_call">Active call</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
