@@ -573,7 +573,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         });
 
-        checkPendingCallView();
+        mVectorPendingCallView.checkPendingCall();
 
         // check if the GA accepts to send crash reports.
         // do not display this alert if there is an universal link management
@@ -1077,8 +1077,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     if (isActiveCall) {
                         // suspend the app if required
                         VectorApp.getInstance().onCallEnd();
-                        // hide the call button in the menu bar
-                        VectorHomeActivity.this.checkPendingCallView();
+                        // hide the view
+                        mVectorPendingCallView.checkPendingCall();
                         // clear call in progress notification
                         EventStreamService.getInstance().checkDisplayedNotification();
                         // and play a lovely sound
@@ -1100,19 +1100,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             return powerManager.isInteractive();
         } else {
             return powerManager.isScreenOn();
-        }
-    }
-
-    /**
-     * Display or hide the the call button.
-     * it is used to resume a call.
-     */
-    private void checkPendingCallView() {
-        if (CallViewActivity.getActiveCall() != null) {
-            mVectorPendingCallView.setVisibility(View.VISIBLE);
-            mVectorPendingCallView.start(mSession);
-        } else {
-            mVectorPendingCallView.setVisibility(View.GONE);
         }
     }
 }

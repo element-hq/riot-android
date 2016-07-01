@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/vector_green_color"
-    android:orientation="vertical">
+    android:background="@color/vector_green_color">
 
+    <!-- separator line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/vector_33_black"/>
+
+    <!-- call view -->
     <LinearLayout
         android:id="@+id/pending_call_main_view"
         android:layout_marginLeft="16dp"
@@ -13,11 +19,11 @@
         android:layout_height="72dp"
         android:orientation="horizontal">
 
+        <!-- call icon -->
         <RelativeLayout
             android:layout_gravity="center_vertical"
             android:layout_width="40dp"
             android:layout_height="40dp">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -26,6 +32,7 @@
                 android:layout_centerInParent="true" />
         </RelativeLayout>
 
+        <!-- call description -->
         <LinearLayout
             android:orientation="vertical"
             android:paddingLeft="16dp"
@@ -57,5 +64,4 @@
                 android:id="@+id/pending_call_status_textview"/>
         </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -90,6 +90,7 @@ import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -202,6 +203,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // medias sending helper
     private VectorRoomMediasSender mVectorRoomMediasSender;
+
+    // pending call
+    private VectorPendingCallView mVectorPendingCallView;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -404,6 +408,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mActionBarHeaderRoomAvatar = (ImageView) mRoomHeaderView.findViewById(R.id.avatar_img);
         mActionBarHeaderInviteMemberView = mRoomHeaderView.findViewById(R.id.action_bar_header_invite_members);
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
+        mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -541,6 +546,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMXCall call = CallViewActivity.getActiveCall();
+                if (null != call) {
+                    final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+
+                    VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            VectorRoomActivity.this.startActivity(intent);
+                        }
+                    });
+                }
             }
         });
 
@@ -808,6 +832,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                               }
                 );
             }
+        }
+
+        // the pending call view is only displayed with "active " room
+        if ((null == sRoomPreviewData) && (null == mEventId)) {
+            mVectorPendingCallView.checkPendingCall();
         }
 
         Log.d(LOG_TAG, "-- Resume the activity");
