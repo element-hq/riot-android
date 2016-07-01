@@ -18,6 +18,8 @@ package im.vector.fragments;
 
 import android.app.Activity;
 //
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.EditTextPreference;
@@ -51,6 +53,7 @@ import org.matrix.androidsdk.util.ContentManager;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.RoomAvatarPreference;
@@ -84,6 +87,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     public static final String PREF_KEY_ROOM_ACCESS_RULES_LIST = "roomAccessRulesList";
     public static final String PREF_KEY_ROOM_HISTORY_READABILITY_LIST = "roomReadHistoryRulesList";
     public static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
+    public static final String PREF_KEY_ROOM_LEAVE = "roomLeave";
 
     private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
 
@@ -247,6 +251,80 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomTagListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
+
+        // leave room
+        EditTextPreference leaveRoomPreference = (EditTextPreference)findPreference(PREF_KEY_ROOM_LEAVE);
+
+        if (null != leaveRoomPreference) {
+            leaveRoomPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // leave room
+                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            .setTitle(R.string.room_participants_leave_prompt_title)
+                            .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                            .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    displayLoadingView();
+
+                                    mRoom.leave(new ApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            if (null != getActivity()) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        getActivity().finish();
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                        private void onError(final String errorMessage) {
+                                            if (null != getActivity()) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        hideLoadingView(true);
+                                                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
+
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
+
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            onError(e.getLocalizedMessage());
+                                        }
+                                    });
+
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create()
+                            .show();
+                    return true;
+                }
+            });
+        }
+
 
         // init the room avatar: session and room
         mRoomPhotoAvatar.setConfiguration(mSession, mRoom);

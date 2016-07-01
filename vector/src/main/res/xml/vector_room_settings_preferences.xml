@@ -30,6 +30,10 @@
         android:key="muteNotificationsSwitch"
         android:title="@string/room_details_mute_notifs" />
 
+    <im.vector.preference.VectorCustomActionEditTextPreference
+        android:title="@string/leave"
+        android:key="roomLeave"/>
+
     <im.vector.preference.VectorPreferenceCategory
         android:key="prefCatAccessVisibility"
         android:title="@string/room_settings_prefcat_access_visibility_title">
