@@ -106,8 +106,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // i.e the user tries to send several files with VECTOR
     public static final String EXTRA_SHARED_INTENT_PARAMS = "VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS";
 
-    private static final boolean WAITING_VIEW_STOP = false;
-    private static final boolean WAITING_VIEW_START = true;
+    public static final boolean WAITING_VIEW_STOP = false;
+    public static final boolean WAITING_VIEW_START = true;
 
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
 

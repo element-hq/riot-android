@@ -188,7 +188,7 @@ public class VectorPendingCallView extends RelativeLayout {
      */
     private void onCallTerminated() {
         mCall = null;
-        // should hide from parent view
+        setVisibility(View.GONE);
     }
 
     /**
