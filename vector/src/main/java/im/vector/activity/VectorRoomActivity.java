@@ -100,6 +100,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Displays a single room with messages.
@@ -989,6 +991,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public void cancelSelectionMode() {
         mVectorMessageListFragment.cancelSelectionMode();
     }
+
+    private static Pattern mHashPattern = Pattern.compile("(#+)[^( |#)]", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * The antdown parser does not manage as expected the # to display header.
+     * It should only be displayed when there is a pending space after the # char.
+     * @param markdownString the text to check.
+     * @return the filtered string.
+     */
+    private static String checkHashes(String markdownString) {
+        if (TextUtils.isEmpty(markdownString) || !markdownString.contains("#")) {
+            return markdownString;
+        }
+
+        // search pattern with starting with # and finishing with # or space
+        // replace first character (#+) i.e #
+        return mHashPattern.matcher(markdownString).replaceAll("\\\\$0");
+    }
+
     /**
      * Send the editText text.
      */
@@ -1019,10 +1040,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
-        String html = mAndDown.markdownToHtml(modifiedBody);
+        String html = mAndDown.markdownToHtml(checkHashes(modifiedBody));
 
         if (null != html) {
-
             for(int index = 0; index < tmpUrlsValue.size(); index++) {
                 html = html.replace(tmpUrlsValue.get(index), urls.get(index));
             }
