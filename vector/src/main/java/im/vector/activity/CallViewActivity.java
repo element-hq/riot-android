@@ -16,6 +16,7 @@
 
 package im.vector.activity;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -57,7 +58,7 @@ import java.io.InputStream;
 /**
  * CallViewActivity is the call activity.
  */
-public class CallViewActivity extends FragmentActivity {
+public class CallViewActivity extends Activity {
     private static final String LOG_TAG = "CallViewActivity";
 
     public static final String EXTRA_MATRIX_ID = "CallViewActivity.EXTRA_MATRIX_ID";
@@ -561,7 +562,7 @@ public class CallViewActivity extends FragmentActivity {
 
         Log.d(LOG_TAG, "manageSubViews callState : " + callState);
 
-        // hide / show avatar
+        // video call => hide avatar,  audio call => show avatar
         ImageView avatarView = (ImageView)CallViewActivity.this.findViewById(R.id.call_other_member);
         if (null != avatarView) {
             avatarView.setVisibility((callState.equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) ? View.GONE : View.VISIBLE);

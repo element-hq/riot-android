@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="50"
                 android:layout_height="wrap_content"
-                android:text="@string/action_reject" />
+                android:text="@string/action_ignore" />
         </LinearLayout>
 
         <Button
@@ -78,7 +78,7 @@
             android:layout_marginRight="10dp"
             android:background="#FFF"
             android:scaleType="fitCenter"
-            android:layout_alignTop="@+id/call_state_text"
+            android:layout_alignTop="@id/call_state_text"
             android:layout_alignParentRight="true"
             />
 

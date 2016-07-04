@@ -1034,7 +1034,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         if ((null != sessionId) && (null != callId)) {
             // display the call activity only if the application is in background.
             if (isScreenOn()) {
-                final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
+                final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
 
                 intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, sessionId);
                 intent.putExtra(CallViewActivity.EXTRA_CALL_ID, callId);
