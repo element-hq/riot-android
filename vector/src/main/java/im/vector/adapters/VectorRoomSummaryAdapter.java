@@ -814,6 +814,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             separatorGroupView.setVisibility(View.VISIBLE);
             showMoreView.setVisibility(View.VISIBLE);
             actionClickArea.setVisibility(View.GONE);
+            unreadCountTxtView.setVisibility(View.GONE);
 
             if (mDirectoryGroupPosition == groupPosition) {
                 if (null == mPublicRooms) {
