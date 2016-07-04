@@ -52,7 +52,7 @@ import im.vector.ViewedRoomTracker;
 import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
-import im.vector.gcm.GCMRegistrationManager;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorUtils;
 
@@ -118,7 +118,7 @@ public class EventStreamService extends Service {
     private static EventStreamService mActiveEventStreamService = null;
 
     // the GCM manager
-    private GCMRegistrationManager mGcmRegistrationManager;
+    private GcmRegistrationManager mGcmRegistrationManager;
 
     /**
      * @return the event stream instance
@@ -524,7 +524,7 @@ public class EventStreamService extends Service {
         // detect if the polling thread must be started
         // i.e a session must be defined
         // and GCM disabled or GCM registration failed
-        if ((!mGcmRegistrationManager.useGCM() || mGcmRegistrationManager.usePollingThread()) && mGcmRegistrationManager.isBackgroundSyncAllowed()) {
+        if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForeground = true;
@@ -793,7 +793,7 @@ public class EventStreamService extends Service {
                     nm.notify(MSG_NOTIFICATION_ID, mLatestNotification);
 
                     // turn the screen on
-                    if (mGcmRegistrationManager.doNotificationsTurnScreenOn()) {
+                    if (mGcmRegistrationManager.turnScreenOn()) {
                         // turn the screen on for 3 seconds
                         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");

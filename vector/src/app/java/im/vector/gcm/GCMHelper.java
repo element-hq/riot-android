@@ -29,11 +29,11 @@ public class GCMHelper {
     private static final String LOG_TAG = "GCMHelper";
 
     /**
-     * Retrieve the GCM registration token.
+     * Retrieves the GCM registration token.
      * @param appContext the application context
      * @return the registration token.
      */
-    public static String getRegisrationToken(Context appContext) {
+    public static String getRegistrationToken(Context appContext) {
         String registrationToken;
 
         try {
@@ -46,10 +46,10 @@ public class GCMHelper {
 
             Log.d(LOG_TAG, "GCM Registration Token: " + registrationToken);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
             registrationToken = null;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
             registrationToken = null;
         }
 

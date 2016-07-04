@@ -25,7 +25,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.gcm.GCMRegistrationManager;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 
@@ -44,7 +44,7 @@ public class SplashActivity extends MXCActionBarActivity {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
     private Collection<MXSession> mSessions;
-    private GCMRegistrationManager mGCMRegistrationManager;
+    private GcmRegistrationManager mGCMRegistrationManager;
 
     private boolean mInitialSyncComplete = false;
     private boolean mPusherRegistrationComplete = false;
@@ -202,7 +202,7 @@ public class SplashActivity extends MXCActionBarActivity {
         mPusherRegistrationComplete = mGCMRegistrationManager.isGCMRegistred();
 
         if (!mPusherRegistrationComplete) {
-            mGCMRegistrationManager.registerToGCM(new GCMRegistrationManager.GCMRegistrationListener() {
+            mGCMRegistrationManager.registerToGCM(new GcmRegistrationManager.GCMRegistrationListener() {
                 /**
                  * Common behaviour.
                  */

@@ -20,11 +20,11 @@ import android.content.Context;
 public class GCMHelper {
 
     /**
-     * Retrieve the GCM registration token.
+     * Retrieves the GCM registration token.
      * @param appContext the application context
      * @return the registration token.
      */
-    public static String getRegisrationToken(Context appContext) {
+    public static String getRegistrationToken(Context appContext) {
         return null;
     }
 }

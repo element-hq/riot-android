@@ -29,7 +29,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
-import im.vector.gcm.GCMRegistrationManager;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 
@@ -109,7 +109,7 @@ public class VectorApp extends Application {
      * Suspend background threads.
      */
     private void suspendApp() {
-        GCMRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGCMRegistrationManager();
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGCMRegistrationManager();
 
         // suspend the events thread if the client uses GCM
         if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasRegistrationToken())) {
@@ -196,7 +196,7 @@ public class VectorApp extends Application {
 
                 // try to perform a GCM registration if it failed
                 // or if the GCM server generated a new push key
-                GCMRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGCMRegistrationManager();
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGCMRegistrationManager();
 
                 if (null != gcmRegistrationManager) {
                     gcmRegistrationManager.checkRegistrations();

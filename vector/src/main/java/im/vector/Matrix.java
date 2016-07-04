@@ -48,7 +48,7 @@ import im.vector.activity.CallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
-import im.vector.gcm.GCMRegistrationManager;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
 import im.vector.util.RageShake;
@@ -76,7 +76,7 @@ public class Matrix {
     private ArrayList<MXSession> mMXSessions;
 
     // GCM registration manager
-    private GCMRegistrationManager mGCMRegistrationManager;
+    private GcmRegistrationManager mGCMRegistrationManager;
 
     // list of store : some sessions or activities use tmp stores
     // provide an storage to exchange them
@@ -110,7 +110,7 @@ public class Matrix {
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
-                GCMRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
+                GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
                 // check if the GCM is not available
                 if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
@@ -234,7 +234,7 @@ public class Matrix {
         mNetworkConnectivityReceiver = new NetworkConnectivityReceiver();
         appContext.registerReceiver(mNetworkConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
-        mGCMRegistrationManager = new GCMRegistrationManager(mAppContext);
+        mGCMRegistrationManager = new GcmRegistrationManager(mAppContext);
     }
 
     /**
@@ -597,7 +597,7 @@ public class Matrix {
     /**
      * @return the GCM registration manager
      */
-    public GCMRegistrationManager getSharedGCMRegistrationManager() {
+    public GcmRegistrationManager getSharedGCMRegistrationManager() {
         return mGCMRegistrationManager;
     }
 
