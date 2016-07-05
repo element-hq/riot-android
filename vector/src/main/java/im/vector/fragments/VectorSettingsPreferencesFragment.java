@@ -483,7 +483,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
                     switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
                 } else if (resourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
-                    switchPreference.setChecked(gcmMgr.turnScreenOn());
+                    switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
                     switchPreference.setChecked(preferences.getBoolean(resourceText, false));
@@ -616,7 +616,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
 
         if (fResourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
-            gcmMgr.setTurnScreenOn(newValue);
+            gcmMgr.setScreenTurnedOn(newValue);
             return;
         }
 

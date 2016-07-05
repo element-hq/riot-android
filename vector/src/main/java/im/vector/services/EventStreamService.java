@@ -793,7 +793,7 @@ public class EventStreamService extends Service {
                     nm.notify(MSG_NOTIFICATION_ID, mLatestNotification);
 
                     // turn the screen on
-                    if (mGcmRegistrationManager.turnScreenOn()) {
+                    if (mGcmRegistrationManager.isScreenTurnedOn()) {
                         // turn the screen on for 3 seconds
                         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");

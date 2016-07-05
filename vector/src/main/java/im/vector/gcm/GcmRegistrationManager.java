@@ -804,7 +804,7 @@ public final class GcmRegistrationManager {
     /**
      * @return true if the notifications should turn the screen on for 3 seconds.
      */
-    public boolean turnScreenOn() {
+    public boolean isScreenTurnedOn() {
         return getGcmSharedPreferences().getBoolean(PREFS_TURN_SCREEN_ON, false);
     }
 
@@ -812,7 +812,7 @@ public final class GcmRegistrationManager {
      * Update the screen on management when a notification is received.
      * @param flag true to enable the device notifications.
      */
-    public void setTurnScreenOn(boolean flag) {
+    public void setScreenTurnedOn(boolean flag) {
         getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
                 .apply();
