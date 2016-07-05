@@ -76,7 +76,7 @@ public class RageShake implements SensorEventListener {
         String model = Build.MODEL.trim();
         // S3, S1(Brazil), Galaxy Pocket
         if ("GT-I9300".equals(model) || "GT-I9000B".equals(model) || "GT-S5300B".equals(model)) {
-            threshold = 20.0f;
+            mThreshold = 20.0f;
         }
     }
 
@@ -368,8 +368,8 @@ public class RageShake implements SensorEventListener {
         // don't care
     }
 
-    private static long mTimeToNextShakeMs = 10 * 1000;
-    private static long mIntervalNanos = 3L * 1000L * 1000L; // 3 sec
+    private static final long mTimeToNextShakeMs = 10 * 1000;
+    private static final long mIntervalNanos = 3L * 1000L * 1000L; // 3 sec
     private static float mThreshold = 35.0f;
 
     private long mLastUpdate = 0;
