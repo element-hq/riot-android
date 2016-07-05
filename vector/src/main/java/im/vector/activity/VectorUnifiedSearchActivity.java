@@ -424,7 +424,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
             } else {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                CommonActivityUtils.displayToast(this, "Due to missing permissions, some features may be missing..");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }
             ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
         }
