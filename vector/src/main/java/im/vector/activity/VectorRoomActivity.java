@@ -1356,7 +1356,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if(isCameraPermissionGranted){
                 launchCamera();
             } else {
-                CommonActivityUtils.displayToast(this, "Sorry.. Action not performed due to missing permissions");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }
         } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
            if( CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
