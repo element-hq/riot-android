@@ -644,10 +644,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         switch(item.getItemId()) {
             // search in rooms content
             case R.id.ic_action_search_room:
-                // Check permission to access contacts
-                if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_SEARCH_ROOM, this)){
-                    startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_GRANTED);
-                }
+                final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorUnifiedSearchActivity.class);
+                VectorHomeActivity.this.startActivity(searchIntent);
                 break;
 
             // search in rooms content
@@ -663,35 +661,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         return retCode;
     }
 
-    /**
-     * Start the VectorUnifiedSearchActivity.
-     * See {@link #onRequestPermissionsResult(int, String[], int[])}
-     * @param aIsContactPermissionGranted true to indicate the contact permission is granted, false otherwise
-     */
-    private void startUnifiedSearchActivity(boolean aIsContactPermissionGranted) {
-        // launch the "search in rooms" activity
-        final Intent searchIntent = new Intent(VectorHomeActivity.this, VectorUnifiedSearchActivity.class);
-        searchIntent.putExtra(CommonActivityUtils.KEY_PERMISSIONS_READ_CONTACTS,aIsContactPermissionGranted);
-        VectorHomeActivity.this.startActivity(searchIntent);
-    }
-
     @Override
     public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_SEARCH_ROOM){
-            if(Manifest.permission.READ_CONTACTS.equals(aPermissions[0])) {
-                if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
-                    Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                    startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_GRANTED);
-                } else {
-                    Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                    CommonActivityUtils.displayToast(this, "Due to missing permissions, some features may be missing..");
-                    startUnifiedSearchActivity(CommonActivityUtils.PERMISSIONS_DENIED);
-                }
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
-            } else {
-                Log.w(LOG_TAG, "## onRequestPermissionsResult(): unexpected permission = " + aPermissions[0]);
-            }
-        } else if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
+        if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
             if(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
                 startCall(mIncomingCallSessionId,mIncomingCallId);
             } else if(null != mIncomingCall) {

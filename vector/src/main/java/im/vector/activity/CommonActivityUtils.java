@@ -141,13 +141,10 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
-    public static final int REQUEST_CODE_PERMISSION_SEARCH_ROOM = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
-
-    // start activity intent parameters
-    public static final String KEY_PERMISSIONS_READ_CONTACTS = "KEY_PERMISSIONS_READ_CONTACTS";
-
+    
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
             // stop the service
@@ -531,7 +528,7 @@ public class CommonActivityUtils {
         } else if((REQUEST_CODE_PERMISSION_TAKE_PHOTO!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_SEARCH_ROOM !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
                 ) {
