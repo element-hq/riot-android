@@ -60,7 +60,6 @@ import im.vector.MyPresenceManager;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
