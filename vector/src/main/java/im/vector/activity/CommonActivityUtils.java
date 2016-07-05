@@ -162,7 +162,7 @@ public class CommonActivityUtils {
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
+            Matrix.getInstance(activity).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
             Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
@@ -333,7 +333,7 @@ public class CommonActivityUtils {
         }
 
         // reset the GCM
-        Matrix.getInstance(activity).getSharedGcmRegistrationManager().reset();
+        Matrix.getInstance(activity).getSharedGCMRegistrationManager().reset();
 
         // clear credentials
         Matrix.getInstance(activity).clearSessions(activity, true);

@@ -109,10 +109,10 @@ public class VectorApp extends Application {
      * Suspend background threads.
      */
     private void suspendApp() {
-        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGcmRegistrationManager();
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(VectorApp.this).getSharedGCMRegistrationManager();
 
         // suspend the events thread if the client uses GCM
-        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasPushKey())) {
+        if (!gcmRegistrationManager.isBackgroundSyncAllowed() || (gcmRegistrationManager.useGCM() && gcmRegistrationManager.hasRegistrationToken())) {
             Log.d(LOG_TAG, "suspendApp ; pause the event stream");
             CommonActivityUtils.pauseEventStream(VectorApp.this);
         } else {
@@ -196,10 +196,10 @@ public class VectorApp extends Application {
 
                 // try to perform a GCM registration if it failed
                 // or if the GCM server generated a new push key
-                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGcmRegistrationManager();
+                GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(this).getSharedGCMRegistrationManager();
 
                 if (null != gcmRegistrationManager) {
-                    gcmRegistrationManager.checkPusherRegistration(this);
+                    gcmRegistrationManager.checkRegistrations();
                 }
             }
 
