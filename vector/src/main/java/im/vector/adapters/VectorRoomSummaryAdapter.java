@@ -777,7 +777,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         int roomNameBlack = mContext.getResources().getColor(R.color.vector_text_black_color);
         int fushiaColor = mContext.getResources().getColor(R.color.vector_fuchsia_color);
-        int vectorDarkGreyColor = mContext.getResources().getColor(R.color.vector_4d_gray);
         int vectorDefaultTimeStampColor = mContext.getResources().getColor(R.color.vector_0_54_black_color);
         int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
         int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
@@ -939,6 +938,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     }
                 }
             });
+
+            // display an exclamation mark like the webclient
+            unreadCountTxtView.setVisibility(View.VISIBLE);
+            unreadCountTxtView.setText("!");
+            unreadCountTxtView.setTypeface(null, Typeface.BOLD);
+            setUnreadBackground(unreadCountTxtView, fushiaColor);
         } else {
 
             final boolean isFavorite = groupPosition == mFavouritesGroupPosition;
