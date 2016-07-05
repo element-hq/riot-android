@@ -912,8 +912,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
 
         bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);
-        timestampTxtView.setVisibility((isInvited || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
-        actionImageView.setVisibility((isInvited || mIsSearchMode) ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(isInvited ? View.VISIBLE : View.GONE);
 
         final String fRoomId = childRoomSummary.getRoomId();
@@ -944,6 +942,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             unreadCountTxtView.setText("!");
             unreadCountTxtView.setTypeface(null, Typeface.BOLD);
             setUnreadBackground(unreadCountTxtView, fushiaColor);
+            timestampTxtView.setVisibility(View.GONE);
+            actionImageView.setVisibility(View.GONE);
         } else {
 
             final boolean isFavorite = groupPosition == mFavouritesGroupPosition;
@@ -956,6 +956,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     displayPopupMenu(childRoom, actionView, isFavorite, isLowPrior);
                 }
             });
+
+            timestampTxtView.setVisibility(mIsSearchMode ? View.INVISIBLE : View.VISIBLE);
+            actionImageView.setVisibility(mIsSearchMode ? View.INVISIBLE : View.VISIBLE);
         }
 
         separatorView.setVisibility(isLastChild ? View.GONE : View.VISIBLE);
