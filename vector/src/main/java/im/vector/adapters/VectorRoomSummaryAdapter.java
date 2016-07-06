@@ -1092,6 +1092,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         return displayNameRetValue;
     }
 
+    /**
+     * Retrieves the text to display for a RoomSummary.
+     * @param aChildRoomSummary the roomSummary.
+     * @return the text to display.
+     */
     private CharSequence getChildMessageToDisplay(RoomSummary aChildRoomSummary) {
         CharSequence messageToDisplayRetValue=null;
         EventDisplay eventDisplay;
