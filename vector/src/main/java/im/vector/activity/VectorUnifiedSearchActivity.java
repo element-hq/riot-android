@@ -33,7 +33,6 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
-import im.vector.Manifest;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.contacts.ContactsManager;
