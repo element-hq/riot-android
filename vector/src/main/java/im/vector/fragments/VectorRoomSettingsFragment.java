@@ -92,6 +92,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     public static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
     public static final String PREF_KEY_ROOM_LEAVE = "roomLeave";
     public static final String PREF_KEY_ROOM_INTERNAL_ID = "roomInternalId";
+    public static final String PREF_KEY_ADDRESSES = "addresses";
 
     private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
 

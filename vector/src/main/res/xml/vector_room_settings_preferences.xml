@@ -66,8 +66,20 @@
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceCategory
-        android:key="@string/room_settings_advanced"
-        android:title="@string/room_settings_advanced">
+        android:key="addresses"
+        android:title="@string/room_settings_addresses_title">
+
+        <im.vector.preference.AddressPreference
+            android:title="@string/settings_profile_picture"
+            android:key="matrixId">
+        </im.vector.preference.AddressPreference>
+
+
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceCategory
+        android:key="@string/room_settings_advanced_title"
+        android:title="@string/room_settings_advanced_title">
 
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/room_settings_room_internal_id"

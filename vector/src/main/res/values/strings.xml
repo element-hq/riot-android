@@ -641,8 +641,9 @@
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
     <string name="room_settings_prefcat_access_visibility_title">Access and visibility</string>
-    <string name="room_settings_advanced">Advanced</string>
-    <string name="room_settings_room_internal_id">Room\'s internal ID</string>
+    <string name="room_settings_advanced_title">Advanced</string>
+    <string name="room_settings_room_internal_id">This room\'s internal ID</string>
+    <string name="room_settings_addresses_title">Addresses</string>
 
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
