@@ -27,8 +27,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -60,7 +62,6 @@ import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
-import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
@@ -100,7 +101,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -163,7 +163,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private String mDefaultTopic;
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
-    private MXMediasCache mMediasCache;
 
     private ImageButton mSendButton;
     private ImageButton mAttachmentsButton;
@@ -504,7 +503,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 };
 
 
-                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, VectorRoomActivity.this.getResources().getColor(R.color.vector_text_black_color));
+                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
                 fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
                     @Override
                     public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
@@ -591,7 +590,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         CommonActivityUtils.resumeEventStream(this);
 
         mRoom = mSession.getDataHandler().getRoom(roomId, false);
-        mMediasCache = Matrix.getInstance(this).getMediasCache();
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorMessageListFragment = (VectorMessageListFragment) fm.findFragmentByTag(TAG_FRAGMENT_MATRIX_MESSAGE_LIST);
@@ -606,7 +604,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
         }
 
-        mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, mMediasCache);
+        mVectorRoomMediasSender = new VectorRoomMediasSender(this, mVectorMessageListFragment, Matrix.getInstance(this).getMediasCache());
         mVectorRoomMediasSender.onRestoreInstanceState(savedInstanceState);
 
         manageRoomPreview();
@@ -992,7 +990,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorMessageListFragment.cancelSelectionMode();
     }
 
-    private static Pattern mHashPattern = Pattern.compile("(#+)[^( |#)]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern mHashPattern = Pattern.compile("(#+)[^( |#)]", Pattern.CASE_INSENSITIVE);
 
     /**
      * The antdown parser does not manage as expected the # to display header.
@@ -1021,7 +1019,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         List<String> urls = VectorUtils.listURLs(body);
         List<String> tmpUrlsValue = new ArrayList<>();
 
-        String modifiedBody = new String(body);
+        String modifiedBody = body;
 
         if (urls.size() > 0) {
             // sort by length -> largest before
@@ -1307,7 +1305,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Launch the room details activity with a selected tab.
      * @param selectedTab the selected tab index.
      */
-    public void launchRoomDetails(int selectedTab) {
+    private void launchRoomDetails(int selectedTab) {
         if ((null != mRoom) && (null != mRoom.getMember(mSession.getMyUserId()))) {
             enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
@@ -1346,7 +1344,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
            if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
                boolean isCameraPermissionGranted = false;
 
@@ -1394,7 +1392,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     /**
      * Display UI buttons according to user input text.
      */
-    public void manageSendMoreButtons() {
+    private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
 
         mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
@@ -1430,7 +1428,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Append a text in the message editor.
      * @param text the text to append
      */
-    public void appendInTextEditor(String text) {
+    private void appendInTextEditor(String text) {
         if (null != text) {
             if (TextUtils.isEmpty(mEditText.getText())) {
                 mEditText.append(text + ": ");
@@ -1911,7 +1909,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                mToolbar.setBackgroundColor(getResources().getColor(R.color.vector_green_color));
+                mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.vector_green_color));
             }
         }
     }
