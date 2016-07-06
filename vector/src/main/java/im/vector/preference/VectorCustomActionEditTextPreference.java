@@ -18,13 +18,35 @@ package im.vector.preference;
 
 import android.content.Context;
 import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-// create an EditTextPreference with a dedicated click method
+// create an EditTextPreference with a dedicated click/long click methods.
 // Android displays by an edit text dialog by default
 // With this class, a custom behaviour can be designed.
 public class VectorCustomActionEditTextPreference extends EditTextPreference {
+
+    /**
+     * Interface definition for a callback to be invoked when a preference is
+     * long clicked.
+     */
+    public interface OnPreferenceLongClickListener {
+        /**
+         * Called when a Preference has been clicked.
+         *
+         * @param preference The Preference that was clicked.
+         * @return True if the click was handled.
+         */
+        boolean onPreferenceLongClick(Preference preference);
+    }
+
+    // long press listener
+    private OnPreferenceLongClickListener mOnClickLongListener;
 
     public VectorCustomActionEditTextPreference(Context context) {
         super(context);
@@ -38,6 +60,50 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
         super(context, attrs, defStyle);
     }
 
+    @Override
+    protected View onCreateView(ViewGroup parent) {
+        View res = super.onCreateView(parent);
+
+        if (parent instanceof ListView) {
+            ((ListView) parent).setOnItemLongClickListener(
+                    new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (null != getOnPreferenceLongClickListener()) {
+                                getOnPreferenceLongClickListener().onPreferenceLongClick(VectorCustomActionEditTextPreference.this);
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    });
+        }
+
+        return res;
+    }
+
+    /**
+     * Sets the callback to be invoked when this Preference is long clicked.
+     *
+     * @param onPreferenceLongClickListener The callback to be invoked.
+     */
+    public void setOnPreferenceLongClickListener(OnPreferenceLongClickListener onPreferenceLongClickListener) {
+        mOnClickLongListener = onPreferenceLongClickListener;
+    }
+
+    /**
+     * Returns the callback to be invoked when this Preference is long clicked.
+     *
+     * @return The callback to be invoked.
+     */
+    public OnPreferenceLongClickListener getOnPreferenceLongClickListener() {
+        return mOnClickLongListener;
+    }
+
+    /**
+     * Override performClick to bypass the dialogPreference behaviour.
+     * @param preferenceScreen the preferenceScreen.
+     */
     public void performClick(PreferenceScreen preferenceScreen) {
         // call only the click listener
         if (getOnPreferenceClickListener() != null) {
