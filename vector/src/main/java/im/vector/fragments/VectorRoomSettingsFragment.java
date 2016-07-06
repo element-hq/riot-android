@@ -19,6 +19,9 @@ package im.vector.fragments;
 import android.app.Activity;
 //
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -88,6 +91,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     public static final String PREF_KEY_ROOM_HISTORY_READABILITY_LIST = "roomReadHistoryRulesList";
     public static final String PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH = "muteNotificationsSwitch";
     public static final String PREF_KEY_ROOM_LEAVE = "roomLeave";
+    public static final String PREF_KEY_ROOM_INTERNAL_ID = "roomInternalId";
 
     private static final String UNKNOWN_VALUE = "UNKNOWN_VALUE";
 
@@ -251,6 +255,25 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomTagListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
+
+        // display the room Id.
+        EditTextPreference roomInternalIdPreference = (EditTextPreference)findPreference(PREF_KEY_ROOM_INTERNAL_ID);
+        if (null != roomInternalIdPreference) {
+            roomInternalIdPreference.setSummary(mRoom.getRoomId());
+
+            roomInternalIdPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+
+                    ClipData clip = ClipData.newPlainText("", mRoom.getRoomId());
+                    clipboard.setPrimaryClip(clip);
+
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+        }
 
         // leave room
         EditTextPreference leaveRoomPreference = (EditTextPreference)findPreference(PREF_KEY_ROOM_LEAVE);

@@ -65,4 +65,14 @@
             android:entryValues="@array/room_read_history_rules_values" />
     </im.vector.preference.VectorPreferenceCategory>
 
+    <im.vector.preference.VectorPreferenceCategory
+        android:key="@string/room_settings_advanced"
+        android:title="@string/room_settings_advanced">
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/room_settings_room_internal_id"
+            android:key="roomInternalId"/>
+
+    </im.vector.preference.VectorPreferenceCategory>
+
 </PreferenceScreen>
