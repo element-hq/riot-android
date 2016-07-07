@@ -311,7 +311,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         } else if (action == R.id.ic_action_vector_permalink) {
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            String link = "https://vector.im/develop/#/room/" + event.roomId + "/" + event.eventId;
+            String link = "https://vector.im/beta/#/room/" + event.roomId + "/" + event.eventId;
 
             // the $ character is not as a part of an url so escape it.
             ClipData clip = ClipData.newPlainText("", link.replace("$","%24"));

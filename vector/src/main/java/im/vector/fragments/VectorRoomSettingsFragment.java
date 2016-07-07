@@ -216,6 +216,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         Log.d(LOG_TAG, "## onLiveEvent() event = " + event.type);
                         updateUi();
                     }
+
+
+                    // aliases
+                    if (Event.EVENT_TYPE_STATE_CANONICAL_ALIAS.equals(event.type)
+                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
+                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)
+                            )
+                    {
+                        Log.d(LOG_TAG, "## onLiveEvent() refresh the addresses list");
+                        refreshAddresses();
+                    }
+
                 }
             });
         }
@@ -1251,6 +1263,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 @Override
                 public void run() {
                     Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    hideLoadingView(false);
                     refreshAddresses();
                 }
             });
@@ -1272,9 +1285,13 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     };
 
-
+    /**
+     * Manage the long click on an address.
+     * @param roomAlias the room alias.
+     * @param anchorView the popup menu anchor view.
+     */
     @SuppressLint("NewApi")
-    private void onAddressLongClick(final ArrayList<String> aliases,  final String roomAlias, final View anchorView) {
+    private void onAddressLongClick(final String roomAlias, final View anchorView) {
         Context context = getActivity();
         final PopupMenu popup = (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(context, anchorView, Gravity.END) : new PopupMenu(context, anchorView);
 
@@ -1303,21 +1320,19 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             menu.findItem(R.id.ic_action_vector_delete_alias).setVisible(false);
         }
 
-        // hide some entries if required
-
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final MenuItem item) {
                 //
                 if (item.getItemId() == R.id.ic_action_vector_delete_alias) {
-                    aliases.remove(roomAlias);
-                    mRoom.updateAliases(aliases, mAliasUpdatesCallback);
+                    displayLoadingView();
+                    mRoom.removeAlias(roomAlias, mAliasUpdatesCallback);
                 } else {
                     String text = roomAlias;
 
                     if (item.getItemId() == R.id.ic_action_vector_permalink) {
-                        text = "https://vector.im/develop/#/room/" + text;
+                        text = "https://vector.im/beta/#/room/" + text;
                     }
 
                     ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -1352,38 +1367,44 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         return canUpdateAliases;
     }
 
-
     /**
      * Refresh the addresses section
      */
     private void refreshAddresses() {
-        List<String> roomAliases = mRoom.getLiveState().aliases;
-
-        // get the aliases
-        final ArrayList<String> fAliases;
-        if (null == roomAliases) {
-            fAliases = new ArrayList<>();
-        } else {
-            fAliases = new ArrayList<>(roomAliases);
-        }
-
-        // canonical alias
+        final String localSuffix = ":" + mSession.getHomeserverConfig().getHomeserverUri().getHost();
         final String canonicalAlias = mRoom.getLiveState().alias;
+        final ArrayList<String> aliases = new ArrayList<>(mRoom.getAliases());
 
         // remove the displayed preferences
         while (mAddressesSettingsCategory.getPreferenceCount() > 0) {
             mAddressesSettingsCategory.removePreference(mAddressesSettingsCategory.getPreference(0));
         }
 
-        if (0 == fAliases.size()) {
+        if (0 == aliases.size()) {
             AddressPreference preference = new AddressPreference(getActivity());
             preference.setTitle(getString(R.string.room_settings_addresses_no_local_addresses));
             preference.setKey(NO_LOCAL_ADDRESS_PREFERENCE_KEY);
             mAddressesSettingsCategory.addPreference(preference);
         } else {
+            ArrayList<String> localAliases  = new ArrayList<>();
+            ArrayList<String> remoteAliases  = new ArrayList<>();
+
+            for(String alias : aliases) {
+                if (alias.endsWith(localSuffix)) {
+                    localAliases.add(alias);
+                } else {
+                    remoteAliases.add(alias);
+                }
+            }
+
+            // the local aliases are displayed first in the
+            aliases.clear();
+            aliases.addAll(localAliases);
+            aliases.addAll(remoteAliases);
+
             int index = 0;
 
-            for (String alias : fAliases) {
+            for (String alias : aliases) {
                 AddressPreference preference = new AddressPreference(getActivity());
                 preference.setTitle(alias);
                 preference.setKey(ADDRESSES_PREFERENCE_KEY_BASE + index);
@@ -1395,7 +1416,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-
                         if (TextUtils.equals(fAlias, canonicalAlias)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setMessage(R.string.room_details_addresses_disable_main_address_prompt_msg);
@@ -1429,7 +1449,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 preference.setOnPreferenceLongClickListener( new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
-                        onAddressLongClick(fAliases, fAlias, fAddressPreference.getMainIconView());
+                        onAddressLongClick(fAlias, fAddressPreference.getMainIconView());
                         return true;
                     }
                 });
@@ -1468,13 +1488,12 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                                     AlertDialog dialog = builder.create();
                                     dialog.show();
-                                } else if (fAliases.indexOf(newAddress) < 0) {
+                                } else if (aliases.indexOf(newAddress) < 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             displayLoadingView();
-                                            fAliases.add(newAddress);
-                                            mRoom.updateAliases(fAliases, mAliasUpdatesCallback);
+                                            mRoom.addAlias(newAddress, mAliasUpdatesCallback);
                                         }
                                     });
                                 }
