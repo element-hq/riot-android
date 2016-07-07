@@ -657,6 +657,15 @@
     <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
     <string name="room_settings_tag_pref_entry_value_none">none</string>
 
+    <!-- Room settings: addresses -->
+    <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
+    <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
+    <string name="room_details_addresses_disable_main_address_prompt_msg">This is currently the main address of this room. Are you sure you don\'t want to specify a main address?"</string>
+
+
     <!-- Room settings: WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>

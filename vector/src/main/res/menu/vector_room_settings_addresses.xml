@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ic_action_vector_delete_alias"
+        android:icon="@drawable/ic_material_delete"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_copy_alias"
+        android:icon="@drawable/ic_material_copy"
+        android:title="@string/copy"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_permalink"
+        android:icon="@drawable/ic_material_link_black"
+        android:title="@string/permalink"
+        app:showAsAction="never" />
+</menu>

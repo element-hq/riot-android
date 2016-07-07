@@ -29,6 +29,7 @@ public class AddressPreference extends VectorCustomActionEditTextPreference {
     // members
     protected Context mContext;
     protected ImageView mMainAddressIconView;
+    protected int mMainIconVisibility = View.GONE;
 
     public AddressPreference(Context context) {
         super(context);
@@ -48,16 +49,29 @@ public class AddressPreference extends VectorCustomActionEditTextPreference {
     @Override
     protected View onCreateView(ViewGroup parent) {
         setWidgetLayoutResource(R.layout.vector_settings_address_preference);
-        View layout = super.onCreateView(parent);
-        mMainAddressIconView = (ImageView)layout.findViewById(R.id.main_address_icon_view);
-        return layout;
+        View view = super.onCreateView(parent);
+        mMainAddressIconView = (ImageView)view.findViewById(R.id.main_address_icon_view);
+        mMainAddressIconView.setVisibility(mMainIconVisibility);
+        return view;
     }
 
     /**
      * Set the main address icon visibility.
      * @param visibility the new visibility
      */
+    @SuppressWarnings("ResourceType")
     public void setMainIconVisibility(int visibility) {
-        mMainAddressIconView.setVisibility(visibility);
+        mMainIconVisibility = visibility;
+
+        if (null != mMainAddressIconView) {
+            mMainAddressIconView.setVisibility(mMainIconVisibility);
+        }
+    }
+
+    /**
+     * @return the main icon view.
+     */
+    public View getMainIconView() {
+        return mMainAddressIconView;
     }
 }

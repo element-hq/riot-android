@@ -62,24 +62,29 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
 
     @Override
     protected View onCreateView(ViewGroup parent) {
-        View res = super.onCreateView(parent);
+        View view = super.onCreateView(parent);
 
-        if (parent instanceof ListView) {
-            ((ListView) parent).setOnItemLongClickListener(
-                    new AdapterView.OnItemLongClickListener() {
-                        @Override
-                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                            if (null != getOnPreferenceLongClickListener()) {
-                                getOnPreferenceLongClickListener().onPreferenceLongClick(VectorCustomActionEditTextPreference.this);
-                                return true;
-                            }
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (null != getOnPreferenceLongClickListener()) {
+                    return getOnPreferenceLongClickListener().onPreferenceLongClick(VectorCustomActionEditTextPreference.this);
+                }
+                return false;
+            }
+        });
 
-                            return false;
-                        }
-                    });
-        }
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call only the click listener
+                if (getOnPreferenceClickListener() != null) {
+                    getOnPreferenceClickListener().onPreferenceClick(VectorCustomActionEditTextPreference.this);
+                }
+            }
+        });
 
-        return res;
+        return view;
     }
 
     /**
@@ -98,16 +103,5 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
      */
     public OnPreferenceLongClickListener getOnPreferenceLongClickListener() {
         return mOnClickLongListener;
-    }
-
-    /**
-     * Override performClick to bypass the dialogPreference behaviour.
-     * @param preferenceScreen the preferenceScreen.
-     */
-    public void performClick(PreferenceScreen preferenceScreen) {
-        // call only the click listener
-        if (getOnPreferenceClickListener() != null) {
-            getOnPreferenceClickListener().onPreferenceClick(this);
-        }
     }
 }
