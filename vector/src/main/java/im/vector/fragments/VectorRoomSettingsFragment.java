@@ -1403,9 +1403,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         final ArrayList<String> aliases = new ArrayList<>(mRoom.getAliases());
 
         // remove the displayed preferences
-        while (mAddressesSettingsCategory.getPreferenceCount() > 0) {
-            mAddressesSettingsCategory.removePreference(mAddressesSettingsCategory.getPreference(0));
-        }
+        mAddressesSettingsCategory.removeAll();
 
         if (0 == aliases.size()) {
             AddressPreference preference = new AddressPreference(getActivity());
