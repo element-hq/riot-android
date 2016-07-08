@@ -306,13 +306,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             roomInternalIdPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-
-                    ClipData clip = ClipData.newPlainText("", mRoom.getRoomId());
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-                    return false;
+                    VectorUtils.copyToClipboard(getActivity(), mRoom.getRoomId());
+                  return false;
                 }
             });
         }
@@ -1355,19 +1350,10 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 if (item.getItemId() == R.id.ic_action_vector_delete_alias) {
                     displayLoadingView();
                     mRoom.removeAlias(roomAlias, mAliasUpdatesCallback);
+                } else if (item.getItemId() == R.id.ic_action_vector_permalink) {
+                    VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(roomAlias, null));
                 } else {
-                    String text = roomAlias;
-
-                    if (item.getItemId() == R.id.ic_action_vector_permalink) {
-                        text = "https://vector.im/beta/#/room/" + text;
-                    }
-
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-
-                    ClipData clip = ClipData.newPlainText("", text);
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                    VectorUtils.copyToClipboard(getActivity(), roomAlias);
                 }
 
                 return true;

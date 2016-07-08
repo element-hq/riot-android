@@ -757,11 +757,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", viewHolder.mMemberNameTextView.getText());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-
+                VectorUtils.copyToClipboard(mContext, viewHolder.mMemberNameTextView.getText());
                 return true;
             }
         };
