@@ -505,10 +505,6 @@
 
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
-    <string name="room_details_mute_notifs">Mute Notifications</string>
-    <string name="room_details_photo">Room Photo</string>
-    <string name="room_details_room_name">Room Name</string>
-    <string name="room_details_topic">Topic</string>
     <string name="room_details_people">People</string>
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
@@ -521,6 +517,10 @@
     <string name="malformed_id">Malformed ID. Should be an email address or a Matrix ID like \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITED</string>
     <string name="room_details_people_present_group_name">JOINED</string>
+
+    <!-- Room events -->
+    <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
+    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
@@ -606,10 +606,8 @@
     <string name="settings_second">second</string>
     <string name="settings_seconds">seconds</string>
 
-
     <string name="settings_version">Version</string>
     <string name="settings_term_conditions">Terms &amp; conditions</string>
-    <string name="settings_directory_visibility">List this room in room directory</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_room_privacy_label">Privacy</string>
 
@@ -633,17 +631,18 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
-    <string name="room_settings_pref_category">Room settings</string>
+
+
+    <!-- Room Settings -->
+
+    <!-- room global settings-->
     <string name="room_settings_room_photo">Room Photo</string>
-
-    <string name="room_settings_tag_pref_title">Room Tag</string>
+    <string name="room_settings_photo">Room Photo</string>
+    <string name="room_settings_room_name">Room Name</string>
+    <string name="room_settings_topic">Topic</string>
+    <string name="room_settings_room_tag">Room Tag</string>
     <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
-    <string name="room_settings_room_access_rules_pref_title">Room Access</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
-    <string name="room_settings_prefcat_access_visibility_title">Access and visibility</string>
-
-    <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
+    <string name="room_settings_mute_notifs">Mute Notifications</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
@@ -654,7 +653,15 @@
     <string name="room_settings_tag_pref_entry_value_low_priority">low</string>
     <string name="room_settings_tag_pref_entry_value_none">none</string>
 
-    <!-- Room settings: WHO CAN READ HISTORY? (read rule) -->
+    <!-- room settings : access and visibility -->
+    <string name="room_settings_category_access_visibility_title">Access and visibility</string>
+    <string name="room_settings_directory_visibility">List this room in room directory</string>
+    <string name="room_settings_room_access_rules_pref_title">Room Access</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+
+    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Members only (since they were invited)</string>
@@ -665,12 +672,27 @@
     <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
+    <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
     <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
 
-    <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
-    <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
+
+    <!-- advanced -->
+    <string name="room_settings_category_advanced_title">Advanced</string>
+    <string name="room_settings_room_internal_id">This room\'s internal ID</string>
+    <string name="room_settings_addresses_pref_title">Addresses</string>
+
+
+    <!-- Room settings: advanced addresses -->
+    <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
+    <string name="room_settings_addresses_add_new_address">New address (e.g #foo:matrix.org")</string>
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Invalid alias format</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
+
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
