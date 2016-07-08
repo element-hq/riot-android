@@ -264,7 +264,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     undeliverableEvents = new ArrayList<>();
                 }
                 undeliverableEvents.add(row);
-                this.remove(row);
+                removeRow(row);
                 i--;
             }
         }
@@ -768,15 +768,18 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         return ContextCompat.getColor(mContext, R.color.presence_unavailable);
     }
 
-    public int highlightMessageColor(Context context) {
+    @Override
+    public int getHighlightMessageTextColor(Context context) {
         return ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
     }
 
-    public int searchHighlightMessageColor(Context context) {
+    @Override
+    public int getSearchHighlightMessageTextColor(Context context) {
         return ContextCompat.getColor(mContext, R.color.vector_green_color);
     }
 
-    public int notSentMessageColor(Context context) {
+    @Override
+    public int getNotSentMessageTextColor(Context context) {
         return ContextCompat.getColor(mContext, R.color.vector_not_send_color);
     }
 }
