@@ -57,17 +57,13 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
-import org.matrix.androidsdk.util.JsonUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -77,6 +73,7 @@ import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.preference.AddressPreference;
 import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
+import im.vector.preference.VectorListPreference;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -133,7 +130,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private SwitchPreference mRoomDirectoryVisibilitySwitch;
     private SwitchPreference mRoomMuteNotificationsSwitch;
     private ListPreference mRoomTagListPreference;
-    private ListPreference mRoomAccessRulesListPreference;
+    private VectorListPreference mRoomAccessRulesListPreference;
     private ListPreference mRoomHistoryReadabilityRulesListPreference;
     private View mParentLoadingView;
     private View mParentFragmentContainerView;
@@ -290,9 +287,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomDirectoryVisibilitySwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
         mRoomMuteNotificationsSwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
         mRoomTagListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_TAG_LIST);
-        mRoomAccessRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
+        mRoomAccessRulesListPreference = (VectorListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
         mAddressesSettingsCategory =  (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_ADDRESSES);
+
+        mRoomAccessRulesListPreference.setOnPreferenceWarningIconClickListener(new VectorListPreference.OnPreferenceWarningIconClickListener() {
+            @Override
+            public void onWarningIconClick(Preference preference) {
+                displayAccessRoomWarning();
+            }
+        });
 
         // display the room Id.
         EditTextPreference roomInternalIdPreference = (EditTextPreference)findPreference(PREF_KEY_ROOM_INTERNAL_ID);
@@ -385,9 +389,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 }
             });
         }
-
-
-
 
         // init the room avatar: session and room
         mRoomPhotoAvatar.setConfiguration(mSession, mRoom);
@@ -593,6 +594,14 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+
+    /**
+     * Display the access room warning.
+     */
+    private void displayAccessRoomWarning () {
+        Toast.makeText(getActivity(), R.string.room_settings_room_access_warning, Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * Enable / disable preferences according to the power levels.
      */
@@ -642,8 +651,15 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             mRoomTagListPreference.setEnabled(isConnected);
 
         // room access rules: admin only
-        if(null != mRoomAccessRulesListPreference)
+        if(null != mRoomAccessRulesListPreference) {
             mRoomAccessRulesListPreference.setEnabled(isAdmin && isConnected);
+
+            if ((0 == mRoom.getAliases().size()) && !TextUtils.equals(RoomState.JOIN_RULE_INVITE, mRoom.getLiveState().join_rule)) {
+                mRoomAccessRulesListPreference.setWarningIconVisibility(View.VISIBLE);
+            } else {
+                mRoomAccessRulesListPreference.setWarningIconVisibility(View.GONE);
+            }
+        }
 
         // room read history: admin only
         if(null != mRoomHistoryReadabilityRulesListPreference)
@@ -656,8 +672,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * the SDK layer.
      */
     private void updatePreferenceUiValues() {
-        String value="";
-        String summary="";
+        String value ="";
+        String summary ="";
         Resources resources;
 
         if ((null == mSession) || (null == mRoom)){
@@ -850,6 +866,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
     }
 
+    /**
+     * The room history readability has been updated.
+     */
     private void onRoomHistoryReadabilityPreferenceChanged() {
         // sanity check
         if ((null == mRoom) || (null == mRoomHistoryReadabilityRulesListPreference)) {
@@ -944,10 +963,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 // requires: {join_rule: "public"} and {guest_access: "forbidden"}
                 joinRuleToApply = !RoomState.JOIN_RULE_PUBLIC.equals(previousJoinRule)?RoomState.JOIN_RULE_PUBLIC:null;
                 guestAccessRuleToApply = !RoomState.GUEST_ACCESS_FORBIDDEN.equals(previousGuestAccessRule)?RoomState.GUEST_ACCESS_FORBIDDEN:null;
+
+                if (0 == mRoom.getAliases().size()) {
+                    displayAccessRoomWarning();
+                }
             } else if(ACCESS_RULES_ANYONE_WITH_LINK_INCLUDING_GUEST.equals(newValue)) {
                 // requires: {join_rule: "public"} and {guest_access: "can_join"}
                 joinRuleToApply = !RoomState.JOIN_RULE_PUBLIC.equals(previousJoinRule)?RoomState.JOIN_RULE_PUBLIC:null;
                 guestAccessRuleToApply = !RoomState.GUEST_ACCESS_CAN_JOIN.equals(previousGuestAccessRule)?RoomState.GUEST_ACCESS_CAN_JOIN:null;
+
+                if (0 == mRoom.getAliases().size()) {
+                    displayAccessRoomWarning();
+                }
             } else {
                 // unknown value
                 Log.d(LOG_TAG,"## onRoomAccessPreferenceChanged(): unknown selected value = "+newValue);

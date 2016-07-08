@@ -49,7 +49,7 @@
             android:title="@string/settings_room_privacy_label" /> -->
 
         <!-- room access rules (Who can access?) -->
-        <ListPreference
+        <im.vector.preference.VectorListPreference
             android:key="roomAccessRulesList"
             android:title="@string/room_settings_room_access_rules_pref_title"
             android:dialogTitle="@string/room_settings_room_access_rules_pref_dialog_title"

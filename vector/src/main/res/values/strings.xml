@@ -672,6 +672,7 @@
     <string name="room_settings_read_history_entry_value_members_only_joined">joined</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
+    <string name="room_settings_room_access_warning">To link to a room it must have an address.</string>
     <string name="room_settings_room_access_entry_only_invited">Only people who have been invited</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
