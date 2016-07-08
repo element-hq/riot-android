@@ -67,6 +67,7 @@ import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
+import im.vector.util.VectorUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -256,13 +257,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-
-                    ClipData clip = ClipData.newPlainText("", textMsg);
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-
+                    VectorUtils.copyToClipboard(getActivity(), textMsg);
                 }
             });
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
@@ -310,14 +305,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 }
             }
         } else if (action == R.id.ic_action_vector_permalink) {
-            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            String link = "https://vector.im/beta/#/room/" + event.roomId + "/" + event.eventId;
-
-            // the $ character is not as a part of an url so escape it.
-            ClipData clip = ClipData.newPlainText("", link.replace("$","%24"));
-            clipboard.setPrimaryClip(clip);
-
-            Toast.makeText(getActivity(), this.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+            VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(event.roomId, event.eventId));
         } else if  (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
         }

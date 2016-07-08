@@ -462,12 +462,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", nameTextView.getText());
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-
+                VectorUtils.copyToClipboard(mContext, nameTextView.getText());
                 return true;
             }
         };
