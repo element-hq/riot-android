@@ -1418,7 +1418,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     public boolean onPreferenceClick(Preference preference) {
                         if (TextUtils.equals(fAlias, canonicalAlias)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage(R.string.room_details_addresses_disable_main_address_prompt_msg);
+                            builder.setMessage(R.string.room_settings_addresses_disable_main_address_prompt_msg);
+                            builder.setTitle(R.string.room_settings_addresses_disable_main_address_prompt_title);
 
                             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
