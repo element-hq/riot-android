@@ -1424,7 +1424,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 }
             }
 
-            // the local aliases are displayed first in the
+            // the local aliases are displayed first in the list
             aliases.clear();
             aliases.addAll(localAliases);
             aliases.addAll(remoteAliases);
