@@ -429,6 +429,9 @@ public class CallViewActivity extends Activity {
             }
         }
 
+        // init the call button
+        manageSubViews();
+
         // the webview has been saved after a screen rotation
         // getParent() != null : the static value have been reused whereas it should not
         if ((null != mSavedCallview) && (null == mSavedCallview.getParent())) {
