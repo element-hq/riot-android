@@ -32,6 +32,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.util.VectorUtils;
 
 /**
@@ -56,10 +57,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             Log.d(LOG_TAG,"## onStateDidChange(): state="+state);
         }
 
-        /**
-         * Display the error messages
-         * @param aMsgToDisplay the toast message
-         */
         private void showToast(final String aMsgToDisplay)  {
             InComingCallActivity.this.runOnUiThread(new Runnable() {
                 @Override
@@ -132,13 +129,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        // this will turn the screen on whilst honouring the screen timeout setting, so it will
-        // dim/turn off depending on user configured values.
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.vector_incoming_call_dialog);
@@ -205,16 +195,9 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                     }
                 });
 
-                // set listener
-                //mMxCall.addListener(mMxCallListener);
-
-                // create the call view asap
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMxCall.createCallView();
-                    }
-                });
+                // create the call view to enable mMxCallListener being used,
+                // otherwise call API is not enabled
+                mMxCall.createCallView();
             }
         }
     }
@@ -228,6 +211,17 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             mMxCall.onResume();
             mMxCall.addListener(mMxCallListener);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (null != mMxCall) {
+            mMxCall.onPause();
+            mMxCall.removeListener(mMxCallListener);
+        }
+        VectorApp.setCurrentActivity(null);
     }
 
     @Override
