@@ -149,6 +149,7 @@ public class VectorApp extends Application {
     private void startActivityTransitionTimer() {
         this.mActivityTransitionTimer = new Timer();
         this.mActivityTransitionTimerTask = new TimerTask() {
+            @Override
             public void run() {
                 if (VectorApp.this.mActivityTransitionTimerTask != null) {
                     VectorApp.this.mActivityTransitionTimerTask.cancel();
@@ -168,6 +169,8 @@ public class VectorApp extends Application {
                 if (!mIsCallingInBackground) {
                     Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within 2 seconds");
                     suspendApp();
+                } else {
+                    Log.d(LOG_TAG, "App not suspended due to call in progress");
                 }
             }
         };
