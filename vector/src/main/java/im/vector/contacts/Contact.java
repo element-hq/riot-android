@@ -67,7 +67,7 @@ public class Contact {
     private String mContactId = "";
 
     // the contact display name
-    private String mDisplayName;
+    private String mDisplayName = "";
     // the thumbnail uri
     private String mThumbnailUri;
     // the thumbnail image
@@ -326,6 +326,13 @@ public class Contact {
         }
 
         return res;
+    }
+
+    /**
+     * @return the contact id
+     */
+    public String getContactId() {
+        return mContactId;
     }
 
     /**

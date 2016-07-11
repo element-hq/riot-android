@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import im.vector.contacts.Contact;
+import im.vector.util.VectorUtils;
 
 // Class representing a room participant.
 public class ParticipantAdapterItem {
@@ -87,6 +88,10 @@ public class ParticipantAdapterItem {
      */
     public ParticipantAdapterItem(Contact contact, Context context) {
         mDisplayName = contact.getDisplayName();
+
+        if (TextUtils.isEmpty(mDisplayName)) {
+            mDisplayName = contact.getContactId();
+        }
         mAvatarBitmap = contact.getThumbnail(context);
 
         mUserId = null;
@@ -139,10 +144,10 @@ public class ParticipantAdapterItem {
                 mComparisonDisplayName = mUserId;
             }
 
-            mComparisonDisplayName = mComparisonDisplayName.replaceAll(mTrimRegEx, "");
-
             if (null == mComparisonDisplayName) {
                 mComparisonDisplayName = "";
+            } else {
+                mComparisonDisplayName = mComparisonDisplayName.replaceAll(mTrimRegEx, "");
             }
         }
 
