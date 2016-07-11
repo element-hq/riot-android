@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.matrix.androidsdk.rest.model.User;
 import org.w3c.dom.Text;
@@ -28,12 +29,18 @@ import org.w3c.dom.UserDataHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
  * A simple contact class
  */
 public class Contact {
+
+    private static final String LOG_TAG = "Contact";
+
+    // a contact field (like email)
+    // is linked to a matrix id/
     public static class MXID {
         // the MXSession identifier
         public String mAccountId;
@@ -44,6 +51,11 @@ public class Contact {
         // the user description
         public User mUser;
 
+        /**
+         * Contstructor
+         * @param matrixId the matrix id
+         * @param accountId the account id
+         */
         public MXID(String matrixId, String accountId) {
             mMatrixId = matrixId;
             mAccountId = accountId;
@@ -51,21 +63,86 @@ public class Contact {
         }
     }
 
-    public  String mContactId = "";
-    private String mDisplayName;
-    public String mThumbnailUri = null;
-    private Bitmap mThumbnail = null;
+    // the contact ID
+    private String mContactId = "";
 
-    public ArrayList<String>mPhoneNumbers = new ArrayList<String>();
-    public ArrayList<String>mEmails = new ArrayList<String>();
-    private HashMap<String, MXID> mMXIDsByElement = null;
+    // the contact display name
+    private String mDisplayName = "";
+    // the thumbnail uri
+    private String mThumbnailUri;
+    // the thumbnail image
+    private Bitmap mThumbnail;
 
+    // phone numbers list
+    private final ArrayList<String> mPhoneNumbers = new ArrayList<String>();
+
+    // emails list
+    private final ArrayList<String> mEmails = new ArrayList<String>();
+
+    // MXID by meail address
+    private HashMap<String, MXID> mMXIDsByElement;
+
+    /**
+     * Constructor
+     * @param contactId the contact id.
+     */
     public Contact(String contactId) {
         if (null != contactId) {
             mContactId = contactId;
         } else {
             mContactId = "" + System.currentTimeMillis();
         }
+    }
+
+    // emails list
+    /**
+     * @return the emails list.
+     */
+    public List<String> getEmails() {
+        return mEmails;
+    }
+
+    /**
+     * Add an email address to the list.
+     * @param anEmailAddress the email address to add
+     */
+    public void addEmailAdress(String anEmailAddress) {
+        if (mEmails.indexOf(anEmailAddress) < 0) {
+            mEmails.add(anEmailAddress);
+        }
+    }
+
+    /**
+     * @return the phone numbers list.
+     */
+    public List<String> getPhonenumbers() {
+        return mPhoneNumbers;
+    }
+
+    /**
+     * Add a phone number address to the list.
+     * @param aPhonenumber the phone number to add
+     */
+    public void addPhonenumber(String aPhonenumber) {
+        if (mPhoneNumbers.indexOf(aPhonenumber) < 0) {
+            mPhoneNumbers.add(aPhonenumber);
+        }
+    }
+
+    /**
+     * Defines a thumbnail URI.
+     * @return the thumbnail uri.
+     */
+    public String getThumbnailUri() {
+        return mThumbnailUri;
+    }
+
+    /**
+     * Defines a new thumbnail uri.
+     * @param aThumbnailUri the new thumbnail ur.
+     */
+    public void setThumbnailUri(String aThumbnailUri) {
+        mThumbnailUri = aThumbnailUri;
     }
 
     /**
@@ -102,16 +179,16 @@ public class Contact {
      * Check if the contact could contain some matrix Ids
      * @return true if the contact could contain some matrix IDs
      */
-    public boolean couldContainMatridIds() {
+    private boolean couldContainMatridIds() {
         return (0 != mEmails.size());
     }
 
     /**
-     * test if some fields match with the pattern
-     * @param pattern
-     * @return
+     * Tell if one field contains the pattern
+     * @param pattern the pattern to find
+     * @return true if it is found.
      */
-    public boolean matchWithPattern(String pattern) {
+    public boolean contains(String pattern) {
         // empty pattern -> cannot match
         if (TextUtils.isEmpty(pattern)) {
             return false;
@@ -130,6 +207,34 @@ public class Contact {
         }
 
         return matched;
+    }
+
+    /**
+     * Tell whether a matrix id/email has the provided prefix.
+     * @param prefix the prefix
+     * @return true if one item matched
+     */
+    public boolean startsWith(String prefix) {
+        // empty pattern -> cannot match
+        if (TextUtils.isEmpty(prefix)) {
+            return false;
+        }
+
+        for(String email : mEmails) {
+            if (email.startsWith(prefix)) {
+                return true;
+            }
+
+            if ((null != mMXIDsByElement) && mMXIDsByElement.containsKey(email)) {
+                MXID mxid = mMXIDsByElement.get(email);
+
+                if ((null != mxid.mMatrixId) && mxid.mMatrixId.startsWith("@" + prefix)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -190,10 +295,17 @@ public class Contact {
         }
     }
 
+    /**
+     * Set the display name.
+     * @param displayName the new display name.
+     */
     public void setDisplayName(String displayName) {
         mDisplayName = displayName;
     }
 
+    /**
+     * @return teh display name
+     */
     public String getDisplayName() {
         String res = mDisplayName;
 
@@ -217,6 +329,13 @@ public class Contact {
     }
 
     /**
+     * @return the contact id
+     */
+    public String getContactId() {
+        return mContactId;
+    }
+
+    /**
      * Return the contact thumbnail bitmap.
      * @param context the context.
      * @return the contact thumbnail bitmap.
@@ -227,6 +346,7 @@ public class Contact {
             try {
                 mThumbnail = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mThumbnailUri));
             } catch (Exception e) {
+                Log.e(LOG_TAG, "getThumbnail " + e.getLocalizedMessage());
             }
         }
 

@@ -18,13 +18,16 @@ package im.vector.util;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
@@ -245,6 +248,11 @@ public class SharedDataItem implements Parcelable {
                         mMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
                     }
                 }
+
+                if (null != mMimeType) {
+                    // the mimetype is sometimes in uppercase.
+                    mMimeType = mMimeType.toLowerCase();
+                }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Failed to open resource input stream", e);
             }
@@ -254,10 +262,64 @@ public class SharedDataItem implements Parcelable {
     }
 
     /**
+     * Gets the MINI_KIND image thumbnail.
+     * @param context the context
+     * @return the MINI_KIND thumbnail it it exists
+     */
+    public Bitmap getMiniKindImageThumbnail(Context context) {
+        return getImageThumbnail(context,  MediaStore.Images.Thumbnails.MINI_KIND);
+    }
+
+    /**
+     * Gets the FULL_SCREEN image thumbnail.
+     * @param context the context
+     * @return the FULL_SCREEN thumbnail it it exists
+     */
+    public Bitmap getFullScreenImageKindThumbnail(Context context) {
+        return getImageThumbnail(context,  MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+    }
+
+    /**
+     * Gets the image thumbnail.
+     * @param context the context.
+     * @param kind the thumbnail kind.
+     * @return the thumbnail.
+     */
+    private Bitmap getImageThumbnail(Context context, int kind) {
+        // sanity check
+        if ((null == getMimeType(context)) || !getMimeType(context).startsWith("image/")) {
+            return null;
+        }
+
+        Bitmap thumbnailBitmap = null;
+
+        try {
+            ContentResolver resolver = context.getContentResolver();
+
+            List uriPath = getUri().getPathSegments();
+            long imageId;
+            String lastSegment = (String) uriPath.get(uriPath.size() - 1);
+
+            // > Kitkat
+            if (lastSegment.startsWith("image:")) {
+                lastSegment = lastSegment.substring("image:".length());
+            }
+
+            imageId = Long.parseLong(lastSegment);
+
+            thumbnailBitmap = MediaStore.Images.Thumbnails.getThumbnail(resolver, imageId, kind, null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "MediaStore.Images.Thumbnails.getThumbnail " + e.getMessage());
+        }
+
+        return thumbnailBitmap;
+    }
+
+    /**
      * @return the filename
      */
     public String getFileName(Context context) {
-        if ((null != mFileName) && (null != getUri())) {
+        if ((null == mFileName) && (null != getUri())) {
             Uri mediaUri = getUri();
 
             if (null != mediaUri) {
@@ -313,8 +375,8 @@ public class SharedDataItem implements Parcelable {
 
                 if (null == resource) {
                 } else {
-                    mUri = saveFile(folder, resource.contentStream, mFileName, resource.mimeType);
-                    resource.contentStream.close();
+                    mUri = saveFile(folder, resource.mContentStream, getFileName(context), resource.mMimeType);
+                    resource.mContentStream.close();
                 }
             } catch (Exception e) {
             }
@@ -330,7 +392,7 @@ public class SharedDataItem implements Parcelable {
      * @param mimeType the file mimetype.
      * @return the file uri
      */
-    private static final Uri saveFile(File folder, InputStream stream, String defaultFileName, String mimeType) {
+    private static Uri saveFile(File folder, InputStream stream, String defaultFileName, String mimeType) {
         String filename = defaultFileName;
 
         if (null == filename) {

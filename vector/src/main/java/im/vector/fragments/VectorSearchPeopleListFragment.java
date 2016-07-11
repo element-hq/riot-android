@@ -39,7 +39,7 @@ import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.adapters.VectorAddParticipantsAdapter;
+import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 
@@ -52,7 +52,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
     // the session
     private MXSession mSession;
     private ListView mPeopleListView;
-    private VectorAddParticipantsAdapter mAdapter;
+    private VectorParticipantsAdapter mAdapter;
 
     // pending requests
     // a request might be called whereas the fragment is not initialized
@@ -143,7 +143,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
         mPeopleListView = (ListView)v.findViewById(R.id.search_people_list);
-        mAdapter = new VectorAddParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null);
+        mAdapter = new VectorParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null);
         mPeopleListView.setAdapter(mAdapter);
 
         mPeopleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,7 +182,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 }
             });
         } else {
-            mAdapter.setSearchedPattern(pattern, new VectorAddParticipantsAdapter.OnParticipantsSearchListener() {
+            mAdapter.setSearchedPattern(pattern, VectorParticipantsAdapter.SEARCH_METHOD_CONTAINS, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
                 @Override
                 public void onSearchEnd(final int count) {
                     mPeopleListView.post(new Runnable() {

@@ -16,7 +16,9 @@
 
 package im.vector.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -32,6 +34,7 @@ import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorRoomDetailsMembersFragment;
 import im.vector.fragments.VectorRoomSettingsFragment;
 import im.vector.fragments.VectorSearchRoomFilesListFragment;
@@ -79,6 +82,9 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     private String mRoomId;
     private String mMatrixId;
+
+    // request the contacts permission
+    private boolean mIsContactsPermissionChecked;
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -165,6 +171,23 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         if (null != mActionBar) {
             int currentIndex = mActionBar.getSelectedNavigationIndex();
             outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS) {
+            if (Manifest.permission.READ_CONTACTS.equals(aPermissions[0])) {
+                if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                    Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                } else {
+                    Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                    CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+                }
+
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+            }
         }
     }
 
@@ -335,6 +358,12 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
             }
             mCurrentTabIndex = PEOPLE_TAB_INDEX;
+
+
+            if (!mIsContactsPermissionChecked) {
+                mIsContactsPermissionChecked = true;
+                CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
+            }
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabSelectSettingsFragment();

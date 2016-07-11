@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -92,6 +93,8 @@ public class CommonActivityUtils {
     /**
      * Mime types
      **/
+    public static final String MIME_TYPE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_JPG =  "image/jpg";
     public static final String MIME_TYPE_IMAGE_ALL = "image/*";
     public static final String MIME_TYPE_ALL_CONTENT = "*/*";
 
@@ -139,9 +142,9 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
-    public static final int REQUEST_CODE_PERMISSION_SEARCH_ROOM = PERMISSION_READ_CONTACTS;
-    // start activity intent parameters
-    public static final String KEY_PERMISSIONS_READ_CONTACTS = "KEY_PERMISSIONS_READ_CONTACTS";
+    public static final int REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
@@ -159,7 +162,7 @@ public class CommonActivityUtils {
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
+            Matrix.getInstance(activity).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
             Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
@@ -330,7 +333,7 @@ public class CommonActivityUtils {
         }
 
         // reset the GCM
-        Matrix.getInstance(activity).getSharedGcmRegistrationManager().reset();
+        Matrix.getInstance(activity).getSharedGCMRegistrationManager().reset();
 
         // clear credentials
         Matrix.getInstance(activity).clearSessions(activity, true);
@@ -526,7 +529,10 @@ public class CommonActivityUtils {
         } else if((REQUEST_CODE_PERMISSION_TAKE_PHOTO!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_SEARCH_ROOM !=aPermissionsToBeGrantedBitMap)) {
+                && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
+                ) {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
         } else {
@@ -539,22 +545,22 @@ public class CommonActivityUtils {
             String permissionType;
 
             // retrieve the permissions to be granted according to the request code bit map
-            if(PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap&PERMISSION_CAMERA)){
+            if(PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap & PERMISSION_CAMERA)){
                 permissionType = Manifest.permission.CAMERA;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap&PERMISSION_RECORD_AUDIO)){
+            if(PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap & PERMISSION_RECORD_AUDIO)){
                 permissionType = Manifest.permission.RECORD_AUDIO;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap&PERMISSION_WRITE_EXTERNAL_STORAGE)){
+            if(PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap & PERMISSION_WRITE_EXTERNAL_STORAGE)){
                 permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap&PERMISSION_READ_CONTACTS)){
+            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)){
                 permissionType = Manifest.permission.READ_CONTACTS;
                 isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
@@ -568,9 +574,9 @@ public class CommonActivityUtils {
 
                     // add the user info text to be displayed to explain why the permission is required by the App
                     for(String permissionAlreadyDenied : permissionListAlreadyDenied) {
-                        if(Manifest.permission.CAMERA.equals(permissionAlreadyDenied))
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_camera);
-                        else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
+                        if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
+                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera);
+                        } else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
                             explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio);
                         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)){
                             explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage);
@@ -597,11 +603,21 @@ public class CommonActivityUtils {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
+                            //ContactsManager.refreshLocalContactsSnapshot(aCallingActivity);
                             ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
                         }
                     }
                 });
-                permissionsInfoDialog.show();
+
+                Dialog dialog = permissionsInfoDialog.show();
+
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        CommonActivityUtils.displayToast(aCallingActivity, aCallingActivity.getString(R.string.missing_permissions_warning));
+                    }
+                });
+
             } else {
                 // some permissions are not granted, ask permissions
                 if (isRequestPermissionRequired) {
@@ -739,6 +755,53 @@ public class CommonActivityUtils {
             intent.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
             fromActivity.startActivity(intent);
         }
+    }
+
+    /**
+     * Helper method used to build an intent to trigger a room preview.
+     * @param aMatrixId matrix ID of the user
+     * @param aRoomId room ID
+     * @param aContext application context
+     * @param aTargetActivity the activity set in the returned intent
+     * @return a valid intent if operation succeed, null otherwise
+     */
+    public static Intent buildIntentPreviewRoom(String aMatrixId, String aRoomId, Context aContext, Class<?> aTargetActivity) {
+        Intent intentRetCode;
+
+        // sanity check
+        if ((null == aContext) || (null == aRoomId) || (null == aMatrixId)){
+            intentRetCode = null;
+        } else {
+            MXSession session;
+
+            // get the session
+            if(null == (session = Matrix.getInstance(aContext).getSession(aMatrixId))) {
+                session = Matrix.getInstance(aContext).getDefaultSession();
+            }
+
+            // check session validity
+            if ((null == session) || !session.isAlive()) {
+                intentRetCode = null;
+            } else {
+                String roomAlias = null;
+                Room room = session.getDataHandler().getRoom(aRoomId);
+
+                // get the room alias (if any) for the preview data
+                if ((null != room) && (null != room.getLiveState())) {
+                    roomAlias = room.getLiveState().getAlias();
+                }
+
+                intentRetCode = new Intent(aContext, aTargetActivity);
+                // extra required by VectorRoomActivity
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, aRoomId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ID, aRoomId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, aMatrixId);
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                // extra only required by VectorFakeRoomPreviewActivity
+                intentRetCode.putExtra(VectorRoomActivity.EXTRA_ROOM_PREVIEW_ROOM_ALIAS, roomAlias);
+            }
+        }
+        return intentRetCode;
     }
 
     /**

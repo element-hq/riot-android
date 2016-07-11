@@ -5,10 +5,9 @@
 
     <ImageView
         android:id="@+id/search_background_imageview"
-        android:background="#FFFFFFFF"
+        android:background="@android:color/white"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_centerInParent="true"
         android:src="@drawable/vector_search_bg"/>
 
     <TextView
@@ -25,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="1dp"
-        android:divider="#00000000"
+        android:divider="@android:color/transparent"
         android:dividerHeight="1px"/>
 
     <View

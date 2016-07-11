@@ -29,29 +29,30 @@ public class GCMHelper {
     private static final String LOG_TAG = "GCMHelper";
 
     /**
-     * Retrieve the GCM push key (registration token).
+     * Retrieves the GCM registration token.
      * @param appContext the application context
-     * @return the GCM pushKey
+     * @return the registration token.
      */
-    public static String getPushKey(Context appContext) {
-        String pushKey = null;
+    public static String getRegistrationToken(Context appContext) {
+        String registrationToken;
+
         try {
             Log.d(LOG_TAG, "Getting the GCM Registration Token");
 
             InstanceID instanceID = InstanceID.getInstance(appContext);
 
-            pushKey = instanceID.getToken(appContext.getString(R.string.gcm_defaultSenderId),
+            registrationToken = instanceID.getToken(appContext.getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-            Log.d(LOG_TAG, "GCM Registration Token: " + pushKey);
+            Log.d(LOG_TAG, "GCM Registration Token: " + registrationToken);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
-            pushKey = null;
+            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
+            registrationToken = null;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "getPushKey failed with exception : " + e.getLocalizedMessage());
-            pushKey = null;
+            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
+            registrationToken = null;
         }
 
-        return pushKey;
+        return registrationToken;
     }
 }

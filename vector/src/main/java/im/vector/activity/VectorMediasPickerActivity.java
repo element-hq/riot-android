@@ -974,10 +974,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 try {
                     ResourceUtils.Resource resource = ResourceUtils.openResource(this, defaultUri, null);
 
-                    if ((null != resource) && (null != resource.contentStream)) {
+                    if ((null != resource) && (null != resource.mContentStream)) {
                         int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, defaultUri);
-                        newBitmap = createPhotoThumbnail(resource.contentStream, rotationAngle);
-                        resource.contentStream.close();
+                        newBitmap = createPhotoThumbnail(resource.mContentStream, rotationAngle);
+                        resource.mContentStream.close();
                     }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "fails to retrieve the bitmap from uri");
@@ -1171,6 +1171,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    @SuppressLint("NewApi")
     private void openFileExplorer() {
         try {
             Intent fileIntent = new Intent(Intent.ACTION_PICK);

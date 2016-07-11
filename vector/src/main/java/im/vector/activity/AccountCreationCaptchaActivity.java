@@ -44,11 +44,6 @@ public class AccountCreationCaptchaActivity extends Activity {
     public static String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
     public static String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
 
-    WebView mWebView = null;
-
-    private String mHomeServerUrl = null;
-    private String mSiteKey = null;
-
     private static final String mRecaptchaHTMLString = "<html> " +
                         " <head> " +
                          " <script type=\"text/javascript\"> " +
@@ -83,32 +78,32 @@ public class AccountCreationCaptchaActivity extends Activity {
 
         setContentView(R.layout.activity_vector_registration_captcha);
 
-        mWebView = (WebView) findViewById(R.id.account_creation_webview);
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        final WebView webView = (WebView) findViewById(R.id.account_creation_webview);
+        webView.getSettings().setJavaScriptEnabled(true);
 
         Intent intent = getIntent();
 
-        mHomeServerUrl = "https://matrix.org/";
+        String homeServerUrl = "https://matrix.org/";
 
         if (intent.hasExtra(EXTRA_HOME_SERVER_URL)) {
-            mHomeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_URL);
+            homeServerUrl = intent.getStringExtra(EXTRA_HOME_SERVER_URL);
         }
 
         // check the trailing slash
-        if (!mHomeServerUrl.endsWith("/")) {
-            mHomeServerUrl += "/";
+        if (!homeServerUrl.endsWith("/")) {
+            homeServerUrl += "/";
         }
 
-        mSiteKey = intent.getStringExtra(EXTRA_SITE_KEY);
+        String siteKey = intent.getStringExtra(EXTRA_SITE_KEY);
 
-        String html = (new Formatter()).format(mRecaptchaHTMLString, mSiteKey).toString();
+        String html = (new Formatter()).format(mRecaptchaHTMLString, siteKey).toString();
         String mime = "text/html";
         String encoding = "utf-8";
 
-        mWebView.loadDataWithBaseURL(mHomeServerUrl, html, mime, encoding, null);
-        mWebView.requestLayout();
+        webView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null);
+        webView.requestLayout();
 
-        mWebView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {

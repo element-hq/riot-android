@@ -28,7 +28,6 @@ import im.vector.R;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +44,7 @@ public class SplashActivity extends MXCActionBarActivity {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
     private Collection<MXSession> mSessions;
-    private GcmRegistrationManager mGcmRegistrationManager;
+    private GcmRegistrationManager mGCMRegistrationManager;
 
     private boolean mInitialSyncComplete = false;
     private boolean mPusherRegistrationComplete = false;
@@ -199,15 +198,15 @@ public class SplashActivity extends MXCActionBarActivity {
             EventStreamService.getInstance().startAccounts(matrixIds);
         }
 
-        mGcmRegistrationManager = Matrix.getInstance(getApplicationContext())
-                .getSharedGcmRegistrationManager();
-        mPusherRegistrationComplete = mGcmRegistrationManager.isGCMRegistred();
+        mGCMRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+        mPusherRegistrationComplete = mGCMRegistrationManager.isGCMRegistred();
 
         if (!mPusherRegistrationComplete) {
-            mGcmRegistrationManager.registerPusher(getApplicationContext(), new GcmRegistrationManager.GcmRegistrationIdListener() {
-                @Override
-                public void onPusherRegistered() {
-                    Log.d(LOG_TAG, "The GCM registration is done");
+            mGCMRegistrationManager.registerToGCM(new GcmRegistrationManager.GCMRegistrationListener() {
+                /**
+                 * Common behaviour.
+                 */
+                private void onDone() {
                     SplashActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -220,22 +219,19 @@ public class SplashActivity extends MXCActionBarActivity {
                 }
 
                 @Override
-                public void onPusherRegistrationFailed() {
+                public void onGCMRegistered() {
+                    Log.d(LOG_TAG, "The GCM registration is done");
+                    onDone();
+                }
+
+                @Override
+                public void onGCMRegistrationFailed() {
                     Log.d(LOG_TAG, "The GCM registration failed");
-
-                    SplashActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CommonActivityUtils.onGcmUpdate(SplashActivity.this);
-                        }
-                    });
-
-                    // can register it ignore
-                    onPusherRegistered();
+                    onDone();
                 }
             });
-        } else if (mGcmRegistrationManager.useGCM()) {
-            mGcmRegistrationManager.reregisterSessions(SplashActivity.this, null);
+        } else if (mGCMRegistrationManager.useGCM()) {
+            mGCMRegistrationManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;

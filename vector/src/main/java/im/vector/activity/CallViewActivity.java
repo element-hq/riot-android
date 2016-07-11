@@ -738,6 +738,10 @@ public class CallViewActivity extends FragmentActivity {
                     int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
                     ringToneUri = Uri.withAppendedPath(Uri.parse("content://media/external/audio/media"), "" + id);
                 }
+
+                if (null != cursor) {
+                    cursor.close();
+                }
             }
 
             // the Uri has been received

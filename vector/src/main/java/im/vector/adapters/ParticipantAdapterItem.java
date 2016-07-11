@@ -22,12 +22,15 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 import im.vector.contacts.Contact;
+import im.vector.util.VectorUtils;
 
-
+// Class representing a room participant.
 public class ParticipantAdapterItem {
+
     // displayed info
     public String mDisplayName;
     public String mAvatarUrl;
@@ -41,6 +44,7 @@ public class ParticipantAdapterItem {
     public Contact mContact;
 
     // search fields
+    private ArrayList<String> mDisplayNameComponents;
     private String mLowerCaseDisplayName;
     private String mLowerCaseMatrixId;
 
@@ -51,6 +55,10 @@ public class ParticipantAdapterItem {
     public int mReferenceGroupPosition = -1;
     public int mReferenceChildPosition = -1;
 
+    /**
+     * Constructor from a room member.
+     * @param member the member
+     */
     public ParticipantAdapterItem(RoomMember member) {
         mDisplayName = member.getName();
         mAvatarUrl = member.avatarUrl;
@@ -62,6 +70,10 @@ public class ParticipantAdapterItem {
         initSearchByPatternFields();
     }
 
+    /**
+     * Constructor from a matrix user.
+     * @param user the matrix user.
+     */
     public ParticipantAdapterItem(User user) {
         mDisplayName = TextUtils.isEmpty(user.displayname) ? user.user_id : user.displayname;
         mUserId = user.user_id;
@@ -69,8 +81,17 @@ public class ParticipantAdapterItem {
         initSearchByPatternFields();
     }
 
+    /**
+     * Constructor from a contact.
+     * @param contact the contact.
+     * @param context the context.
+     */
     public ParticipantAdapterItem(Contact contact, Context context) {
         mDisplayName = contact.getDisplayName();
+
+        if (TextUtils.isEmpty(mDisplayName)) {
+            mDisplayName = contact.getContactId();
+        }
         mAvatarBitmap = contact.getThumbnail(context);
 
         mUserId = null;
@@ -81,6 +102,12 @@ public class ParticipantAdapterItem {
         initSearchByPatternFields();
     }
 
+    /**
+     * Constructor from an user information.
+     * @param displayName the display name
+     * @param avatarUrl the avatar url.
+     * @param userId teh userId
+     */
     public ParticipantAdapterItem(String displayName, String avatarUrl, String userId) {
         mDisplayName = displayName;
         mAvatarUrl = avatarUrl;
@@ -98,7 +125,6 @@ public class ParticipantAdapterItem {
         }
 
         if (!TextUtils.isEmpty(mUserId)) {
-
             int sepPos = mUserId.indexOf(":");
 
             if (sepPos > 0) {
@@ -118,10 +144,10 @@ public class ParticipantAdapterItem {
                 mComparisonDisplayName = mUserId;
             }
 
-            mComparisonDisplayName = mComparisonDisplayName.replaceAll(mTrimRegEx, "");
-
             if (null == mComparisonDisplayName) {
                 mComparisonDisplayName = "";
+            } else {
+                mComparisonDisplayName = mComparisonDisplayName.replaceAll(mTrimRegEx, "");
             }
         }
 
@@ -147,12 +173,12 @@ public class ParticipantAdapterItem {
     };
 
     /**
-     * Test if a room member matches with a pattern.
+     * Test if a room member fields contains a dedicated pattern.
      * The check is done with the displayname and the userId.
      * @param aPattern the pattern to search.
      * @return true if it matches.
      */
-    public boolean matchWithPattern(String aPattern) {
+    public boolean contains(String aPattern) {
         if (TextUtils.isEmpty(aPattern)) {
             return false;
         }
@@ -160,11 +186,11 @@ public class ParticipantAdapterItem {
         boolean res = false;
 
         if (/*!res &&*/ !TextUtils.isEmpty(mLowerCaseDisplayName)) {
-            res = mLowerCaseDisplayName.indexOf(aPattern) > -1;
+            res = mLowerCaseDisplayName.contains(aPattern);
         }
 
         if (!res && !TextUtils.isEmpty(mLowerCaseMatrixId)) {
-            res = mLowerCaseMatrixId.indexOf(aPattern) > -1;
+            res = mLowerCaseMatrixId.contains(aPattern);
         }
 
         // the room member class only checks the matrixId and the displayname
@@ -174,7 +200,7 @@ public class ParticipantAdapterItem {
         }*/
 
         if (!res && (null != mContact)) {
-            res = mContact.matchWithPattern(aPattern);
+            res = mContact.contains(aPattern);
         }
 
         return res;
@@ -211,5 +237,46 @@ public class ParticipantAdapterItem {
         }
 
         return res;
+    }
+
+    /**
+     * Tell whether a component of the displayName, or one of his matrix id/email has the provided prefix.
+     * @param prefix the prefix
+     * @return true if one item matched
+     */
+    public boolean startsWith(String prefix) {
+        //sanity check
+        if (TextUtils.isEmpty(prefix)) {
+            return false;
+        }
+
+        // test first the display name
+        if (!TextUtils.isEmpty(mDisplayName)) {
+            // build the components list
+            if (null == mDisplayNameComponents) {
+                String[] componentsArrays = mDisplayName.split(" ");
+                mDisplayNameComponents = new ArrayList<>();
+
+                if (componentsArrays.length > 0) {
+                    for (int i = 0; i < componentsArrays.length; i++) {
+                        mDisplayNameComponents.add(componentsArrays[i].trim().toLowerCase());
+                    }
+                }
+            }
+
+            // test components
+            for(String comp : mDisplayNameComponents) {
+                if (comp.startsWith(prefix)) {
+                    return true;
+                }
+            }
+        }
+
+        // test user id
+        if (!TextUtils.isEmpty(mUserId) && mUserId.startsWith("@" + prefix)) {
+            return true;
+        }
+
+        return (null != mContact ) && mContact.startsWith(prefix);
     }
 }

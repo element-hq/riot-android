@@ -101,17 +101,26 @@
                     android:fontFamily="sans-serif-light"
                     android:textColor="@color/vector_0_54_black_color"
                     android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginRight="25dp"/>
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_action_image" />
 
                 <ImageView
                     android:id="@+id/roomSummaryAdapter_action_image"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:visibility="gone"
                     android:layout_alignBottom="@+id/roomSummaryAdapter_roomName"
-                    android:src="@drawable/vector_actions_9b"/>
+                    android:src="@drawable/vector_actions_9b"
+                    android:layout_toLeftOf="@+id/roomSummaryAdapter_right_view" />
+
+                <!-- this view is a dummy one, it is used to be able
+                     to hide roomSummaryAdapter_action_image properly-->
+                <View
+                    android:id="@+id/roomSummaryAdapter_right_view"
+                    android:layout_width="0dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"/>
 
                 <RelativeLayout
                     android:id="@+id/roomSummaryAdapter_action"
@@ -243,7 +252,6 @@
         android:id="@+id/recents_groups_separator_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
         android:background="@color/vector_line_separator_gray_color"/>
 
 </LinearLayout>

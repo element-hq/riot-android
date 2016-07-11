@@ -63,7 +63,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         setNotifyOnChange(true);
         mDisplayRoomName = displayRoomName;
-        searchHighlightColor = context.getResources().getColor(R.color.vector_green_color);
+        mSearchHighlightMessageTextColor = context.getResources().getColor(R.color.vector_green_color);
     }
 
     /**
@@ -78,16 +78,10 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
      * Highlight text style
      */
     protected CharacterStyle getHighLightTextStyle() {
-        return new BackgroundColorSpan(searchHighlightColor);
+        return new BackgroundColorSpan(mSearchHighlightMessageTextColor);
     }
 
-    /**
-     *
-     * @param event
-     * @param position
-     * @param shouldBeMerged
-     * @return
-     */
+    @Override
     protected boolean mergeView(Event event, int position, boolean shouldBeMerged) {
         return false;
     }

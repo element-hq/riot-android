@@ -242,6 +242,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.VectorFakeRoomPreviewActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+        </activity>
+
         <!-- broadcast receiver -->
         <receiver
             android:name=".receiver.VectorUniversalLinkReceiver"

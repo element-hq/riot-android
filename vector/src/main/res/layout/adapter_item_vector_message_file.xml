@@ -80,14 +80,12 @@
                             <!-- download progress -->
                             <org.matrix.androidsdk.view.PieFractionView
                                 android:id="@+id/content_download_piechart"
-                                android:layout_centerInParent="true"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"/>
 
                             <!-- upload progress -->
                             <org.matrix.androidsdk.view.PieFractionView
                                 android:id="@+id/content_upload_piechart"
-                                android:layout_centerInParent="true"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"/>
 
@@ -95,7 +93,6 @@
                             <ImageView
                                 android:id="@+id/upload_event_failed"
                                 android:src="@drawable/file_upload_failed"
-                                android:layout_alignParentBottom="true"
                                 android:layout_width="@dimen/chat_avatar_size"
                                 android:layout_height="@dimen/chat_avatar_size"/>
 

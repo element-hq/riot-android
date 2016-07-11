@@ -24,6 +24,7 @@
     <!-- activities background -->
     <color name="vector_activity_background_color">#FFF</color>
 
+    <color name="vector_not_send_color">#FFFF4444</color>
     <color name="vector_green_color">#FF76cfa6</color>
     <color name="vector_light_gray_color">#FFF2F2F2</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
@@ -67,5 +68,6 @@
 
     <color name="vector_74_gray">#FF747474</color>
     <color name="vector_25_black">#25000000</color>
+    <color name="vector_33_black">#33000000</color>
 
 </resources>
