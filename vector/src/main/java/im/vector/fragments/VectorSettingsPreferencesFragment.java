@@ -983,6 +983,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 preference.setTitle(getResources().getString(R.string.settings_email_address));
                 preference.setSummary(email);
                 preference.setKey(EMAIL_PREFERENCE_KEY_BASE + index);
+
+                final String fEmailAddress = email;
+
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        VectorUtils.copyToClipboard(getActivity(), fEmailAddress);
+                        return true;
+                    }
+                });
+
                 index++;
                 mUserSettingsCategory.addPreference(preference);
             }
