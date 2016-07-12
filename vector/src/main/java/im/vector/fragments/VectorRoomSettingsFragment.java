@@ -1370,7 +1370,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                             mAliasUpdatesCallback.onUnexpectedError(e);
                         }
                     });
-                } else if (item.getItemId() == R.id.ic_action_vector_permalink) {
+                } else if (item.getItemId() == R.id.ic_action_vector_room_url) {
                     VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(roomAlias, null));
                 } else {
                     VectorUtils.copyToClipboard(getActivity(), roomAlias);

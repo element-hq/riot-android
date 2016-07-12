@@ -43,6 +43,7 @@
     <string name="report_content">Report content</string>
     <string name="decline">Decline</string>
     <string name="active_call">Active call</string>
+    <string name="room_url">Room URL</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>
 
     <!-- server urls -->

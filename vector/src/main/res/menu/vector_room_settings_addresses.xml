@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/ic_action_vector_delete_alias"
-        android:icon="@drawable/ic_material_delete"
-        android:title="@string/delete"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/ic_action_vector_copy_alias"
         android:icon="@drawable/ic_material_copy"
         android:title="@string/copy"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/ic_action_vector_permalink"
+        android:id="@+id/ic_action_vector_room_url"
         android:icon="@drawable/ic_material_link_black"
-        android:title="@string/permalink"
+        android:title="@string/room_url"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_delete_alias"
+        android:icon="@drawable/ic_material_delete"
+        android:title="@string/delete"
         app:showAsAction="never" />
 </menu>
