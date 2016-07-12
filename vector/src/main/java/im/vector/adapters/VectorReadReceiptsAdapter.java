@@ -100,12 +100,8 @@ public class VectorReadReceiptsAdapter extends ArrayAdapter<ReceiptData> {
         userNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("", userNameTextView.getText());
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
-                return true;
+                VectorUtils.copyToClipboard(mContext, userNameTextView.getText());
+               return true;
             }
         });
 

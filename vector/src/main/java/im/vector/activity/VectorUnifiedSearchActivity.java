@@ -17,7 +17,9 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -33,6 +35,7 @@ import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.contacts.ContactsManager;
 import im.vector.fragments.VectorSearchPeopleListFragment;
 import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
@@ -57,8 +60,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private int mSearchInPeopleTabIndex = -1;
     private int mSearchInFilesTabIndex = -1;
     private int mCurrentTabIndex = -1;
-
-    private boolean mIsPermissionGranted;
 
     // activity life cycle management:
     // - Bundle keys
@@ -103,17 +104,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             Log.e(LOG_TAG, "No MXSession.");
             finish();
             return;
-        }
-
-        if(null != getIntent()){
-            mIsPermissionGranted = getIntent().getBooleanExtra(CommonActivityUtils.KEY_PERMISSIONS_READ_CONTACTS,CommonActivityUtils.PERMISSIONS_DENIED);
-        } else {
-            mIsPermissionGranted = CommonActivityUtils.PERMISSIONS_DENIED;
-        }
-
-        if(null != savedInstanceState){
-            // restore permissions status
-            mIsPermissionGranted = savedInstanceState.getBoolean(KEY_STATE_IS_PERMISSIONS_GRANTED,CommonActivityUtils.PERMISSIONS_DENIED);
         }
 
         // UI widgets binding & init fields
@@ -375,6 +365,9 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             }
             fragment = mSearchInPeopleFragment;
             mCurrentTabIndex = mSearchInPeopleTabIndex;
+
+            // Check permission to access contacts
+            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
         }
 
         if (replace) {
@@ -423,6 +416,19 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     public void onTabReselected(android.support.v7.app.ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+            } else {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+            }
+            ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+        }
+    }
+
     //==============================================================================================================
     // Life cycle Activity methods
     //==============================================================================================================
@@ -442,9 +448,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if (!TextUtils.isEmpty(searchPattern)) {
             outState.putString(KEY_STATE_SEARCH_PATTERN, searchPattern);
         }
-
-        // save permissions status
-        outState.putBoolean(KEY_STATE_IS_PERMISSIONS_GRANTED, mIsPermissionGranted);
     }
 
     //==============================================================================================================

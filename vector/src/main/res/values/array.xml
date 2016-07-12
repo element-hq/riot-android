@@ -7,6 +7,7 @@
         <item>@string/room_settings_tag_pref_entry_low_priority</item>
         <item>@string/room_settings_tag_pref_entry_none</item>
     </string-array>
+
     <string-array name="tag_values">
         <item>@string/room_settings_tag_pref_entry_value_favourite</item>
         <item>@string/room_settings_tag_pref_entry_value_low_priority</item>
@@ -19,6 +20,7 @@
         <item>Anyone who knows the room\'s link, apart from guests</item>
         <item>Anyone who knows the room\'s link, including guests</item>
     </string-array>
+    
     <string-array name="room_access_rules_values">
         <item>1</item>
         <item>2</item>

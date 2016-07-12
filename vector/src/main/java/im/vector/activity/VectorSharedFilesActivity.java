@@ -122,7 +122,7 @@ public class VectorSharedFilesActivity extends Activity {
 
         sharedFolder.mkdir();
 
-        ArrayList<SharedDataItem> cachedFiles = new ArrayList<SharedDataItem>(SharedDataItem.listSharedDataItems(intent));
+        ArrayList<SharedDataItem> cachedFiles = new ArrayList<>(SharedDataItem.listSharedDataItems(intent));
 
         if (null != cachedFiles) {
             for(SharedDataItem sharedDataItem : cachedFiles) {

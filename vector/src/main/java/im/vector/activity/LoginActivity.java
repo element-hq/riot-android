@@ -82,20 +82,20 @@ public class LoginActivity extends MXCActionBarActivity {
 
     private static final String LOG_TAG = "LoginActivity";
 
-    static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
-    static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
-    static final int CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316;
+    private static final int ACCOUNT_CREATION_ACTIVITY_REQUEST_CODE = 314;
+    private static final int FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE = 315;
+    private static final int CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE = 316;
 
     private final static int REGISTER_POLLING_PERIOD = 10 * 1000;
 
     // activity modes
     // either the user logs in
     // or creates a new account
-    static final int MODE_UNKNOWN = 0;
-    static final int MODE_LOGIN = 1;
-    static final int MODE_ACCOUNT_CREATION = 2;
-    static final int MODE_FORGOT_PASSWORD = 3;
-    static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
+    private static final int MODE_UNKNOWN = 0;
+    private static final int MODE_LOGIN = 1;
+    private static final int MODE_ACCOUNT_CREATION = 2;
+    private static final int MODE_FORGOT_PASSWORD = 3;
+    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
 
     public static final String LOGIN_PREF = "vector_login";
     public static final String PASSWORD_PREF = "vector_password";
@@ -129,9 +129,9 @@ public class LoginActivity extends MXCActionBarActivity {
     private static final String SAVED_IDENTITY_SERVER_URL = "SAVED_IDENTITY_SERVER_URL";
 
     // mail validation
-    public static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
-    public static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
-    public static final String KEY_SUBMIT_TOKEN_SUCCESS = "success";
+    private static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
+    private static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
+    private static final String KEY_SUBMIT_TOKEN_SUCCESS = "success";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -197,7 +197,6 @@ public class LoginActivity extends MXCActionBarActivity {
     // HS / identity URL layouts
     // the IS and the HS have a dedicated editText to let the user customize them.
     private boolean mIsHomeServerUrlIsDisplayed;
-    private View mDisplayHomeServerUrlView;
     private View mHomeServerUrlsLayout;
     private ImageView mExpandImageView;
 
@@ -205,14 +204,14 @@ public class LoginActivity extends MXCActionBarActivity {
     private Parcelable mUniversalLinkUri;
 
     // the HS and the IS urls
-    String mHomeServerUrl = null;
-    String mIdentityServerUrl = null;
+    private String mHomeServerUrl = null;
+    private String mIdentityServerUrl = null;
 
     // allowed registration response
     private RegistrationFlowResponse mRegistrationResponse;
 
     // login handler
-    private LoginHandler mLoginHandler = new LoginHandler();
+    private final LoginHandler mLoginHandler = new LoginHandler();
 
     // save the config because trust a certificate is asynchronous.
     private HomeserverConnectionConfig mHomeserverConnectionConfig;
@@ -366,7 +365,7 @@ public class LoginActivity extends MXCActionBarActivity {
         mForgotPasswordButton = (Button) findViewById(R.id.button_reset_password);
         mForgotValidateEmailButton = (Button) findViewById(R.id.button_forgot_email_validate);
 
-        mDisplayHomeServerUrlView = findViewById(R.id.display_server_url_layout);
+        View displayHomeServerUrlView  = findViewById(R.id.display_server_url_layout);
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
         mExpandImageView = (ImageView) findViewById(R.id.display_server_url_expand_icon);
 
@@ -481,7 +480,7 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         });
 
-        mDisplayHomeServerUrlView.setOnClickListener(new View.OnClickListener() {
+        displayHomeServerUrlView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mIsHomeServerUrlIsDisplayed = !mIsHomeServerUrlIsDisplayed;
@@ -583,7 +582,7 @@ public class LoginActivity extends MXCActionBarActivity {
      * This method is mainly used to refresh the login UI upon the network is back.
      * See {@link #removeNetworkStateNotificationListener()}
      */
-    public void addNetworkStateNotificationListener() {
+    private void addNetworkStateNotificationListener() {
         if(null != Matrix.getInstance(getApplicationContext())) {
             Matrix.getInstance(this).removeNetworkEventListener(mNetworkListener);
             Matrix.getInstance(this).addNetworkEventListener(mNetworkListener);
@@ -593,7 +592,7 @@ public class LoginActivity extends MXCActionBarActivity {
     /**
      * Remove the network listener set in {@link #addNetworkStateNotificationListener()}.
      */
-    public void removeNetworkStateNotificationListener() {
+    private void removeNetworkStateNotificationListener() {
         if(null != Matrix.getInstance(getApplicationContext())) {
             Matrix.getInstance(this).removeNetworkEventListener(mNetworkListener);
         }
@@ -656,7 +655,7 @@ public class LoginActivity extends MXCActionBarActivity {
         // cancel the registration flow
         mEmailValidationExtraParams = null;
         mRegistrationResponse = null;
-        onRegistrationEnd();
+        showMainLayout();
         enableLoadingScreen(false);
 
         mMode = MODE_LOGIN;
@@ -783,9 +782,9 @@ public class LoginActivity extends MXCActionBarActivity {
                     refreshDisplay();
 
                     // refresh the messages
-                    onRegistrationStart(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
+                    hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_email_validation_message, email));
 
-                    mForgotPid = new HashMap<String, String>();
+                    mForgotPid = new HashMap<>();
                     mForgotPid.put("client_secret", thirdPid.clientSecret);
                     String identityServerHost = mIdentityServerText.getText().toString().trim();
                     if (identityServerHost.startsWith("http://")) {
@@ -801,7 +800,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
             /**
              * Display a toast to warn that the operation failed
-             * @param errorMessage
+             * @param errorMessage the error message.
              */
             private void onError(String errorMessage) {
                 Log.e(LOG_TAG, "onForgotPasswordClick : requestValidationToken fails with error " + errorMessage);
@@ -812,7 +811,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     // display the dedicated
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     mMode = MODE_LOGIN;
-                    onRegistrationEnd();
+                    showMainLayout();
                     refreshDisplay();
                 }
             }
@@ -867,7 +866,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
             mIsPasswordResetted = false;
             mMode = MODE_LOGIN;
-            onRegistrationEnd();
+            showMainLayout();
             refreshDisplay();
         } else {
             ProfileRestClient profileRestClient = new ProfileRestClient(hsConfig);
@@ -884,7 +883,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         enableLoadingScreen(false);
 
                         // refresh the messages
-                        onRegistrationStart(getResources().getString(R.string.auth_reset_password_success_message));
+                        hideMainLayoutAndToast(getResources().getString(R.string.auth_reset_password_success_message));
                         mIsPasswordResetted = true;
                         refreshDisplay();
                     }
@@ -893,7 +892,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 /**
                  * Display a toast to warn that the operation failed
                  *
-                 * @param errorMessage
+                 * @param errorMessage the error message.
                  */
                 private void onError(String errorMessage, boolean cancel) {
                     if (mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
@@ -903,12 +902,18 @@ public class LoginActivity extends MXCActionBarActivity {
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                         enableLoadingScreen(false);
 
+                        showMainLayout();
+
                         if (cancel) {
                             mMode = MODE_LOGIN;
-                            onRegistrationEnd();
                             refreshDisplay();
                         } else {
-                            onRegistrationStart(getResources().getString(R.string.auth_reset_password_success_message));
+                            LoginActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_reset_password_success_message), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }
                 }
@@ -1034,7 +1039,7 @@ public class LoginActivity extends MXCActionBarActivity {
             enableLoadingScreen(true);
 
             // display wait screen with no text (same as iOS) for now..
-            onRegistrationStart("");
+            hideMainLayoutAndToast("");
 
             // set register mode
             mMode = MODE_ACCOUNT_CREATION;
@@ -1072,7 +1077,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     Log.d(LOG_TAG, "## submitEmailToken(): errorHandler().");
                     enableLoadingScreen(false);
                     setActionButtonsEnabled(false);
-                    onRegistrationEnd();
+                    showMainLayout();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 }
 
@@ -1131,8 +1136,8 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private void registerAfterEmailValidation(String aClientSecret, String aSid, String aIdentityServer, String aSessionId) {
         mMode = MODE_ACCOUNT_CREATION;
-        HashMap<String, Object> authParams = new HashMap<String, Object>();
-        HashMap<String, Object> thirdPartyIdsCredentialsAuth = new HashMap<String, Object>();
+        HashMap<String, Object> authParams = new HashMap<>();
+        HashMap<String, Object> thirdPartyIdsCredentialsAuth = new HashMap<>();
         RegistrationParams registrationParams = new RegistrationParams();
 
         Log.d(LoginActivity.LOG_TAG, "## registerAfterEmailValidation(): IN aSessionId="+aSessionId);
@@ -1199,6 +1204,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         private void onError (String errorMessage){
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
                                 enableLoadingScreen(false);
+                                showMainLayout();
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -1221,7 +1227,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                 // waiting for email case
                                 if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                                     // refresh the messages
-                                    onRegistrationStart(getResources().getString(R.string.auth_email_validation_message));
+                                    hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
 
                                     // check if the next link parameters have been received
                                     if (null != mEmailValidationExtraParams) {
@@ -1268,7 +1274,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                         // next step
                                         onRegisterClick(false);
                                     } else {
-                                        onRegistrationEnd();
+                                        showMainLayout();
                                         onFailureDuringAuthRequest(e);
                                     }
                                 }
@@ -1280,7 +1286,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
-                onRegistrationEnd();
+                showMainLayout();
                 enableLoadingScreen(false);
             }
         } else {
@@ -1314,13 +1320,13 @@ public class LoginActivity extends MXCActionBarActivity {
                     final String fSession = mRegistrationResponse.session;
 
                     // display wait screen with no text (same as iOS) for now..
-                    onRegistrationStart("");
+                    hideMainLayoutAndToast("");
 
                     mLoginHandler.register(LoginActivity.this, hsConfig, params, new SimpleApiCallback<HomeserverConnectionConfig>() {
                         // common local error handler
                         private void onError (String errorMessage){
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
-                                onRegistrationEnd();
+                                showMainLayout();
                                 enableLoadingScreen(false);
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
@@ -1354,7 +1360,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                     // user name is already taken, the registration process stops here (new user name should be provided)
                                     // ex: {"errcode":"M_USER_IN_USE","error":"User ID already taken."}
                                     Log.d(LOG_TAG, "## checkNameAvailability(): user name is used");
-                                    onRegistrationEnd();
+                                    showMainLayout();
                                     enableLoadingScreen(false);
                                     onFailureDuringAuthRequest(aErrorParam);
                                 } else {
@@ -1381,7 +1387,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                         mRegistrationResponse = registrationFlowResponse;
                                         onRegisterClick(false);
                                     } else {
-                                        onRegistrationEnd();
+                                        showMainLayout();
                                         enableLoadingScreen(false);
                                         onFailureDuringAuthRequest(aErrorParam);
                                     }
@@ -1394,7 +1400,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
-                onRegistrationEnd();
+                showMainLayout();
                 enableLoadingScreen(false);
             }
         } else {
@@ -1441,7 +1447,7 @@ public class LoginActivity extends MXCActionBarActivity {
         enableLoadingScreen(false);
         setActionButtonsEnabled(true);
 
-        ArrayList<LoginFlow> supportedFlows = new ArrayList<LoginFlow>();
+        ArrayList<LoginFlow> supportedFlows = new ArrayList<>();
 
         // supported only m.login.password by now
         for (LoginFlow flow : registrationFlowResponse.flows) {
@@ -1559,6 +1565,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         private void onError(String errorMessage) {
                             // should not check login flows
                             if (mMode == MODE_ACCOUNT_CREATION) {
+                                showMainLayout();
                                 enableLoadingScreen(false);
                                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                             }
@@ -1594,6 +1601,7 @@ public class LoginActivity extends MXCActionBarActivity {
                                         try {
                                             registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
                                         } catch (Exception castExcept) {
+                                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage());
                                         }
                                     } else if (e.mStatus == 403) {
                                         // not supported by the server
@@ -1625,19 +1633,19 @@ public class LoginActivity extends MXCActionBarActivity {
     }
 
     /**
-     * The registration process starts
+     * Hide the main layout and display a toast.
      * @param text the text helper
      */
-    private void onRegistrationStart(String text) {
+    private void hideMainLayoutAndToast(String text) {
         mMainLayout.setVisibility(View.GONE);
         mProgressTextView.setVisibility(View.VISIBLE);
         mProgressTextView.setText(text);
     }
 
     /**
-     * The registration process stops.
+     * Show the main layout.
      */
-    private void onRegistrationEnd() {
+    private void showMainLayout() {
         mMainLayout.setVisibility(View.VISIBLE);
         mProgressTextView.setVisibility(View.GONE);
     }
@@ -1728,12 +1736,11 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 AlertDialog alert = builder.create();
                 alert.show();
-
                 return;
             }
         }
 
-        final String fsession = mRegistrationResponse.session;
+        final String fSession = mRegistrationResponse.session;
 
         // ask server if chosen user name is available before doing anything
         if(!mIsUserNameAvailable && !isEmailIdentityFlowCompleted()) {
@@ -1758,11 +1765,11 @@ public class LoginActivity extends MXCActionBarActivity {
             enableLoadingScreen(true);
 
             final HomeserverConnectionConfig hsConfig = getHsConfig();
-            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, fsession,new SimpleApiCallback<ThreePid>() {
+            mLoginHandler.requestValidationToken(LoginActivity.this, hsConfig, email, fSession,new SimpleApiCallback<ThreePid>() {
                 @Override
                 public void onSuccess(ThreePid thirdPid) {
-                    if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fsession, getRegistrationSession()))) {
-                        HashMap<String, Object> pidsCredentialsAuth = new HashMap<String, Object>();
+                    if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
+                        HashMap<String, Object> pidsCredentialsAuth = new HashMap<>();
                         pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
                         String identityServerHost = mIdentityServerText.getText().toString().trim();
                         if (identityServerHost.startsWith("http://")) {
@@ -1775,7 +1782,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         pidsCredentialsAuth.put("sid", thirdPid.sid);
                         RegistrationParams params = new RegistrationParams();
 
-                        HashMap<String, Object> authParams = new HashMap<String, Object>();
+                        HashMap<String, Object> authParams = new HashMap<>();
                         authParams.put("session", mRegistrationResponse.session);
                         authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
                         authParams.put("threepid_creds", pidsCredentialsAuth);
@@ -1790,7 +1797,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
 
                 private void onError (String errorMessage){
-                    if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fsession, getRegistrationSession()))) {
+                    if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
                         enableLoadingScreen(false);
                         setActionButtonsEnabled(false);
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
@@ -1832,6 +1839,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         site_key = recaptchaParams.get("public_key");
 
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "JsonUtils.recaptchaParams " + e.getLocalizedMessage());
                     }
 
                     if (!TextUtils.isEmpty(site_key)) {
@@ -1854,7 +1862,7 @@ public class LoginActivity extends MXCActionBarActivity {
         // use the default registration
         RegistrationParams params = new RegistrationParams();
 
-        HashMap<String, Object> authParams = new HashMap<String, Object>();
+        HashMap<String, Object> authParams = new HashMap<>();
         authParams.put("session", mRegistrationResponse.session);
         authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
 
@@ -1894,6 +1902,9 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // the user switches to another mode
         if (mMode != MODE_LOGIN) {
+            // end any pending registration UI
+            showMainLayout();
+
             mMode = MODE_LOGIN;
             refreshDisplay();
             return;
@@ -2293,7 +2304,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                 final RegistrationParams params = new RegistrationParams();
 
-                HashMap<String, Object> authParams = new HashMap<String, Object>();
+                HashMap<String, Object> authParams = new HashMap<>();
                 authParams.put("session", mRegistrationResponse.session);
                 authParams.put("response", captchaResponse);
                 authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
@@ -2321,7 +2332,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 Log.d(LOG_TAG,"## onActivityResult(): CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE => RESULT_KO");
                 // cancel the registration flow
                 mRegistrationResponse = null;
-                onRegistrationEnd();
+                showMainLayout();
                 enableLoadingScreen(false);
                 refreshDisplay();
             }

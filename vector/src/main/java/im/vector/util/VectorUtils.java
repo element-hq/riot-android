@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -73,6 +75,47 @@ public class VectorUtils {
 
     public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
+
+    //==============================================================================================================
+    // permalink methods
+    //==============================================================================================================
+
+    /**
+     * Provides a permalink for a room id and an eventId.
+     * The eventId is optional.
+     * @param roomIdOrAlias the room id or alias.
+     * @param eventId the event id (optional)
+     * @return the permalink
+     */
+    public static String getPermalink(String roomIdOrAlias, String eventId) {
+        if (TextUtils.isEmpty(roomIdOrAlias)) {
+            return null;
+        }
+
+        String link = "https://vector.im/beta/#/room/" + roomIdOrAlias;
+
+        if (!TextUtils.isEmpty(eventId)) {
+            link +=  "/" + eventId;
+        }
+
+        // the $ character is not as a part of an url so escape it.
+        return link.replace("$","%24");
+    }
+
+    //==============================================================================================================
+    // Clipboard helper
+    //==============================================================================================================
+
+    /**
+     * Copy a text to the clipboard.
+     * @param context the context
+     * @param text the text to copy
+     */
+    public static void copyToClipboard(Context context, CharSequence text) {
+        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newPlainText("", text));
+        Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+    }
 
     //==============================================================================================================
     // Rooms methods
@@ -638,14 +681,12 @@ public class VectorUtils {
                     ResourceUtils.Resource resource = ResourceUtils.openResource(context, thumbnailUri, null);
 
                     // sanity check
-                    if (null != resource) {
-                        if ("image/jpg".equals(resource.mimeType) || "image/jpeg".equals(resource.mimeType)) {
-                            InputStream stream = resource.contentStream;
-                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
+                    if ((null != resource) && resource.isJpegResource()) {
+                        InputStream stream = resource.mContentStream;
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(context, thumbnailUri);
 
-                            String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mimeType, 1024, rotationAngle, mediasCache);
-                            thumbnailUri = Uri.parse(mediaUrl);
-                        }
+                        String mediaUrl = ImageUtils.scaleAndRotateImage(context, stream, resource.mMimeType, 1024, rotationAngle, mediasCache);
+                        thumbnailUri = Uri.parse(mediaUrl);
                     }
 
                     return thumbnailUri;

@@ -1,3 +1,33 @@
+Changes in Vector 0.3.3 (2016-07-11)
+===================================================
+
+Improvements:
+ * #248 : Update room members search sort.
+ * #249 : Fix some lint errors.
+ * The android permissions are only requested in the right fragment/activity.
+ * The image compression dialog is only requested once when an images batch is sent.
+ * Update gradle to 1.5.0
+
+Features:
+ * Add the room aliases management in the room settings page. 
+ 
+Bugfixes:
+ * #177 / 245 : Click on a room invitation notification should open the room preview.
+ * #237 : Sending several images in one time should offer compression for each 
+ * #239 : Display notifications when GCM is enabled and background synd is disabled.
+ * #253 : Add copy in any room message
+ * #203 / 257 : Login page buttons disabled when no network.
+ * #261 : The app should not display <img> from HTML formatted_body.
+ * #262 : Improve device notification settings 
+ * #263 : redactions shouldn't hide auth events (eg bans) from the timeline. they should only hide the human readable bits of content.
+ * #268 : Add 'leave' button to room settings.
+ * #271 : Accepting an invite does not get full scrollback.
+ * #272 : MD swallows leading #'s even if there are less than 3.
+ * #278 : Add exclamation badge in invitation cell
+ * Display leave room when displaying the account member details activity when no room is defined.
+ * In some cases, the filename was not properly retrieved.
+ * fix several GA crashes.
+ 
 Changes in Vector 0.3.2 (2016-06-21)
 ===================================================
 

@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -92,6 +93,8 @@ public class CommonActivityUtils {
     /**
      * Mime types
      **/
+    public static final String MIME_TYPE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_JPG =  "image/jpg";
     public static final String MIME_TYPE_IMAGE_ALL = "image/*";
     public static final String MIME_TYPE_ALL_CONTENT = "*/*";
 
@@ -139,12 +142,9 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
-    public static final int REQUEST_CODE_PERMISSION_SEARCH_ROOM = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
-
-    // start activity intent parameters
-    public static final String KEY_PERMISSIONS_READ_CONTACTS = "KEY_PERMISSIONS_READ_CONTACTS";
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
@@ -162,7 +162,7 @@ public class CommonActivityUtils {
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(activity).getSharedGcmRegistrationManager().unregisterSession(session, null);
+            Matrix.getInstance(activity).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
             Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
@@ -333,7 +333,7 @@ public class CommonActivityUtils {
         }
 
         // reset the GCM
-        Matrix.getInstance(activity).getSharedGcmRegistrationManager().reset();
+        Matrix.getInstance(activity).getSharedGCMRegistrationManager().reset();
 
         // clear credentials
         Matrix.getInstance(activity).clearSessions(activity, true);
@@ -529,7 +529,7 @@ public class CommonActivityUtils {
         } else if((REQUEST_CODE_PERMISSION_TAKE_PHOTO!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL!=aPermissionsToBeGrantedBitMap)
-                && (REQUEST_CODE_PERMISSION_SEARCH_ROOM !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
                 ) {
@@ -608,7 +608,16 @@ public class CommonActivityUtils {
                         }
                     }
                 });
-                permissionsInfoDialog.show();
+
+                Dialog dialog = permissionsInfoDialog.show();
+
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        CommonActivityUtils.displayToast(aCallingActivity, aCallingActivity.getString(R.string.missing_permissions_warning));
+                    }
+                });
+
             } else {
                 // some permissions are not granted, ask permissions
                 if (isRequestPermissionRequired) {

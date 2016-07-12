@@ -20,9 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.LoginFilter;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -31,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -67,29 +64,42 @@ import java.util.List;
  */
 public class VectorMessagesAdapter extends MessagesAdapter {
 
+    private static final String LOG_TAG = "VMessagesAdapter";
+
     public interface VectorMessagesAdapterActionsListener {
         /**
          * An action has been  triggered on an event.
          * @param event the event.
+         * @param textMsg the text message
          * @param action an action ic_action_vector_XXX
          */
-        void onEventAction(final Event event, final int action);
+        void onEventAction(final Event event, final String textMsg, final int action);
     }
 
     // an event is highlighted when the user taps on it
     private String mHighlightedEventId;
 
-    protected VectorMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
-    protected Date mReferenceDate = new Date();
-    protected ArrayList<Date> mMessagesDateList = new ArrayList<Date>();
-    protected Handler mUiHandler;
+    // events listeners
+    private VectorMessagesAdapterActionsListener mVectorMessagesAdapterEventsListener = null;
+
+    // current date : used to compute the day header
+    private Date mReferenceDate = new Date();
+
+    // day date of each message
+    // the hours, minutes and seconds are removed
+    private ArrayList<Date> mMessagesDateList = new ArrayList<>();
 
     // when the adapter is used in search mode
     // the searched message should be highlighted
-    protected String mSearchedEventId = null;
+    private String mSearchedEventId = null;
 
-    protected HashMap<String, String> mEventFormattedTsMap = new HashMap<String, String>();
+    // formatted time by event id
+    // it avoids computing them several times
+    private final HashMap<String, String> mEventFormattedTsMap = new HashMap<>();
 
+    /**
+     * Expanded constructor.
+     */
     public VectorMessagesAdapter(MXSession session, Context context, int textResLayoutId, int imageResLayoutId,
                                  int noticeResLayoutId, int emoteRestLayoutId, int fileResLayoutId, int videoResLayoutId, MXMediasCache mediasCache) {
 
@@ -101,11 +111,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 fileResLayoutId,
                 videoResLayoutId,
                 mediasCache);
-
-        // for dispatching data to add to the adapter we need to be on the main thread
-        mUiHandler = new Handler(Looper.getMainLooper());
     }
 
+    /**
+     * Creates a messages adapter with the default layouts.
+     */
     public VectorMessagesAdapter(MXSession session, Context context, MXMediasCache mediasCache) {
         super(session, context,
                 R.layout.adapter_item_vector_message_text_emote_notice,
@@ -115,9 +125,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 R.layout.adapter_item_vector_message_file,
                 R.layout.adapter_item_vector_message_image_video,
                 mediasCache);
-
-        // for dispatching data to add to the adapter we need to be on the main thread
-        mUiHandler = new Handler(Looper.getMainLooper());
     }
 
     /**
@@ -127,9 +134,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         mEventFormattedTsMap.clear();
     }
 
-
     /**
-     * Toogle the selection mode.
+     * Toggle the selection mode.
      * @param eventId the tapped eventID.
      */
     public void onEventTap(String eventId) {
@@ -255,10 +261,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
             if ((null != row.getEvent()) && !row.getEvent().isValidOriginServerTs()) {
                 if (null == undeliverableEvents) {
-                    undeliverableEvents = new ArrayList<MessageRow>();
+                    undeliverableEvents = new ArrayList<>();
                 }
                 undeliverableEvents.add(row);
-                this.remove(row);
+                removeRow(row);
                 i--;
             }
         }
@@ -270,7 +276,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         this.setNotifyOnChange(true);
 
         // build messages timestamps
-        ArrayList<Date> dates = new ArrayList<Date>();
+        ArrayList<Date> dates = new ArrayList<>();
 
         Date latestDate = AdapterUtils.zeroTimeDate(new Date());
 
@@ -293,7 +299,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     /**
      * Converts a difference of days to a string.
-     * @param date the date to dislay
+     * @param date the date to display
      * @param nbrDays the number of days between the reference days
      * @return the date text
      */
@@ -398,7 +404,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         avatarsListView.setVisibility(View.VISIBLE);
 
-        ArrayList<View> imageViews = new ArrayList<View>();
+        ArrayList<View> imageViews = new ArrayList<>();
 
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_1).findViewById(org.matrix.androidsdk.R.id.avatar_img));
         imageViews.add(avatarsListView.findViewById(R.id.message_avatar_receipt_2).findViewById(org.matrix.androidsdk.R.id.avatar_img));
@@ -428,7 +434,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
 
         moreText.setVisibility((receipts.size() <= imageViews.size()) ? View.GONE : View.VISIBLE);
-        moreText.setText(receipts.size() - imageViews.size() + "+");
+        moreText.setText((receipts.size() - imageViews.size()) + "+");
 
         for(; index < imageViews.size(); index++) {
             imageViews.get(index).setVisibility(View.INVISIBLE);
@@ -451,10 +457,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     /**
      * The user taps on the action icon.
      * @param event the selected event.
+     * @param textMsg the event text
      * @param anchorView the popup anchor.
      */
     @SuppressLint("NewApi")
-    private void onMessageClick(final Event event, final View anchorView) {
+    private void onMessageClick(final Event event, final String textMsg, final View anchorView) {
         final PopupMenu popup = (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? new PopupMenu(mContext, anchorView, Gravity.END) : new PopupMenu(mContext, anchorView);
 
         popup.getMenuInflater().inflate(R.menu.vector_room_message_settings, popup.getMenu());
@@ -473,6 +480,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 }
             }
         } catch (Exception e) {
+            Log.e(LOG_TAG, "onMessageClick : force to display the icons failed " + e.getLocalizedMessage());
         }
 
         Menu menu = popup.getMenu();
@@ -486,14 +494,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
         }
 
-        // before enabling them
-        // according to the event type.
-        if (TextUtils.equals(event.type, Event.EVENT_TYPE_MESSAGE)) {
-            Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
-
-            if (Message.MSGTYPE_TEXT.equals(message.msgtype)) {
-                menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
-            }
+        if (!TextUtils.isEmpty(textMsg)) {
+            menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
         }
 
         if (event.canBeResent()) {
@@ -529,7 +531,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             public boolean onMenuItemClick(final MenuItem item) {
                 // warn the listener
                 if (null != mVectorMessagesAdapterEventsListener) {
-                    mVectorMessagesAdapterEventsListener.onEventAction(event, item.getItemId());
+                    mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId());
                 }
 
                 // disable the selection
@@ -545,45 +547,45 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     /**
      * Manage the select mode i.e highlight an item when the user tap on it
-     * @param convertView teh cell view.
+     * @param contentView the cell view.
      * @param event the linked event
      */
-    private void manageSelectionMode(final View convertView, final Event event) {
+    private void manageSelectionMode(final View contentView, final Event event) {
         final String eventId = event.eventId;
 
         boolean isInSelectionMode = (null != mHighlightedEventId);
         boolean isHighlighted = TextUtils.equals(eventId, mHighlightedEventId);
 
         // display the action icon when selected
-        convertView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isHighlighted ? View.VISIBLE : View.GONE);
+        contentView.findViewById(R.id.messagesAdapter_action_image).setVisibility(isHighlighted ? View.VISIBLE : View.GONE);
 
         float alpha = (!isInSelectionMode || isHighlighted) ? 1.0f : 0.2f;
 
         // the message body is dimmed when not selected
-        convertView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
-        convertView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
+        contentView.findViewById(R.id.messagesAdapter_body_view).setAlpha(alpha);
+        contentView.findViewById(R.id.messagesAdapter_avatars_list).setAlpha(alpha);
 
-        TextView tsTextView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
+        TextView tsTextView = (TextView)contentView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_timestamp);
         if (isInSelectionMode && isHighlighted) {
             tsTextView.setVisibility(View.VISIBLE);
         }
 
-        convertView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right).setOnClickListener(new View.OnClickListener() {
+        contentView.findViewById(org.matrix.androidsdk.R.id.message_timestamp_layout_right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.equals(eventId, mHighlightedEventId)) {
-                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                 } else {
                     onEventTap(eventId);
                 }
             }
         });
 
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+        contentView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (!mIsSearchMode) {
-                    onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                    onMessageClick(event, getEventText(contentView), contentView.findViewById(R.id.messagesAdapter_action_anchor));
                     mHighlightedEventId = eventId;
                     notifyDataSetChanged();
                     return true;
@@ -606,6 +608,25 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     @Override
     protected boolean isMergeableEvent(Event event) {
         return super.isMergeableEvent(event) && !event.isCallEvent();
+    }
+
+    /**
+     * Return the text displayed in a convertView in the chat history.
+     * @param contentView the cell view
+     * @return the displayed text.
+     */
+    private String getEventText(View contentView) {
+        String text = null;
+
+        if (null != contentView) {
+            TextView bodyTextView = (TextView)contentView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body);
+
+            if (null != bodyTextView) {
+                text = bodyTextView.getText().toString();
+            }
+        }
+
+        return text;
     }
 
     @Override
@@ -631,7 +652,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                     Event event = row.getEvent();
 
                     if (!mIsSearchMode) {
-                        onMessageClick(event, convertView.findViewById(R.id.messagesAdapter_action_anchor));
+                        onMessageClick(event, getEventText(contentView), convertView.findViewById(R.id.messagesAdapter_action_anchor));
                         mHighlightedEventId = event.eventId;
                         notifyDataSetChanged();
                         return true;
@@ -726,9 +747,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
                 bodyLayout.setMargins(4, bodyLayout.topMargin, 4, bodyLayout.bottomMargin);
 
-                highlightMakerView.setBackgroundColor(mContext.getResources().getColor(R.color.vector_green_color));
+                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.vector_green_color));
             } else {
-                highlightMakerView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
+                highlightMakerView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
             }
         }
 
@@ -736,22 +757,29 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     }
 
     public int presenceOnlineColor() {
-        return mContext.getResources().getColor(R.color.presence_online);
+        return ContextCompat.getColor(mContext, R.color.presence_online);
     }
 
     public int presenceOfflineColor() {
-        return mContext.getResources().getColor(R.color.presence_offline);
+        return ContextCompat.getColor(mContext, R.color.presence_offline);
     }
 
     public int presenceUnavailableColor() {
-        return mContext.getResources().getColor(R.color.presence_unavailable);
+        return ContextCompat.getColor(mContext, R.color.presence_unavailable);
     }
 
-    public int highlightMessageColor(Context context) {
-        return context.getResources().getColor(R.color.vector_fuchsia_color);
+    @Override
+    public int getHighlightMessageTextColor(Context context) {
+        return ContextCompat.getColor(mContext, R.color.vector_fuchsia_color);
     }
 
-    public int searchHighlightMessageColor(Context context) {
-        return context.getResources().getColor(R.color.vector_green_color);
+    @Override
+    public int getSearchHighlightMessageTextColor(Context context) {
+        return ContextCompat.getColor(mContext, R.color.vector_green_color);
+    }
+
+    @Override
+    public int getNotSentMessageTextColor(Context context) {
+        return ContextCompat.getColor(mContext, R.color.vector_not_send_color);
     }
 }

@@ -763,12 +763,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberNameTextView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("", mMemberNameTextView.getText());
-                    clipboard.setPrimaryClip(clip);
-
-                    Context context = VectorMemberDetailsActivity.this;
-                    Toast.makeText(context, context.getResources().getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show();
+                    VectorUtils.copyToClipboard(VectorMemberDetailsActivity.this, mMemberNameTextView.getText());
                     return true;
                 }
             });

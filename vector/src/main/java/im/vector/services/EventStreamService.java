@@ -117,6 +117,9 @@ public class EventStreamService extends Service {
     // static instance
     private static EventStreamService mActiveEventStreamService = null;
 
+    // the GCM manager
+    private GcmRegistrationManager mGcmRegistrationManager;
+
     /**
      * @return the event stream instance
      */
@@ -395,7 +398,9 @@ public class EventStreamService extends Service {
             }
         }
 
-        if (!Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager().useGCM()) {
+        mGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
+
+        if (!mGcmRegistrationManager.useGCM()) {
             updateServiceForegroundState();
         }
 
@@ -516,12 +521,10 @@ public class EventStreamService extends Service {
             return;
         }
 
-        GcmRegistrationManager gcmnMgr = Matrix.getInstance(this).getSharedGcmRegistrationManager();
-
         // detect if the polling thread must be started
         // i.e a session must be defined
         // and GCM disabled or GCM registration failed
-        if ((!gcmnMgr.useGCM() || gcmnMgr.usePollingThread()) && gcmnMgr.isBackgroundSyncAllowed()) {
+        if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForeground = true;
@@ -607,9 +610,7 @@ public class EventStreamService extends Service {
             bingRule = mDefaultBingRule;
         }
 
-        GcmRegistrationManager gcmGcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGcmRegistrationManager();
-
-        if (!gcmGcmRegistrationManager.isNotificationsAllowed()) {
+        if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
             return;
         }
@@ -791,11 +792,16 @@ public class EventStreamService extends Service {
                     nm.cancelAll();
                     nm.notify(MSG_NOTIFICATION_ID, mLatestNotification);
 
-                    // turn the screen on for 3 seconds
-                    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                    PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
-                    wl.acquire(3000);
-                    wl.release();
+                    // turn the screen on
+                    if (mGcmRegistrationManager.isScreenTurnedOn()) {
+                        // turn the screen on for 3 seconds
+                        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "MXEventListener");
+                        wl.acquire(3000);
+                        wl.release();
+                    }
+
+
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "onLiveEventsChunkProcessed crashed " + e.getLocalizedMessage());
                 }

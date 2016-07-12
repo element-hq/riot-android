@@ -183,7 +183,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                     Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
                 } else {
                     Log.w(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                    CommonActivityUtils.displayToast(this, "Due to missing permissions, some features may be missing..");
+                    CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
                 }
 
                 ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
@@ -233,11 +233,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
             // start the file search if the selected tab is the file one
             startFileSearch();
-        }
-
-        if (!mIsContactsPermissionChecked) {
-            mIsContactsPermissionChecked = true;
-            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
         }
     }
 
@@ -363,6 +358,12 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
             }
             mCurrentTabIndex = PEOPLE_TAB_INDEX;
+
+
+            if (!mIsContactsPermissionChecked) {
+                mIsContactsPermissionChecked = true;
+                CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
+            }
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabSelectSettingsFragment();
