@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.media.AudioManager;
@@ -29,16 +30,19 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +55,7 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.services.EventStreamService;
+import im.vector.view.VectorPendingCallView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -71,7 +76,8 @@ public class CallViewActivity extends Activity {
     public static final String EXTRA_CALL_ID = "CallViewActivity.EXTRA_CALL_ID";
     public static final String EXTRA_AUTO_ACCEPT = "CallViewActivity.EXTRA_AUTO_ACCEPT";
     private static final String KEY_MIC_MUTE_STATUS = "KEY_MIC_MUTE_STATUS";
-    private static final String KEY_SPEAKER_STATUS = "KEY_SPEAKER_STATUS";
+    private static final String KEY_SPEAKER_VIDEO_CALL_STATUS = "KEY_SPEAKER_VIDEO_CALL_STATUS";
+    private static final String KEY_SPEAKER_AUDIO_CALL_STATUS = "KEY_SPEAKER_AUDIO_CALL_STATUS";
 
     private static CallViewActivity instance = null;
 
@@ -97,6 +103,7 @@ public class CallViewActivity extends Activity {
     private ImageView mAvatarView;
     private ImageView mMuteMicImageView;
     private ImageView mRoomLinkImageView;
+    private VectorPendingCallView mHeaderPendingCallView;
 
     // video diplay size
     private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig;
@@ -121,8 +128,6 @@ public class CallViewActivity extends Activity {
     private static final int FIRST_PERCENT_VOLUME = 10;
     private static boolean firstCallAlert = true;
     private static int mCallVolume = 0;
-    private boolean mSavedSpeakerValue;
-    private boolean mIsSpeakerForcedFromLifeCycle;
 
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
         @Override
@@ -184,14 +189,13 @@ public class CallViewActivity extends Activity {
         @Override
         public void onViewReady() {
             // update UI before displaying the video
-            setVideoCallUiLayout();
-
+            computeVideoUiLayout();
             if (!mCall.isIncoming()) {
                 Log.d(LOG_TAG, "## onViewReady(): placeCall()");
-                mCall.placeCall();
+                mCall.placeCall(mLocalVideoLayoutConfig);
             } else {
                 Log.d(LOG_TAG, "## onViewReady(): launchIncomingCall()");
-                mCall.launchIncomingCall();
+                mCall.launchIncomingCall(mLocalVideoLayoutConfig);
             }
         }
 
@@ -294,6 +298,9 @@ public class CallViewActivity extends Activity {
             mCall.removeListener(mListener);
         }
 
+        // remove header call view
+        mHeaderPendingCallView.checkPendingCall();
+
         mCall = null;
         mCallView = null;
         mSavedCallview = null;
@@ -326,9 +333,9 @@ public class CallViewActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG,"## onCreate(): IN");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_callview);
-        Log.d(LOG_TAG, "## onCreate():");
         instance = this;
 
         final Intent intent = getIntent();
@@ -369,6 +376,7 @@ public class CallViewActivity extends Activity {
         mAvatarView = (ImageView)CallViewActivity.this.findViewById(R.id.call_other_member);
         mMuteMicImageView = (ImageView)CallViewActivity.this.findViewById(R.id.mute_audio);
         mRoomLinkImageView = (ImageView)CallViewActivity.this.findViewById(R.id.room_chat_link);
+        mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
 
         mRoomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -396,8 +404,7 @@ public class CallViewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (null != mCall) {
-                    mIsSpeakerForcedFromLifeCycle = false;
-                    mCall.toggleSpeaker();
+                    toggleSpeaker();
                     refreshSpeakerButton();
                 }
             }
@@ -414,31 +421,13 @@ public class CallViewActivity extends Activity {
         // unmute mic as default state
         AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
 
-        // life cycle management
-        if(null != savedInstanceState){
-            if (null != audioManager) {
-                // restore audio settings
-                audioManager.setMicrophoneMute(savedInstanceState.getBoolean(KEY_MIC_MUTE_STATUS, false));
-                mSavedSpeakerValue = savedInstanceState.getBoolean(KEY_SPEAKER_STATUS, mCall.isVideo());
-                audioManager.setSpeakerphoneOn(mSavedSpeakerValue);
-                mIsSpeakerForcedFromLifeCycle = true;
-            }
-        } else {
-            if (null != audioManager) {
-                audioManager.setMicrophoneMute(false);
-            }
-        }
-
         // init the call button
+        restoreUserUiAudioSettings();
         manageSubViews();
 
         // the webview has been saved after a screen rotation
         // getParent() != null : the static value have been reused whereas it should not
         if ((null != mSavedCallview) && (null == mSavedCallview.getParent())) {
-            // after rotation compute the new camera layout and force applying new layout in the SDK
-            // computeVideoUiLayout();
-            // mCall.updateSmallLocalVideoRenderer();
-
             mCallView = mSavedCallview;
             insertCallView(mOtherMember.avatarUrl);
         } else {
@@ -453,10 +442,37 @@ public class CallViewActivity extends Activity {
                 }
             });
         }
+
+        setupHeaderPendingCallView();
+        Log.d(LOG_TAG,"## onCreate(): OUT");
+    }
+
+    /**
+     * Customize the header pending call view to match the video/audio call UI.
+     */
+    private void setupHeaderPendingCallView(){
+        if(null != mHeaderPendingCallView) {
+            // set the gradient effect in the background
+            View mainContainerView = mHeaderPendingCallView.findViewById(R.id.main_view);
+            mainContainerView.setBackgroundResource(R.drawable.call_header_transparent_bg);
+
+            // remove the call icon
+            View iconContainerView = mHeaderPendingCallView.findViewById(R.id.call_icon_container);
+            iconContainerView.setVisibility(View.GONE);
+
+            // center the text horizontally and remove any padding
+            LinearLayout textInfoContainerView = (LinearLayout)mHeaderPendingCallView.findViewById(R.id.call_info_container);
+            textInfoContainerView.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+            textInfoContainerView.setPadding(0,0,0,0);
+
+            // prevent the status call to be displayed
+            mHeaderPendingCallView.enableCallStatusDisplay(false);
+        }
     }
 
     /**
      * Toggle the mute feature of the mic.
+     * <br>Corresponding value is saved in the shared preference.
      */
     private void toggleMicMute() {
         AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
@@ -464,6 +480,73 @@ public class CallViewActivity extends Activity {
             boolean isMuted = audioManager.isMicrophoneMute();
             Log.d(LOG_TAG,"## toggleMicMute(): current mute val="+isMuted+" new mute val="+!isMuted);
             audioManager.setMicrophoneMute(!isMuted);
+
+            // save user choice in shared preference
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(KEY_MIC_MUTE_STATUS, audioManager.isMicrophoneMute());
+            editor.apply();
+        } else {
+            Log.w(LOG_TAG,"## toggleMicMute(): Failed due to invalid AudioManager");
+        }
+    }
+
+    /**
+     * Toggle the mute feature of the mic.
+     * <br>Corresponding value is saved in the shared preference.
+     */
+    private void toggleSpeaker() {
+        if(null != mCall) {
+            mCall.toggleSpeaker();
+
+            // save user choice in shared preference
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (null != audioManager) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                String keyPref = mCall.isVideo()?KEY_SPEAKER_VIDEO_CALL_STATUS:KEY_SPEAKER_AUDIO_CALL_STATUS;
+
+                editor.putBoolean(keyPref, audioManager.isSpeakerphoneOn());
+                editor.apply();
+            } else {
+                Log.w(LOG_TAG, "## toggleSpeaker(): Failed due to invalid AudioManager");
+            }
+        } else {
+            Log.w(LOG_TAG, "## toggleSpeaker(): Failed");
+        }
+    }
+
+    /**
+     * Update the speaker and the mic mute status according to the values
+     * saved by the user in the shared preference.
+     * <br>See {@link #toggleSpeaker()} and {@link #toggleMicMute()}.
+     */
+    private void restoreUserUiAudioSettings() {
+        boolean isSpeakerOn = false;
+        boolean isMicMute;
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(null != preferences) {
+            isMicMute = preferences.getBoolean(KEY_MIC_MUTE_STATUS, false/* default = un mute  */);
+
+            if (null != mCall) {
+                if (mCall.isVideo()) {
+                    // for video calls, default value speaker = enabled
+                    isSpeakerOn = preferences.getBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, true);
+                } else {
+                    // for audio calls, default value speaker = disabled
+                    isSpeakerOn = preferences.getBoolean(KEY_SPEAKER_AUDIO_CALL_STATUS, false);
+                }
+            }
+
+            // apply mute & speaker values
+            if (null != audioManager) {
+                audioManager.setMicrophoneMute(isMicMute);
+                audioManager.setSpeakerphoneOn(isSpeakerOn);
+            } else {
+                Log.w(LOG_TAG, "## restoreUserUiAudioSettings(): Failed due to invalid AudioManager");
+            }
         }
     }
 
@@ -529,8 +612,14 @@ public class CallViewActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        // compute video UI layout parameters
+        mHeaderPendingCallView.checkPendingCall();
+
+        // compute video UI layout position after rotation
         computeVideoUiLayout();
+        // apply new position
+        if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
+            mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+        }
 
         if (null != mCall) {
             mCall.onResume();
@@ -546,7 +635,6 @@ public class CallViewActivity extends Activity {
             }
             // init the call button
             manageSubViews();
-
         } else {
             this.finish();
         }
@@ -557,7 +645,7 @@ public class CallViewActivity extends Activity {
     /**
      * Compute the top margin of the view that contains the video
      * of the local attendee of the call (the small video, where
-     * the user sees himself).
+     * the user sees himself).<br>
      * Ratios are taken from the UI specifications. The vertical space
      * between the video view and the container (call_menu_buttons_layout_container)
      * containing the buttons of the video menu, is specified as 4.3% of
@@ -614,7 +702,8 @@ public class CallViewActivity extends Activity {
             if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
                 // take the video width as height
                 ratioVideoHeightNormalized = (localVideoWidth/screenHeight);
-            }else {
+            } else {
+                mLocalVideoLayoutConfig.mIsPortrait = true;
                 // take the video height as height
                 ratioVideoHeightNormalized = estimatedLocalVideoHeight/screenHeight;
             }
@@ -634,15 +723,6 @@ public class CallViewActivity extends Activity {
 
         msgDebug+= " VideoHeightRadio="+ratioVideoHeightNormalized+" screenHeight="+screenHeight+" containerHeight="+(int)buttonsContainerHeight+" TopMarginRatio="+mLocalVideoLayoutConfig.mY;
         Log.d(LOG_TAG,msgDebug);
-    }
-
-    /**
-     * Set the layout configuration used in the video call over IP.
-     * The sizes are computed here before being transmitted to the SDK, which
-     * is in charge of creating the view.
-     */
-    private void setVideoCallUiLayout() {
-        mCall.setVideoLayoutParameters(mLocalVideoLayoutConfig);
     }
 
     /**
@@ -672,7 +752,7 @@ public class CallViewActivity extends Activity {
 
             // update icon
             if (isMuted) {
-                mMuteMicImageView.setImageResource(R.drawable.ic_material_mic_grey);
+                mMuteMicImageView.setImageResource(R.drawable.ic_material_mic_off_pink_red); // ic_material_mic_grey
             } else {
                 mMuteMicImageView.setImageResource(R.drawable.ic_material_mic_off_grey);
             }
@@ -691,7 +771,7 @@ public class CallViewActivity extends Activity {
 
             AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.isSpeakerphoneOn()) {
-                mSpeakerSelectionView.setImageResource(R.drawable.ic_material_call_grey);
+                mSpeakerSelectionView.setImageResource(R.drawable.ic_material_speaker_phone_pink_red); // ic_material_call_grey
             } else {
                 mSpeakerSelectionView.setImageResource(R.drawable.ic_material_speaker_phone_grey);
             }
@@ -732,7 +812,6 @@ public class CallViewActivity extends Activity {
      * Init the buttons layer
      */
     private void manageSubViews() {
-        Log.d(LOG_TAG, "## manageSubViews(): IN");
         // sanity check
         // the call could have been destroyed between call.
         if (null == mCall) {
@@ -740,14 +819,16 @@ public class CallViewActivity extends Activity {
             return;
         }
 
-        // obtain speaker status from life cycle
-        boolean isSpeakerPhoneOn = mCall.isVideo();
-        if(mIsSpeakerForcedFromLifeCycle) {
-            isSpeakerPhoneOn = mSavedSpeakerValue;
-        }
+        // read speaker value from preferences
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isSpeakerPhoneOn;
+        if (mCall.isVideo())
+            isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, true);
+        else
+            isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_AUDIO_CALL_STATUS, false);
 
         String callState = mCall.getCallState();
-        Log.d(LOG_TAG, "## manageSubViews() callState : " + callState);
+        Log.d(LOG_TAG, "## manageSubViews() IN callState : " + callState);
 
         // avatar visibility: video call => hide avatar, audio call => show avatar
         mAvatarView.setVisibility((callState.equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) ? View.GONE : View.VISIBLE);
@@ -869,7 +950,7 @@ public class CallViewActivity extends Activity {
         AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
         if (null != audioManager) {
             savedInstanceState.putBoolean(KEY_MIC_MUTE_STATUS, audioManager.isMicrophoneMute());
-            savedInstanceState.putBoolean(KEY_SPEAKER_STATUS, audioManager.isSpeakerphoneOn());
+            savedInstanceState.putBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, audioManager.isSpeakerphoneOn());
         }
     }
 

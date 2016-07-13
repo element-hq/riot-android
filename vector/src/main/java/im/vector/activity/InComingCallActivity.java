@@ -92,7 +92,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
 
             if(null != mMxCall) {
                 if (mMxCall.isIncoming()) {
-                    mMxCall.launchIncomingCall();
+                    mMxCall.launchIncomingCall(null);
                 } else {
                     Log.d(LOG_TAG, "## onViewReady(): not incoming call");
                 }
