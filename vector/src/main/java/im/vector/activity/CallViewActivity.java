@@ -44,7 +44,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -99,7 +98,6 @@ public class CallViewActivity extends Activity {
     // graphical items
     private ImageView mHangUpImageView;
     private ImageView mSpeakerSelectionView;
-    private TextView mCallStateTextView;
     private ImageView mAvatarView;
     private ImageView mMuteMicImageView;
     private ImageView mRoomLinkImageView;
@@ -372,7 +370,6 @@ public class CallViewActivity extends Activity {
         // UI binding
         mHangUpImageView = (ImageView) findViewById(R.id.hang_up_button);
         mSpeakerSelectionView = (ImageView) findViewById(R.id.call_speaker_view);
-        mCallStateTextView = (TextView) findViewById(R.id.call_state_text);
         mAvatarView = (ImageView)CallViewActivity.this.findViewById(R.id.call_other_member);
         mMuteMicImageView = (ImageView)CallViewActivity.this.findViewById(R.id.mute_audio);
         mRoomLinkImageView = (ImageView)CallViewActivity.this.findViewById(R.id.room_chat_link);
@@ -456,9 +453,24 @@ public class CallViewActivity extends Activity {
             View mainContainerView = mHeaderPendingCallView.findViewById(R.id.main_view);
             mainContainerView.setBackgroundResource(R.drawable.call_header_transparent_bg);
 
-            // remove the call icon
-            View iconContainerView = mHeaderPendingCallView.findViewById(R.id.call_icon_container);
-            iconContainerView.setVisibility(View.GONE);
+            // remove the call icon and display the back arrow icon
+            mHeaderPendingCallView.findViewById(R.id.call_icon_container).setVisibility(View.GONE);
+            View backButtonView = mHeaderPendingCallView.findViewById(R.id.back_icon);
+            backButtonView.setVisibility(View.VISIBLE);
+            backButtonView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // simulate a back button press
+                    if (!canCallBeResumed()) {
+                        if (null != mCall) {
+                            mCall.hangup("");
+                        }
+                    } else {
+                        saveCallView();
+                    }
+                    CallViewActivity.this.onBackPressed();
+                }
+            });
 
             // center the text horizontally and remove any padding
             LinearLayout textInfoContainerView = (LinearLayout)mHeaderPendingCallView.findViewById(R.id.call_info_container);
@@ -795,21 +807,7 @@ public class CallViewActivity extends Activity {
     }
 
     /**
-     * Update the text value
-     * @param stateText the text to be displayed
-     */
-    private void updateStateTextView(String stateText, boolean displayState) {
-        String text = mOtherMember.getName();
-
-        if (!TextUtils.isEmpty(stateText) && displayState) {
-            text += " (" + stateText + ")";
-        }
-
-        mCallStateTextView.setText(text);
-    }
-
-    /**
-     * Init the buttons layer
+     * Manage the UI according to call state.
      */
     private void manageSubViews() {
         // sanity check
@@ -819,6 +817,9 @@ public class CallViewActivity extends Activity {
             return;
         }
 
+        String callState = mCall.getCallState();
+        Log.d(LOG_TAG, "## manageSubViews() IN callState : " + callState);
+
         // read speaker value from preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isSpeakerPhoneOn;
@@ -827,17 +828,14 @@ public class CallViewActivity extends Activity {
         else
             isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_AUDIO_CALL_STATUS, false);
 
-        String callState = mCall.getCallState();
-        Log.d(LOG_TAG, "## manageSubViews() IN callState : " + callState);
-
         // avatar visibility: video call => hide avatar, audio call => show avatar
         mAvatarView.setVisibility((callState.equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) ? View.GONE : View.VISIBLE);
 
-        updateStateTextView("", false);
+        // update UI icon settings
         refreshSpeakerButton();
         refreshMuteMicButton();
 
-        // display the button according to the call state
+        // display the hang up button according to the call state
         switch (callState) {
             case IMXCall.CALL_STATE_ENDED:
                 mHangUpImageView.setVisibility(View.INVISIBLE);
@@ -850,19 +848,22 @@ public class CallViewActivity extends Activity {
                 break;
         }
 
-        // display the callview only when the preview is displayed
+        // callview visibility management
         if (mCall.isVideo() && !callState.equals(IMXCall.CALL_STATE_ENDED)) {
             int visibility;
 
-            if (callState.equals(IMXCall.CALL_STATE_WAIT_CREATE_OFFER) ||
-                    callState.equals(IMXCall.CALL_STATE_INVITE_SENT) ||
-                    callState.equals(IMXCall.CALL_STATE_RINGING) ||
-                    callState.equals(IMXCall.CALL_STATE_CREATE_ANSWER) ||
-                    callState.equals(IMXCall.CALL_STATE_CONNECTING) ||
-                    callState.equals(IMXCall.CALL_STATE_CONNECTED)) {
-                visibility = View.VISIBLE;
-            } else {
-                visibility = View.GONE;
+            switch (callState) {
+                case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
+                case IMXCall.CALL_STATE_INVITE_SENT:
+                case IMXCall.CALL_STATE_RINGING:
+                case IMXCall.CALL_STATE_CREATE_ANSWER:
+                case IMXCall.CALL_STATE_CONNECTING:
+                case IMXCall.CALL_STATE_CONNECTED:
+                    visibility = View.VISIBLE;
+                    break;
+                default:
+                    visibility = View.GONE;;
+                    break;
             }
 
             if ((null != mCall) && (visibility != mCall.getVisibility())) {
@@ -870,60 +871,44 @@ public class CallViewActivity extends Activity {
             }
         }
 
-        // display the callstate
-        if (callState.equals(IMXCall.CALL_STATE_CONNECTING) || callState.equals(IMXCall.CALL_STATE_CREATE_ANSWER)
-                || callState.equals(IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA) || callState.equals(IMXCall.CALL_STATE_WAIT_CREATE_OFFER)
-                ) {
-            updateStateTextView(getResources().getString(R.string.call_connecting), true);
-            mCallStateTextView.setVisibility(View.VISIBLE);
-            stopRinging();
-        } else if (callState.equals(IMXCall.CALL_STATE_CONNECTED)) {
-            stopRinging();
-            final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
-            CallViewActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-                    audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mCallVolume, 0);
-                    MXCallsManager.setSpeakerphoneOn(CallViewActivity.this, fIsSpeakerPhoneOn);
-                    refreshSpeakerButton();
-                }
-            });
+        // ringing management
+        switch (callState) {
+            case IMXCall.CALL_STATE_CONNECTING:
+            case IMXCall.CALL_STATE_CREATE_ANSWER:
+            case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
+            case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
+                stopRinging();
+                break;
 
-            updateStateTextView(getResources().getString(R.string.call_connected), false);
-
-            // remove the state text for video call
-            mCallStateTextView.setVisibility(mCall.isVideo() ? View.GONE : View.VISIBLE);
-        } else if (callState.equals(IMXCall.CALL_STATE_ENDED)) {
-            updateStateTextView(getResources().getString(R.string.call_ended), true);
-            mCallStateTextView.setVisibility(View.VISIBLE);
-        } else if (callState.equals(IMXCall.CALL_STATE_RINGING)) {
-            if (mCall.isIncoming()) {
-                if (mCall.isVideo()) {
-                    updateStateTextView(getResources().getString(R.string.incoming_video_call), true);
-                } else {
-                    updateStateTextView(getResources().getString(R.string.incoming_voice_call), true);
-                }
-            } else {
-                updateStateTextView(getResources().getString(R.string.call_ring), true);
-            }
-            mCallStateTextView.setVisibility(View.VISIBLE);
-
-            if (mAutoAccept) {
-                mAutoAccept = false;
-                mCallStateTextView.postDelayed(new Runnable() {
+            case IMXCall.CALL_STATE_CONNECTED:
+                stopRinging();
+                final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
+                CallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mCall.answer();
+                        AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+                        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mCallVolume, 0);
+                        MXCallsManager.setSpeakerphoneOn(CallViewActivity.this, fIsSpeakerPhoneOn);
+                        refreshSpeakerButton();
                     }
-                }, 100);
-            } else {
-                if (mCall.isIncoming()) {
-                    startRinging(CallViewActivity.this);
+                });
+                break;
+
+            case IMXCall.CALL_STATE_RINGING:
+                if (mAutoAccept) {
+                    mAutoAccept = false;
+                    mCall.answer();
                 } else {
-                    startRingbackSound(CallViewActivity.this);
+                    if (mCall.isIncoming())
+                        startRinging(CallViewActivity.this);
+                    else
+                        startRingbackSound(CallViewActivity.this);
                 }
-            }
+                break;
+
+            default:
+                // nothing to do..
+                break;
         }
         Log.d(LOG_TAG, "## manageSubViews(): OUT");
     }

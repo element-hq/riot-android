@@ -179,7 +179,7 @@
 
         <activity
             android:name="im.vector.activity.CallViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"

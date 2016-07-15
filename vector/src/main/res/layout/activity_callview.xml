@@ -21,7 +21,7 @@
             android:layout_alignParentLeft="true"
             />
 
-
+        <!-- container layout for the action buttons -->
         <LinearLayout
             android:id="@+id/call_menu_buttons_layout_container"
             android:layout_width="match_parent"
@@ -70,19 +70,6 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_material_mic_off_grey"/>
             </LinearLayout>
-
-        <TextView
-            android:id="@+id/call_state_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="A state here"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="70dp"
-            android:textColor="@android:color/white"
-            />
-
 
         <im.vector.view.VectorPendingCallView
             android:id="@+id/header_pending_callview"
