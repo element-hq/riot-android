@@ -16,7 +16,6 @@
 
 package im.vector.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -24,12 +23,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -120,7 +119,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private View mWaitingView = null;
 
     private Timer mRoomCreationViewTimer = null;
-    private View mRoomCreationView = null;
+    private FloatingActionButton mRoomCreationFab;
 
     // the public rooms are displayed when the user overscroll after 0.5s
     private long mOverscrollStartTime = -1;
@@ -249,9 +248,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mToolbar.setTitle(R.string.title_activity_home);
         this.setTitle(R.string.title_activity_home);
 
-        mRoomCreationView = findViewById(R.id.listView_create_room_view);
+        mRoomCreationFab = (FloatingActionButton) findViewById(R.id.listView_create_room_view);
 
-        mRoomCreationView.setOnClickListener(new View.OnClickListener() {
+        mRoomCreationFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWaitingView.setVisibility(View.VISIBLE);
@@ -559,7 +558,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         VectorApp.setCurrentActivity(this);
 
-        mRoomCreationView.setVisibility(View.VISIBLE);
+        mRoomCreationFab.show();
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -924,7 +923,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 mRoomCreationViewTimer.cancel();
             }
 
-            mRoomCreationView.setVisibility(View.GONE);
+            mRoomCreationFab.hide();
 
             mRoomCreationViewTimer = new Timer();
             mRoomCreationViewTimer.schedule(new TimerTask() {
@@ -938,7 +937,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mRoomCreationView.setVisibility(View.VISIBLE);
+                            mRoomCreationFab.show();
                         }
                     });
                 }
@@ -979,8 +978,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // warn when the list content can be fully displayed without scrolling
     @Override
     public void onRecentsListFitsScreen() {
-        if (mRoomCreationView.getVisibility() != View.VISIBLE) {
-            mRoomCreationView.setVisibility(View.VISIBLE);
+        if (!mRoomCreationFab.isShown()) {
+            mRoomCreationFab.show();
         }
     }
 

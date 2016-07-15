@@ -548,7 +548,7 @@
     <string name="room_recents_invites">INVITES</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Browse directory results</string>
+    <string name="directory_search_results_title">Browse directory</string>
     <string name="directory_search_room">%1$d room</string>
     <string name="directory_search_rooms">%1$d rooms</string>
     <string name="directory_search_room_for">%1$d room found for %2$s</string>
