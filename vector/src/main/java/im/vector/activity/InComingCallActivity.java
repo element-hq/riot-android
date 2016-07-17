@@ -130,6 +130,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setFinishOnTouchOutside(false);
 
         setContentView(R.layout.vector_incoming_call_dialog);
 
@@ -231,6 +232,11 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         if (null != mMxCall) {
             mMxCall.removeListener(mMxCallListener);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        onHangUp();
     }
 
     /**
