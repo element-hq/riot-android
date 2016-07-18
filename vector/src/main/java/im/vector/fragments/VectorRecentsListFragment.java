@@ -132,14 +132,18 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+        View defaultView = super.onCreateView(inflater, container, savedInstanceState);
         Bundle args = getArguments();
 
         mMatrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(mMatrixId);
 
+        // should never happen but it happened once.
         if (null == mSession) {
-            throw new RuntimeException("Must have valid default MXSession.");
+            if (null != getActivity()) {
+                CommonActivityUtils.logout(getActivity());
+            }
+            return defaultView;
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
