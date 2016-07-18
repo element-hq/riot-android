@@ -1759,7 +1759,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Check if the user can send a message in this room
      */
     private void checkSendEventStatus() {
-        if (null != mRoom) {
+        if ((null != mRoom) && (null !=  mRoom.getLiveState())) {
             boolean canSendMessage = true;
 
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
