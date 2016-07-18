@@ -140,67 +140,69 @@
                 android:id="@+id/room_bottom_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_alignParentBottom="true">
 
                 <RelativeLayout
                     android:id="@+id/room_self_avatar_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="55dp">
+                    android:layout_height="wrap_content">
 
                     <include layout="@layout/vector_room_round_avatar"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
                         android:id="@+id/room_self_avatar"/>
-
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/buttons_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp">
-
-                    <ImageButton
-                        android:layout_width="24dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="13dp"
-                        android:background="@drawable/ic_material_file"
-                        android:id="@+id/button_attachments"
-                        android:contentDescription="@string/more"/>
-
-                    <ImageButton
-                        android:layout_width="24dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="13dp"
-                        android:background="@drawable/ic_material_send_green"
-                        android:id="@+id/button_send"
-                        android:contentDescription="@string/send"/>
-                </LinearLayout>
-
-                <EditText
                     android:layout_marginLeft="16dp"
-                    android:layout_toLeftOf="@id/buttons_layout"
+                    android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:textSize="14sp"
-                    android:hint="@string/room_message_placeholder"
-                    android:id="@+id/editText_messageBox"
-                    android:layout_centerVertical="true"
-                    android:theme="@style/SearchesAppTheme"
-                    android:background="@android:color/transparent"
-                    android:textCursorDrawable="@drawable/searches_cursor_background"
-                    android:textColorHint="@color/vector_0_54_black_color"/>
+                    android:minHeight="24dp"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:textSize="14sp"
+                        android:hint="@string/room_message_placeholder"
+                        android:id="@+id/editText_messageBox"
+                        android:layout_centerVertical="true"
+                        android:theme="@style/SearchesAppTheme"
+                        android:background="@android:color/transparent"
+                        android:textCursorDrawable="@drawable/searches_cursor_background"
+                        android:textColorHint="@color/vector_0_54_black_color"/>
+
+                    <RelativeLayout
+                        android:id="@+id/room_send_layout"
+                        android:layout_marginLeft="13dp"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/send">
+
+                        <ImageView
+                            android:id="@+id/room_send_image_view"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_material_file"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/room_cannot_post_textview"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:text="@string/room_do_not_have_permission_to_post"
@@ -209,7 +211,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
-
             </RelativeLayout>
 
             <View

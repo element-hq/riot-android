@@ -165,11 +165,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
 
-    private ImageButton mSendButton;
-    private ImageButton mAttachmentsButton;
+    private View mSendButtonLayout;
+    private ImageView mSendImageView;
     private EditText mEditText;
     private ImageView mAvatarImageView;
-    private View mMessageButtonLayout;
     private View mCanNotPostTextView;
 
     // action bar header
@@ -465,60 +464,56 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
-        mSendButton = (ImageButton) findViewById(R.id.button_send);
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-
+        mSendImageView = (ImageView) findViewById(R.id.room_send_image_view);
+        mSendButtonLayout = findViewById(R.id.room_send_layout);
+        mSendButtonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                sendTextMessage();
-            }
-        });
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(mEditText.getText())) {
+                    sendTextMessage();
+                } else {
+                    // hide the header room
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
-        mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
+                    FragmentManager fm = getSupportFragmentManager();
+                    IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
 
-            @Override
-            public void onClick(View view) {
-                // hide the header room
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    if (fragment != null) {
+                        fragment.dismissAllowingStateLoss();
+                    }
 
-                FragmentManager fm = getSupportFragmentManager();
-                IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                    final Integer[] messages = new Integer[]{
+                            R.string.option_send_files,
+                            R.string.option_take_photo,
+                    };
 
-                if (fragment != null) {
-                    fragment.dismissAllowingStateLoss();
-                }
-
-                final Integer[] messages = new Integer[]{
-                        R.string.option_send_files,
-                        R.string.option_take_photo,
-                };
-
-                final Integer[] icons = new Integer[]{
-                        R.drawable.ic_material_file,  // R.string.option_send_files
-                        R.drawable.ic_material_camera, // R.string.option_take_photo
-                };
+                    final Integer[] icons = new Integer[]{
+                            R.drawable.ic_material_file,  // R.string.option_send_files
+                            R.drawable.ic_material_camera, // R.string.option_take_photo
+                    };
 
 
-                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
-                fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                        Integer selectedVal = messages[position];
+                    fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
+                    fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                            Integer selectedVal = messages[position];
 
-                        if (selectedVal == R.string.option_send_files) {
-                            VectorRoomActivity.this.launchFileSelectionIntent();
-                        } else if (selectedVal == R.string.option_take_photo) {
-                            if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
-                                launchCamera();
+                            if (selectedVal == R.string.option_send_files) {
+                                VectorRoomActivity.this.launchFileSelectionIntent();
+                            } else if (selectedVal == R.string.option_take_photo) {
+                                if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
+                                    launchCamera();
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                    fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                }
             }
         });
+
 
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -579,7 +574,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mNotificationsMessageTextView = (TextView) findViewById(R.id.room_notification_message);
         mErrorIcon = findViewById(R.id.room_error_icon);
         mErrorMessageTextView = (TextView) findViewById(R.id.room_notification_error_message);
-        mMessageButtonLayout = findViewById(R.id.buttons_layout);
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
 
         mMyUserId = mSession.getCredentials().userId;
@@ -1384,10 +1378,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
-
-        mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-
-        mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+        mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
     }
 
     /**
@@ -1780,7 +1771,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             mEditText.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
-            mMessageButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
+            mSendButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
         }
     }
