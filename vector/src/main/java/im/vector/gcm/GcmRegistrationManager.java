@@ -587,7 +587,7 @@ public final class GcmRegistrationManager {
                 Log.d(LOG_TAG, "registerSessions : onSessionRegistrationFailed " + session.getMyUserId());
 
                 mRegistrationState = RegistrationState.GCM_REGISTRED;
-                onThirdPartyRegistrationFailed();
+                dispatchOnThirdPartyRegistrationFailed();
             }
 
             @Override
@@ -660,7 +660,7 @@ public final class GcmRegistrationManager {
             @Override
             public void onThirdPartyUnregistrationFailed() {
                 mRegistrationState = RegistrationState.SERVER_REGISTERED;
-                onThirdPartyUnregistrationFailed();
+                dispatchOnThirdPartyUnregistrationFailed();
             }
         });
     }
