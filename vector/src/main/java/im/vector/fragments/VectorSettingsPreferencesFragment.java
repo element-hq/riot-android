@@ -151,6 +151,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         String matrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
 
+        // sanity checks
+        if (null == mSession) {
+            if (null != getActivity()) {
+                getActivity().finish();
+            }
+            
+            return;
+        }
+
         // define the layout
         addPreferencesFromResource(R.xml.vector_settings_preferences);
 
