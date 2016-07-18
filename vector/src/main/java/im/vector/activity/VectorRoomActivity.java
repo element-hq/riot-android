@@ -46,6 +46,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -182,10 +183,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private TextView mActionBarHeaderRoomTopic;
     private ImageView mActionBarHeaderRoomAvatar;
     private View mActionBarHeaderInviteMemberView;
-    private boolean mIsKeyboardDisplayed;
-
-    // keyboard listener to detect when the keyboard is displayed
-    private ViewTreeObserver.OnGlobalLayoutListener mKeyboardListener;
 
     // notifications area
     private View mNotificationsArea;
@@ -708,9 +705,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mSession.getDataHandler().removeListener(mGlobalEventListener);
             }
         }
-
-        // remove listener on keyboard display
-        enableKeyboardShownListener(false);
     }
 
     @Override
@@ -755,13 +749,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
         }
 
-        // listen to keyboard display
-        enableKeyboardShownListener(true);
-
         if (null != mRoom) {
             // reset the unread messages counter
             mRoom.sendReadReceipt(null);
-
 
             String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
@@ -1641,7 +1631,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mActionBarCustomTitle = (TextView)findViewById(R.id.room_action_bar_title);
         mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
         mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
-        mIsKeyboardDisplayed = false;
 
         // custom header
         View headerTextsContainer = findViewById(R.id.header_texts_container);
@@ -1859,7 +1848,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         }
                     }
 
-            } else {
+             } else {
                 mActionBarHeaderActiveMembers.setVisibility(View.GONE);
             }
         }
@@ -1870,11 +1859,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed) {
-        if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed){
-            if(true == mIsKeyboardDisplayed) {
-                Log.i(LOG_TAG, "## enableActionBarHeader(): action bar header canceled (keyboard is displayed)");
-                return;
-            }
+        if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
+
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
             // hide the name and the topic in the action bar.
             // these items are hidden when the header view is opened
@@ -1911,33 +1899,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mRoomHeaderView.setVisibility(View.GONE);
                 mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.vector_green_color));
             }
-        }
-    }
-
-    //================================================================================
-    // Keyboard display detection
-    //================================================================================
-
-    private void enableKeyboardShownListener(boolean aIsListenerEnabled){
-        final View vectorActivityRoomView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);//findViewById(R.id.vector_room_root_layout);
-
-        if(null == mKeyboardListener) {
-            mKeyboardListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    int rootHeight = vectorActivityRoomView.getRootView().getHeight();
-                    int height =  vectorActivityRoomView.getHeight();
-                    int heightDiff = rootHeight - height;
-                    mIsKeyboardDisplayed = heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE;
-                }
-            };
-        }
-
-        if (aIsListenerEnabled) {
-            vectorActivityRoomView.getViewTreeObserver().addOnGlobalLayoutListener(mKeyboardListener);
-        }
-        else {
-            vectorActivityRoomView.getViewTreeObserver().removeOnGlobalLayoutListener(mKeyboardListener);
         }
     }
 
@@ -2410,6 +2371,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // tap on the room name to update it
         View titleText = findViewById(R.id.action_bar_header_room_title);
+
         if (null != titleText) {
             titleText.setOnClickListener(new View.OnClickListener() {
                 @Override
