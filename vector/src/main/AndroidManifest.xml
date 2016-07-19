@@ -156,6 +156,14 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name="im.vector.activity.InComingCallActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name="im.vector.activity.VectorMediasViewerActivity"
@@ -171,7 +179,7 @@
 
         <activity
             android:name="im.vector.activity.CallViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity
             android:name="im.vector.activity.VectorMediasPickerActivity"

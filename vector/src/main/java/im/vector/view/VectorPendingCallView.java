@@ -51,6 +51,9 @@ public class VectorPendingCallView extends RelativeLayout {
     private TextView mCallDescriptionTextView;
     private TextView mCallStatusTextView;
 
+    /** set to true to hide the line displaying the call status **/
+    private boolean mIsCallStatusHidden;
+
     // the call listener
     private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
         @Override
@@ -208,7 +211,7 @@ public class VectorPendingCallView extends RelativeLayout {
                 description = mCall.getCallId();
             }
 
-            if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED)) {
+            if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED) && !mIsCallStatusHidden) {
                 description += " - " + getResources().getString(R.string.active_call);
             }
 
@@ -226,5 +229,14 @@ public class VectorPendingCallView extends RelativeLayout {
 
         mCallStatusTextView.setText(callStatus);
         mCallStatusTextView.setVisibility(TextUtils.isEmpty(callStatus) ? View.GONE : View.VISIBLE);
+    }
+
+
+    /**
+     * Enable/disable the display of the status active call.
+     * @param aIsEnabled true to display the call status, false otherwise
+     */
+    public void enableCallStatusDisplay(boolean aIsEnabled){
+        mIsCallStatusHidden = !aIsEnabled;
     }
 }

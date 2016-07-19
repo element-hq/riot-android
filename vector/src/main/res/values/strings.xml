@@ -344,8 +344,8 @@
     <string name="call_error_ice_failed">Media Connection Failed</string>
     <string name="call_error_camera_init_failed">Cannot initialize the camera.</string>
 
-    <string name="action_accept">Accept</string>
-    <string name="action_reject">Reject</string>
+    <string name="action_accept">ACCEPT</string>
+    <string name="action_ignore">IGNORE</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_hangup">Hang up</string>
 

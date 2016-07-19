@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@android:color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
 
     <RelativeLayout
         android:id="@+id/call_layout"
@@ -11,75 +12,71 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:id="@+id/call_other_member"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:scaleType="fitCenter"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             />
 
+        <!-- container layout for the action buttons -->
         <LinearLayout
-            android:layout_alignParentBottom="true"
-            android:id="@+id/layout_accept_reject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/accept_button"
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
-                android:text="@string/action_accept"/>
-
-            <Button
-                android:id="@+id/reject_button"
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
-                android:text="@string/action_reject" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:text="@string/action_cancel"/>
-
-        <Button
-            android:id="@+id/stop_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:text="@string/action_hangup"/>
-
-        <TextView
-            android:id="@+id/call_state_text"
+            android:id="@+id/call_menu_buttons_layout_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="A state here"
             android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="70dp"
-            android:textColor="#FFF"
-            />
+            android:background="@android:color/white">
 
-        <ImageView
-            android:id="@+id/call_speaker_view"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="10dp"
-            android:background="#FFF"
-            android:scaleType="fitCenter"
-            android:layout_alignTop="@+id/call_state_text"
-            android:layout_alignParentRight="true"
+            <ImageView
+                android:id="@+id/room_chat_link"
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_material_message_grey"/>
+
+            <ImageView
+                android:id="@+id/call_speaker_view"
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_material_speaker_phone_grey"/>
+
+
+            <!-- Hang up button used when the call is established or
+            when the call is being setup and the called device has not yet reached -->
+            <ImageView
+                android:id="@+id/hang_up_button"
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_material_call_end_black"/>
+
+            <!-- for further use: for now we cannot switch from audio to video -->
+            <ImageView
+                android:id="@+id/start_video_call"
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:layout_height="24dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_material_videocam_grey"/>
+
+            <ImageView
+                android:id="@+id/mute_audio"
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_material_mic_off_grey"/>
+            </LinearLayout>
+
+        <im.vector.view.VectorPendingCallView
+            android:id="@+id/header_pending_callview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="visible"
             />
 
     </RelativeLayout>
