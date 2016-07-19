@@ -211,10 +211,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             call.setRoom(room);
             call.setIsIncoming(false);
 
-            final Intent intent = new Intent(VectorMemberDetailsActivity.this, CallViewActivity.class);
+            final Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorCallViewActivity.class);
 
-            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+            intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
             VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override
@@ -495,7 +495,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // 1:1 call
-            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall())) {
+            if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == VectorCallViewActivity.getActiveCall())) {
                 // Offer voip call options
                 supportedActions.add(ITEM_ACTION_START_VOICE_CALL);
                 supportedActions.add(ITEM_ACTION_START_VIDEO_CALL);

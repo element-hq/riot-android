@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import im.vector.R;
-import im.vector.activity.CallViewActivity;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.util.CallUtilities;
 import im.vector.util.VectorUtils;
 
@@ -128,7 +128,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * If there is none, this view is gone.
      */
     public void checkPendingCall() {
-        IMXCall call = CallViewActivity.getActiveCall();
+        IMXCall call = VectorCallViewActivity.getActiveCall();
 
         // no more call
         if (null == call) {

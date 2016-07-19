@@ -60,10 +60,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /**
- * CallViewActivity is the call activity.
+ * VectorCallViewActivity is the call activity.
  */
-public class CallViewActivity extends Activity {
-    private static final String LOG_TAG = "CallViewActivity";
+public class VectorCallViewActivity extends Activity {
+    private static final String LOG_TAG = "VCallViewActivity";
 
     // ring tones
     private static final String RING_TONE_START_RINGING = "ring.ogg";
@@ -77,7 +77,7 @@ public class CallViewActivity extends Activity {
     private static final String KEY_SPEAKER_VIDEO_CALL_STATUS = "KEY_SPEAKER_VIDEO_CALL_STATUS";
     private static final String KEY_SPEAKER_AUDIO_CALL_STATUS = "KEY_SPEAKER_AUDIO_CALL_STATUS";
 
-    private static CallViewActivity instance = null;
+    private static VectorCallViewActivity instance = null;
 
     private static View mSavedCallview = null;
     private static IMXCall mCall = null;
@@ -130,7 +130,7 @@ public class CallViewActivity extends Activity {
         public void onStateDidChange(String state) {
             if (null != getInstance()) {
                 final String fState = state;
-                CallViewActivity.this.runOnUiThread(new Runnable() {
+                VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d(LOG_TAG, "## onStateDidChange(): new state=" + fState);
@@ -200,26 +200,26 @@ public class CallViewActivity extends Activity {
          */
         @Override
         public void onCallAnsweredElsewhere() {
-            CallViewActivity.this.runOnUiThread(new Runnable() {
+            VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): ");
                     clearCallData();
-                    CallViewActivity.this.finish();
+                    VectorCallViewActivity.this.finish();
                 }
             });
         }
 
         @Override
         public void onCallEnd() {
-            CallViewActivity.this.runOnUiThread(new Runnable() {
+            VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onCallEnd(): ");
 
                     clearCallData();
                     mIsCallEnded = true;
-                    CallViewActivity.this.finish();
+                    VectorCallViewActivity.this.finish();
                 }
             });
         }
@@ -282,7 +282,7 @@ public class CallViewActivity extends Activity {
     /**
      * @return the callViewActivity instance
      */
-    private static CallViewActivity getInstance() {
+    private static VectorCallViewActivity getInstance() {
         return instance;
     }
 
@@ -308,12 +308,12 @@ public class CallViewActivity extends Activity {
      */
     private void insertCallView() {
         if(null != mCallView) {
-            ImageView avatarView = (ImageView) CallViewActivity.this.findViewById(R.id.call_other_member);
+            ImageView avatarView = (ImageView) VectorCallViewActivity.this.findViewById(R.id.call_other_member);
 
             // set the avatar
             VectorUtils.loadRoomAvatar(this, mSession, avatarView, mCall.getRoom());
 
-            RelativeLayout layout = (RelativeLayout) CallViewActivity.this.findViewById(R.id.call_layout);
+            RelativeLayout layout = (RelativeLayout) VectorCallViewActivity.this.findViewById(R.id.call_layout);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
@@ -364,9 +364,9 @@ public class CallViewActivity extends Activity {
         // UI binding
         mHangUpImageView = (ImageView) findViewById(R.id.hang_up_button);
         mSpeakerSelectionView = (ImageView) findViewById(R.id.call_speaker_view);
-        mAvatarView = (ImageView)CallViewActivity.this.findViewById(R.id.call_other_member);
-        mMuteMicImageView = (ImageView)CallViewActivity.this.findViewById(R.id.mute_audio);
-        mRoomLinkImageView = (ImageView)CallViewActivity.this.findViewById(R.id.room_chat_link);
+        mAvatarView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.call_other_member);
+        mMuteMicImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.mute_audio);
+        mRoomLinkImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
         mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
 
         mRoomLinkImageView.setOnClickListener(new View.OnClickListener() {
@@ -455,7 +455,7 @@ public class CallViewActivity extends Activity {
                     } else {
                         saveCallView();
                     }
-                    CallViewActivity.this.onBackPressed();
+                    VectorCallViewActivity.this.onBackPressed();
                 }
             });
 
@@ -474,7 +474,7 @@ public class CallViewActivity extends Activity {
      * <br>Corresponding value is saved in the shared preference.
      */
     private void toggleMicMute() {
-        AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
         if(null != audioManager) {
             boolean isMuted = audioManager.isMicrophoneMute();
             Log.d(LOG_TAG,"## toggleMicMute(): current mute val="+isMuted+" new mute val="+!isMuted);
@@ -577,7 +577,7 @@ public class CallViewActivity extends Activity {
             // when the call is ringing, the AudioManager.Mode switch to MODE_IN_COMMUNICATION
             // so the volume is the next call one whereas the user expects to reduce the ring volume.
             if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_RINGING)) {
-                AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+                AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
                 // IMXChrome call issue
                 if (audioManager.getMode() == AudioManager.MODE_IN_COMMUNICATION) {
                     int musicVol = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL) * audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
@@ -675,7 +675,7 @@ public class CallViewActivity extends Activity {
             screenHeight -= actionBarHeight;
         }
 
-        View mMenuButtonsContainerView = CallViewActivity.this.findViewById(R.id.hang_up_button);
+        View mMenuButtonsContainerView = VectorCallViewActivity.this.findViewById(R.id.hang_up_button);
         ViewGroup.LayoutParams layout = mMenuButtonsContainerView.getLayoutParams();
         float buttonsContainerHeight = (float)(layout.height);
 
@@ -744,7 +744,7 @@ public class CallViewActivity extends Activity {
      */
     private void refreshMuteMicButton() {
         if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
-            AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
             mMuteMicImageView.setVisibility(View.VISIBLE);
 
             boolean  isMuted = audioManager.isMicrophoneMute();
@@ -769,13 +769,13 @@ public class CallViewActivity extends Activity {
         if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
             mSpeakerSelectionView.setVisibility(View.VISIBLE);
 
-            AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.isSpeakerphoneOn()) {
                 mSpeakerSelectionView.setImageResource(R.drawable.ic_material_speaker_phone_pink_red); // ic_material_call_grey
             } else {
                 mSpeakerSelectionView.setImageResource(R.drawable.ic_material_speaker_phone_grey);
             }
-            CallViewActivity.this.setVolumeControlStream(audioManager.getMode());
+            VectorCallViewActivity.this.setVolumeControlStream(audioManager.getMode());
 
         } else {
             Log.d(LOG_TAG,"## refreshSpeakerButton(): View.INVISIBLE");
@@ -871,12 +871,12 @@ public class CallViewActivity extends Activity {
             case IMXCall.CALL_STATE_CONNECTED:
                 stopRinging();
                 final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
-                CallViewActivity.this.runOnUiThread(new Runnable() {
+                VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+                        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
                         audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mCallVolume, 0);
-                        MXCallsManager.setSpeakerphoneOn(CallViewActivity.this, fIsSpeakerPhoneOn);
+                        MXCallsManager.setSpeakerphoneOn(VectorCallViewActivity.this, fIsSpeakerPhoneOn);
                         refreshSpeakerButton();
                     }
                 });
@@ -888,9 +888,9 @@ public class CallViewActivity extends Activity {
                     mCall.answer();
                 } else {
                     if (mCall.isIncoming())
-                        startRinging(CallViewActivity.this);
+                        startRinging(VectorCallViewActivity.this);
                     else
-                        startRingbackSound(CallViewActivity.this);
+                        startRingbackSound(VectorCallViewActivity.this);
                 }
                 break;
 
@@ -920,7 +920,7 @@ public class CallViewActivity extends Activity {
         instance = null;
 
         // save audio settings
-        AudioManager audioManager = (AudioManager) CallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
         if (null != audioManager) {
             savedInstanceState.putBoolean(KEY_MIC_MUTE_STATUS, audioManager.isMicrophoneMute());
             savedInstanceState.putBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, audioManager.isSpeakerphoneOn());

@@ -178,7 +178,7 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.CallViewActivity"
+            android:name="im.vector.activity.VectorCallViewActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity

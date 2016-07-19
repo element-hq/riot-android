@@ -543,11 +543,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMXCall call = CallViewActivity.getActiveCall();
+                IMXCall call = VectorCallViewActivity.getActiveCall();
                 if (null != call) {
-                    final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
-                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
-                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                    final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
                     VectorRoomActivity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -776,17 +776,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (null != mCallId) {
-            IMXCall call = CallViewActivity.getActiveCall();
+            IMXCall call = VectorCallViewActivity.getActiveCall();
 
             // can only manage one call instance.
             // either there is no active call or resume the active one
             if ((null == call) || call.getCallId().equals(mCallId)) {
-                final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
-                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, mCallId);
+                final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
+                intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, mCallId);
 
                 if (null == call) {
-                    intent.putExtra(CallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
+                    intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, "anything");
                 }
 
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
@@ -948,10 +948,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             call.setRoom(mRoom);
             call.setIsIncoming(false);
 
-            final Intent intent = new Intent(VectorRoomActivity.this, CallViewActivity.class);
+            final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
 
-            intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+            intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
             VectorRoomActivity.this.runOnUiThread(new Runnable() {
                 @Override
@@ -1493,7 +1493,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (null != mCallMenuItem) {
-            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == CallViewActivity.getActiveCall());
+            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == VectorCallViewActivity.getActiveCall());
             mCallMenuItem.setVisible(isCallSupported);
         }
     }

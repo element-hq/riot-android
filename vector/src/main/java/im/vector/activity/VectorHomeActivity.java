@@ -226,11 +226,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMXCall call = CallViewActivity.getActiveCall();
+                IMXCall call = VectorCallViewActivity.getActiveCall();
                 if (null != call) {
-                    final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
-                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
-                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                    final Intent intent = new Intent(VectorHomeActivity.this, VectorCallViewActivity.class);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -999,8 +999,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             if (isScreenOn()) {
                 final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
 
-                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, sessionId);
-                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, callId);
+                intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
+                intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);
 
                 VectorHomeActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -1038,7 +1038,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             String callId = call.getCallId();
             // either the call view has been put in background
             // or the ringing started because of a notified call in lockscreen (the callview was never created)
-            final boolean isActiveCall = CallViewActivity.isBackgroundedCallId(callId) ||
+            final boolean isActiveCall = VectorCallViewActivity.isBackgroundedCallId(callId) ||
                     (!mSession.mCallsManager.hasActiveCalls() && IMXCall.CALL_STATE_CREATED.equals(call.getCallState()));
 
             VectorHomeActivity.this.runOnUiThread(new Runnable() {
@@ -1052,7 +1052,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // clear call in progress notification
                         EventStreamService.getInstance().checkDisplayedNotification();
                         // and play a lovely sound
-                        CallViewActivity.startEndCallSound(VectorHomeActivity.this);
+                        VectorCallViewActivity.startEndCallSound(VectorHomeActivity.this);
                     }
                 }
             });

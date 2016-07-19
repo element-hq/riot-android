@@ -142,8 +142,8 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             Log.e(LOG_TAG, "## onCreate(): intent missing");
             finish();
         } else {
-            mMatrixId = intent.getStringExtra(CallViewActivity.EXTRA_MATRIX_ID);
-            mCallId = intent.getStringExtra(CallViewActivity.EXTRA_CALL_ID);
+            mMatrixId = intent.getStringExtra(VectorCallViewActivity.EXTRA_MATRIX_ID);
+            mCallId = intent.getStringExtra(VectorCallViewActivity.EXTRA_CALL_ID);
 
             if(null == mMatrixId){
                 Log.e(LOG_TAG, "## onCreate(): matrix ID is missing in extras");
@@ -238,14 +238,14 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
     /**
      * Helper method: starts the CallViewActivity in auto accept mode.
      * The extras provided in  are copied to
-     * the CallViewActivity and {@link CallViewActivity#EXTRA_AUTO_ACCEPT} is set to true.
+     * the CallViewActivity and {@link VectorCallViewActivity#EXTRA_AUTO_ACCEPT} is set to true.
      * @param aSourceIntent the intent whose extras are transmitted
      */
     private void startCallViewActivity(final Intent aSourceIntent) {
-        Intent intent = new Intent(this, CallViewActivity.class);
+        Intent intent = new Intent(this, VectorCallViewActivity.class);
         Bundle receivedData = aSourceIntent.getExtras();
         intent.putExtras(receivedData);
-        intent.putExtra(CallViewActivity.EXTRA_AUTO_ACCEPT, true);
+        intent.putExtra(VectorCallViewActivity.EXTRA_AUTO_ACCEPT, true);
         startActivity(intent);
     }
 

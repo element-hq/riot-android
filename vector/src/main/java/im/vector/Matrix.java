@@ -44,7 +44,7 @@ import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 
-import im.vector.activity.CallViewActivity;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
@@ -167,7 +167,7 @@ public class Matrix {
                     @Override
                     public void run() {
                         // can only manage one call instance.
-                        if (null == CallViewActivity.getActiveCall()) {
+                        if (null == VectorCallViewActivity.getActiveCall()) {
                             Log.d(LOG_TAG, "onIncomingCall with no active call");
 
                             VectorHomeActivity homeActivity = VectorHomeActivity.getInstance();

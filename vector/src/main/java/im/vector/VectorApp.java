@@ -24,7 +24,7 @@ import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 
-import im.vector.activity.CallViewActivity;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
@@ -162,7 +162,7 @@ public class VectorApp extends Application {
                 }
 
                 VectorApp.this.mIsInBackground = true;
-                mIsCallingInBackground = (null != CallViewActivity.getActiveCall());
+                mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
 
                 // if there is a pending call
                 // the application is not suspended

@@ -49,7 +49,7 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
-import im.vector.activity.CallViewActivity;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
@@ -144,7 +144,7 @@ public class EventStreamService extends Service {
             }
 
             Log.d(LOG_TAG, "manageHangUpEvent stopRinging");
-            CallViewActivity.stopRinging();
+            VectorCallViewActivity.stopRinging();
         }
 
         @Override
@@ -752,9 +752,9 @@ public class EventStreamService extends Service {
         mNotificationEventId = event.eventId;
 
         if (bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
-            if (null == CallViewActivity.getActiveCall()) {
+            if (null == VectorCallViewActivity.getActiveCall()) {
                 Log.d(LOG_TAG, "onBingEvent starting");
-                CallViewActivity.startRinging(EventStreamService.this);
+                VectorCallViewActivity.startRinging(EventStreamService.this);
             }
         }
 
@@ -905,7 +905,7 @@ public class EventStreamService extends Service {
                         clearNotification = !room.isInvited();
                     } else if (null != mNotificationCallId) {
                         Log.d(LOG_TAG, "checkNotification :  call case");
-                        IMXCall call =  CallViewActivity.getActiveCall();
+                        IMXCall call =  VectorCallViewActivity.getActiveCall();
                         clearNotification  = (null != call) && !TextUtils.equals(call.getCallId(), mNotificationCallId);
                     } else {
                         Log.d(LOG_TAG, "checkNotification :  event case");
