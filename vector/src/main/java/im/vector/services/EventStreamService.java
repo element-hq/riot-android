@@ -199,9 +199,11 @@ public class EventStreamService extends Service {
     private MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingEvent(Event event, RoomState roomState, BingRule bingRule) {
-            Log.d(LOG_TAG, "onBingEvent : the event " + event);
-            Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
+            // privacy
+            //Log.d(LOG_TAG, "onBingEvent : the event " + event);
+            //Log.d(LOG_TAG, "onBingEvent : the bingRule " + bingRule);
 
+            Log.d(LOG_TAG, "onBingEvent " + event.eventId + " in " + roomState.roomId);
             prepareNotification(event, roomState, bingRule);
         }
 

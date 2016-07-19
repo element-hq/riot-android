@@ -304,7 +304,8 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                     if (null != item.mContact) {
                         // the email <-> matrix Ids matching is done asynchronously
                         if (item.mContact.hasMatridIds(mContext)) {
-                            Log.d(LOG_TAG, "the contact " + item.mContact.getDisplayName() + " contains matrix ID");
+                            // privacy
+                            //Log.d(LOG_TAG, "the contact " + item.mContact.getDisplayName() + " contains matrix ID");
                             item.mUserId = item.mContact.getFirstMatrixId().mMatrixId;
                         }
                     }

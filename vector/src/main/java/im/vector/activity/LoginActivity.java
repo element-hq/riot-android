@@ -766,7 +766,9 @@ public class LoginActivity extends MXCActionBarActivity {
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
 
-        Log.d(LOG_TAG, "onForgotPasswordClick for email " + email);
+        // privacy
+        //Log.d(LOG_TAG, "onForgotPasswordClick for email " + email);
+        Log.d(LOG_TAG, "onForgotPasswordClick");
 
         // check if there is an account linked to this email
         // 3Pid does the job
@@ -1170,7 +1172,10 @@ public class LoginActivity extends MXCActionBarActivity {
         registrationParams.auth = authParams;
         // Note: username, password and bind_email must not be set in registrationParams
 
-        Log.d(LOG_TAG, "## registerAfterEmailValidation(): start register() with authParams=" + authParams);
+        // privacy
+        //Log.d(LOG_TAG, "## registerAfterEmailValidation(): start register() with authParams=" + authParams);
+        Log.d(LOG_TAG, "## registerAfterEmailValidation(): ");
+
         enableLoadingScreen(true);
         register(registrationParams);
     }
@@ -1232,7 +1237,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         @Override
                         public void onMatrixError (MatrixError e){
                             if ((mMode == MODE_ACCOUNT_CREATION) && TextUtils.equals(fSession, getRegistrationSession())) {
-                                Log.d(LOG_TAG, "## register(): onMatrixError - Msg="+e.mErrorBodyAsString);
+                                Log.d(LOG_TAG, "## register(): onMatrixError - Msg=" + e.getLocalizedMessage());
                                 // waiting for email case
                                 if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
                                     // refresh the messages
@@ -1363,7 +1368,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         @Override
                         public void onMatrixError(MatrixError aErrorParam){
                             if ((mMode == MODE_ACCOUNT_CREATION)/* && TextUtils.equals(fSession, getRegistrationSession())*/) {
-                                Log.d(LOG_TAG, "## checkNameAvailability(): onMatrixError Response="+aErrorParam.mErrorBodyAsString);
+                                Log.d(LOG_TAG, "## checkNameAvailability(): onMatrixError Response="+aErrorParam.getLocalizedMessage());
 
                                 if (TextUtils.equals(aErrorParam.errcode, MatrixError.USER_IN_USE)) {
                                     // user name is already taken, the registration process stops here (new user name should be provided)
@@ -1601,7 +1606,7 @@ public class LoginActivity extends MXCActionBarActivity {
                             removeNetworkStateNotificationListener();
 
                             if (mMode == MODE_ACCOUNT_CREATION) {
-                                Log.d(LOG_TAG,"## checkRegistrationFlows(): onMatrixError - Resp="+e.mErrorBodyAsString);
+                                Log.d(LOG_TAG,"## checkRegistrationFlows(): onMatrixError - Resp="+e.getLocalizedMessage());
                                 RegistrationFlowResponse registrationFlowResponse = null;
 
                                 // when a response is not completed the server returns an error message
