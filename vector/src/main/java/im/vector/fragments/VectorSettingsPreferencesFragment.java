@@ -156,7 +156,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             if (null != getActivity()) {
                 getActivity().finish();
             }
-            
             return;
         }
 
@@ -300,8 +299,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
             useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    gcmMgr.setBackgroundSyncAllowed((boolean)newValue);
+                public boolean onPreferenceChange(Preference preference, Object aNewValue) {
+                    boolean newValue = (boolean)aNewValue;
+
+                    if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
+                        gcmMgr.setBackgroundSyncAllowed(newValue);
+                    }
+
                     return true;
                 }
             });
@@ -625,13 +629,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
 
         if (fResourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
-            gcmMgr.setScreenTurnedOn(newValue);
+            if (gcmMgr.isScreenTurnedOn() != newValue) {
+                gcmMgr.setScreenTurnedOn(newValue);
+            }
             return;
         }
 
         if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
             final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
+
+            // avoid useless update
+            if (isAllowed == newValue) {
+                return;
+            }
 
             gcmMgr.setDeviceNotificationsAllowed(!isAllowed);
 
