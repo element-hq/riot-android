@@ -1051,6 +1051,15 @@ public class LoginActivity extends MXCActionBarActivity {
             String homeServer = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_HOME_SERVER_URL);
             String identityServer = aMapParams.get(VectorRegistrationReceiver.KEY_MAIL_VALIDATION_IDENTITY_SERVER_URL);
 
+            // test if the home server urls are valid
+            try {
+                Uri.parse(homeServer);
+                Uri.parse(identityServer);
+            } catch (Exception e) {
+                Toast.makeText(LoginActivity.this, getString(R.string.login_error_invalid_home_server), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             submitEmailToken(token, clientSecret, identityServerSessId, sessionId, homeServer, identityServer);
         } else {
             Log.d(LOG_TAG, "## startEmailOwnershipValidation(): skipped");

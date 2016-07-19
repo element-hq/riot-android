@@ -545,7 +545,7 @@ public class Matrix {
         if (true) {
             store = new MXFileStore(hsConfig, context);
         } else {
-            store = new MXMemoryStore(hsConfig.getCredentials());
+            store = new MXMemoryStore(hsConfig.getCredentials(), context);
         }
 
         MXSession session = new MXSession(hsConfig, new MXDataHandler(store, credentials, new MXDataHandler.InvalidTokenListener() {

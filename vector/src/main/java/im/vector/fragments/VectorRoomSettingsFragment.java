@@ -1344,8 +1344,33 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 //
                 if (item.getItemId() == R.id.ic_action_vector_delete_alias) {
                     displayLoadingView();
-                    mRoom.removeAlias(roomAlias, mAliasUpdatesCallback);
-                } else if (item.getItemId() == R.id.ic_action_vector_permalink) {
+                    mRoom.removeAlias(roomAlias, new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            // when there is only one alias, it becomes the main alias.
+                            if (mRoom.getAliases().size() == 1) {
+                                mRoom.updateCanonicalAlias(mRoom.getAliases().get(0), mAliasUpdatesCallback);
+                            } else {
+                                mAliasUpdatesCallback.onSuccess(info);
+                            }
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            mAliasUpdatesCallback.onNetworkError(e);
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            mAliasUpdatesCallback.onMatrixError(e);
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            mAliasUpdatesCallback.onUnexpectedError(e);
+                        }
+                    });
+                } else if (item.getItemId() == R.id.ic_action_vector_room_url) {
                     VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(roomAlias, null));
                 } else {
                     VectorUtils.copyToClipboard(getActivity(), roomAlias);
@@ -1500,7 +1525,32 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                         @Override
                                         public void run() {
                                             displayLoadingView();
-                                            mRoom.addAlias(newAddress, mAliasUpdatesCallback);
+                                            mRoom.addAlias(newAddress, new ApiCallback<Void>() {
+                                                @Override
+                                                public void onSuccess(Void info) {
+                                                    // when there is only one alias, it becomes the main alias.
+                                                    if (mRoom.getAliases().size() == 1) {
+                                                        mRoom.updateCanonicalAlias(mRoom.getAliases().get(0), mAliasUpdatesCallback);
+                                                    } else {
+                                                        mAliasUpdatesCallback.onSuccess(info);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onNetworkError(Exception e) {
+                                                    mAliasUpdatesCallback.onNetworkError(e);
+                                                }
+
+                                                @Override
+                                                public void onMatrixError(MatrixError e) {
+                                                    mAliasUpdatesCallback.onMatrixError(e);
+                                                }
+
+                                                @Override
+                                                public void onUnexpectedError(Exception e) {
+                                                    mAliasUpdatesCallback.onUnexpectedError(e);
+                                                }
+                                            });
                                         }
                                     });
                                 }

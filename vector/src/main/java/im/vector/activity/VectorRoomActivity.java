@@ -44,11 +44,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -164,11 +163,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
 
-    private ImageButton mSendButton;
-    private ImageButton mAttachmentsButton;
+    private View mSendButtonLayout;
+    private ImageView mSendImageView;
     private EditText mEditText;
     private ImageView mAvatarImageView;
-    private View mMessageButtonLayout;
     private View mCanNotPostTextView;
 
     // action bar header
@@ -182,10 +180,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private TextView mActionBarHeaderRoomTopic;
     private ImageView mActionBarHeaderRoomAvatar;
     private View mActionBarHeaderInviteMemberView;
-    private boolean mIsKeyboardDisplayed;
-
-    // keyboard listener to detect when the keyboard is displayed
-    private ViewTreeObserver.OnGlobalLayoutListener mKeyboardListener;
 
     // notifications area
     private View mNotificationsArea;
@@ -468,60 +462,56 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
-        mSendButton = (ImageButton) findViewById(R.id.button_send);
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-
+        mSendImageView = (ImageView) findViewById(R.id.room_send_image_view);
+        mSendButtonLayout = findViewById(R.id.room_send_layout);
+        mSendButtonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                sendTextMessage();
-            }
-        });
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(mEditText.getText())) {
+                    sendTextMessage();
+                } else {
+                    // hide the header room
+                    enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        mAttachmentsButton = (ImageButton) findViewById(R.id.button_attachments);
-        mAttachmentsButton.setOnClickListener(new View.OnClickListener() {
+                    FragmentManager fm = getSupportFragmentManager();
+                    IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
 
-            @Override
-            public void onClick(View view) {
-                // hide the header room
-                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                    if (fragment != null) {
+                        fragment.dismissAllowingStateLoss();
+                    }
 
-                FragmentManager fm = getSupportFragmentManager();
-                IconAndTextDialogFragment fragment = (IconAndTextDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                    final Integer[] messages = new Integer[]{
+                            R.string.option_send_files,
+                            R.string.option_take_photo,
+                    };
 
-                if (fragment != null) {
-                    fragment.dismissAllowingStateLoss();
-                }
-
-                final Integer[] messages = new Integer[]{
-                        R.string.option_send_files,
-                        R.string.option_take_photo,
-                };
-
-                final Integer[] icons = new Integer[]{
-                        R.drawable.ic_material_file,  // R.string.option_send_files
-                        R.drawable.ic_material_camera, // R.string.option_take_photo
-                };
+                    final Integer[] icons = new Integer[]{
+                            R.drawable.ic_material_file,  // R.string.option_send_files
+                            R.drawable.ic_material_camera, // R.string.option_take_photo
+                    };
 
 
-                fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
-                fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
-                        Integer selectedVal = messages[position];
+                    fragment = IconAndTextDialogFragment.newInstance(icons, messages, null, ContextCompat.getColor(VectorRoomActivity.this, R.color.vector_text_black_color));
+                    fragment.setOnClickListener(new IconAndTextDialogFragment.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(IconAndTextDialogFragment dialogFragment, int position) {
+                            Integer selectedVal = messages[position];
 
-                        if (selectedVal == R.string.option_send_files) {
-                            VectorRoomActivity.this.launchFileSelectionIntent();
-                        } else if (selectedVal == R.string.option_take_photo) {
-                            if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
-                                launchCamera();
+                            if (selectedVal == R.string.option_send_files) {
+                                VectorRoomActivity.this.launchFileSelectionIntent();
+                            } else if (selectedVal == R.string.option_take_photo) {
+                                if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
+                                    launchCamera();
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                    fragment.show(fm, TAG_FRAGMENT_ATTACHMENTS_DIALOG);
+                }
             }
         });
+
 
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -582,7 +572,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mNotificationsMessageTextView = (TextView) findViewById(R.id.room_notification_message);
         mErrorIcon = findViewById(R.id.room_error_icon);
         mErrorMessageTextView = (TextView) findViewById(R.id.room_notification_error_message);
-        mMessageButtonLayout = findViewById(R.id.buttons_layout);
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
 
         mMyUserId = mSession.getCredentials().userId;
@@ -708,9 +697,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mSession.getDataHandler().removeListener(mGlobalEventListener);
             }
         }
-
-        // remove listener on keyboard display
-        enableKeyboardShownListener(false);
     }
 
     @Override
@@ -755,13 +741,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             EventStreamService.cancelNotificationsForRoomId(mSession.getCredentials().userId, mRoom.getRoomId());
         }
 
-        // listen to keyboard display
-        enableKeyboardShownListener(true);
-
         if (null != mRoom) {
             // reset the unread messages counter
             mRoom.sendReadReceipt(null);
-
 
             String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
@@ -1394,10 +1376,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void manageSendMoreButtons() {
         boolean hasText = mEditText.getText().length() > 0;
-
-        mSendButton.setVisibility(hasText ? View.VISIBLE : View.GONE);
-
-        mAttachmentsButton.setVisibility(!hasText ? View.VISIBLE : View.GONE);
+        mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
     }
 
     /**
@@ -1641,7 +1620,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mActionBarCustomTitle = (TextView)findViewById(R.id.room_action_bar_title);
         mActionBarCustomTopic = (TextView)findViewById(R.id.room_action_bar_topic);
         mActionBarCustomArrowImageView = (ImageView)findViewById(R.id.open_chat_header_arrow);
-        mIsKeyboardDisplayed = false;
 
         // custom header
         View headerTextsContainer = findViewById(R.id.header_texts_container);
@@ -1781,7 +1759,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Check if the user can send a message in this room
      */
     private void checkSendEventStatus() {
-        if (null != mRoom) {
+        if ((null != mRoom) && (null !=  mRoom.getLiveState())) {
             boolean canSendMessage = true;
 
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
@@ -1791,7 +1769,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             mEditText.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
-            mMessageButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
+            mSendButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
         }
     }
@@ -1859,7 +1837,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         }
                     }
 
-            } else {
+             } else {
                 mActionBarHeaderActiveMembers.setVisibility(View.GONE);
             }
         }
@@ -1870,11 +1848,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed) {
-        if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed){
-            if(true == mIsKeyboardDisplayed) {
-                Log.i(LOG_TAG, "## enableActionBarHeader(): action bar header canceled (keyboard is displayed)");
-                return;
-            }
+        if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
+
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
             // hide the name and the topic in the action bar.
             // these items are hidden when the header view is opened
@@ -1911,33 +1888,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mRoomHeaderView.setVisibility(View.GONE);
                 mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.vector_green_color));
             }
-        }
-    }
-
-    //================================================================================
-    // Keyboard display detection
-    //================================================================================
-
-    private void enableKeyboardShownListener(boolean aIsListenerEnabled){
-        final View vectorActivityRoomView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);//findViewById(R.id.vector_room_root_layout);
-
-        if(null == mKeyboardListener) {
-            mKeyboardListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    int rootHeight = vectorActivityRoomView.getRootView().getHeight();
-                    int height =  vectorActivityRoomView.getHeight();
-                    int heightDiff = rootHeight - height;
-                    mIsKeyboardDisplayed = heightDiff > KEYBOARD_THRESHOLD_VIEW_SIZE;
-                }
-            };
-        }
-
-        if (aIsListenerEnabled) {
-            vectorActivityRoomView.getViewTreeObserver().addOnGlobalLayoutListener(mKeyboardListener);
-        }
-        else {
-            vectorActivityRoomView.getViewTreeObserver().removeOnGlobalLayoutListener(mKeyboardListener);
         }
     }
 
@@ -2410,6 +2360,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // tap on the room name to update it
         View titleText = findViewById(R.id.action_bar_header_room_title);
+
         if (null != titleText) {
             titleText.setOnClickListener(new View.OnClickListener() {
                 @Override

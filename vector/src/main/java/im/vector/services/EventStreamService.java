@@ -524,7 +524,7 @@ public class EventStreamService extends Service {
         // detect if the polling thread must be started
         // i.e a session must be defined
         // and GCM disabled or GCM registration failed
-        if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed()) {
+        if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
             mIsForeground = true;

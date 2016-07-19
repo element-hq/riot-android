@@ -1618,9 +1618,11 @@ public class CommonActivityUtils {
     private static final String LOW_MEMORY_LOG_TAG = "Memory usage";
 
     /**
-     * Log the memory status.
+     * Log the memory statuses.
+     * @param activity the calling activity
+     * @return if the device is running on low memory.
      */
-    public static void displayMemoryInformation(Activity activity) {
+    public static boolean displayMemoryInformation(Activity activity) {
         long freeSize = 0L;
         long totalSize = 0L;
         long usedSize = -1L;
@@ -1649,6 +1651,8 @@ public class CommonActivityUtils {
         Log.e(LOW_MEMORY_LOG_TAG, "threshold  " + (mi.threshold / 1048576L) + " MB");
         Log.e(LOW_MEMORY_LOG_TAG, "lowMemory  " + (mi.lowMemory));
         Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+
+        return mi.lowMemory;
     }
 
     /**
@@ -1661,14 +1665,18 @@ public class CommonActivityUtils {
             String activityName = (null!=activity)?activity.getClass().getSimpleName():"NotAvailable";
             Log.e(LOW_MEMORY_LOG_TAG, "Active application : onLowMemory from " + activityName);
 
-            displayMemoryInformation(activity);
-
-            if (CommonActivityUtils.shouldRestartApp(activity)) {
-                Log.e(LOW_MEMORY_LOG_TAG, "restart");
-                CommonActivityUtils.restartApp(activity);
+            // it seems that onLowMemory is called whereas the device is seen on low memory condition
+            // so, test if the both conditions
+            if (displayMemoryInformation(activity)) {
+                if (CommonActivityUtils.shouldRestartApp(activity)) {
+                    Log.e(LOW_MEMORY_LOG_TAG, "restart");
+                    CommonActivityUtils.restartApp(activity);
+                } else {
+                    Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
+                    Matrix.getInstance(activity).reloadSessions(activity);
+                }
             } else {
-                Log.e(LOW_MEMORY_LOG_TAG, "clear the application cache");
-                Matrix.getInstance(activity).reloadSessions(activity);
+                Log.e(LOW_MEMORY_LOG_TAG, "Wait to be concerned");
             }
         } else {
             Log.e(LOW_MEMORY_LOG_TAG, "background application : onLowMemory ");

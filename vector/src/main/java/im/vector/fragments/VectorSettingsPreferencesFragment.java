@@ -151,6 +151,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         String matrixId = args.getString(ARG_MATRIX_ID);
         mSession = Matrix.getInstance(getActivity()).getSession(matrixId);
 
+        // sanity checks
+        if (null == mSession) {
+            if (null != getActivity()) {
+                getActivity().finish();
+            }
+            return;
+        }
+
         // define the layout
         addPreferencesFromResource(R.xml.vector_settings_preferences);
 
@@ -291,8 +299,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
             useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    gcmMgr.setBackgroundSyncAllowed((boolean)newValue);
+                public boolean onPreferenceChange(Preference preference, Object aNewValue) {
+                    boolean newValue = (boolean)aNewValue;
+
+                    if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
+                        gcmMgr.setBackgroundSyncAllowed(newValue);
+                    }
+
                     return true;
                 }
             });
@@ -616,13 +629,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
 
         if (fResourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
-            gcmMgr.setScreenTurnedOn(newValue);
+            if (gcmMgr.isScreenTurnedOn() != newValue) {
+                gcmMgr.setScreenTurnedOn(newValue);
+            }
             return;
         }
 
         if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
             final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
+
+            // avoid useless update
+            if (isAllowed == newValue) {
+                return;
+            }
 
             gcmMgr.setDeviceNotificationsAllowed(!isAllowed);
 
@@ -983,6 +1003,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 preference.setTitle(getResources().getString(R.string.settings_email_address));
                 preference.setSummary(email);
                 preference.setKey(EMAIL_PREFERENCE_KEY_BASE + index);
+
+                final String fEmailAddress = email;
+
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        VectorUtils.copyToClipboard(getActivity(), fEmailAddress);
+                        return true;
+                    }
+                });
+
                 index++;
                 mUserSettingsCategory.addPreference(preference);
             }

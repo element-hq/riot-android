@@ -15,8 +15,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         // use the version code
-        versionCode 303
-        versionName "0.3.3"
+        versionCode 304
+        versionName "0.3.4"
     }
 
     signingConfigs {
@@ -54,8 +54,8 @@ android {
         app {
             applicationId "im.vector.alpha"
             // use the version name
-            versionCode 303
-            versionName "0.3.3"
+            versionCode 304
+            versionName "0.3.4"
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
             resValue "string", "flavor_description", ""
@@ -64,8 +64,8 @@ android {
         appfdroid {
             applicationId "im.vector.alpha"
             // use the version name
-            versionCode 303
-            versionName "0.3.3"
+            versionCode 304
+            versionName "0.3.4"
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
             resValue "string", "flavor_description", "FDroid version"

@@ -203,15 +203,15 @@
                 android:layout_height="match_parent"/>
 
             <Button
-                android:id="@+id/recents_invite_preview_button"
+                android:id="@+id/recents_invite_reject_button"
                 android:layout_weight="0.26"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="14sp"
+                android:layout_height="match_parent"
                 android:background="@color/vector_green_color"
                 android:textColor="@android:color/white"
-                android:text="@string/preview"/>
+                android:text="@string/reject"/>
 
             <View
                 android:id="@+id/recents_invite_sep2"
@@ -221,15 +221,15 @@
                 android:layout_height="match_parent"/>
 
             <Button
-                android:id="@+id/recents_invite_reject_button"
+                android:id="@+id/recents_invite_preview_button"
                 android:layout_weight="0.26"
                 android:layout_width="0dp"
-                android:textColor="@color/vector_green_color"
-                android:background="@android:color/transparent"
+                android:layout_height="36dp"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="14sp"
-                android:layout_height="match_parent"
-                android:text="@string/reject"/>
+                android:background="@color/vector_green_color"
+                android:textColor="@android:color/white"
+                android:text="@string/preview"/>
 
             <View
                 android:id="@+id/recents_invite_sep3"

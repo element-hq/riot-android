@@ -46,6 +46,7 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
@@ -73,6 +74,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -718,6 +720,71 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 intent.putExtra(Browser.EXTRA_APPLICATION_ID, getActivity().getPackageName());
                 getActivity().startActivity(intent);
             }
+        }
+    }
+
+    @Override
+    public void onMatrixUserIdClick(final String userId) {
+
+        showInitLoading();
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CommonActivityUtils.goToOneToOneRoom(mSession, userId, getActivity(), new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        // nothing to do here
+                    }
+
+                    private void onError(String errorMessage) {
+                        hideInitLoading();
+                        CommonActivityUtils.displayToast(getActivity(), errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onRoomAliasClick(String roomAlias) {
+        try {
+            onURLClick(Uri.parse(VectorUtils.getPermalink(roomAlias, null)));
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onRoomAliasClick failed " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void onRoomIdClick(String roomId) {
+        try {
+            onURLClick(Uri.parse(VectorUtils.getPermalink(roomId, null)));
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void onMessageIdClick(String messageId) {
+        try {
+            onURLClick(Uri.parse(VectorUtils.getPermalink(mRoom.getRoomId(), messageId)));
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onRoomIdClick failed " + e.getLocalizedMessage());
         }
     }
 }
