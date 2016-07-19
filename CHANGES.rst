@@ -1,3 +1,23 @@
+Changes in Vector 0.3.4 (2016-07-18)
+===================================================
+
+Improvements:
+ * #291 : Room settings: the first created alias should be defined as the main address by default.
+ * Imporve the low memory management.
+
+Bugfixes:
+ * #293 : The markdown rendering is mangled for backtick blocks.
+ * #294 : Messages: switch decline and preview buttons on invites enhancement.
+ * #297 : Redact avatar / name update event should remove them from the room history.
+ * #307 : Red FAB for room creation should fade in/out.
+ * #309 : Send button is too small.
+ * #310 : Room header view seems to ignore the first tap.
+ * #318 : Some member avatars are wrong.
+ * Fix an infinite loop when third party registration fails.
+ * Always display the permalink action. (even if the hs is not matrix.org).
+ * Fix some flickering settings buttons.
+ * Fix several GA crashes.
+ 
 Changes in Vector 0.3.3 (2016-07-11)
 ===================================================
 

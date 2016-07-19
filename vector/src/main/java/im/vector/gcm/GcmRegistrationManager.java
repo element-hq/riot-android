@@ -799,6 +799,11 @@ public final class GcmRegistrationManager {
         getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
                 .apply();
+
+        if (!useGCM()) {
+            // when GCM is disabled, enable / disable the "Listen for events" notifications
+            CommonActivityUtils.onGcmUpdate(mContext);
+        }
     }
 
     /**

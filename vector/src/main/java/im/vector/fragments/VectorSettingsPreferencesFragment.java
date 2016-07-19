@@ -163,7 +163,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.vector_settings_preferences);
 
         if (null == mPushesRuleByResourceId) {
-            mPushesRuleByResourceId = new HashMap<String, String>();
+            mPushesRuleByResourceId = new HashMap<>();
 
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_this_device), DUMMY_RULE);
@@ -275,15 +275,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
-                final String fResourceText = resourceText;
-
                 switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
                         // on some old android APIs,
                         // the callback is called even if there is no user interaction
                         // so the value will be checked to ensure there is really no update.
-                        onPushRuleClick(fResourceText, (boolean)newValueAsVoid);
+                        onPushRuleClick(preference.getKey(), (boolean)newValueAsVoid);
                         return true;
                     }
                 });
