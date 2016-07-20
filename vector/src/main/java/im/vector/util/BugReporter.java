@@ -203,7 +203,7 @@ public class BugReporter {
                 MXSession session = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 String userName = session.getMyUser().user_id.replace("@", "").replace(":", "_");
 
-                File compressedFile = new File(LogUtilities.ensureLogDirectoryExists(), "BugReport-" + userName + "-" + System.currentTimeMillis() + ".zip");
+                File compressedFile = new File(LogUtilities.ensureLogDirectoryExists(), "VectorBugReport-" + System.currentTimeMillis()  + "-" + userName + ".zip");
 
                 if (compressedFile.exists()) {
                     compressedFile.delete();
