@@ -146,8 +146,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public static final int GET_MENTION_REQUEST_CODE = 2;
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
 
-    private static final int KEYBOARD_THRESHOLD_VIEW_SIZE = 1000;
-
     private static final AndDown mAndDown = new AndDown();
 
     private VectorMessageListFragment mVectorMessageListFragment;
@@ -223,6 +221,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private int mScrollToIndex = -1;
 
     private boolean mIgnoreTextUpdate = false;
+
+    // https://github.com/vector-im/vector-android/issues/323
+    // on some devices, the toolbar background is set to transparent
+    // when an activity is opened from this one.
+    // It should not but it does.
+    private boolean mIsHeaderViewDisplayed = false;
 
     /**
      * Presence and room preview listeners
@@ -1849,7 +1853,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Show or hide the action bar header view according to aIsHeaderViewDisplayed
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
-    private boolean mIsHeaderViewDisplayed = false;
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed) {
 
         mIsHeaderViewDisplayed = aIsHeaderViewDisplayed;

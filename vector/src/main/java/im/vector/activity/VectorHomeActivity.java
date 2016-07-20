@@ -598,6 +598,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mStorePermissionCheck = true;
             CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
         }
+
+        // https://github.com/vector-im/vector-android/issues/323
+        // the tool bar color is not restored on some devices.
+        mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
     }
 
     @Override
