@@ -146,8 +146,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public static final int GET_MENTION_REQUEST_CODE = 2;
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
 
-    private static final int KEYBOARD_THRESHOLD_VIEW_SIZE = 1000;
-
     private static final AndDown mAndDown = new AndDown();
 
     private VectorMessageListFragment mVectorMessageListFragment;
@@ -256,13 +254,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 });
             }
         }
-
     };
 
     /**
      * The room events listener
      */
     private final MXEventListener mRoomEventListener = new MXEventListener() {
+        @Override
+        public void onRoomFlush(String roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateActionBarTitleAndTopic();
+                    updateRoomHeaderMembersStatus();
+                }
+            });
+        }
 
         @Override
         public void onLeaveRoom(String roomId) {

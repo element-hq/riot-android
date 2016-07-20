@@ -122,6 +122,16 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
 
         @Override
+        public void onRoomFlush(String roomId) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
+                }
+            });
+        }
+
+        @Override
         public void onPresenceUpdate(final Event event, final User user) {
             if (null != getActivity()) {
                 getActivity().runOnUiThread(new Runnable() {
