@@ -765,6 +765,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         checkSendEventStatus();
 
+        enableActionBarHeader(mIsHeaderViewDisplayed);
+
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
 
@@ -1847,7 +1849,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Show or hide the action bar header view according to aIsHeaderViewDisplayed
      * @param aIsHeaderViewDisplayed true to show the header view, false to hide
      */
+    private boolean mIsHeaderViewDisplayed = false;
     private void enableActionBarHeader(boolean aIsHeaderViewDisplayed) {
+
+        mIsHeaderViewDisplayed = aIsHeaderViewDisplayed;
         if (SHOW_ACTION_BAR_HEADER == aIsHeaderViewDisplayed) {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
