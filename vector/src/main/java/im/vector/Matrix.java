@@ -229,7 +229,6 @@ public class Matrix {
         mLoginStorage = new LoginStorage(mAppContext);
         mMXSessions = new ArrayList<>();
         mTmpStores = new ArrayList<>();
-        RageShake.getInstance().start(mAppContext);
 
         mNetworkConnectivityReceiver = new NetworkConnectivityReceiver();
         appContext.registerReceiver(mNetworkConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));

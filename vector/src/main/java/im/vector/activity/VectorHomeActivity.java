@@ -63,6 +63,7 @@ import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import im.vector.util.BugReporter;
 import im.vector.util.RageShake;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
@@ -831,7 +832,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
 
                     case R.id.sliding_menu_send_bug_report: {
-                        RageShake.getInstance().sendBugReport();
+                        BugReporter.sendBugReport();
                         break;
                     }
 

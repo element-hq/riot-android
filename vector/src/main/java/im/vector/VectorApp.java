@@ -32,6 +32,7 @@ import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
+import im.vector.util.RageShake;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,8 +43,16 @@ import java.util.TimerTask;
  * The main application injection point
  */
 public class VectorApp extends Application {
+
     private static final String LOG_TAG = "VectorApp";
 
+    // instance
+    private static VectorApp instance = null;
+
+    // rage shake detection
+    private static RageShake mRageShake = new RageShake();
+
+    // active activity detection
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
     private boolean mIsInBackground = true;
@@ -54,13 +63,16 @@ public class VectorApp extends Application {
     public static String VECTOR_VERSION_STRING = "";
     public static String SDK_VERSION_STRING = "";
 
-    private Boolean mIsCallingInBackground = false;
+    // call in progress management
+    private boolean mIsCallingInBackground = false;
 
-    private static VectorApp instance = null;
+    // the current activity
+    private static Activity mCurrentActivity = null;
 
-    private EventEmitter<Activity> mOnActivityDestroyedListener;
-
-    private static Bitmap mSavedPickerImagePreview = null;
+    // return the current instance
+    public static VectorApp getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -68,9 +80,6 @@ public class VectorApp extends Application {
         super.onCreate();
 
         instance = this;
-
-        mOnActivityDestroyedListener = new EventEmitter<>();
-
         mActivityTransitionTimer = null;
         mActivityTransitionTimerTask = null;
 
@@ -96,15 +105,10 @@ public class VectorApp extends Application {
 
         // get the contact update at application launch
         ContactsManager.refreshLocalContactsSnapshot(this);
+
+        mRageShake.start(this);
     }
 
-    public static VectorApp getInstance() {
-        return instance;
-    }
-
-    public EventEmitter<Activity> getOnActivityDestroyedListener() {
-        return mOnActivityDestroyedListener;
-    }
     /**
      * Suspend background threads.
      */
@@ -135,30 +139,22 @@ public class VectorApp extends Application {
     }
 
     /**
-     * The application is warned that a call is ended.
+     * Test if application is put in background.
+     * i.e wait 2s before assuming that the application is put in background.
      */
-    public void onCallEnd() {
-        if (isAppInBackground() && mIsCallingInBackground) {
-            Log.d(LOG_TAG, "onCallEnd : Suspend the events thread because the call was ended whereas the application was in background");
-            suspendApp();
-        }
-
-        mIsCallingInBackground = false;
-    }
-
     private void startActivityTransitionTimer() {
-        this.mActivityTransitionTimer = new Timer();
-        this.mActivityTransitionTimerTask = new TimerTask() {
+        mActivityTransitionTimer = new Timer();
+        mActivityTransitionTimerTask = new TimerTask() {
             @Override
             public void run() {
-                if (VectorApp.this.mActivityTransitionTimerTask != null) {
-                    VectorApp.this.mActivityTransitionTimerTask.cancel();
-                    VectorApp.this.mActivityTransitionTimerTask = null;
+                if (mActivityTransitionTimerTask != null) {
+                    mActivityTransitionTimerTask.cancel();
+                    mActivityTransitionTimerTask = null;
                 }
 
-                if (VectorApp.this.mActivityTransitionTimer != null) {
-                    VectorApp.this.mActivityTransitionTimer.cancel();
-                    VectorApp.this.mActivityTransitionTimer = null;
+                if (mActivityTransitionTimer != null) {
+                    mActivityTransitionTimer.cancel();
+                    mActivityTransitionTimer = null;
                 }
 
                 VectorApp.this.mIsInBackground = true;
@@ -175,18 +171,21 @@ public class VectorApp extends Application {
             }
         };
 
-        this.mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
+        mActivityTransitionTimer.schedule(mActivityTransitionTimerTask, MAX_ACTIVITY_TRANSITION_TIME_MS);
     }
 
+    /**
+     * Stop the background detection.
+     */
     private void stopActivityTransitionTimer() {
-        if (this.mActivityTransitionTimerTask != null) {
-            this.mActivityTransitionTimerTask.cancel();
-            this.mActivityTransitionTimerTask = null;
+        if (mActivityTransitionTimerTask != null) {
+            mActivityTransitionTimerTask.cancel();
+            mActivityTransitionTimerTask = null;
         }
 
-        if (this.mActivityTransitionTimer != null) {
-            this.mActivityTransitionTimer.cancel();
-            this.mActivityTransitionTimer = null;
+        if (mActivityTransitionTimer != null) {
+            mActivityTransitionTimer.cancel();
+            mActivityTransitionTimer = null;
         }
 
         if (isAppInBackground() && !mIsCallingInBackground) {
@@ -220,11 +219,15 @@ public class VectorApp extends Application {
 
         MyPresenceManager.advertiseAllOnline();
 
-        this.mIsCallingInBackground = false;
-        this.mIsInBackground = false;
+        mIsCallingInBackground = false;
+        mIsInBackground = false;
     }
 
-    static private Activity mCurrentActivity = null;
+    /**
+     * Update the current active activity.
+     * It manages the application background / foreground when it is required.
+     * @param activity the current activity, null if there is no more one.
+     */
     public static void setCurrentActivity(Activity activity) {
         if (VectorApp.isAppInBackground() && (null != activity)) {
             Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
@@ -235,7 +238,7 @@ public class VectorApp extends Application {
             }
 
             Log.d(LOG_TAG, "The application is resumed");
-            // display the memory usage when the application is debackgrounded.
+            // display the memory usage when the application is put iun foreground..
             CommonActivityUtils.displayMemoryInformation(activity);
         }
 
@@ -250,6 +253,10 @@ public class VectorApp extends Application {
 
         mCurrentActivity = activity;
     }
+
+    /**
+     * @return the current active activity
+     */
     public static Activity getCurrentActivity() { return mCurrentActivity; }
 
     /**
@@ -258,6 +265,42 @@ public class VectorApp extends Application {
     public static boolean isAppInBackground() {
         return (null == mCurrentActivity) && (null != getInstance()) && getInstance().mIsInBackground;
     }
+
+    //==============================================================================================================
+    // Calls management.
+    //==============================================================================================================
+
+    /**
+     * The application is warned that a call is ended.
+     */
+    public void onCallEnd() {
+        if (isAppInBackground() && mIsCallingInBackground) {
+            Log.d(LOG_TAG, "onCallEnd : Suspend the events thread because the call was ended whereas the application was in background");
+            suspendApp();
+        }
+
+        mIsCallingInBackground = false;
+    }
+
+    //==============================================================================================================
+    // cert management : store the active activities.
+    //==============================================================================================================
+
+    private EventEmitter<Activity> mOnActivityDestroyedListener = new EventEmitter<>();
+
+    /**
+     * @return the EventEmitter list.
+     */
+    public EventEmitter<Activity> getOnActivityDestroyedListener() {
+        return mOnActivityDestroyedListener;
+    }
+
+    //==============================================================================================================
+    // Media pickers : image backup
+    //==============================================================================================================
+
+    private static Bitmap mSavedPickerImagePreview = null;
+
     /**
      * The image taken from the medias picker is stored in a static variable because
      * saving it would take too much time.
