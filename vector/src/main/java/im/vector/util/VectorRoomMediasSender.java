@@ -83,13 +83,13 @@ public class VectorRoomMediasSender {
     private AlertDialog mImageSizesListDialog;
 
     // the linked room activity
-    private VectorRoomActivity mVectorRoomActivity;
+    private final VectorRoomActivity mVectorRoomActivity;
 
     // the room fragment
-    private VectorMessageListFragment mVectorMessageListFragment;
+    private final VectorMessageListFragment mVectorMessageListFragment;
 
     // the medias cache
-    private MXMediasCache mMediasCache;
+    private final MXMediasCache mMediasCache;
 
     // the background thread
     private static HandlerThread mHandlerThread = null;
@@ -277,13 +277,11 @@ public class VectorRoomMediasSender {
     private void sendTextMessage(SharedDataItem sharedDataItem) {
         CharSequence sequence = sharedDataItem.getText();
         String htmlText = sharedDataItem.getHtmlText();
-        String text;
+        String text = null;
 
         if (null == sequence) {
             if (null != htmlText) {
                 text = Html.fromHtml(htmlText).toString();
-            } else {
-                text = htmlText;
             }
         } else {
             text = sequence.toString();
@@ -323,7 +321,7 @@ public class VectorRoomMediasSender {
                 String filename =  sharedDataItem.getFileName(mVectorRoomActivity);
 
                 String mediaUrl = mMediasCache.saveMedia(resource.mContentStream, null, mimeType);
-                mVectorMessageListFragment.uploadVideoContent(mediaUrl, mVectorMessageListFragment.getVideoThumbailUrl(mediaUrl), filename, mimeType);
+                mVectorMessageListFragment.uploadVideoContent(mediaUrl, mVectorMessageListFragment.getVideoThumbnailUrl(mediaUrl), filename, mimeType);
                 resource.close();
             }
         });

@@ -230,6 +230,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         }
 
         @Override
+        public void onRoomFlush(String roomId) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateUi();
+                }
+            });
+        }
+
+        @Override
         public void onRoomTagEvent(String roomId) {
             Log.d(LOG_TAG, "## onRoomTagEvent()");
             updateUi();

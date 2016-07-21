@@ -260,13 +260,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 });
             }
         }
-
     };
 
     /**
      * The room events listener
      */
     private final MXEventListener mRoomEventListener = new MXEventListener() {
+        @Override
+        public void onRoomFlush(String roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateActionBarTitleAndTopic();
+                    updateRoomHeaderMembersStatus();
+                    updateRoomHeaderAvatar();
+                }
+            });
+        }
 
         @Override
         public void onLeaveRoom(String roomId) {
@@ -291,6 +301,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         setTitle();
                         refreshNotificationsArea();
                         updateRoomHeaderMembersStatus();
+                        updateRoomHeaderAvatar();
                     } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
                         checkSendEventStatus();
                     } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {

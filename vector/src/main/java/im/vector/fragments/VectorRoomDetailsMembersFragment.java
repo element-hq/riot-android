@@ -106,7 +106,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private TimerTask mRefreshTimerTask;
 
     // list the up to date presence to avoid refreshing it twice
-    private ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<String>();
+    private final ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<>();
 
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
@@ -114,9 +114,21 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type)) {
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
+                            Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type) ||
+                            Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
                         refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
                     }
+                }
+            });
+        }
+
+        @Override
+        public void onRoomFlush(String roomId) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
                 }
             });
         }
@@ -203,7 +215,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     };
 
-    private ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
+    private final ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
             if (null != getActivity()) {
@@ -442,9 +454,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private boolean isUserAdmin(){
         boolean isAdmin = false;
-        PowerLevels powerLevels = null;
 
         if ((null != mRoom) && (null != mSession)) {
+            PowerLevels powerLevels;
+
             if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
                 String userId = mSession.getMyUserId();
                 isAdmin = (null != userId)?(powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN):false;
@@ -467,7 +480,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if(null != mSwitchDeletionMenuItem) {
             if(!isUserAdmin()){
                 isEnabled = false;
-            } else if(1 == mAdapter.getItemsCount()){
+            } else if (1 == mAdapter.getItemsCount()){
                 isEnabled = false;
             } else {
                 isEnabled = true;
@@ -518,7 +531,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private void refreshMemberPresences()  {
         int firstPos = mParticipantsListView.getFirstVisiblePosition();
-        int lastPos = mParticipantsListView.getLastVisiblePosition() + 20; // add a margin to efresh more
+        int lastPos = mParticipantsListView.getLastVisiblePosition() + 20; // add a margin to refresh more
         int count = mParticipantsListView.getCount();
 
         for(int i = firstPos; (i <= lastPos) && (i < count); i++) {
@@ -569,7 +582,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     /**
      * Update the activity title
      *
-     * @param title
+     * @param title the new title
      */
     private void setActivityTitle(String title) {
         if (null != ((AppCompatActivity) getActivity()).getSupportActionBar()) {
@@ -588,7 +601,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     * Enable / disable the multiselection mode
+     * Enable / disable the multi selection mode
      */
     private void toggleMultiSelectionMode() {
         resetActivityTitle();
@@ -789,7 +802,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ArrayList<String> userIds = new ArrayList<String>();
+                                        ArrayList<String> userIds = new ArrayList<>();
                                         userIds.add(participantItem.mUserId);
 
                                         kickUsers(userIds, 0);
@@ -913,13 +926,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     * @return the participant User Ids except oneself.
-     */
-    public ArrayList<String> getUserIdsList() {
-        return mAdapter.getUserIdsList();
-    }
-
-    /**
      * Activity result
      * @param requestCode the request code
      * @param resultCode teh result code
@@ -940,7 +946,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
                             mRoom.inviteByEmail(userId, mDefaultCallBack);
                         } else {
-                            ArrayList<String> userIDs = new ArrayList<String>();
+                            ArrayList<String> userIDs = new ArrayList<>();
                             userIDs.add(userId);
                             mRoom.invite(userIDs, mDefaultCallBack);
                         }
