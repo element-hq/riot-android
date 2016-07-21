@@ -3,6 +3,8 @@ Vector
 
 Vector is an Android Matrix client.
 
+[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/im.vector.alpha)
+
 It uses https://github.com/matrix-org/matrix-android-sdk
 
 
