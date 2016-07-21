@@ -26,7 +26,7 @@
         android:entryValues="@array/tag_values" />
 
     <!-- mute/un mute room notifications-->
-    <SwitchPreference
+    <im.vector.preference.VectorSwitchPreference
         android:key="muteNotificationsSwitch"
         android:title="@string/room_settings_mute_notifs" />
 
@@ -39,7 +39,7 @@
         android:title="@string/room_settings_category_access_visibility_title">
 
         <!-- indicate if the room name should listed in the room directory list -->
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:key="roomNameListedInDirectorySwitch"
             android:title="@string/room_settings_directory_visibility" />
 
