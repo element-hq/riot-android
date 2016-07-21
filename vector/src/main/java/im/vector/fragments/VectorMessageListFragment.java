@@ -18,9 +18,6 @@ package im.vector.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,8 +33,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
@@ -74,7 +74,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -238,7 +237,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     resend(event);
                 }
             });
-        } else if (action == R.id.ic_action_vector_delete_message) {
+        } else if (action == R.id.ic_action_vector_redact_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -310,6 +309,28 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(event.roomId, event.eventId));
         } else if  (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
+        } else if  (action == R.id.ic_action_view_source) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    View view= getActivity().getLayoutInflater().inflate(R.layout.dialog_event_content, null);
+                    TextView textview = (TextView)view.findViewById(R.id.event_content_text_view);
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    textview.setText(gson.toJson(JsonUtils.toJson(event)));
+                    builder.setView(view);
+
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.create().show();
+                }
+            });
         }
     }
 

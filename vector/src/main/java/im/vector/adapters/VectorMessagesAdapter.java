@@ -490,6 +490,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             menu.getItem(i).setVisible(false);
         }
 
+        menu.findItem(R.id.ic_action_view_source).setVisible(true);
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
 
         if (!TextUtils.isEmpty(textMsg)) {
@@ -500,10 +501,10 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
 
             if (event.isUndeliverable()) {
-                menu.findItem(R.id.ic_action_vector_delete_message).setVisible(true);
+                menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
             }
         } else if (event.mSentState == Event.SentState.SENT) {
-            menu.findItem(R.id.ic_action_vector_delete_message).setVisible(!mIsPreviewMode);
+            menu.findItem(R.id.ic_action_vector_redact_message).setVisible(!mIsPreviewMode);
 
             if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
