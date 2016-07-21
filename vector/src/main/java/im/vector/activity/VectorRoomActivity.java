@@ -267,6 +267,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 public void run() {
                     updateActionBarTitleAndTopic();
                     updateRoomHeaderMembersStatus();
+                    updateRoomHeaderAvatar();
                 }
             });
         }
@@ -294,6 +295,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         setTitle();
                         refreshNotificationsArea();
                         updateRoomHeaderMembersStatus();
+                        updateRoomHeaderAvatar();
                     } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
                         checkSendEventStatus();
                     } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
