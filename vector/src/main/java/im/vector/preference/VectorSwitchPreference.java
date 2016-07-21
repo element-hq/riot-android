@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 
 /**
- * This class should fe the android issue
+ * This class should fix the android issue
  * https://code.google.com/p/android/issues/detail?id=26194
  *
  */
