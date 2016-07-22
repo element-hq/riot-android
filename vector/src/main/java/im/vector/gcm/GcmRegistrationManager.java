@@ -912,7 +912,7 @@ public final class GcmRegistrationManager {
      * @param registrationToken the registration token
      */
     private void setStoredRegistrationToken(String registrationToken) {
-        Log.d(LOG_TAG, "Saving registration token " + registrationToken);
+        Log.d(LOG_TAG, "Saving registration token ");
         getGcmSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
                 .apply();
