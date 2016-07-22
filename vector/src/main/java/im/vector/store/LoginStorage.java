@@ -84,7 +84,7 @@ public class LoginStorage {
 
         String connectionConfigsString = prefs.getString(PREFS_KEY_CONNECTION_CONFIGS, null);
 
-        Log.d(LOG_TAG, "Got connection json: " + connectionConfigsString);
+        Log.d(LOG_TAG, "Got connection json: ");
 
         if (connectionConfigsString == null) {
             return new ArrayList<HomeserverConnectionConfig>();
