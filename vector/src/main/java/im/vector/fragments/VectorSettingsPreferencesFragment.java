@@ -48,6 +48,7 @@ import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
@@ -820,7 +821,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
-                mSession.getContentManager().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new ContentManager.UploadCallback() {
+                mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
                     @Override
                     public void onUploadStart(String uploadId) {
                     }

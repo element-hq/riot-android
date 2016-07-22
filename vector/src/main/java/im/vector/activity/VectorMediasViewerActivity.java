@@ -32,7 +32,7 @@ import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.listeners.MXMediasDownloadListener;
+import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -249,7 +249,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
             if (null != downloadId) {
-                mediasCache.addDownloadListener(downloadId, new MXMediasDownloadListener() {
+                mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);

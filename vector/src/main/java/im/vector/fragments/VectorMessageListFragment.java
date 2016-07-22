@@ -46,7 +46,7 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
-import org.matrix.androidsdk.listeners.MXMediasDownloadListener;
+import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -445,7 +445,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
-                mediasCache.addDownloadListener(downloadId, new MXMediasDownloadListener() {
+                mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
                     public void onDownloadStart(String downloadId) {
                     }
