@@ -44,6 +44,7 @@ import android.widget.VideoView;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.listeners.MXMediasDownloadListener;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
@@ -211,13 +212,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
             pieFractionView.setTag(downloadId);
 
-            mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+            mMediasCache.addDownloadListener(downloadId, new MXMediasDownloadListener() {
                 @Override
                 public void onDownloadStart(String downloadId) {
                 }
 
                 @Override
-                public void onError(String downloadId, JsonElement jsonElement) {
+                public void onDownloadError(String downloadId, JsonElement jsonElement) {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
@@ -281,13 +282,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
             pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
-            mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+            mMediasCache.addDownloadListener(downloadId, new MXMediasDownloadListener() {
                 @Override
                 public void onDownloadStart(String downloadId) {
                 }
 
                 @Override
-                public void onError(String downloadId, JsonElement jsonElement) {
+                public void onDownloadError(String downloadId, JsonElement jsonElement) {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                     if ((null != error) && error.isSupportedErrorCode()) {
@@ -422,13 +423,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
             pieFractionView.setTag(downloadId);
 
-            mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+            mMediasCache.addDownloadListener(downloadId, new MXMediasDownloadListener() {
                 @Override
                 public void onDownloadStart(String downloadId) {
                 }
 
                 @Override
-                public void onError(String downloadId, JsonElement jsonElement) {
+                public void onDownloadError(String downloadId, JsonElement jsonElement) {
                     pieFractionView.setVisibility(View.GONE);
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
@@ -568,13 +569,13 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
             if (null != downloadId) {
-                mMediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                mMediasCache.addDownloadListener(downloadId, new MXMediasDownloadListener() {
                     @Override
                     public void onDownloadStart(String downloadId) {
                     }
 
                     @Override
-                    public void onError(String downloadId, JsonElement jsonElement) {
+                    public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
