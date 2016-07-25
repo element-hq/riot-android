@@ -232,6 +232,9 @@
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Small</string>
 
+    <string name="attachment_cancel_download">"Cancel the download?</string>
+    <string name="attachment_cancel_upload">Cancel the upload?</string>
+
     <!-- invitation members list Screen -->
     <string name="members_one_to_one">One to one room members</string>
     <string name="members_small_room_members">Small room members</string>
@@ -527,6 +530,8 @@
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
+    <string name="room_event_action_cancel_upload">Cancel Upload</string>
+    <string name="room_event_action_cancel_download">Cancel Download</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>

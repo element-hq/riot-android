@@ -263,6 +263,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     VectorUtils.copyToClipboard(getActivity(), textMsg);
                 }
             });
+        }  else if ((action == R.id.ic_action_vector_cancel_upload) || (action == R.id.ic_action_vector_cancel_download))  {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mRoom.cancelEventSending(event);
+                }
+            });
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
             Message message = JsonUtils.toMessage(event.content);
@@ -447,20 +454,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             if (null != downloadId) {
                 mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
-                    public void onDownloadStart(String downloadId) {
-                    }
-
-                    @Override
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
                             Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     }
 
                     @Override

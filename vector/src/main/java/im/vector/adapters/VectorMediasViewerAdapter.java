@@ -209,13 +209,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
-            pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
+            pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             pieFractionView.setTag(downloadId);
 
             mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
-                @Override
-                public void onDownloadStart(String downloadId) {
-                }
 
                 @Override
                 public void onDownloadError(String downloadId, JsonElement jsonElement) {
@@ -227,9 +224,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 }
 
                 @Override
-                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                public void onDownloadProgress(String aDownloadId, DownloadStats stats) {
                     if (aDownloadId.equals(pieFractionView.getTag())) {
-                        pieFractionView.setFraction(percentageProgress);
+                        pieFractionView.setFraction(stats.mProgress);
                     }
                 }
 
@@ -281,12 +278,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
-            pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
+            pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
-                @Override
-                public void onDownloadStart(String downloadId) {
-                }
-
                 @Override
                 public void onDownloadError(String downloadId, JsonElement jsonElement) {
                     MatrixError error = JsonUtils.toMatrixError(jsonElement);
@@ -297,9 +290,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 }
 
                 @Override
-                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                public void onDownloadProgress(String aDownloadId, DownloadStats stats) {
                     if (aDownloadId.equals(downloadId)) {
-                        pieFractionView.setFraction(percentageProgress);
+                        pieFractionView.setFraction(stats.mProgress);
                     }
                 }
 
@@ -420,14 +413,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
-            pieFractionView.setFraction(mMediasCache.progressValueForDownloadId(downloadId));
+            pieFractionView.setFraction(mMediasCache.getProgressValueForDownloadId(downloadId));
             pieFractionView.setTag(downloadId);
 
             mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
-                @Override
-                public void onDownloadStart(String downloadId) {
-                }
-
                 @Override
                 public void onDownloadError(String downloadId, JsonElement jsonElement) {
                     pieFractionView.setVisibility(View.GONE);
@@ -439,9 +428,9 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 }
 
                 @Override
-                public void onDownloadProgress(String aDownloadId, int percentageProgress) {
+                public void onDownloadProgress(String aDownloadId, DownloadStats stats) {
                     if (aDownloadId.equals(pieFractionView.getTag())) {
-                        pieFractionView.setFraction(percentageProgress);
+                        pieFractionView.setFraction(stats.mProgress);
                     }
                 }
 
@@ -571,20 +560,12 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
-                    public void onDownloadStart(String downloadId) {
-                    }
-
-                    @Override
                     public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
                             Toast.makeText(VectorMediasViewerAdapter.this.mContext, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     }
 
                     @Override

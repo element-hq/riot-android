@@ -2142,55 +2142,48 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if (null != resource) {
                 mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
                     @Override
-                    public void onUploadStart(String uploadId) {
+                    public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                        Log.e(LOG_TAG, "Fail to upload the avatar");
                     }
 
                     @Override
-                    public void onUploadProgress(String anUploadId, int percentageProgress) {
-                    }
-
-                    @Override
-                    public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
+                    public void onUploadComplete(final String uploadId, final String contentUri) {
                         VectorRoomActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                    Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
-                                    mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                                Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
+                                mRoom.updateAvatarUrl(contentUri, new ApiCallback<Void>() {
 
-                                        private void onDone(String message) {
-                                            if (!TextUtils.isEmpty(message)) {
-                                                CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
-                                            }
-
-                                            setProgressVisibility(View.GONE);
-                                            updateRoomHeaderAvatar();
+                                    private void onDone(String message) {
+                                        if (!TextUtils.isEmpty(message)) {
+                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
                                         }
 
-                                        @Override
-                                        public void onSuccess(Void info) {
-                                            onDone(null);
-                                        }
+                                        setProgressVisibility(View.GONE);
+                                        updateRoomHeaderAvatar();
+                                    }
 
-                                        @Override
-                                        public void onNetworkError(Exception e) {
-                                            onDone(e.getLocalizedMessage());
-                                        }
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        onDone(null);
+                                    }
 
-                                        @Override
-                                        public void onMatrixError(MatrixError e) {
-                                            onDone(e.getLocalizedMessage());
-                                        }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
 
-                                        @Override
-                                        public void onUnexpectedError(Exception e) {
-                                            onDone(e.getLocalizedMessage());
-                                        }
-                                    });
-                                } else {
-                                    Log.e(LOG_TAG, "Fail to upload the avatar");
-                                }
-                            }
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+                                });
+                        }
                         });
                     }
                 });
