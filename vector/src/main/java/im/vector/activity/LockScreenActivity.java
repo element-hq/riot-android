@@ -21,8 +21,10 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,6 +38,9 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
+
+import java.util.logging.Handler;
+
 import im.vector.Matrix;
 import im.vector.R;
 
@@ -43,6 +48,8 @@ import im.vector.R;
  * LockScreenActivity is displayed within the notification to send a message without opening the application.
  */
 public class LockScreenActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
+    public static final String LOG_TAG = "LockScreenActivity";
+
     public static final String EXTRA_SENDER_NAME = "extra_sender_name";
     public static final String EXTRA_MESSAGE_BODY = "extra_chat_body";
     public static final String EXTRA_ROOM_ID = "extra_room_id";
@@ -139,29 +146,35 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(LOG_TAG, "Send a message ...");
+
                 String body = editText.getText().toString();
 
                 Message message = new Message();
                 message.msgtype = Message.MSGTYPE_TEXT;
                 message.body = body;
 
-                Event event = new Event(message, session.getCredentials().userId, roomId);
+                final Event event = new Event(message, session.getCredentials().userId, roomId);
                 room.storeOutgoingEvent(event);
                 room.sendEvent(event, new ApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
+                        Log.d(LOG_TAG, "Send message : onSuccess ");
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
+                        Log.d(LOG_TAG, "Send message : onNetworkError " + e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
+                        Log.d(LOG_TAG, "Send message : onMatrixError " + e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
+                        Log.d(LOG_TAG, "Send message : onUnexpectedError " + e.getLocalizedMessage());
                     }
                 });
 
