@@ -652,14 +652,29 @@ public class VectorRoomMediasSender {
 
             if (maxSide > LARGE_IMAGE_SIZE) {
                 imageCompressionSizes.mLargeImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(LARGE_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mLargeImageSize.mWidth == imageWidth) && (imageCompressionSizes.mLargeImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mLargeImageSize = null;
+                }
             }
 
             if (maxSide > MEDIUM_IMAGE_SIZE) {
                 imageCompressionSizes.mMediumImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(MEDIUM_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mMediumImageSize.mWidth == imageWidth) && (imageCompressionSizes.mMediumImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mMediumImageSize = null;
+                }
             }
 
             if (maxSide > SMALL_IMAGE_SIZE) {
                 imageCompressionSizes.mSmallImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(SMALL_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mSmallImageSize.mWidth == imageWidth) && (imageCompressionSizes.mSmallImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mSmallImageSize = null;
+                }
             }
         }
 
@@ -703,9 +718,9 @@ public class VectorRoomMediasSender {
         final ArrayList<String> textsList = new ArrayList<>();
 
         addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_original), imageSizes.mFullImageSize, imagefileSize);
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, estimateFileSize(imageSizes.mLargeImageSize));
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, estimateFileSize(imageSizes.mMediumImageSize));
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, estimateFileSize(imageSizes.mSmallImageSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, Math.min(estimateFileSize(imageSizes.mLargeImageSize), imagefileSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, Math.min(estimateFileSize(imageSizes.mMediumImageSize), imagefileSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, Math.min(estimateFileSize(imageSizes.mSmallImageSize), imagefileSize));
 
         return textsList.toArray(new String[textsList.size()]);
     }
