@@ -116,7 +116,10 @@ public class SharedDataItem implements Parcelable {
         CharSequence clipDataItemText = unformatNullString(source.readString());
         String clipDataItemHtml =  unformatNullString(source.readString());
         Uri clipDataItemUri = unformatNullUri((Uri)source.readParcelable(Uri.class.getClassLoader()));
-        mClipDataItem = new ClipData.Item(clipDataItemText, clipDataItemHtml, null, clipDataItemUri);
+
+        if (!TextUtils.isEmpty(clipDataItemText) || !TextUtils.isEmpty(clipDataItemHtml) || (null != clipDataItemUri)) {
+            mClipDataItem = new ClipData.Item(clipDataItemText, clipDataItemHtml, null, clipDataItemUri);
+        }
 
         mFileName = unformatNullString(source.readString());
     }
@@ -165,9 +168,15 @@ public class SharedDataItem implements Parcelable {
         dest.writeParcelable(formatNullUri(mUri), 0);
         dest.writeString(formatNullString(mMimeType));
 
-        dest.writeString(formatNullString(mClipDataItem.getText()));
-        dest.writeString(formatNullString(mClipDataItem.getHtmlText()));
-        dest.writeParcelable(formatNullUri(mClipDataItem.getUri()), 0);
+        if (null == mClipDataItem) {
+            dest.writeString("");
+            dest.writeString("");
+            dest.writeParcelable(formatNullUri(null), 0);
+        } else {
+            dest.writeString(formatNullString(mClipDataItem.getText()));
+            dest.writeString(formatNullString(mClipDataItem.getHtmlText()));
+            dest.writeParcelable(formatNullUri(mClipDataItem.getUri()), 0);
+        }
 
         dest.writeString(formatNullString(mFileName));
     }

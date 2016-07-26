@@ -66,16 +66,6 @@ public class VectorRoomMediasSender {
         void onCancel();
     }
 
-    /**
-     * This class defines the user preferences when sending medias.
-     * It avoid requesting the compression for each medias of the same type
-     * i.e ask the compression once for image, once for video..;
-     */
-    private class MediasCompressionPreferences implements Serializable {
-        // image compression
-        public String mImageCompressionDescription;
-    }
-
     // save/restore instance
     private static final String KEY_BUNDLE_MEDIAS_LIST = "KEY_BUNDLE_MEDIAS_LIST";
     private static final String KEY_BUNDLE_COMPRESSION_PREFERENCES = "KEY_BUNDLE_COMPRESSION_PREFERENCES";
@@ -97,7 +87,7 @@ public class VectorRoomMediasSender {
 
     // pending
     private ArrayList<SharedDataItem> mSharedDataItems;
-    private MediasCompressionPreferences mMediasCompressionPreferences;
+    private String mImageCompressionDescription;
 
     /**
      * Constructor
@@ -123,7 +113,7 @@ public class VectorRoomMediasSender {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         if (null != savedInstanceState) {
             mSharedDataItems = (ArrayList<SharedDataItem>) savedInstanceState.getSerializable(KEY_BUNDLE_MEDIAS_LIST);
-            mMediasCompressionPreferences = (MediasCompressionPreferences)savedInstanceState.getSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES);
+            mImageCompressionDescription = (String)savedInstanceState.getSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES);
         }
     }
 
@@ -136,8 +126,8 @@ public class VectorRoomMediasSender {
             savedInstanceState.putSerializable(KEY_BUNDLE_MEDIAS_LIST, mSharedDataItems);
         }
 
-        if (null != mMediasCompressionPreferences) {
-            savedInstanceState.putSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES, mMediasCompressionPreferences);
+        if (null != mImageCompressionDescription) {
+            savedInstanceState.putSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES, mImageCompressionDescription);
         }
     }
 
@@ -163,8 +153,6 @@ public class VectorRoomMediasSender {
     public void sendMedias(final ArrayList<SharedDataItem> sharedDataItems) {
         if (null != sharedDataItems) {
             mSharedDataItems = new ArrayList<>(sharedDataItems);
-            mMediasCompressionPreferences = new MediasCompressionPreferences();
-
             sendMedias();
         }
     }
@@ -182,7 +170,7 @@ public class VectorRoomMediasSender {
         // detect end of messages sending
         if ((null == mSharedDataItems) || (0 == mSharedDataItems.size())) {
             Log.d(LOG_TAG, "sendMedias : done");
-            mMediasCompressionPreferences = null;
+            mImageCompressionDescription = null;
             mSharedDataItems = null;
 
             mVectorRoomActivity.runOnUiThread(new Runnable() {
@@ -794,10 +782,10 @@ public class VectorRoomMediasSender {
                 imageStream.close();
 
                 // the user already selects a compression
-                if (null != mMediasCompressionPreferences.mImageCompressionDescription) {
+                if (null != mImageCompressionDescription) {
                     isManaged = true;
 
-                    final ImageSize expectedSize = imageSizes.getImageSize(mVectorRoomActivity, mMediasCompressionPreferences.mImageCompressionDescription);
+                    final ImageSize expectedSize = imageSizes.getImageSize(mVectorRoomActivity, mImageCompressionDescription);
                     final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
 
                     mVectorRoomActivity.runOnUiThread(new Runnable() {
@@ -846,7 +834,7 @@ public class VectorRoomMediasSender {
                                             }
 
                                             // stored the compression selected by the user
-                                            mMediasCompressionPreferences.mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
+                                            mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
 
                                             final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
 
