@@ -217,7 +217,10 @@ public class VectorRoomMediasSender {
                 if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_INTENT, mimeType)) {
                     Log.d(LOG_TAG, "sendMedias :  unsupported mime type");
                     // don't know how to manage it -> skip it
-                    mSharedDataItems.remove(0);
+                    // GA issue
+                    if (mSharedDataItems.size() > 0) {
+                        mSharedDataItems.remove(0);
+                    }
                     sendMedias();
                 } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
                     sendTextMessage(sharedDataItem);
@@ -227,7 +230,9 @@ public class VectorRoomMediasSender {
                     if (null == sharedDataItem.getUri()) {
                         Log.e(LOG_TAG, "sendMedias : null uri");
                         // manage others
-                        mSharedDataItems.remove(0);
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         sendMedias();
                         return;
                     }
@@ -248,7 +253,9 @@ public class VectorRoomMediasSender {
                         });
 
                         // manage others
-                        mSharedDataItems.remove(0);
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         sendMedias();
 
                         return;
@@ -300,7 +307,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -327,7 +336,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -354,7 +365,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -413,7 +426,10 @@ public class VectorRoomMediasSender {
                 sendImageMessage(fThumbnailURL, fMediaUrl, sharedDataItem.getFileName(mVectorRoomActivity), fMimeType, new OnImageUploadListener() {
                     @Override
                     public void onDone() {
-                        mSharedDataItems.remove(0);
+                        // reported by GA
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         // go to the next item
                         sendMedias();
                     }
