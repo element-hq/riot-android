@@ -42,7 +42,15 @@ public class NotificationUtils {
     // the bubble radius is computed for 99
     static int mUnreadBubbleWidth = -1;
 
-
+    /**
+     * Build a call notification
+     * @param context the context.
+     * @param roomName the room name in which the call is pending.
+     * @param roomId the room Id
+     * @param matrixId the matrix id
+     * @param callId the call id.
+     * @return the call notification.
+     */
     public static Notification buildCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
@@ -77,6 +85,12 @@ public class NotificationUtils {
         return n;
     }
 
+    /**
+     * Create a square bitmap from another one.
+     * It is centered.
+     * @param bitmap the bitmap to "square"
+     * @return the squared bitmap
+     */
     private static Bitmap createSquareBitmap(Bitmap bitmap) {
         Bitmap resizedBitmap = null;
 
@@ -114,10 +128,36 @@ public class NotificationUtils {
         return resizedBitmap;
     }
 
+    /**
+     * Build a message notification.
+     * @param context the context
+     * @param from the sender
+     * @param matrixId the user account id;
+     * @param callId the call id
+     * @param displayMatrixId true to display the matrix id
+     * @param largeIcon the notification icon
+     * @param unseenNotifiedRoomsCount the number of notified rooms
+     * @param body the message body
+     * @param roomId the room id
+     * @param roomName the room name
+     * @param shouldPlaySound true when the notification as sound.
+     * @param isInvitationEvent true if it is an invitation notification
+     * @return the notification
+     */
     public static Notification buildMessageNotification(
-            Context context, String from, String matrixId, String callId, Boolean displayMatrixId, Bitmap largeIcon, int globalUnseen, int memberUnseen, String body, String roomId, String roomName,
+            Context context,
+            String from,
+            String matrixId,
+            String callId,
+            boolean displayMatrixId,
+            Bitmap largeIcon,
+            int unseenNotifiedRoomsCount,
+            String body,
+            String roomId,
+            String roomName,
             boolean shouldPlaySound,
             boolean isInvitationEvent) {
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
 
@@ -140,7 +180,7 @@ public class NotificationUtils {
             largeIcon = createSquareBitmap(largeIcon);
 
             // add a bubble in the top right
-            if (0 != memberUnseen) {
+            if (0 != unseenNotifiedRoomsCount) {
                 try {
                     android.graphics.Bitmap.Config bitmapConfig = largeIcon.getConfig();
 
@@ -169,7 +209,7 @@ public class NotificationUtils {
                     Bitmap rescaledBitmap = Bitmap.createScaledBitmap(largeIcon, scaledWidth, scaledHeight, true);
                     canvas.drawBitmap(rescaledBitmap, (side - scaledWidth) / 2, (side - scaledHeight) / 2, null);
 
-                    String text = "" + memberUnseen;
+                    String text = "" + unseenNotifiedRoomsCount;
 
                     // prepare the text drawing
                     Paint textPaint = new Paint();
@@ -250,23 +290,25 @@ public class NotificationUtils {
 
         // do not offer to quick respond if the user did not dismiss the previous one
         if (!LockScreenActivity.isDisplayingALockScreenActivity() && (null == callId)) {
-            // offer to type a quick answer (i.e. without launching the application)
-            Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
-            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId);
-            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, from);
-            quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, body);
+            if (!isInvitationEvent) {
+                // offer to type a quick answer (i.e. without launching the application)
+                Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, from);
+                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MESSAGE_BODY, body);
 
-            if (null != matrixId) {
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MATRIX_ID, matrixId);
+                if (null != matrixId) {
+                    quickReplyIntent.putExtra(LockScreenActivity.EXTRA_MATRIX_ID, matrixId);
+                }
+
+                // the action must be unique else the parameters are ignored
+                quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
+                PendingIntent pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0);
+                builder.addAction(
+                        R.drawable.ic_material_mode_edit_green_vector,
+                        context.getString(R.string.action_quick_reply),
+                        pIntent);
             }
-
-            // the action must be unique else the parameters are ignored
-            quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
-            PendingIntent pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0);
-            builder.addAction(
-                    R.drawable.ic_material_mode_edit_green_vector,
-                    context.getString(R.string.action_quick_reply),
-                    pIntent);
 
             // Build the pending intent for when the notification is clicked
             Intent roomIntentTap;
@@ -284,13 +326,14 @@ public class NotificationUtils {
             TaskStackBuilder stackBuilderTap = TaskStackBuilder.create(context)
                     .addParentStack(VectorRoomActivity.class)
                     .addNextIntent(roomIntentTap);
+
             builder.addAction(
                     R.drawable.ic_material_message_green_vector,
                     context.getString(R.string.action_open),
                     stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }
 
-        extendForCar(context, builder, roomId, roomName, from, body);
+        //extendForCar(context, builder, roomId, roomName, from, body);
 
         Notification n = builder.build();
         n.flags |= Notification.FLAG_SHOW_LIGHTS;
@@ -317,6 +360,7 @@ public class NotificationUtils {
         return n;
     }
 
+    /*
     private static void extendForCar(Context context, NotificationCompat.Builder builder, String roomId, String roomName, String from, String body) {
         int carConversationId = roomId.hashCode();
         Intent msgHeardIntent = new Intent()
@@ -358,7 +402,7 @@ public class NotificationUtils {
         builder.extend(new NotificationCompat.CarExtender()
                 .setUnreadConversation(unreadConvBuilder.build()));
 
-    }
+    }*/
 
     private NotificationUtils() {}
 }

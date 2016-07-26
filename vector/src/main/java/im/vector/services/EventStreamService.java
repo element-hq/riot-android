@@ -767,7 +767,6 @@ public class EventStreamService extends Service {
                 Matrix.getMXSessions(getApplicationContext()).size() > 1,
                 largeBitmap,
                 CommonActivityUtils.getBadgeCount(),
-                CommonActivityUtils.getBadgeCount(),
                 body,
                 event.roomId,
                 roomName,
