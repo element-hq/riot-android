@@ -422,19 +422,19 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onNetworkError(Exception e) {
-                                Log.e(LOG_TAG, "registerPusher onNetworkError " + e.getMessage());
+                                Log.e(LOG_TAG, "registerPusher onNetworkError " + e.getLocalizedMessage());
                                 onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onMatrixError(MatrixError e) {
-                                Log.e(LOG_TAG, "registerPusher onMatrixError " + e.errcode);
+                                Log.e(LOG_TAG, "registerPusher onMatrixError " + e.getLocalizedMessage());
                                 onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onUnexpectedError(Exception e) {
-                                Log.e(LOG_TAG, "registerPusher onUnexpectedError " + e.getMessage());
+                                Log.e(LOG_TAG, "registerPusher onUnexpectedError " + e.getLocalizedMessage());
                                 onError(e.getLocalizedMessage());
                             }
                         });
@@ -912,7 +912,8 @@ public final class GcmRegistrationManager {
      * @param registrationToken the registration token
      */
     private void setStoredRegistrationToken(String registrationToken) {
-        Log.d(LOG_TAG, "Saving registration token ");
+        Log.d(LOG_TAG, "Saving registration token");
+
         getGcmSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
                 .apply();

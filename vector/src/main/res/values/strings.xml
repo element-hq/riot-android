@@ -27,12 +27,12 @@
     <string name="redact">Redact</string>
     <string name="share">Share</string>
     <string name="paste_username">Paste username</string>
-    <string name="delete_message">Delete message</string>
     <string name="view_profile">View profile</string>
     <string name="direct_message">Direct message</string>
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
     <string name="message_details">Message details</string>
+    <string name="view_source">View Source</string>
     <string name="view">View</string>
     <string name="set_power_level">Power level</string>
     <string name="chat">Chat</string>
