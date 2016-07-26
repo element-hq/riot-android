@@ -664,6 +664,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         return retCode;
     }
 
+
     @Override
     public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
@@ -673,7 +674,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 mIncomingCall.hangup("busy");
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY = " + aPermissions[0]);
+            Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY");
         } else {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
         }
