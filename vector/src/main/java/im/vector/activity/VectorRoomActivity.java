@@ -106,7 +106,7 @@ import java.util.regex.Pattern;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.RoomPreviewDataListener {
+public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener {
 
     /** the room id (string) **/
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
@@ -855,6 +855,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 onActivityResultRoomAvatarUpdate(data);
             }
         }
+    }
+
+    //================================================================================
+    // IEventSendingListener
+    //================================================================================
+
+    @Override
+    public void onMessageSendingSucceeded(Event event) {
+        refreshNotificationsArea();
+    }
+
+    @Override
+    public void onMessageSendingFailed(Event event) {
+        refreshNotificationsArea();
     }
 
     //================================================================================
