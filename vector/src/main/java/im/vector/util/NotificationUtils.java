@@ -19,8 +19,11 @@ import android.util.Log;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.InComingCallActivity;
 import im.vector.activity.LockScreenActivity;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 
 import java.lang.reflect.Method;
@@ -185,14 +188,14 @@ public class NotificationUtils {
                     android.graphics.Bitmap.Config bitmapConfig = largeIcon.getConfig();
 
                     // set default bitmap config if none
-                    if(bitmapConfig == null) {
+                    if (bitmapConfig == null) {
                         bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
                     }
 
                     // setLargeIcon must used a 64 * 64 pixels bitmap
                     // rescale to have the same text UI.
                     float densityScale = context.getResources().getDisplayMetrics().density;
-                    int side = (int)(64 * densityScale);
+                    int side = (int) (64 * densityScale);
 
                     Bitmap bitmapCopy = Bitmap.createBitmap(side, side, bitmapConfig);
                     Canvas canvas = new Canvas(bitmapCopy);
@@ -232,7 +235,7 @@ public class NotificationUtils {
                     Paint paint = new Paint();
                     paint.setStyle(Paint.Style.FILL);
                     paint.setColor(Color.RED);
-                    canvas.drawCircle(canvas.getWidth() - radius, radius,  radius , paint);
+                    canvas.drawCircle(canvas.getWidth() - radius, radius, radius, paint);
 
                     // draw the text
                     canvas.drawText(text, canvas.getWidth() - textBounds.width() - (radius - (textBounds.width() / 2)), -textBounds.top + (radius - (-textBounds.top / 2)), textPaint);
@@ -240,7 +243,7 @@ public class NotificationUtils {
                     // get the new bitmap
                     largeIcon = bitmapCopy;
                 } catch (Exception e) {
-                    Log.e(LOG_TAG,"## buildMessageNotification(): Exception Msg="+e.getMessage());
+                    Log.e(LOG_TAG, "## buildMessageNotification(): Exception Msg=" + e.getMessage());
                 }
             }
 
@@ -248,7 +251,7 @@ public class NotificationUtils {
         }
 
         String name = ": ";
-        if(!TextUtils.isEmpty(roomName)) {
+        if (!TextUtils.isEmpty(roomName)) {
             name = " (" + roomName + "): ";
         }
 
@@ -258,23 +261,28 @@ public class NotificationUtils {
 
         builder.setTicker(from + name + body);
 
-        // Build the pending intent for when the notification is clicked
-        Intent roomIntent = new Intent(context, VectorRoomActivity.class);
-        roomIntent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+        TaskStackBuilder stackBuilder;
+        Intent intent;
 
-        if (null != matrixId) {
-            roomIntent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
+        if (!TextUtils.isEmpty(callId)) {
+            intent = new Intent(context, VectorHomeActivity.class);
+
+            stackBuilder = TaskStackBuilder.create(context)
+                    .addParentStack(VectorHomeActivity.class)
+                    .addNextIntent(intent);
+        } else {
+
+            intent = new Intent(context, VectorRoomActivity.class);
+            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+            if (null != matrixId) {
+                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
+            }
+
+            stackBuilder = TaskStackBuilder.create(context)
+                    .addParentStack(VectorRoomActivity.class)
+                    .addNextIntent(intent);
         }
-
-        if (null != callId) {
-            roomIntent.putExtra(VectorRoomActivity.EXTRA_START_CALL_ID, callId);
-        }
-
-        // Recreate the back stack
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
-                .addParentStack(VectorRoomActivity.class)
-                .addNextIntent(roomIntent);
-
 
         // android 4.3 issue
         // use a generator for the private requestCode.
