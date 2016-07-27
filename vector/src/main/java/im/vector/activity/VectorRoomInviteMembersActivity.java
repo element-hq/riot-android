@@ -60,7 +60,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private VectorParticipantsAdapter mAdapter;
 
     // retrieve a matrix Id from an email
-    private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
+    private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
         @Override
         public void onRefresh() {
             mAdapter.notifyDataSetChanged();
@@ -87,7 +87,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     };
 
     // refresh the presence asap
-    private MXEventListener mEventsListener = new MXEventListener() {
+    private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onPresenceUpdate(final Event event, final User user) {
             runOnUiThread(new Runnable() {
@@ -249,7 +249,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     /**
      * The search pattern has been updated
      */
-    protected void onPatternUpdate() {
+    @Override
+    protected void onPatternUpdate(boolean isTypingUpdate) {
         manageBackground();
 
         String pattern = mPatternToSearchEditText.getText().toString();
@@ -276,7 +277,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             }
         }
 
-        mLoadingView.setVisibility(View.VISIBLE);
+        // display a spinner while the other room memebers are listed
+        if (!mAdapter.didListKnownMembers()) {
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
 
         mAdapter.setSearchedPattern(pattern, VectorParticipantsAdapter.SEARCH_METHOD_STARTS_WITH, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override

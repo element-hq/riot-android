@@ -103,7 +103,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         mRecentsListView.setAdapter(mAdapter);
 
         // hide it by default
-        mRecentsListView.setVisibility(View.GONE);
+        mRecentsListView.setVisibility(View.VISIBLE);
 
         // Set rooms click listener:
         // - reset the unread count
@@ -262,7 +262,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         mRecentsListView.post(new Runnable() {
             @Override
             public void run() {
-                mRecentsListView.setVisibility(View.VISIBLE);
                 expandsAllSections();
                 onSearchResultListener.onSearchSucceed(1);
             }
