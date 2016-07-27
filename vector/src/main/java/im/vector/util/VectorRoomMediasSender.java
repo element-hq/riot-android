@@ -398,21 +398,29 @@ public class VectorRoomMediasSender {
         mVectorRoomActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                sendImageMessage(fThumbnailURL, fMediaUrl, sharedDataItem.getFileName(mVectorRoomActivity), fMimeType, new OnImageUploadListener() {
-                    @Override
-                    public void onDone() {
-                        mSharedDataItems.remove(0);
-                        // go to the next item
-                        sendMedias();
-                    }
+                if ((null != mSharedDataItems) && (mSharedDataItems.size() > 0)) {
+                    sendImageMessage(fThumbnailURL, fMediaUrl, sharedDataItem.getFileName(mVectorRoomActivity), fMimeType, new OnImageUploadListener() {
+                        @Override
+                        public void onDone() {
+                            // reported by GA
+                            if ((null != mSharedDataItems) && (mSharedDataItems.size() > 0)){
+                                mSharedDataItems.remove(0);
+                            }
+                            // go to the next item
+                            sendMedias();
+                        }
 
-                    @Override
-                    public void onCancel() {
-                        // cancel any media sending
-                        mSharedDataItems.clear();
-                        sendMedias();
-                    }
-                });
+                        @Override
+                        public void onCancel() {
+                            // cancel any media sending
+                            // reported by GA
+                            if (null != mSharedDataItems) {
+                                mSharedDataItems.clear();
+                            }
+                            sendMedias();
+                        }
+                    });
+                }
             }
         });
     }
