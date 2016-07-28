@@ -420,7 +420,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
 
         if (currentSelfPowerLevel == newPowerLevel) {
-            // The user is trying to leave with unsaved changes. Warn about that
+            // ask to the user to confirmation thu upgrade.
             new AlertDialog.Builder(VectorApp.getCurrentActivity())
                     .setMessage(R.string.room_participants_power_level_prompt)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
