@@ -23,8 +23,6 @@ import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 // create an EditTextPreference with a dedicated click/long click methods.
 // Android displays by an edit text dialog by default

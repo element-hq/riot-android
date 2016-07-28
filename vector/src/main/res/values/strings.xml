@@ -683,12 +683,13 @@
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
 
+    <!-- Room settings: banned users -->
+    <string name="room_settings_banned_users_title">Banned users</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
     <string name="room_settings_room_internal_id">This room\'s internal ID</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
-
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
@@ -698,7 +699,6 @@
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
-
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
