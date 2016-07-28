@@ -752,7 +752,7 @@ public class VectorUtils {
         final User user = session.getDataHandler().getStore().getUser(userId);
 
         // refresh the presence with this conditions
-        boolean triggerRefresh = (null == user) || (null == user.presence);
+        boolean triggerRefresh = (null == user) || user.isPresenceObsolete();
 
         if ((null != refreshCallback) && triggerRefresh) {
             Log.d(LOG_TAG, "Get the user presence : " + userId);
