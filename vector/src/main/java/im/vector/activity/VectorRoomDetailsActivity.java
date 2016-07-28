@@ -20,6 +20,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.TabListener;
@@ -68,7 +69,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     private int mCurrentTabIndex = -1;
     private ActionBar mActionBar;
-    private VectorRoomDetailsMembersFragment mAddPeopleFragment;
+    private VectorRoomDetailsMembersFragment mRoomDetailsMembersFragment;
     private VectorSearchRoomFilesListFragment mSearchFilesFragment;
     private VectorRoomSettingsFragment mRoomSettingsFragment;
 
@@ -176,7 +177,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS) {
             if (Manifest.permission.READ_CONTACTS.equals(aPermissions[0])) {
                 if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
@@ -198,7 +199,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         boolean isTrapped = false;
 
         if (PEOPLE_TAB_INDEX == mCurrentTabIndex) {
-            isTrapped = mAddPeopleFragment.onBackPressed();
+            isTrapped = mRoomDetailsMembersFragment.onBackPressed();
         }
 
         if (!isTrapped) {
@@ -247,16 +248,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
     }
 
     /**
-     * Restore the UI context associated with the tab
-     *
-     * @param aTabToRestore the tab to be restored
-     */
-    private void restoreUiTabContext(ActionBar.Tab aTabToRestore) {
-        // Bundle tabTag = (Bundle) aTabToRestore.getTag();
-        // restore here context here
-    }
-
-    /**
      * Reset the UI to its init state:
      * - "waiting while searching" screen disabled
      * - background image visible
@@ -282,35 +273,35 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // People tab creation: display the members of the this room
-        ActionBar.Tab tabToBeadded = mActionBar.newTab();
+        ActionBar.Tab tabToBeAdded = mActionBar.newTab();
         String tabTitle = getResources().getString(R.string.room_details_people);
-        tabToBeadded.setText(tabTitle);
-        tabToBeadded.setTabListener(this);
+        tabToBeAdded.setText(tabTitle);
+        tabToBeAdded.setTabListener(this);
         Bundle tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
-        tabToBeadded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeadded);
+        tabToBeAdded.setTag(tabBundle);
+        mActionBar.addTab(tabToBeAdded);
 
         // Files tab creation: display the file list in the room history
-        tabToBeadded = mActionBar.newTab();
+        tabToBeAdded = mActionBar.newTab();
         tabTitle = getResources().getString(R.string.room_details_files);
-        tabToBeadded.setText(tabTitle);
-        tabToBeadded.setTabListener(this);
+        tabToBeAdded.setText(tabTitle);
+        tabToBeAdded.setTabListener(this);
         tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_FILES_DETAILS);
-        tabToBeadded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeadded);
+        tabToBeAdded.setTag(tabBundle);
+        mActionBar.addTab(tabToBeAdded);
 
 
         // Settings tab creation: the room settings (room photo, name, topic..)
-        tabToBeadded = mActionBar.newTab();
+        tabToBeAdded = mActionBar.newTab();
         tabTitle = getResources().getString(R.string.room_details_settings);
-        tabToBeadded.setText(tabTitle);
-        tabToBeadded.setTabListener(this);
+        tabToBeAdded.setText(tabTitle);
+        tabToBeAdded.setTabListener(this);
         tabBundle = new Bundle();
         tabBundle.putString(KEY_FRAGMENT_TAG, TAG_FRAGMENT_SETTINGS_ROOM_DETAIL);
-        tabToBeadded.setTag(tabBundle);
-        mActionBar.addTab(tabToBeadded);
+        tabToBeAdded.setTag(tabBundle);
+        mActionBar.addTab(tabToBeAdded);
 
         // set the default tab to be displayed
         tabIndexToRestore = (null != aSavedInstanceState) ? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, -1) : -1;
@@ -334,7 +325,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      *
      * @param tab The tab that was selected
      * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
-     *            during a tab switch. The previous tab's unselect and this tab's select will be
+     *            during a tab switch. The previous tab's unselected and this tab's select will be
      *            executed in a single transaction. This FragmentTransaction does not support
      */
     @Override
@@ -343,18 +334,16 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         String fragmentTag = tabHolder.getString(KEY_FRAGMENT_TAG, "");
         Log.d(LOG_TAG, "## onTabSelected() FragTag=" + fragmentTag);
 
-        // inter tab selection life cycle: restore tab UI
-        restoreUiTabContext(tab);
         resetUi();
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
-            mAddPeopleFragment = (VectorRoomDetailsMembersFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
-            if (null == mAddPeopleFragment) {
-                mAddPeopleFragment = VectorRoomDetailsMembersFragment.newInstance();
-                ft.replace(R.id.room_details_fragment_container, mAddPeopleFragment, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
+            mRoomDetailsMembersFragment = (VectorRoomDetailsMembersFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
+            if (null == mRoomDetailsMembersFragment) {
+                mRoomDetailsMembersFragment = VectorRoomDetailsMembersFragment.newInstance();
+                ft.replace(R.id.room_details_fragment_container, mRoomDetailsMembersFragment, TAG_FRAGMENT_PEOPLE_ROOM_DETAILS);
                 Log.d(LOG_TAG, "## onTabSelected() people frag replace");
             } else {
-                ft.attach(mAddPeopleFragment);
+                ft.attach(mRoomDetailsMembersFragment);
                 Log.d(LOG_TAG, "## onTabSelected() people frag attach");
             }
             mCurrentTabIndex = PEOPLE_TAB_INDEX;
@@ -434,7 +423,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
      *
      * @param tab The tab that was unselected
      * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
-     *            during a tab switch. This tab's unselect and the newly selected tab's select
+     *            during a tab switch. This tab's unselected and the newly selected tab's select
      *            will be executed in a single transaction. This FragmentTransaction does not
      */
     @Override
@@ -447,8 +436,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         saveUiTabContext(tab);
 
         if (fragmentTag.equals(TAG_FRAGMENT_PEOPLE_ROOM_DETAILS)) {
-            if (null != mAddPeopleFragment) {
-                ft.detach(mAddPeopleFragment);
+            if (null != mRoomDetailsMembersFragment) {
+                ft.detach(mRoomDetailsMembersFragment);
             }
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
