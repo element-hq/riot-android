@@ -1236,7 +1236,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     //================================================================================
 
     /**
-     * Refresh the addresses section
+     * Refresh the banned users list.
      */
     private void refreshBannedMembersList() {
         ArrayList<RoomMember> bannedMembers = new ArrayList<>();
@@ -1276,7 +1276,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        // The user is trying to leave with unsaved changes. Warn about that
+                        // display the user id in a dialog to make is readable.
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
                                 .setMessage(userId)
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
