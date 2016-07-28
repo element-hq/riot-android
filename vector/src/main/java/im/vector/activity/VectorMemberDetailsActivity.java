@@ -15,11 +15,11 @@
  */
 package im.vector.activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +44,7 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.MemberDetailsAdapter;
 import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
 import im.vector.util.VectorUtils;
@@ -80,9 +81,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     public static final int ITEM_ACTION_START_VIDEO_CALL = 13;
     public static final int ITEM_ACTION_MENTION = 14;
 
-
-    private static final int VECTOR_ROOM_MODERATOR_LEVEL = 50;
-    private static final int VECTOR_ROOM_ADMIN_LEVEL = 100;
+    public static final int VECTOR_ROOM_MODERATOR_LEVEL = 50;
+    public static final int VECTOR_ROOM_ADMIN_LEVEL = 100;
 
     // internal info
     private IMXStore mStore;
@@ -247,7 +247,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int aRequestCode, String[] aPermissions, int[] aGrantResults) {
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull  int[] aGrantResults) {
         if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
             if( CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
                 startCall(mCallableRoom, false);
@@ -271,7 +271,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
-        ArrayList<String> idsList = new ArrayList<String>();
+        ArrayList<String> idsList = new ArrayList<>();
 
         switch (aActionType) {
             case ITEM_ACTION_START_CHAT:
@@ -311,14 +311,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case ITEM_ACTION_SET_ADMIN:
                 if (null != mRoom) {
-                    mRoom.updateUserPowerLevels(mMemberId, VECTOR_ROOM_ADMIN_LEVEL, mRoomActionsListener);
+                    updateUserPowerLevels(mMemberId, VECTOR_ROOM_ADMIN_LEVEL, mRoomActionsListener);
                     Log.d(LOG_TAG, "## performItemAction(): Make Admin");
                 }
                 break;
 
             case ITEM_ACTION_SET_MODERATOR:
                 if (null != mRoom) {
-                    mRoom.updateUserPowerLevels(mMemberId, VECTOR_ROOM_MODERATOR_LEVEL, mRoomActionsListener);
+                    updateUserPowerLevels(mMemberId, VECTOR_ROOM_MODERATOR_LEVEL, mRoomActionsListener);
                     Log.d(LOG_TAG, "## performItemAction(): Make moderator");
                 }
                 break;
@@ -332,7 +332,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                         defaultPowerLevel = powerLevels.users_default;
                     }
 
-                    mRoom.updateUserPowerLevels(mMemberId, defaultPowerLevel, mRoomActionsListener);
+                    updateUserPowerLevels(mMemberId, defaultPowerLevel, mRoomActionsListener);
                     Log.d(LOG_TAG, "## performItemAction(): default power level");
                 }
                 break;
@@ -405,6 +405,45 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     /**
+     * Update the power level of the user userId.
+     * A confirmation dialog is displayed the new user level is the same as the self one.
+     * @param userId the user id
+     * @param newPowerLevel the new power level
+     * @param callback the callback with the created event
+     */
+    private void updateUserPowerLevels(final String userId, final int newPowerLevel, final ApiCallback<Void> callback) {
+        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
+        int currentSelfPowerLevel = 0;
+
+        if (null != powerLevels) {
+            currentSelfPowerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+        }
+
+        if (currentSelfPowerLevel == newPowerLevel) {
+            // ask to the user to confirmation thu upgrade.
+            new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    .setMessage(R.string.room_participants_power_level_prompt)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            mRoom.updateUserPowerLevels(userId, newPowerLevel, callback);
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        } else {
+            mRoom.updateUserPowerLevels(userId, newPowerLevel, callback);
+        }
+    }
+
+    /**
      * Search the first callable room with this member
      * @return a valid Room instance, null if no room found
      */
@@ -437,7 +476,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @return the list of supported actions (ITEM_ACTION_XX)
      */
     private ArrayList<Integer> supportedActionsList() {
-        ArrayList<Integer> supportedActions = new ArrayList<Integer>();
+        ArrayList<Integer> supportedActions = new ArrayList<>();
 
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "supportedActionsList : the session is not anymore valid");
@@ -786,10 +825,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         if (null != intent) {
             if (null == (mMemberId = intent.getStringExtra(EXTRA_MEMBER_ID))) {
                 Log.e(LOG_TAG, "member ID missing in extra");
-                return isParamInitSucceed;
+                return false;
             } else if (null == (mSession = getSession(intent))) {
                 Log.e(LOG_TAG, "Invalid session");
-                return isParamInitSucceed;
+                return false;
             }
 
             int storeIndex = intent.getIntExtra(EXTRA_STORE_ID, -1);
