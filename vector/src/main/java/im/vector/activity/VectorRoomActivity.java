@@ -381,7 +381,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (!intent.hasExtra(EXTRA_ROOM_ID)) {
             Log.e(LOG_TAG, "No room ID extra.");
             finish();
@@ -641,6 +641,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mEditText.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        intent.removeExtra(EXTRA_ROOM_INTENT);
                         sendMediasIntent(mediaIntent);
                     }
                 }, 1000);
