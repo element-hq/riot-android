@@ -165,7 +165,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
      * @return true if the local search is ready to start.
      */
     public boolean isReady() {
-        return mAdapter.didListKnownMembers();
+        return mAdapter.isKnownMembersInitialized();
     }
 
     /**

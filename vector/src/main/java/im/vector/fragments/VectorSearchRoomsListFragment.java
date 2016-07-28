@@ -101,8 +101,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         // create the adapter
         mAdapter = new VectorRoomSummaryAdapter(getActivity().getApplicationContext(), mSession, true, false, R.layout.adapter_item_vector_recent_room, R.layout.adapter_item_vector_recent_header, this);
         mRecentsListView.setAdapter(mAdapter);
-
-        // hide it by default
         mRecentsListView.setVisibility(View.VISIBLE);
 
         // Set rooms click listener:

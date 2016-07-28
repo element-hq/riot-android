@@ -230,7 +230,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     /**
      * @return true if the known members list has been initialized.
      */
-    public boolean didListKnownMembers() {
+    public boolean isKnownMembersInitialized() {
         return null != mDisplayNamesList;
     }
 

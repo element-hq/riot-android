@@ -278,7 +278,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         // display a spinner while the other room memebers are listed
-        if (!mAdapter.didListKnownMembers()) {
+        if (!mAdapter.isKnownMembersInitialized()) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
 
