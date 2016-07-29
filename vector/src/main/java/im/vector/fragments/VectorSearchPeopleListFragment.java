@@ -46,8 +46,8 @@ import im.vector.contacts.ContactsManager;
 
 public class  VectorSearchPeopleListFragment extends Fragment {
 
-    public static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
-    public static final String ARG_LAYOUT_ID = "VectorSearchPeopleListFragment.ARG_LAYOUT_ID";
+    private static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
+    private static final String ARG_LAYOUT_ID = "VectorSearchPeopleListFragment.ARG_LAYOUT_ID";
 
     // the session
     private MXSession mSession;
@@ -62,7 +62,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
 
     // contacts manager listener
     // detect if a contact is a matrix user
-    private ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
+    private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
         @Override
         public void onRefresh() {
             mAdapter.notifyDataSetChanged();
@@ -91,7 +91,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
     };
 
     // refresh the presence asap
-    private MXEventListener mEventsListener = new MXEventListener() {
+    private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onPresenceUpdate(final Event event, final User user) {
             if (null != getActivity()) {
@@ -162,9 +162,16 @@ public class  VectorSearchPeopleListFragment extends Fragment {
     }
 
     /**
+     * @return true if the local search is ready to start.
+     */
+    public boolean isReady() {
+        return mAdapter.isKnownMembersInitialized();
+    }
+
+    /**
      * Search a pattern in the room
-     * @param pattern
-     * @param onSearchResultListener
+     * @param pattern the pattern to search
+     * @param onSearchResultListener the result listener
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
         if (null == mPeopleListView) {

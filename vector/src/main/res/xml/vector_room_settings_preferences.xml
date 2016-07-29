@@ -72,6 +72,11 @@
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceCategory
+        android:key="banned"
+        android:title="@string/room_settings_banned_users_title" >
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceCategory
         android:key="@string/room_settings_category_advanced_title"
         android:title="@string/room_settings_category_advanced_title">
 

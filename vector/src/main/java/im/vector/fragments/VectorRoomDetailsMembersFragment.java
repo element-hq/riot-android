@@ -108,6 +108,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     // list the up to date presence to avoid refreshing it twice
     private final ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<>();
 
+    // global events listener
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
@@ -149,6 +150,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     };
 
+    //  search result listener
     private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
         @Override
         public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
@@ -157,11 +159,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 public void run() {
                     // stop waiting wheel
                     mProgressView.setVisibility(View.GONE);
-
-                    // close IME after search to clean the UI
-                    InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (null != inputMgr)
-                        inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
 
                     if (0 == aSearchCountResult) {
                         // no results found!
@@ -191,9 +188,39 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     };
 
+    // search text listener
     private final TextWatcher mTextWatcherListener = new TextWatcher() {
         @Override
         public void afterTextChanged(android.text.Editable s) {
+            final String patternValue = mPatternToSearchEditText.getText().toString();
+
+            if (TextUtils.isEmpty(patternValue)) {
+                // search input is empty: restore a not filtered room members list
+                mClearSearchImageView.setVisibility(View.INVISIBLE);
+                mPatternValue = null;
+                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+            } else {
+                Timer timer = new Timer();
+                // wait a little delay before refreshing the results.
+                // it avoid UI lags when the user is typing.
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), patternValue) && (null != getActivity())) {
+                            mPatternValue = mPatternToSearchEditText.getText().toString();
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                                                            }
+                                                        });
+                        }
+                    }
+                }, 100);
+
+                mClearSearchImageView.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -202,19 +229,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String patternValue = mPatternToSearchEditText.getText().toString();
 
-            if (TextUtils.isEmpty(patternValue)) {
-                // search input is empty: restore a not filtered room members list
-                mClearSearchImageView.setVisibility(View.INVISIBLE);
-                mPatternValue = null;
-                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
-            } else {
-                mClearSearchImageView.setVisibility(View.VISIBLE);
-            }
         }
     };
 
+    // matrix SDK actions callback
     private final ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
@@ -268,6 +287,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private String mPatternValue;
     private View mAddMembersFloatingActionButton;
 
+    // create an instance of the fragment
     public static VectorRoomDetailsMembersFragment newInstance() {
         return new VectorRoomDetailsMembersFragment();
     }
@@ -368,6 +388,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     }
 
+    /**
+     * Expand all list groups.
+     */
     private void forceListInExpandingState(){
         if(null !=  mParticipantsListView) {
             mParticipantsListView.post(new Runnable() {

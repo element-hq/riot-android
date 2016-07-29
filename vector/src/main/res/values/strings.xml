@@ -232,6 +232,9 @@
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Small</string>
 
+    <string name="attachment_cancel_download">"Cancel the download?</string>
+    <string name="attachment_cancel_upload">Cancel the upload?</string>
+
     <!-- invitation members list Screen -->
     <string name="members_one_to_one">One to one room members</string>
     <string name="members_small_room_members">Small room members</string>
@@ -464,6 +467,7 @@
     <string name="room_participants_action_unignore">Show all messages from this user</string>
     <string name="room_participants_invite_search_another_user">Search/invite by name, email, id</string>
     <string name="room_participants_action_mention">Mention</string>
+    <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>
@@ -527,6 +531,8 @@
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
+    <string name="room_event_action_cancel_upload">Cancel Upload</string>
+    <string name="room_event_action_cancel_download">Cancel Download</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
@@ -683,12 +689,13 @@
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
 
+    <!-- Room settings: banned users -->
+    <string name="room_settings_banned_users_title">Banned users</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
     <string name="room_settings_room_internal_id">This room\'s internal ID</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
-
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
@@ -698,7 +705,6 @@
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' is not a valid format for an alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
-
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>

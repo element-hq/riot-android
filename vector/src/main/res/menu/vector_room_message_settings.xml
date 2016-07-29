@@ -9,6 +9,18 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/ic_action_vector_cancel_upload"
+        android:icon="@drawable/vector_cancel_upload_download"
+        android:title="@string/room_event_action_cancel_upload"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ic_action_vector_cancel_download"
+        android:icon="@drawable/vector_cancel_upload_download"
+        android:title="@string/room_event_action_cancel_download"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/ic_action_vector_redact_message"
         android:icon="@drawable/ic_material_delete"
         android:title="@string/redact"

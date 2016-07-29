@@ -32,6 +32,7 @@ import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
@@ -248,22 +249,14 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
             final String downloadId = mediasCache.downloadMedia(this, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType);
 
             if (null != downloadId) {
-                mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
-                    public void onDownloadStart(String downloadId) {
-                    }
-
-                    @Override
-                    public void onError(String downloadId, JsonElement jsonElement) {
+                    public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
                             Toast.makeText(VectorMediasViewerActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     }
 
                     @Override

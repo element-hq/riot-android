@@ -46,6 +46,7 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -249,6 +250,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         // remove from the adapter
                         mAdapter.removeEventById(event.eventId);
                         mAdapter.notifyDataSetChanged();
+                        mEventSendingListener.onMessageRedacted(event);
                     } else {
                         redactEvent(event.eventId);
                     }
@@ -259,6 +261,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 @Override
                 public void run() {
                     VectorUtils.copyToClipboard(getActivity(), textMsg);
+                }
+            });
+        }  else if ((action == R.id.ic_action_vector_cancel_upload) || (action == R.id.ic_action_vector_cancel_download))  {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mRoom.cancelEventSending(event);
                 }
             });
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
@@ -465,22 +474,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
-                mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
-                    public void onDownloadStart(String downloadId) {
-                    }
-
-                    @Override
-                    public void onError(String downloadId, JsonElement jsonElement) {
+                    public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
                             Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     }
 
                     @Override

@@ -38,6 +38,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import im.vector.R;
 
@@ -49,8 +51,6 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     public interface IVectorSearchActivity {
         void refreshSearch();
     }
-
-    private static final String LOG_TAG = "VectorBaseSearchAct";
 
     private static final int SPEECH_REQUEST_CODE = 1234;
 
@@ -81,6 +81,24 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
         mPatternToSearchEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(android.text.Editable s) {
                 VectorBaseSearchActivity.this.refreshMenuEntries();
+                final String fPattern = mPatternToSearchEditText.getText().toString();
+
+                Timer timer = new Timer();
+                // wait a little delay before refreshing the results.
+                // it avoid UI lags when the user is typing.
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onPatternUpdate(true);
+                                }
+                            });
+                        }
+                    }
+                }, 100);
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -93,7 +111,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    onPatternUpdate();
+                    onPatternUpdate(false);
                     return true;
                 }
                 return false;
@@ -111,13 +129,14 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        onPatternUpdate();
+        onPatternUpdate(false);
     }
 
     /**
-     * The search pattern has been updated
+     * The search pattern has been updated.
+     * @param isTypingUpdate true when the pattern has been updated while typing.
      */
-    protected void onPatternUpdate() {
+    protected void onPatternUpdate(boolean isTypingUpdate) {
         // do something here
     }
 
@@ -166,7 +185,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
 
         } else if (id ==  R.id.ic_action_clear_search) {
             mPatternToSearchEditText.setText("");
-            onPatternUpdate();
+            onPatternUpdate(false);
         }
 
         return super.onOptionsItemSelected(item);
@@ -185,7 +204,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
             if (matches.size() == 1) {
                 // use it
                 mPatternToSearchEditText.setText(matches.get(0));
-                onPatternUpdate();
+                onPatternUpdate(false);
             } else if (matches.size() > 1) {
                 // if they are several matches, let the user chooses the right one.
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -197,7 +216,7 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
                         VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onPatternUpdate();
+                                onPatternUpdate(false);
                             }
                         });
                     }
