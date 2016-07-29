@@ -871,6 +871,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         refreshNotificationsArea();
     }
 
+    @Override
+    public void onMessageRedacted(Event event) {
+        refreshNotificationsArea();
+    }
+
     //================================================================================
     // Menu management
     //================================================================================
@@ -1486,8 +1491,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 String part1 = getResources().getString(R.string.room_unsent_messages_notification);
                 String part2 = getResources().getString(R.string.room_prompt_resent);
 
-                errorText = new SpannableString(part1 + part2);
-                errorText.setSpan(new UnderlineSpan(), part1.length(), part1.length() + part2.length(), 0);
+                errorText = new SpannableString(part1 + " " + part2);
+                errorText.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
 
                 mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
                     @Override

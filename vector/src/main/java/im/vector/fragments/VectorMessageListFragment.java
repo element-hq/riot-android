@@ -250,6 +250,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         // remove from the adapter
                         mAdapter.removeEventById(event.eventId);
                         mAdapter.notifyDataSetChanged();
+                        mEventSendingListener.onMessageRedacted(event);
                     } else {
                         redactEvent(event.eventId);
                     }
