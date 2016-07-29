@@ -58,7 +58,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="0dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingLeft="4dp"
@@ -87,24 +87,60 @@
 
                         <!-- the upload / download information -->
                         <!-- download progress -->
-                        <org.matrix.androidsdk.view.PieFractionView
-                            android:id="@+id/content_download_piechart"
+                        <LinearLayout
+                            android:id="@+id/content_download_progress_layout"
                             android:layout_centerInParent="true"
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <org.matrix.androidsdk.view.PieFractionView
+                                android:id="@+id/content_download_progress_piechart"
+                                android:layout_centerInParent="true"
+                                android:layout_width="@dimen/chat_avatar_size"
+                                android:layout_height="@dimen/chat_avatar_size"/>
+
+                            <TextView
+                                android:id="@+id/content_download_progress_stats"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="7sp"
+                                android:layout_marginLeft="5dp"
+                                android:text = "estimation / total \n bitrate \n remaining time" />
+
+                        </LinearLayout>
 
                         <!-- upload progress -->
-                        <org.matrix.androidsdk.view.PieFractionView
-                            android:id="@+id/content_upload_piechart"
+                        <LinearLayout
+                            android:id="@+id/content_upload_progress_layout"
                             android:layout_centerInParent="true"
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <org.matrix.androidsdk.view.PieFractionView
+                                android:id="@+id/content_upload_progress_piechart"
+                                android:layout_width="@dimen/chat_avatar_size"
+                                android:layout_height="@dimen/chat_avatar_size"/>
+
+                            <TextView
+                                android:id="@+id/content_upload_progress_stats"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="7sp"
+                                android:layout_marginLeft="5dp"
+                                android:text = "estimation / total \n bitrate \n remaining time" />
+
+                        </LinearLayout>
 
                         <!-- the upload fails -->
                         <ImageView
                             android:id="@+id/upload_event_failed"
                             android:src="@drawable/file_upload_failed"
                             android:layout_centerInParent="true"
+                            android:visibility="gone"
                             android:layout_width="@dimen/chat_avatar_size"
                             android:layout_height="@dimen/chat_avatar_size"/>
 

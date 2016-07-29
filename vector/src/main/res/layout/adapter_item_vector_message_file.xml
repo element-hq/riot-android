@@ -75,20 +75,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <!-- the upload / download information -->
-
-                            <!-- download progress -->
-                            <org.matrix.androidsdk.view.PieFractionView
-                                android:id="@+id/content_download_piechart"
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
-
-                            <!-- upload progress -->
-                            <org.matrix.androidsdk.view.PieFractionView
-                                android:id="@+id/content_upload_piechart"
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
-
                             <!-- the upload fails -->
                             <ImageView
                                 android:id="@+id/upload_event_failed"
@@ -106,10 +92,63 @@
                             <!-- the media -->
                             <TextView
                                 android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
                                 android:text= "A filename here"
                                 android:autoLink="none"
                                 android:id="@+id/messagesAdapter_filename"/>
+
+
+                            <!-- the upload / download information -->
+                            <!-- download progress -->
+                            <LinearLayout
+                                android:id="@+id/content_download_progress_layout"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <org.matrix.androidsdk.view.PieFractionView
+                                    android:id="@+id/content_download_progress_piechart"
+                                    android:layout_centerInParent="true"
+                                    android:layout_width="@dimen/chat_avatar_size"
+                                    android:layout_height="@dimen/chat_avatar_size"/>
+
+                                <TextView
+                                    android:id="@+id/content_download_progress_stats"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:textSize="7sp"
+                                    android:layout_marginLeft="5dp"
+                                    android:text = "estimation / total \n bitrate \n remaining time" />
+
+                            </LinearLayout>
+
+                            <!-- upload progress -->
+                            <LinearLayout
+                                android:id="@+id/content_upload_progress_layout"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <org.matrix.androidsdk.view.PieFractionView
+                                    android:id="@+id/content_upload_progress_piechart"
+                                    android:layout_width="@dimen/chat_avatar_size"
+                                    android:layout_height="@dimen/chat_avatar_size"/>
+
+                                <TextView
+                                    android:id="@+id/content_upload_progress_stats"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:textSize="7sp"
+                                    android:layout_marginLeft="5dp"
+                                    android:text = "estimation / total \n bitrate \n remaining time" />
+
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <!-- the thumbnail has been uploaded : sending the message -->
