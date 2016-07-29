@@ -205,7 +205,10 @@ public class VectorRoomMediasSender {
                 if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_INTENT, mimeType)) {
                     Log.d(LOG_TAG, "sendMedias :  unsupported mime type");
                     // don't know how to manage it -> skip it
-                    mSharedDataItems.remove(0);
+                    // GA issue
+                    if (mSharedDataItems.size() > 0) {
+                        mSharedDataItems.remove(0);
+                    }
                     sendMedias();
                 } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
                     sendTextMessage(sharedDataItem);
@@ -215,7 +218,9 @@ public class VectorRoomMediasSender {
                     if (null == sharedDataItem.getUri()) {
                         Log.e(LOG_TAG, "sendMedias : null uri");
                         // manage others
-                        mSharedDataItems.remove(0);
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         sendMedias();
                         return;
                     }
@@ -236,7 +241,9 @@ public class VectorRoomMediasSender {
                         });
 
                         // manage others
-                        mSharedDataItems.remove(0);
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         sendMedias();
 
                         return;
@@ -288,7 +295,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -315,7 +324,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -342,7 +353,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -632,14 +645,29 @@ public class VectorRoomMediasSender {
 
             if (maxSide > LARGE_IMAGE_SIZE) {
                 imageCompressionSizes.mLargeImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(LARGE_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mLargeImageSize.mWidth == imageWidth) && (imageCompressionSizes.mLargeImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mLargeImageSize = null;
+                }
             }
 
             if (maxSide > MEDIUM_IMAGE_SIZE) {
                 imageCompressionSizes.mMediumImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(MEDIUM_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mMediumImageSize.mWidth == imageWidth) && (imageCompressionSizes.mMediumImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mMediumImageSize = null;
+                }
             }
 
             if (maxSide > SMALL_IMAGE_SIZE) {
                 imageCompressionSizes.mSmallImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(SMALL_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mSmallImageSize.mWidth == imageWidth) && (imageCompressionSizes.mSmallImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mSmallImageSize = null;
+                }
             }
         }
 
@@ -683,9 +711,9 @@ public class VectorRoomMediasSender {
         final ArrayList<String> textsList = new ArrayList<>();
 
         addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_original), imageSizes.mFullImageSize, imagefileSize);
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, estimateFileSize(imageSizes.mLargeImageSize));
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, estimateFileSize(imageSizes.mMediumImageSize));
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, estimateFileSize(imageSizes.mSmallImageSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, Math.min(estimateFileSize(imageSizes.mLargeImageSize), imagefileSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, Math.min(estimateFileSize(imageSizes.mMediumImageSize), imagefileSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, Math.min(estimateFileSize(imageSizes.mSmallImageSize), imagefileSize));
 
         return textsList.toArray(new String[textsList.size()]);
     }

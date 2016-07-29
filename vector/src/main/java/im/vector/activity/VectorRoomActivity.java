@@ -65,6 +65,7 @@ import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
@@ -105,7 +106,7 @@ import java.util.regex.Pattern;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.RoomPreviewDataListener {
+public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener {
 
     /** the room id (string) **/
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
@@ -858,6 +859,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     //================================================================================
+    // IEventSendingListener
+    //================================================================================
+
+    @Override
+    public void onMessageSendingSucceeded(Event event) {
+        refreshNotificationsArea();
+    }
+
+    @Override
+    public void onMessageSendingFailed(Event event) {
+        refreshNotificationsArea();
+    }
+
+    @Override
+    public void onMessageRedacted(Event event) {
+        refreshNotificationsArea();
+    }
+
+    //================================================================================
     // Menu management
     //================================================================================
 
@@ -1472,8 +1492,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 String part1 = getResources().getString(R.string.room_unsent_messages_notification);
                 String part2 = getResources().getString(R.string.room_prompt_resent);
 
-                errorText = new SpannableString(part1 + part2);
-                errorText.setSpan(new UnderlineSpan(), part1.length(), part1.length() + part2.length(), 0);
+                errorText = new SpannableString(part1 + " " + part2);
+                errorText.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
 
                 mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -2140,57 +2160,50 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // save the bitmap URL on the server
             ResourceUtils.Resource resource = ResourceUtils.openResource(this, thumbnailUri, null);
             if (null != resource) {
-                mSession.getContentManager().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new ContentManager.UploadCallback() {
+                mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
                     @Override
-                    public void onUploadStart(String uploadId) {
+                    public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                        Log.e(LOG_TAG, "Fail to upload the avatar");
                     }
 
                     @Override
-                    public void onUploadProgress(String anUploadId, int percentageProgress) {
-                    }
-
-                    @Override
-                    public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
+                    public void onUploadComplete(final String uploadId, final String contentUri) {
                         VectorRoomActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                    Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
-                                    mRoom.updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                                Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
+                                mRoom.updateAvatarUrl(contentUri, new ApiCallback<Void>() {
 
-                                        private void onDone(String message) {
-                                            if (!TextUtils.isEmpty(message)) {
-                                                CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
-                                            }
-
-                                            setProgressVisibility(View.GONE);
-                                            updateRoomHeaderAvatar();
+                                    private void onDone(String message) {
+                                        if (!TextUtils.isEmpty(message)) {
+                                            CommonActivityUtils.displayToast(VectorRoomActivity.this, message);
                                         }
 
-                                        @Override
-                                        public void onSuccess(Void info) {
-                                            onDone(null);
-                                        }
+                                        setProgressVisibility(View.GONE);
+                                        updateRoomHeaderAvatar();
+                                    }
 
-                                        @Override
-                                        public void onNetworkError(Exception e) {
-                                            onDone(e.getLocalizedMessage());
-                                        }
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        onDone(null);
+                                    }
 
-                                        @Override
-                                        public void onMatrixError(MatrixError e) {
-                                            onDone(e.getLocalizedMessage());
-                                        }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
 
-                                        @Override
-                                        public void onUnexpectedError(Exception e) {
-                                            onDone(e.getLocalizedMessage());
-                                        }
-                                    });
-                                } else {
-                                    Log.e(LOG_TAG, "Fail to upload the avatar");
-                                }
-                            }
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onDone(e.getLocalizedMessage());
+                                    }
+                                });
+                        }
                         });
                     }
                 });

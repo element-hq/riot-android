@@ -48,6 +48,7 @@ import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
@@ -820,46 +821,45 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
-                mSession.getContentManager().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new ContentManager.UploadCallback() {
-                    @Override
-                    public void onUploadStart(String uploadId) {
-                    }
+                mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                     @Override
-                    public void onUploadProgress(String anUploadId, int percentageProgress) {
-                    }
-
-                    @Override
-                    public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
+                    public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                    mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
-                                        @Override
-                                        public void onSuccess(Void info) {
-                                            onCommonDone(null);
-                                            refreshDisplay();
-                                        }
+                                hideLoadingView(false);
+                            }
+                        });
+                    }
 
-                                        @Override
-                                        public void onNetworkError(Exception e) {
-                                            onCommonDone(e.getLocalizedMessage());
-                                        }
+                    @Override
+                    public void onUploadComplete(final String uploadId, final String contentUri) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        onCommonDone(null);
+                                        refreshDisplay();
+                                    }
 
-                                        @Override
-                                        public void onMatrixError(MatrixError e) {
-                                            onCommonDone(e.getLocalizedMessage());
-                                        }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onCommonDone(e.getLocalizedMessage());
+                                    }
 
-                                        @Override
-                                        public void onUnexpectedError(Exception e) {
-                                            onCommonDone(e.getLocalizedMessage());
-                                        }
-                                    });
-                                } else {
-                                    hideLoadingView(false);
-                                }
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onCommonDone(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onCommonDone(e.getLocalizedMessage());
+                                    }
+                                });
                             }
                         });
                     }

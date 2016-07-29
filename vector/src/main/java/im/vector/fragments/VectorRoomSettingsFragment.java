@@ -52,6 +52,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
@@ -1149,27 +1150,26 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 // save the bitmap URL on the server
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
                 if(null != resource) {
-                    mSession.getContentManager().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new ContentManager.UploadCallback() {
-                        @Override
-                        public void onUploadStart(String uploadId) {
-                        }
+                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
                         @Override
-                        public void onUploadProgress(String anUploadId, int percentageProgress) {
-                        }
-
-                        @Override
-                        public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverResponseCode, final String serverErrorMessage) {
+                        public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                        Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
-                                        mRoom.updateAvatarUrl(uploadResponse.contentUri, mUpdateCallback);
-                                    } else {
-                                        Log.e(LOG_TAG, "Fail to upload the avatar");
-                                        hideLoadingView(DO_NOT_UPDATE_UI);
-                                    }
+                                    Log.e(LOG_TAG, "Fail to upload the avatar");
+                                    hideLoadingView(DO_NOT_UPDATE_UI);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onUploadComplete(final String uploadId, final String contentUri) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d(LOG_TAG, "The avatar has been uploaded, update the room avatar");
+                                    mRoom.updateAvatarUrl(contentUri, mUpdateCallback);
                                 }
                             });
                         }

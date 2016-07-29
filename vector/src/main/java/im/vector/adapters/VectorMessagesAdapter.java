@@ -497,6 +497,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
         }
 
+        if (event.isUploadingMedias(mMediasCache)) {
+            menu.findItem(R.id.ic_action_vector_cancel_upload).setVisible(true);
+        }
+
+        if (event.isDownloadingMedias(mMediasCache)) {
+            menu.findItem(R.id.ic_action_vector_cancel_download).setVisible(true);
+        }
+
         if (event.canBeResent()) {
             menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
 
