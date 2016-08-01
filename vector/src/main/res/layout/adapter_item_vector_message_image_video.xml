@@ -87,7 +87,7 @@
 
                         <!-- the upload fails -->
                         <ImageView
-                            android:id="@+id/upload_event_failed"
+                            android:id="@+id/media_upload_failed"
                             android:src="@drawable/file_upload_failed"
                             android:layout_centerInParent="true"
                             android:visibility="gone"

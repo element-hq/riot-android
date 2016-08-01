@@ -29,10 +29,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -782,7 +784,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             if (null != uploadProgressLayout) {
                 ViewGroup.MarginLayoutParams uploadProgressLayoutParams = (ViewGroup.MarginLayoutParams) uploadProgressLayout.getLayoutParams();
                 uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
-                downloadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
+                uploadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
             }
         }
         return isMergedView;

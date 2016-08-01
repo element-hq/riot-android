@@ -74,13 +74,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <!-- the upload fails -->
-                            <ImageView
-                                android:id="@+id/upload_event_failed"
-                                android:src="@drawable/file_upload_failed"
-                                android:layout_width="@dimen/chat_avatar_size"
-                                android:layout_height="@dimen/chat_avatar_size"/>
-
                             <!-- the media type -->
                             <ImageView
                                 android:layout_width="@dimen/chat_avatar_size"
