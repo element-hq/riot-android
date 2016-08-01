@@ -268,7 +268,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // The user is trying to leave with unsaved changes. Warn about that
                     new AlertDialog.Builder(VectorApp.getCurrentActivity())
                             .setMessage((action == R.id.ic_action_vector_cancel_upload) ? R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -389,7 +388,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
                     @Override
                     public void onSuccess(Void info) {
-                        // The user is trying to leave with unsaved changes. Warn about that
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
                                 .setMessage(R.string.room_event_action_report_prompt_ignore_user)
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
