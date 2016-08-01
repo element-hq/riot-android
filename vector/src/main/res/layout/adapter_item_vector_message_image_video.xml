@@ -107,14 +107,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <include layout="@layout/media_upload_download_progress_layout"
-                        android:id="@+id/content_download_progress_layout2"/>
+                        android:id="@+id/content_download_progress_layout"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <include layout="@layout/media_upload_download_progress_layout"
-                        android:id="@+id/content_upload_progress_layout2"/>
+                        android:id="@+id/content_upload_progress_layout"/>
                 </RelativeLayout>
 
             </LinearLayout>

@@ -232,8 +232,11 @@
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Small</string>
 
+    <!-- media upload / download messages -->
     <string name="attachment_cancel_download">"Cancel the download?</string>
     <string name="attachment_cancel_upload">Cancel the upload?</string>
+    <string name="attachment_remaining_time_seconds">%s s</string>
+    <string name="attachment_remaining_time_minutes">%s min</string>
 
     <!-- invitation members list Screen -->
     <string name="members_one_to_one">One to one room members</string>

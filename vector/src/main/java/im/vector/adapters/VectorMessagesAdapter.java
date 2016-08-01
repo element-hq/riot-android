@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -40,6 +41,8 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
+import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.ReceiptData;
@@ -760,6 +763,28 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
         }
 
+        // download / upload progress layout
+        if ((ROW_TYPE_IMAGE == msgType) || (ROW_TYPE_FILE == msgType) || (ROW_TYPE_VIDEO == msgType)) {
+            View bodyLayoutView = convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
+            ViewGroup.MarginLayoutParams bodyLayoutParams = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+            int marginLeft = bodyLayoutParams.leftMargin;
+
+            View downloadProgressLayout = convertView.findViewById(org.matrix.androidsdk.R.id.content_download_progress_layout);
+
+            if (null != downloadProgressLayout) {
+                ViewGroup.MarginLayoutParams downloadProgressLayoutParams = (ViewGroup.MarginLayoutParams) downloadProgressLayout.getLayoutParams();
+                downloadProgressLayoutParams.setMargins(marginLeft, downloadProgressLayoutParams.topMargin, downloadProgressLayoutParams.rightMargin, downloadProgressLayoutParams.bottomMargin);
+                downloadProgressLayout.setLayoutParams(downloadProgressLayoutParams);
+            }
+
+            View uploadProgressLayout = convertView.findViewById(org.matrix.androidsdk.R.id.content_upload_progress_layout);
+
+            if (null != uploadProgressLayout) {
+                ViewGroup.MarginLayoutParams uploadProgressLayoutParams = (ViewGroup.MarginLayoutParams) uploadProgressLayout.getLayoutParams();
+                uploadProgressLayoutParams.setMargins(marginLeft, uploadProgressLayoutParams.topMargin, uploadProgressLayoutParams.rightMargin, uploadProgressLayoutParams.bottomMargin);
+                downloadProgressLayout.setLayoutParams(uploadProgressLayoutParams);
+            }
+        }
         return isMergedView;
     }
 
@@ -788,5 +813,158 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     @Override
     public int getNotSentMessageTextColor(Context context) {
         return ContextCompat.getColor(mContext, R.color.vector_not_send_color);
+    }
+
+    //==============================================================================================================
+    // Download / upload progress management
+    //==============================================================================================================
+
+    /**
+     * Format a second time range.
+     * @param seconds the seconds time
+     * @return the formatted string
+     */
+    private static String vectorRemainingTimeToString(Context context, int seconds) {
+        if (seconds < 0) {
+          return "";
+        } else if (seconds <= 1) {
+            return "< 1s";
+        } else if (seconds < 60) {
+            return context.getString(R.string.attachment_remaining_time_seconds, seconds);
+        } else if (seconds < 3600) {
+            return context.getString(R.string.attachment_remaining_time_minutes, seconds / 60);
+        } else {
+            return DateUtils.formatElapsedTime(seconds);
+        }
+    }
+
+    /**
+     * Format the download / upload stats.
+     * @param context the context.
+     * @param progressFileSize the upload / download media size.
+     * @param fileSize the expected media size.
+     * @param remainingTime the remaining time (seconds)
+     * @return the formatted string.
+     */
+    private static String formatStats(Context context, int progressFileSize, int fileSize, int remainingTime) {
+        String formattedString = "";
+
+        if (fileSize > 0) {
+            formattedString += android.text.format.Formatter.formatShortFileSize(context,progressFileSize);
+            formattedString += " / " + android.text.format.Formatter.formatShortFileSize(context, fileSize);
+        }
+
+        if (remainingTime > 0) {
+            if (!TextUtils.isEmpty(formattedString)) {
+                formattedString += " (" + vectorRemainingTimeToString(context, remainingTime) + ")";
+            } else {
+                formattedString += vectorRemainingTimeToString(context, remainingTime);
+            }
+        }
+
+        return formattedString;
+    }
+
+    /**
+     * Format the download stats.
+     * @param context the context.
+     * @param stats the download stats
+     * @return the formatted string
+     */
+    private static String formatDownloadStats(Context context, IMXMediaDownloadListener.DownloadStats stats) {
+        return formatStats(context, stats.mDownloadedSize, stats.mFileSize, stats.mEstimatedRemainingTime);
+    }
+
+    /**
+     * Format the upload stats.
+     * @param context the context.
+     * @param stats the upload stats
+     * @return the formatted string
+     */
+    private static String formatUploadStats(Context context, IMXMediaUploadListener.UploadStats stats) {
+        return formatStats(context, stats.mUploadedSize, stats.mFileSize, stats.mEstimatedRemainingTime);
+    }
+
+    @Override
+    protected void refreshDownloadViews(final Event event, final IMXMediaDownloadListener.DownloadStats downloadStats, final View downloadProgressLayout) {
+        if (null != downloadStats) {
+            downloadProgressLayout.setVisibility(View.VISIBLE);
+
+            TextView downloadProgressStatsTextView = (TextView) downloadProgressLayout.findViewById(R.id.media_progress_text_view);
+            ProgressBar progressBar = (ProgressBar) downloadProgressLayout.findViewById(R.id.media_progress_view);
+
+            if (null != downloadProgressStatsTextView) {
+                downloadProgressStatsTextView.setText(formatDownloadStats(mContext, downloadStats));
+            }
+
+            if (null != progressBar) {
+                progressBar.setProgress(downloadStats.mProgress);
+            }
+
+            final View cancelLayout = downloadProgressLayout.findViewById(R.id.media_progress_cancel);
+
+            if (null != cancelLayout) {
+                cancelLayout.setTag(event);
+
+                cancelLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (event == cancelLayout.getTag()) {
+                            if (null != mVectorMessagesAdapterEventsListener) {
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_download);
+                            }
+                        }
+                    }
+                });
+            }
+        } else {
+            downloadProgressLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void updateUploadProgress(View uploadProgressLayout, int progress) {
+        ProgressBar progressBar = (ProgressBar) uploadProgressLayout.findViewById(R.id.media_progress_view);
+
+        if (null != progressBar) {
+            progressBar.setProgress(progress);
+        }
+    }
+
+    @Override
+    protected void refreshUploadViews(final Event event, final IMXMediaUploadListener.UploadStats uploadStats, final View uploadProgressLayout) {
+        if (null != uploadStats) {
+            uploadProgressLayout.setVisibility(View.VISIBLE);
+
+            TextView uploadProgressStatsTextView = (TextView) uploadProgressLayout.findViewById(R.id.media_progress_text_view);
+            ProgressBar progressBar = (ProgressBar) uploadProgressLayout.findViewById(R.id.media_progress_view);
+
+            if (null != uploadProgressStatsTextView) {
+                uploadProgressStatsTextView.setText(formatUploadStats(mContext, uploadStats));
+            }
+
+            if (null != progressBar) {
+                progressBar.setProgress(uploadStats.mProgress);
+            }
+
+            final View cancelLayout = uploadProgressLayout.findViewById(R.id.media_progress_cancel);
+
+            if (null != cancelLayout) {
+                cancelLayout.setTag(event);
+
+                cancelLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (event == cancelLayout.getTag()) {
+                            if (null != mVectorMessagesAdapterEventsListener) {
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_upload);
+                            }
+                        }
+                    }
+                });
+            }
+        } else {
+            uploadProgressLayout.setVisibility(View.GONE);
+        }
     }
 }

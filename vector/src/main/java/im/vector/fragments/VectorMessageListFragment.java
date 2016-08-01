@@ -68,6 +68,7 @@ import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.BugReporter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.VectorUtils;
 
@@ -267,7 +268,31 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mRoom.cancelEventSending(event);
+                    // The user is trying to leave with unsaved changes. Warn about that
+                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            .setMessage((action == R.id.ic_action_vector_cancel_upload) ? R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    mRoom.cancelEventSending(event);
+
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create()
+                            .show();
                 }
             });
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
