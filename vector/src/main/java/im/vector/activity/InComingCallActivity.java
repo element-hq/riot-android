@@ -208,8 +208,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             mMxCall.onResume();
             mMxCall.addListener(mMxCallListener);
         }
-
-        VectorApp.setCurrentActivity(this);
     }
 
     @Override
@@ -220,7 +218,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             mMxCall.onPause();
             mMxCall.removeListener(mMxCallListener);
         }
-        VectorApp.setCurrentActivity(null);
     }
 
     @Override
