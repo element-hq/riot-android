@@ -1277,27 +1277,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-
                         Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
                         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
                         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
                         startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
                         getActivity().startActivity(startRoomInfoIntent);
-
-
-                        // display the user id in a dialog to make is readable.
-                        /*new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                                .setMessage(userId)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .create()
-                                .show();*/
-
-
                         return false;
                     }
                 });
