@@ -74,6 +74,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.preference.AddressPreference;
 import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
@@ -1276,8 +1277,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
+
+                        Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                        startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        getActivity().startActivity(startRoomInfoIntent);
+
+
                         // display the user id in a dialog to make is readable.
-                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        /*new AlertDialog.Builder(VectorApp.getCurrentActivity())
                                 .setMessage(userId)
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
@@ -1286,7 +1295,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                                     }
                                 })
                                 .create()
-                                .show();
+                                .show();*/
 
 
                         return false;
