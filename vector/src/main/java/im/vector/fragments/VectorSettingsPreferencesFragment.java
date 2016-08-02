@@ -952,19 +952,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         if (ignoredUsersList.size() > 0) {
             preferenceScreen.addPreference(mIgnoredUserSettingsCategory);
 
-            for (String userId : ignoredUsersList) {
+            for (final String userId : ignoredUsersList) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
                 preference.setTitle(userId);
                 preference.setKey(IGNORED_USER_KEY_BASE + userId);
 
-                final String fUserId = userId;
-
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                                .setMessage(getActivity().getString(R.string.room_participants_action_unignore) + "?")
+                                .setMessage(getActivity().getString(R.string.settings_unignore_user, userId))
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -973,7 +971,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                                         displayLoadingView();
 
                                         ArrayList<String> idsList = new ArrayList<>();
-                                        idsList.add(fUserId);
+                                        idsList.add(userId);
 
                                         mSession.unIgnoreUsers(idsList, new ApiCallback<Void>() {
                                             @Override
@@ -996,7 +994,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                                                 onCommonDone(e.getLocalizedMessage());
                                             }
                                         });
-
                                     }
                                 })
                                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

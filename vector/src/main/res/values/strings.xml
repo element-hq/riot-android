@@ -644,7 +644,7 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
-
+    <string name="settings_unignore_user">Show all messages from %s?</string>
 
     <!-- Room Settings -->
 
