@@ -16,6 +16,7 @@
 
 package im.vector.services;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -642,6 +643,7 @@ public class EventStreamService extends Service {
     /**
      * @return the polling thread listener notification
      */
+    @SuppressLint("NewApi")
     private Notification buildForegroundServiceNotification() {
         // build the pending intent go to the home screen if this is clicked.
         Intent i = new Intent(this, VectorHomeActivity.class);
@@ -655,6 +657,11 @@ public class EventStreamService extends Service {
         notifBuilder.setContentTitle(getString(R.string.app_name));
         notifBuilder.setContentText(NOTIFICATION_SUB_TITLE);
         notifBuilder.setContentIntent(pi);
+
+        // hide the notification from the status bar
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            notifBuilder.setPriority(NotificationCompat.PRIORITY_MIN);
+        }
 
         Notification notification = notifBuilder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
