@@ -625,6 +625,7 @@
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
+    <string name="settings_ignored_users">Ignored users</string>
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_notifications_targets">Notification Targets</string>
