@@ -1166,7 +1166,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         Log.e(LOG_TAG, "fail to extract the extra stream");
                     }
                 } else if (bundle.containsKey(Intent.EXTRA_TEXT)) {
-                    this.sendMessage(bundle.getString(Intent.EXTRA_TEXT), null, null);
+                    mEditText.setText(mEditText.getText() + bundle.getString(Intent.EXTRA_TEXT));
+
+                    mEditText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mEditText.setSelection(mEditText.getText().length());
+                        }
+                    });
                 }
             }
         }
