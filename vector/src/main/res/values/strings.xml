@@ -714,4 +714,7 @@
     <string name="ga_use_settings">Automatically send crash reports</string>
     <string name="ga_use_disable_alert_message">You need to restart the application to disable the crash reports.</string>
 
+    <!-- matrix error -->
+    <string name="failed_to_load_timeline_position">Vector was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
+
 </resources>
