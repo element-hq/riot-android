@@ -19,7 +19,6 @@
             android:id="@+id/messagesAdapter_roundAvatar_left"/>
 
         <View android:id="@+id/messagesAdapter_highlight_message_marker"
-            android:background="#f00"
             android:layout_marginLeft="5dp"
             android:layout_width="6dp"
             android:layout_marginRight="5dp"
@@ -55,10 +54,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <FrameLayout
-                    android:layout_width="0dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingLeft="4dp"
@@ -85,26 +84,12 @@
                             android:id="@+id/messagesAdapter_image_type"
                             android:src="@drawable/filetype_image"/>
 
-                        <!-- the upload / download information -->
-                        <!-- download progress -->
-                        <org.matrix.androidsdk.view.PieFractionView
-                            android:id="@+id/content_download_piechart"
-                            android:layout_centerInParent="true"
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"/>
-
-                        <!-- upload progress -->
-                        <org.matrix.androidsdk.view.PieFractionView
-                            android:id="@+id/content_upload_piechart"
-                            android:layout_centerInParent="true"
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"/>
-
                         <!-- the upload fails -->
                         <ImageView
-                            android:id="@+id/upload_event_failed"
+                            android:id="@+id/media_upload_failed"
                             android:src="@drawable/file_upload_failed"
                             android:layout_centerInParent="true"
+                            android:visibility="gone"
                             android:layout_width="@dimen/chat_avatar_size"
                             android:layout_height="@dimen/chat_avatar_size"/>
 
@@ -116,6 +101,18 @@
                             android:layout_height="@dimen/chat_avatar_size"/>
                     </RelativeLayout>
                 </FrameLayout>
+
+                <include layout="@layout/media_upload_download_progress_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/content_download_progress_layout"/>
+
+                <include layout="@layout/media_upload_download_progress_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/content_upload_progress_layout"/>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
