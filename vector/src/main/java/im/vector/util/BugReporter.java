@@ -327,7 +327,7 @@ public class BugReporter {
 
                 // list the intent which supports email
                 // it should avoid having lot of unexpected applications (like bluetooth...)
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "example@gmail.com", null));
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rageshake@vector.im", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Mail subject");
                 List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(emailIntent, 0);
 
@@ -376,31 +376,7 @@ public class BugReporter {
                 if (0 == n) {
                     sendBugReportWithMail(currentActivity);
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
-                    builder.setTitle(R.string.bug_report_password);
-
-                    final EditText input = new EditText(currentActivity);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    builder.setView(input);
-                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String password = input.getText().toString();
-
-                            if (!TextUtils.isEmpty(password)) {
-                                password = password.trim();
-                            }
-
-                            sendBugReportWithVector(currentActivity, password);
-                        }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    builder.show();
+                    sendBugReportWithVector(currentActivity, null);
                 }
             }
         });
