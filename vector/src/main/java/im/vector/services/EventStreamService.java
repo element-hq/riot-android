@@ -511,21 +511,18 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Enable/disable the service to be in foreground or not.
-     * The service is put in foreground when a sync polling is used,
+     * Enable/disable the service foreground status.
+     * The service is put in foreground ("Foreground process priority") when a sync polling is used,
      * to strongly reduce the likelihood of the App being killed.
      */
     private void updateServiceForegroundState() {
         MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
         if (null == session) {
-            Log.e(LOG_TAG, "updateServiceForegroundState : no session");
+            Log.e(LOG_TAG, "## updateServiceForegroundState(): no session");
             return;
         }
 
-        // detect if the polling thread must be started
-        // i.e a session must be defined
-        // and GCM disabled or GCM registration failed
         if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Notification notification = buildNotification();
             startForeground(NOTIFICATION_ID, notification);
