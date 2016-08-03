@@ -110,6 +110,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): finish activity");
+                    showToast(InComingCallActivity.this.getString(R.string.call_error_answered_elsewhere));
                     InComingCallActivity.this.finish();
                 }
             });
@@ -208,6 +209,8 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             mMxCall.onResume();
             mMxCall.addListener(mMxCallListener);
         }
+
+        VectorApp.setCurrentActivity(this);
     }
 
     @Override
