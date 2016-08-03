@@ -43,6 +43,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.util.EventDisplay;
 import im.vector.VectorApp;
@@ -207,7 +208,7 @@ public class EventStreamService extends Service {
                     // if there is no call push rule
                     // display the incoming call notification but with no sound
                     if (TextUtils.equals(state, IMXCall.CALL_STATE_CREATED) || TextUtils.equals(state, IMXCall.CALL_STATE_CREATED)) {
-                        displayIncomingCallNotification(call.getSession(), call.getRoom(), call.getCallId(), null);
+                        displayIncomingCallNotification(call.getSession(), call.getRoom(), null, call.getCallId(), null);
                     }
                 }
 
@@ -691,6 +692,37 @@ public class EventStreamService extends Service {
         return notification;
     }
 
+
+    /**
+     * Retrieve the room name.
+     * @param session the session
+     * @param room the room
+     * @param event the event
+     * @return the room name
+     */
+    private String getRoomName(MXSession session, Room room, Event event) {
+        String roomName = VectorUtils.getRoomDisplayname(EventStreamService.this, session, room);
+
+        // avoid displaying the room Id
+        // try to find the sender display name
+        if (TextUtils.equals(roomName, room.getRoomId())) {
+            roomName = room.getName(session.getMyUserId());
+
+            // avoid room Id as name
+            if (TextUtils.equals(roomName, room.getRoomId()) && (null != event)) {
+                User user = session.getDataHandler().getStore().getUser(event.sender);
+
+                if (null != user) {
+                    roomName = user.displayname;
+                } else {
+                    roomName = event.sender;
+                }
+            }
+        }
+
+        return roomName;
+    }
+
     /**
      * Prepare a call notification.
      * Only the incoming calls are managed by now and have a dedicated notification.
@@ -734,7 +766,7 @@ public class EventStreamService extends Service {
         }
 
         if (!TextUtils.isEmpty(callId)) {
-            displayIncomingCallNotification(session, room, callId, bingRule);
+            displayIncomingCallNotification(session, room, event, callId, bingRule);
         }
     }
 
@@ -748,7 +780,7 @@ public class EventStreamService extends Service {
         String uid = computeEventUID(event);
 
         if (mPendingNotifications.indexOf(uid) >= 0) {
-            Log.d(LOG_TAG, "onBingEvent : don't bing - the event was already binged");
+            Log.d(LOG_TAG, "prepareNotification : don't bing - the event was already binged");
             checkNotification();
             return;
         }
@@ -761,7 +793,7 @@ public class EventStreamService extends Service {
         }
 
         if (!mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
-            Log.d(LOG_TAG, "onBingEvent : the push has been disable on this device");
+            Log.d(LOG_TAG, "prepareNotification : the push has been disable on this device");
             return;
         }
 
@@ -775,7 +807,7 @@ public class EventStreamService extends Service {
 
         // Just don't bing for the room the user's currently in
         if (!VectorApp.isAppInBackground() && (roomId != null) && event.roomId.equals(ViewedRoomTracker.getInstance().getViewedRoomId())) {
-            Log.d(LOG_TAG, "onBingEvent : don't bing because it is the currently opened room");
+            Log.d(LOG_TAG, "prepareNotification : don't bing because it is the currently opened room");
             return;
         }
 
@@ -796,7 +828,7 @@ public class EventStreamService extends Service {
         // But it could be triggered because of multi accounts management.
         // The dedicated account is removing but some pushes are still received.
         if ((null == session) || !session.isAlive()) {
-            Log.d(LOG_TAG, "onBingEvent : don't bing - no session");
+            Log.d(LOG_TAG, "prepareNotification : don't bing - no session");
             return;
         }
 
@@ -804,7 +836,7 @@ public class EventStreamService extends Service {
 
         // invalid room ?
         if (null == room) {
-            Log.d(LOG_TAG, "onBingEvent : don't bing - the room does not exist");
+            Log.d(LOG_TAG, "prepareNotification : don't bing - the room does not exist");
             return;
         }
 
@@ -818,7 +850,7 @@ public class EventStreamService extends Service {
             try {
                 isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
             } catch (Exception e) {
-                Log.e(LOG_TAG, "onBingEvent : invitation parsing failed");
+                Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
             }
 
         } else {
@@ -865,7 +897,7 @@ public class EventStreamService extends Service {
         mNotificationRoomId = roomId;
         mNotificationEventId = event.eventId;
 
-        Log.d(LOG_TAG, "onBingEvent : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
+        Log.d(LOG_TAG, "prepareNotification : with sound " + bingRule.isDefaultNotificationSound(bingRule.notificationSound()));
 
         mLatestNotification = NotificationUtils.buildMessageNotification(
                 EventStreamService.this,
@@ -875,7 +907,7 @@ public class EventStreamService extends Service {
                 CommonActivityUtils.getBadgeCount(),
                 body,
                 event.roomId,
-                VectorUtils.getRoomDisplayname(EventStreamService.this, session, room),
+                getRoomName(session, room, event),
                 bingRule.isDefaultNotificationSound(bingRule.notificationSound()),
                 isInvitationEvent);
     }
@@ -1028,11 +1060,12 @@ public class EventStreamService extends Service {
     /**
      * Display a permanent notification when there is an incoming call.
      * @param session the session
-     * @param room the romm
+     * @param room the room
+     * @param event the event
      * @param callId the callId
      * @param bingRule the bing rule.
      */
-    private void displayIncomingCallNotification(MXSession session, Room room, String callId, BingRule bingRule) {
+    private void displayIncomingCallNotification(MXSession session, Room room, Event event, String callId, BingRule bingRule) {
         Log.d(LOG_TAG, "displayIncomingCallNotification : " + callId + " in " + room.getRoomId());
 
         // the incoming call in progress is already displayed
@@ -1049,8 +1082,11 @@ public class EventStreamService extends Service {
                 VectorCallViewActivity.startRinging(EventStreamService.this);
             }
 
-            Notification notification = NotificationUtils.buildIncomingCallNotification(EventStreamService.this,
-                    VectorUtils.getRoomDisplayname(EventStreamService.this, session, room), session.getMyUserId(), callId);
+            Notification notification = NotificationUtils.buildIncomingCallNotification(
+                    EventStreamService.this,
+                    getRoomName(session, room, event),
+                    session.getMyUserId(),
+                    callId);
 
             if ((null != bingRule) && bingRule.isDefaultNotificationSound(bingRule.notificationSound())) {
                 notification.defaults |= Notification.DEFAULT_SOUND;
