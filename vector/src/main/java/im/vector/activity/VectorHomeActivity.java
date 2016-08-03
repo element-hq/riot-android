@@ -997,20 +997,17 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private void startCall(String sessionId, String callId) {
         // sanity checks
         if ((null != sessionId) && (null != callId)) {
-            // display the call activity only if the application is in background.
-            if (isScreenOn()) {
-                final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
+            final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
 
-                intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
-                intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);
+            intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
+            intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);
 
-                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        VectorHomeActivity.this.startActivity(intent);
-                    }
-                });
-            }
+            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    VectorHomeActivity.this.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -1058,20 +1055,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 }
             });
-        }
-    }
-
-    @SuppressLint("NewApi")
-    /**
-     * Tell if the screen is turned on
-     */
-    private boolean isScreenOn() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            return powerManager.isInteractive();
-        } else {
-            return powerManager.isScreenOn();
         }
     }
 }
