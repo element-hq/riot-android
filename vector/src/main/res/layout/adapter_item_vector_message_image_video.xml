@@ -19,7 +19,6 @@
             android:id="@+id/messagesAdapter_roundAvatar_left"/>
 
         <View android:id="@+id/messagesAdapter_highlight_message_marker"
-            android:background="#f00"
             android:layout_marginLeft="5dp"
             android:layout_width="6dp"
             android:layout_marginRight="5dp"
@@ -103,19 +102,16 @@
                     </RelativeLayout>
                 </FrameLayout>
 
-                <RelativeLayout
+                <include layout="@layout/media_upload_download_progress_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <include layout="@layout/media_upload_download_progress_layout"
-                        android:id="@+id/content_download_progress_layout"/>
-                </RelativeLayout>
+                    android:layout_height="wrap_content"
+                    android:id="@+id/content_download_progress_layout"/>
 
-                <RelativeLayout
+                <include layout="@layout/media_upload_download_progress_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <include layout="@layout/media_upload_download_progress_layout"
-                        android:id="@+id/content_upload_progress_layout"/>
-                </RelativeLayout>
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/content_upload_progress_layout"/>
 
             </LinearLayout>
         </LinearLayout>
