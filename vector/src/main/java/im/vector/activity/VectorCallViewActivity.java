@@ -642,7 +642,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             mCall.onPause();
             mCall.removeListener(mListener);
         }
-        VectorApp.setCurrentActivity(null);
     }
 
     @Override
@@ -676,8 +675,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         } else {
             this.finish();
         }
-
-        VectorApp.setCurrentActivity(this);
     }
 
     /**

@@ -178,7 +178,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        VectorApp.setCurrentActivity(null);
         Matrix.removeSessionErrorListener(this);
 
         // close any opened dialog
@@ -203,8 +202,6 @@ public class MXCActionBarActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        VectorApp.setCurrentActivity(this);
         Matrix.setSessionErrorListener(this);
 
         // the online presence must be displayed ASAP.

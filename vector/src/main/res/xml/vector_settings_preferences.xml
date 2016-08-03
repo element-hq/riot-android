@@ -78,6 +78,11 @@
         android:key="@string/settings_notifications_targets">
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_ignored_users"
+        android:key="@string/settings_ignored_users">
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/settings_advanced" >
 
         <im.vector.preference.VectorCustomActionEditTextPreference

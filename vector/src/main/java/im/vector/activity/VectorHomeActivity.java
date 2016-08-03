@@ -509,8 +509,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
 
         mRecentsListFragment.setIsDirectoryDisplayed(false);
-
-        VectorApp.setCurrentActivity(null);
     }
 
     @Override
@@ -556,8 +554,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         if (mSession.isAlive()) {
             mSession.getDataHandler().addListener(mEventsListener);
         }
-
-        VectorApp.setCurrentActivity(this);
 
         mRoomCreationFab.show();
 

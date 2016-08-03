@@ -221,7 +221,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             mMxCall.onPause();
             mMxCall.removeListener(mMxCallListener);
         }
-        VectorApp.setCurrentActivity(null);
     }
 
     @Override
