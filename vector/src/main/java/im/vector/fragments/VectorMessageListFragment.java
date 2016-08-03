@@ -46,6 +46,7 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -131,6 +132,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
 
         return v;
+    }
+
+    @Override
+    public MatrixMessagesFragment createMessagesFragmentInstance(String roomId) {
+        return VectorMessagesFragment.newInstance(getSession(), roomId, this);
     }
 
     /**

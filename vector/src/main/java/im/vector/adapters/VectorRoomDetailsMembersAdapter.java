@@ -808,8 +808,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
                             // assume it is a tap
                             if (Math.abs(x - mStartX) < 10) {
-                                if (null != mOnParticipantsListener) {
-                                    mOnParticipantsListener.onClick(participant);
+                                // ignore the cancel event
+                                if (event.getAction() == MotionEvent.ACTION_UP) {
+                                    if (null != mOnParticipantsListener) {
+                                        mOnParticipantsListener.onClick(participant);
+                                    }
                                 }
                                 isMotionTrapped = false;
                             } else {

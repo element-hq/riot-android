@@ -604,7 +604,6 @@ public class VectorCallViewActivity extends Activity {
             mCall.onPause();
             mCall.removeListener(mListener);
         }
-        VectorApp.setCurrentActivity(null);
     }
 
     @Override
@@ -638,8 +637,6 @@ public class VectorCallViewActivity extends Activity {
         } else {
             this.finish();
         }
-
-        VectorApp.setCurrentActivity(this);
     }
 
     /**

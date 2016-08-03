@@ -20,6 +20,7 @@ import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -43,33 +44,56 @@ import java.util.TimerTask;
  * The main application injection point
  */
 public class VectorApp extends Application {
-
     private static final String LOG_TAG = "VectorApp";
 
-    // instance
+    /**
+     * The current instance.
+     */
     private static VectorApp instance = null;
 
-    // rage shake detection
-    private static RageShake mRageShake = new RageShake();
+    /**
+     * Rage shake detection to send a bug report.
+     */
+    private static final RageShake mRageShake = new RageShake();
 
-    // active activity detection
+    /**
+     * Delay to detect if the application is in background.
+     * If there is no active activity during the elapsed time, it means that the application is in background.
+     */
+    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
+
+    /**
+     * The current active activity
+     */
+    private static Activity mCurrentActivity = null;
+
+    /**
+     * Background application detection
+     */
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
     private boolean mIsInBackground = true;
-    private final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
 
-    // google analytics info
+    /**
+     * Google analytics information.
+     */
     public static int VERSION_BUILD = -1;
     public static String VECTOR_VERSION_STRING = "";
     public static String SDK_VERSION_STRING = "";
 
-    // call in progress management
+    /**
+     * Tells if there a pending call whereas the application is backgrounded.
+     */
     private boolean mIsCallingInBackground = false;
 
-    // the current activity
-    private static Activity mCurrentActivity = null;
+    /**
+     * Monitor the created activities to detect memory leaks.
+     */
+    private final ArrayList<String> mCreatedActivities = new ArrayList<>();
 
-    // return the current instance
+    /**
+     * @return the current instance
+     */
     public static VectorApp getInstance() {
         return instance;
     }
@@ -84,10 +108,12 @@ public class VectorApp extends Application {
         mActivityTransitionTimerTask = null;
 
         try {
-            PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            VERSION_BUILD = pinfo.versionCode;
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            VERSION_BUILD = packageInfo.versionCode;
         }
-        catch (PackageManager.NameNotFoundException e) {}
+        catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "fails to retrieve the package info " + e.getMessage());
+        }
 
         VECTOR_VERSION_STRING = Matrix.getInstance(this).getVersion(true);
 
@@ -107,6 +133,44 @@ public class VectorApp extends Application {
         ContactsManager.refreshLocalContactsSnapshot(this);
 
         mRageShake.start(this);
+
+        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                mCreatedActivities.add(activity.toString());
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                setCurrentActivity(activity);
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+                setCurrentActivity(null);
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                mCreatedActivities.remove(activity.toString());
+
+                if (mCreatedActivities.size() > 1) {
+                    Log.d(LOG_TAG, "onActivityDestroyed : \n" + mCreatedActivities);
+                }
+            }
+        });
     }
 
     /**
@@ -228,7 +292,7 @@ public class VectorApp extends Application {
      * It manages the application background / foreground when it is required.
      * @param activity the current activity, null if there is no more one.
      */
-    public static void setCurrentActivity(Activity activity) {
+    private void setCurrentActivity(Activity activity) {
         if (VectorApp.isAppInBackground() && (null != activity)) {
             Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
 
@@ -286,7 +350,7 @@ public class VectorApp extends Application {
     // cert management : store the active activities.
     //==============================================================================================================
 
-    private EventEmitter<Activity> mOnActivityDestroyedListener = new EventEmitter<>();
+    private final EventEmitter<Activity> mOnActivityDestroyedListener = new EventEmitter<>();
 
     /**
      * @return the EventEmitter list.
@@ -312,7 +376,7 @@ public class VectorApp extends Application {
 
     /**
      * Save the image taken in the medias picker
-     * @param aSavedCameraImagePreview
+     * @param aSavedCameraImagePreview the bitmap.
      */
     public static void setSavedCameraImagePreview(Bitmap aSavedCameraImagePreview){
         if (aSavedCameraImagePreview != mSavedPickerImagePreview) {

@@ -172,7 +172,7 @@ public class LogUtilities {
         LogUtilities.rotateLogs();
 
         File cacheDirectory = LogUtilities.ensureLogDirectoryExists();
-        File file = new File(cacheDirectory, "logcat.0");
+        File file = new File(cacheDirectory, "logcat.txt");
         FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(file);
@@ -200,22 +200,22 @@ public class LogUtilities {
         try {
             File logDir = LogUtilities.ensureLogDirectoryExists();
 
-            File log1 = new File(logDir, "logcat.0");
+            File log1 = new File(logDir, "logcat.txt");
             if (log1.exists()) {
                 list.add(log1);
             }
 
-            File log2 = new File(logDir, "logcat.1");
+            File log2 = new File(logDir, "prev_logcat_1.txt");
             if (log2.exists()) {
                 list.add(log2);
             }
 
-            File log3 = new File(logDir, "logcat.2");
+            File log3 = new File(logDir, "prev_logcat_2.txt");
             if (log3.exists()) {
                 list.add(log3);
             }
 
-            File log4 = new File(logDir, "logcat.3");
+            File log4 = new File(logDir, "prev_logcat_3.txt");
             if (log4.exists()) {
                 list.add(log4);
             }
@@ -234,10 +234,10 @@ public class LogUtilities {
         try {
             File logDir = LogUtilities.ensureLogDirectoryExists();
 
-            File log1 = new File(logDir, "logcat.0");
-            File log2 = new File(logDir, "logcat.1");
-            File log3 = new File(logDir, "logcat.2");
-            File log4 = new File(logDir, "logcat.3");
+            File log1 = new File(logDir, "logcat.txt");
+            File log2 = new File(logDir, "prev_logcat_1.txt");
+            File log3 = new File(logDir, "prev_logcat_2.txt");
+            File log4 = new File(logDir, "prev_logcat_3.txt");
 
             if (log4.exists()) {
                 log4.delete();
