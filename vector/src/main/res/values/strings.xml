@@ -236,7 +236,7 @@
     <string name="attachment_cancel_download">"Cancel the download?</string>
     <string name="attachment_cancel_upload">Cancel the upload?</string>
     <string name="attachment_remaining_time_seconds">%s s</string>
-    <string name="attachment_remaining_time_minutes">%s min</string>
+    <string name="attachment_remaining_time_minutes">%1$sm %2$ss</string>
 
     <!-- invitation members list Screen -->
     <string name="members_one_to_one">One to one room members</string>
