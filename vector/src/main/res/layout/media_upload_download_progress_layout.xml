@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="10sp"
-            android:text = "a progress here" />
+            android:text = "" />
 
         <ProgressBar
             android:id="@+id/media_progress_view"
@@ -28,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:progressTint="@color/vector_green_color"
             android:max="100"
-            android:progress="20"/>
+            android:progress="0"/>
     </LinearLayout>
 
     <RelativeLayout
