@@ -886,9 +886,48 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         return formatStats(context, stats.mUploadedSize, stats.mFileSize, stats.mEstimatedRemainingTime);
     }
 
+    //
+    private final HashMap<String, String> mMediaDownloadIdByEventId = new HashMap<>();
+
+    /**
+     * Tells if the downloadId is the media download id.
+     * @param event the event
+     * @param downloadId the download id.
+     * @return true if the media is downloading (not the thumbnail)
+     */
+    private boolean isMediaDownloading(Event event, String downloadId) {
+        String mediaDownloadId = mMediaDownloadIdByEventId.get(event.eventId);
+
+        if (null == mediaDownloadId) {
+            mediaDownloadId = "";
+
+            if (TextUtils.equals(event.type, Event.EVENT_TYPE_MESSAGE)) {
+                Message message = JsonUtils.toMessage(event.content);
+
+                String url = null;
+
+                if (TextUtils.equals(message.msgtype, Message.MSGTYPE_IMAGE)) {
+                    url = JsonUtils.toImageMessage(event.content).url;
+                } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_VIDEO)) {
+                    url = JsonUtils.toVideoMessage(event.content).url;
+                } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_FILE)) {
+                    url = JsonUtils.toFileMessage(event.content).url;
+                }
+
+                if (!TextUtils.isEmpty(url)) {
+                    mediaDownloadId = mSession.getMediasCache().downloadIdFromUrl(url);
+                }
+            }
+
+            mMediaDownloadIdByEventId.put(event.eventId, mediaDownloadId);
+        }
+
+        return TextUtils.equals(mediaDownloadId, downloadId);
+    }
+
     @Override
     protected void refreshDownloadViews(final Event event, final IMXMediaDownloadListener.DownloadStats downloadStats, final View downloadProgressLayout) {
-        if (null != downloadStats) {
+        if ((null != downloadStats) && isMediaDownloading(event, downloadStats.mDownloadId)) {
             downloadProgressLayout.setVisibility(View.VISIBLE);
 
             TextView downloadProgressStatsTextView = (TextView) downloadProgressLayout.findViewById(R.id.media_progress_text_view);
