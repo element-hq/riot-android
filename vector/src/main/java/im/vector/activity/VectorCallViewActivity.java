@@ -51,7 +51,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import im.vector.VectorApp;
+
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.services.EventStreamService;
@@ -69,6 +69,8 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private static final String LOG_TAG = "VCallViewActivity";
     private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
     private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
+    /** threshold used to manage the backlight during the call **/
+    private static final float PROXIMITY_THRESHOLD = 3.0f; // centimeters
 
     // ring tones
     private static final String RING_TONE_START_RINGING = "ring.ogg";
@@ -133,6 +135,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     // sensor
     SensorManager mSensorMgr;
+    Sensor mProximitySensor;
 
     // activity life cycle management
     private boolean mSavedSpeakerValue;
@@ -368,9 +371,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             return;
         }
 
-        mCall = mSession.mCallsManager.callWithCallId(mCallId);
-
-        if (null == mCall) {
+        if(null == (mCall = mSession.mCallsManager.callWithCallId(mCallId))) {
             Log.e(LOG_TAG, "invalid callId");
             finish();
             return;
@@ -396,8 +397,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mSwichRearFrontCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleRearFrontCamera();
-                refreshSwitchRearFrontCameraButton();
+                CommonActivityUtils.displayToast(VectorCallViewActivity.this.getApplicationContext(),"Not implemented");
+//                toggleRearFrontCamera();
+//                refreshSwitchRearFrontCameraButton();
             }
         });
 
@@ -472,8 +474,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         setupHeaderPendingCallView();
-        initBacklightConfiguration();
-        mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+        initBackLightManagement();
         Log.d(LOG_TAG,"## onCreate(): OUT");
     }
 
@@ -515,20 +516,26 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
     }
 
-    private void initBacklightConfiguration() {
+    /**
+     * Perform the required initializations for the backlight management.<p>
+     * For video call the backlight must be ON. For voice call the backlight must be
+     * OFF when the proximity sensor fires.
+     */
+    private void initBackLightManagement() {
         if(null != mCall) {
             if(mCall.isVideo()) {
-                // set the backlight on
-                Log.d(LOG_TAG,"## initBacklightConfiguration(): backlight is ON");
+                // video call: set the backlight on
+                Log.d(LOG_TAG,"## initBackLightManagement(): backlight is ON");
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // same as android:keepScreenOn="true" in layout
+            } else {
+                // voice call: use the proximity sensor
+                mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+                if(null == (mProximitySensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY))) {
+                    Log.w(LOG_TAG,"## initBackLightManagement(): Warning - proximity sensor not supported");
+                }
             }
         }
 
-    }
-
-    private void initProximitySensorListener(){
-        Sensor sensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        mSensorMgr.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     /**
@@ -636,9 +643,10 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     protected void onPause() {
         super.onPause();
 
-        mSensorMgr.unregisterListener(this);
-
         if (null != mCall) {
+            if(null != mProximitySensor) {
+                mSensorMgr.unregisterListener(this);
+            }
             mCall.onPause();
             mCall.removeListener(mListener);
         }
@@ -650,14 +658,17 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         mHeaderPendingCallView.checkPendingCall();
 
-        // compute video UI layout position after rotation
+        // compute video UI layout position after rotation & apply new position
         computeVideoUiLayout();
-        // apply new position
         if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
             mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
         }
 
         if (null != mCall) {
+            if(null != mProximitySensor) {
+                // proximity sensor only used for voice call (see initBackLightManagement())
+                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
             mCall.onResume();
 
             mCall.addListener(mListener);
@@ -847,7 +858,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): isSwitched="+isSwitched);
 
             // update icon
-            int iconId = isSwitched?R.drawable.ic_material_videocam_off_pink_red:R.drawable.ic_material_videocam_off_grey;
+            int iconId = isSwitched?R.drawable.ic_material_switch_video_pink_red:R.drawable.ic_material_switch_video_grey;
             mSwichRearFrontCameraImageView.setImageResource(iconId);
         } else {
             Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): View.INVISIBLE");
@@ -1350,7 +1361,31 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     @Override
     public void onSensorChanged(SensorEvent event) {
         float distanceCentimeters = event.values[0];
+        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+
         Log.d(LOG_TAG,"## onSensorChanged(): "+String.format("distance=%.3f",distanceCentimeters));
+
+        if(audioManager.isSpeakerphoneOn()) {
+            Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
+        } else {
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+
+            if (distanceCentimeters <= PROXIMITY_THRESHOLD) {
+                //layoutParams.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                layoutParams.screenBrightness = 0;
+                getWindow().setAttributes(layoutParams);
+
+                //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                Log.d(LOG_TAG, "## onSensorChanged(): force screen OFF");
+            } else {
+                // restore previous brightness (whatever it was)
+                layoutParams.screenBrightness = -1;
+                getWindow().setAttributes(layoutParams);
+
+                //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                Log.d(LOG_TAG, "## onSensorChanged(): force screen ON");
+            }
+        }
     }
 
     @Override
