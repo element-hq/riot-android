@@ -714,20 +714,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mSession.getDataHandler().removeListener(mGlobalEventListener);
             }
         }
-    }
 
-    @Override
-    public void finish() {
-        super.finish();
-
-        // do not reset ViewedRoomTracker in onPause
-        // else the messages received while the application is in background
-        // are marked as unread in the home/recents activity.
-        // Assume that the finish method is the right place to manage it.
+        // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
     }
-
+    
     @Override
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
@@ -736,6 +728,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ViewedRoomTracker.getInstance().setMatrixId(mSession.getCredentials().userId);
 
         if (null != mRoom) {
+            // to do not trigger notifications for this room
+            // because it is displayed.
             ViewedRoomTracker.getInstance().setViewedRoomId(mRoom.getRoomId());
 
             // check if the room has been left from another client.

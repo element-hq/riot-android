@@ -20,9 +20,11 @@ import android.content.Context;
 import android.os.Build;
 import android.preference.SwitchPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 
 /**
  * This class should fix the android issue
@@ -30,6 +32,8 @@ import android.widget.Switch;
  *
  */
 public class VectorSwitchPreference extends SwitchPreference {
+    private static final String LOG_TAG = "VectorSwitchPreference";
+
 
     /**
      * Construct a new SwitchPreference with the given style options.
@@ -69,6 +73,16 @@ public class VectorSwitchPreference extends SwitchPreference {
             clearListenerInViewGroup(viewGroup);
         }
         super.onBindView(view);
+
+        // display the title in multi-line to avoid ellipsing.
+        try {
+            TextView textView = (TextView) view.findViewById(android.R.id.title);
+            if (textView != null) {
+                textView.setSingleLine(false);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+        }
     }
 
     /**
