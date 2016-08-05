@@ -59,7 +59,8 @@ public class NotificationUtils {
     static private int mUnreadBubbleWidth = -1;
 
     /**
-     * Build an incoming call notification
+     * Build an incoming call notification.
+     * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
      * @param context the context.
      * @param roomName the room name in which the call is pending.
      * @param matrixId the matrix id

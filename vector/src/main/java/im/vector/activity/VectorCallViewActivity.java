@@ -262,6 +262,9 @@ public class VectorCallViewActivity extends Activity {
     }
 
     /**
+     * Provides the active call.
+     * The current call is tested to check if it is still valid.
+     * It if it is no more valid, any call UIs are dismissed.
      * @return the active call
      */
     public static IMXCall getActiveCall() {
