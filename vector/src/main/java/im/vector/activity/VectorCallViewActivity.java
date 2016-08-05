@@ -262,6 +262,9 @@ public class VectorCallViewActivity extends Activity {
     }
 
     /**
+     * Provides the active call.
+     * The current call is tested to check if it is still valid.
+     * It if it is no more valid, any call UIs are dismissed.
      * @return the active call
      */
     public static IMXCall getActiveCall() {
@@ -270,7 +273,8 @@ public class VectorCallViewActivity extends Activity {
             // check if the call can be resume
             // or it's still valid
             if (!canCallBeResumed() || (null == mCall.getSession().mCallsManager.callWithCallId(mCall.getCallId()))) {
-                EventStreamService.getInstance().hidePendingCallNotification(mCall.getCallId());
+                Log.d(LOG_TAG, "Hide the call notifications because the cuurent one cannot be resumed");
+                EventStreamService.getInstance().hideCallNotifications();
                 mCall = null;
                 mSavedCallview = null;
             }
@@ -415,7 +419,8 @@ public class VectorCallViewActivity extends Activity {
             mCallView = mSavedCallview;
             insertCallView();
         } else {
-            EventStreamService.getInstance().hidePendingCallNotification(mCall.getCallId());
+            Log.d(LOG_TAG, "onCreate: Hide the call notifications");
+            EventStreamService.getInstance().hideCallNotifications();
             mSavedCallview = null;
 
             // create the callview asap
@@ -904,7 +909,7 @@ public class VectorCallViewActivity extends Activity {
             parent.removeView(mCallView);
             mSavedCallview = mCallView;
 
-            EventStreamService.getInstance().displayPendingCallNotification(mSession, mCall.getRoom(), mCall.getCallId());
+            EventStreamService.getInstance().displayCallInProgressNotification(mSession, mCall.getRoom(), mCall.getCallId());
             mCallView = null;
         }
     }
@@ -937,7 +942,8 @@ public class VectorCallViewActivity extends Activity {
         }
 
         if (mIsCallEnded) {
-            EventStreamService.getInstance().hidePendingCallNotification(mCallId);
+            Log.d(LOG_TAG, "onDestroy: Hide the call notifications");
+            EventStreamService.getInstance().hideCallNotifications();
             startEndCallSound(this);
         }
 

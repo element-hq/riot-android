@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package im.vector.util;
 
 import android.app.Notification;
@@ -12,16 +28,13 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.InComingCallActivity;
 import im.vector.activity.LockScreenActivity;
-import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
@@ -43,10 +56,54 @@ public class NotificationUtils {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
     // the bubble radius is computed for 99
-    static int mUnreadBubbleWidth = -1;
+    static private int mUnreadBubbleWidth = -1;
 
     /**
-     * Build a call notification
+     * Build an incoming call notification.
+     * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
+     * @param context the context.
+     * @param roomName the room name in which the call is pending.
+     * @param matrixId the matrix id
+     * @param callId the call id.
+     * @return the call notification.
+     */
+    public static Notification buildIncomingCallNotification(Context context, String roomName, String matrixId, String callId) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setWhen(System.currentTimeMillis());
+
+        builder.setContentTitle(roomName);
+        builder.setContentText(context.getString(R.string.incoming_call));
+        builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
+
+        // clear the activity stack to home activity
+        Intent intent = new Intent(context, VectorHomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, matrixId);
+        intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, callId);
+        context.startActivity(intent);
+
+        // Recreate the back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
+                .addParentStack(VectorHomeActivity.class)
+                .addNextIntent(intent);
+
+
+        // android 4.3 issue
+        // use a generator for the private requestCode.
+        // When using 0, the intent is not created/launched when the user taps on the notification.
+        //
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent((new Random()).nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        Notification n = builder.build();
+        n.flags |= Notification.FLAG_SHOW_LIGHTS;
+        n.defaults |= Notification.DEFAULT_LIGHTS;
+
+        return n;
+    }
+
+    /**
+     * Build a pending call notification
      * @param context the context.
      * @param roomName the room name in which the call is pending.
      * @param roomId the room Id
@@ -54,13 +111,13 @@ public class NotificationUtils {
      * @param callId the call id.
      * @return the call notification.
      */
-    public static Notification buildCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
+    public static Notification buildPendingCallNotification(Context context, String roomName, String roomId, String matrixId, String callId) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setWhen(System.currentTimeMillis());
 
         builder.setContentTitle(roomName);
         builder.setContentText(context.getString(R.string.call_in_progress));
-        builder.setSmallIcon(R.drawable.logo_transparent);
+        builder.setSmallIcon(R.drawable.incoming_call_notification_transparent);
 
         // Build the pending intent for when the notification is clicked
         Intent roomIntent = new Intent(context, VectorRoomActivity.class);
@@ -136,7 +193,6 @@ public class NotificationUtils {
      * @param context the context
      * @param from the sender
      * @param matrixId the user account id;
-     * @param callId the call id
      * @param displayMatrixId true to display the matrix id
      * @param largeIcon the notification icon
      * @param unseenNotifiedRoomsCount the number of notified rooms
@@ -151,7 +207,6 @@ public class NotificationUtils {
             Context context,
             String from,
             String matrixId,
-            String callId,
             boolean displayMatrixId,
             Bitmap largeIcon,
             int unseenNotifiedRoomsCount,
@@ -264,25 +319,17 @@ public class NotificationUtils {
         TaskStackBuilder stackBuilder;
         Intent intent;
 
-        if (!TextUtils.isEmpty(callId)) {
-            intent = new Intent(context, VectorHomeActivity.class);
+        intent = new Intent(context, VectorRoomActivity.class);
+        intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
-            stackBuilder = TaskStackBuilder.create(context)
-                    .addParentStack(VectorHomeActivity.class)
-                    .addNextIntent(intent);
-        } else {
-
-            intent = new Intent(context, VectorRoomActivity.class);
-            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-            if (null != matrixId) {
-                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
-            }
-
-            stackBuilder = TaskStackBuilder.create(context)
-                    .addParentStack(VectorRoomActivity.class)
-                    .addNextIntent(intent);
+        if (null != matrixId) {
+            intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, matrixId);
         }
+
+        stackBuilder = TaskStackBuilder.create(context)
+                .addParentStack(VectorRoomActivity.class)
+                .addNextIntent(intent);
+
 
         // android 4.3 issue
         // use a generator for the private requestCode.
@@ -297,7 +344,7 @@ public class NotificationUtils {
         builder.setStyle(textStyle);
 
         // do not offer to quick respond if the user did not dismiss the previous one
-        if (!LockScreenActivity.isDisplayingALockScreenActivity() && (null == callId)) {
+        if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
             if (!isInvitationEvent) {
                 // offer to type a quick answer (i.e. without launching the application)
                 Intent quickReplyIntent = new Intent(context, LockScreenActivity.class);
