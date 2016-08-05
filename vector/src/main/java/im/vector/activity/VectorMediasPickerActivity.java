@@ -78,8 +78,6 @@ import java.util.List;
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
  */
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
-    // medias folder
-    private static final int REQUEST_MEDIAS = 54;
     private static final String LOG_TAG = "VectorMedPicker";
 
     // public keys
@@ -94,6 +92,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
     private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
     private static final String KEY_IS_AVATAR_MODE = "KEY_IS_AVATAR_MODE";
+
+    // activity request
+    private static final int REQUEST_MEDIAS = 54;
+
+    private static final int AVATAR_COMPRESSION_LEVEL = 50;
 
     private final int IMAGE_ORIGIN_CAMERA = 1;
     private final int IMAGE_ORIGIN_GALLERY = 2;
@@ -711,7 +714,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     // and the user would not understand that the shooted image is not the previewed one
                     if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
                         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 0, bos);
+                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
                         data = bos.toByteArray();
                     }
 
