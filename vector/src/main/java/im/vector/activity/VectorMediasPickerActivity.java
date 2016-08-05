@@ -1399,7 +1399,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param width the image width to hide
      * @param height the image height to hide
      */
-    private void drawCircleMask(ImageView maskView, int width, int height) {
+    private void drawCircleMask(final ImageView maskView, final int width, final int height) {
+        // remove any background
+        maskView.setBackgroundResource(0);
+
         // create a bitmap with a transparent hole
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -1482,7 +1485,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                 if (mIsAvatarMode) {
                     mCameraTextureMaskView.setVisibility(View.VISIBLE);
-                    drawCircleMask(mCameraTextureMaskView, newWidth, newHeight);
+                    final int fWidth = newWidth;
+                    final int fHeight = newHeight;
+
+                    mCameraTextureMaskView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawCircleMask(mCameraTextureMaskView, fWidth, fHeight);
+                        }
+                    });
                 } else {
                     mCameraTextureMaskView.setVisibility(View.GONE);
                 }
