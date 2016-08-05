@@ -2069,11 +2069,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         }
 
                         private void onError(String errorMessage) {
-                            // delete the created room.
-                            // it is a temporary room.
-                            // having it implies that the user has been invited or joined it.
-                            sRoomPreviewData.getSession().getDataHandler().getStore().deleteRoom(sRoomPreviewData.getRoomId());
-                            CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
+							CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
                             setProgressVisibility(View.GONE);
                         }
 
