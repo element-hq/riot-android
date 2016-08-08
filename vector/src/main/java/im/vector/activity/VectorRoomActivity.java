@@ -988,6 +988,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void startIpCall(final boolean aIsVideoCall){
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
+        setProgressVisibility(View.VISIBLE);
+
         // create the call object
         mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
             @Override
@@ -995,6 +997,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        setProgressVisibility(View.GONE);
                         call.setIsVideo(aIsVideoCall);
                         call.setIsIncoming(false);
 
