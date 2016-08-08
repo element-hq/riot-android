@@ -980,7 +980,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     @Override
                     public void run() {
                         call.setIsVideo(aIsVideoCall);
-                        call.setRoom(mRoom);
                         call.setIsIncoming(false);
 
                         final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);

@@ -166,6 +166,9 @@ public class Matrix {
                 getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
+                        IMXCall aa = call;
+                        IMXCall bb = VectorCallViewActivity.getActiveCall();
+
                         // can only manage one call instance.
                         if (null == VectorCallViewActivity.getActiveCall()) {
                             Log.d(LOG_TAG, "onIncomingCall with no active call");
