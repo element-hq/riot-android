@@ -969,29 +969,50 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * is true.
      * @param aIsVideoCall true to video call, false to audio call
      */
-    private void startIpCall(boolean aIsVideoCall){
+    private void startIpCall(final boolean aIsVideoCall){
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
         // create the call object
-        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+            @Override
+            public void onSuccess(final IMXCall call) {
+                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        call.setIsVideo(aIsVideoCall);
+                        call.setRoom(mRoom);
+                        call.setIsIncoming(false);
 
-        if (null != call) {
-            call.setIsVideo(aIsVideoCall);
-            call.setRoom(mRoom);
-            call.setIsIncoming(false);
+                        final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
 
-            final Intent intent = new Intent(VectorRoomActivity.this, VectorCallViewActivity.class);
+                        intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-            intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                        VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorRoomActivity.this.startActivity(intent);
+                            }
+                        });
+                    }
+                });
+            }
 
-            VectorRoomActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    VectorRoomActivity.this.startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onNetworkError(Exception e) {
+
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+
+            }
+        });
     }
 
     //================================================================================
