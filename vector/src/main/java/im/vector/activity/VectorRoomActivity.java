@@ -91,6 +91,7 @@ import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
+import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
@@ -200,6 +201,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // pending call
     private VectorPendingCallView mVectorPendingCallView;
+
+    // outgoing call
+    private VectorOngoingConferenceCallView mVectorOngoingConferenceCallView;
 
     // network events
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
@@ -420,6 +424,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mActionBarHeaderInviteMemberView = mRoomHeaderView.findViewById(R.id.action_bar_header_invite_members);
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
+        mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -649,6 +654,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         }
 
+        mVectorOngoingConferenceCallView.initRoomInfo(mSession, mRoom);
+        mVectorOngoingConferenceCallView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayVideoCallIpDialog();
+            }
+        });
+
         View avatarLayout = findViewById(R.id.room_self_avatar);
 
         if (null != avatarLayout) {
@@ -714,6 +727,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mSession.getDataHandler().removeListener(mGlobalEventListener);
             }
         }
+
+        mVectorOngoingConferenceCallView.onActivityPause();
 
         // to have notifications for this room
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
@@ -832,6 +847,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // the pending call view is only displayed with "active " room
         if ((null == sRoomPreviewData) && (null == mEventId)) {
             mVectorPendingCallView.checkPendingCall();
+            mVectorOngoingConferenceCallView.onActivityResume();
         }
 
         Log.d(LOG_TAG, "-- Resume the activity");
