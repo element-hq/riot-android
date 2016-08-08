@@ -166,9 +166,6 @@ public class Matrix {
                 getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        IMXCall aa = call;
-                        IMXCall bb = VectorCallViewActivity.getActiveCall();
-
                         // can only manage one call instance.
                         if (null == VectorCallViewActivity.getActiveCall()) {
                             Log.d(LOG_TAG, "onIncomingCall with no active call");
@@ -221,6 +218,16 @@ public class Matrix {
             } else {
                 Log.d(LOG_TAG, "onCallHangUp : homeactivity does not exist -> don't know what to do");
             }
+        }
+
+
+        @Override
+        public void onVoipConferenceStarted(String roomId) {
+
+        }
+
+        @Override
+        public void onVoipConferenceFinished(String roomId) {
         }
     };
 

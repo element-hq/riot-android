@@ -46,10 +46,27 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     private MXSession mSession;
     private Room mRoom;
 
-    public final MXEventListener mEventsListener = new MXEventListener()  {
+    private final MXCallsManager.MXCallsManagerListener mCallsListener = new MXCallsManager.MXCallsManagerListener() {
         @Override
-        public void onLiveEvent(Event event, RoomState roomState) {
-            if (TextUtils.equals(event.type, Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+        public void onIncomingCall(IMXCall call) {
+
+        }
+
+        @Override
+        public void onCallHangUp(IMXCall call) {
+
+        }
+
+        @Override
+        public void onVoipConferenceStarted(String roomId) {
+            if ((null != mRoom) && TextUtils.equals(roomId, mRoom.getRoomId())) {
+                refresh();
+            }
+        }
+
+        @Override
+        public void onVoipConferenceFinished(String roomId) {
+            if ((null != mRoom) && TextUtils.equals(roomId, mRoom.getRoomId())) {
                 refresh();
             }
         }
@@ -109,8 +126,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public void onActivityResume() {
         refresh();
 
-        if (null != mRoom) {
-            mRoom.addEventListener(mEventsListener);
+        if (null != mSession) {
+            mSession.mCallsManager.addListener(mCallsListener);
         }
     }
 
@@ -118,8 +135,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      * The parent activity is suspended
      */
     public void onActivityPause() {
-        if (null != mRoom) {
-            mRoom.removeEventListener(mEventsListener);
+        if (null != mSession) {
+            mSession.mCallsManager.addListener(mCallsListener);
         }
     }
 }

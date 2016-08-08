@@ -247,6 +247,14 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "onCallHangUp " + call.getCallId());
             manageHangUpEvent(call.getCallId());
         }
+
+        @Override
+        public void onVoipConferenceStarted(String roomId) {
+        }
+
+        @Override
+        public void onVoipConferenceFinished(String roomId) {
+        }
     };
 
     /**
