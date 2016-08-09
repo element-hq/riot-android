@@ -203,7 +203,7 @@ public class EventStreamService extends Service {
             IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
                 @Override
                 public void onStateDidChange(String state) {
-                    Log.d(LOG_TAG, "onStateDidChange " + call.getCallId() + " : " + state);
+                    Log.d(LOG_TAG, "dispatchOnStateDidChange " + call.getCallId() + " : " + state);
 
                     // if there is no call push rule
                     // display the incoming call notification but with no sound
@@ -214,7 +214,7 @@ public class EventStreamService extends Service {
 
                 @Override
                 public void onCallError(String error) {
-                    Log.d(LOG_TAG, "onCallError " + call.getCallId() + " : " + error);
+                    Log.d(LOG_TAG, "dispatchOnCallError " + call.getCallId() + " : " + error);
                     manageHangUpEvent(call.getCallId());
                 }
 
@@ -233,8 +233,8 @@ public class EventStreamService extends Service {
                 }
 
                 @Override
-                public void onCallEnd() {
-                    Log.d(LOG_TAG, "onCallEnd " + call.getCallId());
+                public void onCallEnd(final int aReasonId) {
+                    Log.d(LOG_TAG, "dispatchOnCallEnd " + call.getCallId());
                     manageHangUpEvent(call.getCallId());
                 }
             };
