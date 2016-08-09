@@ -54,6 +54,7 @@ import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.util.CallRingManager;
 import im.vector.util.NotificationUtils;
 import im.vector.util.VectorUtils;
 
@@ -193,7 +194,7 @@ public class EventStreamService extends Service {
             } else {
                 Log.d(LOG_TAG, "manageHangUpEvent : stopRinging");
             }
-            VectorCallViewActivity.stopRinging();
+            CallRingManager.stopRinging();
         }
 
         @Override
@@ -1079,7 +1080,7 @@ public class EventStreamService extends Service {
             Log.d(LOG_TAG, "displayIncomingCallNotification : display the dedicated notification");
 
             if ((null != bingRule) && bingRule.isCallRingNotificationSound(bingRule.notificationSound())) {
-                VectorCallViewActivity.startRinging(EventStreamService.this);
+                CallRingManager.startRinging(EventStreamService.this);
             }
 
             Notification notification = NotificationUtils.buildIncomingCallNotification(

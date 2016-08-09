@@ -52,6 +52,7 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.services.EventStreamService;
+import im.vector.util.CallRingManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
 
@@ -64,11 +65,6 @@ import java.io.InputStream;
  */
 public class VectorCallViewActivity extends Activity {
     private static final String LOG_TAG = "VCallViewActivity";
-
-    // ring tones
-    private static final String RING_TONE_START_RINGING = "ring.ogg";
-    private static final String RING_TONE_RING_BACK = "ringback.ogg";
-    private static final String RING_TONE_CALL_END = "callend.ogg";
 
     public static final String EXTRA_MATRIX_ID = "CallViewActivity.EXTRA_MATRIX_ID";
     public static final String EXTRA_CALL_ID = "CallViewActivity.EXTRA_CALL_ID";
@@ -110,20 +106,6 @@ public class VectorCallViewActivity extends Activity {
     private static final int PERCENT_LOCAL_USER_VIDEO_SIZE = 25;
     private static final float RATIO_LOCAL_USER_VIDEO_HEIGHT = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
     private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
-
-    // sounds management
-    private static MediaPlayer mRingingPlayer = null;
-    private static MediaPlayer mRingbackPlayer = null;
-    private static MediaPlayer mCallEndPlayer = null;
-
-    private static Ringtone mRingTone = null;
-    private static Ringtone mRingbackTone = null;
-    private static Ringtone mCallEndTone = null;
-
-    private static final int DEFAULT_PERCENT_VOLUME = 10;
-    private static final int FIRST_PERCENT_VOLUME = 10;
-    private static boolean firstCallAlert = true;
-    private static int mCallVolume = 0;
 
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
         @Override
@@ -407,7 +389,7 @@ public class VectorCallViewActivity extends Activity {
 
         mAutoAccept = intent.hasExtra(EXTRA_AUTO_ACCEPT);
 
-        initMediaPlayerVolume();
+        CallRingManager.initMediaPlayerVolume();
 
         // init the call button
         restoreUserUiAudioSettings();
@@ -597,7 +579,7 @@ public class VectorCallViewActivity extends Activity {
     @Override
     public void finish() {
         super.finish();
-        stopRinging();
+        CallRingManager.stopRinging();
         instance = null;
     }
 
@@ -867,17 +849,17 @@ public class VectorCallViewActivity extends Activity {
             case IMXCall.CALL_STATE_CREATE_ANSWER:
             case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
             case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
-                stopRinging();
+                CallRingManager.stopRinging();
                 break;
 
             case IMXCall.CALL_STATE_CONNECTED:
-                stopRinging();
+                CallRingManager.stopRinging();
                 final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
                 VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-                        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mCallVolume, 0);
+                        //audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mCallVolume, 0);
                         MXCallsManager.setSpeakerphoneOn(VectorCallViewActivity.this, fIsSpeakerPhoneOn);
                         refreshSpeakerButton();
                     }
@@ -889,10 +871,11 @@ public class VectorCallViewActivity extends Activity {
                     mAutoAccept = false;
                     mCall.answer();
                 } else {
-                    if (mCall.isIncoming())
-                        startRinging(VectorCallViewActivity.this);
-                    else
-                        startRingbackSound(VectorCallViewActivity.this);
+                    if (mCall.isIncoming()) {
+                        CallRingManager.startRinging(VectorCallViewActivity.this);
+                    } else {
+                        CallRingManager.startRingBackSound(VectorCallViewActivity.this);
+                    }
                 }
                 break;
 
@@ -944,333 +927,9 @@ public class VectorCallViewActivity extends Activity {
         if (mIsCallEnded) {
             Log.d(LOG_TAG, "onDestroy: Hide the call notifications");
             EventStreamService.getInstance().hideCallNotifications();
-            startEndCallSound(this);
+            CallRingManager.startEndCallSound(this);
         }
 
         super.onDestroy();
-    }
-
-    /**
-     * Provide a ringtone from a resource and a filename.
-     * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
-     * @param resid The audio resource.
-     * @param filename the audio filename
-     * @return a RingTone, null if the operation fails.
-     */
-    static private Ringtone getRingTone(Context context, int resid, String filename) {
-        Ringtone ringtone = null;
-
-        try {
-            Uri ringToneUri = null;
-            File directory = new File(Environment.getExternalStorageDirectory(), "/" + context.getApplicationContext().getPackageName().hashCode() + "/Audio/");
-
-            // create the directory if it does not exist
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            File file = new File(directory + "/", filename);
-
-            // if the file exists, check if the resource has been created
-            if (file.exists()) {
-                Cursor cursor = context.getContentResolver().query(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        new String[] { MediaStore.Audio.Media._ID },
-                        MediaStore.Audio.Media.DATA + "=? ",
-                        new String[] {file.getAbsolutePath()}, null);
-
-                if ((null != cursor) && cursor.moveToFirst()) {
-                    int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-                    ringToneUri = Uri.withAppendedPath(Uri.parse("content://media/external/audio/media"), "" + id);
-                }
-
-                if (null != cursor) {
-                    cursor.close();
-                }
-            }
-
-            // the Uri has been received
-            if (null == ringToneUri) {
-                // create the file
-                if (!file.exists()) {
-                    try {
-                        byte[] readData = new byte[1024];
-                        InputStream fis = context.getResources().openRawResource(resid);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        int i = fis.read(readData);
-
-                        while (i != -1) {
-                            fos.write(readData, 0, i);
-                            i = fis.read(readData);
-                        }
-
-                        fos.close();
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## getRingTone():  Exception1 Msg=" + e.getLocalizedMessage());
-                    }
-                }
-
-                // and the resource Uri
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
-                values.put(MediaStore.MediaColumns.TITLE, filename);
-                values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/ogg");
-                values.put(MediaStore.MediaColumns.SIZE, file.length());
-                values.put(MediaStore.Audio.Media.ARTIST, R.string.app_name);
-                values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
-                values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);
-                values.put(MediaStore.Audio.Media.IS_ALARM, true);
-                values.put(MediaStore.Audio.Media.IS_MUSIC, true);
-
-                ringToneUri = context.getContentResolver() .insert(MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath()), values);
-            }
-
-            if (null != ringToneUri) {
-                ringtone = RingtoneManager.getRingtone(context, ringToneUri);
-            }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## getRingTone():  Exception2 Msg=" + e.getLocalizedMessage());
-        }
-
-        return ringtone;
-    }
-
-    /**
-     * Initialize the audio volume.
-     */
-    private void initMediaPlayerVolume() {
-        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
-
-        // use the ringing volume to initialize the playing volume
-        // it does not make sense to ring louder
-        int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int minValue = firstCallAlert ? FIRST_PERCENT_VOLUME : DEFAULT_PERCENT_VOLUME;
-        int ratio = (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) * 100) / maxVol;
-
-        firstCallAlert = false;
-
-        // ensure there is a minimum audio level
-        // some users could complain they did not hear their device was ringing.
-        if (ratio < minValue) {
-            setMediaPlayerVolume(minValue);
-        }
-        else {
-            setMediaPlayerVolume(ratio);
-        }
-    }
-
-    private void setMediaPlayerVolume(int percent) {
-        if(percent < 0 || percent > 100) {
-            Log.e(LOG_TAG,"setMediaPlayerVolume percent is invalid: "+percent);
-            return;
-        }
-
-        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
-
-        mCallVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-
-        int maxMusicVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int maxVoiceVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
-
-        if(maxMusicVol > 0) {
-            int volume = (int) ((float) percent / 100f * maxMusicVol);
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-
-            volume = (int) ((float) percent / 100f * maxVoiceVol);
-            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
-        }
-        Log.i(LOG_TAG, "Set media volume (ringback) to: " + audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-    }
-
-    /**
-     * Start the ringing sound
-     */
-    public static void startRinging(Context context) {
-        Log.d(LOG_TAG, "startRinging");
-
-        if (null != mRingTone) {
-            Log.d(LOG_TAG, "already ringing");
-            return;
-        }
-
-        // use the ringTone to manage sound volume properly
-        // else the ringing volume is linked to the media volume.
-        mRingTone = getRingTone(context, R.raw.ring, RING_TONE_START_RINGING);
-        if (null != mRingTone) {
-
-            if (null != mRingbackTone) {
-                mRingbackTone.stop();
-                mRingbackTone = null;
-            }
-
-            if (null != mCallEndTone) {
-                mCallEndTone.stop();
-                mCallEndTone = null;
-            }
-
-            MXCallsManager.setSpeakerphoneOn(context, true);
-            mRingTone.play();
-            return;
-        }
-
-
-        if (null == mRingingPlayer) {
-            mRingingPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.ring);
-
-            if (null != mRingingPlayer) {
-                mRingingPlayer.setLooping(true);
-                mRingingPlayer.setVolume(1.0f, 1.0f);
-            }
-        }
-
-        if (null != mRingingPlayer) {
-            // check if it is not yet playing
-            if (!mRingingPlayer.isPlaying()) {
-                // stop pending
-                if ((null != mCallEndPlayer) && mCallEndPlayer.isPlaying()) {
-                    mCallEndPlayer.stop();
-                }
-
-                if ((null != mRingbackPlayer) && mRingbackPlayer.isPlaying()) {
-                    mRingbackPlayer.stop();
-                }
-
-                MXCallsManager.setSpeakerphoneOn(context, true);
-                mRingingPlayer.start();
-            }
-        }
-    }
-
-    /**
-     * Start the ringback sound
-     */
-    private static void startRingbackSound(Context context) {
-        Log.d(LOG_TAG, "startRingbackSound");
-
-        if (null != mRingTone) {
-            Log.d(LOG_TAG, "already ringing");
-            return;
-        }
-
-        // use the ringTone to manage sound volume properly
-        // else the ringing volume is linked to the media volume.
-        mRingbackTone = getRingTone(context, R.raw.ringback, RING_TONE_RING_BACK);
-
-        if (null != mRingbackTone) {
-            if (null != mRingTone) {
-                mRingTone.stop();
-                mRingTone = null;
-            }
-
-            if (null != mCallEndTone) {
-                mCallEndTone.stop();
-                mCallEndTone = null;
-            }
-
-            MXCallsManager.setSpeakerphoneOn(context, true);
-            mRingbackTone.play();
-            return;
-        }
-
-        if (null == mRingbackPlayer) {
-            mRingbackPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.ringback);
-
-            if (null != mRingbackPlayer) {
-                mRingbackPlayer.setLooping(true);
-                mRingbackPlayer.setVolume(1.0f, 1.0f);
-            }
-        }
-
-        if (null != mRingbackPlayer) {
-            // check if it is not yet playing
-            if (!mRingbackPlayer.isPlaying()) {
-                // stop pending
-                if ((null != mCallEndPlayer) && mCallEndPlayer.isPlaying()) {
-                    mCallEndPlayer.stop();
-                }
-
-                if ((null != mRingingPlayer) && mRingingPlayer.isPlaying()) {
-                    mRingingPlayer.stop();
-                }
-
-                MXCallsManager.setSpeakerphoneOn(context, true);
-                mRingbackPlayer.start();
-            }
-        }
-    }
-    /**
-     * Stop the ringing sound
-     */
-    public static void stopRinging() {
-        Log.d(LOG_TAG, "stopRinging");
-
-        if (null != mRingTone) {
-            mRingTone.stop();
-            mRingTone = null;
-        }
-
-        if (null != mRingbackTone) {
-            mRingbackTone.stop();
-            mRingbackTone = null;
-        }
-
-        // sanity checks
-        if ((null != mRingingPlayer) && mRingingPlayer.isPlaying()) {
-            Log.d(LOG_TAG, "stop mRingingPLayer");
-            try {
-                mRingingPlayer.pause();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "stop mRingingPLayer failed " + e.getLocalizedMessage());
-            }
-        }
-        if ((null != mRingbackPlayer) && mRingbackPlayer.isPlaying()) {
-            Log.d(LOG_TAG, "stop mRingbackPlayer");
-
-            try {
-                mRingbackPlayer.pause();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "stop mRingbackPlayer failed " + e.getLocalizedMessage());
-            }
-        }
-    }
-
-    /**
-     * Start the end call sound
-     */
-    public static void startEndCallSound(Context context) {
-        Log.d(LOG_TAG, "startEndCallSound");
-
-        // use the ringTone to manage sound volume properly
-        // else the ringing volume is linked to the media volume.
-        mCallEndTone = getRingTone(context, R.raw.callend, RING_TONE_CALL_END);
-
-        if (null != mCallEndTone) {
-            if (null != mRingTone) {
-                mRingTone.stop();
-                mRingTone = null;
-            }
-
-            if (null != mRingbackTone) {
-                mRingbackTone.stop();
-                mRingbackTone = null;
-            }
-
-            MXCallsManager.setSpeakerphoneOn(context, true);
-            mCallEndTone.play();
-            return;
-        }
-
-        if (null == mCallEndPlayer) {
-            mCallEndPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.callend);
-            mCallEndPlayer.setLooping(false);
-            mCallEndPlayer.setVolume(1.0f, 1.0f);
-        }
-
-        // sanity checks
-        if ((null != mCallEndPlayer) && !mCallEndPlayer.isPlaying()) {
-            MXCallsManager.setSpeakerphoneOn(context, true);
-            mCallEndPlayer.start();
-        }
-        stopRinging();
     }
 }
