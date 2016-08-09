@@ -41,7 +41,7 @@ import org.matrix.androidsdk.rest.model.RoomMember;
 import org.w3c.dom.Text;
 
 /**
- * This class displays the pending call information.
+ * This class displays if there is an ongoing conference call.
  */
 public class VectorOngoingConferenceCallView extends RelativeLayout {
     // call information
