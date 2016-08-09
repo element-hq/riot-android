@@ -3,8 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@android:color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:keepScreenOn="true">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/call_layout"
@@ -12,11 +11,11 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_margin="10dp"
+            android:layout_margin="0dp"
             android:id="@+id/call_other_member"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             />
@@ -33,16 +32,24 @@
             <ImageView
                 android:id="@+id/room_chat_link"
                 android:layout_width="0dp"
-                android:layout_weight="20"
+                android:layout_weight="14"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_material_message_grey"/>
 
             <ImageView
                 android:id="@+id/call_speaker_view"
                 android:layout_width="0dp"
-                android:layout_weight="20"
+                android:layout_weight="14"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_material_speaker_phone_grey"/>
+
+            <ImageView
+                android:id="@+id/call_switch_camera_view"
+                android:layout_width="0dp"
+                android:layout_weight="14"
+                android:layout_height="24dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_material_switch_video_grey"/>
 
 
             <!-- Hang up button used when the call is established or
@@ -50,7 +57,7 @@
             <ImageView
                 android:id="@+id/hang_up_button"
                 android:layout_width="0dp"
-                android:layout_weight="20"
+                android:layout_weight="16"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_material_call_end_black"/>
 
@@ -58,15 +65,23 @@
             <ImageView
                 android:id="@+id/start_video_call"
                 android:layout_width="0dp"
-                android:layout_weight="20"
+                android:layout_weight="14"
                 android:layout_height="24dp"
                 android:visibility="invisible"
                 android:src="@drawable/ic_material_videocam_grey"/>
 
             <ImageView
+                android:id="@+id/mute_local_camera"
+                android:layout_width="0dp"
+                android:layout_weight="14"
+                android:layout_height="24dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_material_videocam_off_grey"/>
+
+            <ImageView
                 android:id="@+id/mute_audio"
                 android:layout_width="0dp"
-                android:layout_weight="20"
+                android:layout_weight="14"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_material_mic_off_grey"/>
             </LinearLayout>
