@@ -112,7 +112,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     /**
      * Refresh the view visibility
      */
-    private void refresh() {
+    public void refresh() {
         if ((null != mRoom) && (null != mSession)) {
             IMXCall call = mSession.mCallsManager.callWithRoomId(mRoom.getRoomId());
             setVisibility((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) ? View.VISIBLE : View.GONE);

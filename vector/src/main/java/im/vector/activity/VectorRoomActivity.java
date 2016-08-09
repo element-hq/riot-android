@@ -1641,6 +1641,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility((call == roomCall) ? View.VISIBLE : View.GONE);
             }
+
+            mVectorOngoingConferenceCallView.refresh();
         }
     }
 
