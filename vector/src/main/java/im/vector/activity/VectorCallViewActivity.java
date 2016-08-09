@@ -579,7 +579,7 @@ public class VectorCallViewActivity extends Activity {
     @Override
     public void finish() {
         super.finish();
-        CallRingManager.stopRinging();
+        CallRingManager.stopRinging(this);
         instance = null;
     }
 
@@ -794,11 +794,7 @@ public class VectorCallViewActivity extends Activity {
 
         // read speaker value from preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isSpeakerPhoneOn;
-        if (mCall.isVideo())
-            isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, true);
-        else
-            isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_AUDIO_CALL_STATUS, false);
+        boolean isSpeakerPhoneOn = mCall.isVideo();
 
         // avatar visibility: video call => hide avatar, audio call => show avatar
         mAvatarView.setVisibility((callState.equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) ? View.GONE : View.VISIBLE);
@@ -849,18 +845,16 @@ public class VectorCallViewActivity extends Activity {
             case IMXCall.CALL_STATE_CREATE_ANSWER:
             case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
             case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
-                CallRingManager.stopRinging();
+                CallRingManager.stopRinging(this);
                 break;
 
             case IMXCall.CALL_STATE_CONNECTED:
-                CallRingManager.stopRinging();
+                CallRingManager.stopRinging(this);
                 final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
                 VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-                        //audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mCallVolume, 0);
-                        MXCallsManager.setSpeakerphoneOn(VectorCallViewActivity.this, fIsSpeakerPhoneOn);
+                        MXCallsManager.setCallSpeakerphoneOn(VectorCallViewActivity.this, fIsSpeakerPhoneOn);
                         refreshSpeakerButton();
                     }
                 });

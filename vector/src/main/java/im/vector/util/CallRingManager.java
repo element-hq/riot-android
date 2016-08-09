@@ -25,6 +25,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -33,6 +35,8 @@ import org.matrix.androidsdk.call.MXCallsManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import im.vector.R;
 import im.vector.VectorApp;
@@ -219,32 +223,41 @@ public class CallRingManager {
     /**
      * Stop any playing ring tones.
      */
-    private static void stopRingTones() {
+    private static boolean stopRingTones() {
+        boolean found = false;
+
         if (null != mRingTone) {
             mRingTone.stop();
             mRingTone = null;
+            found = true;
         }
 
         if (null != mRingBackTone) {
             mRingBackTone.stop();
             mRingBackTone = null;
+            found = true;
         }
 
         if (null != mCallEndTone) {
             mCallEndTone.stop();
             mCallEndTone = null;
+            found = true;
         }
 
         if (null != mBusyTone) {
             mBusyTone.stop();
             mBusyTone = null;
+            found = true;
         }
+
+        return found;
     }
 
     /**
      * Stop any running ring media player
      */
-    private static void stopRingPlayers() {
+    private static boolean stopRingPlayers() {
+        boolean found = false;
 
         if ((null != mRingingPlayer) && mRingingPlayer.isPlaying()) {
             try {
@@ -252,6 +265,8 @@ public class CallRingManager {
             } catch (Exception e) {
                 Log.e(LOG_TAG, "stopRingPlayers : mRingingPlayer.pause failed " + e.getMessage());
             }
+
+            found = true;
         }
 
         if ((null != mRingBackPlayer) && mRingBackPlayer.isPlaying()) {
@@ -260,25 +275,33 @@ public class CallRingManager {
             } catch (Exception e) {
                 Log.e(LOG_TAG, "stopRingPlayers : mRingbackPlayer.pause failed " + e.getMessage());
             }
+
+            found = true;
         }
 
         if ((null != mCallEndPlayer) && mCallEndPlayer.isPlaying()) {
             mCallEndPlayer.stop();
+
+            found = true;
         }
 
         if ((null != mBusyPlayer) && mBusyPlayer.isPlaying()) {
             mBusyPlayer.stop();
+            found = true;
         }
+
+        return found;
     }
 
     /**
      * Stop the ringing sound
      */
-    public static void stopRinging() {
+    public static void stopRinging(Context context) {
         Log.d(LOG_TAG, "stopRinging");
 
-        stopRingTones();
-        stopRingPlayers();
+        if (!stopRingTones() && !stopRingPlayers()) {
+            MXCallsManager.prepareCallAudio(context);
+        }
     }
 
     /**
@@ -297,14 +320,13 @@ public class CallRingManager {
             return;
         }
 
-        stopRinging();
+        stopRinging(context);
 
         // use the ringTone to manage sound volume properly
         mRingTone = getRingTone(context, R.raw.ring, RING_TONE_START_RINGING);
 
         if (null != mRingTone) {
-
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mRingTone.play();
 
             return;
@@ -320,7 +342,7 @@ public class CallRingManager {
             stopRingPlayers();
             mRingingPlayer.setLooping(true);
 
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mRingingPlayer.start();
         }
     }
@@ -341,13 +363,13 @@ public class CallRingManager {
             return;
         }
 
-        stopRinging();
+        stopRinging(context);
 
         // use the ringTone to manage sound volume properly
         mRingBackTone = getRingTone(context, R.raw.ringback, RING_TONE_RING_BACK);
 
         if (null != mRingBackTone) {
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mRingBackTone.play();
             return;
         }
@@ -361,9 +383,41 @@ public class CallRingManager {
 
             stopRingPlayers();
 
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mRingBackPlayer.start();
         }
+    }
+
+    static Timer mRestoreAudioConfigTimer = null;
+    static TimerTask mRestoreAudioConfigTimerMask = null;
+    static Handler mUIHandler = null;
+
+    private static void restoreAudioConfigAfter(final Context context, int delayMs) {
+
+        if (null == mUIHandler) {
+            mUIHandler = new Handler(Looper.getMainLooper());
+        }
+
+        mRestoreAudioConfigTimer = new Timer();
+        mRestoreAudioConfigTimerMask = new TimerTask() {
+            public void run() {
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != mRestoreAudioConfigTimer) {
+                            mRestoreAudioConfigTimer.cancel();
+                        }
+                        mRestoreAudioConfigTimer = null;
+                        mRestoreAudioConfigTimerMask = null;
+
+                        MXCallsManager.restoreCallAudio(context);
+                    }
+                });
+            }
+        };
+
+        mRestoreAudioConfigTimer.schedule(mRestoreAudioConfigTimerMask, delayMs);
+
     }
 
     /**
@@ -388,8 +442,9 @@ public class CallRingManager {
         mCallEndTone = getRingTone(context, R.raw.callend, RING_TONE_CALL_END);
 
         if (null != mCallEndTone) {
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mCallEndTone.play();
+            restoreAudioConfigAfter(context, 5000);
             return;
         }
 
@@ -400,8 +455,9 @@ public class CallRingManager {
         // sanity checks
         if (null != mCallEndPlayer) {
             mCallEndPlayer.setLooping(false);
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mCallEndPlayer.start();
+            restoreAudioConfigAfter(context, 5000);
         }
     }
 
@@ -427,8 +483,9 @@ public class CallRingManager {
         mBusyTone = getRingTone(context, R.raw.callend, RING_TONE_BUSY);
 
         if (null != mBusyTone) {
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mBusyTone.play();
+            restoreAudioConfigAfter(context, 5000);
             return;
         }
 
@@ -439,8 +496,9 @@ public class CallRingManager {
         // sanity checks
         if (null != mBusyPlayer) {
             mBusyPlayer.setLooping(false);
-            MXCallsManager.setSpeakerphoneOn(context, true);
+            MXCallsManager.setCallSpeakerphoneOn(context, true);
             mBusyPlayer.start();
+            restoreAudioConfigAfter(context, 5000);
         }
     }
 }

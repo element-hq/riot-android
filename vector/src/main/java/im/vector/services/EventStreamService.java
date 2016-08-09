@@ -194,7 +194,7 @@ public class EventStreamService extends Service {
             } else {
                 Log.d(LOG_TAG, "manageHangUpEvent : stopRinging");
             }
-            CallRingManager.stopRinging();
+            CallRingManager.stopRinging(EventStreamService.this);
         }
 
         @Override
