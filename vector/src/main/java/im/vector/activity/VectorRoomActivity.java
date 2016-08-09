@@ -56,6 +56,7 @@ import com.commonsware.cwac.anddown.AndDown;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -169,6 +170,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private ImageView mAvatarImageView;
     private View mCanNotPostTextView;
 
+    // call
+    private View mStartCallLayout;
+    private View mStopCallLayout;
+
     // action bar header
     private android.support.v7.widget.Toolbar mToolbar;
     private TextView mActionBarCustomTitle;
@@ -192,7 +197,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // room preview
     private View mRoomPreviewLayout;
 
-    private MenuItem mCallMenuItem;
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
 
@@ -368,7 +372,36 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         public void onFailedSendingEvent(Event event) {
             refreshNotificationsArea();
         }
+    };
 
+    private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
+        @Override
+        public void onStateDidChange(String state) {
+        }
+
+        @Override
+        public void onCallError(String error) {
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void onViewLoading(View callview) {
+
+        }
+
+        @Override
+        public void onViewReady() {
+        }
+
+        @Override
+        public void onCallAnsweredElsewhere() {
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void onCallEnd() {
+            refreshNotificationsArea();
+        }
     };
 
     //================================================================================
@@ -594,6 +627,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mErrorIcon = findViewById(R.id.room_error_icon);
         mErrorMessageTextView = (TextView) findViewById(R.id.room_notification_error_message);
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
+
+        mStartCallLayout = findViewById(R.id.room_start_call_layout);
+
+        mStartCallLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayVideoCallIpDialog();
+            }
+        });
+
+        mStopCallLayout = findViewById(R.id.room_end_call_layout);
+        mStopCallLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        IMXCall call = mSession.mCallsManager.callWithRoomId(mRoom.getRoomId());
+
+                        if (null != call) {
+                            call.hangup(null);
+                        }
+                    }
+                }
+        );
 
         mMyUserId = mSession.getCredentials().userId;
 
@@ -904,7 +959,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.vector_room, menu);
 
-            mCallMenuItem = menu.findItem(R.id.ic_action_call_in_room);
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
 
@@ -939,8 +993,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_delete_unsent) {
             mVectorMessageListFragment.deleteUnsentMessages();
             refreshNotificationsArea();
-        } else if (id == R.id.ic_action_call_in_room){
-            displayVideoCallIpDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -1570,9 +1622,25 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mResendDeleteMenuItem.setVisible(hasUnsentEvent);
         }
 
-        if (null != mCallMenuItem) {
-            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && (null == VectorCallViewActivity.getActiveCall());
-            mCallMenuItem.setVisible(isCallSupported);
+        // call management
+        if ((null == sRoomPreviewData) && (null == mEventId)) {
+
+            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
+            IMXCall call = VectorCallViewActivity.getActiveCall();
+
+            if (null == call) {
+                mStartCallLayout.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
+                mStopCallLayout.setVisibility(View.GONE);
+            } else {
+                // ensure that the listener is defined once
+                call.removeListener(mCallListener);
+                call.addListener(mCallListener);
+
+                IMXCall roomCall = mSession.mCallsManager.callWithRoomId(mRoom.getRoomId());
+
+                mStartCallLayout.setVisibility(View.GONE);
+                mStopCallLayout.setVisibility((call == roomCall) ? View.VISIBLE : View.GONE);
+            }
         }
     }
 

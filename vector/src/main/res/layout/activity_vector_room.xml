@@ -190,7 +190,7 @@
                     <RelativeLayout
                         android:id="@+id/room_send_layout"
                         android:layout_marginLeft="13dp"
-                        android:layout_width="40dp"
+                        android:layout_width="24dp"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/send">
 
@@ -203,6 +203,42 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/room_start_call_layout"
+                        android:layout_marginLeft="13dp"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:contentDescription="@string/call_connecting">
+
+                        <ImageView
+                            android:id="@+id/room_start_call_image_view"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/voice_call_start_fushia"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/room_end_call_layout"
+                        android:layout_marginLeft="13dp"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:contentDescription="@string/call_ended">
+
+                        <ImageView
+                            android:id="@+id/room_end_call_image_view"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/voice_call_end_fushia"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/room_button_margin" />
                 </LinearLayout>
 
                 <TextView

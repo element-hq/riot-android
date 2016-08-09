@@ -31,12 +31,14 @@ import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.call.MXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
+import org.w3c.dom.Text;
 
 /**
  * This class displays the pending call information.
@@ -112,11 +114,8 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     private void refresh() {
         if ((null != mRoom) && (null != mSession)) {
-            if (null != mSession.mCallsManager.callWithRoomId(mRoom.getRoomId())) {
-                setVisibility(View.GONE);
-            } else {
-                setVisibility(mRoom.isOngoingConferenceCall() ? View.VISIBLE : View.GONE);
-            }
+            IMXCall call = mSession.mCallsManager.callWithRoomId(mRoom.getRoomId());
+            setVisibility((!MXCallsManager.isCallInProgress(call) && mRoom.isOngoingConferenceCall()) ? View.VISIBLE : View.GONE);
         }
     }
 

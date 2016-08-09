@@ -8,12 +8,6 @@
         android:icon="@drawable/ic_material_search_white"
         app:showAsAction="always" />
 
-    <item android:id="@+id/ic_action_call_in_room"
-        android:title="@string/room_menu_call"
-        android:icon="@drawable/ic_material_call"
-        app:showAsAction="collapseActionView" />
-
-
     <item android:id="@+id/ic_action_room_resend_unsent"
         android:title="@string/room_resend_unsent_messages"
         android:icon="@drawable/ic_material_send_black"
