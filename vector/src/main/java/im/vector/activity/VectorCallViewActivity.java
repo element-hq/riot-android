@@ -111,13 +111,16 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     // video diplay size
     private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig;
-    // hard coded values are taken from specs
+    // hard coded values are taken from specs:
+    // - 585 as screen height reference
+    // - 18 as space between the local video and the container view containing the setting buttons
     private static final float RATIO_TOP_MARGIN_LOCAL_USER_VIDEO = (float)(462.0/585.0);
     private static final float VIDEO_TO_BUTTONS_VERTICAL_SPACE = (float) (18.0/585.0);
     /**  local user video height is set as percent of the total screen height **/
     private static final int PERCENT_LOCAL_USER_VIDEO_SIZE = 25;
     private static final float RATIO_LOCAL_USER_VIDEO_HEIGHT = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
     private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
+    private static final float RATIO_LOCAL_USER_VIDEO_ASPECT = 0.65f;
 
     // sounds management
     private static MediaPlayer mRingingPlayer = null;
@@ -228,7 +231,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         @Override
-        public void onCallEnd() {
+        public void onCallEnd(final int aReasonId) {
             VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -236,6 +239,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
                     clearCallData();
                     mIsCallEnded = true;
+                    CommonActivityUtils.processEndCallInfo(VectorCallViewActivity.this, aReasonId);
                     VectorCallViewActivity.this.finish();
                 }
             });
@@ -325,7 +329,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     /**
      * Insert the callView in the activity (above the other room member).
-     * The callView is setup in the SDK, and provided via onViewLoading() in {@link #mListener}.
+     * The callView is setup in the SDK, and provided via dispatchOnViewLoading() in {@link #mListener}.
      */
     private void insertCallView() {
         if(null != mCallView) {
@@ -401,9 +405,8 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mSwichRearFrontCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonActivityUtils.displayToast(VectorCallViewActivity.this.getApplicationContext(),"Not implemented");
-//                toggleRearFrontCamera();
-//                refreshSwitchRearFrontCameraButton();
+                toggleRearFrontCamera();
+                refreshSwitchRearFrontCameraButton();
             }
         });
 
@@ -465,7 +468,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             mCallView = mSavedCallview;
             insertCallView();
         } else {
-            Log.d(LOG_TAG, "onCreate: Hide the call notifications");
+            Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
             EventStreamService.getInstance().hideCallNotifications();
             mSavedCallview = null;
 
@@ -720,9 +723,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         // compute action bar size: the video Y component starts below the action bar
         int actionBarHeight=0;
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        TypedValue typedValue = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
             screenHeight -= actionBarHeight;
         }
 
@@ -737,34 +740,24 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         float topMarginHeightNormalized = 0; // range [0;1]
         float ratioVideoHeightNormalized = 0; // range [0;1]
         float localVideoWidth = Math.min(screenHeight,screenWidth/*portrait is ref*/)*RATIO_LOCAL_USER_VIDEO_HEIGHT; // value effectively applied by the SDK
-        float estimatedLocalVideoHeight = (float) ((localVideoWidth)/(0.65)); // 0.65 => to adapt
+        float estimatedLocalVideoHeight = (float) ((localVideoWidth)/(RATIO_LOCAL_USER_VIDEO_ASPECT)); // 0.65 => to adapt
 
-        if(false /*Configuration.ORIENTATION_LANDSCAPE == screenOrientation*/){
-            Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = LANDSCAPE");
-
-            // landscape: video displayed in the left side, centered vertically
-            mLocalVideoLayoutConfig.mX = 0;
-
-            // for landscape, the video width is used in the Y axis
+        if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
+            // take the video width as height
             ratioVideoHeightNormalized = (localVideoWidth/screenHeight);
-            topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - (buttonsContainerHeight/screenHeight);
-            topMarginHeightNormalized /=2; // centered vertically => equal space before and after the video
         } else {
-            if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
-                // take the video width as height
-                ratioVideoHeightNormalized = (localVideoWidth/screenHeight);
-            } else {
-                mLocalVideoLayoutConfig.mIsPortrait = true;
-                // take the video height as height
-                ratioVideoHeightNormalized = estimatedLocalVideoHeight/screenHeight;
-            }
-            Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
-
-            // portrait: video displayed above the video buttons, centered horizontally
-            mLocalVideoLayoutConfig.mX = (100 - PERCENT_LOCAL_USER_VIDEO_SIZE) / 2;
-            topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
+            mLocalVideoLayoutConfig.mIsPortrait = true;
+            // take the video height as height
+            ratioVideoHeightNormalized = estimatedLocalVideoHeight/screenHeight;
         }
+        Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
 
+        // the video is displayed:
+        // - X axis: centered horizontally
+        mLocalVideoLayoutConfig.mX = (100 - PERCENT_LOCAL_USER_VIDEO_SIZE) / 2;
+
+        // - Y axis: above the video buttons
+        topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
         if(topMarginHeightNormalized >= 0) {
             mLocalVideoLayoutConfig.mY = (int) (topMarginHeightNormalized * 100);
         }
@@ -854,9 +847,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     /**
      * Update the switch camera icon.
+     * Note that, this icon is only active if the device supports
+     * camera switching (See {@link IMXCall#isSwitchCameraSupported()})
      */
     private void refreshSwitchRearFrontCameraButton() {
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) {
+        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo() && mCall.isSwitchCameraSupported()) {
             mSwichRearFrontCameraImageView.setVisibility(View.VISIBLE);
 
             boolean isSwitched= mCall.isCameraSwitched();

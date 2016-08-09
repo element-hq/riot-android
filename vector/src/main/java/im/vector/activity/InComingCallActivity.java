@@ -17,7 +17,6 @@
 package im.vector.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,12 +28,9 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.model.RoomMember;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.util.VectorUtils;
 
 /**
@@ -59,27 +55,19 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             Log.d(LOG_TAG,"## onStateDidChange(): state="+state);
         }
 
-        private void showToast(final String aMsgToDisplay)  {
-            InComingCallActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    CommonActivityUtils.displayToast(InComingCallActivity.this.getApplicationContext(),aMsgToDisplay);
-                }
-            });
-        }
 
         @Override
         public void onCallError(String aErrorMsg) {
-            Log.d(LOG_TAG, "## onCallError(): error=" + aErrorMsg);
+            Log.d(LOG_TAG, "## dispatchOnCallError(): error=" + aErrorMsg);
 
             if (IMXCall.CALL_ERROR_USER_NOT_RESPONDING.equals(aErrorMsg)) {
-                showToast(InComingCallActivity.this.getString(R.string.call_error_user_not_responding));
+                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_user_not_responding));
             } else if (IMXCall.CALL_ERROR_ICE_FAILED.equals(aErrorMsg)) {
-                showToast(InComingCallActivity.this.getString(R.string.call_error_ice_failed));
+                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_ice_failed));
             } else if (IMXCall.CALL_ERROR_CAMERA_INIT_FAILED.equals(aErrorMsg)) {
-                showToast(InComingCallActivity.this.getString(R.string.call_error_camera_init_failed));
+                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_camera_init_failed));
             } else {
-                showToast(aErrorMsg);
+                CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, aErrorMsg);
             }
         }
 
@@ -110,18 +98,19 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): finish activity");
-                    showToast(InComingCallActivity.this.getString(R.string.call_error_answered_elsewhere));
+                    CommonActivityUtils.displayToastOnUiThread(InComingCallActivity.this, InComingCallActivity.this.getString(R.string.call_error_answered_elsewhere));
                     InComingCallActivity.this.finish();
                 }
             });
         }
 
         @Override
-        public void onCallEnd() {
+        public void onCallEnd(final int aReasonId) {
             InComingCallActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onCallEnd(): finish activity");
+                    CommonActivityUtils.processEndCallInfo(InComingCallActivity.this, aReasonId);
                     InComingCallActivity.this.finish();
                 }
             });
@@ -209,8 +198,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             mMxCall.onResume();
             mMxCall.addListener(mMxCallListener);
         }
-
-        VectorApp.setCurrentActivity(this);
     }
 
     @Override

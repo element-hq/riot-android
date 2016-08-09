@@ -47,6 +47,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -66,7 +67,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.ga.GAHelper;
-import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 
 import java.io.File;
@@ -1532,6 +1532,22 @@ public class CommonActivityUtils {
     //==============================================================================================================
 
     /**
+     * Helper method to display a toast message.
+     * @param aCallingActivity calling Activity instance
+     * @param aMsgToDisplay message to display
+     */
+    public static void displayToastOnUiThread(final Activity aCallingActivity, final String aMsgToDisplay)  {
+        if(null != aCallingActivity) {
+            aCallingActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    CommonActivityUtils.displayToast(aCallingActivity.getApplicationContext(), aMsgToDisplay);
+                }
+            });
+        }
+    }
+
+    /**
      * Display a toast
      * @param aContext the context.
      * @param aTextToDisplay the text to display.
@@ -1547,6 +1563,35 @@ public class CommonActivityUtils {
      */
     public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
+    }
+
+    //==============================================================================================================
+    // call utils
+    //==============================================================================================================
+
+    /**
+     * Display a toast message according to the end call reason.
+     *
+     * @param aCallingActivity calling activity
+     * @param aCallEndReason define the reason of the end call
+     */
+    public static void processEndCallInfo(Activity aCallingActivity, int aCallEndReason) {
+        if(null != aCallingActivity) {
+            if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
+                switch (aCallEndReason) {
+                    case IMXCall.END_CALL_REASON_PEER_HANG_UP:
+                        CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup));
+                        break;
+
+                    case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:
+                        CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup_elsewhere));
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     //==============================================================================================================
