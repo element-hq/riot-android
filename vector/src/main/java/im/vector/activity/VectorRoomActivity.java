@@ -1936,7 +1936,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         RoomState roomState = (null != sRoomPreviewData) ? sRoomPreviewData.getRoomState() : mRoom.getState();
 
                         if (null != roomState) {
-                            Collection<RoomMember> members = roomState.getMembers();
+                            Collection<RoomMember> members = roomState.getDisplayableMembers();
 
                             for (RoomMember member : members) {
                                 if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {

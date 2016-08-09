@@ -216,7 +216,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/voice_call_start_fushia"/>
+                            android:src="@drawable/voice_call_start_green"/>
                     </RelativeLayout>
 
                     <RelativeLayout

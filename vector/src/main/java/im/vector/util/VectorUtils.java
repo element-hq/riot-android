@@ -183,7 +183,7 @@ public class VectorUtils {
 
         String myUserId = session.getMyUserId();
 
-        Collection<RoomMember> members = roomState.getMembers();
+        Collection<RoomMember> members = roomState.getDisplayableMembers();
         ArrayList<RoomMember> othersActiveMembers = new ArrayList<RoomMember>();
         ArrayList<RoomMember> activeMembers = new ArrayList<RoomMember>();
 

@@ -176,7 +176,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             Room fromRoom = store.getRoom(mRoomId);
 
             if (null != fromRoom) {
-                Collection<RoomMember> members = fromRoom.getMembers();
+                Collection<RoomMember> members = fromRoom.getLiveState().getDisplayableMembers();
                 for (RoomMember member : members) {
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
                         mMemberUserIds.add(member.getUserId());
