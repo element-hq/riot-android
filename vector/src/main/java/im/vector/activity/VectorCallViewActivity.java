@@ -17,21 +17,14 @@
 package im.vector.activity;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -47,18 +40,12 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
-import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.services.EventStreamService;
-import im.vector.util.CallRingManager;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 /**
  * VectorCallViewActivity is the call activity.
@@ -88,6 +75,7 @@ public class VectorCallViewActivity extends Activity {
     // call info
     private boolean mAutoAccept = false;
     private boolean mIsCallEnded = false;
+    private boolean mIsCalleeeBusy = false;
 
     // graphical items
     private ImageView mHangUpImageView;
@@ -108,6 +96,8 @@ public class VectorCallViewActivity extends Activity {
     private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
 
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
+        private String mLastCallState = null;
+
         @Override
         public void onStateDidChange(String state) {
             if (null != getInstance()) {
@@ -115,7 +105,17 @@ public class VectorCallViewActivity extends Activity {
                 VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(LOG_TAG, "## onStateDidChange(): new state=" + fState);
+                        Log.d(LOG_TAG, "## onStateDidChange(): new state = " + fState);
+
+                        if (TextUtils.equals(IMXCall.CALL_STATE_ENDED, fState) &&
+                                ((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mLastCallState) && !mCall.isIncoming())||
+                                        TextUtils.equals(IMXCall.CALL_STATE_INVITE_SENT, mLastCallState))) {
+                            showToast(VectorCallViewActivity.this.getString(R.string.call_error_user_not_responding));
+                            mIsCalleeeBusy = true;
+                            Log.d(LOG_TAG, "## onStateDidChange(): the calleee is busy");
+                        }
+
+                        mLastCallState = fState;
                         manageSubViews();
                     }
                 });
@@ -145,9 +145,11 @@ public class VectorCallViewActivity extends Activity {
 
             Log.d(LOG_TAG, "## onCallError(): error=" + error);
 
+
             if (null != context) {
                 if (IMXCall.CALL_ERROR_USER_NOT_RESPONDING.equals(error)) {
                     showToast(context.getString(R.string.call_error_user_not_responding));
+                    mIsCalleeeBusy = true;
                 } else if (IMXCall.CALL_ERROR_ICE_FAILED.equals(error)) {
                     showToast(context.getString(R.string.call_error_ice_failed));
                 } else if (IMXCall.CALL_ERROR_CAMERA_INIT_FAILED.equals(error)) {
@@ -157,10 +159,10 @@ public class VectorCallViewActivity extends Activity {
         }
 
         @Override
-        public void onViewLoading(View callview) {
+        public void onViewLoading(View callView) {
             Log.d(LOG_TAG, "## onViewLoading():");
 
-            mCallView = callview;
+            mCallView = callView;
             insertCallView();
         }
 
@@ -389,8 +391,6 @@ public class VectorCallViewActivity extends Activity {
 
         mAutoAccept = intent.hasExtra(EXTRA_AUTO_ACCEPT);
 
-        CallRingManager.initMediaPlayerVolume();
-
         // init the call button
         restoreUserUiAudioSettings();
         manageSubViews();
@@ -483,7 +483,7 @@ public class VectorCallViewActivity extends Activity {
      */
     private void toggleSpeaker() {
         if(null != mCall) {
-            mCall.toggleSpeaker();
+            VectorCallSoundManager.toggleSpeaker();
 
             // save user choice in shared preference
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -579,7 +579,7 @@ public class VectorCallViewActivity extends Activity {
     @Override
     public void finish() {
         super.finish();
-        CallRingManager.stopRinging(this);
+        VectorCallSoundManager.stopRinging();
         instance = null;
     }
 
@@ -845,16 +845,16 @@ public class VectorCallViewActivity extends Activity {
             case IMXCall.CALL_STATE_CREATE_ANSWER:
             case IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA:
             case IMXCall.CALL_STATE_WAIT_CREATE_OFFER:
-                CallRingManager.stopRinging(this);
+                VectorCallSoundManager.stopRinging();
                 break;
 
             case IMXCall.CALL_STATE_CONNECTED:
-                CallRingManager.stopRinging(this);
+                VectorCallSoundManager.stopRinging();
                 final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
                 VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        MXCallsManager.setCallSpeakerphoneOn(VectorCallViewActivity.this, fIsSpeakerPhoneOn);
+                        VectorCallSoundManager.setCallSpeakerphoneOn(fIsSpeakerPhoneOn);
                         refreshSpeakerButton();
                     }
                 });
@@ -866,9 +866,9 @@ public class VectorCallViewActivity extends Activity {
                     mCall.answer();
                 } else {
                     if (mCall.isIncoming()) {
-                        CallRingManager.startRinging(VectorCallViewActivity.this);
+                        VectorCallSoundManager.startRinging();
                     } else {
-                        CallRingManager.startRingBackSound(VectorCallViewActivity.this);
+                        VectorCallSoundManager.startRingBackSound();
                     }
                 }
                 break;
@@ -918,10 +918,15 @@ public class VectorCallViewActivity extends Activity {
             mCall.removeListener(mListener);
         }
 
-        if (mIsCallEnded) {
+        if (mIsCallEnded || mIsCalleeeBusy) {
             Log.d(LOG_TAG, "onDestroy: Hide the call notifications");
             EventStreamService.getInstance().hideCallNotifications();
-            CallRingManager.startEndCallSound(this);
+
+            if (mIsCalleeeBusy) {
+                VectorCallSoundManager.startBusyCallSound();
+            } else {
+                VectorCallSoundManager.startEndCallSound();
+            }
         }
 
         super.onDestroy();

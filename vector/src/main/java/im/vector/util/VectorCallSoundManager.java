@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -30,11 +29,10 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import org.matrix.androidsdk.call.MXCallsManager;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,29 +46,22 @@ public class VectorCallSoundManager {
 
     private static final String LOG_TAG = "CallRingManager";
 
-    // ring tones
+    // ring tones resource names
     private static final String RING_TONE_BUSY = "busy.ogg";
     private static final String RING_TONE_CALL_END = "callend.ogg";
     private static final String RING_TONE_START_RINGING = "ring.ogg";
     private static final String RING_TONE_RING_BACK = "ringback.ogg";
 
-    // sounds management
-    private static MediaPlayer mRingingPlayer = null;
-    private static MediaPlayer mRingBackPlayer = null;
-    private static MediaPlayer mCallEndPlayer = null;
-    private static MediaPlayer mBusyPlayer = null;
-
+    // the ring tones
     private static Ringtone mRingTone = null;
     private static Ringtone mRingBackTone = null;
     private static Ringtone mCallEndTone = null;
     private static Ringtone mBusyTone = null;
 
-    private static final int DEFAULT_PERCENT_VOLUME = 10;
-    private static final int FIRST_PERCENT_VOLUME = 10;
-    private static boolean mIsFirstCallAlert = true;
-    private static int mCallVolume = 0;
-
+    // the audio manager
     private static AudioManager mAudioManager = null;
+
+    private static HashMap<String, Uri> mRingtoneUrlByFileName = new HashMap<>();
 
     /**
      * @return the audio manager
@@ -86,15 +77,24 @@ public class VectorCallSoundManager {
     /**
      * Provide a ringtone from a resource and a filename.
      * The audio file must have a ANDROID_LOOP metatada set to true to loop the sound.
-     * @param resid The audio resource.
+     * @param resId The audio resource.
      * @param filename the audio filename
      * @return a RingTone, null if the operation fails.
      */
-    static private Ringtone getRingTone(Context context, int resid, String filename) {
+    static private Ringtone getRingTone(int resId, String filename) {
+        Context context = VectorApp.getInstance();
+        Uri ringToneUri = mRingtoneUrlByFileName.get(filename);
         Ringtone ringtone = null;
 
+        // test if the ring tone has been cached
+        if (null != ringToneUri) {
+            ringtone = RingtoneManager.getRingtone(context, ringToneUri);
+
+            // provide it
+            return ringtone;
+        }
+
         try {
-            Uri ringToneUri = null;
             File directory = new File(Environment.getExternalStorageDirectory(), "/" + context.getApplicationContext().getPackageName().hashCode() + "/Audio/");
 
             // create the directory if it does not exist
@@ -122,13 +122,13 @@ public class VectorCallSoundManager {
                 }
             }
 
-            // the Uri has been received
+            // the Uri has been retrieved
             if (null == ringToneUri) {
                 // create the file
                 if (!file.exists()) {
                     try {
                         byte[] readData = new byte[1024];
-                        InputStream fis = context.getResources().openRawResource(resid);
+                        InputStream fis = context.getResources().openRawResource(resId);
                         FileOutputStream fos = new FileOutputStream(file);
                         int i = fis.read(readData);
 
@@ -159,6 +159,7 @@ public class VectorCallSoundManager {
             }
 
             if (null != ringToneUri) {
+                mRingtoneUrlByFileName.put(filename, ringToneUri);
                 ringtone = RingtoneManager.getRingtone(context, ringToneUri);
             }
         } catch (Exception e) {
@@ -169,145 +170,42 @@ public class VectorCallSoundManager {
     }
 
     /**
-     * Initialize the audio volume.
-     */
-    public static void initMediaPlayerVolume() {
-        /*AudioManager audioManager = getAudioManager();
-
-        // use the ringing volume to initialize the playing volume
-        // it does not make sense to ring louder
-        int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int minValue = mIsFirstCallAlert ? FIRST_PERCENT_VOLUME : DEFAULT_PERCENT_VOLUME;
-        int ratio = (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) * 100) / maxVol;
-
-        mIsFirstCallAlert = false;
-
-        // ensure there is a minimum audio level
-        // some users could complain they did not hear their device was ringing.
-        if (ratio < minValue) {
-            setMediaPlayerVolume(minValue);
-        }
-        else {
-            setMediaPlayerVolume(ratio);
-        }*/
-    }
-
-    /**
-     *
-     * @param percent
-     */
-    private static void setMediaPlayerVolume(int percent) {
-       /* if(percent < 0 || percent > 100) {
-            Log.e(LOG_TAG,"setMediaPlayerVolume percent is invalid: "+percent);
-            return;
-        }
-
-        AudioManager audioManager = getAudioManager();
-
-        mCallVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-
-        int maxMusicVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int maxVoiceVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
-
-        if(maxMusicVol > 0) {
-            int volume = (int) ((float) percent / 100f * maxMusicVol);
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-
-            volume = (int) ((float) percent / 100f * maxVoiceVol);
-            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
-        }
-        Log.i(LOG_TAG, "Set media volume (ringback) to: " + audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-        */
-    }
-
-    /**
      * Stop any playing ring tones.
      */
-    private static boolean stopRingTones() {
-        boolean found = false;
-
+    private static void stopRingTones() {
         if (null != mRingTone) {
             mRingTone.stop();
             mRingTone = null;
-            found = true;
         }
 
         if (null != mRingBackTone) {
             mRingBackTone.stop();
             mRingBackTone = null;
-            found = true;
         }
 
         if (null != mCallEndTone) {
             mCallEndTone.stop();
             mCallEndTone = null;
-            found = true;
         }
 
         if (null != mBusyTone) {
             mBusyTone.stop();
             mBusyTone = null;
-            found = true;
         }
-
-        return found;
-    }
-
-    /**
-     * Stop any running ring media player
-     */
-    private static boolean stopRingPlayers() {
-        boolean found = false;
-
-        if ((null != mRingingPlayer) && mRingingPlayer.isPlaying()) {
-            try {
-                mRingingPlayer.pause();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "stopRingPlayers : mRingingPlayer.pause failed " + e.getMessage());
-            }
-
-            found = true;
-        }
-
-        if ((null != mRingBackPlayer) && mRingBackPlayer.isPlaying()) {
-            try {
-                mRingBackPlayer.pause();
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "stopRingPlayers : mRingbackPlayer.pause failed " + e.getMessage());
-            }
-
-            found = true;
-        }
-
-        if ((null != mCallEndPlayer) && mCallEndPlayer.isPlaying()) {
-            mCallEndPlayer.stop();
-
-            found = true;
-        }
-
-        if ((null != mBusyPlayer) && mBusyPlayer.isPlaying()) {
-            mBusyPlayer.stop();
-            found = true;
-        }
-
-        return found;
     }
 
     /**
      * Stop the ringing sound
      */
-    public static void stopRinging(Context context) {
+    public static void stopRinging() {
         Log.d(LOG_TAG, "stopRinging");
-
-        if (!stopRingTones() && !stopRingPlayers()) {
-            MXCallsManager.prepareCallAudio(context);
-        }
+        stopRingTones();
     }
 
     /**
      * Start the ringing sound
      */
-    public static void startRinging(Context context) {
+    public static void startRinging() {
         Log.d(LOG_TAG, "startRinging");
 
         if (null != mRingTone) {
@@ -315,42 +213,23 @@ public class VectorCallSoundManager {
             return;
         }
 
-        if ((null != mRingingPlayer) && mRingingPlayer.isPlaying()) {
-            Log.d(LOG_TAG, "player is already ringing");
-            return;
-        }
-
-        stopRinging(context);
+        stopRinging();
 
         // use the ringTone to manage sound volume properly
-        mRingTone = getRingTone(context, R.raw.ring, RING_TONE_START_RINGING);
+        mRingTone = getRingTone(R.raw.ring, RING_TONE_START_RINGING);
 
         if (null != mRingTone) {
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
+            setSpeakerphoneOn(false, true);
             mRingTone.play();
-
-            return;
-        }
-
-        // if the ring tone cannot be used
-        // use the media player
-        if (null == mRingingPlayer) {
-            mRingingPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.ring);
-        }
-
-        if (null != mRingingPlayer) {
-            stopRingPlayers();
-            mRingingPlayer.setLooping(true);
-
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
-            mRingingPlayer.start();
+        } else {
+            Log.e(LOG_TAG, "startRinging : fail to retrieve RING_TONE_START_RINGING");
         }
     }
 
     /**
      * Start the ring back sound
      */
-    public static void startRingBackSound(Context context) {
+    public static void startRingBackSound() {
         Log.d(LOG_TAG, "startRingBackSound");
 
         if (null != mRingBackTone) {
@@ -358,40 +237,23 @@ public class VectorCallSoundManager {
             return;
         }
 
-        if ((null != mRingBackPlayer) && mRingBackPlayer.isPlaying()) {
-            Log.d(LOG_TAG, "player already ringing");
-            return;
-        }
-
-        stopRinging(context);
+        stopRinging();
 
         // use the ringTone to manage sound volume properly
-        mRingBackTone = getRingTone(context, R.raw.ringback, RING_TONE_RING_BACK);
+        mRingBackTone = getRingTone(R.raw.ringback, RING_TONE_RING_BACK);
 
         if (null != mRingBackTone) {
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
+            initRingToneSpeaker();
             mRingBackTone.play();
-            return;
-        }
-
-        if (null == mRingBackPlayer) {
-            mRingBackPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.ringback);
-        }
-
-        if ((null != mRingBackPlayer) && !mRingBackPlayer.isPlaying()) {
-            mRingBackPlayer.setLooping(true);
-
-            stopRingPlayers();
-
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
-            mRingBackPlayer.start();
+        } else {
+            Log.e(LOG_TAG, "startRingBackSound : fail to retrieve RING_TONE_RING_BACK");
         }
     }
 
     /**
      * Start the end call sound
      */
-    public static void startEndCallSound(Context context) {
+    public static void startEndCallSound() {
         Log.d(LOG_TAG, "startEndCallSound");
 
         if (null != mCallEndTone) {
@@ -399,40 +261,24 @@ public class VectorCallSoundManager {
             return;
         }
 
-        if ((null != mCallEndPlayer) && mCallEndPlayer.isPlaying()) {
-            Log.d(LOG_TAG, "player already ringing");
-            return;
-        }
-
         stopRingTones();
 
         // use the ringTone to manage sound volume properly
-        mCallEndTone = getRingTone(context, R.raw.callend, RING_TONE_CALL_END);
+        mCallEndTone = getRingTone(R.raw.callend, RING_TONE_CALL_END);
 
         if (null != mCallEndTone) {
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
+            initRingToneSpeaker();
             mCallEndTone.play();
-            restoreAudioConfigAfter(context, 5000);
-            return;
-        }
-
-        if (null == mCallEndPlayer) {
-            mCallEndPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.callend);
-        }
-
-        // sanity checks
-        if (null != mCallEndPlayer) {
-            mCallEndPlayer.setLooping(false);
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
-            mCallEndPlayer.start();
-            restoreAudioConfigAfter(context, 5000);
+            restoreAudioConfigAfter(2000);
+        } else {
+            Log.e(LOG_TAG, "startEndCallSound : fail to retrieve RING_TONE_RING_BACK");
         }
     }
 
     /**
      * Start the busy call sound
      */
-    public static void startBusyCallSound(Context context) {
+    public static void startBusyCallSound() {
         Log.d(LOG_TAG, "startBusyCallSound");
 
         if (null != mBusyTone) {
@@ -440,33 +286,15 @@ public class VectorCallSoundManager {
             return;
         }
 
-        if ((null != mBusyPlayer) && mBusyPlayer.isPlaying()) {
-            Log.d(LOG_TAG, "player already ringing");
-            return;
-        }
-
         stopRingTones();
 
         // use the ringTone to manage sound volume properly
-        mBusyTone = getRingTone(context, R.raw.callend, RING_TONE_BUSY);
+        mBusyTone = getRingTone(R.raw.busy, RING_TONE_BUSY);
 
         if (null != mBusyTone) {
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
+            initRingToneSpeaker();
             mBusyTone.play();
-            restoreAudioConfigAfter(context, 5000);
-            return;
-        }
-
-        if (null == mBusyPlayer) {
-            mBusyPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.busy);
-        }
-
-        // sanity checks
-        if (null != mBusyPlayer) {
-            mBusyPlayer.setLooping(false);
-            MXCallsManager.setCallSpeakerphoneOn(context, true);
-            mBusyPlayer.start();
-            restoreAudioConfigAfter(context, 5000);
+            restoreAudioConfigAfter(4000);
         }
     }
 
@@ -482,16 +310,48 @@ public class VectorCallSoundManager {
     private static TimerTask mRestoreAudioConfigTimerMask = null;
     private static Handler mUIHandler = null;
 
-    private static void prepareCallAudio(Context context) {
-        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+    /**
+     * Back up the current audio config.
+     */
+    private static void backupAudioConfig() {
+        // there is a pending timer to restore the audio config
+        if (null != mRestoreAudioConfigTimer) {
+            // cancel the timer and don't get the audio config
+            mRestoreAudioConfigTimer.cancel();
+            mRestoreAudioConfigTimer = null;
+            mRestoreAudioConfigTimerMask = null;
+        } else if (null == mAudioMode) { // not yet backuped
+            AudioManager audioManager = getAudioManager();
 
-        mAudioMode = audioManager.getMode();
-        mIsSpeakerOn = audioManager.isSpeakerphoneOn();
+            mAudioMode = audioManager.getMode();
+            mIsSpeakerOn = audioManager.isSpeakerphoneOn();
+        }
     }
 
+    /**
+     * Restore the audio config.
+     */
+    private static void restoreAudioConfig() {
+        // ensure that something has been saved
+        if ((null != mAudioMode) && (null != mIsSpeakerOn)) {
+            AudioManager audioManager = getAudioManager();
 
+            // ignore speaker button if a headset is connected
+            if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
+                audioManager.setMode(mAudioMode);
+                audioManager.setSpeakerphoneOn(mIsSpeakerOn);
+            }
 
-    private static void restoreAudioConfigAfter(final Context context, int delayMs) {
+            mAudioMode = null;
+            mIsSpeakerOn = null;
+        }
+    }
+
+    /**
+     * Restore the audio config after a specified delay
+     * @param delayMs the delay in ms
+     */
+    private static void restoreAudioConfigAfter(int delayMs) {
         if (null == mUIHandler) {
             mUIHandler = new Handler(Looper.getMainLooper());
         }
@@ -508,7 +368,12 @@ public class VectorCallSoundManager {
                         mRestoreAudioConfigTimer = null;
                         mRestoreAudioConfigTimerMask = null;
 
-                        MXCallsManager.restoreCallAudio(context);
+                        mUIHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                restoreAudioConfig();
+                            }
+                        });
                     }
                 });
             }
@@ -517,40 +382,47 @@ public class VectorCallSoundManager {
         mRestoreAudioConfigTimer.schedule(mRestoreAudioConfigTimerMask, delayMs);
     }
 
-
-    private static void restoreCallAudio(Context context) {
-        if ((null != mAudioMode) && (null != mIsSpeakerOn)) {
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-            // ignore speaker button if a headset is connected
-            if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
-                audioManager.setMode(mAudioMode);
-                audioManager.setSpeakerphoneOn(mIsSpeakerOn);
-            }
-
-            mAudioMode = null;
-            mIsSpeakerOn = null;
-        }
+    /**
+     * Turn the speaker on to be ready to ring
+     */
+    private static void initRingToneSpeaker() {
+        setSpeakerphoneOn(false, true);
     }
 
     /**
      * Sets the speakerphone on or off.
-     *
-     * @param isOn true to turn on speakerphone;
-     *           false to turn it off
+     * @param isOn true to turn on the speaker (false to turn it off)
      */
-    public static void setSpeakerphoneOn(Context context, boolean isOn) {
+    public static void setCallSpeakerphoneOn(boolean isOn) {
+        setSpeakerphoneOn(true, isOn);
+    }
+
+    /**
+     * Tells if there is a plugged headset.
+     * @return
+     */
+    public static boolean isHeadsetPlugged() {
+        AudioManager audioManager = getAudioManager();
+
+        return audioManager.isBluetoothA2dpOn() || audioManager.isWiredHeadsetOn();
+    }
+
+    /**
+     * Update the speaker status
+     *
+     * @param isInCall true when the speaker is updated during call.
+     * @param isOn true to turn on the speaker (false to turn it off)
+     */
+    private static void setSpeakerphoneOn(boolean isInCall, boolean isOn) {
         Log.d(LOG_TAG, "setCallSpeakerphoneOn " + isOn);
 
-        if ((null == mAudioMode) || (null == mIsSpeakerOn)) {
-            prepareCallAudio(context);
-        }
+        backupAudioConfig();
 
-        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = getAudioManager();
 
         // ignore speaker button if a headset is connected
-        if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
-            int audioMode = AudioManager.MODE_IN_COMMUNICATION;
+        if (!isHeadsetPlugged()) {
+            int audioMode = isInCall ? AudioManager.MODE_IN_COMMUNICATION : AudioManager.MODE_RINGTONE;
 
             if (audioManager.getMode() != audioMode) {
                 audioManager.setMode(audioMode);
@@ -562,15 +434,13 @@ public class VectorCallSoundManager {
         }
     }
 
-
     /**
-     * Toogle the speaker
+     * Toggle the speaker
      */
-    public void toggleSpeaker() {
-        AudioManager audioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-
-        if (null != audioManager) {
-            MXCallsManager.setCallSpeakerphoneOn(mContext, !audioManager.isSpeakerphoneOn());
+    public static void toggleSpeaker() {
+        if (!isHeadsetPlugged()) {
+            AudioManager audioManager = getAudioManager();
+            audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
         }
     }
 }

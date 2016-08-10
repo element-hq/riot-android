@@ -64,8 +64,7 @@ import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
-import im.vector.util.CallRingManager;
-import im.vector.util.RageShake;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
 
@@ -1052,7 +1051,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // clear call in progress notification
                         EventStreamService.getInstance().checkDisplayedNotification();
                         // and play a lovely sound
-                        CallRingManager.startEndCallSound(VectorHomeActivity.this);
+                        VectorCallSoundManager.startEndCallSound();
                     }
                 }
             });
