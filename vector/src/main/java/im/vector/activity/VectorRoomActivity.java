@@ -399,7 +399,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         @Override
-        public void onCallEnd() {
+        public void onCallEnd(final int aReasonId) {
             refreshNotificationsArea();
         }
     };
