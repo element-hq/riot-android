@@ -358,6 +358,7 @@
     <string name="call_error_answered_elsewhere">call answered elsewhere</string>
     <string name="call_error_peer_hangup">peer hung up</string>
     <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
+    <string name="call_error_peer_cancelled_call">call cancelled</string>
 
     <string name="action_accept">ACCEPT</string>
     <string name="action_ignore">IGNORE</string>
