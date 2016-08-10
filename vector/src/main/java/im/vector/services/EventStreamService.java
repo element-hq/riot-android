@@ -203,7 +203,7 @@ public class EventStreamService extends Service {
             IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {
                 @Override
                 public void onStateDidChange(String state) {
-                    Log.d(LOG_TAG, "onStateDidChange " + call.getCallId() + " : " + state);
+                    Log.d(LOG_TAG, "dispatchOnStateDidChange " + call.getCallId() + " : " + state);
 
                     // if there is no call push rule
                     // display the incoming call notification but with no sound
@@ -214,7 +214,7 @@ public class EventStreamService extends Service {
 
                 @Override
                 public void onCallError(String error) {
-                    Log.d(LOG_TAG, "onCallError " + call.getCallId() + " : " + error);
+                    Log.d(LOG_TAG, "dispatchOnCallError " + call.getCallId() + " : " + error);
                     manageHangUpEvent(call.getCallId());
                 }
 
@@ -233,8 +233,8 @@ public class EventStreamService extends Service {
                 }
 
                 @Override
-                public void onCallEnd() {
-                    Log.d(LOG_TAG, "onCallEnd " + call.getCallId());
+                public void onCallEnd(final int aReasonId) {
+                    Log.d(LOG_TAG, "dispatchOnCallEnd " + call.getCallId());
                     manageHangUpEvent(call.getCallId());
                 }
             };
@@ -611,8 +611,8 @@ public class EventStreamService extends Service {
     }
 
     /**
-     * Enable/disable the service to be in foreground or not.
-     * The service is put in foreground when a sync polling is used,
+     * Enable/disable the service foreground status.
+     * The service is put in foreground ("Foreground process priority") when a sync polling is used,
      * to strongly reduce the likelihood of the App being killed.
      */
     private void updateServiceForegroundState() {
@@ -621,13 +621,10 @@ public class EventStreamService extends Service {
         MXSession session = Matrix.getInstance(getApplicationContext()).getDefaultSession();
 
         if (null == session) {
-            Log.e(LOG_TAG, "updateServiceForegroundState : no session");
+            Log.e(LOG_TAG, "## updateServiceForegroundState(): no session");
             return;
         }
 
-        // detect if the polling thread must be started
-        // i.e a session must be defined
-        // and GCM disabled or GCM registration failed
         if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground");
             Notification notification = buildForegroundServiceNotification();
