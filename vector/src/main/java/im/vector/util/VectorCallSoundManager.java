@@ -338,8 +338,13 @@ public class VectorCallSoundManager {
 
             // ignore speaker button if a headset is connected
             if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
-                audioManager.setMode(mAudioMode);
-                audioManager.setSpeakerphoneOn(mIsSpeakerOn);
+                if (mAudioMode!= audioManager.getMode()) {
+                    audioManager.setMode(mAudioMode);
+                }
+
+                if (mIsSpeakerOn != audioManager.isSpeakerphoneOn()) {
+                    audioManager.setSpeakerphoneOn(mIsSpeakerOn);
+                }
             }
 
             mAudioMode = null;
