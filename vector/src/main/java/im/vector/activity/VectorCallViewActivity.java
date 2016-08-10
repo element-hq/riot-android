@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 OpenMarket Ltd
+ * Copyright 2016 OpenMarket Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,12 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
@@ -30,7 +33,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,6 +42,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,7 +51,7 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import im.vector.VectorApp;
+
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.services.EventStreamService;
@@ -62,8 +65,12 @@ import java.io.InputStream;
 /**
  * VectorCallViewActivity is the call activity.
  */
-public class VectorCallViewActivity extends Activity {
+public class VectorCallViewActivity extends Activity implements SensorEventListener {
     private static final String LOG_TAG = "VCallViewActivity";
+    private static final String HANGUP_MSG_HEADER_UI_CALL = "user hangup from header back arrow";
+    private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
+    /** threshold used to manage the backlight during the call **/
+    private static final float PROXIMITY_THRESHOLD = 3.0f; // centimeters
 
     // ring tones
     private static final String RING_TONE_START_RINGING = "ring.ogg";
@@ -74,8 +81,7 @@ public class VectorCallViewActivity extends Activity {
     public static final String EXTRA_CALL_ID = "CallViewActivity.EXTRA_CALL_ID";
     public static final String EXTRA_AUTO_ACCEPT = "CallViewActivity.EXTRA_AUTO_ACCEPT";
     private static final String KEY_MIC_MUTE_STATUS = "KEY_MIC_MUTE_STATUS";
-    private static final String KEY_SPEAKER_VIDEO_CALL_STATUS = "KEY_SPEAKER_VIDEO_CALL_STATUS";
-    private static final String KEY_SPEAKER_AUDIO_CALL_STATUS = "KEY_SPEAKER_AUDIO_CALL_STATUS";
+    private static final String KEY_SPEAKER_STATUS = "KEY_SPEAKER_STATUS";
 
     private static VectorCallViewActivity instance = null;
 
@@ -98,18 +104,23 @@ public class VectorCallViewActivity extends Activity {
     private ImageView mSpeakerSelectionView;
     private ImageView mAvatarView;
     private ImageView mMuteMicImageView;
+    private ImageView mSwichRearFrontCameraImageView;
+    private ImageView mMuteLocalCameraView;
     private ImageView mRoomLinkImageView;
     private VectorPendingCallView mHeaderPendingCallView;
 
     // video diplay size
     private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig;
-    // hard coded values are taken from specs
+    // hard coded values are taken from specs:
+    // - 585 as screen height reference
+    // - 18 as space between the local video and the container view containing the setting buttons
     private static final float RATIO_TOP_MARGIN_LOCAL_USER_VIDEO = (float)(462.0/585.0);
     private static final float VIDEO_TO_BUTTONS_VERTICAL_SPACE = (float) (18.0/585.0);
     /**  local user video height is set as percent of the total screen height **/
     private static final int PERCENT_LOCAL_USER_VIDEO_SIZE = 25;
     private static final float RATIO_LOCAL_USER_VIDEO_HEIGHT = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
     private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
+    private static final float RATIO_LOCAL_USER_VIDEO_ASPECT = 0.65f;
 
     // sounds management
     private static MediaPlayer mRingingPlayer = null;
@@ -124,6 +135,14 @@ public class VectorCallViewActivity extends Activity {
     private static final int FIRST_PERCENT_VOLUME = 10;
     private static boolean firstCallAlert = true;
     private static int mCallVolume = 0;
+
+    // sensor
+    SensorManager mSensorMgr;
+    Sensor mProximitySensor;
+
+    // activity life cycle management
+    private boolean mSavedSpeakerValue;
+    private boolean mIsSpeakerForcedFromLifeCycle;
 
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
         @Override
@@ -204,6 +223,7 @@ public class VectorCallViewActivity extends Activity {
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "## onCallAnsweredElsewhere(): ");
+                    showToast(VectorCallViewActivity.this.getString(R.string.call_error_answered_elsewhere));
                     clearCallData();
                     VectorCallViewActivity.this.finish();
                 }
@@ -211,7 +231,7 @@ public class VectorCallViewActivity extends Activity {
         }
 
         @Override
-        public void onCallEnd() {
+        public void onCallEnd(final int aReasonId) {
             VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -219,6 +239,7 @@ public class VectorCallViewActivity extends Activity {
 
                     clearCallData();
                     mIsCallEnded = true;
+                    CommonActivityUtils.processEndCallInfo(VectorCallViewActivity.this, aReasonId);
                     VectorCallViewActivity.this.finish();
                 }
             });
@@ -308,21 +329,22 @@ public class VectorCallViewActivity extends Activity {
 
     /**
      * Insert the callView in the activity (above the other room member).
-     * The callView is setup in the SDK, and provided via onViewLoading() in {@link #mListener}.
+     * The callView is setup in the SDK, and provided via dispatchOnViewLoading() in {@link #mListener}.
      */
     private void insertCallView() {
         if(null != mCallView) {
-            ImageView avatarView = (ImageView) VectorCallViewActivity.this.findViewById(R.id.call_other_member);
-
             // set the avatar
+            ImageView avatarView = (ImageView) VectorCallViewActivity.this.findViewById(R.id.call_other_member);
             VectorUtils.loadRoomAvatar(this, mSession, avatarView, mCall.getRoom());
 
-            RelativeLayout layout = (RelativeLayout) VectorCallViewActivity.this.findViewById(R.id.call_layout);
+            // insert the
+            RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
             layout.addView(mCallView, 1, params);
 
+            // init as GONE, will be displayed according to call states..
             mCall.setVisibility(View.GONE);
         }
     }
@@ -357,9 +379,7 @@ public class VectorCallViewActivity extends Activity {
             return;
         }
 
-        mCall = mSession.mCallsManager.callWithCallId(mCallId);
-
-        if (null == mCall) {
+        if(null == (mCall = mSession.mCallsManager.callWithCallId(mCallId))) {
             Log.e(LOG_TAG, "invalid callId");
             finish();
             return;
@@ -372,11 +392,29 @@ public class VectorCallViewActivity extends Activity {
         mMuteMicImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.mute_audio);
         mRoomLinkImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
         mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
+        mSwichRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
+        mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
 
         mRoomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startRoomActivity();
+            }
+        });
+
+        mSwichRearFrontCameraImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleRearFrontCamera();
+                refreshSwitchRearFrontCameraButton();
+            }
+        });
+
+        mMuteLocalCameraView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleVideoMute();
+                refreshMuteVideoButton();
             }
         });
 
@@ -391,17 +429,16 @@ public class VectorCallViewActivity extends Activity {
         mHangUpImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onHangUp();
+                onHangUp("user hangup");
             }
         });
 
         mSpeakerSelectionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mCall) {
-                    toggleSpeaker();
-                    refreshSpeakerButton();
-                }
+                mIsSpeakerForcedFromLifeCycle = false;
+                toggleSpeaker();
+                refreshSpeakerButton();
             }
         });
 
@@ -409,8 +446,20 @@ public class VectorCallViewActivity extends Activity {
 
         initMediaPlayerVolume();
 
-        // init the call button
-        restoreUserUiAudioSettings();
+        // life cycle management
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if((null != savedInstanceState) && (null != audioManager)) {
+            // restore mic satus
+            audioManager.setMicrophoneMute(savedInstanceState.getBoolean(KEY_MIC_MUTE_STATUS, false));
+            // restore speaker status (Cf. manageSubViews())
+            mIsSpeakerForcedFromLifeCycle = true;
+            mSavedSpeakerValue = savedInstanceState.getBoolean(KEY_SPEAKER_STATUS, mCall.isVideo());
+        } else {
+            // mic default value: enabled
+            audioManager.setMicrophoneMute(false);
+        }
+
+        // init call UI setting buttons
         manageSubViews();
 
         // the webview has been saved after a screen rotation
@@ -419,7 +468,7 @@ public class VectorCallViewActivity extends Activity {
             mCallView = mSavedCallview;
             insertCallView();
         } else {
-            Log.d(LOG_TAG, "onCreate: Hide the call notifications");
+            Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
             EventStreamService.getInstance().hideCallNotifications();
             mSavedCallview = null;
 
@@ -433,6 +482,7 @@ public class VectorCallViewActivity extends Activity {
         }
 
         setupHeaderPendingCallView();
+        initBackLightManagement();
         Log.d(LOG_TAG,"## onCreate(): OUT");
     }
 
@@ -455,7 +505,7 @@ public class VectorCallViewActivity extends Activity {
                     // simulate a back button press
                     if (!canCallBeResumed()) {
                         if (null != mCall) {
-                            mCall.hangup("");
+                            mCall.hangup(HANGUP_MSG_HEADER_UI_CALL);
                         }
                     } else {
                         saveCallView();
@@ -475,8 +525,29 @@ public class VectorCallViewActivity extends Activity {
     }
 
     /**
+     * Perform the required initializations for the backlight management.<p>
+     * For video call the backlight must be ON. For voice call the backlight must be
+     * OFF when the proximity sensor fires.
+     */
+    private void initBackLightManagement() {
+        if(null != mCall) {
+            if(mCall.isVideo()) {
+                // video call: set the backlight on
+                Log.d(LOG_TAG,"## initBackLightManagement(): backlight is ON");
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // same as android:keepScreenOn="true" in layout
+            } else {
+                // voice call: use the proximity sensor
+                mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+                if(null == (mProximitySensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY))) {
+                    Log.w(LOG_TAG,"## initBackLightManagement(): Warning - proximity sensor not supported");
+                }
+            }
+        }
+
+    }
+
+    /**
      * Toggle the mute feature of the mic.
-     * <br>Corresponding value is saved in the shared preference.
      */
     private void toggleMicMute() {
         AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
@@ -484,74 +555,49 @@ public class VectorCallViewActivity extends Activity {
             boolean isMuted = audioManager.isMicrophoneMute();
             Log.d(LOG_TAG,"## toggleMicMute(): current mute val="+isMuted+" new mute val="+!isMuted);
             audioManager.setMicrophoneMute(!isMuted);
-
-            // save user choice in shared preference
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(KEY_MIC_MUTE_STATUS, audioManager.isMicrophoneMute());
-            editor.apply();
         } else {
             Log.w(LOG_TAG,"## toggleMicMute(): Failed due to invalid AudioManager");
         }
     }
 
     /**
+     * Toggle the mute feature of the local camera.
+     */
+    private void toggleVideoMute() {
+        if(null != mCall) {
+            if(mCall.isVideo()) {
+                boolean isMuted = mCall.isVideoRecordingMuted();
+                mCall.muteVideoRecording(!isMuted);
+                Log.w(LOG_TAG, "## toggleVideoMute(): camera record turned to " + !isMuted);
+            }
+        } else {
+            Log.w(LOG_TAG, "## toggleVideoMute(): Failed");
+        }
+    }
+
+    /**
      * Toggle the mute feature of the mic.
-     * <br>Corresponding value is saved in the shared preference.
      */
     private void toggleSpeaker() {
         if(null != mCall) {
             mCall.toggleSpeaker();
-
-            // save user choice in shared preference
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            if (null != audioManager) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                String keyPref = mCall.isVideo()?KEY_SPEAKER_VIDEO_CALL_STATUS:KEY_SPEAKER_AUDIO_CALL_STATUS;
-
-                editor.putBoolean(keyPref, audioManager.isSpeakerphoneOn());
-                editor.apply();
-            } else {
-                Log.w(LOG_TAG, "## toggleSpeaker(): Failed due to invalid AudioManager");
-            }
         } else {
             Log.w(LOG_TAG, "## toggleSpeaker(): Failed");
         }
     }
 
     /**
-     * Update the speaker and the mic mute status according to the values
-     * saved by the user in the shared preference.
-     * <br>See {@link #toggleSpeaker()} and {@link #toggleMicMute()}.
+     * Toggle the cameras.
      */
-    private void restoreUserUiAudioSettings() {
-        boolean isSpeakerOn = false;
-        boolean isMicMute;
-        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    private void toggleRearFrontCamera() {
+        boolean wasCameraSwitched = false;
 
-        if(null != preferences) {
-            isMicMute = preferences.getBoolean(KEY_MIC_MUTE_STATUS, false/* default = un mute  */);
-
-            if (null != mCall) {
-                if (mCall.isVideo()) {
-                    // for video calls, default value speaker = enabled
-                    isSpeakerOn = preferences.getBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, true);
-                } else {
-                    // for audio calls, default value speaker = disabled
-                    isSpeakerOn = preferences.getBoolean(KEY_SPEAKER_AUDIO_CALL_STATUS, false);
-                }
-            }
-
-            // apply mute & speaker values
-            if (null != audioManager) {
-                audioManager.setMicrophoneMute(isMicMute);
-                audioManager.setSpeakerphoneOn(isSpeakerOn);
-            } else {
-                Log.w(LOG_TAG, "## restoreUserUiAudioSettings(): Failed due to invalid AudioManager");
-            }
+        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) {
+            wasCameraSwitched = mCall.switchRearFrontCamera();
+        } else {
+            Log.w(LOG_TAG, "## toggleRearFrontCamera(): Skipped");
         }
+        Log.w(LOG_TAG, "## toggleRearFrontCamera(): done? " + wasCameraSwitched);
     }
 
     @Override
@@ -572,7 +618,7 @@ public class VectorCallViewActivity extends Activity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!canCallBeResumed()) {
                 if (null != mCall) {
-                    mCall.hangup("");
+                    mCall.hangup(HANGUP_MSG_BACK_KEY);
                 }
             } else {
                 saveCallView();
@@ -606,6 +652,9 @@ public class VectorCallViewActivity extends Activity {
         super.onPause();
 
         if (null != mCall) {
+            if(null != mProximitySensor) {
+                mSensorMgr.unregisterListener(this);
+            }
             mCall.onPause();
             mCall.removeListener(mListener);
         }
@@ -617,14 +666,17 @@ public class VectorCallViewActivity extends Activity {
 
         mHeaderPendingCallView.checkPendingCall();
 
-        // compute video UI layout position after rotation
+        // compute video UI layout position after rotation & apply new position
         computeVideoUiLayout();
-        // apply new position
         if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
             mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
         }
 
         if (null != mCall) {
+            if(null != mProximitySensor) {
+                // proximity sensor only used for voice call (see initBackLightManagement())
+                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
             mCall.onResume();
 
             mCall.addListener(mListener);
@@ -671,9 +723,9 @@ public class VectorCallViewActivity extends Activity {
 
         // compute action bar size: the video Y component starts below the action bar
         int actionBarHeight=0;
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        TypedValue typedValue = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
             screenHeight -= actionBarHeight;
         }
 
@@ -688,34 +740,24 @@ public class VectorCallViewActivity extends Activity {
         float topMarginHeightNormalized = 0; // range [0;1]
         float ratioVideoHeightNormalized = 0; // range [0;1]
         float localVideoWidth = Math.min(screenHeight,screenWidth/*portrait is ref*/)*RATIO_LOCAL_USER_VIDEO_HEIGHT; // value effectively applied by the SDK
-        float estimatedLocalVideoHeight = (float) ((localVideoWidth)/(0.65)); // 0.65 => to adapt
+        float estimatedLocalVideoHeight = (float) ((localVideoWidth)/(RATIO_LOCAL_USER_VIDEO_ASPECT)); // 0.65 => to adapt
 
-        if(false /*Configuration.ORIENTATION_LANDSCAPE == screenOrientation*/){
-            Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = LANDSCAPE");
-
-            // landscape: video displayed in the left side, centered vertically
-            mLocalVideoLayoutConfig.mX = 0;
-
-            // for landscape, the video width is used in the Y axis
+        if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
+            // take the video width as height
             ratioVideoHeightNormalized = (localVideoWidth/screenHeight);
-            topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - (buttonsContainerHeight/screenHeight);
-            topMarginHeightNormalized /=2; // centered vertically => equal space before and after the video
         } else {
-            if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
-                // take the video width as height
-                ratioVideoHeightNormalized = (localVideoWidth/screenHeight);
-            } else {
-                mLocalVideoLayoutConfig.mIsPortrait = true;
-                // take the video height as height
-                ratioVideoHeightNormalized = estimatedLocalVideoHeight/screenHeight;
-            }
-            Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
-
-            // portrait: video displayed above the video buttons, centered horizontally
-            mLocalVideoLayoutConfig.mX = (100 - PERCENT_LOCAL_USER_VIDEO_SIZE) / 2;
-            topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
+            mLocalVideoLayoutConfig.mIsPortrait = true;
+            // take the video height as height
+            ratioVideoHeightNormalized = estimatedLocalVideoHeight/screenHeight;
         }
+        Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
 
+        // the video is displayed:
+        // - X axis: centered horizontally
+        mLocalVideoLayoutConfig.mX = (100 - PERCENT_LOCAL_USER_VIDEO_SIZE) / 2;
+
+        // - Y axis: above the video buttons
+        topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
         if(topMarginHeightNormalized >= 0) {
             mLocalVideoLayoutConfig.mY = (int) (topMarginHeightNormalized * 100);
         }
@@ -753,11 +795,8 @@ public class VectorCallViewActivity extends Activity {
             Log.d(LOG_TAG,"## refreshMuteMicButton(): isMuted="+isMuted);
 
             // update icon
-            if (isMuted) {
-                mMuteMicImageView.setImageResource(R.drawable.ic_material_mic_off_pink_red); // ic_material_mic_grey
-            } else {
-                mMuteMicImageView.setImageResource(R.drawable.ic_material_mic_off_grey);
-            }
+            int iconId = isMuted?R.drawable.ic_material_mic_off_pink_red:R.drawable.ic_material_mic_off_grey;
+            mMuteMicImageView.setImageResource(iconId);
         } else {
             Log.d(LOG_TAG,"## refreshMuteMicButton(): View.INVISIBLE");
             mMuteMicImageView.setVisibility(View.INVISIBLE);
@@ -772,27 +811,69 @@ public class VectorCallViewActivity extends Activity {
             mSpeakerSelectionView.setVisibility(View.VISIBLE);
 
             AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager.isSpeakerphoneOn()) {
-                mSpeakerSelectionView.setImageResource(R.drawable.ic_material_speaker_phone_pink_red); // ic_material_call_grey
-            } else {
-                mSpeakerSelectionView.setImageResource(R.drawable.ic_material_speaker_phone_grey);
-            }
-            VectorCallViewActivity.this.setVolumeControlStream(audioManager.getMode());
+            boolean isOn = audioManager.isSpeakerphoneOn();
+            Log.d(LOG_TAG,"## refreshSpeakerButton(): isOn="+isOn);
 
+            // update icon
+            int iconId = isOn?R.drawable.ic_material_speaker_phone_pink_red:R.drawable.ic_material_speaker_phone_grey;
+            mSpeakerSelectionView.setImageResource(iconId);
+
+            VectorCallViewActivity.this.setVolumeControlStream(audioManager.getMode());
         } else {
             Log.d(LOG_TAG,"## refreshSpeakerButton(): View.INVISIBLE");
             mSpeakerSelectionView.setVisibility(View.INVISIBLE);
         }
     }
 
+
+    /**
+     * Update the mute video icon.
+     */
+    private void refreshMuteVideoButton() {
+        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) {
+            mMuteLocalCameraView.setVisibility(View.VISIBLE);
+
+            boolean isMuted = mCall.isVideoRecordingMuted();
+            Log.d(LOG_TAG,"## refreshMuteVideoButton(): isMuted="+isMuted);
+
+            // update icon
+            int iconId = isMuted?R.drawable.ic_material_videocam_off_pink_red:R.drawable.ic_material_videocam_off_grey;
+            mMuteLocalCameraView.setImageResource(iconId);
+        } else {
+            Log.d(LOG_TAG,"## refreshMuteVideoButton(): View.INVISIBLE");
+            mMuteLocalCameraView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * Update the switch camera icon.
+     * Note that, this icon is only active if the device supports
+     * camera switching (See {@link IMXCall#isSwitchCameraSupported()})
+     */
+    private void refreshSwitchRearFrontCameraButton() {
+        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo() && mCall.isSwitchCameraSupported()) {
+            mSwichRearFrontCameraImageView.setVisibility(View.VISIBLE);
+
+            boolean isSwitched= mCall.isCameraSwitched();
+            Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): isSwitched="+isSwitched);
+
+            // update icon
+            int iconId = isSwitched?R.drawable.ic_material_switch_video_pink_red:R.drawable.ic_material_switch_video_grey;
+            mSwichRearFrontCameraImageView.setImageResource(iconId);
+        } else {
+            Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): View.INVISIBLE");
+            mSwichRearFrontCameraImageView.setVisibility(View.INVISIBLE);
+        }
+    }
+
     /**
      * hangup the call.
      */
-    private void onHangUp() {
+    private void onHangUp(String hangUpMsg) {
         mSavedCallview = null;
 
         if (null != mCall) {
-            mCall.hangup("");
+            mCall.hangup(hangUpMsg);
         }
     }
 
@@ -810,13 +891,14 @@ public class VectorCallViewActivity extends Activity {
         String callState = mCall.getCallState();
         Log.d(LOG_TAG, "## manageSubViews() IN callState : " + callState);
 
-        // read speaker value from preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // set speaker status
         boolean isSpeakerPhoneOn;
-        if (mCall.isVideo())
-            isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, true);
-        else
-            isSpeakerPhoneOn = preferences.getBoolean(KEY_SPEAKER_AUDIO_CALL_STATUS, false);
+        if(mIsSpeakerForcedFromLifeCycle) {
+            isSpeakerPhoneOn = mSavedSpeakerValue;
+        } else {
+            // default value: video => speaker ON, voice => speaker OFF
+            isSpeakerPhoneOn = mCall.isVideo();
+        }
 
         // avatar visibility: video call => hide avatar, audio call => show avatar
         mAvatarView.setVisibility((callState.equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) ? View.GONE : View.VISIBLE);
@@ -824,6 +906,8 @@ public class VectorCallViewActivity extends Activity {
         // update UI icon settings
         refreshSpeakerButton();
         refreshMuteMicButton();
+        refreshMuteVideoButton();
+        refreshSwitchRearFrontCameraButton();
 
         // display the hang up button according to the call state
         switch (callState) {
@@ -925,7 +1009,7 @@ public class VectorCallViewActivity extends Activity {
         AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
         if (null != audioManager) {
             savedInstanceState.putBoolean(KEY_MIC_MUTE_STATUS, audioManager.isMicrophoneMute());
-            savedInstanceState.putBoolean(KEY_SPEAKER_VIDEO_CALL_STATUS, audioManager.isSpeakerphoneOn());
+            savedInstanceState.putBoolean(KEY_SPEAKER_STATUS, audioManager.isSpeakerphoneOn());
         }
     }
 
@@ -1061,7 +1145,7 @@ public class VectorCallViewActivity extends Activity {
 
     private void setMediaPlayerVolume(int percent) {
         if(percent < 0 || percent > 100) {
-            Log.e(LOG_TAG,"setMediaPlayerVolume percent is invalid: "+percent);
+            Log.e(LOG_TAG,"## setMediaPlayerVolume(): invalid value: "+percent);
             return;
         }
 
@@ -1072,14 +1156,14 @@ public class VectorCallViewActivity extends Activity {
         int maxMusicVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int maxVoiceVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
 
-        if(maxMusicVol > 0) {
+        if((maxMusicVol > 0)  && (maxVoiceVol > 0)){
             int volume = (int) ((float) percent / 100f * maxMusicVol);
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
 
             volume = (int) ((float) percent / 100f * maxVoiceVol);
             audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
         }
-        Log.i(LOG_TAG, "Set media volume (ringback) to: " + audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        Log.i(LOG_TAG, "## setMediaPlayerVolume(): media volume (ringback) set to: " + audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
     }
 
     /**
@@ -1273,4 +1357,41 @@ public class VectorCallViewActivity extends Activity {
         }
         stopRinging();
     }
+
+    // ************* SensorEventListener *************
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float distanceCentimeters = event.values[0];
+        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+
+        Log.d(LOG_TAG,"## onSensorChanged(): "+String.format("distance=%.3f",distanceCentimeters));
+
+        if(audioManager.isSpeakerphoneOn()) {
+            Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
+        } else {
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+
+            if (distanceCentimeters <= PROXIMITY_THRESHOLD) {
+                //layoutParams.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                layoutParams.screenBrightness = 0;
+                getWindow().setAttributes(layoutParams);
+
+                //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                Log.d(LOG_TAG, "## onSensorChanged(): force screen OFF");
+            } else {
+                // restore previous brightness (whatever it was)
+                layoutParams.screenBrightness = -1;
+                getWindow().setAttributes(layoutParams);
+
+                //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                Log.d(LOG_TAG, "## onSensorChanged(): force screen ON");
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        Log.d(LOG_TAG,"## onAccuracyChanged(): accuracy="+accuracy);
+    }
+    // ***********************************************
 }

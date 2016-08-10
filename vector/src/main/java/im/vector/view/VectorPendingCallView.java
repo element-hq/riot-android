@@ -81,7 +81,7 @@ public class VectorPendingCallView extends RelativeLayout {
         }
 
         @Override
-        public void onCallEnd() {
+        public void onCallEnd(final int aReasonId) {
             onCallTerminated();
         }
     };
