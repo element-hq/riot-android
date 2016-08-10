@@ -42,9 +42,9 @@ import im.vector.R;
 import im.vector.VectorApp;
 
 /**
- * This class manages the call rings
+ * This class manages the sound for v
  */
-public class CallRingManager {
+public class VectorCallSoundManager {
 
     private static final String LOG_TAG = "CallRingManager";
 
@@ -388,38 +388,6 @@ public class CallRingManager {
         }
     }
 
-    static Timer mRestoreAudioConfigTimer = null;
-    static TimerTask mRestoreAudioConfigTimerMask = null;
-    static Handler mUIHandler = null;
-
-    private static void restoreAudioConfigAfter(final Context context, int delayMs) {
-
-        if (null == mUIHandler) {
-            mUIHandler = new Handler(Looper.getMainLooper());
-        }
-
-        mRestoreAudioConfigTimer = new Timer();
-        mRestoreAudioConfigTimerMask = new TimerTask() {
-            public void run() {
-                mUIHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != mRestoreAudioConfigTimer) {
-                            mRestoreAudioConfigTimer.cancel();
-                        }
-                        mRestoreAudioConfigTimer = null;
-                        mRestoreAudioConfigTimerMask = null;
-
-                        MXCallsManager.restoreCallAudio(context);
-                    }
-                });
-            }
-        };
-
-        mRestoreAudioConfigTimer.schedule(mRestoreAudioConfigTimerMask, delayMs);
-
-    }
-
     /**
      * Start the end call sound
      */
@@ -499,6 +467,110 @@ public class CallRingManager {
             MXCallsManager.setCallSpeakerphoneOn(context, true);
             mBusyPlayer.start();
             restoreAudioConfigAfter(context, 5000);
+        }
+    }
+
+    //==============================================================================================================
+    // speakers management
+    //==============================================================================================================
+
+    // save the audio statuses
+    private static Integer mAudioMode = null;
+    private static Boolean mIsSpeakerOn = null;
+
+    private static Timer mRestoreAudioConfigTimer = null;
+    private static TimerTask mRestoreAudioConfigTimerMask = null;
+    private static Handler mUIHandler = null;
+
+    private static void prepareCallAudio(Context context) {
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
+        mAudioMode = audioManager.getMode();
+        mIsSpeakerOn = audioManager.isSpeakerphoneOn();
+    }
+
+
+
+    private static void restoreAudioConfigAfter(final Context context, int delayMs) {
+        if (null == mUIHandler) {
+            mUIHandler = new Handler(Looper.getMainLooper());
+        }
+
+        mRestoreAudioConfigTimer = new Timer();
+        mRestoreAudioConfigTimerMask = new TimerTask() {
+            public void run() {
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != mRestoreAudioConfigTimer) {
+                            mRestoreAudioConfigTimer.cancel();
+                        }
+                        mRestoreAudioConfigTimer = null;
+                        mRestoreAudioConfigTimerMask = null;
+
+                        MXCallsManager.restoreCallAudio(context);
+                    }
+                });
+            }
+        };
+
+        mRestoreAudioConfigTimer.schedule(mRestoreAudioConfigTimerMask, delayMs);
+    }
+
+
+    private static void restoreCallAudio(Context context) {
+        if ((null != mAudioMode) && (null != mIsSpeakerOn)) {
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+            // ignore speaker button if a headset is connected
+            if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
+                audioManager.setMode(mAudioMode);
+                audioManager.setSpeakerphoneOn(mIsSpeakerOn);
+            }
+
+            mAudioMode = null;
+            mIsSpeakerOn = null;
+        }
+    }
+
+    /**
+     * Sets the speakerphone on or off.
+     *
+     * @param isOn true to turn on speakerphone;
+     *           false to turn it off
+     */
+    public static void setSpeakerphoneOn(Context context, boolean isOn) {
+        Log.d(LOG_TAG, "setCallSpeakerphoneOn " + isOn);
+
+        if ((null == mAudioMode) || (null == mIsSpeakerOn)) {
+            prepareCallAudio(context);
+        }
+
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
+        // ignore speaker button if a headset is connected
+        if (!audioManager.isBluetoothA2dpOn() && !audioManager.isWiredHeadsetOn()) {
+            int audioMode = AudioManager.MODE_IN_COMMUNICATION;
+
+            if (audioManager.getMode() != audioMode) {
+                audioManager.setMode(audioMode);
+            }
+
+            if (isOn != audioManager.isSpeakerphoneOn()) {
+                audioManager.setSpeakerphoneOn(isOn);
+            }
+        }
+    }
+
+
+    /**
+     * Toogle the speaker
+     */
+    public void toggleSpeaker() {
+        AudioManager audioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+
+        if (null != audioManager) {
+            MXCallsManager.setCallSpeakerphoneOn(mContext, !audioManager.isSpeakerphoneOn());
         }
     }
 }
