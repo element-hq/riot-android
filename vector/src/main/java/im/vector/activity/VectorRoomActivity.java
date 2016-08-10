@@ -1046,6 +1046,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
             @Override
             public void onSuccess(final IMXCall call) {
+                Log.d(LOG_TAG,"## startIpCall(): onSuccess");
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1070,17 +1071,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             @Override
             public void onNetworkError(Exception e) {
-
+                Log.e(LOG_TAG,"## startIpCall(): onNetworkError Msg="+e.getMessage());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-
+                Log.e(LOG_TAG,"## startIpCall(): onMatrixError Msg="+e.getLocalizedMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-
+                Log.e(LOG_TAG,"## startIpCall(): onUnexpectedError Msg="+e.getLocalizedMessage());
             }
         });
     }
