@@ -194,32 +194,52 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * @param room the room
      * @param isVideo true if the call is a video call
      */
-    private void startCall(Room room, boolean isVideo) {
+    private void startCall(final Room room, final boolean isVideo) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "startCall : the session is not anymore valid");
             return;
         }
 
         // create the call object
-        IMXCall call = mSession.mCallsManager.createCallInRoom(mRoom.getRoomId());
+        mSession.mCallsManager.createCallInRoom(mRoom.getRoomId(), new ApiCallback<IMXCall>() {
+            @Override
+            public void onSuccess(final IMXCall call) {
+                VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        call.setIsVideo(isVideo);
+                        call.setIsIncoming(false);
 
-        if (null != call) {
-            call.setIsVideo(isVideo);
-            call.setRoom(room);
-            call.setIsIncoming(false);
+                        final Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorCallViewActivity.class);
 
-            final Intent intent = new Intent(VectorMemberDetailsActivity.this, VectorCallViewActivity.class);
+                        intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
-            intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-            intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                VectorMemberDetailsActivity.this.startActivity(intent);
+                            }
+                        });
+                    }
+                });
+            }
 
-            VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    VectorMemberDetailsActivity.this.startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onNetworkError(Exception e) {
+
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+
+            }
+        });
     }
 
     /**

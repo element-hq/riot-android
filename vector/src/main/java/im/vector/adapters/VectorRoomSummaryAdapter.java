@@ -371,7 +371,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 Room room = mMxSession.getDataHandler().getStore().getRoom(roomSummaryId);
 
                 // check if the room exists
-                if ((null != room) && isMatchedPattern(room)) {
+                // the user conference rooms are not displayed.
+                if ((null != room) && isMatchedPattern(room) && !room.isConferenceUserRoom()) {
                     // list first the summary
                     if (room.isInvited()) {
                         inviteRoomSummaryList.add(roomSummary);

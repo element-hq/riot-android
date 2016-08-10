@@ -219,6 +219,16 @@ public class Matrix {
                 Log.d(LOG_TAG, "onCallHangUp : homeactivity does not exist -> don't know what to do");
             }
         }
+
+
+        @Override
+        public void onVoipConferenceStarted(String roomId) {
+
+        }
+
+        @Override
+        public void onVoipConferenceFinished(String roomId) {
+        }
     };
 
     // constructor
