@@ -178,7 +178,9 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
 
     @Override
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS) {
             if (Manifest.permission.READ_CONTACTS.equals(aPermissions[0])) {
                 if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                     Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");

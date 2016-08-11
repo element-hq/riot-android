@@ -663,10 +663,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     @Override
     public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
-            if(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mIncomingCallSessionId,mIncomingCallId);
-            } else if(null != mIncomingCall) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
+            if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+                startCall(mIncomingCallSessionId, mIncomingCallId);
+            } else if (null != mIncomingCall) {
                 mIncomingCall.hangup("busy");
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
