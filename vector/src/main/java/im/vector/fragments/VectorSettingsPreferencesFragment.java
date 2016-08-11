@@ -541,8 +541,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 // Setting Positive "Yes" Button
                 alertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        if (null != getActivity()) {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
 
                         String oldPwd = oldPasswordText.getText().toString().trim();
                         String newPwd = newPasswordText.getText().toString().trim();
@@ -592,8 +594,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 // Setting Negative "NO" Button
                 alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        if (null != getActivity()) {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
                     }
                 });
 
@@ -602,8 +606,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        if (null != getActivity()) {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
                     }
                 });
 

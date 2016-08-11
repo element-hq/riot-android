@@ -319,10 +319,13 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     @Override
     public void onStop() {
-        InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if ((null != inputMgr) && (null != mPatternToSearchEditText)) {
-            inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
-            mPatternToSearchEditText.clearFocus();
+        // sanity check, reported by GA
+        if (null != getActivity()) {
+            InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if ((null != inputMgr) && (null != mPatternToSearchEditText)) {
+                inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+                mPatternToSearchEditText.clearFocus();
+            }
         }
 
         super.onStop();
