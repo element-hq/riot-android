@@ -1071,8 +1071,14 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             private void onError() {
-                Activity activity = VectorRoomActivity.this;
-                CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call));
+                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setProgressVisibility(View.GONE);
+                        Activity activity = VectorRoomActivity.this;
+                        CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call));
+                    }
+                });
             }
 
             @Override
