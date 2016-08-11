@@ -895,7 +895,9 @@ public class VectorRoomMediasSender {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             mImageSizesListDialog = null;
-                            aListener.onCancel();
+                            if (null != aListener) {
+                                aListener.onCancel();
+                            }
                         }
                     });
                 }
@@ -910,7 +912,9 @@ public class VectorRoomMediasSender {
                 @Override
                 public void run() {
                     mVectorMessageListFragment.uploadImageContent(aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
-                    aListener.onDone();
+                    if (null != aListener) {
+                        aListener.onDone();
+                    }
                 }
             });
         }
