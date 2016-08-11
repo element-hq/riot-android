@@ -79,6 +79,12 @@ public class LogUtilities {
             "ListView:S",
             "Posix:S",
             "chatty:S",
+            "ViewRootImpl:S",
+            "TextView:S",
+            "MotionRecognitionManager:S",
+            "DisplayListCanvas:S",
+            "AudioManager:S",
+            
             "*:*"
     };
 
