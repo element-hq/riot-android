@@ -237,11 +237,16 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                 }
 
                 if (null != mediaUri) {
-                    final Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.setType(mediaInfo.mMimeType);
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
-                    startActivity(sendIntent);
+                    try {
+                        final Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.setType(mediaInfo.mMimeType);
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
+                        startActivity(sendIntent);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onAction : cannot display the media " + mediaUri + " mimeType " + mediaInfo.mMimeType);
+                        CommonActivityUtils.displayToast(this, e.getLocalizedMessage());
+                    }
                 }
             }
         } else {
