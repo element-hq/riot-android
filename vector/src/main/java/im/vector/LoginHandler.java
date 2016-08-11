@@ -51,6 +51,12 @@ public class LoginHandler {
      * @param callback the callback
      */
     private void onRegistrationDone(Context appCtx, HomeserverConnectionConfig hsConfig, Credentials credentials, SimpleApiCallback<HomeserverConnectionConfig> callback) {
+        // sanity check - GA issue
+        if (TextUtils.isEmpty(credentials.userId)) {
+            callback.onMatrixError(new MatrixError(MatrixError.FORBIDDEN, "No user id"));
+            return;
+        }
+
         Collection<MXSession> sessions = Matrix.getMXSessions(appCtx);
         boolean isDuplicated = false;
 
