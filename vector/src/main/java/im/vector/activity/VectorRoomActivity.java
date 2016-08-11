@@ -642,7 +642,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mStopCallLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        IMXCall call = mSession.mCallsManager.callWithRoomId(mRoom.getRoomId());
+                        IMXCall call = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
 
                         if (null != call) {
                             call.hangup(null);
@@ -1663,7 +1663,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 call.removeListener(mCallListener);
                 call.addListener(mCallListener);
 
-                IMXCall roomCall = mSession.mCallsManager.callWithRoomId(mRoom.getRoomId());
+                IMXCall roomCall = mSession.mCallsManager.getCallWithRoomId(mRoom.getRoomId());
 
                 mStartCallLayout.setVisibility(View.GONE);
                 mStopCallLayout.setVisibility((call == roomCall) ? View.VISIBLE : View.GONE);

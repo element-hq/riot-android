@@ -1580,10 +1580,11 @@ public class CommonActivityUtils {
             if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
                 switch (aCallEndReason) {
                     case IMXCall.END_CALL_REASON_PEER_HANG_UP:
-                        if(aCallingActivity instanceof InComingCallActivity)
+                        if(aCallingActivity instanceof InComingCallActivity) {
                             CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_cancelled_call));
-                        else
-                            CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup));
+                        } else {
+                            // let VectorCallActivity manage its
+                        }
                         break;
 
                     case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:

@@ -144,7 +144,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
             } else if(null == (mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId))){
                 Log.e(LOG_TAG, "## onCreate(): invalid session (null)");
                 finish();
-            } else if(null == (mMxCall = mSession.mCallsManager.callWithCallId(mCallId))){
+            } else if(null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))){
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
                 finish();
             } else {
