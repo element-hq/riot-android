@@ -18,6 +18,7 @@ package im.vector.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -1069,19 +1070,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 });
             }
 
+            private void onError() {
+                Activity activity = VectorRoomActivity.this;
+                CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call));
+            }
+
             @Override
             public void onNetworkError(Exception e) {
                 Log.e(LOG_TAG,"## startIpCall(): onNetworkError Msg="+e.getMessage());
+                onError();
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
                 Log.e(LOG_TAG,"## startIpCall(): onMatrixError Msg="+e.getLocalizedMessage());
+                onError();
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
                 Log.e(LOG_TAG,"## startIpCall(): onUnexpectedError Msg="+e.getLocalizedMessage());
+                onError();
             }
         });
     }
@@ -1630,6 +1639,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             IMXCall call = VectorCallViewActivity.getActiveCall();
 
             if (null == call) {
+                // in conference call, the user must have have the power to invite someone.
+                if (mRoom.getActiveMembers().size() > 2) {
+                    PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
+
+                    if (null != powerLevels) {
+                        isCallSupported &= powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.invite;
+                    }
+                }
+
                 mStartCallLayout.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else {
