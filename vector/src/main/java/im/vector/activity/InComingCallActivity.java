@@ -158,7 +158,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 VectorUtils.loadRoomAvatar(this, mSession, mCallingUserAvatarView,  mMxCall.getRoom());
 
                 // set the room display name
-                String roomDisplayName = VectorUtils.getRoomDisplayname(this, mSession, mMxCall.getRoom());
+                String roomDisplayName = VectorUtils.getRoomDisplayName(this, mSession, mMxCall.getRoom());
                 if(null != roomDisplayName) {
                     mRoomNameTextView.setText(roomDisplayName);
                 } else {

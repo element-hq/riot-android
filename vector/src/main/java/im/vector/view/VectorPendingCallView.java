@@ -206,7 +206,7 @@ public class VectorPendingCallView extends RelativeLayout {
             String description;
 
             if (null != room) {
-                description = VectorUtils.getRoomDisplayname(getContext(), mCall.getSession(), room);
+                description = VectorUtils.getRoomDisplayName(getContext(), mCall.getSession(), room);
             } else {
                 description = mCall.getCallId();
             }

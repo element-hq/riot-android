@@ -1862,7 +1862,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void setTitle() {
         String titleToApply = mDefaultRoomName;
         if((null != mSession) && (null != mRoom)) {
-            titleToApply = VectorUtils.getRoomDisplayname(this, mSession, mRoom);
+            titleToApply = VectorUtils.getRoomDisplayName(this, mSession, mRoom);
 
             if (TextUtils.isEmpty(titleToApply)) {
                 titleToApply = mDefaultRoomName;
@@ -1898,7 +1898,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // update the room name
         if (null != mRoom) {
-            mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayname(this, mSession, mRoom));
+            mActionBarHeaderRoomName.setText(VectorUtils.getRoomDisplayName(this, mSession, mRoom));
         } else if (null != sRoomPreviewData) {
             mActionBarHeaderRoomName.setText(sRoomPreviewData.getRoomName());
         } else {

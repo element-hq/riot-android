@@ -706,7 +706,7 @@ public class EventStreamService extends Service {
      * @return the room name
      */
     private String getRoomName(MXSession session, Room room, Event event) {
-        String roomName = VectorUtils.getRoomDisplayname(EventStreamService.this, session, room);
+        String roomName = VectorUtils.getRoomDisplayName(EventStreamService.this, session, room);
 
         // avoid displaying the room Id
         // try to find the sender display name
@@ -895,7 +895,7 @@ public class EventStreamService extends Service {
         }
 
         if (null == largeBitmap) {
-            largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarcolor(senderID), TextUtils.isEmpty(from) ? senderID : from, true);
+            largeBitmap = VectorUtils.getAvatar(getApplicationContext(), VectorUtils.getAvatarColor(senderID), TextUtils.isEmpty(from) ? senderID : from, true);
         }
 
         mNotificationSessionId = session.getCredentials().userId;

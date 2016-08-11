@@ -185,7 +185,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             }
         }
 
-        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mContext, mSession);
+        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mSession);
 
         // add contact emails
         Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(getContext());
@@ -375,9 +375,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
             if ((null != mFirstEntry) && (position == 0)) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@", true));
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(null), "@@", true));
             } else if ((null != participant.mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches())) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(participant.mUserId), "@@", true));
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(participant.mUserId), "@@", true));
             } else {
                 if (TextUtils.isEmpty(participant.mUserId)) {
                     VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);

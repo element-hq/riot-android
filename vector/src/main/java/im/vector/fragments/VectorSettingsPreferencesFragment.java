@@ -841,49 +841,51 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
-                mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+                if (null != resource) {
+                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
-                    @Override
-                    public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideLoadingView(false);
-                            }
-                        });
-                    }
+                        @Override
+                        public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoadingView(false);
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onUploadComplete(final String uploadId, final String contentUri) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void info) {
-                                        onCommonDone(null);
-                                        refreshDisplay();
-                                    }
+                        @Override
+                        public void onUploadComplete(final String uploadId, final String contentUri) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void info) {
+                                            onCommonDone(null);
+                                            refreshDisplay();
+                                        }
 
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        onCommonDone(e.getLocalizedMessage());
-                                    }
+                                        @Override
+                                        public void onNetworkError(Exception e) {
+                                            onCommonDone(e.getLocalizedMessage());
+                                        }
 
-                                    @Override
-                                    public void onMatrixError(MatrixError e) {
-                                        onCommonDone(e.getLocalizedMessage());
-                                    }
+                                        @Override
+                                        public void onMatrixError(MatrixError e) {
+                                            onCommonDone(e.getLocalizedMessage());
+                                        }
 
-                                    @Override
-                                    public void onUnexpectedError(Exception e) {
-                                        onCommonDone(e.getLocalizedMessage());
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                                        @Override
+                                        public void onUnexpectedError(Exception e) {
+                                            onCommonDone(e.getLocalizedMessage());
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
             }
         }
 

@@ -71,7 +71,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
 
-    public static final String LOG_TAG = "VectorUtils";
+    private static final String LOG_TAG = "VectorUtils";
 
     public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
@@ -122,25 +122,25 @@ public class VectorUtils {
     //==============================================================================================================
 
     /**
-     * Returns the displayname to display for a public room.
+     * Returns the public room display name..
      * @param publicRoom the public room.
      * @return the room display name.
      */
     public static String getPublicRoomDisplayName(PublicRoom publicRoom) {
-        String displayname = publicRoom.name;
+        String displayName = publicRoom.name;
 
-        if (TextUtils.isEmpty(displayname)) {
+        if (TextUtils.isEmpty(displayName)) {
 
             if ((null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
-                displayname = publicRoom.aliases.get(0);
+                displayName = publicRoom.aliases.get(0);
             } else {
-                displayname = publicRoom.roomId;
+                displayName = publicRoom.roomId;
             }
-        } else if (!displayname.startsWith("#")  && (null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
-            displayname = displayname + " (" + publicRoom.aliases.get(0) + ")";
+        } else if (!displayName.startsWith("#")  && (null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
+            displayName = displayName + " (" + publicRoom.aliases.get(0) + ")";
         }
 
-        return displayname;
+        return displayName;
     }
 
     /**
@@ -148,15 +148,15 @@ public class VectorUtils {
      * @param context the application context.
      * @param session the room session.
      * @param room the room.
-     * @return the room displayname.
+     * @return the room display name.
      */
-    public static String getRoomDisplayname(Context context, MXSession session, Room room) {
+    public static String getRoomDisplayName(Context context, MXSession session, Room room) {
         // sanity checks
         if (null == room) {
             return null;
         }
 
-        // this algo is the one defined in
+        // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
 
@@ -184,8 +184,8 @@ public class VectorUtils {
         String myUserId = session.getMyUserId();
 
         Collection<RoomMember> members = roomState.getDisplayableMembers();
-        ArrayList<RoomMember> othersActiveMembers = new ArrayList<RoomMember>();
-        ArrayList<RoomMember> activeMembers = new ArrayList<RoomMember>();
+        ArrayList<RoomMember> othersActiveMembers = new ArrayList<>();
+        ArrayList<RoomMember> activeMembers = new ArrayList<>();
 
         for(RoomMember member : members) {
             if (!TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_LEAVE)) {
@@ -248,16 +248,16 @@ public class VectorUtils {
     //==============================================================================================================
 
     // avatars cache
-    static LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<String, Bitmap>(20 * 1024 * 1024);
+    static final private LruCache<String, Bitmap> mAvatarImageByKeyDict = new LruCache<>(20 * 1024 * 1024);
     // the avatars background color
-    static ArrayList<Integer> mColorList = new ArrayList<Integer>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
+    static final private ArrayList<Integer> mColorList = new ArrayList<>(Arrays.asList(0xff76cfa6, 0xff50e2c2, 0xfff4c371));
 
     /**
      * Provides the avatar background color from a text.
      * @param text the text.
      * @return the color.
      */
-    public static int getAvatarcolor(String text) {
+    public static int getAvatarColor(String text) {
         long colorIndex = 0;
 
         if (!TextUtils.isEmpty(text)) {
@@ -311,7 +311,7 @@ public class VectorUtils {
     }
 
     /**
-     * Return the char to display for a naem
+     * Return the char to display for a name
      * @param name the name
      * @return teh first char
      */
@@ -373,10 +373,10 @@ public class VectorUtils {
      * @param userId the member userId.
      * @param displayName the member display name.
      */
-    public static void setDefaultMemberAvatar(final ImageView imageView, final String userId, final String displayName) {
+    private static void setDefaultMemberAvatar(final ImageView imageView, final String userId, final String displayName) {
         // sanity checks
         if (null != imageView && !TextUtils.isEmpty(userId)) {
-            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, true);
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, true);
 
             if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
                 imageView.setImageBitmap(bitmap);
@@ -400,14 +400,14 @@ public class VectorUtils {
      * Set the default vector room avatar.
      * @param imageView the image view.
      * @param roomId the room id.
-     * @param displayName the room displayname.
+     * @param displayName the room display name.
      */
     public static void setDefaultRoomVectorAvatar(ImageView imageView, String roomId, String displayName) {
         VectorUtils.setDefaultMemberAvatar(imageView, roomId, displayName);
     }
 
     /**
-     * Set the room avatar in an imageview.
+     * Set the room avatar in an imageView.
      * @param context the context
      * @param session the session
      * @param imageView the image view
@@ -415,12 +415,12 @@ public class VectorUtils {
      */
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
-            VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayname(context, session, room));
+            VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
         }
     }
 
     /**
-     * Set the room member avatar in an imageview.
+     * Set the room member avatar in an imageView.
      * @param context the context
      * @param session the session
      * @param imageView the image view
@@ -433,7 +433,7 @@ public class VectorUtils {
     }
 
     /**
-     * Set the user avatar in an imageview.
+     * Set the user avatar in an imageView.
      * @param context the context
      * @param session the session
      * @param imageView the image view
@@ -451,14 +451,13 @@ public class VectorUtils {
     private static Handler mUIHandler = null;
 
     /**
-     * Set the user avatar in an imageview.
+     * Set the user avatar in an imageView.
      * @param context the context
      * @param session the session
      * @param imageView the image view
      * @param avatarUrl the avatar url
      * @param userId the user id
-     * @param displayName the user displayname
-     * @return the download Id
+     * @param displayName the user display name
      */
     public static void loadUserAvatar(final Context context,final MXSession session, final ImageView imageView, final String avatarUrl, final String userId, final String displayName) {
         // sanity check
@@ -466,9 +465,8 @@ public class VectorUtils {
             return;
         }
 
-        // reset the imageview tag
+        // reset the imageView tag
         imageView.setTag(null);
-
 
         if (session.getMediasCache().isAvatarThumbnailCached(avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
             session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
@@ -480,7 +478,7 @@ public class VectorUtils {
                 mUIHandler = new Handler(Looper.getMainLooper());
             }
 
-            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
+            final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
 
             // test if the default avatar has been computed
             if (null != bitmap) {
@@ -489,7 +487,7 @@ public class VectorUtils {
                 final String tag = avatarUrl + userId + displayName;
                 imageView.setTag(tag);
 
-                if (!session.getMediasCache().isMediaUrlUnreachable(avatarUrl)) {
+                if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
                     mImagesThreadHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -511,7 +509,7 @@ public class VectorUtils {
                             imageView.setTag(null);
                             setDefaultMemberAvatar(imageView, userId, displayName);
 
-                            if (!session.getMediasCache().isMediaUrlUnreachable(avatarUrl)) {
+                            if (!MXMediasCache.isMediaUrlUnreachable(avatarUrl)) {
                                 final String tmpTag1 = "11" + avatarUrl + "-" + userId + "--" + displayName;
                                 imageView.setTag(tmpTag1);
 
@@ -519,7 +517,7 @@ public class VectorUtils {
                                 mUIHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        // test if the imageview tag has not been updated
+                                        // test if the imageView tag has not been updated
                                         if (TextUtils.equals(tmpTag1, (String)imageView.getTag())) {
                                             final String tmptag2 = "22" + avatarUrl + userId + displayName;
                                             imageView.setTag(tmptag2);
@@ -527,9 +525,9 @@ public class VectorUtils {
                                             mImagesThreadHandler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    // test if the imageview tag has not been updated
+                                                    // test if the imageView tag has not been updated
                                                     if (TextUtils.equals(tmptag2, (String) imageView.getTag())) {
-                                                        final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarcolor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
+                                                        final Bitmap bitmap = VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(userId), TextUtils.isEmpty(displayName) ? userId : displayName, false);
                                                         session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, avatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
                                                     }
                                                 }
@@ -619,41 +617,6 @@ public class VectorUtils {
     //==============================================================================================================
 
     /**
-     * List the media Uris provided in an intent
-     * @param intent the intent.
-     * @return the media URIs list
-     */
-    public static  ArrayList<Uri> listMediaUris(Intent intent) {
-        ArrayList<Uri> uris = new ArrayList<Uri>();
-
-        if (null != intent) {
-            ClipData clipData = null;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                clipData = intent.getClipData();
-            }
-
-            // multiple data
-            if (null != clipData) {
-                int count = clipData.getItemCount();
-
-                for (int i = 0; i < count; i++) {
-                    ClipData.Item item = clipData.getItemAt(i);
-                    Uri uri = item.getUri();
-
-                    if (null != uri) {
-                        uris.add(uri);
-                    }
-                }
-            } else if (null != intent.getData()) {
-                uris.add(intent.getData());
-            }
-        }
-
-        return uris;
-    }
-
-    /**
      * Return a selected bitmap from an intent.
      * @param intent the intent
      * @return the bitmap uri
@@ -694,7 +657,7 @@ public class VectorUtils {
                     return thumbnailUri;
 
                 } catch (Exception e) {
-
+                    Log.e(LOG_TAG, "## etThumbnailUriFromIntent failed " + e.getMessage());
                 }
             }
         }
@@ -712,7 +675,7 @@ public class VectorUtils {
      * @param secondsInterval the time interval.
      * @return the formatted string
      */
-    public static String formatSecondsIntervalFloored(Context context, long secondsInterval) {
+    private static String formatSecondsIntervalFloored(Context context, long secondsInterval) {
         String formattedString;
 
         if (secondsInterval < 0) {
@@ -739,7 +702,7 @@ public class VectorUtils {
      * @param session the session.
      * @param userId the userId.
      * @param refreshCallback the presence callback.
-     * @return the online status desrcription.
+     * @return the online status description.
      */
     public static String getUserOnlineStatus(final Context context, final MXSession session, final String userId, final SimpleApiCallback<Void> refreshCallback) {
         String presenceText = context.getResources().getString(R.string.room_participants_offline);
@@ -833,13 +796,12 @@ public class VectorUtils {
     /**
      * List the active users i.e the active rooms users (invited or joined) and the contacts with matrix id emails.
      * This function could require a long time to process so it should be called in background.
-     * @param context the context
      * @param session the session.
      * @return a map indexed by the matrix id.
      */
-    public static HashMap<String, ParticipantAdapterItem> listKnownParticipants(Context context, MXSession session) {
-        // a hashmap is a lot faster than a list search
-        HashMap<String, ParticipantAdapterItem> map = new HashMap<String, ParticipantAdapterItem>();
+    public static HashMap<String, ParticipantAdapterItem> listKnownParticipants(MXSession session) {
+        // a hash map is a lot faster than a list search
+        HashMap<String, ParticipantAdapterItem> map = new HashMap<>();
 
         // check known users
         Collection<User> users = session.getDataHandler().getStore().getUsers();
@@ -849,22 +811,6 @@ public class VectorUtils {
         for(User user : users) {
             map.put(user.user_id, new ParticipantAdapterItem(user));
         }
-
-        // from contacts
-        // there is no design to select an email from a contact
-        /*Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(context);
-
-        for(Contact contact : contacts) {
-            if (contact.hasMatridIds(context)) {
-                Contact.MXID mxId = contact.getFirstMatrixId();
-
-                if (null == map.get(mxId.mMatrixId)) {
-                    map.put(mxId.mMatrixId, new ParticipantAdapterItem(contact, context));
-                }
-            } else {
-                map.put(contact.hashCode() + "", new ParticipantAdapterItem(contact, context));
-            }
-        }*/
 
         return map;
     }

@@ -225,7 +225,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             res = false;
 
             if (!TextUtils.isEmpty(mSearchedPattern)) {
-                String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, room);
+                String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
                 res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().indexOf(mSearchedPattern) >= 0));
             }
         }
@@ -838,11 +838,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), null, true));
+                avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarColor(null), null, true));
             } else {
                 roomNameTxtView.setText(mSearchedPattern);
                 roomMsgTxtView.setText("");
-                avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarcolor(null), "@", true));
+                avatarImageView.setImageBitmap(VectorUtils.getAvatar(avatarImageView.getContext(), VectorUtils.getAvatarColor(null), "@", true));
             }
 
             return convertView;
@@ -866,7 +866,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // display the room avatar
         avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-        final String roomName = VectorUtils.getRoomDisplayname(mContext, mMxSession, childRoom);
+        final String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name
