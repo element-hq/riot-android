@@ -17,6 +17,7 @@
 package im.vector.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,8 @@ import im.vector.util.VectorUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.util.EventDisplay;
 
 /**
  * An adapter which display the rooms list
@@ -54,6 +57,24 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
         mLayoutResourceId = layoutResourceId;
         mLayoutInflater = LayoutInflater.from(mContext);
         mSession = session;
+    }
+
+    /**
+     * Provides the formatted timestamp to display.
+     * null means that the timestamp text must be hidden.
+     * @param event the event.
+     * @return  the formatted timestamp to display.
+     */
+    private String getFormattedTimestamp(Event event) {
+        String text =  AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false);
+
+        // don't display the today before the time
+        String today = mContext.getString(R.string.today) + " ";
+        if (text.startsWith(today)) {
+            text = text.substring(today.length());
+        }
+
+        return text;
     }
 
     @Override
@@ -86,16 +107,23 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
             VectorUtils.loadRoomAvatar(mContext, mSession, avatarImageView, childRoom);
         }
 
-        if (null != childRoom) {
-            // set the topic
-            roomMessageTxtView.setText(childRoom.getTopic());
+        if (roomSummary.getLatestEvent() != null) {
+            EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestEvent(), roomSummary.getLatestRoomState());
+            eventDisplay.setPrependMessagesWithAuthor(true);
+            roomMessageTxtView.setText(eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color)));
+
+            timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestEvent()));
+            timestampTxtView.setTextColor(mContext.getResources().getColor(R.color.vector_0_54_black_color));
+            timestampTxtView.setTypeface(null, Typeface.NORMAL);
+            timestampTxtView.setVisibility(View.VISIBLE);
+        } else {
+            roomMessageTxtView.setText("");
+            timestampTxtView.setVisibility(View.GONE);
         }
 
         // display the room name
         roomNameTxtView.setText(roomName);
-
-        timestampTxtView.setVisibility(View.GONE);
-
+        
         // separator
         separatorView.setVisibility(View.VISIBLE);
 
