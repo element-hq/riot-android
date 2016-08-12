@@ -159,7 +159,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
         if (mDisplayRoomName) {
             TextView roomTextView = (TextView) convertView.findViewById(R.id.messagesAdapter_message_room_name_textview);
-            roomTextView.setText(VectorUtils.getRoomDisplayname(mContext, mSession, room));
+            roomTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, room));
         }
 
         // display the day

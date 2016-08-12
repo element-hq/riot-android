@@ -63,7 +63,8 @@ import im.vector.fragments.VectorRecentsListFragment;
 import im.vector.ga.GAHelper;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.util.RageShake;
+import im.vector.util.BugReporter;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorPendingCallView;
 
@@ -226,11 +227,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMXCall call = CallViewActivity.getActiveCall();
+                IMXCall call = VectorCallViewActivity.getActiveCall();
                 if (null != call) {
-                    final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
-                    intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
-                    intent.putExtra(CallViewActivity.EXTRA_CALL_ID, call.getCallId());
+                    final Intent intent = new Intent(VectorHomeActivity.this, VectorCallViewActivity.class);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, call.getSession().getCredentials().userId);
+                    intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, call.getCallId());
 
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -508,8 +509,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
 
         mRecentsListFragment.setIsDirectoryDisplayed(false);
-
-        VectorApp.setCurrentActivity(null);
     }
 
     @Override
@@ -556,8 +555,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mSession.getDataHandler().addListener(mEventsListener);
         }
 
-        VectorApp.setCurrentActivity(this);
-
         mRoomCreationFab.show();
 
         this.runOnUiThread(new Runnable() {
@@ -597,6 +594,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mStorePermissionCheck = true;
             CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY, this);
         }
+
+        // https://github.com/vector-im/vector-android/issues/323
+        // the tool bar color is not restored on some devices.
+        mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
     }
 
     @Override
@@ -659,16 +660,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         return retCode;
     }
 
+
     @Override
     public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if(aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL){
-            if(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mIncomingCallSessionId,mIncomingCallId);
-            } else if(null != mIncomingCall) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
+            if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
+                startCall(mIncomingCallSessionId, mIncomingCallId);
+            } else if (null != mIncomingCall) {
                 mIncomingCall.hangup("busy");
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
-            Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY = " + aPermissions[0]);
+            Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY");
         } else {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): unknown RequestCode = " + aRequestCode);
         }
@@ -831,7 +835,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
 
                     case R.id.sliding_menu_send_bug_report: {
-                        RageShake.getInstance().sendBugReport();
+                        BugReporter.sendBugReport();
                         break;
                     }
 
@@ -995,20 +999,17 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private void startCall(String sessionId, String callId) {
         // sanity checks
         if ((null != sessionId) && (null != callId)) {
-            // display the call activity only if the application is in background.
-            if (isScreenOn()) {
-                final Intent intent = new Intent(VectorHomeActivity.this, CallViewActivity.class);
+            final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
 
-                intent.putExtra(CallViewActivity.EXTRA_MATRIX_ID, sessionId);
-                intent.putExtra(CallViewActivity.EXTRA_CALL_ID, callId);
+            intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
+            intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);
 
-                VectorHomeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        VectorHomeActivity.this.startActivity(intent);
-                    }
-                });
-            }
+            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    VectorHomeActivity.this.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -1038,7 +1039,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             String callId = call.getCallId();
             // either the call view has been put in background
             // or the ringing started because of a notified call in lockscreen (the callview was never created)
-            final boolean isActiveCall = CallViewActivity.isBackgroundedCallId(callId) ||
+            final boolean isActiveCall = VectorCallViewActivity.isBackgroundedCallId(callId) ||
                     (!mSession.mCallsManager.hasActiveCalls() && IMXCall.CALL_STATE_CREATED.equals(call.getCallState()));
 
             VectorHomeActivity.this.runOnUiThread(new Runnable() {
@@ -1052,24 +1053,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // clear call in progress notification
                         EventStreamService.getInstance().checkDisplayedNotification();
                         // and play a lovely sound
-                        CallViewActivity.startEndCallSound(VectorHomeActivity.this);
+                        VectorCallSoundManager.startEndCallSound();
                     }
                 }
             });
-        }
-    }
-
-    @SuppressLint("NewApi")
-    /**
-     * Tell if the screen is turned on
-     */
-    private boolean isScreenOn() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            return powerManager.isInteractive();
-        } else {
-            return powerManager.isScreenOn();
         }
     }
 }

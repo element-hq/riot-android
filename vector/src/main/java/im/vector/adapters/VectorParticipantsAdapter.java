@@ -15,8 +15,6 @@
  */
 
 package im.vector.adapters;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,7 +27,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.IMXStore;
@@ -69,20 +66,20 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
 
     // defines the search method
     // contains the pattern
-    public static String SEARCH_METHOD_CONTAINS = "SEARCH_METHOD_CONTAINS";
+    public static final String SEARCH_METHOD_CONTAINS = "SEARCH_METHOD_CONTAINS";
     // starts with
-    public static String SEARCH_METHOD_STARTS_WITH = "SEARCH_METHOD_STARTS_WITH";
+    public static final String SEARCH_METHOD_STARTS_WITH = "SEARCH_METHOD_STARTS_WITH";
 
     // layout info
     private Context mContext;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     // account info
-    private MXSession mSession;
-    private String mRoomId;
+    private final MXSession mSession;
+    private final String mRoomId;
 
     // used layout
-    private int mLayoutResourceId;
+    private final int mLayoutResourceId;
 
     // participants list
     private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
@@ -164,7 +161,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     /**
      * Refresh the un-invited members
      */
-    public void listOtherMembers() {
+    private void listOtherMembers() {
         // refresh only when performing a search
         if (TextUtils.isEmpty(mPattern)) {
             return;
@@ -173,13 +170,13 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         IMXStore store = mSession.getDataHandler().getStore();
 
         // list the used members IDs
-        mMemberUserIds = new ArrayList<String>();
+        mMemberUserIds = new ArrayList<>();
 
         if ((null != mRoomId) && (null != store)) {
             Room fromRoom = store.getRoom(mRoomId);
 
             if (null != fromRoom) {
-                Collection<RoomMember> members = fromRoom.getMembers();
+                Collection<RoomMember> members = fromRoom.getLiveState().getDisplayableMembers();
                 for (RoomMember member : members) {
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
                         mMemberUserIds.add(member.getUserId());
@@ -188,7 +185,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             }
         }
 
-        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mContext, mSession);
+        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mSession);
 
         // add contact emails
         Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(getContext());
@@ -231,6 +228,13 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     }
 
     /**
+     * @return true if the known members list has been initialized.
+     */
+    public boolean isKnownMembersInitialized() {
+        return null != mDisplayNamesList;
+    }
+
+    /**
      * refresh the display
      * @param searchMethod the search method
      */
@@ -259,7 +263,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
      * @param theFirstEntry the first entry in the result.
      * @param searchListener the search result listener
      */
-    public void refresh(final String searchMethod, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
+    private void refresh(final String searchMethod, final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "refresh : the session is not anymore active");
             return;
@@ -268,7 +272,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
 
         this.setNotifyOnChange(false);
         this.clear();
-        ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<>();
 
         if (!TextUtils.isEmpty(mPattern)) {
             // the list members are refreshed in background to avoid UI locks
@@ -304,7 +308,8 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                     if (null != item.mContact) {
                         // the email <-> matrix Ids matching is done asynchronously
                         if (item.mContact.hasMatridIds(mContext)) {
-                            Log.d(LOG_TAG, "the contact " + item.mContact.getDisplayName() + " contains matrix ID");
+                            // privacy
+                            //Log.d(LOG_TAG, "the contact " + item.mContact.getDisplayName() + " contains matrix ID");
                             item.mUserId = item.mContact.getFirstMatrixId().mMatrixId;
                         }
                     }
@@ -370,9 +375,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             thumbView.setImageBitmap(participant.mAvatarBitmap);
         } else {
             if ((null != mFirstEntry) && (position == 0)) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(null), "@@", true));
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(null), "@@", true));
             } else if ((null != participant.mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches())) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarcolor(participant.mUserId), "@@", true));
+                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(participant.mUserId), "@@", true));
             } else {
                 if (TextUtils.isEmpty(participant.mUserId)) {
                     VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);

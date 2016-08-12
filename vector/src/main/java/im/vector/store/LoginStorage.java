@@ -20,16 +20,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.matrix.androidsdk.HomeserverConnectionConfig;
-import org.matrix.androidsdk.rest.model.login.Credentials;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Stores login credentials in SharedPreferences.
@@ -37,64 +33,36 @@ import java.util.Arrays;
 public class LoginStorage {
     private static final String LOG_TAG = "LoginStorage";
 
-    public static final String PREFS_LOGIN = "Vector.LoginStorage";
+    private static final String PREFS_LOGIN = "Vector.LoginStorage";
 
-    // one account
-    public static final String PREFS_KEY_USERNAME = "PREFS_KEY_USERNAME";
-    public static final String PREFS_KEY_HOME_SERVER = "PREFS_KEY_HOME_SERVER";
-    public static final String PREFS_KEY_ACCESS_TOKEN = "PREFS_KEY_ACCESS_TOKEN";
+    // multi accounts + home server config
+    private static final String PREFS_KEY_CONNECTION_CONFIGS = "PREFS_KEY_CONNECTION_CONFIGS";
 
-    // multi accounts
-    public static final String PREFS_KEY_USERNAMES = "PREFS_KEY_USERNAMES";
-    public static final String PREFS_KEY_HOME_SERVERS = "PREFS_KEY_HOME_SERVERS";
-    public static final String PREFS_KEY_ACCESS_TOKENS = "PREFS_KEY_ACCESS_TOKENS";
-
-    // multi accounts + HomeserverConnectionConfig
-    public static final String PREFS_KEY_CONNECTION_CONFIGS = "PREFS_KEY_CONNECTION_CONFIGS";
-
-    private Context mContext;
-    private Gson mGson;
+    private final Context mContext;
 
     public LoginStorage(Context appContext) {
         mContext = appContext.getApplicationContext();
-        mGson = new Gson();
-    }
 
-    private String serialize(ArrayList<String> list) {
-        if (null == list) {
-            return null;
-        }
-        return mGson.toJson(list);
-    }
-
-    private ArrayList<String> deserialize(String listAsString) {
-        if (null == listAsString) {
-            return null;
-        }
-
-        return new ArrayList(Arrays.asList(mGson.fromJson(listAsString,String[].class)));
     }
 
     /**
-     * Return a list of HomeserverConnectionConfig.
-     * @return a list of HomeserverConnectionConfig.
+     * @return the list of home server configurations.
      */
     public ArrayList<HomeserverConnectionConfig> getCredentialsList() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
 
         String connectionConfigsString = prefs.getString(PREFS_KEY_CONNECTION_CONFIGS, null);
 
-        Log.d(LOG_TAG, "Got connection json: " + connectionConfigsString);
+        Log.d(LOG_TAG, "Got connection json: ");
 
         if (connectionConfigsString == null) {
-            return new ArrayList<HomeserverConnectionConfig>();
+            return new ArrayList<>();
         }
 
         try {
-
             JSONArray connectionConfigsStrings = new JSONArray(connectionConfigsString);
 
-            ArrayList<HomeserverConnectionConfig> configList = new ArrayList<HomeserverConnectionConfig>(
+            ArrayList<HomeserverConnectionConfig> configList = new ArrayList<>(
                     connectionConfigsStrings.length()
             );
 
@@ -113,7 +81,7 @@ public class LoginStorage {
 
     /**
      * Add a credentials to the credentials list
-     * @param config the HomeserverConnectionConfig to add.
+     * @param config the home server config to add.
      */
     public void addCredentials(HomeserverConnectionConfig config) {
         if (null != config && config.getCredentials() != null) {
@@ -124,7 +92,7 @@ public class LoginStorage {
 
             configs.add(config);
 
-            ArrayList<JSONObject> serialized = new ArrayList<JSONObject>(configs.size());
+            ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
 
             try {
                 for (HomeserverConnectionConfig c : configs) {
@@ -155,7 +123,7 @@ public class LoginStorage {
             SharedPreferences.Editor editor = prefs.edit();
 
             ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
-            ArrayList<JSONObject> serialized = new ArrayList<JSONObject>(configs.size());
+            ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
 
             boolean found = false;
             try {
@@ -192,7 +160,7 @@ public class LoginStorage {
             SharedPreferences.Editor editor = prefs.edit();
 
             ArrayList<HomeserverConnectionConfig> configs = getCredentialsList();
-            ArrayList<JSONObject> serialized = new ArrayList<JSONObject>(configs.size());
+            ArrayList<JSONObject> serialized = new ArrayList<>(configs.size());
 
             boolean found = false;
             try {

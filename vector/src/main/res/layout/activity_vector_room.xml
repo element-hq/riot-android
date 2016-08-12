@@ -104,11 +104,18 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
+    <im.vector.view.VectorOngoingConferenceCallView
+        android:id="@+id/room_ongoing_conference_call_view"
+        android:layout_below="@+id/room_pending_call_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/room_pending_call_view">
+        android:layout_below="@+id/room_ongoing_conference_call_view">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -183,7 +190,7 @@
                     <RelativeLayout
                         android:id="@+id/room_send_layout"
                         android:layout_marginLeft="13dp"
-                        android:layout_width="40dp"
+                        android:layout_width="24dp"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/send">
 
@@ -196,6 +203,42 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/room_start_call_layout"
+                        android:layout_marginLeft="13dp"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:contentDescription="@string/call_connecting">
+
+                        <ImageView
+                            android:id="@+id/room_start_call_image_view"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/voice_call_start_green"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/room_end_call_layout"
+                        android:layout_marginLeft="13dp"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:contentDescription="@string/call_ended">
+
+                        <ImageView
+                            android:id="@+id/room_end_call_image_view"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/voice_call_end_fushia"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/room_button_margin" />
                 </LinearLayout>
 
                 <TextView

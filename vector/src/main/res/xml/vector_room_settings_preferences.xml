@@ -26,7 +26,7 @@
         android:entryValues="@array/tag_values" />
 
     <!-- mute/un mute room notifications-->
-    <SwitchPreference
+    <im.vector.preference.VectorSwitchPreference
         android:key="muteNotificationsSwitch"
         android:title="@string/room_settings_mute_notifs" />
 
@@ -39,7 +39,7 @@
         android:title="@string/room_settings_category_access_visibility_title">
 
         <!-- indicate if the room name should listed in the room directory list -->
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:key="roomNameListedInDirectorySwitch"
             android:title="@string/room_settings_directory_visibility" />
 
@@ -69,6 +69,11 @@
         android:key="addresses"
         android:title="@string/room_settings_addresses_pref_title">
 
+    </im.vector.preference.VectorPreferenceCategory>
+
+    <im.vector.preference.VectorPreferenceCategory
+        android:key="banned"
+        android:title="@string/room_settings_banned_users_title" >
     </im.vector.preference.VectorPreferenceCategory>
 
     <im.vector.preference.VectorPreferenceCategory

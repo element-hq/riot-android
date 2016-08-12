@@ -17,7 +17,6 @@
 package im.vector.util;
 
 import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,13 +44,13 @@ import java.util.List;
  */
 public class SharedDataItem implements Parcelable {
 
-    private static String LOG_TAG = "SharedDataItem";
+    private static final String LOG_TAG = "SharedDataItem";
 
     // the item is defined either from an uri
     private Uri mUri;
     private String mMimeType;
 
-    // or a clipdataItem
+    // or a clipData Item
     private ClipData.Item mClipDataItem;
 
     // the filename
@@ -65,7 +64,7 @@ public class SharedDataItem implements Parcelable {
      * @param clipDataItem the data item
      * @param mimeType     the mime type
      */
-    public SharedDataItem(ClipData.Item clipDataItem, String mimeType) {
+    private SharedDataItem(ClipData.Item clipDataItem, String mimeType) {
         mClipDataItem = clipDataItem;
         mMimeType = mimeType;
     }
@@ -109,14 +108,17 @@ public class SharedDataItem implements Parcelable {
      * Constructor from a parcel
      * @param source the parcel
      */
-    public SharedDataItem(Parcel source) {
+    private SharedDataItem(Parcel source) {
         mUri = unformatNullUri((Uri)source.readParcelable(Uri.class.getClassLoader()));
         mMimeType = unformatNullString(source.readString());
 
         CharSequence clipDataItemText = unformatNullString(source.readString());
         String clipDataItemHtml =  unformatNullString(source.readString());
         Uri clipDataItemUri = unformatNullUri((Uri)source.readParcelable(Uri.class.getClassLoader()));
-        mClipDataItem = new ClipData.Item(clipDataItemText, clipDataItemHtml, null, clipDataItemUri);
+
+        if (!TextUtils.isEmpty(clipDataItemText) || !TextUtils.isEmpty(clipDataItemHtml) || (null != clipDataItemUri)) {
+            mClipDataItem = new ClipData.Item(clipDataItemText, clipDataItemHtml, null, clipDataItemUri);
+        }
 
         mFileName = unformatNullString(source.readString());
     }
@@ -165,9 +167,15 @@ public class SharedDataItem implements Parcelable {
         dest.writeParcelable(formatNullUri(mUri), 0);
         dest.writeString(formatNullString(mMimeType));
 
-        dest.writeString(formatNullString(mClipDataItem.getText()));
-        dest.writeString(formatNullString(mClipDataItem.getHtmlText()));
-        dest.writeParcelable(formatNullUri(mClipDataItem.getUri()), 0);
+        if (null == mClipDataItem) {
+            dest.writeString("");
+            dest.writeString("");
+            dest.writeParcelable(formatNullUri(null), 0);
+        } else {
+            dest.writeString(formatNullString(mClipDataItem.getText()));
+            dest.writeString(formatNullString(mClipDataItem.getHtmlText()));
+            dest.writeParcelable(formatNullUri(mClipDataItem.getUri()), 0);
+        }
 
         dest.writeString(formatNullString(mFileName));
     }
@@ -347,6 +355,7 @@ public class SharedDataItem implements Parcelable {
                     try {
                         mFileName = mediaUri.getLastPathSegment();
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## getFileName failed " + e.getMessage());
                     }
 
                     if (TextUtils.isEmpty(mFileName)) {
@@ -374,11 +383,13 @@ public class SharedDataItem implements Parcelable {
                 ResourceUtils.Resource resource = ResourceUtils.openResource(context, mediaUri, getMimeType(context));
 
                 if (null == resource) {
+                    Log.e(LOG_TAG, "## saveMedia : Fail to retrieve the resource " + mediaUri);
                 } else {
                     mUri = saveFile(folder, resource.mContentStream, getFileName(context), resource.mMimeType);
                     resource.mContentStream.close();
                 }
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## saveMedia : failed " + e.getMessage());
             }
         }
     }
@@ -427,6 +438,7 @@ public class SharedDataItem implements Parcelable {
                     fos.write(buf, 0, len);
                 }
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## saveFile failed " + e.getMessage());
             }
 
             fos.flush();
@@ -435,6 +447,7 @@ public class SharedDataItem implements Parcelable {
 
             fileUri = Uri.fromFile(file);
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## saveFile failed " + e.getMessage());
         }
 
         return fileUri;
@@ -446,7 +459,7 @@ public class SharedDataItem implements Parcelable {
      * @return the SharedDataItem list
      */
     public static List<SharedDataItem> listSharedDataItems(Intent intent) {
-        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<SharedDataItem>();
+        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>();
 
         if (null != intent) {
             ClipData clipData = null;
@@ -460,7 +473,7 @@ public class SharedDataItem implements Parcelable {
             if (null != clipData) {
                 if (null != clipData.getDescription()) {
                     if (0 != clipData.getDescription().getMimeTypeCount()) {
-                        mimetypes = new ArrayList<String>();
+                        mimetypes = new ArrayList<>();
 
                         for(int i = 0; i < clipData.getDescription().getMimeTypeCount(); i++) {
                             mimetypes.add(clipData.getDescription().getMimeType(i));

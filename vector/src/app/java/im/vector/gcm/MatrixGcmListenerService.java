@@ -94,9 +94,10 @@ public class MatrixGcmListenerService extends GcmListenerService {
             @Override
             public void run() {
                 Log.d(LOG_TAG, "## onMessageReceived() --------------------------------");
-                for (String key : data.keySet()) {
+                // privacy
+                /*for (String key : data.keySet()) {
                     Log.d(LOG_TAG, "## onMessageReceived() >>> " + key + " : " + data.get(key));
-                }
+                }*/
 
                 int unreadCount = 0;
 

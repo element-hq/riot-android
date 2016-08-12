@@ -1,3 +1,41 @@
+
+Changes in Vector 0.4.0 (2016-08-12)
+===================================================
+
+Improvements:
+ * Media upload/download UI
+
+Features:
+ * Add conference call
+ * #311 : Chat screen: Add "view source" option on the selected event 
+ * #314 : Support rageshake reporting via Vector (as opposed to email) 
+ * #316 : Confirmation prompt before opping someone to same power level as per web
+ * #347 : Display the banned users
+ * #350 : Room name and memebers searches are dynamically refreshed  
+ 
+Bugfixes:
+ * #289 : Improve the camera selfie mode
+ * #290 : Redacting membership events should immediately reset the displayname & avatar of room members
+ * #299 : We should show a list of ignored users in user settings somewhere.
+ * #302 : Impossible to scroll in User list.
+ * #320 : Sanitise the logs to remove private data.
+ * #323 : The room and the recents activites header are sometimes blank
+ * #326 : Settings page : the switch values are sometimes updated while scrolling in the page
+ * #330 : some medias are not downloadable
+ * #334 : Quick replay on invitations to room
+ * #343 : Incoming calls should put the application in foreground
+ * #352 : some rooms are not displayed in the recents when the 10 last messages are redacted ones after performing an initial sync
+ * #353 : Forwarded item is sent several times when the device is rotated
+ * #358 : Update the event not found message when clicking on permalink
+ * #359 : Redacting a video during sending goes wrong
+ * #360 : If you try 'share to vector' from another app and share to a room, it should let you edit before sending 
+ * #362 : Add option to disable the permanent notification when background sync is on.
+ * #364 : Profile changes shouldn't reorder the room list 
+ * #367 : Settings entries are not fully displayed.
+ * Fdroid version : the synchronization was not resumed asap when a delay timer was set.
+ * Some permission requirements were not properly requested.
+ * Several crashes reported by Google Analytics.
+
 Changes in Vector 0.3.4 (2016-07-18)
 ===================================================
 

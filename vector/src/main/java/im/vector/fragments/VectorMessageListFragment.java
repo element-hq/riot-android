@@ -18,9 +18,6 @@ package im.vector.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,8 +33,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
@@ -46,6 +46,8 @@ import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
+import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
@@ -67,6 +69,7 @@ import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.VectorContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
+import im.vector.util.BugReporter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.VectorUtils;
 
@@ -74,7 +77,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -130,6 +132,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         }
 
         return v;
+    }
+
+    @Override
+    public MatrixMessagesFragment createMessagesFragmentInstance(String roomId) {
+        return VectorMessagesFragment.newInstance(getSession(), roomId, this);
     }
 
     /**
@@ -238,7 +245,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     resend(event);
                 }
             });
-        } else if (action == R.id.ic_action_vector_delete_message) {
+        } else if (action == R.id.ic_action_vector_redact_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -250,6 +257,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                         // remove from the adapter
                         mAdapter.removeEventById(event.eventId);
                         mAdapter.notifyDataSetChanged();
+                        mEventSendingListener.onMessageRedacted(event);
                     } else {
                         redactEvent(event.eventId);
                     }
@@ -260,6 +268,36 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 @Override
                 public void run() {
                     VectorUtils.copyToClipboard(getActivity(), textMsg);
+                }
+            });
+        }  else if ((action == R.id.ic_action_vector_cancel_upload) || (action == R.id.ic_action_vector_cancel_download))  {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            .setMessage((action == R.id.ic_action_vector_cancel_upload) ? R.string.attachment_cancel_upload : R.string.attachment_cancel_download)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    mRoom.cancelEventSending(event);
+
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create()
+                            .show();
                 }
             });
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
@@ -310,6 +348,28 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             VectorUtils.copyToClipboard(getActivity(), VectorUtils.getPermalink(event.roomId, event.eventId));
         } else if  (action == R.id.ic_action_vector_report) {
             onMessageReport(event);
+        } else if  (action == R.id.ic_action_view_source) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    View view= getActivity().getLayoutInflater().inflate(R.layout.dialog_event_content, null);
+                    TextView textview = (TextView)view.findViewById(R.id.event_content_text_view);
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    textview.setText(gson.toJson(JsonUtils.toJson(event)));
+                    builder.setView(view);
+
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.create().show();
+                }
+            });
         }
     }
 
@@ -334,7 +394,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 mRoom.report(event.eventId, -100, reason, new SimpleApiCallback<Void>(getActivity()) {
                     @Override
                     public void onSuccess(Void info) {
-                        // The user is trying to leave with unsaved changes. Warn about that
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
                                 .setMessage(R.string.room_event_action_report_prompt_ignore_user)
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -444,22 +503,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
-                mediasCache.addDownloadListener(downloadId, new MXMediasCache.DownloadCallback() {
+                mediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
                     @Override
-                    public void onDownloadStart(String downloadId) {
-                    }
-
-                    @Override
-                    public void onError(String downloadId, JsonElement jsonElement) {
+                    public void onDownloadError(String downloadId, JsonElement jsonElement) {
                         MatrixError error = JsonUtils.toMatrixError(jsonElement);
 
                         if ((null != error) && error.isSupportedErrorCode()) {
                             Toast.makeText(VectorMessageListFragment.this.getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    @Override
-                    public void onDownloadProgress(String aDownloadId, int percentageProgress) {
                     }
 
                     @Override

@@ -16,59 +16,35 @@
 
 package im.vector.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.zip.GZIPOutputStream;
-
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 
-import org.matrix.androidsdk.MXSession;
+import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.Matrix;
-import org.matrix.androidsdk.data.MyUser;
 
 /**
- * manages the rageshakes
+ * Manages the rage sakes
  */
 public class RageShake implements SensorEventListener {
 
     private static final String LOG_TAG = "RageShake";
 
-    // the instance
-    private static RageShake instance;
-
     // the context
     private Context mContext;
 
     /**
-     * Contrustor
+     * Constructor
      */
-    private RageShake() {
+    public RageShake() {
         // Samsung devices for some reason seem to be less sensitive than others so the threshold is being
         // lowered for them. A possible lead for a better formula is the fact that the sensitivity detected
         // with the calculated force below seems to relate to the sample rate: The higher the sample rate,
@@ -81,197 +57,9 @@ public class RageShake implements SensorEventListener {
     }
 
     /**
-     * @return the rageshake instance
-     */
-    public synchronized static RageShake getInstance() {
-        if (instance == null) {
-            instance = new RageShake();
-        }
-        return instance;
-    }
-
-    /**
-     * @return the bug report body message.
-     */
-    private String buildBugReportMessage() {
-        String message = "Something went wrong on my Vector client : \n\n\n";
-        message += "-----> my comments <-----\n\n\n";
-
-        message += "---------------------------------------------------------------------\n";
-        message += "Application info\n";
-
-        Collection<MXSession> sessions = Matrix.getMXSessions(mContext);
-        int profileIndex = 1;
-
-        for(MXSession session : sessions) {
-            message += "Profile " + profileIndex + " :\n";
-            profileIndex++;
-
-            MyUser mMyUser = session.getMyUser();
-            message += "userId : "+ mMyUser.user_id + "\n";
-            message += "displayname : " + mMyUser.displayname + "\n";
-            message += "homeServer :" + session.getCredentials().homeServer + "\n";
-        }
-
-        message += "\n";
-        message += "---------------------------------------------------------------------\n";
-        message += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
-        message += "Vector version: " + Matrix.getInstance(mContext).getVersion(true) + "\n";
-        message += "SDK version:  " + Matrix.getInstance(mContext).getDefaultSession().getVersion(true) + "\n";
-        message += "\n";
-        message += "---------------------------------------------------------------------\n";
-        message += "Memory statuses \n";
-
-        long freeSize = 0L;
-        long totalSize = 0L;
-        long usedSize = -1L;
-        try {
-            Runtime info = Runtime.getRuntime();
-            freeSize = info.freeMemory();
-            totalSize = info.totalMemory();
-            usedSize = totalSize - freeSize;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        message += "---------------------------------------------------------------------\n";
-        message += "usedSize   " + (usedSize / 1048576L) + " MB\n";
-        message += "freeSize   " + (freeSize / 1048576L) + " MB\n";
-        message += "totalSize   " + (totalSize / 1048576L) + " MB\n";
-        message += "---------------------------------------------------------------------\n";
-
-        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        ActivityManager activityManager = (ActivityManager) VectorApp.getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.getMemoryInfo(mi);
-
-        message += "availMem   " + (mi.availMem / 1048576L) + " MB\n";
-        message += "totalMem   " + (mi.totalMem / 1048576L) + " MB\n";
-        message += "threshold  " + (mi.threshold / 1048576L) + " MB\n";
-        message += "lowMemory  " + mi.lowMemory + "\n";
-
-        message += "---------------------------------------------------------------------\n";
-
-        return message;
-    }
-
-    /**
-     * Send the bug report
-     */
-    public void sendBugReport() {
-        Bitmap screenShot = this.takeScreenshot();
-
-        if (null != screenShot) {
-            try {
-                // store the file in shared place
-                String path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), screenShot, "screenshot-" + new Date(), null);
-                Uri screenUri = null;
-
-                if (null == path) {
-                    try {
-                        File file  = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "screenshot-" + new Date() + ".jpg");
-                        FileOutputStream out = new FileOutputStream(file);
-                        screenShot.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        screenUri = Uri.fromFile(file);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "sendBugReport : " + e.getLocalizedMessage());
-                    }
-                } else {
-                    screenUri = Uri.parse(path);
-                }
-
-                String message = buildBugReportMessage();
-
-                ArrayList<Uri> attachmentUris = new ArrayList<>();
-
-                if (null != screenUri) {
-                    // attachments
-                    attachmentUris.add(screenUri);
-                }
-
-                String errorLog = LogUtilities.getLogCatError();
-                String debugLog = LogUtilities.getLogCatDebug();
-
-                errorLog += "\n\n\n\n\n\n\n\n\n\n------------------ Debug logs ------------------\n\n\n\n\n\n\n\n";
-                errorLog += debugLog;
-
-                try {
-                    // add the current device logs
-                    {
-                        ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        GZIPOutputStream gzip = new GZIPOutputStream(os);
-                        gzip.write(errorLog.getBytes());
-                        gzip.finish();
-
-                        File debugLogFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "logs-" + new Date() + ".gz");
-                        FileOutputStream fos = new FileOutputStream(debugLogFile);
-                        os.writeTo(fos);
-                        os.flush();
-                        os.close();
-
-                        attachmentUris.add(Uri.fromFile(debugLogFile));
-                    }
-
-                    // add the stored logs
-                    ArrayList<File> logsList = LogUtilities.getLogsFileList();
-
-                    long marker = System.currentTimeMillis();
-
-                    for(File file : logsList) {
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        GZIPOutputStream glogzip = new GZIPOutputStream(bos);
-
-                        FileInputStream inputStream = new FileInputStream(file);
-
-                        byte[] buffer = new byte[1024 * 10];
-                        int len;
-                        while ((len = inputStream.read(buffer)) != -1) {
-                            glogzip.write(buffer, 0, len);
-                        }
-                        glogzip.finish();
-
-                        File storedLogFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), marker + "-" + file.getName() + ".gz");
-                        FileOutputStream flogOs = new FileOutputStream(storedLogFile);
-                        bos.writeTo(flogOs);
-                        flogOs.flush();
-                        flogOs.close();
-
-                        attachmentUris.add(Uri.fromFile(storedLogFile));
-                    }
-                }
-                catch (IOException e) {
-                    Log.e(LOG_TAG, "" + e);
-                }
-
-                // list the intent which supports email
-                // it should avoid having lot of unexpected applications (like bluetooth...)
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "example@gmail.com", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Mail subject");
-                List<ResolveInfo> resolveInfos = mContext.getPackageManager().queryIntentActivities(emailIntent, 0);
-
-                if ((null == resolveInfos) || (0 == resolveInfos.size())) {
-                    Log.e(LOG_TAG, "Cannot send bug report because there is no application to send emails");
-                    return;
-                }
-
-                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@vector.im"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Vector bug report");
-                intent.putExtra(Intent.EXTRA_TEXT, message);
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
-                mContext.startActivity(intent);
-
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "" + e);
-            }
-        }
-    }
-
-    /**
      * Display a dialog to let the user chooses if he would like to send a bnug report.
      */
-    public void promptForReport() {
+    private void promptForReport() {
         // Cannot prompt for bug, no active activity.
         if (VectorApp.getCurrentActivity() == null) {
             return;
@@ -279,15 +67,15 @@ public class RageShake implements SensorEventListener {
 
         // The user is trying to leave with unsaved changes. Warn about that
         new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                .setMessage("You seem to be shaking the phone in frustration. Would you like to submit a bug report?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                .setMessage(R.string.send_bug_report_alert_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        sendBugReport();
+                        BugReporter.sendBugReport();
                     }
                 })
-                .setNeutralButton("Disable", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.disable, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -299,7 +87,7 @@ public class RageShake implements SensorEventListener {
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -308,44 +96,6 @@ public class RageShake implements SensorEventListener {
                 .create()
                 .show();
 
-    }
-
-    /**
-     * Take a screenshot of the display.
-     * @return the screenshot
-     */
-    private Bitmap takeScreenshot() {
-        // sanity check
-        if (VectorApp.getCurrentActivity() == null) {
-            return null;
-        }
-        // get content view
-        View contentView = VectorApp.getCurrentActivity().findViewById(android.R.id.content);
-        if (contentView == null) {
-            Log.e(LOG_TAG, "Cannot find content view on " + VectorApp.getCurrentActivity() + ". Cannot take screenshot.");
-            return null;
-        }
-
-        // get the root view to snapshot
-        View rootView = contentView.getRootView();
-        if (rootView == null) {
-            Log.e(LOG_TAG, "Cannot find root view on " + VectorApp.getCurrentActivity() + ". Cannot take screenshot.");
-            return null;
-        }
-        // refresh it
-        rootView.setDrawingCacheEnabled(false);
-        rootView.setDrawingCacheEnabled(true);
-
-        try {
-           return rootView.getDrawingCache();
-        }
-        catch (OutOfMemoryError oom) {
-            Log.e(LOG_TAG, "Cannot get drawing cache for "+ VectorApp.getCurrentActivity() +" OOM.");
-        }
-        catch (Exception e) {
-            Log.e(LOG_TAG, "Cannot get snapshot of screen: "+e);
-        }
-        return null;
     }
 
     /**

@@ -48,6 +48,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -78,8 +79,6 @@ import java.util.List;
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
  */
 public class VectorMediasPickerActivity extends MXCActionBarActivity implements TextureView.SurfaceTextureListener {
-    // medias folder
-    private static final int REQUEST_MEDIAS = 54;
     private static final String LOG_TAG = "VectorMedPicker";
 
     // public keys
@@ -94,6 +93,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
     private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
     private static final String KEY_IS_AVATAR_MODE = "KEY_IS_AVATAR_MODE";
+
+    // activity request
+    private static final int REQUEST_MEDIAS = 54;
+
+    private static final int AVATAR_COMPRESSION_LEVEL = 50;
 
     private final int IMAGE_ORIGIN_CAMERA = 1;
     private final int IMAGE_ORIGIN_GALLERY = 2;
@@ -711,7 +715,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     // and the user would not understand that the shooted image is not the previewed one
                     if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
                         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 0, bos);
+                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
                         data = bos.toByteArray();
                     }
 
@@ -1330,6 +1334,38 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
         }
 
+        // set the preview size to have the same aspect ratio than the picture size
+        List<Camera.Size> supportedPreviewSizes = params.getSupportedPreviewSizes();
+
+        if (supportedPreviewSizes.size() > 0) {
+            Camera.Size picturesSize = params.getPictureSize();
+            int cameraAR = picturesSize.width * 100 / picturesSize.height;
+
+            Camera.Size bestPreviewSize = null;
+            int resolution = 0;
+
+            for(Camera.Size previewSize : supportedPreviewSizes) {
+                int previewAR = previewSize.width * 100 / previewSize.height;
+
+                if (previewAR == cameraAR) {
+                    int mult = previewSize.height * previewSize.width;
+                    if (mult > resolution) {
+                        bestPreviewSize = previewSize;
+                        resolution = mult;
+                    }
+                }
+            }
+
+            if (null != bestPreviewSize) {
+                params.setPreviewSize(bestPreviewSize.width, bestPreviewSize.height);
+
+                try {
+                    mCamera.setParameters(params);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## initCameraSettings(): set preview size fails EXCEPTION Msg=" + e.getMessage());
+                }
+            }
+        }
 
         // set auto focus
         try {
@@ -1363,7 +1399,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * @param width the image width to hide
      * @param height the image height to hide
      */
-    private void drawCircleMask(ImageView maskView, int width, int height) {
+    private void drawCircleMask(final ImageView maskView, final int width, final int height) {
+        // remove any background
+        maskView.setBackgroundResource(0);
+
         // create a bitmap with a transparent hole
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -1446,7 +1485,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                 if (mIsAvatarMode) {
                     mCameraTextureMaskView.setVisibility(View.VISIBLE);
-                    drawCircleMask(mCameraTextureMaskView, newWidth, newHeight);
+                    final int fWidth = newWidth;
+                    final int fHeight = newHeight;
+
+                    mCameraTextureMaskView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawCircleMask(mCameraTextureMaskView, fWidth, fHeight);
+                        }
+                    });
                 } else {
                     mCameraTextureMaskView.setVisibility(View.GONE);
                 }

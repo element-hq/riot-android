@@ -38,7 +38,6 @@ import org.matrix.androidsdk.util.ImageUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -66,16 +65,6 @@ public class VectorRoomMediasSender {
         void onCancel();
     }
 
-    /**
-     * This class defines the user preferences when sending medias.
-     * It avoid requesting the compression for each medias of the same type
-     * i.e ask the compression once for image, once for video..;
-     */
-    private class MediasCompressionPreferences implements Serializable {
-        // image compression
-        public String mImageCompressionDescription;
-    }
-
     // save/restore instance
     private static final String KEY_BUNDLE_MEDIAS_LIST = "KEY_BUNDLE_MEDIAS_LIST";
     private static final String KEY_BUNDLE_COMPRESSION_PREFERENCES = "KEY_BUNDLE_COMPRESSION_PREFERENCES";
@@ -83,13 +72,13 @@ public class VectorRoomMediasSender {
     private AlertDialog mImageSizesListDialog;
 
     // the linked room activity
-    private VectorRoomActivity mVectorRoomActivity;
+    private final VectorRoomActivity mVectorRoomActivity;
 
     // the room fragment
-    private VectorMessageListFragment mVectorMessageListFragment;
+    private final VectorMessageListFragment mVectorMessageListFragment;
 
     // the medias cache
-    private MXMediasCache mMediasCache;
+    private final MXMediasCache mMediasCache;
 
     // the background thread
     private static HandlerThread mHandlerThread = null;
@@ -97,7 +86,7 @@ public class VectorRoomMediasSender {
 
     // pending
     private ArrayList<SharedDataItem> mSharedDataItems;
-    private MediasCompressionPreferences mMediasCompressionPreferences;
+    private String mImageCompressionDescription;
 
     /**
      * Constructor
@@ -123,7 +112,7 @@ public class VectorRoomMediasSender {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         if (null != savedInstanceState) {
             mSharedDataItems = (ArrayList<SharedDataItem>) savedInstanceState.getSerializable(KEY_BUNDLE_MEDIAS_LIST);
-            mMediasCompressionPreferences = (MediasCompressionPreferences)savedInstanceState.getSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES);
+            mImageCompressionDescription = (String)savedInstanceState.getSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES);
         }
     }
 
@@ -136,8 +125,8 @@ public class VectorRoomMediasSender {
             savedInstanceState.putSerializable(KEY_BUNDLE_MEDIAS_LIST, mSharedDataItems);
         }
 
-        if (null != mMediasCompressionPreferences) {
-            savedInstanceState.putSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES, mMediasCompressionPreferences);
+        if (null != mImageCompressionDescription) {
+            savedInstanceState.putSerializable(KEY_BUNDLE_COMPRESSION_PREFERENCES, mImageCompressionDescription);
         }
     }
 
@@ -163,8 +152,6 @@ public class VectorRoomMediasSender {
     public void sendMedias(final ArrayList<SharedDataItem> sharedDataItems) {
         if (null != sharedDataItems) {
             mSharedDataItems = new ArrayList<>(sharedDataItems);
-            mMediasCompressionPreferences = new MediasCompressionPreferences();
-
             sendMedias();
         }
     }
@@ -182,7 +169,7 @@ public class VectorRoomMediasSender {
         // detect end of messages sending
         if ((null == mSharedDataItems) || (0 == mSharedDataItems.size())) {
             Log.d(LOG_TAG, "sendMedias : done");
-            mMediasCompressionPreferences = null;
+            mImageCompressionDescription = null;
             mSharedDataItems = null;
 
             mVectorRoomActivity.runOnUiThread(new Runnable() {
@@ -217,7 +204,10 @@ public class VectorRoomMediasSender {
                 if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_INTENT, mimeType)) {
                     Log.d(LOG_TAG, "sendMedias :  unsupported mime type");
                     // don't know how to manage it -> skip it
-                    mSharedDataItems.remove(0);
+                    // GA issue
+                    if (mSharedDataItems.size() > 0) {
+                        mSharedDataItems.remove(0);
+                    }
                     sendMedias();
                 } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
                     sendTextMessage(sharedDataItem);
@@ -227,7 +217,9 @@ public class VectorRoomMediasSender {
                     if (null == sharedDataItem.getUri()) {
                         Log.e(LOG_TAG, "sendMedias : null uri");
                         // manage others
-                        mSharedDataItems.remove(0);
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         sendMedias();
                         return;
                     }
@@ -248,7 +240,9 @@ public class VectorRoomMediasSender {
                         });
 
                         // manage others
-                        mSharedDataItems.remove(0);
+                        if (mSharedDataItems.size() > 0) {
+                            mSharedDataItems.remove(0);
+                        }
                         sendMedias();
 
                         return;
@@ -277,13 +271,11 @@ public class VectorRoomMediasSender {
     private void sendTextMessage(SharedDataItem sharedDataItem) {
         CharSequence sequence = sharedDataItem.getText();
         String htmlText = sharedDataItem.getHtmlText();
-        String text;
+        String text = null;
 
         if (null == sequence) {
             if (null != htmlText) {
                 text = Html.fromHtml(htmlText).toString();
-            } else {
-                text = htmlText;
             }
         } else {
             text = sequence.toString();
@@ -302,7 +294,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -323,13 +317,15 @@ public class VectorRoomMediasSender {
                 String filename =  sharedDataItem.getFileName(mVectorRoomActivity);
 
                 String mediaUrl = mMediasCache.saveMedia(resource.mContentStream, null, mimeType);
-                mVectorMessageListFragment.uploadVideoContent(mediaUrl, mVectorMessageListFragment.getVideoThumbailUrl(mediaUrl), filename, mimeType);
+                mVectorMessageListFragment.uploadVideoContent(mediaUrl, mVectorMessageListFragment.getVideoThumbnailUrl(mediaUrl), filename, mimeType);
                 resource.close();
             }
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -356,7 +352,9 @@ public class VectorRoomMediasSender {
         });
 
         // manage others
-        mSharedDataItems.remove(0);
+        if (mSharedDataItems.size() > 0) {
+            mSharedDataItems.remove(0);
+        }
         sendMedias();
     }
 
@@ -412,21 +410,29 @@ public class VectorRoomMediasSender {
         mVectorRoomActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                sendImageMessage(fThumbnailURL, fMediaUrl, sharedDataItem.getFileName(mVectorRoomActivity), fMimeType, new OnImageUploadListener() {
-                    @Override
-                    public void onDone() {
-                        mSharedDataItems.remove(0);
-                        // go to the next item
-                        sendMedias();
-                    }
+                if ((null != mSharedDataItems) && (mSharedDataItems.size() > 0)) {
+                    sendImageMessage(fThumbnailURL, fMediaUrl, sharedDataItem.getFileName(mVectorRoomActivity), fMimeType, new OnImageUploadListener() {
+                        @Override
+                        public void onDone() {
+                            // reported by GA
+                            if ((null != mSharedDataItems) && (mSharedDataItems.size() > 0)){
+                                mSharedDataItems.remove(0);
+                            }
+                            // go to the next item
+                            sendMedias();
+                        }
 
-                    @Override
-                    public void onCancel() {
-                        // cancel any media sending
-                        mSharedDataItems.clear();
-                        sendMedias();
-                    }
-                });
+                        @Override
+                        public void onCancel() {
+                            // cancel any media sending
+                            // reported by GA
+                            if (null != mSharedDataItems) {
+                                mSharedDataItems.clear();
+                            }
+                            sendMedias();
+                        }
+                    });
+                }
             }
         });
     }
@@ -638,14 +644,29 @@ public class VectorRoomMediasSender {
 
             if (maxSide > LARGE_IMAGE_SIZE) {
                 imageCompressionSizes.mLargeImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(LARGE_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mLargeImageSize.mWidth == imageWidth) && (imageCompressionSizes.mLargeImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mLargeImageSize = null;
+                }
             }
 
             if (maxSide > MEDIUM_IMAGE_SIZE) {
                 imageCompressionSizes.mMediumImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(MEDIUM_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mMediumImageSize.mWidth == imageWidth) && (imageCompressionSizes.mMediumImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mMediumImageSize = null;
+                }
             }
 
             if (maxSide > SMALL_IMAGE_SIZE) {
                 imageCompressionSizes.mSmallImageSize = imageCompressionSizes.mFullImageSize.computeSizeToFit(SMALL_IMAGE_SIZE);
+
+                // ensure that the computed is really smaller
+                if ((imageCompressionSizes.mSmallImageSize.mWidth == imageWidth) && (imageCompressionSizes.mSmallImageSize.mHeight == imageHeight)) {
+                    imageCompressionSizes.mSmallImageSize = null;
+                }
             }
         }
 
@@ -689,9 +710,9 @@ public class VectorRoomMediasSender {
         final ArrayList<String> textsList = new ArrayList<>();
 
         addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_original), imageSizes.mFullImageSize, imagefileSize);
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, estimateFileSize(imageSizes.mLargeImageSize));
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, estimateFileSize(imageSizes.mMediumImageSize));
-        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, estimateFileSize(imageSizes.mSmallImageSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_large), imageSizes.mLargeImageSize, Math.min(estimateFileSize(imageSizes.mLargeImageSize), imagefileSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_medium), imageSizes.mMediumImageSize, Math.min(estimateFileSize(imageSizes.mMediumImageSize), imagefileSize));
+        addDialogEntry(context, textsList, context.getString(R.string.compression_opt_list_small), imageSizes.mSmallImageSize, Math.min(estimateFileSize(imageSizes.mSmallImageSize), imagefileSize));
 
         return textsList.toArray(new String[textsList.size()]);
     }
@@ -796,10 +817,10 @@ public class VectorRoomMediasSender {
                 imageStream.close();
 
                 // the user already selects a compression
-                if (null != mMediasCompressionPreferences.mImageCompressionDescription) {
+                if (null != mImageCompressionDescription) {
                     isManaged = true;
 
-                    final ImageSize expectedSize = imageSizes.getImageSize(mVectorRoomActivity, mMediasCompressionPreferences.mImageCompressionDescription);
+                    final ImageSize expectedSize = imageSizes.getImageSize(mVectorRoomActivity, mImageCompressionDescription);
                     final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
 
                     mVectorRoomActivity.runOnUiThread(new Runnable() {
@@ -848,7 +869,7 @@ public class VectorRoomMediasSender {
                                             }
 
                                             // stored the compression selected by the user
-                                            mMediasCompressionPreferences.mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
+                                            mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
 
                                             final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
 
@@ -874,7 +895,9 @@ public class VectorRoomMediasSender {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             mImageSizesListDialog = null;
-                            aListener.onCancel();
+                            if (null != aListener) {
+                                aListener.onCancel();
+                            }
                         }
                     });
                 }
@@ -889,7 +912,9 @@ public class VectorRoomMediasSender {
                 @Override
                 public void run() {
                     mVectorMessageListFragment.uploadImageContent(aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
-                    aListener.onDone();
+                    if (null != aListener) {
+                        aListener.onDone();
+                    }
                 }
             });
         }

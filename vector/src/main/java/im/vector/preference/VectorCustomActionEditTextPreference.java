@@ -17,19 +17,21 @@
 package im.vector.preference;
 
 import android.content.Context;
+import android.os.Build;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.TextView;
 
 // create an EditTextPreference with a dedicated click/long click methods.
 // Android displays by an edit text dialog by default
 // With this class, a custom behaviour can be designed.
 public class VectorCustomActionEditTextPreference extends EditTextPreference {
+    private static final String LOG_TAG = "VEditTextPreference";
 
     /**
      * Interface definition for a callback to be invoked when a preference is
@@ -85,6 +87,21 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
         });
 
         return view;
+    }
+
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+
+        // display the title in multi-line to avoid ellipsing.
+        try {
+            TextView textView = (TextView) view.findViewById(android.R.id.title);
+            if (textView != null) {
+                textView.setSingleLine(false);
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "onBindView " + e.getMessage());
+        }
     }
 
     /**

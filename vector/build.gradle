@@ -15,8 +15,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         // use the version code
-        versionCode 304
-        versionName "0.3.4"
+        versionCode rootProject.ext.versionCodeProp
+        versionName rootProject.ext.versionNameProp
     }
 
     signingConfigs {
@@ -33,6 +33,7 @@ android {
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_unix_date", "\"${gitRevisionUnixDate()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
+            minifyEnabled false
         }
 
         release {
@@ -54,8 +55,8 @@ android {
         app {
             applicationId "im.vector.alpha"
             // use the version name
-            versionCode 304
-            versionName "0.3.4"
+            versionCode rootProject.ext.versionCodeProp
+            versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "true"
             resValue "string", "allow_ga_use", "true"
             resValue "string", "flavor_description", ""
@@ -64,8 +65,8 @@ android {
         appfdroid {
             applicationId "im.vector.alpha"
             // use the version name
-            versionCode 304
-            versionName "0.3.4"
+            versionCode rootProject.ext.versionCodeProp
+            versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
             resValue "string", "flavor_description", "FDroid version"
@@ -119,6 +120,9 @@ dependencies {
     compile 'io.pristine:libjingle:9690@aar'
 
     compile 'com.commonsware.cwac:anddown:0.2.+'
+
+    // bug report encryption
+    compile 'net.lingala.zip4j:zip4j:1.3.1'
 
     /************* Matrix SDK management **************/
     // use the matrix SDK as external lib

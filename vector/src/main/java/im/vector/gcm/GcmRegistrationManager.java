@@ -22,6 +22,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,10 +39,13 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.gcm.GCMHelper;
+import retrofit.RetrofitError;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -365,6 +370,67 @@ public final class GcmRegistrationManager {
     }
 
     /**
+     * Manage the 500 http error case.
+     */
+    private void manage500Error() {
+        Log.d(LOG_TAG, "got a 500 error -> reset the registration and try again");
+
+        Timer relaunchTimer = new Timer();
+
+        // wait 5 seconds before registering
+        relaunchTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (RegistrationState.GCM_REGISTRED == mRegistrationState) {
+                    if (null != mRegistrationToken) {
+                        mRegistrationState = RegistrationState.SERVER_REGISTERED;
+                    }
+
+                    if (RegistrationState.SERVER_REGISTERED == mRegistrationState) {
+
+                        Log.d(LOG_TAG, "500 error : unregister first");
+
+                        unregister(new ThirdPartyRegistrationListener() {
+                            @Override
+                            public void onThirdPartyRegistered() {
+                            }
+
+                            @Override
+                            public void onThirdPartyRegistrationFailed() {
+                            }
+
+                            @Override
+                            public void onThirdPartyUnregistered() {
+                                Log.d(LOG_TAG, "500 error : onThirdPartyUnregistered");
+
+                                setStoredRegistrationToken(null);
+                                mRegistrationState = RegistrationState.UNREGISTRATED;
+                                register(null);
+                            }
+
+                            @Override
+                            public void onThirdPartyUnregistrationFailed() {
+                                Log.d(LOG_TAG, "500 error : onThirdPartyUnregistrationFailed");
+
+                                setStoredRegistrationToken(null);
+                                mRegistrationState = RegistrationState.UNREGISTRATED;
+                                register(null);
+                            }
+                        });
+
+                    } else {
+                        Log.d(LOG_TAG, "500 error : no GCM key");
+
+                        setStoredRegistrationToken(null);
+                        mRegistrationState = RegistrationState.UNREGISTRATED;
+                        register(null);
+                    }
+                }
+            }
+        }, 5000);
+    }
+
+    /**
      * Register the session to the 3rd-party app server
      * @param session the session to register.
      * @param listener the registration listener
@@ -386,6 +452,10 @@ public final class GcmRegistrationManager {
                 }
             }
 
+            // fallback to the GCM_REGISTRED state
+            // thus, the client will try again to register with checkRegistrations.
+            mRegistrationState = RegistrationState.GCM_REGISTRED;
+
             return;
         }
 
@@ -397,7 +467,7 @@ public final class GcmRegistrationManager {
                         DEFAULT_PUSHER_URL, append, new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
-                                Log.d(LOG_TAG, "registerPusher succeeded");
+                                Log.d(LOG_TAG, "registerToThirdPartyServer succeeded");
 
                                 if (null != listener) {
                                     try {
@@ -409,7 +479,11 @@ public final class GcmRegistrationManager {
                             }
 
                             private void onError(final String message) {
-                                Log.e(LOG_TAG, "fail to register " + session.getMyUserId() + " (" + message + ")");
+                                Log.e(LOG_TAG, "registerToThirdPartyServer failed" + session.getMyUserId() + " (" + message + ")");
+
+                                // fallback to the GCM_REGISTRED state
+                                // thus, the client will try again to register with checkRegistrations.
+                                mRegistrationState = RegistrationState.GCM_REGISTRED;
 
                                 if (null != listener) {
                                     try {
@@ -422,20 +496,32 @@ public final class GcmRegistrationManager {
 
                             @Override
                             public void onNetworkError(Exception e) {
-                                Log.e(LOG_TAG, "registerPusher onNetworkError " + e.getMessage());
+                                Log.e(LOG_TAG, "registerToThirdPartyServer onNetworkError " + e.getLocalizedMessage());
                                 onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onMatrixError(MatrixError e) {
-                                Log.e(LOG_TAG, "registerPusher onMatrixError " + e.errcode);
+                                Log.e(LOG_TAG, "registerToThirdPartyServer onMatrixError " + e.errcode);
                                 onError(e.getLocalizedMessage());
                             }
 
                             @Override
                             public void onUnexpectedError(Exception e) {
-                                Log.e(LOG_TAG, "registerPusher onUnexpectedError " + e.getMessage());
+                                Log.e(LOG_TAG, "registerToThirdPartyServer onUnexpectedError " + e.getLocalizedMessage());
                                 onError(e.getLocalizedMessage());
+
+                                // track the 500 HTTP error
+                                if (e instanceof RetrofitError) {
+                                    RetrofitError retrofitError = (RetrofitError)e;
+
+                                    // an HTTP error 500 issue has been reported several times
+                                    // it seems that the server is either rebooting
+                                    // or the GCM key seems triggering error on server side.
+                                    if ((null != retrofitError.getResponse()) && (500 == retrofitError.getResponse().getStatus())) {
+                                        manage500Error();
+                                    }
+                                }
                             }
                         });
     }
@@ -912,7 +998,8 @@ public final class GcmRegistrationManager {
      * @param registrationToken the registration token
      */
     private void setStoredRegistrationToken(String registrationToken) {
-        Log.d(LOG_TAG, "Saving registration token " + registrationToken);
+        Log.d(LOG_TAG, "Saving registration token");
+
         getGcmSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
                 .apply();

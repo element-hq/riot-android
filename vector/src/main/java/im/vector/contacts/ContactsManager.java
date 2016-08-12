@@ -78,7 +78,8 @@ public class ContactsManager {
 
         @Override
         public void onPIDsRetrieved(final String accountId, final Contact contact, final boolean has3PIDs) {
-            Log.d(LOG_TAG, "onPIDsRetrieved : the contact " + contact + " retrieves its 3PIds.");
+            // privacy
+            // Log.d(LOG_TAG, "onPIDsRetrieved : the contact " + contact + " retrieves its 3PIds.");
 
             if (has3PIDs) {
                 MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
@@ -86,7 +87,8 @@ public class ContactsManager {
                 if (null != session) {
                     Set<String> medias = contact.getMatrixIdMedias();
 
-                    Log.d(LOG_TAG, "medias " + medias);
+                    // privacy
+                    //Log.d(LOG_TAG, "medias " + medias);
 
                     for(String media : medias) {
                         final Contact.MXID mxid = contact.getMXID(media);

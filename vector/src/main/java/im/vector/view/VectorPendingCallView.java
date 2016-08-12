@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import im.vector.R;
-import im.vector.activity.CallViewActivity;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.util.CallUtilities;
 import im.vector.util.VectorUtils;
 
@@ -50,6 +50,9 @@ public class VectorPendingCallView extends RelativeLayout {
     // the UI items
     private TextView mCallDescriptionTextView;
     private TextView mCallStatusTextView;
+
+    /** set to true to hide the line displaying the call status **/
+    private boolean mIsCallStatusHidden;
 
     // the call listener
     private final IMXCall.MXCallListener mCallListener = new IMXCall.MXCallListener() {
@@ -78,7 +81,7 @@ public class VectorPendingCallView extends RelativeLayout {
         }
 
         @Override
-        public void onCallEnd() {
+        public void onCallEnd(final int aReasonId) {
             onCallTerminated();
         }
     };
@@ -125,7 +128,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * If there is none, this view is gone.
      */
     public void checkPendingCall() {
-        IMXCall call = CallViewActivity.getActiveCall();
+        IMXCall call = VectorCallViewActivity.getActiveCall();
 
         // no more call
         if (null == call) {
@@ -203,12 +206,12 @@ public class VectorPendingCallView extends RelativeLayout {
             String description;
 
             if (null != room) {
-                description = VectorUtils.getRoomDisplayname(getContext(), mCall.getSession(), room);
+                description = VectorUtils.getRoomDisplayName(getContext(), mCall.getSession(), room);
             } else {
                 description = mCall.getCallId();
             }
 
-            if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED)) {
+            if (TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED) && !mIsCallStatusHidden) {
                 description += " - " + getResources().getString(R.string.active_call);
             }
 
@@ -226,5 +229,14 @@ public class VectorPendingCallView extends RelativeLayout {
 
         mCallStatusTextView.setText(callStatus);
         mCallStatusTextView.setVisibility(TextUtils.isEmpty(callStatus) ? View.GONE : View.VISIBLE);
+    }
+
+
+    /**
+     * Enable/disable the display of the status active call.
+     * @param aIsEnabled true to display the call status, false otherwise
+     */
+    public void enableCallStatusDisplay(boolean aIsEnabled){
+        mIsCallStatusHidden = !aIsEnabled;
     }
 }

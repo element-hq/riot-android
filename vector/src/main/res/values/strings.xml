@@ -27,12 +27,12 @@
     <string name="redact">Redact</string>
     <string name="share">Share</string>
     <string name="paste_username">Paste username</string>
-    <string name="delete_message">Delete message</string>
     <string name="view_profile">View profile</string>
     <string name="direct_message">Direct message</string>
     <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
     <string name="message_details">Message details</string>
+    <string name="view_source">View Source</string>
     <string name="view">View</string>
     <string name="set_power_level">Power level</string>
     <string name="chat">Chat</string>
@@ -43,6 +43,8 @@
     <string name="report_content">Report content</string>
     <string name="decline">Decline</string>
     <string name="active_call">Active call</string>
+    <string name="ongoing_conference_call">Ongoing conference call</string>
+    <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="room_url">Room URL</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>
 
@@ -84,6 +86,11 @@
     <string name="action_resume_call">Resume call</string>
     <string name="about">About</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="with_email">With email</string>
+    <string name="with_vector">With Vector</string>
+    <string name="bug_report_password">Set a password to your bug report</string>
+    <string name="disable">Disable</string>
+    <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
@@ -227,6 +234,12 @@
     <string name="compression_opt_list_medium">Medium</string>
     <string name="compression_opt_list_small">Small</string>
 
+    <!-- media upload / download messages -->
+    <string name="attachment_cancel_download">"Cancel the download?</string>
+    <string name="attachment_cancel_upload">Cancel the upload?</string>
+    <string name="attachment_remaining_time_seconds">%s s</string>
+    <string name="attachment_remaining_time_minutes">%1$sm %2$ss</string>
+
     <!-- invitation members list Screen -->
     <string name="members_one_to_one">One to one room members</string>
     <string name="members_small_room_members">Small room members</string>
@@ -340,12 +353,16 @@
     <string name="call_invite_expired">Call Invite Expired</string>
     <string name="call_in_progress">Call In Progress</string>
 
-    <string name="call_error_user_not_responding">User Not Responding</string>
+    <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
-    <string name="call_error_camera_init_failed">Cannot initialize the camera.</string>
+    <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
+    <string name="call_error_answered_elsewhere">call answered elsewhere</string>
+    <string name="call_error_peer_hangup">peer hung up</string>
+    <string name="call_error_peer_hangup_elsewhere">call hung up elsewhere</string>
+    <string name="call_error_peer_cancelled_call">call cancelled</string>
 
-    <string name="action_accept">Accept</string>
-    <string name="action_reject">Reject</string>
+    <string name="action_accept">ACCEPT</string>
+    <string name="action_ignore">IGNORE</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_hangup">Hang up</string>
 
@@ -459,6 +476,7 @@
     <string name="room_participants_action_unignore">Show all messages from this user</string>
     <string name="room_participants_invite_search_another_user">Search/invite by name, email, id</string>
     <string name="room_participants_action_mention">Mention</string>
+    <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <!-- Presence status-->
     <string name="presence_offline">Offline</string>
@@ -522,6 +540,8 @@
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?</string>
+    <string name="room_event_action_cancel_upload">Cancel Upload</string>
+    <string name="room_event_action_cancel_download">Cancel Download</string>
 
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invite from %s</string>
@@ -614,6 +634,7 @@
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
+    <string name="settings_ignored_users">Ignored users</string>
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_notifications_targets">Notification Targets</string>
@@ -632,7 +653,7 @@
     <string name="settings_confirm_password">confirm password</string>
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
-
+    <string name="settings_unignore_user">Show all messages from %s?</string>
 
     <!-- Room Settings -->
 
@@ -678,12 +699,13 @@
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Anyone who knows the room\'s link, apart from guests</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Anyone who knows the room\'s link, including guests</string>
 
+    <!-- Room settings: banned users -->
+    <string name="room_settings_banned_users_title">Banned users</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
     <string name="room_settings_room_internal_id">This room\'s internal ID</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
-
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
@@ -694,7 +716,6 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified. The default main address for this room will be picked randomly"</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
 
-
     <!-- Directory -->
     <string name="directory_title">Directory</string>
 
@@ -702,5 +723,8 @@
     <string name="ga_use_alert_message">Do you accept to help us to improve the application behaviour and to send crash reports ?</string>
     <string name="ga_use_settings">Automatically send crash reports</string>
     <string name="ga_use_disable_alert_message">You need to restart the application to disable the crash reports.</string>
+
+    <!-- matrix error -->
+    <string name="failed_to_load_timeline_position">Vector was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
 
 </resources>

@@ -106,17 +106,30 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private TimerTask mRefreshTimerTask;
 
     // list the up to date presence to avoid refreshing it twice
-    private ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<String>();
+    private final ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<>();
 
+    // global events listener
     private final MXEventListener mEventListener = new MXEventListener() {
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type)) {
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
+                            Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type) ||
+                            Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
                         refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
                     }
+                }
+            });
+        }
+
+        @Override
+        public void onRoomFlush(String roomId) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
                 }
             });
         }
@@ -137,6 +150,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     };
 
+    //  search result listener
     private final VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener mSearchListener = new VectorRoomDetailsMembersAdapter.OnRoomMembersSearchListener() {
         @Override
         public void onSearchEnd(final int aSearchCountResult, final boolean aIsSearchPerformed) {
@@ -145,11 +159,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 public void run() {
                     // stop waiting wheel
                     mProgressView.setVisibility(View.GONE);
-
-                    // close IME after search to clean the UI
-                    InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (null != inputMgr)
-                        inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
 
                     if (0 == aSearchCountResult) {
                         // no results found!
@@ -179,9 +188,39 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     };
 
+    // search text listener
     private final TextWatcher mTextWatcherListener = new TextWatcher() {
         @Override
         public void afterTextChanged(android.text.Editable s) {
+            final String patternValue = mPatternToSearchEditText.getText().toString();
+
+            if (TextUtils.isEmpty(patternValue)) {
+                // search input is empty: restore a not filtered room members list
+                mClearSearchImageView.setVisibility(View.INVISIBLE);
+                mPatternValue = null;
+                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+            } else {
+                Timer timer = new Timer();
+                // wait a little delay before refreshing the results.
+                // it avoid UI lags when the user is typing.
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), patternValue) && (null != getActivity())) {
+                            mPatternValue = mPatternToSearchEditText.getText().toString();
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
+                                                            }
+                                                        });
+                        }
+                    }
+                }, 100);
+
+                mClearSearchImageView.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -190,20 +229,12 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String patternValue = mPatternToSearchEditText.getText().toString();
 
-            if (TextUtils.isEmpty(patternValue)) {
-                // search input is empty: restore a not filtered room members list
-                mClearSearchImageView.setVisibility(View.INVISIBLE);
-                mPatternValue = null;
-                refreshRoomMembersList(mPatternValue, REFRESH_NOT_FORCED);
-            } else {
-                mClearSearchImageView.setVisibility(View.VISIBLE);
-            }
         }
     };
 
-    private ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
+    // matrix SDK actions callback
+    private final ApiCallback<Void> mDefaultCallBack = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
             if (null != getActivity()) {
@@ -256,6 +287,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private String mPatternValue;
     private View mAddMembersFloatingActionButton;
 
+    // create an instance of the fragment
     public static VectorRoomDetailsMembersFragment newInstance() {
         return new VectorRoomDetailsMembersFragment();
     }
@@ -287,10 +319,13 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
     @Override
     public void onStop() {
-        InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if ((null != inputMgr) && (null != mPatternToSearchEditText)) {
-            inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
-            mPatternToSearchEditText.clearFocus();
+        // sanity check, reported by GA
+        if (null != getActivity()) {
+            InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if ((null != inputMgr) && (null != mPatternToSearchEditText)) {
+                inputMgr.hideSoftInputFromWindow(mPatternToSearchEditText.getApplicationWindowToken(), 0);
+                mPatternToSearchEditText.clearFocus();
+            }
         }
 
         super.onStop();
@@ -356,6 +391,9 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         }
     }
 
+    /**
+     * Expand all list groups.
+     */
     private void forceListInExpandingState(){
         if(null !=  mParticipantsListView) {
             mParticipantsListView.post(new Runnable() {
@@ -442,9 +480,10 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private boolean isUserAdmin(){
         boolean isAdmin = false;
-        PowerLevels powerLevels = null;
 
         if ((null != mRoom) && (null != mSession)) {
+            PowerLevels powerLevels;
+
             if (null != (powerLevels = mRoom.getLiveState().getPowerLevels())) {
                 String userId = mSession.getMyUserId();
                 isAdmin = (null != userId)?(powerLevels.getUserPowerLevel(userId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN):false;
@@ -467,7 +506,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
         if(null != mSwitchDeletionMenuItem) {
             if(!isUserAdmin()){
                 isEnabled = false;
-            } else if(1 == mAdapter.getItemsCount()){
+            } else if (1 == mAdapter.getItemsCount()){
                 isEnabled = false;
             } else {
                 isEnabled = true;
@@ -518,7 +557,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      */
     private void refreshMemberPresences()  {
         int firstPos = mParticipantsListView.getFirstVisiblePosition();
-        int lastPos = mParticipantsListView.getLastVisiblePosition() + 20; // add a margin to efresh more
+        int lastPos = mParticipantsListView.getLastVisiblePosition() + 20; // add a margin to refresh more
         int count = mParticipantsListView.getCount();
 
         for(int i = firstPos; (i <= lastPos) && (i < count); i++) {
@@ -569,7 +608,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     /**
      * Update the activity title
      *
-     * @param title
+     * @param title the new title
      */
     private void setActivityTitle(String title) {
         if (null != ((AppCompatActivity) getActivity()).getSupportActionBar()) {
@@ -588,7 +627,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     * Enable / disable the multiselection mode
+     * Enable / disable the multi selection mode
      */
     private void toggleMultiSelectionMode() {
         resetActivityTitle();
@@ -789,7 +828,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ArrayList<String> userIds = new ArrayList<String>();
+                                        ArrayList<String> userIds = new ArrayList<>();
                                         userIds.add(participantItem.mUserId);
 
                                         kickUsers(userIds, 0);
@@ -913,13 +952,6 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     }
 
     /**
-     * @return the participant User Ids except oneself.
-     */
-    public ArrayList<String> getUserIdsList() {
-        return mAdapter.getUserIdsList();
-    }
-
-    /**
      * Activity result
      * @param requestCode the request code
      * @param resultCode teh result code
@@ -940,7 +972,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                         if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
                             mRoom.inviteByEmail(userId, mDefaultCallBack);
                         } else {
-                            ArrayList<String> userIDs = new ArrayList<String>();
+                            ArrayList<String> userIDs = new ArrayList<>();
                             userIDs.add(userId);
                             mRoom.invite(userIDs, mDefaultCallBack);
                         }

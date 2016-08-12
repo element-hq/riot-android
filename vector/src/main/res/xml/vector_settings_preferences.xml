@@ -27,46 +27,46 @@
 
     <PreferenceCategory android:title="@string/settings_notifications">
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_enable_all_notif"
             android:key="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_enable_this_device"
             android:key="@string/settings_enable_this_device"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_turn_screen_on"
             android:key="@string/settings_turn_screen_on"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_containing_my_name"
             android:key="@string/settings_containing_my_name"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_messages_in_one_to_one"
             android:key="@string/settings_messages_in_one_to_one"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_messages_in_group_chat"
             android:key="@string/settings_messages_in_group_chat"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_invited_to_room"
             android:key="@string/settings_invited_to_room"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_call_invitations"
             android:key="@string/settings_call_invitations"
             android:dependency="@string/settings_enable_all_notif"/>
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_messages_sent_by_bot"
             android:key="@string/settings_messages_sent_by_bot"
             android:dependency="@string/settings_enable_all_notif"/>
@@ -76,6 +76,11 @@
     <PreferenceCategory
         android:title="@string/settings_notifications_targets"
         android:key="@string/settings_notifications_targets">
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_ignored_users"
+        android:key="@string/settings_ignored_users">
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_advanced" >
@@ -100,7 +105,7 @@
         android:key="@string/settings_background_sync"
         android:title="@string/settings_background_sync" >
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/settings_enable_background_sync"
             android:key="@string/settings_enable_background_sync"/>
 
@@ -122,7 +127,7 @@
         android:title="@string/settings_other"
         android:key="@string/settings_other" >
 
-        <SwitchPreference
+        <im.vector.preference.VectorSwitchPreference
             android:title="@string/ga_use_settings"
             android:key="@string/ga_use_settings"/>
 

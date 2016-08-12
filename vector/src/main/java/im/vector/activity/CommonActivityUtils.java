@@ -47,6 +47,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -66,7 +67,6 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.ga.GAHelper;
-import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
 
 import java.io.File;
@@ -547,22 +547,22 @@ public class CommonActivityUtils {
             // retrieve the permissions to be granted according to the request code bit map
             if(PERMISSION_CAMERA == (aPermissionsToBeGrantedBitMap & PERMISSION_CAMERA)){
                 permissionType = Manifest.permission.CAMERA;
-                isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             if(PERMISSION_RECORD_AUDIO == (aPermissionsToBeGrantedBitMap & PERMISSION_RECORD_AUDIO)){
                 permissionType = Manifest.permission.RECORD_AUDIO;
-                isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             if(PERMISSION_WRITE_EXTERNAL_STORAGE == (aPermissionsToBeGrantedBitMap & PERMISSION_WRITE_EXTERNAL_STORAGE)){
                 permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-                isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)){
                 permissionType = Manifest.permission.READ_CONTACTS;
-                isRequestPermissionRequired = updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
@@ -955,7 +955,7 @@ public class CommonActivityUtils {
                                                    Room room = finalSession.getDataHandler().getRoom((String) params.get(VectorRoomActivity.EXTRA_ROOM_ID));
 
                                                    if ((null != room) && room.isInvited()) {
-                                                       String displayName = VectorUtils.getRoomDisplayname(fromActivity, finalSession, room);
+                                                       String displayName = VectorUtils.getRoomDisplayName(fromActivity, finalSession, room);
 
                                                        if (null != displayName) {
                                                            intent.putExtra(VectorRoomActivity.EXTRA_DEFAULT_NAME, displayName);
@@ -1532,6 +1532,22 @@ public class CommonActivityUtils {
     //==============================================================================================================
 
     /**
+     * Helper method to display a toast message.
+     * @param aCallingActivity calling Activity instance
+     * @param aMsgToDisplay message to display
+     */
+    public static void displayToastOnUiThread(final Activity aCallingActivity, final String aMsgToDisplay)  {
+        if(null != aCallingActivity) {
+            aCallingActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    CommonActivityUtils.displayToast(aCallingActivity.getApplicationContext(), aMsgToDisplay);
+                }
+            });
+        }
+    }
+
+    /**
      * Display a toast
      * @param aContext the context.
      * @param aTextToDisplay the text to display.
@@ -1547,6 +1563,39 @@ public class CommonActivityUtils {
      */
     public static void displaySnack(View aTargetView, CharSequence aTextToDisplay) {
         Snackbar.make(aTargetView, aTextToDisplay, Snackbar.LENGTH_SHORT).show();
+    }
+
+    //==============================================================================================================
+    // call utils
+    //==============================================================================================================
+
+    /**
+     * Display a toast message according to the end call reason.
+     *
+     * @param aCallingActivity calling activity
+     * @param aCallEndReason define the reason of the end call
+     */
+    public static void processEndCallInfo(Activity aCallingActivity, int aCallEndReason) {
+        if(null != aCallingActivity) {
+            if (IMXCall.END_CALL_REASON_UNDEFINED != aCallEndReason) {
+                switch (aCallEndReason) {
+                    case IMXCall.END_CALL_REASON_PEER_HANG_UP:
+                        if(aCallingActivity instanceof InComingCallActivity) {
+                            CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_cancelled_call));
+                        } else {
+                            // let VectorCallActivity manage its
+                        }
+                        break;
+
+                    case IMXCall.END_CALL_REASON_PEER_HANG_UP_ELSEWHERE:
+                        CommonActivityUtils.displayToastOnUiThread(aCallingActivity, aCallingActivity.getString(R.string.call_error_peer_hangup_elsewhere));
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     //==============================================================================================================

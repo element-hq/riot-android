@@ -131,10 +131,12 @@ public class ResourceUtils {
             // get the full size bitmap
             Bitmap fullSizeBitmap = null;
 
-            try {
-                fullSizeBitmap = BitmapFactory.decodeStream(resource.mContentStream, null, options);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "BitmapFactory.decodeStream fails " + e.getLocalizedMessage());
+            if (null != resource) {
+                try {
+                    fullSizeBitmap = BitmapFactory.decodeStream(resource.mContentStream, null, options);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "BitmapFactory.decodeStream fails " + e.getLocalizedMessage());
+                }
             }
 
             // succeeds to retrieve the full size bitmap

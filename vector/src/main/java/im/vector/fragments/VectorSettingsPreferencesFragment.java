@@ -29,6 +29,7 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.text.Editable;
@@ -48,10 +49,12 @@ import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
+import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
@@ -59,16 +62,22 @@ import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.ContentManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
+import im.vector.util.BugReporter;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -80,6 +89,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
     private static final String EMAIL_PREFERENCE_KEY_BASE = "EMAIL_PREFERENCE_KEY_BASE";
     private static final String PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE";
+    private static final String IGNORED_USER_KEY_BASE = "IGNORED_USER_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
     private static final String APP_INFO_LINK_PREFERENCE_KEY = "application_info_link";
 
@@ -107,6 +117,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     // displayed pushers
     private PreferenceCategory mPushersSettingsCategory;
     private List<Pusher> mDisplayedPushers = new ArrayList<Pusher>();
+
+    // displayed the ignored users list
+    private PreferenceCategory mIgnoredUserSettingsCategory;
 
     // background sync category
     private PreferenceCategory mBackgroundSyncCategory;
@@ -163,7 +176,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.vector_settings_preferences);
 
         if (null == mPushesRuleByResourceId) {
-            mPushesRuleByResourceId = new HashMap<String, String>();
+            mPushesRuleByResourceId = new HashMap<>();
 
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
             mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_this_device), DUMMY_RULE);
@@ -275,15 +288,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
-                final String fResourceText = resourceText;
-
                 switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
                         // on some old android APIs,
                         // the callback is called even if there is no user interaction
                         // so the value will be checked to ensure there is really no update.
-                        onPushRuleClick(fResourceText, (boolean)newValueAsVoid);
+                        onPushRuleClick(preference.getKey(), (boolean)newValueAsVoid);
                         return true;
                     }
                 });
@@ -338,6 +349,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
+        mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -365,6 +377,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
         refreshPushersList();
         refreshEmailsList();
+        refreshIgnoredUsersList();
     }
 
     @Override
@@ -528,8 +541,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 // Setting Positive "Yes" Button
                 alertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        if (null != getActivity()) {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
 
                         String oldPwd = oldPasswordText.getText().toString().trim();
                         String newPwd = newPasswordText.getText().toString().trim();
@@ -579,8 +594,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 // Setting Negative "NO" Button
                 alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        if (null != getActivity()) {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
                     }
                 });
 
@@ -589,8 +606,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                 dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        if (null != getActivity()) {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        }
                     }
                 });
 
@@ -822,22 +841,25 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
 
                 ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
-                mSession.getContentManager().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new ContentManager.UploadCallback() {
-                    @Override
-                    public void onUploadStart(String uploadId) {
-                    }
+                if (null != resource) {
+                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
-                    @Override
-                    public void onUploadProgress(String anUploadId, int percentageProgress) {
-                    }
+                        @Override
+                        public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoadingView(false);
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onUploadComplete(final String anUploadId, final ContentResponse uploadResponse, final int serverReponseCode, final String serverErrorMessage) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if ((null != uploadResponse) && (null != uploadResponse.contentUri)) {
-                                    mSession.getMyUser().updateAvatarUrl(uploadResponse.contentUri, new ApiCallback<Void>() {
+                        @Override
+                        public void onUploadComplete(final String uploadId, final String contentUri) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
                                         @Override
                                         public void onSuccess(Void info) {
                                             onCommonDone(null);
@@ -859,13 +881,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                                             onCommonDone(e.getLocalizedMessage());
                                         }
                                     });
-                                } else {
-                                    hideLoadingView(false);
                                 }
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+                }
             }
         }
 
@@ -913,6 +933,93 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         }
 
         editor.commit();
+    }
+
+    //==============================================================================================================
+    // ignored users list management
+    //==============================================================================================================
+
+    /**
+     * Refresh the ignored users list
+     */
+    private void refreshIgnoredUsersList() {
+        List<String> ignoredUsersList = mSession.getDataHandler().getIgnoredUserIds();
+
+        Collections.sort(ignoredUsersList, new Comparator<String>() {
+            @Override
+            public int compare(String u1, String u2) {
+                return u1.toLowerCase().compareTo(u2.toLowerCase());
+            }
+        });
+
+        PreferenceScreen preferenceScreen = getPreferenceScreen();
+
+        preferenceScreen.removePreference(mIgnoredUserSettingsCategory);
+        mIgnoredUserSettingsCategory.removeAll();
+
+        if (ignoredUsersList.size() > 0) {
+            preferenceScreen.addPreference(mIgnoredUserSettingsCategory);
+
+            for (final String userId : ignoredUsersList) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                preference.setTitle(userId);
+                preference.setKey(IGNORED_USER_KEY_BASE + userId);
+
+                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                                .setMessage(getActivity().getString(R.string.settings_unignore_user, userId))
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+
+                                        displayLoadingView();
+
+                                        ArrayList<String> idsList = new ArrayList<>();
+                                        idsList.add(userId);
+
+                                        mSession.unIgnoreUsers(idsList, new ApiCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void info) {
+                                                onCommonDone(null);
+                                            }
+
+                                            @Override
+                                            public void onNetworkError(Exception e) {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
+
+                                            @Override
+                                            public void onMatrixError(MatrixError e) {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
+
+                                            @Override
+                                            public void onUnexpectedError(Exception e) {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .create()
+                                .show();
+
+                        return false;
+                    }
+                });
+
+                mIgnoredUserSettingsCategory.addPreference(preference);
+            }
+        }
     }
 
     //==============================================================================================================
