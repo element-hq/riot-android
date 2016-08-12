@@ -108,10 +108,13 @@ public class EventStreamService extends Service {
     /**
      * Notification identifiers
      */
-    private static final int NOTIF_ID_LISTENING_FOR_EVENTS = 42;
-    private static final int NOTIF_ID_MESSAGE = 43;
-    private static final int NOTIF_ID_PENDING_CALL = 44;
-    private static final int NOTIF_ID_INCOMING_CALL = 45;
+    private static final int NOTIF_ID_MESSAGE = 60;
+    private static final int NOTIF_ID_FOREGROUND_SERVICE = 61;
+
+    private static final int FOREGROUND_LISTENING_FOR_EVENTS = 42;
+    private static final int FOREGROUND_NOTIF_ID_PENDING_CALL = 44;
+    private static final int FOREGROUND_ID_INCOMING_CALL = 45;
+    private int mForegroundServiceIdentifier = -1;
 
     /**
      * Default bing rule
@@ -604,7 +607,10 @@ public class EventStreamService extends Service {
 
         if (mIsForeground) {
             Log.d(LOG_TAG, "## gcmStatusUpdate : gcm status succeeds so stopForeground");
-            stopForeground(true);
+            if (FOREGROUND_LISTENING_FOR_EVENTS == mForegroundServiceIdentifier) {
+                stopForeground(true);
+                mForegroundServiceIdentifier = -1;
+            }
             mIsForeground = false;
         }
 
@@ -628,12 +634,21 @@ public class EventStreamService extends Service {
 
         if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground");
-            Notification notification = buildForegroundServiceNotification();
-            startForeground(NOTIF_ID_LISTENING_FOR_EVENTS, notification);
+
+            if (-1 == mForegroundServiceIdentifier) {
+                Notification notification = buildForegroundServiceNotification();
+                startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
+                mForegroundServiceIdentifier = FOREGROUND_LISTENING_FOR_EVENTS;
+            }
+
             mIsForeground = true;
         } else {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in background");
-            stopForeground(true);
+
+            if (FOREGROUND_LISTENING_FOR_EVENTS == mForegroundServiceIdentifier) {
+                stopForeground(true);
+                mForegroundServiceIdentifier = -1;
+            }
             mIsForeground = false;
         }
     }
@@ -1098,7 +1113,9 @@ public class EventStreamService extends Service {
                 notification.defaults |= Notification.DEFAULT_SOUND;
             }
 
-            startForeground(NOTIF_ID_INCOMING_CALL, notification);
+            startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
+            mForegroundServiceIdentifier = FOREGROUND_ID_INCOMING_CALL;
+
             mIncomingCallId = callId;
 
             // turn the screen on for 3 seconds
@@ -1120,7 +1137,8 @@ public class EventStreamService extends Service {
     public void displayCallInProgressNotification(MXSession session, Room room, String callId) {
         if (null != callId) {
             Notification notification = NotificationUtils.buildPendingCallNotification(getApplicationContext(), room.getName(session.getCredentials().userId), room.getRoomId(), session.getCredentials().userId, callId);
-            startForeground(NOTIF_ID_PENDING_CALL, notification);
+            startForeground(NOTIF_ID_FOREGROUND_SERVICE, notification);
+            mForegroundServiceIdentifier = FOREGROUND_NOTIF_ID_PENDING_CALL;
             mCallIdInProgress = callId;
         }
     }
@@ -1131,16 +1149,17 @@ public class EventStreamService extends Service {
     public void hideCallNotifications() {
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (!TextUtils.isEmpty(mCallIdInProgress)) {
-            mCallIdInProgress = null;
-            nm.cancel(NOTIF_ID_PENDING_CALL);
-            updateServiceForegroundState();
-        }
+        // hide the call
+        if ((FOREGROUND_NOTIF_ID_PENDING_CALL == mForegroundServiceIdentifier) || (FOREGROUND_ID_INCOMING_CALL == mForegroundServiceIdentifier)) {
 
-        // hide the "incoming call" notification
-        if (!TextUtils.isEmpty(mIncomingCallId)) {
-            mIncomingCallId = null;
-            nm.cancel(NOTIF_ID_INCOMING_CALL);
+            if (FOREGROUND_NOTIF_ID_PENDING_CALL == mForegroundServiceIdentifier) {
+                mCallIdInProgress = null;
+            } else {
+                mIncomingCallId = null;
+            }
+            nm.cancel(NOTIF_ID_FOREGROUND_SERVICE);
+            mForegroundServiceIdentifier = -1;
+            stopForeground(true);
             updateServiceForegroundState();
         }
     }
