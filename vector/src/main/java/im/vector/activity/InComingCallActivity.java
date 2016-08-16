@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,10 @@ import im.vector.util.VectorUtils;
  */
 public class InComingCallActivity extends Activity { // do NOT extend from UC*Activity, we do not want to login on this screen!
     private static final String LOG_TAG = "InComingCallActivity";
+
+    // only one instance of this class should be displayed
+    // TODO find how to avoid multiple creations
+    private static InComingCallActivity sharedInstance = null;
 
     private ImageView mCallingUserAvatarView;
     private TextView mRoomNameTextView;
@@ -148,6 +153,16 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
                 finish();
             } else {
+
+                synchronized (LOG_TAG) {
+                    if (null != sharedInstance) {
+                        sharedInstance.finish();
+                        Log.e(LOG_TAG, "## onCreate(): kill previous instance");
+                    }
+
+                    sharedInstance = this;
+                }
+
                 // UI widgets binding
                 mCallingUserAvatarView = (ImageView)findViewById(R.id.avatar_img);
                 mRoomNameTextView = (TextView)findViewById(R.id.room_name);
@@ -189,14 +204,42 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         }
     }
 
+    @Override
+    public  void finish() {
+        super.finish();
+        synchronized (LOG_TAG) {
+            if (this == sharedInstance) {
+                sharedInstance = null;
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId);
+
         if (null != mMxCall) {
-            mMxCall.onResume();
-            mMxCall.addListener(mMxCallListener);
+            String callState = mMxCall.getCallState();
+            boolean isWaitingUserResponse =
+                    TextUtils.equals(callState, IMXCall.CALL_STATE_CREATING_CALL_VIEW) ||
+                            TextUtils.equals(callState, IMXCall.CALL_STATE_FLEDGLING) ||
+                            TextUtils.equals(callState, IMXCall.CALL_STATE_WAIT_LOCAL_MEDIA) ||
+                            TextUtils.equals(callState, IMXCall.CALL_STATE_WAIT_CREATE_OFFER) ||
+                            TextUtils.equals(callState, IMXCall.CALL_STATE_RINGING);
+
+
+            if (isWaitingUserResponse) {
+                mMxCall.onResume();
+                mMxCall.addListener(mMxCallListener);
+            } else {
+                Log.d(LOG_TAG, "## onResume : the call has already been managed.");
+                finish();
+            }
+        } else {
+            Log.d(LOG_TAG, "## onResume : the call does not exist anymore");
+            finish();
         }
     }
 

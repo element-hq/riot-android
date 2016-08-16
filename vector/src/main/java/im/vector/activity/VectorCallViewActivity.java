@@ -61,6 +61,8 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private static final String HANGUP_MSG_BACK_KEY = "user hangup from back key";
     /** threshold used to manage the backlight during the call **/
     private static final float PROXIMITY_THRESHOLD = 3.0f; // centimeters
+    private static final String HANGUP_MSG_USER_CANCEL = "user hangup";
+    private static final String HANGUP_MSG_NOT_DEFINED = "not defined";
 
     public static final String EXTRA_MATRIX_ID = "CallViewActivity.EXTRA_MATRIX_ID";
     public static final String EXTRA_CALL_ID = "CallViewActivity.EXTRA_CALL_ID";
@@ -84,6 +86,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private boolean mAutoAccept = false;
     private boolean mIsCallEnded = false;
     private boolean mIsCalleeBusy = false;
+    private String mHangUpReason = HANGUP_MSG_NOT_DEFINED;
 
     // graphical items
     private ImageView mHangUpImageView;
@@ -131,7 +134,12 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                         if (TextUtils.equals(IMXCall.CALL_STATE_ENDED, fState) &&
                                 ((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mLastCallState) && !mCall.isIncoming())||
                                         TextUtils.equals(IMXCall.CALL_STATE_INVITE_SENT, mLastCallState))) {
-                            showToast(VectorCallViewActivity.this.getString(R.string.call_error_user_not_responding));
+
+                            if (!TextUtils.equals(HANGUP_MSG_USER_CANCEL, mHangUpReason)) {
+                                // display message only if the caller originated the hang up
+                                showToast(VectorCallViewActivity.this.getString(R.string.call_error_user_not_responding));
+                            }
+
                             mIsCalleeBusy = true;
                             Log.d(LOG_TAG, "## onStateDidChange(): the callee is busy");
                         }
@@ -414,7 +422,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mHangUpImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onHangUp("user hangup");
+                onHangUp(HANGUP_MSG_USER_CANCEL);
             }
         });
 
@@ -854,6 +862,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      */
     private void onHangUp(String hangUpMsg) {
         mSavedCallview = null;
+        mHangUpReason = hangUpMsg;
 
         if (null != mCall) {
             mCall.hangup(hangUpMsg);
