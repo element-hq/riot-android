@@ -132,7 +132,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                         Log.d(LOG_TAG, "## onStateDidChange(): new state=" + fState);
 
                         if (TextUtils.equals(IMXCall.CALL_STATE_ENDED, fState) &&
-                                ((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mLastCallState) && !mCall.isIncoming())||
+                                ((TextUtils.equals(IMXCall.CALL_STATE_RINGING, mLastCallState) && (null!=mCall) && !mCall.isIncoming())||
                                         TextUtils.equals(IMXCall.CALL_STATE_INVITE_SENT, mLastCallState))) {
 
                             if (!TextUtils.equals(HANGUP_MSG_USER_CANCEL, mHangUpReason)) {
