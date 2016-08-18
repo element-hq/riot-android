@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -57,7 +58,6 @@ import com.commonsware.cwac.anddown.AndDown;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -70,14 +70,12 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
 
@@ -634,7 +632,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayVideoCallIpDialog();
+                if(isUserAllowedToStartConfCall()) {
+                    displayVideoCallIpDialog();
+                } else {
+                    displayConfCallNotAllowed();
+                }
             }
         });
 
@@ -999,6 +1001,55 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Check if the current user is allowed to perform a conf call.
+     * The user power level is checked against the invite power level.
+     * <p>To start a conf call, the user needs to invite the CFU to the room.
+     * @return true if the user is allowed, false otherwise
+     */
+    private boolean isUserAllowedToStartConfCall() {
+     boolean isAllowed = false;
+
+        if(mRoom.isOngoingConferenceCall()) {
+            // if a conf is in progress, the user can join the established conf anyway
+            Log.d(LOG_TAG,"## isUserAllowedToStartConfCall(): conference in progress");
+            isAllowed = true;
+        } else if ((null != mRoom) && (mRoom.getActiveMembers().size() > 2)) {
+            PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
+
+            if (null != powerLevels) {
+                // to start a conf call, the user MUST have the power to invite someone (CFU)
+                isAllowed = powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.invite;
+            }
+        } else {
+            // 1:1 call
+            isAllowed = true;
+        }
+
+        Log.d(LOG_TAG,"## isUserAllowedToStartConfCall(): isAllowed="+isAllowed);
+        return isAllowed;
+    }
+
+    /**
+     * Display a dialog box to indicate that the conf call can no be performed.
+     * <p>See {@link #isUserAllowedToStartConfCall()}
+     */
+    private void displayConfCallNotAllowed() {
+        // display the dialog with the info text
+        AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(VectorRoomActivity.this);
+        Resources resource = getResources();
+
+        if((null != resource) && (null != permissionsInfoDialog)){
+            permissionsInfoDialog.setTitle(resource.getString(R.string.missing_permissions_title_to_start_conf_call));
+            permissionsInfoDialog.setMessage(resource.getString(R.string.missing_permissions_to_start_conf_call));
+
+            permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_alert);
+            permissionsInfoDialog.setPositiveButton(resource.getString(R.string.yes),null);
+            permissionsInfoDialog.show();
+        } else {
+            Log.e(LOG_TAG,"## displayConfCallNotAllowed(): impossible to create dialog");
+        }
+    }
     /**
      * Start an IP call with the management of the corresponding permissions.
      * According to the IP call, the corresponding permissions are asked: {@link CommonActivityUtils#REQUEST_CODE_PERMISSION_AUDIO_IP_CALL}
@@ -1647,15 +1698,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             IMXCall call = VectorCallViewActivity.getActiveCall();
 
             if (null == call) {
-                // in conference call, the user must have have the power to invite someone.
-                if (mRoom.getActiveMembers().size() > 2) {
-                    PowerLevels powerLevels =  mRoom.getLiveState().getPowerLevels();
-
-                    if (null != powerLevels) {
-                        isCallSupported &= powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.invite;
-                    }
-                }
-
                 mStartCallLayout.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else {
