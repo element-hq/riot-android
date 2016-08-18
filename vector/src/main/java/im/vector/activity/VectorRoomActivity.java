@@ -1044,7 +1044,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             permissionsInfoDialog.setMessage(resource.getString(R.string.missing_permissions_to_start_conf_call));
 
             permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_alert);
-            permissionsInfoDialog.setPositiveButton(resource.getString(R.string.yes),null);
+            permissionsInfoDialog.setPositiveButton(resource.getString(R.string.ok),null);
             permissionsInfoDialog.show();
         } else {
             Log.e(LOG_TAG,"## displayConfCallNotAllowed(): impossible to create dialog");
