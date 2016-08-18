@@ -313,8 +313,6 @@ public class CommonActivityUtils {
 
         // clear the preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        String loginVal = preferences.getString(LoginActivity.LOGIN_PREF, "");
-        String passwordVal = preferences.getString(LoginActivity.PASSWORD_PREF, "");
 
         String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
         String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
@@ -322,8 +320,6 @@ public class CommonActivityUtils {
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.putString(LoginActivity.PASSWORD_PREF, passwordVal);
-        editor.putString(LoginActivity.LOGIN_PREF, loginVal);
         editor.putString(LoginActivity.HOME_SERVER_URL_PREF, homeServer);
         editor.putString(LoginActivity.IDENTITY_SERVER_URL_PREF, identityServer);
         editor.commit();

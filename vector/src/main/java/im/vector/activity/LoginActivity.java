@@ -97,8 +97,6 @@ public class LoginActivity extends MXCActionBarActivity {
     private static final int MODE_FORGOT_PASSWORD = 3;
     private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 4;
 
-    public static final String LOGIN_PREF = "vector_login";
-    public static final String PASSWORD_PREF = "vector_password";
     public static final String HOME_SERVER_URL_PREF = "home_server_url";
     public static final String IDENTITY_SERVER_URL_PREF = "identity_server_url";
 
@@ -377,10 +375,6 @@ public class LoginActivity extends MXCActionBarActivity {
             restoreSavedData(savedInstanceState);
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-
-            mLoginEmailTextView.setText(preferences.getString(LOGIN_PREF, ""));
-            mLoginPasswordTextView.setText(preferences.getString(PASSWORD_PREF, ""));
-
             mHomeServerText.setText(preferences.getString(HOME_SERVER_URL_PREF,  getResources().getString(R.string.default_hs_server_url)));
             mIdentityServerText.setText(preferences.getString(IDENTITY_SERVER_URL_PREF,  getResources().getString(R.string.default_identity_server_url)));
         }
@@ -492,46 +486,6 @@ public class LoginActivity extends MXCActionBarActivity {
 
         // reset the badge counter
         CommonActivityUtils.updateBadgeCount(this, 0);
-
-        mLoginEmailTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(LOGIN_PREF, mLoginEmailTextView.getText().toString());
-                editor.commit();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mLoginPasswordTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(PASSWORD_PREF, mLoginPasswordTextView.getText().toString());
-                editor.commit();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         mHomeServerText.addTextChangedListener(new TextWatcher() {
             @Override
