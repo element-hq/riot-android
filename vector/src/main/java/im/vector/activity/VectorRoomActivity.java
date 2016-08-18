@@ -57,7 +57,6 @@ import com.commonsware.cwac.anddown.AndDown;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -70,14 +69,12 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
-import org.matrix.androidsdk.util.ContentManager;
 import org.matrix.androidsdk.util.JsonUtils;
 import org.matrix.androidsdk.view.AutoScrollDownListView;
 
@@ -91,6 +88,7 @@ import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorOngoingConferenceCallView;
@@ -402,6 +400,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void onCallEnd(final int aReasonId) {
             refreshNotificationsArea();
+
+            // catch the flow where the hangup is done in VectorRoomActivity
+            VectorCallSoundManager.releaseAudioFocus();
+            // and play a lovely sound
+            VectorCallSoundManager.startEndCallSound();
         }
     };
 
@@ -610,6 +613,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             VectorRoomActivity.this.startActivity(intent);
                         }
                     });
+                } else {
+                    // if the call is no more active, just remove the view
+                    mVectorPendingCallView.onCallTerminated();
                 }
             }
         });
