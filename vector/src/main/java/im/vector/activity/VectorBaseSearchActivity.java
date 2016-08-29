@@ -89,14 +89,19 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
-                            VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onPatternUpdate(true);
+                        VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TextUtils.equals(mPatternToSearchEditText.getText().toString(), fPattern)) {
+                                    VectorBaseSearchActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            onPatternUpdate(true);
+                                        }
+                                    });
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 }, 100);
             }
