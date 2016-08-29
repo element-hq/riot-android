@@ -21,12 +21,15 @@ import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
  * Display a circular image.
  */
 public class VectorCircularImageView extends ImageView {
+
+    private static final String LOG_TAG = "VCirImageView";
 
     public VectorCircularImageView(Context context) {
         super(context);
@@ -56,35 +59,52 @@ public class VectorCircularImageView extends ImageView {
             }
             // larger than high
             else if (width > height){
-
-                bm = Bitmap.createBitmap(
-                        bm,
-                        (width - height) / 2,
-                        0,
-                        height,
-                        height
-                );
-
+                try {
+                    bm = Bitmap.createBitmap(
+                            bm,
+                            (width - height) / 2,
+                            0,
+                            height,
+                            height
+                    );
+                } catch (OutOfMemoryError error) {
+                    Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + error.getMessage());
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
+                }
             }
             // higher than large
             else {
-                bm = Bitmap.createBitmap(
-                        bm,
-                        0,
-                        (height - width) / 2,
-                        width,
-                        width
-                );
+                try {
+                    bm = Bitmap.createBitmap(
+                            bm,
+                            0,
+                            (height - width) / 2,
+                            width,
+                            width
+                    );
+                } catch (OutOfMemoryError error) {
+                    Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + error.getMessage());
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
+                }
             }
 
-            // create a rounded bitmap
-            RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(), bm);
-            img.setAntiAlias(true);
-            img.setCornerRadius(height / 2.0f);
+            try {
+                // create a rounded bitmap
+                RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(), bm);
+                img.setAntiAlias(true);
+                img.setCornerRadius(height / 2.0f);
 
-            // apply it to the image
-            this.setImageDrawable(img);
-
+                // apply it to the image
+                this.setImageDrawable(img);
+            } catch (OutOfMemoryError error) {
+                Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + error.getMessage());
+                super.setImageBitmap(null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + e.getMessage());
+                super.setImageBitmap(null);
+            }
         } else {
             super.setImageBitmap(null);
         }
