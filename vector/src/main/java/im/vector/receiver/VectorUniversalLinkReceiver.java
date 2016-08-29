@@ -18,24 +18,12 @@ package im.vector.receiver;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.TextView;
-
-import com.squareup.okhttp.internal.Platform;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -44,6 +32,7 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -196,7 +185,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     /**
      * Start the universal link management when the login process is done.
      * If there is no active activity, launch the home activity
-     * @param aContext
+     * @param aContext the context.
      */
     private void manageRoomOnActivity(final Context aContext) {
         final Activity currentActivity = VectorApp.getCurrentActivity();
@@ -305,10 +294,10 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
     /**
      * Open the room activity with the dedicated parameters
-     * @param context
+     * @param context the context.
      */
     private void openRoomActivity(Context context) {
-        HashMap<String, Object> params = new HashMap<String, Object>();
+        HashMap<String, Object> params = new HashMap<>();
 
         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
         params.put(VectorRoomActivity.EXTRA_ROOM_ID, mParameters.get(ULINK_ROOM_ID_KEY));
@@ -340,19 +329,21 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            if (!mSupportedVectorLinkPaths.contains(uri.getPath())) {
+            if (!TextUtils.equals(uri.getHost(), "vector.im") && !TextUtils.equals(uri.getHost(), "matrix.to")) {
+                Log.e(LOG_TAG, "## parseUniversalLink : unsupported host " + uri.getHost());
+                return null;
+            }
+
+            boolean isVectorImHost = TextUtils.equals(uri.getHost(), "vector.im");
+
+            // when the uri host is vector.im, it is followed by a dedicated path
+            if (isVectorImHost && !mSupportedVectorLinkPaths.contains(uri.getPath())) {
                 Log.e(LOG_TAG, "## parseUniversalLink : not supported");
                 return null;
             }
 
-            String uriFragment;
-
-            if (!TextUtils.equals(uri.getHost(), "vector.im")) {
-                Log.e(LOG_TAG, "## parseUniversalLink : unsupported host");
-                return null;
-            }
-
             // remove the server part
+            String uriFragment;
             if (null != (uriFragment = uri.getFragment())) {
                 uriFragment = uriFragment.substring(1); // get rid of first "/"
             } else {
@@ -361,6 +352,12 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             }
 
             String temp[] = uriFragment.split("/", 3); // limit to 3 for security concerns (stack overflow injection)
+
+            if (!isVectorImHost) {
+                ArrayList<String> compliantList = new ArrayList<>(Arrays.asList(temp));
+                compliantList.add(0, "room");
+                temp = compliantList.toArray(new String[compliantList.size()]);
+            }
 
             if (temp.length < 2) {
                 Log.e(LOG_TAG, "## parseUniversalLink : too short");
@@ -396,7 +393,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         try {
                             value = URLDecoder.decode(value, "UTF-8");
                         } catch (Exception e) {
-
+                            Log.e(LOG_TAG, "## parseUniversalLink : URLDecoder.decode " + e.getMessage());
                         }
 
                         map.put(name, value);

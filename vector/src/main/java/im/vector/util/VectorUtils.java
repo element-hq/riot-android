@@ -92,7 +92,7 @@ public class VectorUtils {
             return null;
         }
 
-        String link = "https://vector.im/beta/#/room/" + roomIdOrAlias;
+        String link = "https://matrix.to/#/" + roomIdOrAlias;
 
         if (!TextUtils.isEmpty(eventId)) {
             link +=  "/" + eventId;
