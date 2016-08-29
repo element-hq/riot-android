@@ -43,13 +43,10 @@ public class RecentsExpandableListView extends ExpandableListView {
         void onDrop();
 
         /**
-         * Called the list view is overscrolled
-         * @param scrollX New X scroll value in pixels
-         * @param scrollY New Y scroll value in pixels
-         * @param clampedX True if scrollX was clamped to an over-scroll boundary
-         * @param clampedY True if scrollY was clamped to an over-scroll boundary
+         * Called the list view is over scrolled
+         * @param isTop set to true when the list is top over scrolled.
          */
-        void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY);
+        void onOverScrolled(boolean isTop);
     }
 
     // the touched child view
@@ -70,8 +67,8 @@ public class RecentsExpandableListView extends ExpandableListView {
 
     @Override
     protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-        if (null != mDragAndDropEventsListener) {
-            mDragAndDropEventsListener.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+        if (clampedY && (null != mDragAndDropEventsListener)) {
+            mDragAndDropEventsListener.onOverScrolled(0 == getFirstVisiblePosition());
         }
     }
 

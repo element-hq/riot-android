@@ -845,12 +845,14 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
+    /**
+     * Called the list view is over scrolled
+     * @param isTop set to true when the list is top over scrolled.
+     */
     @Override
-    public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-        if (clampedY && (0 == scrollY)) {
-            if (null != getListener()) {
-                mScrollEventListener.onRecentsListOverScrollUp();
-            }
+    public void onOverScrolled(boolean isTop) {
+        if (isTop && (null != getListener())) {
+            mScrollEventListener.onRecentsListOverScrollUp();
         }
     }
 
