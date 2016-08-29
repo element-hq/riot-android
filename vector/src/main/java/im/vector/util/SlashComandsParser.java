@@ -155,7 +155,7 @@ public class SlashComandsParser {
                             if (TextUtils.equals(state.alias, roomAlias)) {
                                 theRoom = r;
                                 break;
-                            } else if ((null != state.aliases) && (state.aliases.indexOf(roomAlias) >= 0)) {
+                            } else if (state.getAliases().indexOf(roomAlias) >= 0) {
                                 theRoom = r;
                                 break;
                             }

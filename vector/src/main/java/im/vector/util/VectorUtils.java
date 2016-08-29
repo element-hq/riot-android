@@ -130,14 +130,13 @@ public class VectorUtils {
         String displayName = publicRoom.name;
 
         if (TextUtils.isEmpty(displayName)) {
-
-            if ((null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
-                displayName = publicRoom.aliases.get(0);
+            if (publicRoom.getAliases().size() > 0) {
+                displayName = publicRoom.getAliases().get(0);
             } else {
                 displayName = publicRoom.roomId;
             }
-        } else if (!displayName.startsWith("#")  && (null != publicRoom.aliases) && (0 < publicRoom.aliases.size())) {
-            displayName = displayName + " (" + publicRoom.aliases.get(0) + ")";
+        } else if (!displayName.startsWith("#") && (0 < publicRoom.getAliases().size())) {
+            displayName = displayName + " (" + publicRoom.getAliases().get(0) + ")";
         }
 
         return displayName;
@@ -168,13 +167,8 @@ public class VectorUtils {
 
         String alias = roomState.alias;
 
-        if (TextUtils.isEmpty(alias)) {
-            // For rooms where canonical alias is not defined, we use the 1st alias as a workaround
-            List<String> aliases = roomState.aliases;
-
-            if ((null != aliases) && (aliases.size() > 0)) {
-                alias = aliases.get(0);
-            }
+        if (TextUtils.isEmpty(alias) && (roomState.getAliases().size() > 0)) {
+            alias = roomState.getAliases().get(0);
         }
 
         if (!TextUtils.isEmpty(alias)) {
