@@ -164,6 +164,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private MXLatestChatMessageCache mLatestChatMessageCache;
 
+    private View mSendingMessagesLayout;
     private View mSendButtonLayout;
     private ImageView mSendImageView;
     private EditText mEditText;
@@ -521,6 +522,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
         });
 
+        mSendingMessagesLayout = findViewById(R.id.room_sending_message_layout);
         mSendImageView = (ImageView) findViewById(R.id.room_send_image_view);
         mSendButtonLayout = findViewById(R.id.room_send_layout);
         mSendButtonLayout.setOnClickListener(new View.OnClickListener() {
@@ -1701,8 +1703,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         // call management
-        if ((null == sRoomPreviewData) && (null == mEventId)) {
-
+        if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
             boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
             IMXCall call = VectorCallViewActivity.getActiveCall();
 
@@ -1982,20 +1983,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Check if the user can send a message in this room
+     * Tell if the user can send a message in this room.
+     * @return
      */
-    private void checkSendEventStatus() {
-        if ((null != mRoom) && (null !=  mRoom.getLiveState())) {
-            boolean canSendMessage = true;
+    private boolean canSendMessages() {
+        boolean canSendMessage = false;
 
+        if ((null != mRoom) && (null !=  mRoom.getLiveState())) {
+            canSendMessage = true;
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
 
             if (null != powerLevels) {
                 canSendMessage = powerLevels.maySendMessage(mMyUserId);
             }
+        }
 
-            mEditText.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
-            mSendButtonLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
+        return  canSendMessage;
+    }
+
+    /**
+     * Check if the user can send a message in this room
+     */
+    private void checkSendEventStatus() {
+        if ((null != mRoom) && (null !=  mRoom.getLiveState())) {
+            boolean canSendMessage = canSendMessages();
+            mSendingMessagesLayout.setVisibility(canSendMessage ? View.VISIBLE : View.GONE);
             mCanNotPostTextView.setVisibility(!canSendMessage ? View.VISIBLE : View.GONE);
         }
     }
