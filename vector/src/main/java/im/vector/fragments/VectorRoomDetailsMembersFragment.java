@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.renderscript.Script;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -421,7 +422,15 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             mRoom = anActivity.getRoom();
             mSession = anActivity.getSession();
 
-            finalizeInit();
+            // GA issue
+            if (null != mSession) {
+                finalizeInit();
+            } else {
+                Log.e(LOG_TAG, "## onCreateView : the session is null -> kill the activity");
+                if (null != getActivity()) {
+                    getActivity().finish();
+                }
+            }
         }
 
         // life cycle management
