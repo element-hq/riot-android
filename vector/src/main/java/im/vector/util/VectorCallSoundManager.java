@@ -26,12 +26,16 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import org.matrix.androidsdk.call.IMXCall;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,11 +44,25 @@ import im.vector.R;
 import im.vector.VectorApp;
 
 /**
- * This class manages the sound for v
+ * This class manages the sound for vector.
+ * It is in charge of playing ringtones and managing the audio focus.
  */
 public class VectorCallSoundManager {
+    private static final int RESTORE_TIME_AFTER_END_CALL_SOUND = 2000;
+    private static final int RESTORE_TIME_AFTER_BUSY_CALL_SOUND = 4000;
 
-    private static final String LOG_TAG = "CallRingManager";
+    /** Observer pattern class to notify sound events.
+     *  Clients listen to events by calling {@link #addSoundListener(IVectorCallSoundListener)}**/
+    public interface IVectorCallSoundListener {
+        /**
+         * Call back indicating new focus events (ex: {@link AudioManager#AUDIOFOCUS_GAIN},
+         * {@link AudioManager#AUDIOFOCUS_LOSS}..).
+         * @param aFocusEvent the focus event (see {@link AudioManager.OnAudioFocusChangeListener})
+         */
+        void onFocusChanged(int aFocusEvent);
+    }
+
+    private static final String LOG_TAG = "CallSoundManager";
 
     // ring tones resource names
     private static final String RING_TONE_BUSY = "busy.ogg";
@@ -52,11 +70,62 @@ public class VectorCallSoundManager {
     private static final String RING_TONE_START_RINGING = "ring.ogg";
     private static final String RING_TONE_RING_BACK = "ringback.ogg";
 
-    // the ring tones
-    private static Ringtone mRingTone = null;
-    private static Ringtone mRingBackTone = null;
-    private static Ringtone mCallEndTone = null;
-    private static Ringtone mBusyTone = null;
+    // audio focus
+    private static boolean mIsFocusGranted = false;
+
+    // the ring tones & vibrate
+    private static Ringtone mRingTone;
+    private static Ringtone mRingBackTone;
+    private static Ringtone mCallEndTone;
+    private static Ringtone mBusyTone;
+    private static final int VIBRATE_DURATION = 500; // milliseconds
+    private static final int VIBRATE_SLEEP = 1000;  // milliseconds
+    private static final long[] VIBRATE_PATTERN = {0, VIBRATE_DURATION, VIBRATE_SLEEP};
+
+    // audio focus management
+    private final static ArrayList<IVectorCallSoundListener> mCallSoundListenersList = new ArrayList<>();
+    private final static AudioManager.OnAudioFocusChangeListener mFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int aFocusEvent) {
+            switch (aFocusEvent) {
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    Log.d(LOG_TAG, "## OnAudioFocusChangeListener(): AUDIOFOCUS_GAIN");
+                    // TODO resume voip call (ex: ending GSM call)
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    Log.d(LOG_TAG, "## OnAudioFocusChangeListener(): AUDIOFOCUS_LOSS");
+                    // TODO pause voip call (ex: incoming GSM call)
+                    break;
+
+                case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT:
+                    Log.d(LOG_TAG, "## OnAudioFocusChangeListener(): AUDIOFOCUS_GAIN_TRANSIENT");
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    Log.d(LOG_TAG, "## OnAudioFocusChangeListener(): AUDIOFOCUS_LOSS_TRANSIENT");
+                    // TODO pause voip call (ex: incoming GSM call)
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    // TODO : continue playing at an attenuated level
+                    Log.d(LOG_TAG, "## OnAudioFocusChangeListener(): AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                    break;
+
+                case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
+                    Log.d(LOG_TAG, "## OnAudioFocusChangeListener(): AUDIOFOCUS_REQUEST_FAILED");
+                    break;
+
+                default:
+                    break;
+            }
+
+            // notify listeners
+            for (IVectorCallSoundListener listener : mCallSoundListenersList) {
+                listener.onFocusChanged(aFocusEvent);
+            }
+        }
+    };
 
     // the audio manager
     private static AudioManager mAudioManager = null;
@@ -72,6 +141,44 @@ public class VectorCallSoundManager {
         }
 
         return mAudioManager;
+    }
+
+    /**
+     * Add a listener to the listeners list.
+     * @param aListener the listener to add.
+     */
+    public static void addSoundListener(IVectorCallSoundListener aListener) {
+        if (null != aListener) {
+                // avoid adding twice
+                if (-1 == mCallSoundListenersList.indexOf(aListener)) {
+                    mCallSoundListenersList.add(aListener);
+                }
+            }
+    }
+
+    /**
+     * Remove a listener from the listeners list.
+     * @param aListener listener to be removed.
+     */
+    public static void removeSoundListener(IVectorCallSoundListener aListener) {
+        if(null != aListener) {
+            mCallSoundListenersList.remove(aListener);
+        }
+    }
+
+    /**
+     * Perform the actions required when the audio focus is lost.
+     * Any audio activity is stopped and the audio focus is released.
+     * <p>See {@link #mFocusListener}.
+     */
+    private static void onAudioFocusLoss() {
+        AudioManager audioMgr = getAudioManager();
+
+        // stop any ringtone that may be playing
+        stopRingTones();
+
+        // release the focus listener
+       releaseAudioFocus();
     }
 
     /**
@@ -200,6 +307,71 @@ public class VectorCallSoundManager {
     public static void stopRinging() {
         Log.d(LOG_TAG, "stopRinging");
         stopRingTones();
+
+        // stop vibrate
+        enableVibrating(false);
+    }
+
+    /**
+     * Getter method.
+     * @return true is focus is granted, false otherwise.
+     */
+    public static boolean isFocusGranted(){
+        return mIsFocusGranted;
+    }
+
+    /**
+     * Request a permanent audio focus if the focus was not yet granted.
+     * @return true if audio focus was granted, false otherwise
+     */
+    public static boolean requestAudioFocus() {
+        if(false == mIsFocusGranted) {
+            int focusResult;
+            AudioManager audioMgr;
+
+            if ((null != (audioMgr = getAudioManager()))) {
+                // Request permanent audio focus for voice call
+                focusResult = audioMgr.requestAudioFocus(mFocusListener, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
+
+                if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == focusResult) {
+                    mIsFocusGranted = true;
+                    Log.d(LOG_TAG, "## getAudioFocus(): granted");
+                } else {
+                    mIsFocusGranted = false;
+                    Log.w(LOG_TAG, "## getAudioFocus(): refused - focusResult=" + focusResult);
+                }
+            }
+        } else {
+            Log.d(LOG_TAG, "## getAudioFocus(): already granted");
+        }
+
+        return mIsFocusGranted;
+    }
+
+    /**
+     * Release the audio focus if it was granted.
+     */
+    public static void releaseAudioFocus() {
+        if(mIsFocusGranted) {
+            int abandonResult = AudioManager.AUDIOFOCUS_REQUEST_FAILED;
+            AudioManager audioMgr;
+
+            if ((null != (audioMgr = getAudioManager()))) {
+                // release focus
+                abandonResult = audioMgr.abandonAudioFocus(mFocusListener);
+
+                if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == abandonResult) {
+                    mIsFocusGranted = false;
+                    Log.d(LOG_TAG, "## releaseAudioFocus(): abandonAudioFocus = AUDIOFOCUS_REQUEST_GRANTED");
+                }
+
+                if (AudioManager.AUDIOFOCUS_REQUEST_FAILED == abandonResult) {
+                    Log.d(LOG_TAG, "## releaseAudioFocus(): abandonAudioFocus = AUDIOFOCUS_REQUEST_FAILED");
+                }
+            } else {
+                Log.d(LOG_TAG, "## releaseAudioFocus(): failure - invalid AudioManager");
+            }
+        }
     }
 
     /**
@@ -224,6 +396,49 @@ public class VectorCallSoundManager {
         } else {
             Log.e(LOG_TAG, "startRinging : fail to retrieve RING_TONE_START_RINGING");
         }
+
+        // start vibrate
+        enableVibrating(true);
+    }
+
+    /**
+     * Enable the vibrate mode.
+     * @param aIsVibrateEnabled true to force vibrate, false to stop vibrate.
+     */
+    public static void enableVibrating(boolean aIsVibrateEnabled) {
+        Vibrator vibrator = (Vibrator)VectorApp.getInstance().getSystemService(Context.VIBRATOR_SERVICE);
+
+        if((null != vibrator) && vibrator.hasVibrator()) {
+            if(aIsVibrateEnabled) {
+                vibrator.vibrate(VIBRATE_PATTERN, 0 /*repeat till stop*/);
+                Log.d(LOG_TAG, "## startVibrating(): Vibrate started");
+            } else {
+                vibrator.cancel();
+                Log.d(LOG_TAG, "## startVibrating(): Vibrate canceled");
+            }
+        } else {
+            Log.w(LOG_TAG, "## startVibrating(): vibrator access failed");
+        }
+    }
+
+    /**
+     * Perform the audio focus management according to the VoIP call
+     * states.
+     * @param aCallState voip state
+     */
+    public static void manageCallStateFocus(String aCallState){
+        switch (aCallState) {
+            case IMXCall.CALL_STATE_CONNECTED:
+                requestAudioFocus();
+                break;
+
+            case IMXCall.CALL_STATE_ENDED:
+                releaseAudioFocus();
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
@@ -243,7 +458,7 @@ public class VectorCallSoundManager {
         mRingBackTone = getRingTone(R.raw.ringback, RING_TONE_RING_BACK);
 
         if (null != mRingBackTone) {
-            initRingToneSpeaker();
+            enableRingToneSpeaker();
             mRingBackTone.play();
         } else {
             Log.e(LOG_TAG, "startRingBackSound : fail to retrieve RING_TONE_RING_BACK");
@@ -267,9 +482,9 @@ public class VectorCallSoundManager {
         mCallEndTone = getRingTone(R.raw.callend, RING_TONE_CALL_END);
 
         if (null != mCallEndTone) {
-            initRingToneSpeaker();
+            enableRingToneSpeaker();
             mCallEndTone.play();
-            restoreAudioConfigAfter(2000);
+            restoreAudioConfigAfter(RESTORE_TIME_AFTER_END_CALL_SOUND);
         } else {
             Log.e(LOG_TAG, "startEndCallSound : fail to retrieve RING_TONE_RING_BACK");
         }
@@ -292,9 +507,9 @@ public class VectorCallSoundManager {
         mBusyTone = getRingTone(R.raw.busy, RING_TONE_BUSY);
 
         if (null != mBusyTone) {
-            initRingToneSpeaker();
+            enableRingToneSpeaker();
             mBusyTone.play();
-            restoreAudioConfigAfter(4000);
+            restoreAudioConfigAfter(RESTORE_TIME_AFTER_BUSY_CALL_SOUND);
         }
     }
 
@@ -390,13 +605,13 @@ public class VectorCallSoundManager {
     /**
      * Turn the speaker on to be ready to ring
      */
-    private static void initRingToneSpeaker() {
+    private static void enableRingToneSpeaker() {
         setSpeakerphoneOn(false, true);
     }
 
     /**
-     * Sets the speakerphone on or off.
-     * @param isOn true to turn on the speaker (false to turn it off)
+     * Set the speakerphone ON or OFF.
+     * @param isOn true to enable the speaker (ON), false to disable it (OFF)
      */
     public static void setCallSpeakerphoneOn(boolean isOn) {
         setSpeakerphoneOn(true, isOn);
@@ -413,13 +628,17 @@ public class VectorCallSoundManager {
     }
 
     /**
-     * Update the speaker status
+     * Save the current speaker status and the audio mode, before updating those
+     * values.
+     * The audio mode depends on if there is a call in progress.
+     * If audio mode set to {@link AudioManager#MODE_IN_COMMUNICATION} and
+     * a media player is in ON, the media player will reduce its audio level.
      *
      * @param isInCall true when the speaker is updated during call.
-     * @param isOn true to turn on the speaker (false to turn it off)
+     * @param isSpeakerOn true to turn on the speaker (false to turn it off)
      */
-    private static void setSpeakerphoneOn(boolean isInCall, boolean isOn) {
-        Log.d(LOG_TAG, "setCallSpeakerphoneOn " + isOn);
+    private static void setSpeakerphoneOn(boolean isInCall, boolean isSpeakerOn) {
+        Log.d(LOG_TAG, "setCallSpeakerphoneOn " + isSpeakerOn);
 
         backupAudioConfig();
 
@@ -433,8 +652,8 @@ public class VectorCallSoundManager {
                 audioManager.setMode(audioMode);
             }
 
-            if (isOn != audioManager.isSpeakerphoneOn()) {
-                audioManager.setSpeakerphoneOn(isOn);
+            if (isSpeakerOn != audioManager.isSpeakerphoneOn()) {
+                audioManager.setSpeakerphoneOn(isSpeakerOn);
             }
         }
     }

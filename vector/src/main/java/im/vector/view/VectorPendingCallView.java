@@ -189,7 +189,7 @@ public class VectorPendingCallView extends RelativeLayout {
      * The call is ended.
      * Terminates the refresh processes.
      */
-    private void onCallTerminated() {
+    public void onCallTerminated() {
         mCall = null;
         setVisibility(View.GONE);
     }

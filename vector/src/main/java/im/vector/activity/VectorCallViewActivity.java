@@ -148,6 +148,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                         manageSubViews();
                     }
                 });
+
+                // manage audio focus
+                VectorCallSoundManager.manageCallStateFocus(state);
             }
         }
 
@@ -287,7 +290,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             // check if the call can be resume
             // or it's still valid
             if (!canCallBeResumed() || (null == mCall.getSession().mCallsManager.getCallWithCallId(mCall.getCallId()))) {
-                Log.d(LOG_TAG, "Hide the call notifications because the cuurent one cannot be resumed");
+                Log.d(LOG_TAG, "Hide the call notifications because the current one cannot be resumed");
                 EventStreamService.getInstance().hideCallNotifications();
                 mCall = null;
                 mSavedCallview = null;
@@ -314,6 +317,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         // remove header call view
         mHeaderPendingCallView.checkPendingCall();
+
+        // release audio focus
+        VectorCallSoundManager.releaseAudioFocus();
 
         mCall = null;
         mCallView = null;

@@ -89,6 +89,7 @@ import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorOngoingConferenceCallView;
@@ -400,6 +401,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void onCallEnd(final int aReasonId) {
             refreshNotificationsArea();
+
+            // catch the flow where the hangup is done in VectorRoomActivity
+            VectorCallSoundManager.releaseAudioFocus();
+            // and play a lovely sound
+            VectorCallSoundManager.startEndCallSound();
         }
     };
 
@@ -608,6 +614,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             VectorRoomActivity.this.startActivity(intent);
                         }
                     });
+                } else {
+                    // if the call is no more active, just remove the view
+                    mVectorPendingCallView.onCallTerminated();
                 }
             }
         });
