@@ -25,6 +25,7 @@
     <string name="copy">Copy</string>
     <string name="resend">Resend</string>
     <string name="redact">Redact</string>
+    <string name="quote">Quote</string>
     <string name="share">Share</string>
     <string name="paste_username">Paste username</string>
     <string name="view_profile">View profile</string>

@@ -33,6 +33,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/ic_action_vector_quote"
+        android:icon="@drawable/ic_material_quote"
+        android:title="@string/quote"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/ic_action_vector_share"
         android:icon="@drawable/ic_material_share"
         android:title="@string/share"

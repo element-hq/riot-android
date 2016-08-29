@@ -300,7 +300,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             .show();
                 }
             });
-        } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
+        } else if ((action == R.id.ic_action_vector_quote) || (action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
             Message message = JsonUtils.toMessage(event.content);
 
@@ -330,15 +330,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             // media file ?
             if (null != mediaUrl) {
                 onMediaAction(action, mediaUrl, mediaMimeType, message.body);
-            } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward)) {
+            } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_quote)) {
                 // use the body
                 final Intent sendIntent = new Intent();
 
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, message.body);
+                if (action == R.id.ic_action_vector_quote) {
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "> " + message.body);
+                } else {
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, message.body);
+                }
                 sendIntent.setType("text/plain");
 
-                if (action == R.id.ic_action_vector_forward) {
+                if ((action == R.id.ic_action_vector_forward) ||(action == R.id.ic_action_vector_quote)) {
                     CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
                 } else {
                     startActivity(sendIntent);
