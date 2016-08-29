@@ -282,8 +282,10 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
         if (id == R.id.ic_action_share) {
             onAction(mViewPager.getCurrentItem(), id);
+            return true;
         } else if (id ==  R.id.ic_action_download) {
             onAction(mViewPager.getCurrentItem(), id);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
