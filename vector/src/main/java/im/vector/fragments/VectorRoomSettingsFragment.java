@@ -54,13 +54,11 @@ import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.ContentManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -1369,16 +1367,43 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         Menu menu = popup.getMenu();
 
-        if (!canUpdateAliases()) {
-            menu.findItem(R.id.ic_action_vector_delete_alias).setVisible(false);
-        }
+        String canonicalAlias = mRoom.getLiveState().alias;
+        boolean canUpdateAliases = canUpdateAliases();
+
+        menu.findItem(R.id.ic_action_vector_delete_alias).setVisible(canUpdateAliases);
+        menu.findItem(R.id.ic_action_vector_set_as_main_address).setVisible(canUpdateAliases && !TextUtils.equals(roomAlias, canonicalAlias));
+        menu.findItem(R.id.ic_action_vector_unset_main_address).setVisible(canUpdateAliases && TextUtils.equals(roomAlias, canonicalAlias));
 
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final MenuItem item) {
-                //
-                if (item.getItemId() == R.id.ic_action_vector_delete_alias) {
+                if (item.getItemId() == R.id.ic_action_vector_unset_main_address) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(R.string.room_settings_addresses_disable_main_address_prompt_msg);
+                    builder.setTitle(R.string.room_settings_addresses_disable_main_address_prompt_title);
+
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            displayLoadingView();
+                            mRoom.updateCanonicalAlias(null, mAliasUpdatesCallback);
+                        }
+                    });
+
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else  if (item.getItemId() == R.id.ic_action_vector_set_as_main_address) {
+                    displayLoadingView();
+                    mRoom.updateCanonicalAlias(roomAlias, mAliasUpdatesCallback);
+                } else if (item.getItemId() == R.id.ic_action_vector_delete_alias) {
                     displayLoadingView();
                     mRoom.removeAlias(roomAlias, new ApiCallback<Void>() {
                         @Override
@@ -1479,40 +1504,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                 final String fAlias = alias;
                 final AddressPreference fAddressPreference = preference;
-
-                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        if (TextUtils.equals(fAlias, canonicalAlias)) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage(R.string.room_settings_addresses_disable_main_address_prompt_msg);
-                            builder.setTitle(R.string.room_settings_addresses_disable_main_address_prompt_title);
-
-                            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    displayLoadingView();
-                                    mRoom.updateCanonicalAlias(null, mAliasUpdatesCallback);
-                                }
-                            });
-
-                            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // nothing
-                                }
-                            });
-
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        } else {
-                            displayLoadingView();
-                            mRoom.updateCanonicalAlias(fAlias, mAliasUpdatesCallback);
-                        }
-
-                        return false;
-                    }
-                });
 
                 preference.setOnPreferenceLongClickListener( new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
