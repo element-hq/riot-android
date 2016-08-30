@@ -189,10 +189,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // notifications area
     private View mNotificationsArea;
-    private View mTypingIcon;
-    private View mErrorIcon;
-    private TextView mNotificationsMessageTextView;
-    private TextView mErrorMessageTextView;
+    private ImageView mNotificationIconImageView;
+    private TextView mNotificationTextView;
     private String mLatestTypingMessage;
 
     // room preview
@@ -632,12 +630,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // notifications area
         mNotificationsArea = findViewById(R.id.room_notifications_area);
-        mTypingIcon = findViewById(R.id.room_typing_animation);
-        mNotificationsMessageTextView = (TextView) findViewById(R.id.room_notification_message);
-        mErrorIcon = findViewById(R.id.room_error_icon);
-        mErrorMessageTextView = (TextView) findViewById(R.id.room_notification_error_message);
-        mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
+        mNotificationIconImageView = (ImageView)mNotificationsArea.findViewById(R.id.room_notification_icon);
+        mNotificationTextView = (TextView) mNotificationsArea.findViewById(R.id.room_notification_message);
 
+        mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
         mStartCallLayout = findViewById(R.id.room_start_call_layout);
 
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
@@ -1655,33 +1651,34 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
+        int iconId = -1;
+        int textColor = -1;
         boolean isAreaVisible = false;
-        boolean isTypingIconDisplayed = false;
-        boolean isErrorIconDisplayed = false;
-        SpannableString notificationsText = null;
-        SpannableString errorText = null;
+        SpannableString text = null;
         boolean hasUnsentEvent = false;
 
         //  no network
         if (!Matrix.getInstance(this).isConnected()) {
             isAreaVisible = true;
-            isErrorIconDisplayed = true;
-            errorText = new SpannableString(getResources().getString(R.string.room_offline_notification));
-            mErrorMessageTextView.setOnClickListener(null);
+            iconId = R.drawable.error;
+            textColor = R.color.vector_fuchsia_color;
+            text = new SpannableString(getResources().getString(R.string.room_offline_notification));
+            mNotificationTextView.setOnClickListener(null);
         } else {
             Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
             if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
                 hasUnsentEvent = true;
                 isAreaVisible = true;
-                isErrorIconDisplayed = true;
+                iconId = R.drawable.error;
 
                 String part1 = getResources().getString(R.string.room_unsent_messages_notification);
                 String part2 = getResources().getString(R.string.room_prompt_resent);
 
-                errorText = new SpannableString(part1 + " " + part2);
-                errorText.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
+                text = new SpannableString(part1 + " " + part2);
+                text.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
+                textColor = R.color.vector_fuchsia_color;
 
-                mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
+                mNotificationTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mVectorMessageListFragment.resendUnsentMessages();
@@ -1690,8 +1687,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 });
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 isAreaVisible = true;
-                isTypingIconDisplayed = true;
-                notificationsText = new SpannableString(mLatestTypingMessage);
+
+                iconId = R.drawable.vector_typing;
+                text = new SpannableString(mLatestTypingMessage);
+                textColor = R.color.vector_text_gray_color;
             }
         }
 
@@ -1699,14 +1698,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
         }
 
-        // typing
-        mTypingIcon.setVisibility(isTypingIconDisplayed? View.VISIBLE : View.INVISIBLE);
-        mNotificationsMessageTextView.setText(notificationsText);
-
-        // error
-        mErrorIcon.setVisibility(isErrorIconDisplayed? View.VISIBLE : View.INVISIBLE);
-        mErrorMessageTextView.setText(errorText);
-
+        if ((-1 != iconId) && (-1 != textColor)) {
+            mNotificationIconImageView.setImageResource(iconId);
+            mNotificationTextView.setText(text);
+            mNotificationTextView.setTextColor(getResources().getColor(textColor));
+        }
+        
         //
         if (null != mResendUnsentMenuItem) {
             mResendUnsentMenuItem.setVisible(hasUnsentEvent);
