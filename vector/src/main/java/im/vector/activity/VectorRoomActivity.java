@@ -192,6 +192,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private ImageView mNotificationIconImageView;
     private TextView mNotificationTextView;
     private String mLatestTypingMessage;
+    private boolean mIsScrolledToTheBottom = true;
 
     // room preview
     private View mRoomPreviewLayout;
@@ -963,7 +964,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     public void onLatestEventDisplay(boolean isDisplayed) {
-
+        if (isDisplayed != mIsScrolledToTheBottom) {
+            mIsScrolledToTheBottom = isDisplayed;
+            refreshNotificationsArea();
+        }
     }
 
     //================================================================================
@@ -1654,8 +1658,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         int iconId = -1;
         int textColor = -1;
         boolean isAreaVisible = false;
-        SpannableString text = null;
+        SpannableString text =  new SpannableString("");
         boolean hasUnsentEvent = false;
+
+        // remove any listeners
+        mNotificationTextView.setOnClickListener(null);
+        mNotificationIconImageView.setOnClickListener(null);
 
         //  no network
         if (!Matrix.getInstance(this).isConnected()) {
@@ -1663,7 +1671,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             iconId = R.drawable.error;
             textColor = R.color.vector_fuchsia_color;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
-            mNotificationTextView.setOnClickListener(null);
         } else {
             Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
             if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
@@ -1685,6 +1692,22 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         refreshNotificationsArea();
                     }
                 });
+            } else if (!mIsScrolledToTheBottom) {
+                isAreaVisible = true;
+
+                iconId = R.drawable.scrolldown;
+                textColor = R.color.vector_text_gray_color;
+                mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mVectorMessageListFragment.scrollToBottom();
+                    }
+                });
+
+                if (!TextUtils.isEmpty(mLatestTypingMessage)) {
+                    text = new SpannableString(mLatestTypingMessage);
+                }
+
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 isAreaVisible = true;
 
@@ -1703,7 +1726,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mNotificationTextView.setText(text);
             mNotificationTextView.setTextColor(getResources().getColor(textColor));
         }
-        
+
         //
         if (null != mResendUnsentMenuItem) {
             mResendUnsentMenuItem.setVisible(hasUnsentEvent);
