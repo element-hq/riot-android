@@ -124,7 +124,14 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
         if (msgContent.has("avatar_url")) {
             url = msgContent.get("avatar_url") == JsonNull.INSTANCE ? null : msgContent.get("avatar_url").getAsString();
         }
-        loadMemberAvatar(avatarView, sender, event.getSender(), url);
+
+        String displayName = null;
+        //
+        if (msgContent.has("displayname")) {
+            displayName = msgContent.get("displayname") == JsonNull.INSTANCE ? null : msgContent.get("displayname").getAsString();
+        }
+
+        loadMemberAvatar(avatarView, sender, event.getSender(), displayName, url);
 
         // display the sender
         TextView senderTextView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_sender);

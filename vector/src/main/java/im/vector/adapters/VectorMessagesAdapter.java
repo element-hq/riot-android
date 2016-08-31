@@ -232,9 +232,14 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     }
 
     @Override
-    protected void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String url) {
+    protected void loadMemberAvatar(ImageView avatarView, RoomMember member, String userId, String displayName, String url) {
         if (!mSession.isAlive()) {
             return;
+        }
+
+        // if there is no preferred display name, use the member one
+        if (TextUtils.isEmpty(displayName) && (null != member)) {
+            displayName = member.displayname;
         }
 
         if ((member != null) && (null == url)) {
@@ -242,9 +247,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         }
 
         if (null != member) {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), member.displayname);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, member.getUserId(), displayName);
         } else {
-            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, null);
+            VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, displayName);
         }
     }
 
