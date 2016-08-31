@@ -62,6 +62,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -193,6 +194,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private TextView mNotificationTextView;
     private String mLatestTypingMessage;
     private boolean mIsScrolledToTheBottom = true;
+    private Event mLatestDisplayedEvent; // the event at the bottom of the list
 
     // room preview
     private View mRoomPreviewLayout;
@@ -297,6 +299,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             });
         }
 
+
+
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -332,7 +336,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         // they are ephemeral ones.
                         if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
                             if (null != mRoom) {
-                                mRoom.sendReadReceipt(null);
+                               refreshNotificationsArea();
                             }
                         }
                     }
@@ -365,12 +369,32 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onSentEvent(Event event) {
-            refreshNotificationsArea();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                }
+            });
         }
 
         @Override
         public void onFailedSendingEvent(Event event) {
-            refreshNotificationsArea();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                }
+            });
+        }
+
+        @Override
+        public void onReceiptEvent(String roomId, List<String> senderIds) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                }
+            });
         }
     };
 
@@ -834,9 +858,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (null != mRoom) {
-            // reset the unread messages counter
-            mRoom.sendReadReceipt(null);
-
             String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
             if (!cachedText.equals(mEditText.getText().toString())) {
@@ -957,9 +978,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // IOnScrollListener
     //================================================================================
 
+    /**
+     * Send a read receipt to the latest displayed event.
+     */
+    private void sendReadReceipt() {
+        if (null != mRoom) {
+            // send the read receipt
+            mRoom.sendReadReceipt(mLatestDisplayedEvent, null);
+
+            refreshNotificationsArea();
+        }
+    }
+
     @Override
     public void onScroll(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (!VectorApp.isAppInBackground()) {
+            Event eventAtBottom = mVectorMessageListFragment.getEvent(firstVisibleItem+visibleItemCount-1);
 
+            if ((null != eventAtBottom) && ((null == mLatestDisplayedEvent) || !TextUtils.equals(eventAtBottom.eventId, mLatestDisplayedEvent.eventId))) {
+                mLatestDisplayedEvent = eventAtBottom;
+                sendReadReceipt();
+            }
+        }
     }
 
     @Override
@@ -1695,18 +1735,45 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             } else if (!mIsScrolledToTheBottom) {
                 isAreaVisible = true;
 
-                iconId = R.drawable.scrolldown;
-                textColor = R.color.vector_text_gray_color;
-                mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
+                int unreadCount = 0;
+
+                RoomSummary summary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
+
+                if (null != summary) {
+                    unreadCount = mRoom.getDataHandler().getStore().eventsCountAfter(mRoom.getRoomId(), summary.getReadReceiptToken());
+                }
+
+                if (unreadCount > 0) {
+                    iconId = R.drawable.newmessages;
+                    textColor = R.color.vector_fuchsia_color;
+
+                    if (unreadCount == 1) {
+                        text = new SpannableString(getResources().getString(R.string.room_new_message_notification));
+                    } else {
+                        text = new SpannableString(getResources().getString(R.string.room_new_messages_notification, unreadCount));
+                    }
+                } else {
+                    iconId = R.drawable.scrolldown;
+                    textColor = R.color.vector_text_gray_color;
+
+                    if (!TextUtils.isEmpty(mLatestTypingMessage)) {
+                        text = new SpannableString(mLatestTypingMessage);
+                    }
+                }
+
+                mNotificationTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mVectorMessageListFragment.scrollToBottom();
+                        mVectorMessageListFragment.scrollToBottom(0);
                     }
                 });
 
-                if (!TextUtils.isEmpty(mLatestTypingMessage)) {
-                    text = new SpannableString(mLatestTypingMessage);
-                }
+                mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mVectorMessageListFragment.scrollToBottom(0);
+                    }
+                });
 
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 isAreaVisible = true;
