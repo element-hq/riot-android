@@ -278,7 +278,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
         displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                onDisplayNameClick((String) newValue);
+                onDisplayNameClick((null == newValue) ? null : ((String)newValue).trim());
                 return false;
             }
         });
@@ -1140,7 +1140,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                     new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            final String email = (String) newValue;
+                            final String email = (null == newValue) ? null  : ((String) newValue).trim();
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
