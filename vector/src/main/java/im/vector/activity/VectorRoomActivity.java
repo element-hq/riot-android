@@ -62,6 +62,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomEmailInvitation;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.fragments.IconAndTextDialogFragment;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -108,7 +109,7 @@ import java.util.regex.Pattern;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener {
+public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener, MatrixMessageListFragment.IOnScrollListener {
 
     /** the room id (string) **/
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
@@ -189,11 +190,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     // notifications area
     private View mNotificationsArea;
-    private View mTypingIcon;
-    private View mErrorIcon;
-    private TextView mNotificationsMessageTextView;
-    private TextView mErrorMessageTextView;
+    private ImageView mNotificationIconImageView;
+    private TextView mNotificationTextView;
     private String mLatestTypingMessage;
+    private boolean mIsScrolledToTheBottom = true;
+    private Event mLatestDisplayedEvent; // the event at the bottom of the list
 
     // room preview
     private View mRoomPreviewLayout;
@@ -298,6 +299,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             });
         }
 
+
+
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -333,7 +336,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         // they are ephemeral ones.
                         if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
                             if (null != mRoom) {
-                                mRoom.sendReadReceipt(null);
+                               refreshNotificationsArea();
                             }
                         }
                     }
@@ -366,12 +369,32 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onSentEvent(Event event) {
-            refreshNotificationsArea();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                }
+            });
         }
 
         @Override
         public void onFailedSendingEvent(Event event) {
-            refreshNotificationsArea();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                }
+            });
+        }
+
+        @Override
+        public void onReceiptEvent(String roomId, List<String> senderIds) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                }
+            });
         }
     };
 
@@ -632,12 +655,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         // notifications area
         mNotificationsArea = findViewById(R.id.room_notifications_area);
-        mTypingIcon = findViewById(R.id.room_typing_animation);
-        mNotificationsMessageTextView = (TextView) findViewById(R.id.room_notification_message);
-        mErrorIcon = findViewById(R.id.room_error_icon);
-        mErrorMessageTextView = (TextView) findViewById(R.id.room_notification_error_message);
-        mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
+        mNotificationIconImageView = (ImageView)mNotificationsArea.findViewById(R.id.room_notification_icon);
+        mNotificationTextView = (TextView) mNotificationsArea.findViewById(R.id.room_notification_message);
 
+        mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
         mStartCallLayout = findViewById(R.id.room_start_call_layout);
 
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
@@ -837,9 +858,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         if (null != mRoom) {
-            // reset the unread messages counter
-            mRoom.sendReadReceipt(null);
-
             String cachedText = Matrix.getInstance(this).getDefaultLatestChatMessageCache().getLatestText(this, mRoom.getRoomId());
 
             if (!cachedText.equals(mEditText.getText().toString())) {
@@ -954,6 +972,42 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     public void onMessageRedacted(Event event) {
         refreshNotificationsArea();
+    }
+
+    //================================================================================
+    // IOnScrollListener
+    //================================================================================
+
+    /**
+     * Send a read receipt to the latest displayed event.
+     */
+    private void sendReadReceipt() {
+        if (null != mRoom) {
+            // send the read receipt
+            mRoom.sendReadReceipt(mLatestDisplayedEvent, null);
+
+            refreshNotificationsArea();
+        }
+    }
+
+    @Override
+    public void onScroll(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (!VectorApp.isAppInBackground()) {
+            Event eventAtBottom = mVectorMessageListFragment.getEvent(firstVisibleItem+visibleItemCount-1);
+
+            if ((null != eventAtBottom) && ((null == mLatestDisplayedEvent) || !TextUtils.equals(eventAtBottom.eventId, mLatestDisplayedEvent.eventId))) {
+                mLatestDisplayedEvent = eventAtBottom;
+                sendReadReceipt();
+            }
+        }
+    }
+
+    @Override
+    public void onLatestEventDisplay(boolean isDisplayed) {
+        if (isDisplayed != mIsScrolledToTheBottom) {
+            mIsScrolledToTheBottom = isDisplayed;
+            refreshNotificationsArea();
+        }
     }
 
     //================================================================================
@@ -1641,43 +1695,92 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             return;
         }
 
+        int iconId = -1;
+        int textColor = -1;
         boolean isAreaVisible = false;
-        boolean isTypingIconDisplayed = false;
-        boolean isErrorIconDisplayed = false;
-        SpannableString notificationsText = null;
-        SpannableString errorText = null;
+        SpannableString text =  new SpannableString("");
         boolean hasUnsentEvent = false;
+
+        // remove any listeners
+        mNotificationTextView.setOnClickListener(null);
+        mNotificationIconImageView.setOnClickListener(null);
 
         //  no network
         if (!Matrix.getInstance(this).isConnected()) {
             isAreaVisible = true;
-            isErrorIconDisplayed = true;
-            errorText = new SpannableString(getResources().getString(R.string.room_offline_notification));
-            mErrorMessageTextView.setOnClickListener(null);
+            iconId = R.drawable.error;
+            textColor = R.color.vector_fuchsia_color;
+            text = new SpannableString(getResources().getString(R.string.room_offline_notification));
         } else {
             Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
             if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
                 hasUnsentEvent = true;
                 isAreaVisible = true;
-                isErrorIconDisplayed = true;
+                iconId = R.drawable.error;
 
                 String part1 = getResources().getString(R.string.room_unsent_messages_notification);
                 String part2 = getResources().getString(R.string.room_prompt_resent);
 
-                errorText = new SpannableString(part1 + " " + part2);
-                errorText.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
+                text = new SpannableString(part1 + " " + part2);
+                text.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
+                textColor = R.color.vector_fuchsia_color;
 
-                mErrorMessageTextView.setOnClickListener(new View.OnClickListener() {
+                mNotificationTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mVectorMessageListFragment.resendUnsentMessages();
                         refreshNotificationsArea();
                     }
                 });
+            } else if (!mIsScrolledToTheBottom) {
+                isAreaVisible = true;
+
+                int unreadCount = 0;
+
+                RoomSummary summary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
+
+                if (null != summary) {
+                    unreadCount = mRoom.getDataHandler().getStore().eventsCountAfter(mRoom.getRoomId(), summary.getReadReceiptToken());
+                }
+
+                if (unreadCount > 0) {
+                    iconId = R.drawable.newmessages;
+                    textColor = R.color.vector_fuchsia_color;
+
+                    if (unreadCount == 1) {
+                        text = new SpannableString(getResources().getString(R.string.room_new_message_notification));
+                    } else {
+                        text = new SpannableString(getResources().getString(R.string.room_new_messages_notification, unreadCount));
+                    }
+                } else {
+                    iconId = R.drawable.scrolldown;
+                    textColor = R.color.vector_text_gray_color;
+
+                    if (!TextUtils.isEmpty(mLatestTypingMessage)) {
+                        text = new SpannableString(mLatestTypingMessage);
+                    }
+                }
+
+                mNotificationTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mVectorMessageListFragment.scrollToBottom(0);
+                    }
+                });
+
+                mNotificationIconImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mVectorMessageListFragment.scrollToBottom(0);
+                    }
+                });
+
             } else if (!TextUtils.isEmpty(mLatestTypingMessage)) {
                 isAreaVisible = true;
-                isTypingIconDisplayed = true;
-                notificationsText = new SpannableString(mLatestTypingMessage);
+
+                iconId = R.drawable.vector_typing;
+                text = new SpannableString(mLatestTypingMessage);
+                textColor = R.color.vector_text_gray_color;
             }
         }
 
@@ -1685,13 +1788,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mNotificationsArea.setVisibility(isAreaVisible ? View.VISIBLE : View.INVISIBLE);
         }
 
-        // typing
-        mTypingIcon.setVisibility(isTypingIconDisplayed? View.VISIBLE : View.INVISIBLE);
-        mNotificationsMessageTextView.setText(notificationsText);
-
-        // error
-        mErrorIcon.setVisibility(isErrorIconDisplayed? View.VISIBLE : View.INVISIBLE);
-        mErrorMessageTextView.setText(errorText);
+        if ((-1 != iconId) && (-1 != textColor)) {
+            mNotificationIconImageView.setImageResource(iconId);
+            mNotificationTextView.setText(text);
+            mNotificationTextView.setTextColor(getResources().getColor(textColor));
+        }
 
         //
         if (null != mResendUnsentMenuItem) {
