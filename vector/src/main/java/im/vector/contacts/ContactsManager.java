@@ -168,6 +168,13 @@ public class ContactsManager {
     }
 
     /**
+     * Clear the current snapshot
+     */
+    public static void clearSnapshot() {
+        mContactsList = null;
+    }
+
+    /**
      * Add a listener.
      * @param listener the listener to add.
      */
@@ -366,7 +373,6 @@ public class ContactsManager {
         if (Build.VERSION.SDK_INT < 23) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
             SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
             editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
             editor.commit();
         }

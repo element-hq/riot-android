@@ -16,14 +16,12 @@
 
 package im.vector.fragments;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,8 +33,6 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -57,14 +53,11 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.ContentResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
-import org.matrix.androidsdk.util.ContentManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,19 +68,16 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.LoginActivity;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
-import im.vector.util.BugReporter;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
-public class VectorSettingsPreferencesFragment extends PreferenceFragment {
+public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
     private static final String LOG_TAG = "VPreferenceFragment";
 
     // arguments indexes
@@ -376,6 +366,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             }
         });
 
+        // permissions management
+        // on Android >= 23, use the system ones
+        if (Build.VERSION.SDK_INT >= 23) {
+            // hide the dedicated section
+            getPreferenceScreen().removePreference(getPreferenceManager().findPreference(ContactsManager.CONTACTS_BOOK_ACCESS_KEY));
+        }
+
         // background sync management
         mBackgroundSyncCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
         mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
@@ -387,6 +384,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
     }
 
     @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // if the user toggles the contacts book permission
+        if (TextUtils.equals(key, ContactsManager.CONTACTS_BOOK_ACCESS_KEY)) {
+            // reset the current snapshot
+            ContactsManager.clearSnapshot();
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
 
@@ -394,6 +400,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
             mSession.getDataHandler().removeListener(mEventsListener);
             Matrix.getInstance(getActivity()).removeNetworkEventListener(mNetworkListener);
         }
+
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -427,6 +435,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment {
                     refreshPushersList();
                 }
             });
+
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
 
             // refresh anything else
             refreshPreferences();
