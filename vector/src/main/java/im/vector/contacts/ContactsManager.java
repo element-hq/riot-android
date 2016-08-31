@@ -16,10 +16,18 @@
 
 package im.vector.contacts;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -30,6 +38,7 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.VectorApp;
+import im.vector.activity.VectorSettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -188,126 +197,129 @@ public class ContactsManager {
         ContentResolver cr = context.getContentResolver();
         HashMap<String, Contact> dict = new HashMap<>();
 
-        // get the names
-        Cursor namesCur = null;
+        // test if the user allows to access to the contact
+        if (isContactBookAccessAllowed(context)) {
+            // get the names
+            Cursor namesCur = null;
 
-        try {
-            namesCur = cr.query(ContactsContract.Data.CONTENT_URI,
-                    new String[]{ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-                            ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID,
-                            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
-                    },
-                    ContactsContract.Data.MIMETYPE + " = ?",
-                    new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage());
-        }
-
-        if (namesCur != null) {
             try {
-                while (namesCur.moveToNext()) {
-                    String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
-                    String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
-                    String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
-
-                    if (null != contactId) {
-                        Contact contact = dict.get(contactId);
-
-                        if (null == contact) {
-                            contact = new Contact(contactId);
-                            dict.put(contactId, contact);
-                        }
-
-                        if (null != displayName) {
-                            contact.setDisplayName(displayName);
-                        }
-
-                        if (null != thumbnailUri) {
-                            contact.setThumbnailUri(thumbnailUri);
-                        }
-                    }
-                }
+                namesCur = cr.query(ContactsContract.Data.CONTENT_URI,
+                        new String[]{ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                                ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID,
+                                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
+                        },
+                        ContactsContract.Data.MIMETYPE + " = ?",
+                        new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE}, null);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage());
+                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query Msg=" + e.getMessage());
             }
 
-            namesCur.close();
-        }
-
-        // get the phonenumbers
-        Cursor phonesCur = null;
-
-        try {
-            phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                    new String[]{ContactsContract.CommonDataKinds.Phone.DATA, // actual number
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-                    },
-                    null, null, null);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage());
-        }
-
-        if (null != phonesCur) {
-            try {
-                while (phonesCur.moveToNext()) {
-                    String phone = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
-
-                    if (!TextUtils.isEmpty(phone)) {
-                        String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+            if (namesCur != null) {
+                try {
+                    while (namesCur.moveToNext()) {
+                        String displayName = namesCur.getString(namesCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+                        String contactId = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID));
+                        String thumbnailUri = namesCur.getString(namesCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.PHOTO_THUMBNAIL_URI));
 
                         if (null != contactId) {
                             Contact contact = dict.get(contactId);
+
                             if (null == contact) {
                                 contact = new Contact(contactId);
                                 dict.put(contactId, contact);
                             }
 
-                            contact.addPhonenumber(phone);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage());
-            }
-
-            phonesCur.close();
-        }
-
-        // get the emails
-        Cursor emailsCur = null;
-
-        try {
-            emailsCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                    new String[]{ContactsContract.CommonDataKinds.Email.DATA, // actual email
-                            ContactsContract.CommonDataKinds.Email.CONTACT_ID},
-                    null, null, null);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage());
-        }
-
-        if (emailsCur != null) {
-            try {
-                while (emailsCur.moveToNext()) {
-                    String email = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    if (!TextUtils.isEmpty(email)) {
-                        String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
-
-                        if (null != contactId) {
-                            Contact contact = dict.get(contactId);
-                            if (null == contact) {
-                                contact = new Contact(contactId);
-                                dict.put(contactId, contact);
+                            if (null != displayName) {
+                                contact.setDisplayName(displayName);
                             }
 
-                            contact.addEmailAdress(email);
+                            if (null != thumbnailUri) {
+                                contact.setThumbnailUri(thumbnailUri);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Contact names query2 Msg=" + e.getMessage());
                 }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage());
+
+                namesCur.close();
             }
-            
-            emailsCur.close();
+
+            // get the phonenumbers
+            Cursor phonesCur = null;
+
+            try {
+                phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        new String[]{ContactsContract.CommonDataKinds.Phone.DATA, // actual number
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                        },
+                        null, null, null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query Msg=" + e.getMessage());
+            }
+
+            if (null != phonesCur) {
+                try {
+                    while (phonesCur.moveToNext()) {
+                        String phone = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+
+                        if (!TextUtils.isEmpty(phone)) {
+                            String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+
+                            if (null != contactId) {
+                                Contact contact = dict.get(contactId);
+                                if (null == contact) {
+                                    contact = new Contact(contactId);
+                                    dict.put(contactId, contact);
+                                }
+
+                                contact.addPhonenumber(phone);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Phone numbers query2 Msg=" + e.getMessage());
+                }
+
+                phonesCur.close();
+            }
+
+            // get the emails
+            Cursor emailsCur = null;
+
+            try {
+                emailsCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                        new String[]{ContactsContract.CommonDataKinds.Email.DATA, // actual email
+                                ContactsContract.CommonDataKinds.Email.CONTACT_ID},
+                        null, null, null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query Msg=" + e.getMessage());
+            }
+
+            if (emailsCur != null) {
+                try {
+                    while (emailsCur.moveToNext()) {
+                        String email = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        if (!TextUtils.isEmpty(email)) {
+                            String contactId = emailsCur.getString(emailsCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+
+                            if (null != contactId) {
+                                Contact contact = dict.get(contactId);
+                                if (null == contact) {
+                                    contact = new Contact(contactId);
+                                    dict.put(contactId, contact);
+                                }
+
+                                contact.addEmailAdress(email);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - Emails query2 Msg=" + e.getMessage());
+                }
+
+                emailsCur.close();
+            }
         }
 
         PIDsRetriever.getIntance().setPIDsRetrieverListener(mPIDsRetrieverListener);
@@ -322,6 +334,55 @@ public class ContactsManager {
                     Log.e(LOG_TAG, "refreshLocalContactsSnapshot : onRefresh failed" + e.getLocalizedMessage());
                 }
             }
+        }
+    }
+
+    //================================================================================
+    // Contacts book management (for android < M devices)
+    //================================================================================
+    public static final String CONTACTS_BOOK_ACCESS_KEY = "CONTACT_BOOK_ACCESS_KEY";
+
+    /**
+     * Tells if the contacts book access has been requested.
+     * @param activity the calling activity
+     * @return true it was requested once
+     */
+    public static boolean isContactBookAccessRequested(Activity activity) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            return (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_CONTACTS)) &&
+                    !ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_CONTACTS);
+        } else {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            return preferences.contains(CONTACTS_BOOK_ACCESS_KEY);
+        }
+    }
+
+    /**
+     * Update the contacts book access.
+     * @param activity the calling activity.
+     * @param isAllowed true to allowed the contacts book access.
+     */
+    public static void setIsContactBookAccessAllowed(Activity activity, boolean isAllowed) {
+        if (Build.VERSION.SDK_INT < 23) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
+            editor.commit();
+        }
+    }
+
+    /**
+     * Tells if the contacts book access has been granted
+     * @param context the context
+     * @return true if it was granted.
+     */
+    public static boolean isContactBookAccessAllowed(Context context) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS));
+        } else {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            return preferences.getBoolean(CONTACTS_BOOK_ACCESS_KEY, false);
         }
     }
 }

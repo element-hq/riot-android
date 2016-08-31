@@ -16,13 +16,16 @@
 
 package im.vector.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -32,6 +35,8 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -71,6 +76,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.LoginActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.ga.GAHelper;

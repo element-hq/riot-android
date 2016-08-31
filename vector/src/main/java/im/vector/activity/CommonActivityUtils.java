@@ -532,8 +532,8 @@ public class CommonActivityUtils {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
         } else {
-            List<String> permissionListAlreadyDenied = new ArrayList<String>();
-            List<String> permissionsListToBeGranted = new ArrayList<String>();
+            List<String> permissionListAlreadyDenied = new ArrayList<>();
+            List<String> permissionsListToBeGranted = new ArrayList<>();
             final List<String> finalPermissionsListToBeGranted;
             boolean isRequestPermissionRequired = false;
             Resources resource = aCallingActivity.getResources();
@@ -556,9 +556,20 @@ public class CommonActivityUtils {
                 isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
+            // the contact book access is requested for any android platforms
+            // for android M, we use the system preferences
+            // for android < M, we use a dedicated settings
             if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)){
                 permissionType = Manifest.permission.READ_CONTACTS;
-                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+
+                if (!ContactsManager.isContactBookAccessRequested(aCallingActivity)) {
+                    isRequestPermissionRequired = true;
+                    permissionsListToBeGranted.add(permissionType);
+
+                    if ((Build.VERSION.SDK_INT >= 23) && ActivityCompat.shouldShowRequestPermissionRationale(aCallingActivity, permissionType)) {
+                        permissionListAlreadyDenied.add(permissionType);
+                    }
+                }
             }
 
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
@@ -599,7 +610,6 @@ public class CommonActivityUtils {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            //ContactsManager.refreshLocalContactsSnapshot(aCallingActivity);
                             ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
                         }
                     }
@@ -617,7 +627,53 @@ public class CommonActivityUtils {
             } else {
                 // some permissions are not granted, ask permissions
                 if (isRequestPermissionRequired) {
-                    ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                    final String[] fPermissionsArrayToBeGranted = finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]);
+
+                    if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS)) {
+                        // display the dialog with the info text
+                        AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
+                        permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
+
+                        if (null != resource) {
+                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                        }
+
+                        // android M devices : warns the users only
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_android_m);
+
+                            permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(aCallingActivity,fPermissionsArrayToBeGranted , aPermissionsToBeGrantedBitMap);
+                                }
+                            });
+                        } else {
+                            permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_other_androids);
+
+                            // gives the contacts book access
+                            permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
+                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                }
+                            });
+
+                            // or reject it
+                            permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
+                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                                }
+                            });
+                        }
+                        permissionsInfoDialog.show();
+
+                    } else {
+                        ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                    }
                 } else {
                     // permissions were granted, start now..
                     isPermissionGranted = true;
@@ -1019,7 +1075,7 @@ public class CommonActivityUtils {
 
                     // add the room where the second member is the searched one
                     if (userId0.equals(aSearchedUserId) || userId1.equals(aSearchedUserId)) {
-                            listRetValue.add(room);
+                        listRetValue.add(room);
                     }
                 }
             }
@@ -1654,7 +1710,6 @@ public class CommonActivityUtils {
     public static int getBadgeCount() {
         return mBadgeValue;
     }
-
 
     //==============================================================================================================
     // Low memory management
