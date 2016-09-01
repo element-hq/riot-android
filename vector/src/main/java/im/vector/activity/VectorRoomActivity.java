@@ -216,6 +216,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
             refreshNotificationsArea();
+            refreshCallButtons();
         }
     };
 
@@ -312,7 +313,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                             || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
                             || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
                         setTitle();
-                        refreshNotificationsArea();
                         updateRoomHeaderMembersStatus();
                         updateRoomHeaderAvatar();
                     } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
@@ -336,7 +336,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         // they are ephemeral ones.
                         if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
                             if (null != mRoom) {
-                               refreshNotificationsArea();
+                                refreshNotificationsArea();
                             }
                         }
                     }
@@ -405,7 +405,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onCallError(String error) {
-            refreshNotificationsArea();
+            refreshCallButtons();
         }
 
         @Override
@@ -419,12 +419,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         @Override
         public void onCallAnsweredElsewhere() {
-            refreshNotificationsArea();
+            refreshCallButtons();
         }
 
         @Override
         public void onCallEnd(final int aReasonId) {
-            refreshNotificationsArea();
+            refreshCallButtons();
 
             // catch the flow where the hangup is done in VectorRoomActivity
             VectorCallSoundManager.releaseAudioFocus();
@@ -612,6 +612,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
 
                     manageSendMoreButtons();
+                    refreshCallButtons();
                 }
             }
 
@@ -873,6 +874,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         updateActionBarTitleAndTopic();
 
         refreshNotificationsArea();
+
+        refreshCallButtons();
 
         updateRoomHeaderMembersStatus();
 
@@ -1802,14 +1805,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mResendDeleteMenuItem) {
             mResendDeleteMenuItem.setVisible(hasUnsentEvent);
         }
+    }
 
-        // call management
+    /**
+     * Refresh the call buttons display.
+     */
+    private void refreshCallButtons() {
         if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
             boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
             IMXCall call = VectorCallViewActivity.getActiveCall();
 
             if (null == call) {
-                mStartCallLayout.setVisibility(isCallSupported ? View.VISIBLE : View.GONE);
+                mStartCallLayout.setVisibility((isCallSupported && (mEditText.getText().length() == 0)) ? View.VISIBLE : View.GONE);
                 mStopCallLayout.setVisibility(View.GONE);
             } else {
                 // ensure that the listener is defined once
