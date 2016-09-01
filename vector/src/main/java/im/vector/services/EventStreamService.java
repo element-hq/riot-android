@@ -279,9 +279,9 @@ public class EventStreamService extends Service {
         public void onLiveEventsChunkProcessed() {
             triggerPreparedNotification(true);
             mPendingNotifications.clear();
-
-            // special catchup cases
-            if (StreamAction.CATCHUP == mServiceState) {
+            
+            // do not suspend the application if there is some active calls
+            if ((StreamAction.CATCHUP == mServiceState) || (StreamAction.PAUSE == mServiceState)) {
                 boolean hasActiveCalls = false;
 
                 for (MXSession session : mSessions) {
@@ -295,7 +295,7 @@ public class EventStreamService extends Service {
                 if (hasActiveCalls) {
                     Log.d(LOG_TAG, "onLiveEventsChunkProcessed : Catchup again because there are active calls");
                     catchup(false);
-                } else {
+                } else if (StreamAction.CATCHUP == mServiceState) {
                     Log.d(LOG_TAG, "onLiveEventsChunkProcessed : no Active call");
                     setServiceState(StreamAction.PAUSE);
                 }
@@ -1043,7 +1043,7 @@ public class EventStreamService extends Service {
      * because it doesn't make sense anymore.
      */
     private void checkNotification() {
-        Log.d(LOG_TAG, "checkNotification : session ID" + mNotificationSessionId + " - Notif ID " + mNotificationRoomId + " - Event id " + mNotificationEventId);
+        //Log.d(LOG_TAG, "checkNotification : session ID" + mNotificationSessionId + " - Notif ID " + mNotificationRoomId + " - Event id " + mNotificationEventId);
 
         if (null != mNotificationRoomId) {
             boolean clearNotification = true;

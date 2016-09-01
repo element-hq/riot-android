@@ -187,7 +187,7 @@ public class Matrix {
                             } else {
                                 Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
                                 // check incoming call required permissions, before allowing the call..
-                                homeActivity.startIncomingCallCheckPermissions(call, call.getSession().getMyUserId(), call.getCallId());
+                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
