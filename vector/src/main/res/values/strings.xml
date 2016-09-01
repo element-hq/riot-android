@@ -385,7 +385,9 @@
     <string name="permissions_rationale_msg_storage">Vector needs access to media files to display photos in the media picker or to store your medias.\n\n</string>
     <string name="permissions_rationale_msg_camera">Vector needs access to the camera to take pictures, video calls..</string>
     <string name="permissions_rationale_msg_record_audio">Vector needs access to the microphone to perform audio calls</string>
-    <string name="permissions_rationale_msg_contacts">Vector needs access to the contact list to find Vector members</string>
+    <string name="permissions_rationale_msg_contacts">Your address book emails are uploaded for discovering matrix IDs.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Your address book emails are uploaded for discovering matrix IDs.\nAllow Vector to access your contacts ?</string>
+
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
 
     <!-- medias slider string -->
@@ -643,6 +645,7 @@
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_notifications_targets">Notification Targets</string>
+    <string name="settings_app_permission">App permissions</string>
 
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Home Server</string>
@@ -659,6 +662,8 @@
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
+
+    <string name="settings_app_permission_contacts">Contacts</string>
 
     <!-- Room Settings -->
 

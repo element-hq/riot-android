@@ -63,7 +63,12 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
         @Override
         public void onRefresh() {
-            mAdapter.notifyDataSetChanged();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
         }
 
         @Override

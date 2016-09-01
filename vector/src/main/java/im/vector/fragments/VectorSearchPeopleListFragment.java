@@ -65,7 +65,14 @@ public class  VectorSearchPeopleListFragment extends Fragment {
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
         @Override
         public void onRefresh() {
-            mAdapter.notifyDataSetChanged();
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
         }
 
         @Override

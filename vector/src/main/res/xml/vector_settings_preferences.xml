@@ -124,6 +124,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="@string/settings_app_permission"
+        android:title="@string/settings_app_permission" >
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_app_permission_contacts"
+            android:key="CONTACT_BOOK_ACCESS_KEY"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:title="@string/settings_other"
         android:key="@string/settings_other" >
 

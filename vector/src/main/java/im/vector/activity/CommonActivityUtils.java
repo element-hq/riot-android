@@ -101,8 +101,8 @@ public class CommonActivityUtils {
     /**
      * Schemes
      */
-    public static final String HTTP_SCHEME = "http://";
-    public static final String HTTPS_SCHEME = "https://";
+    private static final String HTTP_SCHEME = "http://";
+    private static final String HTTPS_SCHEME = "https://";
 
     // global helper constants:
     /**
@@ -130,15 +130,15 @@ public class CommonActivityUtils {
     // power levels
     public static final float UTILS_POWER_LEVEL_ADMIN = 100;
     public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
-    public static final int ROOM_SIZE_ONE_TO_ONE = 2;
+    private static final int ROOM_SIZE_ONE_TO_ONE = 2;
 
     // Android M permission request code management
-    public static final boolean PERMISSIONS_GRANTED = true;
-    public static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
-    public static final int PERMISSION_CAMERA = 0x1;
-    public static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1<<1;
-    public static final int PERMISSION_RECORD_AUDIO = 0x1<<2;
-    public static final int PERMISSION_READ_CONTACTS = 0x1<<3;
+    private static final boolean PERMISSIONS_GRANTED = true;
+    private static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
+    private static final int PERMISSION_CAMERA = 0x1;
+    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1<<1;
+    private static final int PERMISSION_RECORD_AUDIO = 0x1<<2;
+    private static final int PERMISSION_READ_CONTACTS = 0x1<<3;
     public static final int REQUEST_CODE_PERMISSION_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_VIDEO_IP_CALL = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
@@ -150,7 +150,7 @@ public class CommonActivityUtils {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
-            ArrayList<String> matrixIds = new ArrayList<String>();
+            ArrayList<String> matrixIds = new ArrayList<>();
             matrixIds.add(session.getMyUserId());
             eventStreamService.stopAccounts(matrixIds);
 
@@ -231,7 +231,7 @@ public class CommonActivityUtils {
         return false;
     }
 
-    public static final String RESTART_IN_PROGRESS_KEY = "RESTART_IN_PROGRESS_KEY";
+    private static final String RESTART_IN_PROGRESS_KEY = "RESTART_IN_PROGRESS_KEY";
 
     /**
      * The application has been started
@@ -423,7 +423,7 @@ public class CommonActivityUtils {
      * Stop the event stream.
      * @param context the context.
      */
-    public static void stopEventStream(Context context) {
+    private static void stopEventStream(Context context) {
         Log.d(LOG_TAG, "stopEventStream");
         sendEventStreamAction(context, EventStreamService.StreamAction.STOP);
     }
@@ -475,7 +475,7 @@ public class CommonActivityUtils {
         // either the application has never be launched
         // or the service has been killed on low memory
         if (EventStreamService.getInstance() == null) {
-            ArrayList<String> matrixIds = new ArrayList<String>();
+            ArrayList<String> matrixIds = new ArrayList<>();
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             if ((null != sessions) && (sessions.size() > 0)) {
@@ -532,8 +532,8 @@ public class CommonActivityUtils {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
         } else {
-            List<String> permissionListAlreadyDenied = new ArrayList<String>();
-            List<String> permissionsListToBeGranted = new ArrayList<String>();
+            List<String> permissionListAlreadyDenied = new ArrayList<>();
+            List<String> permissionsListToBeGranted = new ArrayList<>();
             final List<String> finalPermissionsListToBeGranted;
             boolean isRequestPermissionRequired = false;
             Resources resource = aCallingActivity.getResources();
@@ -556,9 +556,20 @@ public class CommonActivityUtils {
                 isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
             }
 
-            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)){
+            // the contact book access is requested for any android platforms
+            // for android M, we use the system preferences
+            // for android < M, we use a dedicated settings
+            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)) {
                 permissionType = Manifest.permission.READ_CONTACTS;
-                isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                } else {
+                    if (!ContactsManager.isContactBookAccessRequested(aCallingActivity)) {
+                        isRequestPermissionRequired = true;
+                        permissionsListToBeGranted.add(permissionType);
+                    }
+                }
             }
 
             finalPermissionsListToBeGranted = permissionsListToBeGranted;
@@ -599,7 +610,6 @@ public class CommonActivityUtils {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
-                            //ContactsManager.refreshLocalContactsSnapshot(aCallingActivity);
                             ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
                         }
                     }
@@ -617,7 +627,42 @@ public class CommonActivityUtils {
             } else {
                 // some permissions are not granted, ask permissions
                 if (isRequestPermissionRequired) {
-                    ActivityCompat.requestPermissions(aCallingActivity, finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]), aPermissionsToBeGrantedBitMap);
+                    final String[] fPermissionsArrayToBeGranted = finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]);
+
+                    // for android < M, we use a custom dialog to request the contacts book access.
+                    if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS) && (Build.VERSION.SDK_INT < 23)) {
+                        AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
+                        permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
+
+                        if (null != resource) {
+                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                        }
+
+                        permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_other_androids);
+
+                        // gives the contacts book access
+                        permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
+                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                            }
+                        });
+
+                        // or reject it
+                        permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, false);
+                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                            }
+                        });
+
+                        permissionsInfoDialog.show();
+
+                    } else {
+                        ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                    }
                 } else {
                     // permissions were granted, start now..
                     isPermissionGranted = true;
@@ -833,7 +878,7 @@ public class CommonActivityUtils {
                 previewRoom(fromActivity, roomPreviewData);
             } else {
                 Log.d(LOG_TAG, "previewRoom : open the room");
-                HashMap<String, Object> params = new HashMap<String, Object>();
+                HashMap<String, Object> params = new HashMap<>();
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
                 CommonActivityUtils.goToRoomPage(fromActivity, session, params);
@@ -971,30 +1016,6 @@ public class CommonActivityUtils {
     //==============================================================================================================
 
     /**
-     * Search the first existing room with a dedicated user.
-     * @param aSession the session
-     * @param otherUserId the other user id
-     * @return the room if it exits.
-     */
-    public static Room findOneToOneRoom(final MXSession aSession, final String otherUserId) {
-        Collection<Room> rooms = aSession.getDataHandler().getStore().getRooms();
-
-        for (Room room : rooms) {
-            Collection<RoomMember> members = room.getMembers();
-
-            if (members.size() == ROOM_SIZE_ONE_TO_ONE) {
-                for (RoomMember member : members) {
-                    if (member.getUserId().equals(otherUserId)) {
-                        return room;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Return all the 1:1 rooms joined by the searched user and by the current logged in user.
      * This method go through all the rooms, and for each room, tests if the searched user
      * and the logged in user are present.
@@ -1002,7 +1023,7 @@ public class CommonActivityUtils {
      * @param aSearchedUserId the searched user ID
      * @return an array containing the found rooms
      */
-    public static ArrayList<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
+    private static ArrayList<Room> findOneToOneRoomList(final MXSession aSession, final String aSearchedUserId) {
         ArrayList<Room> listRetValue = new ArrayList<>();
         List<RoomMember> roomMembersList;
         String userId0, userId1;
@@ -1019,7 +1040,7 @@ public class CommonActivityUtils {
 
                     // add the room where the second member is the searched one
                     if (userId0.equals(aSearchedUserId) || userId1.equals(aSearchedUserId)) {
-                            listRetValue.add(room);
+                        listRetValue.add(room);
                     }
                 }
             }
@@ -1037,7 +1058,7 @@ public class CommonActivityUtils {
      * @param aSearchedUserId the searched user ID
      * @return 1:1 room joined by the user with the most recent message, null otherwise
      */
-    public static Room findLatestOneToOneRoom(final MXSession aSession, final String aSearchedUserId) {
+    private static Room findLatestOneToOneRoom(final MXSession aSession, final String aSearchedUserId) {
         long serverTimeStamp = 0, newServerTimeStamp;
         RoomSummary summary;
         Room mostRecentRoomRetValue = null;
@@ -1126,7 +1147,7 @@ public class CommonActivityUtils {
         // the room already exists -> switch to it
         if (null != room) {
             Log.d(LOG_TAG,"## goToOneToOneRoom(): room already exists");
-            HashMap<String, Object> params = new HashMap<String, Object>();
+            HashMap<String, Object> params = new HashMap<>();
 
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
@@ -1147,7 +1168,7 @@ public class CommonActivityUtils {
                     final SimpleApiCallback inviteCallback = new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
-                            HashMap<String, Object> params = new HashMap<String, Object>();
+                            HashMap<String, Object> params = new HashMap<>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
                             params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
@@ -1263,13 +1284,13 @@ public class CommonActivityUtils {
      * @param intent       the intent param
      * @param session      the session/
      */
-    public static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
+    private static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
         // sanity check
         if ((null == session) || !session.isAlive()) {
             return;
         }
 
-        ArrayList<RoomSummary> mergedSummaries = new ArrayList<RoomSummary>(session.getDataHandler().getStore().getSummaries());
+        ArrayList<RoomSummary> mergedSummaries = new ArrayList<>(session.getDataHandler().getStore().getSummaries());
 
         // keep only the joined room
         for (int index = 0; index < mergedSummaries.size(); index++) {
@@ -1327,7 +1348,7 @@ public class CommonActivityUtils {
                             public void run() {
                                 RoomSummary summary = fMergedSummaries.get(which);
 
-                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                HashMap<String, Object> params = new HashMap<>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
@@ -1344,30 +1365,7 @@ public class CommonActivityUtils {
     // Parameters checkers.
     //==============================================================================================================
 
-    /**
-     * Check if the userId format is valid with the matrix standard.
-     * It should start with a @ and ends with the home server suffix.
-     *
-     * @param userId           the userID to check
-     * @param homeServerSuffix the home server suffix
-     * @return the checked user ID
-     */
-    public static String checkUserId(String userId, String homeServerSuffix) {
-        String res = userId;
 
-        if (res.length() > 0) {
-            res = res.trim();
-            if (!res.startsWith("@")) {
-                res = "@" + res;
-            }
-
-            if (res.indexOf(":") < 0) {
-                res += homeServerSuffix;
-            }
-        }
-
-        return res;
-    }
 
     //==============================================================================================================
     // Media utils
@@ -1411,7 +1409,7 @@ public class CommonActivityUtils {
      * @param outputFilename optional the output filename
      * @return the downloads file path if the file exists or has been properly saved
      */
-    public static String saveFileInto(File sourceFile, String dstDirPath, String outputFilename) {
+    private static String saveFileInto(File sourceFile, String dstDirPath, String outputFilename) {
         // sanity check
         if ((null == sourceFile) || (null == dstDirPath)) {
             return null;
@@ -1504,23 +1502,6 @@ public class CommonActivityUtils {
         }
 
         return fullFilePath;
-    }
-
-    /**
-     * Save an image URI into the gallery
-     *
-     * @param context    the context.
-     * @param sourceFile the image path to save.
-     */
-    public static String saveImageIntoGallery(Context context, File sourceFile) {
-        String filePath = saveFileInto(sourceFile, Environment.DIRECTORY_PICTURES, null);
-
-        if (null != filePath) {
-            // This broadcasts that there's been a change in the media directory
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(filePath))));
-        }
-
-        return filePath;
     }
 
     //==============================================================================================================
@@ -1654,7 +1635,6 @@ public class CommonActivityUtils {
     public static int getBadgeCount() {
         return mBadgeValue;
     }
-
 
     //==============================================================================================================
     // Low memory management
