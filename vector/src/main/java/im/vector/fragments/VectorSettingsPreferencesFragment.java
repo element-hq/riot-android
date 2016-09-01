@@ -99,7 +99,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static HashMap<String, String> mPushesRuleByResourceId = null;
 
     // disable some updates if there is
-    private IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
+    private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
             refreshDisplay();
@@ -108,11 +108,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     // displayed emails
     private PreferenceCategory mUserSettingsCategory;
-    private List<String> mDisplayedEmails = new ArrayList<String>();
+    private List<String> mDisplayedEmails = new ArrayList<>();
 
     // displayed pushers
     private PreferenceCategory mPushersSettingsCategory;
-    private List<Pusher> mDisplayedPushers = new ArrayList<Pusher>();
+    private List<Pusher> mDisplayedPushers = new ArrayList<>();
 
     // displayed the ignored users list
     private PreferenceCategory mIgnoredUserSettingsCategory;
@@ -123,7 +123,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestDelayPreference;
 
     // events listener
-    private MXEventListener mEventsListener = new MXEventListener() {
+    private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
         public void onBingRulesUpdate() {
             refreshPreferences();
@@ -479,7 +479,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Hide the loading view and refresh the preferences.
-     * @param refresh
+     * @param refresh true to refresh the display
      */
     private void hideLoadingView(boolean refresh) {
         mLoadingView.setVisibility(View.GONE);
@@ -940,6 +940,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         try {
                             isEnabled = !TextUtils.equals(actions.get(0).getAsString(), BingRule.ACTION_DONT_NOTIFY);
                         } catch (Exception e) {
+                            Log.e(LOG_TAG, "## refreshPreferences failed " + e.getMessage());
                         }
                     }
                 }
@@ -1194,7 +1195,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Attempt to add a new email to the account
-     * @param email
+     * @param email the email to add.
      */
     private void addEmail(String email) {
         // check first if the email syntax is valid
@@ -1361,6 +1362,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     try {
                         newTimeOut = Integer.parseInt((String) newValue);
                     } catch(Exception e) {
+                        Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.getMessage());
                     }
 
                     if (newTimeOut != timeout) {
@@ -1392,6 +1394,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     try {
                         newDelay = Integer.parseInt((String) newValue);
                     } catch(Exception e) {
+                        Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.getMessage());
                     }
 
                     if (newDelay != delay) {

@@ -26,7 +26,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,7 +37,6 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.VectorApp;
-import im.vector.activity.VectorSettingsActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -383,7 +381,7 @@ public class ContactsManager {
      * @param context the context
      * @return true if it was granted.
      */
-    public static boolean isContactBookAccessAllowed(Context context) {
+    private static boolean isContactBookAccessAllowed(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS));
         } else {
