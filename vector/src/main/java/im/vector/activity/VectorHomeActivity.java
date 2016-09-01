@@ -144,10 +144,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     private Iterator mReadReceiptSessionListIterator;
     private Iterator mReadReceiptSummaryListIterator;
     private IMXStore mReadReceiptStore;
-    // incoming call management with permissions
-    private String mIncomingCallSessionId;
-    private String mIncomingCallId;
-    private IMXCall mIncomingCall;
+
+    // calls
     private VectorPendingCallView mVectorPendingCallView;
 
     private boolean mStorePermissionCheck = false;
@@ -665,12 +663,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
-            if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mIncomingCallSessionId, mIncomingCallId);
-            } else if (null != mIncomingCall) {
-                mIncomingCall.hangup("busy");
-            }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_HOME_ACTIVITY) {
             Log.w(LOG_TAG, "## onRequestPermissionsResult(): REQUEST_CODE_PERMISSION_HOME_ACTIVITY");
         } else {
@@ -996,7 +988,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * @param sessionId the session Id
      * @param callId teh call Id
      */
-    private void startCall(String sessionId, String callId) {
+    public void startCall(String sessionId, String callId) {
         // sanity checks
         if ((null != sessionId) && (null != callId)) {
             final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
@@ -1010,23 +1002,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     VectorHomeActivity.this.startActivity(intent);
                 }
             });
-        }
-    }
-
-    /**
-     * Check permissions before opening the call activity.
-     * @param aCurrentCall the pending call
-     * @param aSessionId the session id
-     * @param aCallId the call id
-     */
-    public void startIncomingCallCheckPermissions(IMXCall aCurrentCall, String aSessionId, String aCallId) {
-        // saved incoming call context to be processed once permissions result are obtained
-        mIncomingCallSessionId = aSessionId;
-        mIncomingCallId = aCallId;
-        mIncomingCall = aCurrentCall;
-
-        if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, VectorHomeActivity.this)){
-            startCall(aSessionId,aCallId);
         }
     }
 

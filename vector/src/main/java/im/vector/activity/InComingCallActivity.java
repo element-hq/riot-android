@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -59,7 +60,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         public void onStateDidChange(String state) {
             Log.d(LOG_TAG,"## onStateDidChange(): state="+state);
         }
-
 
         @Override
         public void onCallError(String aErrorMsg) {
@@ -153,7 +153,6 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
                 finish();
             } else {
-
                 synchronized (LOG_TAG) {
                     if (null != sharedInstance) {
                         sharedInstance.finish();
@@ -202,6 +201,9 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 mMxCall.createCallView();
             }
         }
+
+        // the user can only accept if the dedicated permissions are granted
+        mAcceptCallButton.setVisibility(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, InComingCallActivity.this) ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -240,6 +242,19 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         } else {
             Log.d(LOG_TAG, "## onResume : the call does not exist anymore");
             finish();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
+            // the user can only accept if the dedicated permissions are granted
+            mAcceptCallButton.setVisibility(CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults) ? View.VISIBLE : View.INVISIBLE);
+
+            mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId);
+            if (null == mMxCall) {
+                finish();
+            }
         }
     }
 
