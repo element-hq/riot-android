@@ -252,52 +252,55 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mRoomCreationFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWaitingView.setVisibility(View.VISIBLE);
+                // ignore any action if there is a pending one
+                if (View.VISIBLE != mWaitingView.getVisibility()) {
+                    mWaitingView.setVisibility(View.VISIBLE);
 
-                mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
-                    @Override
-                    public void onSuccess(final String roomId) {
-                        mWaitingView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mWaitingView.setVisibility(View.GONE);
+                    mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                        @Override
+                        public void onSuccess(final String roomId) {
+                            mWaitingView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWaitingView.setVisibility(View.GONE);
 
-                                HashMap<String, Object> params = new HashMap<>();
-                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                                params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
-                                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
-                            }
-                        });
-                    }
-
-                    private void onError(final String message) {
-                        mWaitingView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (null != message) {
-                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                    HashMap<String, Object> params = new HashMap<>();
+                                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                    params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                                    CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
                                 }
-                                mWaitingView.setVisibility(View.GONE);
-                            }
-                        });
-                    }
+                            });
+                        }
 
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                        private void onError(final String message) {
+                            mWaitingView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (null != message) {
+                                        Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                    }
+                                    mWaitingView.setVisibility(View.GONE);
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onMatrixError(final MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
 
-                    @Override
-                    public void onUnexpectedError(final Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
+                        @Override
+                        public void onMatrixError(final MatrixError e) {
+                            onError(e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onUnexpectedError(final Exception e) {
+                            onError(e.getLocalizedMessage());
+                        }
+                    });
+                }
             }
         });
 
