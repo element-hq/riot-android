@@ -279,9 +279,7 @@ public class EventStreamService extends Service {
         public void onLiveEventsChunkProcessed() {
             triggerPreparedNotification(true);
             mPendingNotifications.clear();
-
-            Log.d(LOG_TAG, "onLiveEventsChunkProcessed : " + mServiceState);
-
+            
             // do not suspend the application if there is some active calls
             if ((StreamAction.CATCHUP == mServiceState) || (StreamAction.PAUSE == mServiceState)) {
                 boolean hasActiveCalls = false;
