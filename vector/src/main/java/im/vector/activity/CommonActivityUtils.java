@@ -559,15 +559,15 @@ public class CommonActivityUtils {
             // the contact book access is requested for any android platforms
             // for android M, we use the system preferences
             // for android < M, we use a dedicated settings
-            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)){
+            if(PERMISSION_READ_CONTACTS == (aPermissionsToBeGrantedBitMap & PERMISSION_READ_CONTACTS)) {
                 permissionType = Manifest.permission.READ_CONTACTS;
 
-                if (!ContactsManager.isContactBookAccessRequested(aCallingActivity)) {
-                    isRequestPermissionRequired = true;
-                    permissionsListToBeGranted.add(permissionType);
-
-                    if ((Build.VERSION.SDK_INT >= 23) && ActivityCompat.shouldShowRequestPermissionRationale(aCallingActivity, permissionType)) {
-                        permissionListAlreadyDenied.add(permissionType);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
+                } else {
+                    if (!ContactsManager.isContactBookAccessRequested(aCallingActivity)) {
+                        isRequestPermissionRequired = true;
+                        permissionsListToBeGranted.add(permissionType);
                     }
                 }
             }
@@ -629,8 +629,8 @@ public class CommonActivityUtils {
                 if (isRequestPermissionRequired) {
                     final String[] fPermissionsArrayToBeGranted = finalPermissionsListToBeGranted.toArray(new String[finalPermissionsListToBeGranted.size()]);
 
-                    if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS)) {
-                        // display the dialog with the info text
+                    // for android < M, we use a custom dialog to request the contacts book access.
+                    if (permissionsListToBeGranted.contains(Manifest.permission.READ_CONTACTS) && (Build.VERSION.SDK_INT < 23)) {
                         AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
                         permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
 
@@ -638,37 +638,26 @@ public class CommonActivityUtils {
                             permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
                         }
 
-                        // android M devices : warns the users only
-                        if (Build.VERSION.SDK_INT >= 23) {
-                            permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_android_m);
+                        permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_other_androids);
 
-                            permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(aCallingActivity,fPermissionsArrayToBeGranted , aPermissionsToBeGrantedBitMap);
-                                }
-                            });
-                        } else {
-                            permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_other_androids);
+                        // gives the contacts book access
+                        permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
+                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                            }
+                        });
 
-                            // gives the contacts book access
-                            permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
-                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
-                                }
-                            });
+                        // or reject it
+                        permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, false);
+                                ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
+                            }
+                        });
 
-                            // or reject it
-                            permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
-                                    ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
-                                }
-                            });
-                        }
                         permissionsInfoDialog.show();
 
                     } else {

@@ -129,9 +129,6 @@ public class VectorApp extends Application {
 
         GAHelper.initGoogleAnalytics(getApplicationContext());
 
-        // get the contact update at application launch
-        ContactsManager.refreshLocalContactsSnapshot(this);
-
         mRageShake.start(this);
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

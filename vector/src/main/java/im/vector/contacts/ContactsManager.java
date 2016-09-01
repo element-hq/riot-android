@@ -351,13 +351,13 @@ public class ContactsManager {
 
     /**
      * Tells if the contacts book access has been requested.
+     * For android > M devices, it only tells if the permission has been granted.
      * @param activity the calling activity
      * @return true it was requested once
      */
     public static boolean isContactBookAccessRequested(Activity activity) {
         if (Build.VERSION.SDK_INT >= 23) {
-            return (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_CONTACTS)) &&
-                    !ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_CONTACTS);
+            return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.READ_CONTACTS));
         } else {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
             return preferences.contains(CONTACTS_BOOK_ACCESS_KEY);

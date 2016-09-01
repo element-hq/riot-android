@@ -370,7 +370,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // on Android >= 23, use the system ones
         if (Build.VERSION.SDK_INT >= 23) {
             // hide the dedicated section
-            getPreferenceScreen().removePreference(getPreferenceManager().findPreference(ContactsManager.CONTACTS_BOOK_ACCESS_KEY));
+            getPreferenceScreen().removePreference(getPreferenceManager().findPreference(getResources().getString(R.string.settings_app_permission)));
         }
 
         // background sync management
