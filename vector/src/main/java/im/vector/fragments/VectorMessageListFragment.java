@@ -734,7 +734,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             if (null != state) {
                 String displayName = state.getMemberName(userId);
                 if (!TextUtils.isEmpty(displayName)) {
-                    ((VectorRoomActivity)getActivity()).insertInTextEditor(displayName);
+                    ((VectorRoomActivity)getActivity()).insertUserDisplayenInTextEditor(displayName);
                 }
             }
         }
@@ -744,7 +744,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onSenderNameClick(String userId, String displayName) {
         if (getActivity() instanceof VectorRoomActivity) {
-            ((VectorRoomActivity)getActivity()).insertInTextEditor(displayName);
+            ((VectorRoomActivity)getActivity()).insertUserDisplayenInTextEditor(displayName);
         }
     }
 

@@ -951,7 +951,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if ((requestCode == REQUEST_FILES_REQUEST_CODE) || (requestCode == TAKE_IMAGE_REQUEST_CODE)) {
                 sendMediasIntent(data);
             } else if (requestCode == GET_MENTION_REQUEST_CODE) {
-                appendInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
+                insertUserDisplayenInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
             } else if (requestCode == REQUEST_ROOM_AVATAR_CODE) {
                 onActivityResultRoomAvatarUpdate(data);
             }
@@ -1657,29 +1657,33 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Insert a text in the message editor.
-     * @param text the text to insert.
+     * Sanitize the display name.
+     * @param displayName the display name to sanitize
+     * @return the sanitized display name
      */
-    public void insertInTextEditor(String text) {
-        if (null != text) {
-            if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.append(text + ": ");
-            } else {
-                mEditText.getText().insert(mEditText.getSelectionStart(), text);
+    private static String sanitizeDisplayname(String displayName) {
+        // sanity checks
+        if (!TextUtils.isEmpty(displayName)) {
+            final String ircPattern = " (IRC)";
+
+            if (displayName.endsWith(ircPattern)) {
+                displayName = displayName.substring(0, displayName.length() - ircPattern.length());
             }
         }
+
+        return displayName;
     }
 
     /**
-     * Append a text in the message editor.
-     * @param text the text to append
+     * Insert a text in the message editor.
+     * @param text the text to insert.
      */
-    private void appendInTextEditor(String text) {
+    public void insertUserDisplayenInTextEditor(String text) {
         if (null != text) {
             if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.append(text + ": ");
+                mEditText.append(sanitizeDisplayname(text) + ": ");
             } else {
-                mEditText.append(text + " ");
+                mEditText.getText().insert(mEditText.getSelectionStart(), sanitizeDisplayname(text) + " ");
             }
         }
     }
