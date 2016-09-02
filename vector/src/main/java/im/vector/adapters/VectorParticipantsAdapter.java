@@ -71,7 +71,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     public static final String SEARCH_METHOD_STARTS_WITH = "SEARCH_METHOD_STARTS_WITH";
 
     // layout info
-    private Context mContext;
+    private final Context mContext;
     private final LayoutInflater mLayoutInflater;
 
     // account info
@@ -194,7 +194,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             for(String email : contact.getEmails()) {
                 if (!TextUtils.isEmpty(email)) {
                     Contact dummyContact = new Contact(email);
-                    dummyContact.setDisplayName(email);
+                    dummyContact.setDisplayName(contact.getDisplayName());
                     dummyContact.addEmailAdress(email);
 
                     ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, getContext());
@@ -235,14 +235,6 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     }
 
     /**
-     * refresh the display
-     * @param searchMethod the search method
-     */
-    public void refresh(final String searchMethod) {
-        refresh(searchMethod, null, null);
-    }
-
-    /**
      * Tells an item fullfill the search method.
      * @param item the item to test
      * @param searchMethod the search method
@@ -255,6 +247,86 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         } else {
             return item.startsWith(pattern);
         }
+    }
+
+    /**
+     * Test if the contact is used by an entry of this adapter.
+     * Refresh if required.
+     * @param contact the updated contact
+     * @param matrixId the linked matrix Id
+     * @param firstVisiblePosition the first visible row
+     * @param lastVisiblePosition the last visible row
+     */
+    public void onContactUpdate(Contact contact, String matrixId, int firstVisiblePosition, int lastVisiblePosition) {
+        if (null != contact) {
+            int pos = -1;
+
+            // detect of the contact is used in the adapter
+            for (int index = 0; index <= getCount(); index++) {
+                ParticipantAdapterItem item = getItem(index);
+
+                if (item.mContact == contact) {
+                    pos = index;
+                    item.mUserId = matrixId;
+                    break;
+                }
+            }
+
+            // the item has been found
+            if (pos >= 0) {
+                // refresh if a duplicated entry has been removed
+                // or if the contact is displayed
+                if (checkDuplicatedMatrixIds() ||
+                        ((pos >= firstVisiblePosition) && (pos <= lastVisiblePosition))) {
+                    notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if some entries use the same matrix ids.
+     * If some use the same, prefer the room member one.
+     * @return true if some duplicated entries have been removed.
+     */
+    private boolean checkDuplicatedMatrixIds() {
+        // lock the refresh
+        setNotifyOnChange(false);
+
+        // if several entries have the same matrix id.
+        // keep the one which does not come from a contact
+        ArrayList<String> matrixUserIds = new ArrayList<>();
+
+        for(int i = 0; i < getCount(); i++) {
+            ParticipantAdapterItem item = getItem(i);
+            String userId = item.mUserId;
+
+            if ((null == item.mContact) && !TextUtils.isEmpty(userId)) {
+                matrixUserIds.add(item.mUserId);
+            }
+        }
+
+        ArrayList<ParticipantAdapterItem> itemsToRemove = new ArrayList<>();
+
+        for(int i = 0; i < getCount(); i++) {
+            ParticipantAdapterItem item = getItem(i);
+
+            // if the entry is duplicated and comes from a contact
+            if (matrixUserIds.contains(item.mUserId) && (null != item.mContact)) {
+                // remove it from the known users list
+                mUnusedParticipants.remove(item);
+                itemsToRemove.add(item);
+            }
+        }
+
+        for(ParticipantAdapterItem itemToRemove : itemsToRemove) {
+            this.remove(itemToRemove);
+        }
+
+        // unlock the refresh
+        setNotifyOnChange(false);
+
+        return 0 != itemsToRemove.size();
     }
 
     /**
@@ -301,6 +373,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             // remove trailing spaces.
             String pattern = mPattern.trim().toLowerCase();
 
+            HashMap<String, ParticipantAdapterItem> mContactItems = new HashMap<>();
+            ArrayList<String> memberUserIds = new ArrayList<>();
+
             // check if each member matches the pattern
             for(ParticipantAdapterItem item: mUnusedParticipants) {
                 if (match(item, searchMethod, pattern)) {
@@ -308,13 +383,28 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                     if (null != item.mContact) {
                         // the email <-> matrix Ids matching is done asynchronously
                         if (item.mContact.hasMatridIds(mContext)) {
-                            // privacy
-                            //Log.d(LOG_TAG, "the contact " + item.mContact.getDisplayName() + " contains matrix ID");
                             item.mUserId = item.mContact.getFirstMatrixId().mMatrixId;
-                        }
-                    }
 
-                    nextMembersList.add(item);
+                            // avoid duplicated entries between contact and member definitions
+                            // always prefer a member definition
+                            if (!memberUserIds.contains(item.mUserId) && !mContactItems.containsKey(item.mUserId)) {
+                                nextMembersList.add(item);
+                                mContactItems.put(item.mUserId, item);
+                            }
+                        } else {
+                            nextMembersList.add(item);
+                        }
+                    } else {
+                        // the user id was already by a contact
+                        // prefer the member items over the contact ones.
+                        if (mContactItems.containsKey(item.mUserId)) {
+                            nextMembersList.remove(mContactItems.get(item.mUserId));
+                            mContactItems.remove(item.mUserId);
+                        }
+
+                        nextMembersList.add(item);
+                        memberUserIds.add(item.mUserId);
+                    }
                 }
             }
 
@@ -332,7 +422,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             if (null != firstEntry) {
                 nextMembersList.add(0, firstEntry);
 
-                // avoid multiple definitions
+                // avoid multiple definitions of the written email
                 for(int pos = 1; pos < nextMembersList.size(); pos++) {
                     ParticipantAdapterItem item = nextMembersList.get(pos);
 
@@ -355,6 +445,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         this.setNotifyOnChange(true);
         this.addAll(nextMembersList);
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -407,6 +498,8 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             }
         }
 
+        boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
+
         // set the display name
         String displayname = participant.mDisplayName;
         String lowerCaseDisplayname = displayname.toLowerCase();
@@ -420,8 +513,18 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             }
         }
 
-        if ((pos >= 0) && !TextUtils.isEmpty(participant.mUserId)) {
+        if ((pos >= 0) && isMatrixUserId) {
             displayname += " (" + participant.mUserId + ")";
+        }
+
+        // if a contact has a matrix id
+        // display the matched email address in the display name
+        if ((null != participant.mContact) && isMatrixUserId) {
+            String firstEmail = participant.mContact.getEmails().get(0);
+
+            if (!TextUtils.equals(displayname, firstEmail)) {
+                displayname += " (" +  firstEmail + ")";
+            }
         }
 
         nameTextView.setText(displayname);
@@ -455,9 +558,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         }
 
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
-        if ((participant.mContact != null) && (participant.mUserId != null) && !TextUtils.equals(participant.mUserId, participant.mDisplayName)) {
+        if (participant.mContact != null) {
             statusTextView.setText(participant.mUserId);
-            matrixUserBadge.setVisibility(View.VISIBLE);
+            matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
         }
         else {
             statusTextView.setText(status);

@@ -81,16 +81,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
-                        int lastIndex = mPeopleListView.getLastVisiblePosition();
-
-                        for(int index = firstIndex; index <= lastIndex; index++) {
-                            if (mAdapter.getItem(index).mContact == contact) {
-                                mAdapter.getItem(index).mUserId = matrixId;
-                                mAdapter.notifyDataSetChanged();
-                                break;
-                            }
-                        }
+                        mAdapter.onContactUpdate(contact, matrixId, mPeopleListView.getFirstVisiblePosition(), mPeopleListView.getLastVisiblePosition());
                     }
                 });
             }

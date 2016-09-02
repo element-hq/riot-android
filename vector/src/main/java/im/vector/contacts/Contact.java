@@ -24,8 +24,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.matrix.androidsdk.rest.model.User;
-import org.w3c.dom.Text;
-import org.w3c.dom.UserDataHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,10 +41,10 @@ public class Contact {
     // is linked to a matrix id/
     public static class MXID {
         // the MXSession identifier
-        public String mAccountId;
+        public final String mAccountId;
 
         // the related Matrix ID
-        public String mMatrixId;
+        public final String mMatrixId;
 
         // the user description
         public User mUser;
@@ -79,7 +77,7 @@ public class Contact {
     // emails list
     private final ArrayList<String> mEmails = new ArrayList<String>();
 
-    // MXID by meail address
+    // MXID by email address
     private HashMap<String, MXID> mMXIDsByElement;
 
     /**
@@ -154,7 +152,7 @@ public class Contact {
 
         // the PIDs are not yet retrieved
         if (null == mMXIDsByElement) {
-            mMXIDsByElement = new HashMap<String, MXID>();
+            mMXIDsByElement = new HashMap<>();
         }
 
         if (couldContainMatridIds()) {

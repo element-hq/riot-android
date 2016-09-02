@@ -49,7 +49,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     public static final String EXTRA_SELECTED_USER_ID =  "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
 
     // account data
-    private String mRoomId;
     private String mMatrixId;
 
     // main UI items
@@ -76,16 +75,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    int firstIndex = mListView.getFirstVisiblePosition();
-                    int lastIndex = mListView.getLastVisiblePosition();
-
-                    for(int index = firstIndex; index <= lastIndex; index++) {
-                        if (mAdapter.getItem(index).mContact == contact) {
-                            mAdapter.getItem(index).mUserId = matrixId;
-                            mAdapter.notifyDataSetChanged();
-                            break;
-                        }
-                    }
+                    mAdapter.onContactUpdate(contact, matrixId, mListView.getFirstVisiblePosition(), mListView.getLastVisiblePosition());
                 }
             });
         }
@@ -146,7 +136,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             return;
         }
 
-        mRoomId = intent.getStringExtra(EXTRA_ROOM_ID);
+        String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
 
         setContentView(R.layout.activity_vector_invite_members);
 
@@ -160,7 +150,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
         mListView = (ListView) findViewById(R.id.room_details_members_list);
-        mAdapter = new VectorParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, mRoomId);
+        mAdapter = new VectorParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, roomId);
 
         mAdapter.setSortMethod(new Comparator<ParticipantAdapterItem>() {
             /**
