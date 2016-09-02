@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -193,10 +194,8 @@ public class LoginActivity extends MXCActionBarActivity {
     private View mMainLayout;
 
     // HS / identity URL layouts
-    // the IS and the HS have a dedicated editText to let the user customize them.
-    private boolean mIsHomeServerUrlIsDisplayed;
     private View mHomeServerUrlsLayout;
-    private ImageView mExpandImageView;
+    private CheckBox mUseCustomHomeServersCheckbox;
 
     // the pending universal link uri (if any)
     private Parcelable mUniversalLinkUri;
@@ -365,7 +364,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         View displayHomeServerUrlView  = findViewById(R.id.display_server_url_layout);
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
-        mExpandImageView = (ImageView) findViewById(R.id.display_server_url_expand_icon);
+        mUseCustomHomeServersCheckbox = (CheckBox)findViewById(R.id.display_server_url_expand_checkbox);
 
         mProgressTextView = (TextView) findViewById(R.id.flow_progress_message_textview);
 
@@ -391,9 +390,7 @@ public class LoginActivity extends MXCActionBarActivity {
             public void onClick(View view) {
                 String username = mLoginEmailTextView.getText().toString().trim();
                 String password = mLoginPasswordTextView.getText().toString().trim();
-                String serverUrl = mHomeServerText.getText().toString().trim();
-                String identityServerUrl = mIdentityServerText.getText().toString().trim();
-                onLoginClick(getHsConfig(), serverUrl, identityServerUrl, username, password);
+                onLoginClick(getHsConfig(), getHomeServerUrl(), getIdentityServerUrl(), username, password);
             }
         });
 
@@ -474,10 +471,9 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         });
 
-        displayHomeServerUrlView.setOnClickListener(new View.OnClickListener() {
+        mUseCustomHomeServersCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIsHomeServerUrlIsDisplayed = !mIsHomeServerUrlIsDisplayed;
                 refreshDisplay();
             }
         });
@@ -531,6 +527,29 @@ public class LoginActivity extends MXCActionBarActivity {
         mHandler = new Handler(getMainLooper());
     }
 
+
+    /**
+     * @return the home server Url according to custom HS checkbox
+     */
+    private String getHomeServerUrl() {
+        if (mUseCustomHomeServersCheckbox.isChecked()) {
+            return mHomeServerText.getText().toString().trim();
+        } else {
+            return getResources().getString(R.string.default_hs_server_url);
+        }
+    }
+
+    /**
+     * @return the identity server URL according to custom HS checkbox
+     */
+    private String getIdentityServerUrl() {
+        if (mUseCustomHomeServersCheckbox.isChecked()) {
+            return mIdentityServerText.getText().toString().trim();
+        } else {
+            return getResources().getString(R.string.default_identity_server_url);
+        }
+    }
+
     /**
      * Add a listener to be notified when the device gets connected to a network.
      * This method is mainly used to refresh the login UI upon the network is back.
@@ -570,7 +589,7 @@ public class LoginActivity extends MXCActionBarActivity {
     }
 
     /**
-     * Check if the home server url has been updated
+     * Check if the identity server url has been updated
      */
     private void onIdentityserverUrlUpdate() {
         if (!TextUtils.equals(mIdentityServerUrl, mIdentityServerText.getText().toString())) {
@@ -742,7 +761,8 @@ public class LoginActivity extends MXCActionBarActivity {
 
                     mForgotPid = new HashMap<>();
                     mForgotPid.put("client_secret", thirdPid.clientSecret);
-                    String identityServerHost = mIdentityServerText.getText().toString().trim();
+                    String identityServerHost = getIdentityServerUrl();
+
                     if (identityServerHost.startsWith("http://")) {
                         identityServerHost = identityServerHost.substring("http://".length());
                     } else if (identityServerHost.startsWith("https://")) {
@@ -1444,7 +1464,7 @@ public class LoginActivity extends MXCActionBarActivity {
             mRegistrationResponse = registrationFlowResponse;
             registrationFlowResponse.flows = supportedFlows;
         } else {
-            String hs = mHomeServerText.getText().toString();
+            String hs = getHomeServerUrl();
             boolean validHomeServer = false;
 
             try {
@@ -1739,7 +1759,8 @@ public class LoginActivity extends MXCActionBarActivity {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
                         HashMap<String, Object> pidsCredentialsAuth = new HashMap<>();
                         pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
-                        String identityServerHost = mIdentityServerText.getText().toString().trim();
+                        String identityServerHost = getIdentityServerUrl();
+
                         if (identityServerHost.startsWith("http://")) {
                             identityServerHost = identityServerHost.substring("http://".length());
                         } else if (identityServerHost.startsWith("https://")) {
@@ -2033,7 +2054,7 @@ public class LoginActivity extends MXCActionBarActivity {
         if (null != savedInstanceState) {
             mLoginEmailTextView.setText(savedInstanceState.getString(SAVED_LOGIN_EMAIL_ADDRESS));
             mLoginPasswordTextView.setText(savedInstanceState.getString(SAVED_LOGIN_PASSWORD_ADDRESS));
-            mIsHomeServerUrlIsDisplayed = savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED);
+            mUseCustomHomeServersCheckbox.setChecked(savedInstanceState.getBoolean(SAVED_IS_SERVER_URL_EXPANDED));
             mHomeServerText.setText(savedInstanceState.getString(SAVED_HOME_SERVER_URL));
             mIdentityServerText.setText(savedInstanceState.getString(SAVED_IDENTITY_SERVER_URL));
 
@@ -2078,7 +2099,7 @@ public class LoginActivity extends MXCActionBarActivity {
             savedInstanceState.putString(SAVED_LOGIN_PASSWORD_ADDRESS, mLoginPasswordTextView.getText().toString().trim());
         }
 
-        savedInstanceState.putBoolean(SAVED_IS_SERVER_URL_EXPANDED, mIsHomeServerUrlIsDisplayed);
+        savedInstanceState.putBoolean(SAVED_IS_SERVER_URL_EXPANDED, mUseCustomHomeServersCheckbox.isChecked());
 
         if (!TextUtils.isEmpty(mHomeServerText.getText().toString().trim())) {
             savedInstanceState.putString(SAVED_HOME_SERVER_URL, mHomeServerText.getText().toString().trim());
@@ -2141,8 +2162,7 @@ public class LoginActivity extends MXCActionBarActivity {
         checkFlows();
 
         // home server
-        mHomeServerUrlsLayout.setVisibility(mIsHomeServerUrlIsDisplayed ? View.VISIBLE : View.GONE);
-        mExpandImageView.setImageResource(mIsHomeServerUrlIsDisplayed ? R.drawable.ic_material_arrow_drop_down_black : R.drawable.ic_material_arrow_drop_up_black);
+        mHomeServerUrlsLayout.setVisibility(mUseCustomHomeServersCheckbox.isChecked() ? View.VISIBLE : View.GONE);
 
         // views
         View loginLayout = findViewById(R.id.login_inputs_layout);
@@ -2225,7 +2245,7 @@ public class LoginActivity extends MXCActionBarActivity {
      */
     private HomeserverConnectionConfig getHsConfig() {
         if (null == mHomeserverConnectionConfig) {
-            String hsUrlString = mHomeServerText.getText().toString();
+            String hsUrlString = getHomeServerUrl();
 
             if (TextUtils.isEmpty(hsUrlString) || !hsUrlString.startsWith("http") || TextUtils.equals(hsUrlString, "http://") || TextUtils.equals(hsUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
@@ -2236,7 +2256,7 @@ public class LoginActivity extends MXCActionBarActivity {
                 hsUrlString = "https://" + hsUrlString;
             }
 
-            String identityServerUrlString = mIdentityServerText.getText().toString();
+            String identityServerUrlString = getIdentityServerUrl();
 
             if (TextUtils.isEmpty(identityServerUrlString) || !identityServerUrlString.startsWith("http") || TextUtils.equals(identityServerUrlString, "http://") || TextUtils.equals(identityServerUrlString, "https://")) {
                 Toast.makeText(this, getString(R.string.login_error_must_start_http), Toast.LENGTH_SHORT).show();
