@@ -193,7 +193,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private ImageView mNotificationIconImageView;
     private TextView mNotificationTextView;
     private String mLatestTypingMessage;
-    private boolean mIsScrolledToTheBottom = true;
+    private boolean mIsScrolledToTheBottom;
     private Event mLatestDisplayedEvent; // the event at the bottom of the list
 
     // room preview
@@ -873,7 +873,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         updateActionBarTitleAndTopic();
 
-        refreshNotificationsArea();
+        sendReadReceipt();
 
         refreshCallButtons();
 
@@ -988,19 +988,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mRoom) {
             // send the read receipt
             mRoom.sendReadReceipt(mLatestDisplayedEvent, null);
-
             refreshNotificationsArea();
         }
     }
 
     @Override
     public void onScroll(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (!VectorApp.isAppInBackground()) {
-            Event eventAtBottom = mVectorMessageListFragment.getEvent(firstVisibleItem+visibleItemCount-1);
+        Event eventAtBottom = mVectorMessageListFragment.getEvent(firstVisibleItem+visibleItemCount-1);
 
-            if ((null != eventAtBottom) && ((null == mLatestDisplayedEvent) || !TextUtils.equals(eventAtBottom.eventId, mLatestDisplayedEvent.eventId))) {
-                mLatestDisplayedEvent = eventAtBottom;
+        if ((null != eventAtBottom) && ((null == mLatestDisplayedEvent) || !TextUtils.equals(eventAtBottom.eventId, mLatestDisplayedEvent.eventId))) {
+
+            Log.d(LOG_TAG, "## onScroll firstVisibleItem " + firstVisibleItem + " visibleItemCount " + visibleItemCount + " totalItemCount " + totalItemCount);
+            mLatestDisplayedEvent = eventAtBottom;
+
+            // don't send receive if the app is in background
+            if (!VectorApp.isAppInBackground()) {
                 sendReadReceipt();
+            } else {
+                Log.d(LOG_TAG, "## onScroll : the app is in background");
             }
         }
     }
@@ -1008,6 +1013,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     public void onLatestEventDisplay(boolean isDisplayed) {
         if (isDisplayed != mIsScrolledToTheBottom) {
+
+            Log.d(LOG_TAG, "## onLatestEventDisplay : isDisplayed " + isDisplayed);
+
+            if (isDisplayed && (null != mRoom)) {
+                mLatestDisplayedEvent = mRoom.getDataHandler().getStore().getLatestEvent(mRoom.getRoomId());
+                // ensure that the latest message is displayed
+                mRoom.sendReadReceipt(null);
+            }
+
             mIsScrolledToTheBottom = isDisplayed;
             refreshNotificationsArea();
         }
