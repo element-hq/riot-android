@@ -1684,6 +1684,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
     }
 
+    /**
+     * Init the edited with a provided text
+     * @param text the text
+     */
+    public void initEditText(String text) {
+        mEditText.setText("");
+        mEditText.append(text);
+    }
+
     //================================================================================
     // Notifications area management (... is typing and so on)
     //================================================================================

@@ -300,7 +300,14 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             .show();
                 }
             });
-        } else if ((action == R.id.ic_action_vector_quote) || (action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
+        } else if (action == R.id.ic_action_vector_quote) {
+            Activity attachedActivity = getActivity();
+
+            if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
+                Message message = JsonUtils.toMessage(event.content);
+                ((VectorRoomActivity)attachedActivity).initEditText( "> " + message.body + "\n\n");
+            }
+        } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
             Message message = JsonUtils.toMessage(event.content);
 
@@ -335,11 +342,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 final Intent sendIntent = new Intent();
 
                 sendIntent.setAction(Intent.ACTION_SEND);
-                if (action == R.id.ic_action_vector_quote) {
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "> " + message.body);
-                } else {
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, message.body);
-                }
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message.body);
                 sendIntent.setType("text/plain");
 
                 if ((action == R.id.ic_action_vector_forward) ||(action == R.id.ic_action_vector_quote)) {
