@@ -37,7 +37,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -362,7 +361,6 @@ public class LoginActivity extends MXCActionBarActivity {
         mForgotPasswordButton = (Button) findViewById(R.id.button_reset_password);
         mForgotValidateEmailButton = (Button) findViewById(R.id.button_forgot_email_validate);
 
-        View displayHomeServerUrlView  = findViewById(R.id.display_server_url_layout);
         mHomeServerUrlsLayout = findViewById(R.id.login_matrix_server_options_layout);
         mUseCustomHomeServersCheckbox = (CheckBox)findViewById(R.id.display_server_url_expand_checkbox);
 
@@ -474,7 +472,17 @@ public class LoginActivity extends MXCActionBarActivity {
         mUseCustomHomeServersCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshDisplay();
+                mUseCustomHomeServersCheckbox.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // reset the HS urls.
+                        mHomeServerUrl = null;
+                        mIdentityServerUrl = null;
+                        onIdentityserverUrlUpdate();
+                        onHomeserverUrlUpdate();
+                        refreshDisplay();
+                    }
+                });
             }
         });
 
@@ -575,8 +583,8 @@ public class LoginActivity extends MXCActionBarActivity {
      * Check if the home server url has been updated
      */
     private void onHomeserverUrlUpdate() {
-        if (!TextUtils.equals(mHomeServerUrl, mHomeServerText.getText().toString())) {
-            mHomeServerUrl = mHomeServerText.getText().toString();
+        if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
+            mHomeServerUrl = getHomeServerUrl();
             mRegistrationResponse = null;
 
             // invalidate the current homeserver config
@@ -592,8 +600,8 @@ public class LoginActivity extends MXCActionBarActivity {
      * Check if the identity server url has been updated
      */
     private void onIdentityserverUrlUpdate() {
-        if (!TextUtils.equals(mIdentityServerUrl, mIdentityServerText.getText().toString())) {
-            mIdentityServerUrl = mIdentityServerText.getText().toString();
+        if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
+            mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationResponse = null;
 
             // invalidate the current homeserver config
@@ -610,8 +618,8 @@ public class LoginActivity extends MXCActionBarActivity {
         Log.d(LOG_TAG, "## onResume(): IN");
 
         // retrieve the home server path
-        mHomeServerUrl = mHomeServerText.getText().toString();
-        mIdentityServerUrl = mIdentityServerText.getText().toString();
+        mHomeServerUrl = getHomeServerUrl();
+        mIdentityServerUrl = getIdentityServerUrl();
 
         // check if the login supports the server flows
         checkFlows();
