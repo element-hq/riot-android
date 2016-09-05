@@ -2190,19 +2190,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                 mActionBarHeaderInviteMemberView.setVisibility(View.VISIBLE);
                             } else {
                                 mActionBarHeaderInviteMemberView.setVisibility(View.GONE);
-                                String text;
+                                String text = null;
                                 if (null != sRoomPreviewData) {
                                     if (joinedMembersCount == 1) {
                                         text = getResources().getString(R.string.room_title_one_member);
-                                    } else {
+                                    } else if (joinedMembersCount > 0) {
                                         text = getResources().getString(R.string.room_title_members, joinedMembersCount);
                                     }
                                 } else {
                                     text = getString(R.string.room_header_active_members, activeMembersCount, joinedMembersCount);
                                 }
 
-                                mActionBarHeaderActiveMembers.setText(text);
-                                mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
+                                if (!TextUtils.isEmpty(text)) {
+                                    mActionBarHeaderActiveMembers.setText(text);
+                                    mActionBarHeaderActiveMembers.setVisibility(View.VISIBLE);
+                                } else {
+                                    mActionBarHeaderActiveMembers.setVisibility(View.GONE);
+                                }
                             }
                         } else {
                             mActionBarHeaderActiveMembers.setVisibility(View.GONE);
