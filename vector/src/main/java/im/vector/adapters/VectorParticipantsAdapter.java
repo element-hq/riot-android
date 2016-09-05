@@ -40,6 +40,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -87,6 +88,8 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     private ArrayList<String> mDisplayNamesList = null;
     private String mPattern = "";
     private String mSearchMethod = SEARCH_METHOD_CONTAINS;
+
+    private List<ParticipantAdapterItem> mItemsToHide = new ArrayList<>();
 
     // the participant sort method
     private Comparator<ParticipantAdapterItem> mSortMethod = ParticipantAdapterItem.alphaComparator;
@@ -183,6 +186,11 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                     }
                 }
             }
+        }
+
+        // remove the participant to hide
+        for(ParticipantAdapterItem item : mItemsToHide) {
+            mMemberUserIds.add(item.mUserId);
         }
 
         HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mSession);
@@ -327,6 +335,16 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         setNotifyOnChange(false);
 
         return 0 != itemsToRemove.size();
+    }
+
+    /**
+     * Defines a set of participant items to hide.
+     * @param itemsToHide the set to hide
+     */
+    public void setHiddenParticipantItems(List<ParticipantAdapterItem> itemsToHide) {
+        if (null != itemsToHide) {
+            mItemsToHide = itemsToHide;
+        }
     }
 
     /**

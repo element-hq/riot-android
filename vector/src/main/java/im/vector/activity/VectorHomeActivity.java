@@ -252,8 +252,13 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mRoomCreationFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+                settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                VectorHomeActivity.this.startActivity(settingsIntent);
+
                 // ignore any action if there is a pending one
-                if (View.VISIBLE != mWaitingView.getVisibility()) {
+                /*if (View.VISIBLE != mWaitingView.getVisibility()) {
                     mWaitingView.setVisibility(View.VISIBLE);
 
                     mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
@@ -300,7 +305,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                             onError(e.getLocalizedMessage());
                         }
                     });
-                }
+                }*/
             }
         });
 

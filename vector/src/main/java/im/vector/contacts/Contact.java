@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * A simple contact class
  */
-public class Contact {
+public class Contact implements java.io.Serializable {
 
     private static final String LOG_TAG = "Contact";
 

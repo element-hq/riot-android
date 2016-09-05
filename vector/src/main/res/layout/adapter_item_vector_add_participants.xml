@@ -32,15 +32,28 @@
         android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        
-        <CheckBox
-            android:id="@+id/filtered_list_checkbox"
+
+        <RelativeLayout
+            android:id="@+id/filtered_list_actions_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true">
+
+            <CheckBox
+                android:id="@+id/filtered_list_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/filtered_list_remove_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vector_creation_remove_user"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <im.vector.view.VectorCircularImageView
             android:id="@+id/filtered_list_avatar"
@@ -82,7 +95,7 @@
             android:textSize="16sp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_toLeftOf="@id/filtered_list_checkbox"
+            android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:textColor="@color/vector_21_black"
             android:text="A member name" />
 
@@ -95,7 +108,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:layout_marginRight="16dp"
-            android:layout_toLeftOf="@id/filtered_list_checkbox"
+            android:layout_toLeftOf="@id/filtered_list_actions_list"
             android:textColor="@color/vector_80_gray"
             android:text="A member status" />
 

@@ -29,7 +29,7 @@ import im.vector.contacts.Contact;
 import im.vector.util.VectorUtils;
 
 // Class representing a room participant.
-public class ParticipantAdapterItem {
+public class ParticipantAdapterItem implements java.io.Serializable {
 
     // displayed info
     public String mDisplayName;
