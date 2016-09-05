@@ -639,13 +639,13 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     int retValue;
                     long deltaTimestamp;
 
-                    if((null == aLeftObj) || (null == aLeftObj.getLatestEvent())){
+                    if((null == aLeftObj) || (null == aLeftObj.getLatestReceivedEvent())){
                         retValue = 1;
                     }
-                    else if((null == aRightObj) || (null == aRightObj.getLatestEvent())){
+                    else if((null == aRightObj) || (null == aRightObj.getLatestReceivedEvent())){
                         retValue = -1;
                     }
-                    else if((deltaTimestamp = aRightObj.getLatestEvent().getOriginServerTs() - aLeftObj.getLatestEvent().getOriginServerTs()) > 0) {
+                    else if((deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs()) > 0) {
                         retValue = 1;
                     }
                     else if (deltaTimestamp < 0) {
@@ -878,7 +878,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         roomMsgTxtView.setText(lastMsgToDisplay);
 
         // set the timestamp
-        timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestEvent()));
+        timestampTxtView.setText(getFormattedTimestamp(childRoomSummary.getLatestReceivedEvent()));
         timestampTxtView.setTextColor(vectorDefaultTimeStampColor);
         timestampTxtView.setTypeface(null, Typeface.NORMAL);
 
@@ -1103,8 +1103,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         EventDisplay eventDisplay;
 
         if (null != aChildRoomSummary) {
-            if (aChildRoomSummary.getLatestEvent() != null) {
-                eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestEvent(), aChildRoomSummary.getLatestRoomState());
+            if (aChildRoomSummary.getLatestReceivedEvent() != null) {
+                eventDisplay = new EventDisplay(mContext, aChildRoomSummary.getLatestReceivedEvent(), aChildRoomSummary.getLatestRoomState());
                 eventDisplay.setPrependMessagesWithAuthor(true);
                 messageToDisplayRetValue = eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color));
             }

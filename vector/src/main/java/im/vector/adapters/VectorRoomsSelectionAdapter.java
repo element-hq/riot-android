@@ -107,12 +107,12 @@ public class VectorRoomsSelectionAdapter extends ArrayAdapter<RoomSummary> {
             VectorUtils.loadRoomAvatar(mContext, mSession, avatarImageView, childRoom);
         }
 
-        if (roomSummary.getLatestEvent() != null) {
-            EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestEvent(), roomSummary.getLatestRoomState());
+        if (roomSummary.getLatestReceivedEvent() != null) {
+            EventDisplay eventDisplay = new EventDisplay(mContext, roomSummary.getLatestReceivedEvent(), roomSummary.getLatestRoomState());
             eventDisplay.setPrependMessagesWithAuthor(true);
             roomMessageTxtView.setText(eventDisplay.getTextualDisplay(mContext.getResources().getColor(R.color.vector_text_gray_color)));
 
-            timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestEvent()));
+            timestampTxtView.setText(getFormattedTimestamp(roomSummary.getLatestReceivedEvent()));
             timestampTxtView.setTextColor(mContext.getResources().getColor(R.color.vector_0_54_black_color));
             timestampTxtView.setTypeface(null, Typeface.NORMAL);
             timestampTxtView.setVisibility(View.VISIBLE);

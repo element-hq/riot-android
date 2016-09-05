@@ -1074,7 +1074,7 @@ public class CommonActivityUtils {
                 summary = mStore.getSummary(room.getRoomId());
                 try {
                     // test on the most recent time stamp
-                    if ((null != summary) && ((newServerTimeStamp = summary.getLatestEvent().getOriginServerTs()) > serverTimeStamp)) {
+                    if ((null != summary) && ((newServerTimeStamp = summary.getLatestReceivedEvent().getOriginServerTs()) > serverTimeStamp)) {
                         mostRecentRoomRetValue = room;
                         serverTimeStamp = newServerTimeStamp;
                     }
@@ -1306,15 +1306,15 @@ public class CommonActivityUtils {
         Collections.sort(mergedSummaries, new Comparator<RoomSummary>() {
             @Override
             public int compare(RoomSummary lhs, RoomSummary rhs) {
-                if (lhs == null || lhs.getLatestEvent() == null) {
+                if (lhs == null || lhs.getLatestReceivedEvent() == null) {
                     return 1;
-                } else if (rhs == null || rhs.getLatestEvent() == null) {
+                } else if (rhs == null || rhs.getLatestReceivedEvent() == null) {
                     return -1;
                 }
 
-                if (lhs.getLatestEvent().getOriginServerTs() > rhs.getLatestEvent().getOriginServerTs()) {
+                if (lhs.getLatestReceivedEvent().getOriginServerTs() > rhs.getLatestReceivedEvent().getOriginServerTs()) {
                     return -1;
-                } else if (lhs.getLatestEvent().getOriginServerTs() < rhs.getLatestEvent().getOriginServerTs()) {
+                } else if (lhs.getLatestReceivedEvent().getOriginServerTs() < rhs.getLatestReceivedEvent().getOriginServerTs()) {
                     return 1;
                 }
                 return 0;

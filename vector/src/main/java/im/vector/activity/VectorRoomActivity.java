@@ -193,7 +193,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private ImageView mNotificationIconImageView;
     private TextView mNotificationTextView;
     private String mLatestTypingMessage;
-    private boolean mIsScrolledToTheBottom;
+    private Boolean mIsScrolledToTheBottom;
     private Event mLatestDisplayedEvent; // the event at the bottom of the list
 
     // room preview
@@ -1012,8 +1012,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     @Override
     public void onLatestEventDisplay(boolean isDisplayed) {
-        if (isDisplayed != mIsScrolledToTheBottom) {
-
+        // not yet initialized or a new value
+        if ((null == mIsScrolledToTheBottom) || (isDisplayed != mIsScrolledToTheBottom)) {
             Log.d(LOG_TAG, "## onLatestEventDisplay : isDisplayed " + isDisplayed);
 
             if (isDisplayed && (null != mRoom)) {
@@ -1762,7 +1762,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         refreshNotificationsArea();
                     }
                 });
-            } else if (!mIsScrolledToTheBottom) {
+            } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 isAreaVisible = true;
 
                 int unreadCount = 0;
@@ -1770,7 +1770,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 RoomSummary summary = mRoom.getDataHandler().getStore().getSummary(mRoom.getRoomId());
 
                 if (null != summary) {
-                    unreadCount = mRoom.getDataHandler().getStore().eventsCountAfter(mRoom.getRoomId(), summary.getReadReceiptToken());
+                    unreadCount = mRoom.getDataHandler().getStore().eventsCountAfter(mRoom.getRoomId(), summary.getLatestReadEventId());
                 }
 
                 if (unreadCount > 0) {
