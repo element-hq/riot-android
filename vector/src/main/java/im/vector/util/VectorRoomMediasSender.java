@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.db.MXMediasCache;
+import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.File;
@@ -289,7 +290,7 @@ public class VectorRoomMediasSender {
         mVectorRoomActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mVectorRoomActivity.sendMessage(fText, fHtmlText, "org.matrix.custom.html");
+                mVectorRoomActivity.sendMessage(fText, fHtmlText, Message.FORMAT_MATRIX_HTML);
             }
         });
 
