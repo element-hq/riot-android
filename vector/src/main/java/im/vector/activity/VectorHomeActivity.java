@@ -16,7 +16,6 @@
 
 package im.vector.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,9 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -815,7 +812,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     }
 
-    public void stopWaitingView(){
+    /**
+     * Hide the waiting view?
+     */
+    private void stopWaitingView(){
         if(null != mWaitingView){
             mWaitingView.setVisibility(View.GONE);
         }
@@ -1050,7 +1050,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // hide the view
                         mVectorPendingCallView.checkPendingCall();
                         // clear call in progress notification
-                        EventStreamService.getInstance().checkDisplayedNotification();
+                        EventStreamService.checkDisplayedNotification();
                         // and play a lovely sound
                         VectorCallSoundManager.startEndCallSound();
                     }

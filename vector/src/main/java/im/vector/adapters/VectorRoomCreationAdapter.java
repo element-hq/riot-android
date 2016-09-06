@@ -37,7 +37,7 @@ import im.vector.R;
 import im.vector.util.VectorUtils;
 
 /**
- * This class displays a list of members
+ * This class displays a list of members to create a room.
  */
 public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterItem> {
 
@@ -64,7 +64,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     private final int mAddMemberLayoutResourceId;
 
     // members list display names
-    private ArrayList<String> mDisplayNamesList = new ArrayList<>();
+    private final ArrayList<String> mDisplayNamesList = new ArrayList<>();
 
     // the events listener
     private IRoomCreationAdapterListener mRoomCreationAdapterListener;
@@ -90,7 +90,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
 
-        // list the names to concat user id if several users have the same displayname
+        // list the names to concat user id if several users have the same display name
         mDisplayNamesList.clear();
 
         for(int i = 0; i < getCount(); i++) {
@@ -189,10 +189,10 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
 
-        final View removePartipantImageView = convertView.findViewById(R.id.filtered_list_remove_button);
-        removePartipantImageView.setVisibility(View.VISIBLE);
+        final View removeParticipantImageView = convertView.findViewById(R.id.filtered_list_remove_button);
+        removeParticipantImageView.setVisibility(View.VISIBLE);
 
-        removePartipantImageView.setOnClickListener(new View.OnClickListener() {
+        removeParticipantImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mRoomCreationAdapterListener) {

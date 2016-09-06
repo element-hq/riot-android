@@ -211,39 +211,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     }
 
     /**
-     * Test if a room member fields matches with a regex
-     * The check is done with the displayname and the userId.
-     * @param aRegEx the pattern to search.
-     * @return true if it matches.
-     */
-    public boolean matchWithRegEx(String aRegEx) {
-
-        if (TextUtils.isEmpty(aRegEx)) {
-            return false;
-        }
-
-        boolean res = false;
-
-        if (/*!res &&*/ !TextUtils.isEmpty(mDisplayName)) {
-            res = mDisplayName.matches(aRegEx);
-        }
-
-        if (!res && !TextUtils.isEmpty(mUserId)) {
-            res = mUserId.matches(aRegEx);
-        }
-
-        if (!res && (null != mRoomMember)) {
-            res = mRoomMember.matchWithRegEx(aRegEx);
-        }
-
-        if (!res && (null != mContact)) {
-            res = mContact.matchWithRegEx(aRegEx);
-        }
-
-        return res;
-    }
-
-    /**
      * Tell whether a component of the displayName, or one of his matrix id/email has the provided prefix.
      * @param prefix the prefix
      * @return true if one item matched

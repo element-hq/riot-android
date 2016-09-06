@@ -35,7 +35,6 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -52,13 +51,16 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // participants list
     private static String PARTICIPANTS_LIST = "PARTICIPANTS_LIST";
 
-    ListView mMembersListView;
-    VectorRoomCreationAdapter mAdapter;
-    View mSpinnerView;
+    //
+    private static final int INVITE_USER_REQUEST_CODE = 456;
 
-    ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
+    // UI items
+    private ListView mMembersListView;
+    private VectorRoomCreationAdapter mAdapter;
+    private View mSpinnerView;
 
-    private static final int INVITE_USER_REQUEST_CODE = 777;
+    // displayed participants
+    private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
