@@ -18,18 +18,22 @@ package im.vector.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.widget.ImageView;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import im.vector.contacts.Contact;
 import im.vector.util.VectorUtils;
 
 // Class representing a room participant.
-public class ParticipantAdapterItem {
+public class ParticipantAdapterItem implements java.io.Serializable {
 
     // displayed info
     public String mDisplayName;
@@ -207,39 +211,6 @@ public class ParticipantAdapterItem {
     }
 
     /**
-     * Test if a room member fields matches with a regex
-     * The check is done with the displayname and the userId.
-     * @param aRegEx the pattern to search.
-     * @return true if it matches.
-     */
-    public boolean matchWithRegEx(String aRegEx) {
-
-        if (TextUtils.isEmpty(aRegEx)) {
-            return false;
-        }
-
-        boolean res = false;
-
-        if (/*!res &&*/ !TextUtils.isEmpty(mDisplayName)) {
-            res = mDisplayName.matches(aRegEx);
-        }
-
-        if (!res && !TextUtils.isEmpty(mUserId)) {
-            res = mUserId.matches(aRegEx);
-        }
-
-        if (!res && (null != mRoomMember)) {
-            res = mRoomMember.matchWithRegEx(aRegEx);
-        }
-
-        if (!res && (null != mContact)) {
-            res = mContact.matchWithRegEx(aRegEx);
-        }
-
-        return res;
-    }
-
-    /**
      * Tell whether a component of the displayName, or one of his matrix id/email has the provided prefix.
      * @param prefix the prefix
      * @return true if one item matched
@@ -278,5 +249,88 @@ public class ParticipantAdapterItem {
         }
 
         return (null != mContact ) && mContact.startsWith(prefix);
+    }
+
+    /**
+     * Init an imageView with the avatar.
+     * @param session the session
+     * @param imageView the imageView
+     */
+    public void displayAvatar(MXSession session, ImageView imageView) {
+        // set the
+        if (null != mAvatarBitmap) {
+            imageView.setImageBitmap(mAvatarBitmap);
+        } else {
+            if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches())) {
+                imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mUserId), "@@", true));
+            } else {
+                if (TextUtils.isEmpty(mUserId)) {
+                    VectorUtils.loadUserAvatar(imageView.getContext(), session, imageView, mAvatarUrl, mDisplayName, mDisplayName);
+                } else {
+
+                    // try to provide a better display for a participant when the user is known.
+                    if (TextUtils.equals(mUserId, mDisplayName) || TextUtils.isEmpty(mAvatarUrl)) {
+                        IMXStore store = session.getDataHandler().getStore();
+
+                        if (null != store) {
+                            User user = store.getUser(mUserId);
+
+                            if (null != user) {
+                                if (TextUtils.equals(mUserId, mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
+                                    mDisplayName = user.displayname;
+                                }
+
+                                if (null == mAvatarUrl) {
+                                    mAvatarUrl = user.avatar_url;
+                                }
+                            }
+                        }
+                    }
+
+                    VectorUtils.loadUserAvatar(imageView.getContext(), session, imageView, mAvatarUrl, mUserId, mDisplayName);
+                }
+            }
+        }
+    }
+
+    /**
+     * Compute an unique display name.
+     * @param otherDisplayNames the other display names.
+     * @return an unique display name
+     */
+    public String getUniqueDisplayName(List<String> otherDisplayNames) {
+        boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches();
+
+        // set the display name
+        String displayname = mDisplayName;
+        String lowerCaseDisplayname = displayname.toLowerCase();
+
+        // detect if the username is used by several users
+        int pos = -1;
+
+        if (null != otherDisplayNames) {
+            pos = otherDisplayNames.indexOf(lowerCaseDisplayname);
+
+            if (pos >= 0) {
+                if (pos == otherDisplayNames.lastIndexOf(lowerCaseDisplayname)) {
+                    pos = -1;
+                }
+            }
+        }
+
+        if ((pos >= 0) && isMatrixUserId) {
+            displayname += " (" + mUserId + ")";
+        }
+
+        // if a contact has a matrix id
+        // display the matched email address in the display name
+        if ((null != mContact) && isMatrixUserId) {
+            String firstEmail = mContact.getEmails().get(0);
+
+            if (!TextUtils.equals(displayname, firstEmail)) {
+                displayname += " (" + firstEmail + ")";
+            }
+        }
+        return displayname;
     }
 }

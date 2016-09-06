@@ -29,7 +29,9 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -46,7 +48,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     // search in the room
     public static final String EXTRA_ROOM_ID = "VectorInviteMembersActivity.EXTRA_ROOM_ID";
+    public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
     public static final String EXTRA_SELECTED_USER_ID =  "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
+    public static final String EXTRA_SELECTED_PARTICIPANT_ITEM =  "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
 
     // account data
     private String mMatrixId;
@@ -56,7 +60,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private ImageView mBackgroundImageView;
     private View mNoResultView;
     private View mLoadingView;
+    private List<ParticipantAdapterItem> mPartipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
+
 
     // retrieve a matrix Id from an email
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
@@ -119,12 +125,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         Intent intent = getIntent();
 
-        if (!intent.hasExtra(EXTRA_ROOM_ID)) {
-            Log.e(LOG_TAG, "No room ID extra.");
-            finish();
-            return;
-        }
-
         if (intent.hasExtra(EXTRA_MATRIX_ID)) {
             mMatrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
         }
@@ -134,6 +134,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         if (null == mSession) {
             finish();
             return;
+        }
+
+        if (intent.hasExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS)) {
+            mPartipantItems = (List<ParticipantAdapterItem>)intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -151,6 +155,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         mListView = (ListView) findViewById(R.id.room_details_members_list);
         mAdapter = new VectorParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, roomId);
+
+        mAdapter.setHiddenParticipantItems(mPartipantItems);
 
         mAdapter.setSortMethod(new Comparator<ParticipantAdapterItem>() {
             /**
@@ -233,6 +239,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 // returns the selected user
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_SELECTED_USER_ID, mAdapter.getItem(position).mUserId);
+                intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, mAdapter.getItem(position));
+
                 setResult(RESULT_OK, intent);
                 finish();
             }

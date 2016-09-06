@@ -428,11 +428,13 @@
     <string name="room_creation_make_public_prompt_msg">Are you sure you want to make this chat public? Anyone can read your messages and join the chat.</string>
     <string name="room_creation_keep_private">Keep private</string>
     <string name="room_creation_make_private">Make private</string>
+    <string name="room_creation_add_member">Add member</string>
     <string name="room_creation_name_mobile_email">name, mobile or email</string>
     <string name="room_header_active_members">%1$d/%2$d active members</string>
     <string name="room_header_invite_members">Invite members</string>
     <string name="room_title_members">%1$d members</string>
     <string name="room_title_one_member">1 member</string>
+
 
     <!--  Time -->
     <string name="format_time_s">s</string>
@@ -573,6 +575,8 @@
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
+    <string name="room_recents_select_people">Select people</string>
+    <string name="room_recents_create_room">Create room</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>

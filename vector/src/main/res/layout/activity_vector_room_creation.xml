@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/room_creation_members_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/bright_foreground_material_light"
+        android:dividerHeight="1px" />
+
+    <FrameLayout
+        android:id="@+id/room_creation_spinner_views"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/chat_encoding_background">
+        <ProgressBar
+            android:id="@+id/listView_spinner"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="visible"/>
+    </FrameLayout>
+
+</FrameLayout>

@@ -16,7 +16,6 @@
 
 package im.vector.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,9 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -256,50 +253,71 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 if (View.VISIBLE != mWaitingView.getVisibility()) {
                     mWaitingView.setVisibility(View.VISIBLE);
 
-                    mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                    Context context = VectorHomeActivity.this;
+
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_select_people), context.getString(R.string.room_recents_create_room)};
+                    dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+
                         @Override
-                        public void onSuccess(final String roomId) {
-                            mWaitingView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mWaitingView.setVisibility(View.GONE);
+                        public void onClick(DialogInterface d, int n) {
+                            d.cancel();
 
-                                    HashMap<String, Object> params = new HashMap<>();
-                                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                                    params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
-                                    CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
-                                }
-                            });
-                        }
+                            if (0 == n) {
+                                final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+                                settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                VectorHomeActivity.this.startActivity(settingsIntent);
+                            } else {
+                                mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                                    @Override
+                                    public void onSuccess(final String roomId) {
+                                        mWaitingView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mWaitingView.setVisibility(View.GONE);
 
-                        private void onError(final String message) {
-                            mWaitingView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (null != message) {
-                                        Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                                HashMap<String, Object> params = new HashMap<>();
+                                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                                                params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                                                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                                            }
+                                        });
                                     }
-                                    mWaitingView.setVisibility(View.GONE);
-                                }
-                            });
-                        }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onError(e.getLocalizedMessage());
-                        }
+                                    private void onError(final String message) {
+                                        mWaitingView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (null != message) {
+                                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                                                }
+                                                mWaitingView.setVisibility(View.GONE);
+                                            }
+                                        });
+                                    }
 
-                        @Override
-                        public void onMatrixError(final MatrixError e) {
-                            onError(e.getLocalizedMessage());
-                        }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
 
-                        @Override
-                        public void onUnexpectedError(final Exception e) {
-                            onError(e.getLocalizedMessage());
+                                    @Override
+                                    public void onMatrixError(final MatrixError e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+
+                                    @Override
+                                    public void onUnexpectedError(final Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
                         }
                     });
+                    dialog.setNegativeButton(R.string.cancel, null);
+                    dialog.show();
+
                 }
             }
         });
@@ -794,7 +812,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         }
     }
 
-    public void stopWaitingView(){
+    /**
+     * Hide the waiting view?
+     */
+    private void stopWaitingView(){
         if(null != mWaitingView){
             mWaitingView.setVisibility(View.GONE);
         }
@@ -1029,7 +1050,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // hide the view
                         mVectorPendingCallView.checkPendingCall();
                         // clear call in progress notification
-                        EventStreamService.getInstance().checkDisplayedNotification();
+                        EventStreamService.checkDisplayedNotification();
                         // and play a lovely sound
                         VectorCallSoundManager.startEndCallSound();
                     }
