@@ -17,6 +17,7 @@
 package im.vector.util;
 
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -499,6 +500,11 @@ public class SharedDataItem implements Parcelable {
                             mimetype = mimetypes.get(i);
                         } else {
                             mimetype = mimetypes.get(0);
+                        }
+
+                        // uris list is not a valid mimetype
+                        if (TextUtils.equals(mimetype, ClipDescription.MIMETYPE_TEXT_URILIST)) {
+                            mimetype = null;
                         }
                     }
 
