@@ -251,8 +251,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             public void onClick(View v) {
                 // ignore any action if there is a pending one
                 if (View.VISIBLE != mWaitingView.getVisibility()) {
-                    mWaitingView.setVisibility(View.VISIBLE);
-
                     Context context = VectorHomeActivity.this;
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -268,6 +266,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                                 settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                                 VectorHomeActivity.this.startActivity(settingsIntent);
                             } else {
+                                mWaitingView.setVisibility(View.VISIBLE);
                                 mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
                                     @Override
                                     public void onSuccess(final String roomId) {
