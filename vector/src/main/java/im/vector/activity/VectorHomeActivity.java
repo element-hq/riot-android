@@ -574,7 +574,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mSession.getDataHandler().addListener(mEventsListener);
         }
 
-        mRoomCreationFab.show();
+        if (null != mRoomCreationFab) {
+            mRoomCreationFab.show();
+        }
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -943,7 +945,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 mRoomCreationViewTimer.cancel();
             }
 
-            mRoomCreationFab.hide();
+            if (null != mRoomCreationFab) {
+                mRoomCreationFab.hide();
+            }
 
             mRoomCreationViewTimer = new Timer();
             mRoomCreationViewTimer.schedule(new TimerTask() {
@@ -957,7 +961,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     VectorHomeActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mRoomCreationFab.show();
+                            if (null != mRoomCreationFab) {
+                                mRoomCreationFab.show();
+                            }
                         }
                     });
                 }
@@ -998,7 +1004,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // warn when the list content can be fully displayed without scrolling
     @Override
     public void onRecentsListFitsScreen() {
-        if (!mRoomCreationFab.isShown()) {
+        if ((null != mRoomCreationFab) && !mRoomCreationFab.isShown()) {
             mRoomCreationFab.show();
         }
     }
