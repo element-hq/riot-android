@@ -44,7 +44,9 @@
     <string name="report_content">Report content</string>
     <string name="decline">Decline</string>
     <string name="active_call">Active call</string>
-    <string name="ongoing_conference_call">Ongoing conference call</string>
+    <string name="ongoing_conference_call"> Ongoing conference call. Join as voice or video.</string>
+    <string name="ongoing_conference_call_voice">voice</string>
+    <string name="ongoing_conference_call_video">video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="room_url">Room URL</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>

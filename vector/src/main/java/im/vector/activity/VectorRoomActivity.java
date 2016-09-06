@@ -746,10 +746,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
 
         mVectorOngoingConferenceCallView.initRoomInfo(mSession, mRoom);
-        mVectorOngoingConferenceCallView.setOnClickListener(new View.OnClickListener() {
+        mVectorOngoingConferenceCallView.setCallClickListener(new VectorOngoingConferenceCallView.ICallClickListener() {
+
+            private void startCall(boolean isVideo) {
+                if (CommonActivityUtils.checkPermissions(isVideo ? CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL : CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL,
+                        VectorRoomActivity.this)) {
+                    startIpCall(isVideo);
+                }
+            }
+
             @Override
-            public void onClick(View v) {
-                displayVideoCallIpDialog();
+            public void onVoiceCallClick() {
+                startCall(false);
+            }
+
+            @Override
+            public void onVideoCallClick() {
+                startCall(true);
             }
         });
 
