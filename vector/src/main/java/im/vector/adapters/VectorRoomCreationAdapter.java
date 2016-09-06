@@ -16,8 +16,6 @@
 
 package im.vector.adapters;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,23 +27,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.IMXStore;
-import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.contacts.Contact;
-import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -71,10 +59,11 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     // account info
     private final MXSession mSession;
 
-    // used layout
-    private final int mLayoutResourceId;
+    // used layouts
+    private final int mMemberLayoutResourceId;
+    private final int mAddMemberLayoutResourceId;
 
-    // members list displaynames
+    // members list display names
     private ArrayList<String> mDisplayNamesList = new ArrayList<>();
 
     // the events listener
@@ -83,15 +72,17 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     /**
      * Create a room creation adapter.
      * @param context the context.
-     * @param layoutResourceId the layout.
+     * @param addMemberLayoutResourceId the add member layout.
+     * @param memberLayoutResourceId the member layout id
      * @param session the session.
      */
-    public VectorRoomCreationAdapter(Context context, int layoutResourceId, MXSession session) {
-        super(context, layoutResourceId);
+    public VectorRoomCreationAdapter(Context context, int addMemberLayoutResourceId, int memberLayoutResourceId, MXSession session) {
+        super(context, memberLayoutResourceId);
 
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        mLayoutResourceId = layoutResourceId;
+        mAddMemberLayoutResourceId = addMemberLayoutResourceId;
+        mMemberLayoutResourceId = memberLayoutResourceId;
         mSession = session;
     }
 
@@ -99,6 +90,7 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
 
+        // list the names to concat user id if several users have the same displayname
         mDisplayNamesList.clear();
 
         for(int i = 0; i < getCount(); i++) {
@@ -119,9 +111,28 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
     }
 
     @Override
+    public int getViewTypeCount() {
+        // add member section and member
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (0 == position) ? 0 : 1;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (0 == position) {
+            if (convertView == null) {
+                convertView = mLayoutInflater.inflate(mAddMemberLayoutResourceId, parent, false);
+            }
+
+            return convertView;
+        }
+
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
+            convertView = mLayoutInflater.inflate(mMemberLayoutResourceId, parent, false);
         }
 
         final ParticipantAdapterItem participant = getItem(position);
@@ -132,71 +143,11 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
         final ImageView matrixUserBadge =  (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
 
-        // set the avatar
-        if (null != participant.mAvatarBitmap) {
-            thumbView.setImageBitmap(participant.mAvatarBitmap);
-        } else {
-             if ((null != participant.mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches())) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(participant.mUserId), "@@", true));
-            } else {
-                if (TextUtils.isEmpty(participant.mUserId)) {
-                    VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
-                } else {
+        // display the avatar
+        participant.displayAvatar(mSession, thumbView);
 
-                    // try to provide a better display for a participant when the user is known.
-                    if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
-                        IMXStore store = mSession.getDataHandler().getStore();
-
-                        if (null != store) {
-                            User user = store.getUser(participant.mUserId);
-
-                            if (null != user) {
-                                if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
-                                    participant.mDisplayName = user.displayname;
-                                }
-
-                                if (null == participant.mAvatarUrl) {
-                                    participant.mAvatarUrl = user.avatar_url;
-                                }
-                            }
-                        }
-                    }
-
-                    VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
-                }
-            }
-        }
-
-        boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
-
-        // set the display name
-        String displayname = participant.mDisplayName;
-        String lowerCaseDisplayname = displayname.toLowerCase();
-
-        // detect if the username is used by several users
-        int pos = mDisplayNamesList.indexOf(lowerCaseDisplayname);
-
-        if (pos >= 0) {
-            if (pos == mDisplayNamesList.lastIndexOf(lowerCaseDisplayname)) {
-                pos = -1;
-            }
-        }
-
-        if ((pos >= 0) && isMatrixUserId) {
-            displayname += " (" + participant.mUserId + ")";
-        }
-
-        // if a contact has a matrix id
-        // display the matched email address in the display name
-        if ((null != participant.mContact) && isMatrixUserId) {
-            String firstEmail = participant.mContact.getEmails().get(0);
-
-            if (!TextUtils.equals(displayname, firstEmail)) {
-                displayname += " (" +  firstEmail + ")";
-            }
-        }
-
-        nameTextView.setText(displayname);
+        // the display name
+        nameTextView.setText(participant.getUniqueDisplayName(mDisplayNamesList));
 
         // set the presence
         String status = "";
@@ -225,6 +176,8 @@ public class VectorRoomCreationAdapter extends ArrayAdapter<ParticipantAdapterIt
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
         if (participant.mContact != null) {
             statusTextView.setText(participant.mUserId);
+
+            boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
         }
         else {

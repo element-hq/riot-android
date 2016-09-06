@@ -479,73 +479,10 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
         final ImageView matrixUserBadge =  (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
 
-        // set the avatar
-        if (null != participant.mAvatarBitmap) {
-            thumbView.setImageBitmap(participant.mAvatarBitmap);
-        } else {
-            if ((null != mFirstEntry) && (position == 0)) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(null), "@@", true));
-            } else if ((null != participant.mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches())) {
-                thumbView.setImageBitmap(VectorUtils.getAvatar(thumbView.getContext(), VectorUtils.getAvatarColor(participant.mUserId), "@@", true));
-            } else {
-                if (TextUtils.isEmpty(participant.mUserId)) {
-                    VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);
-                } else {
+        // display the avatar
+        participant.displayAvatar(mSession, thumbView);
 
-                    // try to provide a better display for a participant when the user is known.
-                    if (TextUtils.equals(participant.mUserId, participant.mDisplayName) || TextUtils.isEmpty(participant.mAvatarUrl)) {
-                        IMXStore store = mSession.getDataHandler().getStore();
-
-                        if (null != store) {
-                            User user = store.getUser(participant.mUserId);
-
-                            if (null != user) {
-                                if (TextUtils.equals(participant.mUserId, participant.mDisplayName) && !TextUtils.isEmpty(user.displayname)) {
-                                    participant.mDisplayName = user.displayname;
-                                }
-
-                                if (null == participant.mAvatarUrl) {
-                                    participant.mAvatarUrl = user.avatar_url;
-                                }
-                            }
-                        }
-                    }
-
-                    VectorUtils.loadUserAvatar(mContext, mSession, thumbView, participant.mAvatarUrl, participant.mUserId, participant.mDisplayName);
-                }
-            }
-        }
-
-        boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
-
-        // set the display name
-        String displayname = participant.mDisplayName;
-        String lowerCaseDisplayname = displayname.toLowerCase();
-
-        // detect if the username is used by several users
-        int pos = mDisplayNamesList.indexOf(lowerCaseDisplayname);
-
-        if (pos >= 0) {
-            if (pos == mDisplayNamesList.lastIndexOf(lowerCaseDisplayname)) {
-                pos = -1;
-            }
-        }
-
-        if ((pos >= 0) && isMatrixUserId) {
-            displayname += " (" + participant.mUserId + ")";
-        }
-
-        // if a contact has a matrix id
-        // display the matched email address in the display name
-        if ((null != participant.mContact) && isMatrixUserId) {
-            String firstEmail = participant.mContact.getEmails().get(0);
-
-            if (!TextUtils.equals(displayname, firstEmail)) {
-                displayname += " (" +  firstEmail + ")";
-            }
-        }
-
-        nameTextView.setText(displayname);
+        nameTextView.setText(participant.getUniqueDisplayName(mDisplayNamesList));
 
         // set the presence
         String status = "";
@@ -578,6 +515,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
         if (participant.mContact != null) {
             statusTextView.setText(participant.mUserId);
+            boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
         }
         else {
