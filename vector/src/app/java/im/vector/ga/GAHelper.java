@@ -115,6 +115,24 @@ public class GAHelper {
                     b.append("Vector Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
                     b.append("SDK Version : " + VectorApp.SDK_VERSION_STRING + "\n");
                     b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
+
+                    b.append("Memory statuses \n");
+
+                    long freeSize = 0L;
+                    long totalSize = 0L;
+                    long usedSize = -1L;
+                    try {
+                        Runtime info = Runtime.getRuntime();
+                        freeSize = info.freeMemory();
+                        totalSize = info.totalMemory();
+                        usedSize = totalSize - freeSize;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    b.append("usedSize   " + (usedSize / 1048576L) + " MB\n");
+                    b.append("freeSize   " + (freeSize / 1048576L) + " MB\n");
+                    b.append("totalSize   " + (totalSize / 1048576L) + " MB\n)";
+                    
                     b.append("Thread: ");
                     b.append(threadName);
 
