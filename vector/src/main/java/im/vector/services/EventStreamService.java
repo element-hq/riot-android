@@ -469,6 +469,11 @@ public class EventStreamService extends Service {
         mActiveEventStreamService = this;
 
         for(MXSession session : mSessions) {
+            if (null == session.getDataHandler()) {
+                Log.e(LOG_TAG, "start : the session is not anymore valid.");
+                return;
+            }
+
             session.getDataHandler().addListener(mEventsListener);
             session.getDataHandler().getCallsManager().addListener(mCallsManagerListener);
             final IMXStore store = session.getDataHandler().getStore();
