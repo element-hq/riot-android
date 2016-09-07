@@ -1348,7 +1348,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     public void sendMessage(String body, String formattedBody, String format) {
         if (!TextUtils.isEmpty(body)) {
-            if (!SlashComandsParser.manageSplashCommand(this, mSession, mRoom, body)) {
+            if (!SlashComandsParser.manageSplashCommand(this, mSession, mRoom, body, formattedBody, format)) {
                 cancelSelectionMode();
                 mVectorMessageListFragment.sendTextMessage(body, formattedBody, format);
             }
@@ -1359,9 +1359,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Send an emote in the opened room
      * @param emote the emote
      */
-    public void sendEmote(String emote) {
+    public void sendEmote(String emote, String formattedEmote, String format) {
         if (null != mVectorMessageListFragment) {
-            mVectorMessageListFragment.sendEmote(emote);
+            mVectorMessageListFragment.sendEmote(emote, formattedEmote, format);
         }
     }
 

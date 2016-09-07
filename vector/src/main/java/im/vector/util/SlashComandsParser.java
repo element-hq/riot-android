@@ -60,9 +60,11 @@ public class SlashComandsParser {
      * @param session the session
      * @param room the room
      * @param message the text message
+     * @param formattedBody the formatted message
+     * @param format the message format
      * @return true if it is a splash command
      */
-    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String message) {
+    public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String message, final String formattedBody, final String format) {
         boolean isIRCCmd = false;
 
         // sanity checks
@@ -114,7 +116,11 @@ public class SlashComandsParser {
                 String newMessage = message.substring(CMD_EMOTE.length()).trim();
 
                 if (message.length() > 0) {
-                    activity.sendEmote(newMessage);
+                    if ((null != formattedBody) && formattedBody.length() > CMD_EMOTE.length()) {
+                        activity.sendEmote(newMessage, formattedBody.substring(CMD_EMOTE.length()), format);
+                    } else {
+                        activity.sendEmote(newMessage, formattedBody, format);
+                    }
                 }
             } else if (message.startsWith(CMD_JOIN_ROOM)) {
                 isIRCCmd = true;
