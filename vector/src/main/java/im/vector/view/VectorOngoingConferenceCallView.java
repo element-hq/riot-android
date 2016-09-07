@@ -19,8 +19,14 @@ package im.vector.view;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,14 +45,32 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.w3c.dom.Text;
+import org.w3c.dom.ls.LSOutput;
 
 /**
  * This class displays if there is an ongoing conference call.
  */
 public class VectorOngoingConferenceCallView extends RelativeLayout {
+    private static final String LOG_TAG = "OngConferenceCallView";
+
+    // video / voice text click listener.
+    public interface ICallClickListener {
+        /**
+         * The user clicks on the voice text.
+         */
+        void onVoiceCallClick();
+
+        /**
+         * The user clicks on the video text.
+         */
+        void onVideoCallClick();
+    };
+
     // call information
     private MXSession mSession;
     private Room mRoom;
+
+    private ICallClickListener mCallClickListener;
 
     private final MXCallsManager.MXCallsManagerListener mCallsListener = new MXCallsManager.MXCallsManagerListener() {
         @Override
@@ -97,6 +121,52 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     private void initView() {
         View.inflate(getContext(), R.layout.vector_ongoing_conference_call, this);
+
+        TextView textView = (TextView) findViewById(R.id.ongoing_conference_call_text_view);
+        ClickableSpan voiceClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                if (null != mCallClickListener) {
+                    try {
+                        mCallClickListener.onVoiceCallClick();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## initView() : onVoiceCallClick failed " + e.getMessage());
+                    }
+                }
+            }
+        };
+
+        ClickableSpan videoClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                if (null != mCallClickListener) {
+                    try {
+                        mCallClickListener.onVideoCallClick();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## initView() : onVideoCallClick failed " + e.getMessage());
+                    }
+                }
+            }
+        };
+
+        SpannableString ss = new SpannableString(textView.getText());
+        
+        // "voice" and "video" texts are underlined
+        // and clickable
+        String voiceString = getContext().getString(R.string.ongoing_conference_call_voice);
+        int pos = ss.toString().indexOf(voiceString);
+
+        ss.setSpan(voiceClickableSpan, pos, pos + voiceString.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new UnderlineSpan(), pos, pos + voiceString.length(), 0);
+
+        String videoString = getContext().getString(R.string.ongoing_conference_call_video);
+        pos = ss.toString().indexOf(videoString);
+
+        ss.setSpan(videoClickableSpan, pos, pos + videoString.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new UnderlineSpan(), pos, pos + videoString.length(), 0);
+
+        textView.setText(ss);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     /**
@@ -107,6 +177,14 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
     public void initRoomInfo(MXSession session, Room room) {
         mSession = session;
         mRoom = room;
+    }
+
+    /**
+     * Set a call click listener
+     * @param callClickListener the new call listener
+     */
+    public void setCallClickListener(ICallClickListener callClickListener) {
+        mCallClickListener = callClickListener;
     }
 
     /**
