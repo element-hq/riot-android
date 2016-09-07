@@ -223,6 +223,11 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
         // test first the display name
         if (!TextUtils.isEmpty(mDisplayName)) {
+            // test if it matches without splitting the string.
+            if ((null != mLowerCaseDisplayName) && mLowerCaseDisplayName.startsWith(prefix)) {
+                return true;
+            }
+
             // build the components list
             if (null == mDisplayNameComponents) {
                 String[] componentsArrays = mDisplayName.split(" ");
@@ -248,7 +253,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
             return true;
         }
 
-        return (null != mContact ) && mContact.startsWith(prefix);
+        return (null != mContact) && mContact.startsWith(prefix);
     }
 
     /**
