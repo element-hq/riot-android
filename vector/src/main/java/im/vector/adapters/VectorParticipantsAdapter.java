@@ -34,6 +34,7 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +61,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     public interface OnParticipantsSearchListener {
         /**
          * The search is ended.
+         *
          * @param count the number of matched user
          */
         void onSearchEnd(int count);
@@ -89,6 +91,10 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     private String mPattern = "";
     private String mSearchMethod = SEARCH_METHOD_CONTAINS;
 
+    // display the private rooms participants
+    private Comparator<ParticipantAdapterItem> mPrepopulationSortMethod;
+    private Collection<ParticipantAdapterItem> mPrivateRoomsParticipants = null;
+
     private List<ParticipantAdapterItem> mItemsToHide = new ArrayList<>();
 
     // the participant sort method
@@ -101,10 +107,11 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
      * Create a room member adapter.
      * If a room id is defined, the adapter is in edition mode : the user can add / remove dynamically members or leave the room.
      * If there is none, the room is in creation mode : the user can add/remove members to create a new room.
-     * @param context the context.
+     *
+     * @param context          the context.
      * @param layoutResourceId the layout.
-     * @param session the session.
-     * @param roomId the room id.
+     * @param session          the session.
+     * @param roomId           the room id.
      */
     public VectorParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId) {
         super(context, layoutResourceId);
@@ -119,12 +126,23 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
 
     /**
      * Search a pattern in the known members list.
-     * @param pattern the pattern to search
-     * @param searchMethod the search method
+     *
+     * @param pattern        the pattern to search
+     * @param searchMethod   the search method
      * @param searchListener the search result listener
      */
     public void setSearchedPattern(String pattern, String searchMethod, final OnParticipantsSearchListener searchListener) {
         setSearchedPattern(pattern, searchMethod, null, searchListener);
+    }
+
+    /**
+     * Set the pre-population sort method.
+     * If a method is defined, it implies that the prepopulation is enabled
+     * i.e. the private rooms members are displayed when there is no pattern to searcj.
+     * @param sortMethod the sort method.
+     */
+    public void setPrepopulate(Comparator<ParticipantAdapterItem> sortMethod) {
+        mPrepopulationSortMethod = sortMethod;
     }
 
     /**
@@ -141,7 +159,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             pattern = pattern.toLowerCase();
         }
 
-        if (!pattern.trim().equals(mPattern)) {
+        if (!pattern.trim().equals(mPattern) || ((null != mPrepopulationSortMethod) && TextUtils.isEmpty(pattern))) {
             mPattern = pattern.trim().toLowerCase();
             refresh(searchMethod, firstEntry, searchListener);
         } else if (null != searchListener) {
@@ -165,11 +183,6 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
      * Refresh the un-invited members
      */
     private void listOtherMembers() {
-        // refresh only when performing a search
-        if (TextUtils.isEmpty(mPattern)) {
-            return;
-        }
-
         IMXStore store = mSession.getDataHandler().getStore();
 
         // list the used members IDs
@@ -193,7 +206,24 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             mMemberUserIds.add(item.mUserId);
         }
 
-        HashMap<String, ParticipantAdapterItem> map = VectorUtils.listKnownParticipants(mSession);
+        HashMap<String, ParticipantAdapterItem> privateRoomMembersMap  = new HashMap<>();
+        if (null != store) {
+            Collection<Room> rooms = store.getRooms();
+
+            for(Room room : rooms) {
+                if (!room.getLiveState().isPublic() && !room.isConferenceUserRoom()) {
+                    Collection<RoomMember> members = room.getMembers();
+
+                    for(RoomMember member : members) {
+                        if (!privateRoomMembersMap.containsKey(member.getUserId())) {
+                            privateRoomMembersMap.put(member.getUserId(), new ParticipantAdapterItem(member));
+                        }
+                    }
+                }
+            }
+        }
+
+        HashMap<String, ParticipantAdapterItem> knownUsersMap = VectorUtils.listKnownParticipants(mSession);
 
         // add contact emails
         Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(getContext());
@@ -210,8 +240,8 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
 
                     // always use the member description over the contacts book one
                     // it avoid matching email to matrix id.
-                    if (!map.containsKey(email)) {
-                        map.put(email, participant);
+                    if (!knownUsersMap.containsKey(email)) {
+                        knownUsersMap.put(email, participant);
                     }
                 }
             }
@@ -219,11 +249,18 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
 
         // remove the known users
         for(String id : mMemberUserIds) {
-            map.remove(id);
+            knownUsersMap.remove(id);
+            privateRoomMembersMap.remove(id);
         }
 
         // retrieve the list
-        mUnusedParticipants = map.values();
+        mUnusedParticipants = knownUsersMap.values();
+
+        if (null != mPrepopulationSortMethod) {
+            ArrayList<ParticipantAdapterItem> list = new ArrayList<>(privateRoomMembersMap.values());
+            Collections.sort(list, mPrepopulationSortMethod);
+            mPrivateRoomsParticipants = list;
+        }
 
         // list the display names
         mDisplayNamesList = new ArrayList<>();
@@ -364,7 +401,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<>();
 
-        if (!TextUtils.isEmpty(mPattern)) {
+        if (!TextUtils.isEmpty(mPattern) || (null != mPrepopulationSortMethod)) {
             // the list members are refreshed in background to avoid UI locks
             if (null == mUnusedParticipants) {
                 Thread t = new Thread(new Runnable() {
@@ -394,36 +431,42 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             HashMap<String, ParticipantAdapterItem> mContactItems = new HashMap<>();
             ArrayList<String> memberUserIds = new ArrayList<>();
 
-            // check if each member matches the pattern
-            for(ParticipantAdapterItem item: mUnusedParticipants) {
-                if (match(item, searchMethod, pattern)) {
-                    // for contact with emails, check if they are some matched matrix Id
-                    if (null != item.mContact) {
-                        // the email <-> matrix Ids matching is done asynchronously
-                        if (item.mContact.hasMatridIds(mContext)) {
-                            item.mUserId = item.mContact.getFirstMatrixId().mMatrixId;
+            Collection<ParticipantAdapterItem> list = TextUtils.isEmpty(pattern) ? mPrivateRoomsParticipants : mUnusedParticipants;
 
-                            // avoid duplicated entries between contact and member definitions
-                            // always prefer a member definition
-                            if (!memberUserIds.contains(item.mUserId) && !mContactItems.containsKey(item.mUserId)) {
+            if (!TextUtils.isEmpty(pattern)) {
+                // check if each member matches the pattern
+                for (ParticipantAdapterItem item : list) {
+                    if (match(item, searchMethod, pattern)) {
+                        // for contact with emails, check if they are some matched matrix Id
+                        if (null != item.mContact) {
+                            // the email <-> matrix Ids matching is done asynchronously
+                            if (item.mContact.hasMatridIds(mContext)) {
+                                item.mUserId = item.mContact.getFirstMatrixId().mMatrixId;
+
+                                // avoid duplicated entries between contact and member definitions
+                                // always prefer a member definition
+                                if (!memberUserIds.contains(item.mUserId) && !mContactItems.containsKey(item.mUserId)) {
+                                    nextMembersList.add(item);
+                                    mContactItems.put(item.mUserId, item);
+                                }
+                            } else {
                                 nextMembersList.add(item);
-                                mContactItems.put(item.mUserId, item);
                             }
                         } else {
-                            nextMembersList.add(item);
-                        }
-                    } else {
-                        // the user id was already by a contact
-                        // prefer the member items over the contact ones.
-                        if (mContactItems.containsKey(item.mUserId)) {
-                            nextMembersList.remove(mContactItems.get(item.mUserId));
-                            mContactItems.remove(item.mUserId);
-                        }
+                            // the user id was already by a contact
+                            // prefer the member items over the contact ones.
+                            if (mContactItems.containsKey(item.mUserId)) {
+                                nextMembersList.remove(mContactItems.get(item.mUserId));
+                                mContactItems.remove(item.mUserId);
+                            }
 
-                        nextMembersList.add(item);
-                        memberUserIds.add(item.mUserId);
+                            nextMembersList.add(item);
+                            memberUserIds.add(item.mUserId);
+                        }
                     }
                 }
+            } else {
+                nextMembersList.addAll(list);
             }
 
             ParticipantAdapterItem firstEntry = theFirstEntry;
@@ -435,7 +478,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                 }
             }
 
-            Collections.sort(nextMembersList, mSortMethod);
+            if (list == mUnusedParticipants) {
+                Collections.sort(nextMembersList, mSortMethod);
+            }
 
             if (null != firstEntry) {
                 nextMembersList.add(0, firstEntry);
@@ -503,7 +548,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    if (mSortMethod == ParticipantAdapterItem.alphaComparator) {
+                    Comparator<ParticipantAdapterItem> sortMethod = TextUtils.isEmpty(mPattern) ? mPrepopulationSortMethod : mSortMethod;
+
+                    if (ParticipantAdapterItem.alphaComparator == sortMethod) {
                         VectorParticipantsAdapter.this.notifyDataSetChanged();
                     } else {
                         VectorParticipantsAdapter.this.refresh(mSearchMethod, mFirstEntry, null);

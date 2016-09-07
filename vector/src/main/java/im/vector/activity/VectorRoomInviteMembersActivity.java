@@ -155,8 +155,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
         mListView = (ListView) findViewById(R.id.room_details_members_list);
         mAdapter = new VectorParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, roomId);
-
         mAdapter.setHiddenParticipantItems(mPartipantItems);
+        mAdapter.setPrepopulate(ParticipantAdapterItem.alphaComparator);
 
         mAdapter.setSortMethod(new Comparator<ParticipantAdapterItem>() {
             /**
@@ -219,7 +219,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 if (diff == 0) {
                     return alphaComparator(userADisplayName, userBDisplayName);
                 }
-                
+
                 // if only one member has a lastActiveAgo, prefer it
                 if (0 == lastActiveAgoA) {
                     return +1;
@@ -245,8 +245,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 finish();
             }
         });
-
-        manageBackground();
     }
 
     /**
@@ -254,8 +252,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
      */
     @Override
     protected void onPatternUpdate(boolean isTypingUpdate) {
-        manageBackground();
-
         String pattern = mPatternToSearchEditText.getText().toString();
 
         ParticipantAdapterItem firstEntry = null;
@@ -300,16 +296,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 });
             }
         });
-    }
-
-    /**
-     * Hide/show background/listview according to the text length
-     */
-    private void manageBackground() {
-        boolean emptyText = TextUtils.isEmpty(mPatternToSearchEditText.getText().toString());
-
-        mBackgroundImageView.setVisibility(emptyText ? View.VISIBLE : View.GONE);
-        mListView.setVisibility(emptyText ? View.GONE : View.VISIBLE);
     }
 
     @Override

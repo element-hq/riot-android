@@ -367,7 +367,7 @@ public class BugReporter {
         dialog.setTitle(R.string.send_bug_report);
 
         CharSequence items[] = new CharSequence[] {currentActivity.getString(R.string.with_email), currentActivity.getString(R.string.with_vector)};
-        dialog.setItems(items, new DialogInterface.OnClickListener() {
+        dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int n) {
                 d.cancel();
@@ -379,6 +379,14 @@ public class BugReporter {
                 }
             }
         });
+
+        dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendBugReportWithMail(currentActivity);
+            }
+        });
+
         dialog.setNegativeButton(R.string.cancel, null);
         dialog.show();
     }
@@ -410,7 +418,7 @@ public class BugReporter {
         rootView.setDrawingCacheEnabled(true);
 
         try {
-           return rootView.getDrawingCache();
+            return rootView.getDrawingCache();
         }
         catch (OutOfMemoryError oom) {
             Log.e(LOG_TAG, "Cannot get drawing cache for "+ VectorApp.getCurrentActivity() +" OOM.");

@@ -22,8 +22,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -80,7 +78,7 @@ import java.util.TimerTask;
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
  * new rooms.
  */
-public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener{
+public class VectorHomeActivity extends AppCompatActivity implements VectorRecentsListFragment.IVectorRecentsScrollEventListener {
 
     private static final String LOG_TAG = "VectorHomeActivity";
 
@@ -167,19 +165,19 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         @Override
         public void onNetworkError(Exception e) {
-            Log.d(LOG_TAG,"## onNetworkError() - mSendReceiptCallback: Exception Msg="+e.getLocalizedMessage());
+            Log.d(LOG_TAG, "## onNetworkError() - mSendReceiptCallback: Exception Msg=" + e.getLocalizedMessage());
             onError();
         }
 
         @Override
         public void onMatrixError(MatrixError e) {
-            Log.d(LOG_TAG,"## onMatrixError() - mSendReceiptCallback: Exception Msg="+e.getLocalizedMessage());
+            Log.d(LOG_TAG, "## onMatrixError() - mSendReceiptCallback: Exception Msg=" + e.getLocalizedMessage());
             onError();
         }
 
         @Override
         public void onUnexpectedError(Exception e) {
-            Log.d(LOG_TAG,"## onUnexpectedError() - mSendReceiptCallback: Exception Msg="+e.getLocalizedMessage());
+            Log.d(LOG_TAG, "## onUnexpectedError() - mSendReceiptCallback: Exception Msg=" + e.getLocalizedMessage());
             onError();
         }
     };
@@ -258,65 +256,25 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                     CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_invite_people), context.getString(R.string.room_recents_create_room)};
-                    dialog.setItems(items, new DialogInterface.OnClickListener() {
-
+                    dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int n) {
                             d.cancel();
-
                             if (0 == n) {
-                                final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-                                settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                                VectorHomeActivity.this.startActivity(settingsIntent);
+                                invitePeopleToNewRoom();
                             } else {
-                                mWaitingView.setVisibility(View.VISIBLE);
-                                mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
-                                    @Override
-                                    public void onSuccess(final String roomId) {
-                                        mWaitingView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                mWaitingView.setVisibility(View.GONE);
-
-                                                HashMap<String, Object> params = new HashMap<>();
-                                                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                                                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                                                params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
-                                                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
-                                            }
-                                        });
-                                    }
-
-                                    private void onError(final String message) {
-                                        mWaitingView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (null != message) {
-                                                    Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
-                                                }
-                                                mWaitingView.setVisibility(View.GONE);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onNetworkError(Exception e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onMatrixError(final MatrixError e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-
-                                    @Override
-                                    public void onUnexpectedError(final Exception e) {
-                                        onError(e.getLocalizedMessage());
-                                    }
-                                });
+                                createRoom();
                             }
                         }
                     });
+
+                    dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            invitePeopleToNewRoom();
+                        }
+                    });
+
                     dialog.setNegativeButton(R.string.cancel, null);
                     dialog.show();
                 }
@@ -340,7 +298,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             stopWaitingView();
         }
 
-        mAutomaticallyOpenedRoomParams = (Map<String, Object>)intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
+        mAutomaticallyOpenedRoomParams = (Map<String, Object>) intent.getSerializableExtra(EXTRA_JUMP_TO_ROOM_PARAMS);
         mUniversalLinkToOpen = intent.getParcelableExtra(EXTRA_JUMP_TO_UNIVERSAL_LINK);
 
         // the home activity has been launched with an universal link
@@ -410,7 +368,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
                     }
                 });
-            }  else {
+            } else {
                 mSharedFilesIntent = sharedFilesIntent;
             }
 
@@ -702,6 +660,66 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     /**
+     * Open the room creation with inviting people.
+     */
+    private void invitePeopleToNewRoom() {
+        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        VectorHomeActivity.this.startActivity(settingsIntent);
+    }
+
+    /**
+     * Create a room and open the dedicated activity
+     */
+    private void createRoom() {
+        mWaitingView.setVisibility(View.VISIBLE);
+        mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
+            @Override
+            public void onSuccess(final String roomId) {
+                mWaitingView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWaitingView.setVisibility(View.GONE);
+
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                        params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                        CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+                    }
+                });
+            }
+
+            private void onError(final String message) {
+                mWaitingView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (null != message) {
+                            Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                        }
+                        mWaitingView.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(final MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(final Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
      * Send a read receipt for each room.
      * Recursive method to serialize read receipts processing.
      * Sessions and summaries are all parsed through iterators.
@@ -744,7 +762,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 mReadReceiptSessionListIterator = null;
                 mReadReceiptSummaryListIterator = null;
             }
-        // 2 - loop on next summary
+            // 2 - loop on next summary
         } else if (mReadReceiptSummaryListIterator.hasNext()) {
             sendReadReceipt();
         } else {
@@ -753,7 +771,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mReadReceiptSummaryListIterator = null;
             markAllMessagesAsRead();
         }
-     }
+    }
 
     /**
      * Send a read receipt and manage the spinner screen.
