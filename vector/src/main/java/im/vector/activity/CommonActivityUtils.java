@@ -1296,8 +1296,8 @@ public class CommonActivityUtils {
         for (int index = 0; index < mergedSummaries.size(); index++) {
             RoomSummary summary = mergedSummaries.get(index);
             Room room = session.getDataHandler().getRoom(summary.getRoomId());
-
-            if ((null == room) || room.isInvited()) {
+            
+            if ((null == room) || room.isInvited() || room.isConferenceUserRoom()) {
                 mergedSummaries.remove(index);
                 index--;
             }
