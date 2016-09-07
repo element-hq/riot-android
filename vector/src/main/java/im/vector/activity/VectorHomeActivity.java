@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -254,8 +257,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     Context context = VectorHomeActivity.this;
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_select_people), context.getString(R.string.room_recents_create_room)};
-                    dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_invite_people), context.getString(R.string.room_recents_create_room)};
+                    dialog.setItems(items, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface d, int n) {
@@ -316,7 +319,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     });
                     dialog.setNegativeButton(R.string.cancel, null);
                     dialog.show();
-
                 }
             }
         });
