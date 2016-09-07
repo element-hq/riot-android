@@ -131,7 +131,7 @@ public class GAHelper {
                     }
                     b.append("usedSize   " + (usedSize / 1048576L) + " MB\n");
                     b.append("freeSize   " + (freeSize / 1048576L) + " MB\n");
-                    b.append("totalSize   " + (totalSize / 1048576L) + " MB\n)";
+                    b.append("totalSize   " + (totalSize / 1048576L) + " MB\n");
                     
                     b.append("Thread: ");
                     b.append(threadName);
