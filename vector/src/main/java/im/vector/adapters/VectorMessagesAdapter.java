@@ -39,6 +39,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
@@ -46,6 +47,7 @@ import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
+import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.JsonUtils;
@@ -522,7 +524,26 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
             }
         } else if (event.mSentState == Event.SentState.SENT) {
-            menu.findItem(R.id.ic_action_vector_redact_message).setVisible(!mIsPreviewMode);
+
+            // test if the event can be redacted
+            boolean canBeRedacted = !mIsPreviewMode;
+
+            if (canBeRedacted) {
+                // oneself message -> can redact it
+                if (TextUtils.equals(event.sender, mSession.getMyUserId())) {
+                    canBeRedacted = true;
+                } else {
+                    // need the mininum power level to redact an event
+                    Room room = mSession.getDataHandler().getRoom(event.roomId);
+
+                    if ((null != room) && (null != room.getLiveState().getPowerLevels())) {
+                        PowerLevels powerLevels = room.getLiveState().getPowerLevels();
+                        canBeRedacted = powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.redact;
+                    }
+                }
+            }
+
+            menu.findItem(R.id.ic_action_vector_redact_message).setVisible(canBeRedacted);
 
             if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
