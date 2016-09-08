@@ -2,14 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/search_background_imageview"
-        android:background="@android:color/white"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:src="@drawable/vector_search_bg"/>
-
+    
     <TextView
         android:id="@+id/search_no_result_textview"
         android:layout_width="wrap_content"

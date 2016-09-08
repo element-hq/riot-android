@@ -39,7 +39,7 @@ public class Contact implements java.io.Serializable {
 
     // a contact field (like email)
     // is linked to a matrix id/
-    public static class MXID {
+    public static class MXID implements java.io.Serializable {
         // the MXSession identifier
         public final String mAccountId;
 

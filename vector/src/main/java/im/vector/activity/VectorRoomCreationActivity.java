@@ -59,6 +59,9 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private VectorRoomCreationAdapter mAdapter;
     private View mSpinnerView;
 
+    // the search is displayed at first call
+    private boolean mIsFirstResume = true;
+
     // displayed participants
     private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
 
@@ -112,13 +115,30 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // the first one is "add a member"
                 if (0 == position) {
-                    Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomInviteMembersActivity.class);
-                    intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                    intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS, mParticipants);
-                    VectorRoomCreationActivity.this.startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+                    launchSearchActivity();
                 }
             }
         });
+    }
+
+    /***
+     * Launch the people search activity
+     */
+    private void launchSearchActivity() {
+        Intent intent = new Intent(VectorRoomCreationActivity.this, VectorRoomInviteMembersActivity.class);
+        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+        intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS, mParticipants);
+        VectorRoomCreationActivity.this.startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mIsFirstResume) {
+            mIsFirstResume = false;
+            launchSearchActivity();
+        }
     }
 
     @Override
@@ -148,12 +168,18 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ((requestCode == INVITE_USER_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-            ParticipantAdapterItem item = (ParticipantAdapterItem)data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM);
-            mParticipants.add(item);
+        if (requestCode == INVITE_USER_REQUEST_CODE) {
 
-            mAdapter.add(item);
-            mAdapter.sort(mAlphaComparator);
+            if (resultCode == Activity.RESULT_OK) {
+                ParticipantAdapterItem item = (ParticipantAdapterItem) data.getSerializableExtra(VectorRoomInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM);
+                mParticipants.add(item);
+
+                mAdapter.add(item);
+                mAdapter.sort(mAlphaComparator);
+            } else if (1 == mParticipants.size()) {
+                // the user cancels the first user selection so assume he wants to cancel the room creation.
+                this.finish();
+            }
         }
     }
 
