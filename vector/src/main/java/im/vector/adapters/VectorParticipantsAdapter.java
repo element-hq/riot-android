@@ -219,7 +219,10 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                         String userId = member.getUserId();
 
                         if (!privateRoomMembersMap.containsKey(userId) && !MXCallsManager.isConferenceUserId(userId)) {
-                            privateRoomMembersMap.put(member.getUserId(), new ParticipantAdapterItem(member));
+                            // display only the join / invite members
+                            if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
+                                privateRoomMembersMap.put(member.getUserId(), new ParticipantAdapterItem(member));
+                            }
                         }
                     }
                 }
