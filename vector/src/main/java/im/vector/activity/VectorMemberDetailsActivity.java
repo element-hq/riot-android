@@ -18,10 +18,12 @@ package im.vector.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -64,6 +66,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     public static final String RESULT_MENTION_ID = "RESULT_MENTION_ID";
 
+    private static final String AVATAR_FULLSCREEN_MODE = "AVATAR_FULLSCREEN_MODE";
+
     // list view items associated actions
     public static final int ITEM_ACTION_INVITE = 0;
     public static final int ITEM_ACTION_LEAVE = 1;
@@ -101,6 +105,10 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private TextView mMemberNameTextView;
     private TextView mPresenceTextView;
     private View mProgressBarView;
+
+    // full screen avatar
+    private View mFullMemberAvatarLayout;
+    private ImageView mFullMemberAvatarImageView;
 
     // MX event listener
     private final MXEventListener mLiveEventsListener = new MXEventListener() {
@@ -191,10 +199,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     /**
      * Start a call in a dedicated room
-     * @param room the room
      * @param isVideo true if the call is a video call
      */
-    private void startCall(final Room room, final boolean isVideo) {
+    private void startCall(final boolean isVideo) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "startCall : the session is not anymore valid");
             return;
@@ -248,10 +255,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * the permissions are checked against the system. Final result is provided in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      *
-     * @param aCallableRoom the room the call belongs to
      * @param aIsVideoCall true if video call, false if audio call
      */
-    private void startCheckCallPermissions(Room aCallableRoom, boolean aIsVideoCall) {
+    private void startCheckCallPermissions(boolean aIsVideoCall) {
         int requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
 
         if(aIsVideoCall){
@@ -259,7 +265,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
 
         if(CommonActivityUtils.checkPermissions(requestCode, this)){
-            startCall(aCallableRoom, aIsVideoCall);
+            startCall(aIsVideoCall);
         }
     }
 
@@ -269,11 +275,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mCallableRoom, false);
+                startCall(false);
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mCallableRoom, true);
+                startCall(true);
             }
         }
     }
@@ -309,7 +315,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             case ITEM_ACTION_START_VIDEO_CALL:
             case ITEM_ACTION_START_VOICE_CALL:
                 Log.d(LOG_TAG,"## performItemAction(): Start call");
-                startCheckCallPermissions(mCallableRoom, ITEM_ACTION_START_VIDEO_CALL == aActionType);
+                startCheckCallPermissions(ITEM_ACTION_START_VIDEO_CALL == aActionType);
                 break;
 
             case ITEM_ACTION_INVITE:
@@ -807,6 +813,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberAvatarImageView = (ImageView) findViewById(R.id.avatar_img);
             mMemberAvatarBadgeImageView = (ImageView) findViewById(R.id.member_avatar_badge);
 
+            mFullMemberAvatarImageView = (ImageView) findViewById(R.id.member_details_fullscreen_avatar_image_view);
+            mFullMemberAvatarLayout = findViewById(R.id.member_details_fullscreen_avatar_layout);
+
             mMemberNameTextView = (TextView) findViewById(R.id.member_details_name);
             mPresenceTextView = (TextView) findViewById(R.id.member_details_presence);
             mProgressBarView = findViewById(R.id.member_details_list_view_progress_bar);
@@ -848,8 +857,96 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
 
+            mMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    displayFullScreenAvatar();
+                }
+            });
+
+            mFullMemberAvatarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideFullScreenAvatar();
+                }
+            });
+
+            mFullMemberAvatarLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideFullScreenAvatar();
+                }
+            });
+
             // update the UI
             updateUi();
+
+            if ((null != savedInstanceState) && savedInstanceState.getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
+                displayFullScreenAvatar();
+            }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((KeyEvent.KEYCODE_BACK == keyCode) && (View.VISIBLE == mFullMemberAvatarLayout.getVisibility())) {
+            hideFullScreenAvatar();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(AVATAR_FULLSCREEN_MODE, View.VISIBLE == mFullMemberAvatarLayout.getVisibility());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.getBoolean(AVATAR_FULLSCREEN_MODE, false)) {
+            displayFullScreenAvatar();
+        }
+    }
+
+    /**
+     * Hide the fullscreen avatar.
+     */
+    private void hideFullScreenAvatar() {
+        mFullMemberAvatarLayout.setVisibility(View.GONE);
+    }
+
+    /**
+     * Display the user/member avatar in fullscreen.
+     */
+    private void displayFullScreenAvatar() {
+        String avatarUrl = null;
+        String userId = mMemberId;
+
+        if (null != mRoomMember) {
+            avatarUrl =  mRoomMember.avatarUrl;
+
+            if (TextUtils.isEmpty(avatarUrl)) {
+                userId = mRoomMember.getUserId();
+            }
+        }
+
+        if (TextUtils.isEmpty(avatarUrl) && !TextUtils.isEmpty(userId)) {
+            User user = mSession.getDataHandler().getStore().getUser(mMemberId);
+
+            if (null != user) {
+                avatarUrl = user.getAvatarUrl();
+            }
+        }
+
+        if (!TextUtils.isEmpty(avatarUrl)) {
+            mFullMemberAvatarLayout.setVisibility(View.VISIBLE);
+            mSession.getMediasCache().loadBitmap(mSession.getHomeserverConfig(), mFullMemberAvatarImageView, avatarUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null);
         }
     }
 
