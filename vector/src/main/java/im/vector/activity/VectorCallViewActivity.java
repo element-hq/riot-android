@@ -36,6 +36,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,6 +44,9 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -97,8 +101,16 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private ImageView mMuteLocalCameraView;
     private ImageView mRoomLinkImageView;
     private VectorPendingCallView mHeaderPendingCallView;
+    private View mButtonsContainerView;
 
-    // video diplay size
+    // video screen management
+    private Timer mVideoFadingEdgesTimer;
+    private TimerTask mVideoFadingEdgesTimerTask;
+    private static final short FADE_IN_DURATION = 2000;
+    private static final short FADE_OUT_DURATION = 250;
+    private static final short VIDEO_FADING_TIMER = 4000;
+
+    // video display size
     private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig;
     // hard coded values are taken from specs:
     // - 585 as screen height reference
@@ -336,12 +348,20 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             ImageView avatarView = (ImageView) VectorCallViewActivity.this.findViewById(R.id.call_other_member);
             VectorUtils.loadRoomAvatar(this, mSession, avatarView, mCall.getRoom());
 
-            // insert the
+            // insert the call view above the avatar
             RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
             layout.addView(mCallView, 1, params);
+
+            mCallView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fadeInVideoEdge();
+                    startVideoFadingEdgesScreenTimer();
+                }
+            });
 
             // init as GONE, will be displayed according to call states..
             mCall.setVisibility(View.GONE);
@@ -393,6 +413,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
         mSwichRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
         mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
+        mButtonsContainerView = (View) findViewById(R.id.call_menu_buttons_layout_container);
 
         mRoomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -688,10 +709,87 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
             // init the call button
             manageSubViews();
+
+            // speaker phone state
+            initSpeakerPhoneState();
         } else {
             this.finish();
         }
     }
+
+    /**
+     * Set the speaker phone state according to life cycle value and the kind of call.
+     */
+    private void initSpeakerPhoneState() {
+        // set speaker status
+        boolean isSpeakerPhoneOn;
+        if(mIsSpeakerForcedFromLifeCycle) {
+            isSpeakerPhoneOn = mSavedSpeakerValue;
+        } else {
+            // default value: video => speaker ON, voice => speaker OFF
+            isSpeakerPhoneOn = mCall.isVideo();
+        }
+        VectorCallSoundManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
+    }
+
+    /**
+     * Stop the video fading timer.
+     */
+    private void stopVideoFadingEdgesScreenTimer() {
+        if (null != mVideoFadingEdgesTimer) {
+            mVideoFadingEdgesTimer.cancel();
+            mVideoFadingEdgesTimer = null;
+            mVideoFadingEdgesTimerTask = null;
+        }
+    }
+
+    /**
+     * Start the video fading timer.
+     */
+    private void startVideoFadingEdgesScreenTimer() {
+        // stop current timer in progress
+        stopVideoFadingEdgesScreenTimer();
+
+        mVideoFadingEdgesTimer = new Timer();
+        mVideoFadingEdgesTimerTask = new TimerTask() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        stopVideoFadingEdgesScreenTimer();
+
+                        fadeOutVideoEdge();
+                    }
+                });
+            }
+        };
+
+        mVideoFadingEdgesTimer.schedule(mVideoFadingEdgesTimerTask, VIDEO_FADING_TIMER);
+    }
+
+    /**
+     * Set the fading effect for the UI video.
+     * @param aOpacity UTILS_OPACITY_FULL to fade out, UTILS_OPACITY_NONE to fade in
+     * @param aAnimDuration animation duration in milliseconds
+     */
+    private void fadeVideoEdge(float aOpacity, int aAnimDuration) {
+        if(null != mHeaderPendingCallView){
+            mHeaderPendingCallView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
+        }
+
+        if(null != mButtonsContainerView){
+            mButtonsContainerView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
+        }
+    }
+
+    private void fadeOutVideoEdge() {
+        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_FULL, FADE_IN_DURATION);
+    }
+
+    private void fadeInVideoEdge() {
+        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_NONE, FADE_OUT_DURATION);
+    }
+
 
     /**
      * Compute the top margin of the view that contains the video
@@ -784,42 +882,30 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * Update the mute mic icon according to mute mic status.
      */
     private void refreshMuteMicButton() {
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
-            AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-            mMuteMicImageView.setVisibility(View.VISIBLE);
+        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        mMuteMicImageView.setVisibility(View.VISIBLE);
 
-            boolean  isMuted = audioManager.isMicrophoneMute();
-            Log.d(LOG_TAG,"## refreshMuteMicButton(): isMuted="+isMuted);
+        boolean  isMuted = audioManager.isMicrophoneMute();
+        Log.d(LOG_TAG,"## refreshMuteMicButton(): isMuted="+isMuted);
 
-            // update icon
-            int iconId = isMuted?R.drawable.ic_material_mic_off_pink_red:R.drawable.ic_material_mic_off_grey;
-            mMuteMicImageView.setImageResource(iconId);
-        } else {
-            Log.d(LOG_TAG,"## refreshMuteMicButton(): View.INVISIBLE");
-            mMuteMicImageView.setVisibility(View.INVISIBLE);
-        }
+        // update icon
+        int iconId = isMuted?R.drawable.ic_material_mic_off_pink_red:R.drawable.ic_material_mic_off_grey;
+        mMuteMicImageView.setImageResource(iconId);
     }
 
     /**
      * Update the mute speaker icon according to speaker status.
      */
     private void refreshSpeakerButton() {
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
-            mSpeakerSelectionView.setVisibility(View.VISIBLE);
+        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        boolean isOn = audioManager.isSpeakerphoneOn();
+        Log.d(LOG_TAG,"## refreshSpeakerButton(): isOn="+isOn);
 
-            AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
-            boolean isOn = audioManager.isSpeakerphoneOn();
-            Log.d(LOG_TAG,"## refreshSpeakerButton(): isOn="+isOn);
+        // update icon
+        int iconId = isOn?R.drawable.ic_material_speaker_phone_pink_red:R.drawable.ic_material_speaker_phone_grey;
+        mSpeakerSelectionView.setImageResource(iconId);
 
-            // update icon
-            int iconId = isOn?R.drawable.ic_material_speaker_phone_pink_red:R.drawable.ic_material_speaker_phone_grey;
-            mSpeakerSelectionView.setImageResource(iconId);
-
-            VectorCallViewActivity.this.setVolumeControlStream(audioManager.getMode());
-        } else {
-            Log.d(LOG_TAG,"## refreshSpeakerButton(): View.INVISIBLE");
-            mSpeakerSelectionView.setVisibility(View.INVISIBLE);
-        }
+        VectorCallViewActivity.this.setVolumeControlStream(audioManager.getMode());
     }
 
 
@@ -827,7 +913,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * Update the mute video icon.
      */
     private void refreshMuteVideoButton() {
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) {
+        if ((null != mCall) && mCall.isVideo()) {
             mMuteLocalCameraView.setVisibility(View.VISIBLE);
 
             boolean isMuted = mCall.isVideoRecordingMuted();
@@ -848,7 +934,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * camera switching (See {@link IMXCall#isSwitchCameraSupported()})
      */
     private void refreshSwitchRearFrontCameraButton() {
-        if ((null != mCall) && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo() && mCall.isSwitchCameraSupported()) {
+        if ((null != mCall) && mCall.isVideo() && mCall.isSwitchCameraSupported()) {
             mSwichRearFrontCameraImageView.setVisibility(View.VISIBLE);
 
             boolean isSwitched= mCall.isCameraSwitched();
@@ -889,15 +975,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         String callState = mCall.getCallState();
         Log.d(LOG_TAG, "## manageSubViews() IN callState : " + callState);
 
-        // set speaker status
-        boolean isSpeakerPhoneOn;
-        if(mIsSpeakerForcedFromLifeCycle) {
-            isSpeakerPhoneOn = mSavedSpeakerValue;
-        } else {
-            // default value: video => speaker ON, voice => speaker OFF
-            isSpeakerPhoneOn = mCall.isVideo();
-        }
-
         // avatar visibility: video call => hide avatar, audio call => show avatar
         mAvatarView.setVisibility((callState.equals(IMXCall.CALL_STATE_CONNECTED) && mCall.isVideo()) ? View.GONE : View.VISIBLE);
 
@@ -918,6 +995,18 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             default:
                 mHangUpImageView.setVisibility(View.VISIBLE);
                 break;
+        }
+
+        if (mCall.isVideo()) {
+            switch (callState) {
+                case IMXCall.CALL_STATE_CONNECTED:
+                    startVideoFadingEdgesScreenTimer();
+                    break;
+
+                default:
+                    stopVideoFadingEdgesScreenTimer();
+                    break;
+            }
         }
 
         // callview visibility management
@@ -954,11 +1043,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
             case IMXCall.CALL_STATE_CONNECTED:
                 VectorCallSoundManager.stopRinging();
-                final boolean fIsSpeakerPhoneOn = isSpeakerPhoneOn;
                 VectorCallViewActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        VectorCallSoundManager.setCallSpeakerphoneOn(fIsSpeakerPhoneOn);
                         refreshSpeakerButton();
                     }
                 });
@@ -1040,30 +1127,31 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     // ************* SensorEventListener *************
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float distanceCentimeters = event.values[0];
-        AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        if (null != event) {
+            float distanceCentimeters = event.values[0];
+            AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
 
-        Log.d(LOG_TAG,"## onSensorChanged(): "+String.format("distance=%.3f",distanceCentimeters));
+            Log.d(LOG_TAG, "## onSensorChanged(): " + String.format("distance=%.3f", distanceCentimeters));
 
-        if(audioManager.isSpeakerphoneOn()) {
-            Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
-        } else {
-            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-
-            if (distanceCentimeters <= PROXIMITY_THRESHOLD) {
-                //layoutParams.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-                layoutParams.screenBrightness = 0;
-                getWindow().setAttributes(layoutParams);
-
-                //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                Log.d(LOG_TAG, "## onSensorChanged(): force screen OFF");
+            if (audioManager.isSpeakerphoneOn()) {
+                Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
             } else {
-                // restore previous brightness (whatever it was)
-                layoutParams.screenBrightness = -1;
-                getWindow().setAttributes(layoutParams);
+                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
 
-                //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                Log.d(LOG_TAG, "## onSensorChanged(): force screen ON");
+                if (distanceCentimeters <= PROXIMITY_THRESHOLD) {
+                    layoutParams.screenBrightness = 0;
+                    getWindow().setAttributes(layoutParams);
+
+                    //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    Log.d(LOG_TAG, "## onSensorChanged(): force screen OFF");
+                } else {
+                    // restore previous brightness (whatever it was)
+                    layoutParams.screenBrightness = -1;
+                    getWindow().setAttributes(layoutParams);
+
+                    //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    Log.d(LOG_TAG, "## onSensorChanged(): force screen ON");
+                }
             }
         }
     }
