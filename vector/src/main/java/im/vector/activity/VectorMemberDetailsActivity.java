@@ -199,10 +199,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     /**
      * Start a call in a dedicated room
-     * @param room the room
      * @param isVideo true if the call is a video call
      */
-    private void startCall(final Room room, final boolean isVideo) {
+    private void startCall(final boolean isVideo) {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "startCall : the session is not anymore valid");
             return;
@@ -256,10 +255,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
      * the permissions are checked against the system. Final result is provided in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      *
-     * @param aCallableRoom the room the call belongs to
      * @param aIsVideoCall true if video call, false if audio call
      */
-    private void startCheckCallPermissions(Room aCallableRoom, boolean aIsVideoCall) {
+    private void startCheckCallPermissions(boolean aIsVideoCall) {
         int requestCode = CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL;
 
         if(aIsVideoCall){
@@ -267,7 +265,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
 
         if(CommonActivityUtils.checkPermissions(requestCode, this)){
-            startCall(aCallableRoom, aIsVideoCall);
+            startCall(aIsVideoCall);
         }
     }
 
@@ -277,11 +275,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_AUDIO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultAudioIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mCallableRoom, false);
+                startCall(false);
             }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL) {
             if (CommonActivityUtils.onPermissionResultVideoIpCall(this, aPermissions, aGrantResults)) {
-                startCall(mCallableRoom, true);
+                startCall(true);
             }
         }
     }
@@ -317,7 +315,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             case ITEM_ACTION_START_VIDEO_CALL:
             case ITEM_ACTION_START_VOICE_CALL:
                 Log.d(LOG_TAG,"## performItemAction(): Start call");
-                startCheckCallPermissions(mCallableRoom, ITEM_ACTION_START_VIDEO_CALL == aActionType);
+                startCheckCallPermissions(ITEM_ACTION_START_VIDEO_CALL == aActionType);
                 break;
 
             case ITEM_ACTION_INVITE:
