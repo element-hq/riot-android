@@ -319,29 +319,35 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
         
         final SwitchPreference useGaPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
-        useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Boolean useGA = GAHelper.useGA(getActivity());
-                boolean newGa = (boolean)newValue;
 
-                if ((null != useGA) && (useGA != newGa)) {
-                    if (!newGa) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        if (!GAHelper.isGAUseUpdatable()) {
+            PreferenceCategory otherCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
+            otherCategory.removePreference(useGaPref);
+        } else {
+            useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Boolean useGA = GAHelper.useGA(getActivity());
+                    boolean newGa = (boolean) newValue;
 
-                        builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do something here
-                            }
-                        }).show();
+                    if ((null != useGA) && (useGA != newGa)) {
+                        if (!newGa) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                            builder.setMessage(getString(R.string.ga_use_disable_alert_message)).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do something here
+                                }
+                            }).show();
+                        }
+                        GAHelper.setUseGA(getActivity(), newGa);
                     }
-                    GAHelper.setUseGA(getActivity(), newGa);
-                }
 
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
+        }
 
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));

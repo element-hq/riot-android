@@ -35,6 +35,15 @@ public class GAHelper {
     //==============================================================================================================
     // Google analytics
     //==============================================================================================================
+
+    /**
+     * Tells if the GA use can be updated
+     * @return true if it can be updated
+     */
+    public static boolean isGAUseUpdatable() {
+        return true;
+    }
+
     /**
      * Update the GA use.
      * @param context the context
