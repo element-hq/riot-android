@@ -57,7 +57,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     // main UI items
     private ListView mListView;
-    private ImageView mBackgroundImageView;
     private View mNoResultView;
     private View mLoadingView;
     private List<ParticipantAdapterItem> mPartipantItems = new ArrayList<>();
@@ -149,7 +148,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
-        mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
         mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 

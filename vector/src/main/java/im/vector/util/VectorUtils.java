@@ -44,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -803,7 +804,9 @@ public class VectorUtils {
         // we don't need to populate the room members or each room
         // because an user is created for each joined / invited room member event
         for(User user : users) {
-            map.put(user.user_id, new ParticipantAdapterItem(user));
+            if (!MXCallsManager.isConferenceUserId(user.user_id)) {
+                map.put(user.user_id, new ParticipantAdapterItem(user));
+            }
         }
 
         return map;

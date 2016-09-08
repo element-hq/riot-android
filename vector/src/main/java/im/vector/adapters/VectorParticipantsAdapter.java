@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
@@ -215,7 +216,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                     Collection<RoomMember> members = room.getMembers();
 
                     for(RoomMember member : members) {
-                        if (!privateRoomMembersMap.containsKey(member.getUserId())) {
+                        String userId = member.getUserId();
+
+                        if (!privateRoomMembersMap.containsKey(userId) && !MXCallsManager.isConferenceUserId(userId)) {
                             privateRoomMembersMap.put(member.getUserId(), new ParticipantAdapterItem(member));
                         }
                     }
