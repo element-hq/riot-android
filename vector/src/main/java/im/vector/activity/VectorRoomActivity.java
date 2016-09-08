@@ -900,6 +900,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         // refresh the UI : the timezone could have been updated
         mVectorMessageListFragment.refresh();
 
+        // the list automatically scrolls down when its top moves down
+        if (mVectorMessageListFragment.mMessageListView instanceof AutoScrollDownListView) {
+            ((AutoScrollDownListView)mVectorMessageListFragment.mMessageListView).lockSelectionOnResize();
+        }
+
         // the device has been rotated
         // so try to keep the same top/left item;
         if (mScrollToIndex > 0) {
@@ -2258,11 +2263,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // enable the header view to make it visible
             mRoomHeaderView.setVisibility(View.VISIBLE);
             mToolbar.setBackgroundColor(Color.TRANSPARENT);
-
-            // the list automatically scrolls down when its top moves down
-            if (mVectorMessageListFragment.mMessageListView instanceof AutoScrollDownListView) {
-                ((AutoScrollDownListView)mVectorMessageListFragment.mMessageListView).lockSelectionOnResize();
-            }
         } else {
             // hide the room header only if it is displayed
             if (View.VISIBLE == mRoomHeaderView.getVisibility()) {
