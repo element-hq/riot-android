@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import android.os.Looper;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
@@ -68,6 +70,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
@@ -269,21 +272,27 @@ public class VectorUtils {
     }
 
     /**
-     * Create an avatar bitmap from a text.
-     * @param context the context.
+     * Create a thumbnail avatar.
+     * @param context the context
+     * @param backgroundColor  the background color
      * @param text the text to display.
      * @return the generated bitmap
      */
-    private static Bitmap createAvatar(Context context, int backgroundColor, String text) {
+    private static Bitmap createAvatarThumbnail(Context context, int backgroundColor, String text) {
+        float densityScale = context.getResources().getDisplayMetrics().density;
+        return createAvatar(backgroundColor, text, (int)(42 * densityScale));
+    }
+
+    /**
+     * Create an avatar bitmap from a text.
+     * @param text the text to display.
+     * @param pixelsSide the avatar side in pixels
+     * @return the generated bitmap
+     */
+    private static Bitmap createAvatar(int backgroundColor, String text, int pixelsSide) {
         android.graphics.Bitmap.Config bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
 
-        // the bitmap size
-        int thumbnailSide = 42;
-
-        float densityScale = context.getResources().getDisplayMetrics().density;
-        int side = (int)(thumbnailSide * densityScale);
-
-        Bitmap bitmap = Bitmap.createBitmap(side, side, bitmapConfig);
+        Bitmap bitmap = Bitmap.createBitmap(pixelsSide, pixelsSide, bitmapConfig);
         Canvas canvas = new Canvas(bitmap);
 
         canvas.drawColor(backgroundColor);
@@ -292,7 +301,7 @@ public class VectorUtils {
         Paint textPaint = new Paint();
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(28 * densityScale);
+        textPaint.setTextSize(pixelsSide  * 2 / 3);
 
         // get its size
         Rect textBounds = new Rect();
@@ -355,7 +364,7 @@ public class VectorUtils {
         Bitmap thumbnail = mAvatarImageByKeyDict.get(key);
 
         if ((null == thumbnail) && create) {
-            thumbnail = VectorUtils.createAvatar(context, backgroundColor, firstChar);
+            thumbnail = VectorUtils.createAvatarThumbnail(context, backgroundColor, firstChar);
             mAvatarImageByKeyDict.put(key, thumbnail);
         }
 
@@ -411,6 +420,43 @@ public class VectorUtils {
     public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         if (null != room) {
             VectorUtils.loadUserAvatar(context, session, imageView, room.getAvatarUrl(), room.getRoomId(), VectorUtils.getRoomDisplayName(context, session, room));
+        }
+    }
+
+    /**
+     * Set the call avatar in an imageView.
+     * @param context the context
+     * @param session the session
+     * @param imageView the image view
+     * @param room the room
+     * @param pixelsSide min side size in pixels.
+     */
+    public static void loadCallAvatar(Context context, MXSession session, ImageView imageView, Room room, int pixelsSide) {
+        // sanity check
+        if ((null != room) && (null != session) && (null != imageView) && session.isAlive()) {
+            // sanity check
+            if ((null == session) || (null == imageView) || !session.isAlive()) {
+                return;
+            }
+
+            // reset the imageView tag
+            imageView.setTag(null);
+
+            String callAvatarUrl = room.getCallAvatarUrl();
+            String roomId = room.getRoomId();
+            String displayName = VectorUtils.getRoomDisplayName(context, session, room);
+
+            // if the avatar is already cached, use it
+            if (session.getMediasCache().isAvatarThumbnailCached(callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
+                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
+            } else {
+                // display the default avatar
+                final Bitmap bitmap = VectorUtils.createAvatar(VectorUtils.getAvatarColor(roomId), getInitialLetter(displayName), pixelsSide);
+                imageView.setImageBitmap(bitmap);
+
+                // until the dedicated avatar is loaded.
+                session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);
+            }
         }
     }
 
