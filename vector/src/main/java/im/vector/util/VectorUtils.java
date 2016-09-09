@@ -40,6 +40,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -144,6 +145,34 @@ public class VectorUtils {
         }
 
         return displayName;
+    }
+
+    /**
+     * Provide a display name for a calling room
+     * @param context the application context.
+     * @param session the session
+     * @param session the room session.
+     * @param room the room.
+     * @return the calling room display name.
+     */
+    public static String getCallingRoomDisplayName(Context context, MXSession session, Room room) {
+        if ((null == context) || (null == session) || (null == room)) {
+            return null;
+        }
+
+        Collection<RoomMember> roomMembers = room.getJoinedMembers();
+
+        if (2 == roomMembers.size()) {
+            ArrayList<RoomMember> roomMembersList = new ArrayList<>(roomMembers);
+
+            if (TextUtils.equals(roomMembersList.get(0).getUserId(), session.getMyUserId())) {
+                return room.getLiveState().getMemberName(roomMembersList.get(1).getUserId());
+            } else {
+                return room.getLiveState().getMemberName(roomMembersList.get(0).getUserId());
+            }
+        } else {
+            return getRoomDisplayName(context, session, room);
+        }
     }
 
     /**
@@ -429,9 +458,8 @@ public class VectorUtils {
      * @param session the session
      * @param imageView the image view
      * @param room the room
-     * @param pixelsSide min side size in pixels.
      */
-    public static void loadCallAvatar(Context context, MXSession session, ImageView imageView, Room room, int pixelsSide) {
+    public static void loadCallAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         // sanity check
         if ((null != room) && (null != session) && (null != imageView) && session.isAlive()) {
             // sanity check
@@ -445,14 +473,32 @@ public class VectorUtils {
             String callAvatarUrl = room.getCallAvatarUrl();
             String roomId = room.getRoomId();
             String displayName = VectorUtils.getRoomDisplayName(context, session, room);
+            int pixelsSide = imageView.getLayoutParams().width;
+
+            // when size < 0, it means that the render graph must compute it
+            // so, we search the valid parent view with valid size
+            if (pixelsSide < 0) {
+                ViewParent parent = imageView.getParent();
+
+                while ((pixelsSide < 0) && (null != parent)) {
+                    if (parent instanceof View) {
+                        View parentAsView = (View) parent;
+                        pixelsSide = parentAsView.getLayoutParams().width;
+                    }
+                    parent = parent.getParent();
+                }
+            }
 
             // if the avatar is already cached, use it
             if (session.getMediasCache().isAvatarThumbnailCached(callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size))) {
                 session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size));
             } else {
-                // display the default avatar
-                final Bitmap bitmap = VectorUtils.createAvatar(VectorUtils.getAvatarColor(roomId), getInitialLetter(displayName), pixelsSide);
-                imageView.setImageBitmap(bitmap);
+                Bitmap bitmap = null;
+
+                if (pixelsSide > 0) {
+                    // display the default avatar
+                    bitmap = VectorUtils.createAvatar(VectorUtils.getAvatarColor(roomId), getInitialLetter(displayName), pixelsSide);
+                }
 
                 // until the dedicated avatar is loaded.
                 session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), imageView, callAvatarUrl, context.getResources().getDimensionPixelSize(R.dimen.profile_avatar_size), bitmap);

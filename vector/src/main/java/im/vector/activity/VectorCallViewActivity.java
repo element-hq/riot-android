@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -31,6 +32,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -346,7 +348,21 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         if(null != mCallView) {
             // set the avatar
             ImageView avatarView = (ImageView) VectorCallViewActivity.this.findViewById(R.id.call_other_member);
-            VectorUtils.loadRoomAvatar(this, mSession, avatarView, mCall.getRoom());
+
+            // the avatar side must be the half of the min screen side
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+
+            int side = Math.min(size.x, size.y) / 2;
+
+            RelativeLayout.LayoutParams avatarLayoutParams = (RelativeLayout.LayoutParams)avatarView.getLayoutParams();
+            avatarLayoutParams.height = side;
+            avatarLayoutParams.width = side;
+
+            avatarView.setLayoutParams(avatarLayoutParams);
+
+            VectorUtils.loadCallAvatar(this, mSession, avatarView, mCall.getRoom());
 
             // insert the call view above the avatar
             RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
@@ -413,7 +429,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
         mSwichRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
         mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
-        mButtonsContainerView = (View) findViewById(R.id.call_menu_buttons_layout_container);
+        mButtonsContainerView =  findViewById(R.id.call_menu_buttons_layout_container);
 
         mRoomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
