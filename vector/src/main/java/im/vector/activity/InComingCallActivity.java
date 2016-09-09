@@ -18,17 +18,14 @@ package im.vector.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -80,7 +77,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         }
 
         @Override
-        public void onViewLoading(View callview) {
+        public void onViewLoading(View callView) {
             Log.d(LOG_TAG, "## onViewLoading():");
         }
 

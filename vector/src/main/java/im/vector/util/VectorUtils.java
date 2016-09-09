@@ -26,7 +26,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -37,7 +36,6 @@ import android.os.Looper;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
@@ -71,14 +69,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 
 public class VectorUtils {
 
     private static final String LOG_TAG = "VectorUtils";
 
-    public static final int REQUEST_FILES = 0;
+    //public static final int REQUEST_FILES = 0;
     public static final int TAKE_IMAGE = 1;
 
     //==============================================================================================================
@@ -150,7 +147,6 @@ public class VectorUtils {
     /**
      * Provide a display name for a calling room
      * @param context the application context.
-     * @param session the session
      * @param session the room session.
      * @param room the room.
      * @return the calling room display name.
@@ -462,11 +458,6 @@ public class VectorUtils {
     public static void loadCallAvatar(Context context, MXSession session, ImageView imageView, Room room) {
         // sanity check
         if ((null != room) && (null != session) && (null != imageView) && session.isAlive()) {
-            // sanity check
-            if ((null == session) || (null == imageView) || !session.isAlive()) {
-                return;
-            }
-
             // reset the imageView tag
             imageView.setTag(null);
 

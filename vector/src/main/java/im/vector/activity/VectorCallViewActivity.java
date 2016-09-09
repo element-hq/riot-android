@@ -86,7 +86,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     // account info
     private String mMatrixId = null;
     private MXSession mSession = null;
-    private String mCallId = null;
 
     // call info
     private boolean mAutoAccept = false;
@@ -101,7 +100,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private ImageView mMuteMicImageView;
     private ImageView mSwichRearFrontCameraImageView;
     private ImageView mMuteLocalCameraView;
-    private ImageView mRoomLinkImageView;
     private VectorPendingCallView mHeaderPendingCallView;
     private View mButtonsContainerView;
 
@@ -117,17 +115,17 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     // hard coded values are taken from specs:
     // - 585 as screen height reference
     // - 18 as space between the local video and the container view containing the setting buttons
-    private static final float RATIO_TOP_MARGIN_LOCAL_USER_VIDEO = (float)(462.0/585.0);
+    //private static final float RATIO_TOP_MARGIN_LOCAL_USER_VIDEO = (float)(462.0/585.0);
     private static final float VIDEO_TO_BUTTONS_VERTICAL_SPACE = (float) (18.0/585.0);
     /**  local user video height is set as percent of the total screen height **/
     private static final int PERCENT_LOCAL_USER_VIDEO_SIZE = 25;
     private static final float RATIO_LOCAL_USER_VIDEO_HEIGHT = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
-    private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
+    //private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
     private static final float RATIO_LOCAL_USER_VIDEO_ASPECT = 0.65f;
 
     // sensor
-    SensorManager mSensorMgr;
-    Sensor mProximitySensor;
+    private SensorManager mSensorMgr;
+    private Sensor mProximitySensor;
 
     // activity life cycle management
     private boolean mSavedSpeakerValue;
@@ -404,7 +402,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             return;
         }
 
-        mCallId = intent.getStringExtra(EXTRA_CALL_ID);
+        String callId = intent.getStringExtra(EXTRA_CALL_ID);
         mMatrixId = intent.getStringExtra(EXTRA_MATRIX_ID);
 
         mSession = Matrix.getInstance(getApplicationContext()).getSession(mMatrixId);
@@ -414,7 +412,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             return;
         }
 
-        if(null == (mCall = mSession.mCallsManager.getCallWithCallId(mCallId))) {
+        if(null == (mCall = mSession.mCallsManager.getCallWithCallId(callId))) {
             Log.e(LOG_TAG, "invalid callId");
             finish();
             return;
@@ -425,13 +423,13 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mSpeakerSelectionView = (ImageView) findViewById(R.id.call_speaker_view);
         mAvatarView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.call_other_member);
         mMuteMicImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.mute_audio);
-        mRoomLinkImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
         mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
         mSwichRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
         mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
         mButtonsContainerView =  findViewById(R.id.call_menu_buttons_layout_container);
 
-        mRoomLinkImageView.setOnClickListener(new View.OnClickListener() {
+        ImageView roomLinkImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
+        roomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startRoomActivity();
@@ -483,12 +481,12 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         // life cycle management
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if((null != savedInstanceState) && (null != audioManager)) {
-            // restore mic satus
+            // restore mic status
             audioManager.setMicrophoneMute(savedInstanceState.getBoolean(KEY_MIC_MUTE_STATUS, false));
             // restore speaker status (Cf. manageSubViews())
             mIsSpeakerForcedFromLifeCycle = true;
             mSavedSpeakerValue = savedInstanceState.getBoolean(KEY_SPEAKER_STATUS, mCall.isVideo());
-        } else {
+        } else if (null != audioManager) {
             // mic default value: enabled
             audioManager.setMicrophoneMute(false);
         }
@@ -833,7 +831,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         float screenWidth = (float)(metrics.widthPixels);
 
         // compute action bar size: the video Y component starts below the action bar
-        int actionBarHeight=0;
+        int actionBarHeight;
         TypedValue typedValue = new TypedValue();
         if (getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
@@ -848,10 +846,10 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         // screenHeight = actionBarHeight + topMarginHeightLocalUserVideo + localVideoHeight + "height between video bottom & buttons" + buttonsContainerHeight
         //float topMarginHeightNormalized = 1 - RATIO_LOCAL_USER_VIDEO_HEIGHT - VIDEO_TO_BUTTONS_VERTICAL_SPACE;
 
-        float topMarginHeightNormalized = 0; // range [0;1]
-        float ratioVideoHeightNormalized = 0; // range [0;1]
+        float topMarginHeightNormalized; // range [0;1]
+        float ratioVideoHeightNormalized; // range [0;1]
         float localVideoWidth = Math.min(screenHeight,screenWidth/*portrait is ref*/)*RATIO_LOCAL_USER_VIDEO_HEIGHT; // value effectively applied by the SDK
-        float estimatedLocalVideoHeight = (float) ((localVideoWidth)/(RATIO_LOCAL_USER_VIDEO_ASPECT)); // 0.65 => to adapt
+        float estimatedLocalVideoHeight = ((localVideoWidth)/(RATIO_LOCAL_USER_VIDEO_ASPECT)); // 0.65 => to adapt
 
         if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
             // take the video width as height
