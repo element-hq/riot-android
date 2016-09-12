@@ -77,7 +77,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         }
 
         @Override
-        public void onViewLoading(View callview) {
+        public void onViewLoading(View callView) {
             Log.d(LOG_TAG, "## onViewLoading():");
         }
 
@@ -168,16 +168,16 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 mAcceptCallButton = (Button) findViewById(R.id.button_incoming_call_accept);
                 mIgnoreCallButton = (Button) findViewById(R.id.button_incoming_call_ignore);
 
-                // set the avatar
-                VectorUtils.loadRoomAvatar(this, mSession, mCallingUserAvatarView,  mMxCall.getRoom());
+                mCallingUserAvatarView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // set the avatar
+                        VectorUtils.loadCallAvatar(InComingCallActivity.this, mSession, mCallingUserAvatarView,  mMxCall.getRoom());
+                    }
+                });
 
                 // set the room display name
-                String roomDisplayName = VectorUtils.getRoomDisplayName(this, mSession, mMxCall.getRoom());
-                if(null != roomDisplayName) {
-                    mRoomNameTextView.setText(roomDisplayName);
-                } else {
-                    mRoomNameTextView.setText("");
-                }
+                mRoomNameTextView.setText(VectorUtils.getCallingRoomDisplayName(this, mSession, mMxCall.getRoom()));
 
                 // set button handlers
                 mIgnoreCallButton.setOnClickListener(new View.OnClickListener() {
