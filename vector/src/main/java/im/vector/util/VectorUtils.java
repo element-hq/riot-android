@@ -305,11 +305,13 @@ public class VectorUtils {
      */
     private static Bitmap createAvatarThumbnail(Context context, int backgroundColor, String text) {
         float densityScale = context.getResources().getDisplayMetrics().density;
+        // the avatar size is 42dp, convert it in pixels.
         return createAvatar(backgroundColor, text, (int)(42 * densityScale));
     }
 
     /**
      * Create an avatar bitmap from a text.
+     * @param backgroundColor the background color.
      * @param text the text to display.
      * @param pixelsSide the avatar side in pixels
      * @return the generated bitmap
@@ -326,6 +328,8 @@ public class VectorUtils {
         Paint textPaint = new Paint();
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setColor(Color.WHITE);
+        // the text size is proportional to the avatar size.
+        // by default, the avatar size is 42dp, the text size is 28 dp (not sp because it has to be fixed).
         textPaint.setTextSize(pixelsSide  * 2 / 3);
 
         // get its size
@@ -487,7 +491,7 @@ public class VectorUtils {
                 Bitmap bitmap = null;
 
                 if (pixelsSide > 0) {
-                    // display the default avatar
+                    // get the avatar bitmap.
                     bitmap = VectorUtils.createAvatar(VectorUtils.getAvatarColor(roomId), getInitialLetter(displayName), pixelsSide);
                 }
 
