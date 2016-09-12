@@ -85,9 +85,6 @@ public class Matrix {
     // tell if the client should be logged out
     public boolean mHasBeenDisconnected = false;
 
-    // network event manager
-    private NetworkConnectivityReceiver mNetworkConnectivityReceiver;
-
     // i.e the event has been read from another client
     private static final MXEventListener mLiveEventListener = new MXEventListener() {
         @Override
@@ -239,9 +236,6 @@ public class Matrix {
         mLoginStorage = new LoginStorage(mAppContext);
         mMXSessions = new ArrayList<>();
         mTmpStores = new ArrayList<>();
-
-        mNetworkConnectivityReceiver = new NetworkConnectivityReceiver();
-        appContext.registerReceiver(mNetworkConnectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         mGCMRegistrationManager = new GcmRegistrationManager(mAppContext);
     }
@@ -640,8 +634,8 @@ public class Matrix {
      * @param networkEventListener the event listener to add
      */
     public void addNetworkEventListener(final IMXNetworkEventListener networkEventListener) {
-        if ((null != mNetworkConnectivityReceiver) && (null != networkEventListener)) {
-            mNetworkConnectivityReceiver.addEventListener(networkEventListener);
+        if ((null != getDefaultSession()) && (null != networkEventListener)){
+           getDefaultSession().getNetworkConnectivityReceiver().addEventListener(networkEventListener);
         }
     }
 
@@ -650,8 +644,8 @@ public class Matrix {
      * @param networkEventListener the event listener to remove
      */
     public void removeNetworkEventListener(final IMXNetworkEventListener networkEventListener) {
-        if ((null != mNetworkConnectivityReceiver) && (null != networkEventListener)) {
-            mNetworkConnectivityReceiver.removeEventListener(networkEventListener);
+        if ((null != getDefaultSession()) && (null != networkEventListener)){
+            getDefaultSession().getNetworkConnectivityReceiver().removeEventListener(networkEventListener);
         }
     }
 
@@ -659,7 +653,11 @@ public class Matrix {
      * @return true if the device is connected to a data network
      */
     public boolean isConnected() {
-        return mNetworkConnectivityReceiver.isConnected();
+        if (null != getDefaultSession()) {
+            return getDefaultSession().getNetworkConnectivityReceiver().isConnected();
+        }
+
+        return true;
     }
 
     //==============================================================================================================

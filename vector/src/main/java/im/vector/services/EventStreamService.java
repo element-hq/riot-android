@@ -452,8 +452,7 @@ public class EventStreamService extends Service {
         if (state == StreamAction.START) {
             Log.e(LOG_TAG, "start : Already started.");
             return;
-        }
-        else if ((state == StreamAction.PAUSE) || (state == StreamAction.CATCHUP)) {
+        } else if ((state == StreamAction.PAUSE) || (state == StreamAction.CATCHUP)) {
             Log.e(LOG_TAG, "start : Resuming active stream.");
             resume();
             return;
