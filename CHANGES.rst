@@ -1,4 +1,47 @@
+Changes in Vector 0.4.1 (2016-09-13)
+===================================================
 
+Improvements:
+ * #288 : Search in the Add member to a room page : contact with matrix emails should be merged
+ * #438 : Add contacts access any android
+ * #444 : Strip ' (IRC)' when autocompleting
+ * Room creation : restore the room creation with members selection before really creating the room.
+ * Login page : replace the expand button by a checkbox.
+ * Improve the call avatar when receiving a call
+ 
+Features:
+ * #423 : Intercept matrix.to URLs within the app
+ 
+Bugfixes:
+ * Fix crash in caller side when the callee did not answer
+ * #251 : refuse to create a new room if there is already one in progress (like the IOS client)
+ * #378 : Context menu should have option to quote a message
+ * #384 : Tap on avatar in Member Info page to zoom to view avatar full page 
+ * #386 : Sender picture missing in notification
+ * #389 / #390 : [VoIP] start call icon must be always displayed
+ * #391 : Fix login/password kept after logout
+ * #392 : Add "Audio focus" implementation
+ * #395 : VoIP call button should disappear from composer area when you start typing
+ * #396 : Displayed name should be consistent for all events.
+ * #397 : Generated avatar should be consistent for all events
+ * #404 : The message displayed in a room when a 3pid invited user has registered is not clear 
+ * #406 : Chat screen: New message(s) notification
+ * #407 : Chat screen: The read receipts from the conference user should be ignored 
+ * #413 : The typing area uses the fullscreen when the user is not allowed to post
+ * #415 : Room Settings: some addresses are missing
+ * #417 : Room settings - Addresses: Display the context menu on tap instead of long press 
+ * #418 : Vector shouldn't expose Directory when trying to scroll past the bottom of the room list
+ * #431 : Call screen : speaker and mute icons should be available asap the activity is launched
+ * #435 : trim leading/trailing space when setting display names 
+ * #439 : add markdown support for emotes
+ * #445 : Unable to join federated rooms with Android app
+ * #451 : sharing a website from chrome send an invalid jpg image instead of sending the url
+ * #454 : Let users join confs as voice or video 
+ * #463 : Searching for a display name including a space doesn't find it 
+ * #465 : Chat screen: disable auto scroll to bottom on keyboard presentation
+ * #473 : Huge text messages are not rendered on some android devices 
+ 
+ 
 Changes in Vector 0.4.0 (2016-08-12)
 ===================================================
 
