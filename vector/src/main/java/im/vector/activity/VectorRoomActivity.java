@@ -216,8 +216,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private final IMXNetworkEventListener mNetworkEventListener = new IMXNetworkEventListener() {
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
-            refreshNotificationsArea();
-            refreshCallButtons();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshNotificationsArea();
+                    refreshCallButtons();
+                }
+            });
         }
     };
 
