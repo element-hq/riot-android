@@ -80,7 +80,6 @@ public class NotificationUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, matrixId);
         intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, callId);
-        context.startActivity(intent);
 
         // Recreate the back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context)
