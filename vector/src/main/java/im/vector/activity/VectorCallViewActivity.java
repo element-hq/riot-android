@@ -1074,7 +1074,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                         VectorCallSoundManager.startRinging();
                     }
                     else {
-                        VectorCallSoundManager.startRingBackSound();
+                        VectorCallSoundManager.startRingBackSound(mCall.isVideo());
                     }
                 }
                 break;

@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -48,9 +49,6 @@ import im.vector.VectorApp;
  * It is in charge of playing ringtones and managing the audio focus.
  */
 public class VectorCallSoundManager {
-    private static final int RESTORE_TIME_AFTER_END_CALL_SOUND = 2000;
-    private static final int RESTORE_TIME_AFTER_BUSY_CALL_SOUND = 4000;
-
     /** Observer pattern class to notify sound events.
      *  Clients listen to events by calling {@link #addSoundListener(IVectorCallSoundListener)}**/
     public interface IVectorCallSoundListener {
@@ -65,19 +63,19 @@ public class VectorCallSoundManager {
     private static final String LOG_TAG = "CallSoundManager";
 
     // ring tones resource names
-    private static final String RING_TONE_BUSY = "busy.ogg";
-    private static final String RING_TONE_CALL_END = "callend.ogg";
     private static final String RING_TONE_START_RINGING = "ring.ogg";
-    private static final String RING_TONE_RING_BACK = "ringback.ogg";
 
     // audio focus
     private static boolean mIsFocusGranted = false;
 
-    // the ring tones & vibrate
-    private static Ringtone mRingTone;
-    private static Ringtone mRingBackTone;
-    private static Ringtone mCallEndTone;
-    private static Ringtone mBusyTone;
+    // the ringtones are played on loudspeaker
+    private static Ringtone mRingTone = null;
+
+    // the media players are played on loudspeaker / earpiece according to setSpeakerOn
+    private static MediaPlayer mRingBackPlayer = null;
+    private static MediaPlayer mCallEndPlayer = null;
+    private static MediaPlayer mBusyPlayer = null;
+
     private static final int VIBRATE_DURATION = 500; // milliseconds
     private static final int VIBRATE_SLEEP = 1000;  // milliseconds
     private static final long[] VIBRATE_PATTERN = {0, VIBRATE_DURATION, VIBRATE_SLEEP};
@@ -130,7 +128,7 @@ public class VectorCallSoundManager {
     // the audio manager
     private static AudioManager mAudioManager = null;
 
-    private static HashMap<String, Uri> mRingtoneUrlByFileName = new HashMap<>();
+    private static final HashMap<String, Uri> mRingtoneUrlByFileName = new HashMap<>();
 
     /**
      * @return the audio manager
@@ -141,44 +139,6 @@ public class VectorCallSoundManager {
         }
 
         return mAudioManager;
-    }
-
-    /**
-     * Add a listener to the listeners list.
-     * @param aListener the listener to add.
-     */
-    public static void addSoundListener(IVectorCallSoundListener aListener) {
-        if (null != aListener) {
-                // avoid adding twice
-                if (-1 == mCallSoundListenersList.indexOf(aListener)) {
-                    mCallSoundListenersList.add(aListener);
-                }
-            }
-    }
-
-    /**
-     * Remove a listener from the listeners list.
-     * @param aListener listener to be removed.
-     */
-    public static void removeSoundListener(IVectorCallSoundListener aListener) {
-        if(null != aListener) {
-            mCallSoundListenersList.remove(aListener);
-        }
-    }
-
-    /**
-     * Perform the actions required when the audio focus is lost.
-     * Any audio activity is stopped and the audio focus is released.
-     * <p>See {@link #mFocusListener}.
-     */
-    private static void onAudioFocusLoss() {
-        AudioManager audioMgr = getAudioManager();
-
-        // stop any ringtone that may be playing
-        stopRingTones();
-
-        // release the focus listener
-       releaseAudioFocus();
     }
 
     /**
@@ -285,19 +245,25 @@ public class VectorCallSoundManager {
             mRingTone = null;
         }
 
-        if (null != mRingBackTone) {
-            mRingBackTone.stop();
-            mRingBackTone = null;
+        if (null != mRingBackPlayer) {
+            if (mRingBackPlayer.isPlaying()) {
+                mRingBackPlayer.stop();
+            }
+            mRingBackPlayer = null;
         }
 
-        if (null != mCallEndTone) {
-            mCallEndTone.stop();
-            mCallEndTone = null;
+        if (null != mCallEndPlayer) {
+            if (mCallEndPlayer.isPlaying()) {
+                mCallEndPlayer.stop();
+            }
+            mCallEndPlayer = null;
         }
 
-        if (null != mBusyTone) {
-            mBusyTone.stop();
-            mBusyTone = null;
+        if (null != mBusyPlayer) {
+            if (mBusyPlayer.isPlaying()) {
+                mBusyPlayer.stop();
+            }
+            mBusyPlayer = null;
         }
     }
 
@@ -322,10 +288,9 @@ public class VectorCallSoundManager {
 
     /**
      * Request a permanent audio focus if the focus was not yet granted.
-     * @return true if audio focus was granted, false otherwise
      */
-    public static boolean requestAudioFocus() {
-        if(false == mIsFocusGranted) {
+    private static void requestAudioFocus() {
+        if(! mIsFocusGranted) {
             int focusResult;
             AudioManager audioMgr;
 
@@ -344,8 +309,6 @@ public class VectorCallSoundManager {
         } else {
             Log.d(LOG_TAG, "## getAudioFocus(): already granted");
         }
-
-        return mIsFocusGranted;
     }
 
     /**
@@ -353,12 +316,11 @@ public class VectorCallSoundManager {
      */
     public static void releaseAudioFocus() {
         if(mIsFocusGranted) {
-            int abandonResult = AudioManager.AUDIOFOCUS_REQUEST_FAILED;
             AudioManager audioMgr;
 
             if ((null != (audioMgr = getAudioManager()))) {
                 // release focus
-                abandonResult = audioMgr.abandonAudioFocus(mFocusListener);
+                int abandonResult = audioMgr.abandonAudioFocus(mFocusListener);
 
                 if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == abandonResult) {
                     mIsFocusGranted = false;
@@ -405,7 +367,7 @@ public class VectorCallSoundManager {
      * Enable the vibrate mode.
      * @param aIsVibrateEnabled true to force vibrate, false to stop vibrate.
      */
-    public static void enableVibrating(boolean aIsVibrateEnabled) {
+    private static void enableVibrating(boolean aIsVibrateEnabled) {
         Vibrator vibrator = (Vibrator)VectorApp.getInstance().getSystemService(Context.VIBRATOR_SERVICE);
 
         if((null != vibrator) && vibrator.hasVibrator()) {
@@ -444,22 +406,22 @@ public class VectorCallSoundManager {
     /**
      * Start the ring back sound
      */
-    public static void startRingBackSound() {
+    public static void startRingBackSound(boolean isVideo) {
         Log.d(LOG_TAG, "startRingBackSound");
 
-        if (null != mRingBackTone) {
+        if (null != mRingBackPlayer) {
             Log.d(LOG_TAG, "ringtone already ringing");
             return;
         }
 
         stopRinging();
 
-        // use the ringTone to manage sound volume properly
-        mRingBackTone = getRingTone(R.raw.ringback, RING_TONE_RING_BACK);
+        mRingBackPlayer = MediaPlayer.create(VectorApp.getInstance(), R.raw.ringback);
+        mRingBackPlayer.setLooping(true);
 
-        if (null != mRingBackTone) {
-            enableRingToneSpeaker();
-            mRingBackTone.play();
+        if (null != mRingBackPlayer) {
+            setSpeakerphoneOn(true, isVideo);
+            mRingBackPlayer.start();
         } else {
             Log.e(LOG_TAG, "startRingBackSound : fail to retrieve RING_TONE_RING_BACK");
         }
@@ -471,20 +433,27 @@ public class VectorCallSoundManager {
     public static void startEndCallSound() {
         Log.d(LOG_TAG, "startEndCallSound");
 
-        if (null != mCallEndTone) {
+        if (null != mCallEndPlayer) {
             Log.d(LOG_TAG, "ringtone already ringing");
             return;
         }
 
         stopRingTones();
 
-        // use the ringTone to manage sound volume properly
-        mCallEndTone = getRingTone(R.raw.callend, RING_TONE_CALL_END);
+        mCallEndPlayer = MediaPlayer.create(VectorApp.getInstance(), R.raw.callend);
+        mCallEndPlayer.setLooping(false);
 
-        if (null != mCallEndTone) {
-            enableRingToneSpeaker();
-            mCallEndTone.play();
-            restoreAudioConfigAfter(RESTORE_TIME_AFTER_END_CALL_SOUND);
+        if (null != mCallEndPlayer) {
+            // do not update the audio path
+
+            mCallEndPlayer.start();
+
+            mCallEndPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    restoreAudioConfig();
+                }
+            });
         } else {
             Log.e(LOG_TAG, "startEndCallSound : fail to retrieve RING_TONE_RING_BACK");
         }
@@ -496,7 +465,7 @@ public class VectorCallSoundManager {
     public static void startBusyCallSound() {
         Log.d(LOG_TAG, "startBusyCallSound");
 
-        if (null != mBusyTone) {
+        if (null != mBusyPlayer) {
             Log.d(LOG_TAG, "ringtone already ringing");
             return;
         }
@@ -504,12 +473,19 @@ public class VectorCallSoundManager {
         stopRingTones();
 
         // use the ringTone to manage sound volume properly
-        mBusyTone = getRingTone(R.raw.busy, RING_TONE_BUSY);
+        mBusyPlayer = MediaPlayer.create(VectorApp.getInstance(), R.raw.busy);
 
-        if (null != mBusyTone) {
-            enableRingToneSpeaker();
-            mBusyTone.play();
-            restoreAudioConfigAfter(RESTORE_TIME_AFTER_BUSY_CALL_SOUND);
+        if (null != mBusyPlayer) {
+            // do not update the audio path
+
+            mBusyPlayer.start();
+
+            mBusyPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    restoreAudioConfig();
+                }
+            });
         }
     }
 
@@ -621,7 +597,7 @@ public class VectorCallSoundManager {
      * Tells if there is a plugged headset.
      * @return
      */
-    public static boolean isHeadsetPlugged() {
+    private static boolean isHeadsetPlugged() {
         AudioManager audioManager = getAudioManager();
 
         return audioManager.isBluetoothA2dpOn() || audioManager.isWiredHeadsetOn();

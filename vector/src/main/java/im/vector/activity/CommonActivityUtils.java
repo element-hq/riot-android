@@ -144,6 +144,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
@@ -528,6 +529,7 @@ public class CommonActivityUtils {
                 && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_ROOM_DETAILS !=aPermissionsToBeGrantedBitMap)
                 ) {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
