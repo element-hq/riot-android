@@ -350,7 +350,6 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             }
             mCurrentTabIndex = PEOPLE_TAB_INDEX;
 
-
             if (!mIsContactsPermissionChecked) {
                 mIsContactsPermissionChecked = true;
                 CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBER_DETAILS, this);
@@ -358,6 +357,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_SETTINGS_ROOM_DETAIL)) {
             onTabSelectSettingsFragment();
+            CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, this);
             mCurrentTabIndex = SETTINGS_TAB_INDEX;
         }
         else if (fragmentTag.equals(TAG_FRAGMENT_FILES_DETAILS)) {
