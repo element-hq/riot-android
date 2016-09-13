@@ -16,6 +16,8 @@
 
 package im.vector.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -78,7 +80,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     private static VectorCallViewActivity instance = null;
 
-    private static View mSavedCallview = null;
+    private static View mSavedCallView = null;
     private static IMXCall mCall = null;
 
     private View mCallView;
@@ -98,7 +100,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private ImageView mSpeakerSelectionView;
     private ImageView mAvatarView;
     private ImageView mMuteMicImageView;
-    private ImageView mSwichRearFrontCameraImageView;
+    private ImageView mSwitchRearFrontCameraImageView;
     private ImageView mMuteLocalCameraView;
     private VectorPendingCallView mHeaderPendingCallView;
     private View mButtonsContainerView;
@@ -106,9 +108,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     // video screen management
     private Timer mVideoFadingEdgesTimer;
     private TimerTask mVideoFadingEdgesTimerTask;
-    private static final short FADE_IN_DURATION = 2000;
-    private static final short FADE_OUT_DURATION = 250;
-    private static final short VIDEO_FADING_TIMER = 4000;
+    private static final short FADE_IN_DURATION = 250;
+    private static final short FADE_OUT_DURATION = 2000;
+    private static final short VIDEO_FADING_TIMER = 5000;
 
     // video display size
     private IMXCall.VideoLayoutConfiguration mLocalVideoLayoutConfig;
@@ -305,7 +307,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 Log.d(LOG_TAG, "Hide the call notifications because the current one cannot be resumed");
                 EventStreamService.getInstance().hideCallNotifications();
                 mCall = null;
-                mSavedCallview = null;
+                mSavedCallView = null;
             }
         }
 
@@ -335,7 +337,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         mCall = null;
         mCallView = null;
-        mSavedCallview = null;
+        mSavedCallView = null;
     }
 
     /**
@@ -368,14 +370,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             layout.removeView(mCallView);
             layout.addView(mCallView, 1, params);
-
-            mCallView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fadeInVideoEdge();
-                    startVideoFadingEdgesScreenTimer();
-                }
-            });
 
             // init as GONE, will be displayed according to call states..
             mCall.setVisibility(View.GONE);
@@ -424,9 +418,19 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         mAvatarView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.call_other_member);
         mMuteMicImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.mute_audio);
         mHeaderPendingCallView = (VectorPendingCallView) findViewById(R.id.header_pending_callview);
-        mSwichRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
+        mSwitchRearFrontCameraImageView = (ImageView) findViewById(R.id.call_switch_camera_view);
         mMuteLocalCameraView = (ImageView) findViewById(R.id.mute_local_camera);
         mButtonsContainerView =  findViewById(R.id.call_menu_buttons_layout_container);
+        View mainContainerLayoutView =  findViewById(R.id.call_layout);
+
+        // when video is in full screen, touching the screen restore the edges (fade in)
+        mainContainerLayoutView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fadeInVideoEdge();
+                startVideoFadingEdgesScreenTimer();
+            }
+        });
 
         ImageView roomLinkImageView = (ImageView)VectorCallViewActivity.this.findViewById(R.id.room_chat_link);
         roomLinkImageView.setOnClickListener(new View.OnClickListener() {
@@ -436,11 +440,12 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             }
         });
 
-        mSwichRearFrontCameraImageView.setOnClickListener(new View.OnClickListener() {
+        mSwitchRearFrontCameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleRearFrontCamera();
                 refreshSwitchRearFrontCameraButton();
+                startVideoFadingEdgesScreenTimer();
             }
         });
 
@@ -449,6 +454,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             public void onClick(View v) {
                 toggleVideoMute();
                 refreshMuteVideoButton();
+                startVideoFadingEdgesScreenTimer();
             }
         });
 
@@ -457,6 +463,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             public void onClick(View v) {
                 toggleMicMute();
                 refreshMuteMicButton();
+                startVideoFadingEdgesScreenTimer();
             }
         });
 
@@ -473,6 +480,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 mIsSpeakerForcedFromLifeCycle = false;
                 toggleSpeaker();
                 refreshSpeakerButton();
+                startVideoFadingEdgesScreenTimer();
             }
         });
 
@@ -496,13 +504,13 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         // the webview has been saved after a screen rotation
         // getParent() != null : the static value have been reused whereas it should not
-        if ((null != mSavedCallview) && (null == mSavedCallview.getParent())) {
-            mCallView = mSavedCallview;
+        if ((null != mSavedCallView) && (null == mSavedCallView.getParent())) {
+            mCallView = mSavedCallView;
             insertCallView();
         } else {
             Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
             EventStreamService.getInstance().hideCallNotifications();
-            mSavedCallview = null;
+            mSavedCallView = null;
 
             // create the callview asap
             this.runOnUiThread(new Runnable() {
@@ -718,7 +726,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             Log.d(LOG_TAG, "## onResume(): call state=" + fState);
 
             // restore video layout after rotation
-            mCallView = mSavedCallview;
+            mCallView = mSavedCallView;
             insertCallView();
 
             // init the call button
@@ -782,28 +790,50 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     }
 
     /**
-     * Set the fading effect for the UI video.
+     * Set the fading effect on the view above the UI video.
      * @param aOpacity UTILS_OPACITY_FULL to fade out, UTILS_OPACITY_NONE to fade in
      * @param aAnimDuration animation duration in milliseconds
      */
-    private void fadeVideoEdge(float aOpacity, int aAnimDuration) {
+        private void fadeVideoEdge(final float aOpacity, int aAnimDuration) {
         if(null != mHeaderPendingCallView){
-            mHeaderPendingCallView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
+            if(aOpacity != mHeaderPendingCallView.getAlpha()) {
+                mHeaderPendingCallView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
+            }
         }
 
-        if(null != mButtonsContainerView){
-            mButtonsContainerView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator());
+        if(null != mButtonsContainerView) {
+            if (aOpacity != mButtonsContainerView.getAlpha()) {
+                mButtonsContainerView.animate().alpha(aOpacity).setDuration(aAnimDuration).setInterpolator(new AccelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                        // set to GONE after the fade out, so buttons can not not be accessed by the user
+                        if (CommonActivityUtils.UTILS_OPACITY_FULL == aOpacity) {
+                            mButtonsContainerView.setVisibility(View.GONE);
+                        } else {
+                            // restore visibility after fade in
+                            mButtonsContainerView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
         }
     }
 
+    /**
+     * Remove the views (buttons settings + pending call view) above the video call with a fade out animation.
+     */
     private void fadeOutVideoEdge() {
-        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_FULL, FADE_IN_DURATION);
+        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_FULL, FADE_OUT_DURATION);
     }
 
+    /**
+     * Restore the views (buttons settings + pending call view) above the video call with a fade in animation.
+     */
     private void fadeInVideoEdge() {
-        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_NONE, FADE_OUT_DURATION);
+        fadeVideoEdge(CommonActivityUtils.UTILS_OPACITY_NONE, FADE_IN_DURATION);
     }
-
 
     /**
      * Compute the top margin of the view that contains the video
@@ -949,17 +979,17 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      */
     private void refreshSwitchRearFrontCameraButton() {
         if ((null != mCall) && mCall.isVideo() && mCall.isSwitchCameraSupported()) {
-            mSwichRearFrontCameraImageView.setVisibility(View.VISIBLE);
+            mSwitchRearFrontCameraImageView.setVisibility(View.VISIBLE);
 
             boolean isSwitched= mCall.isCameraSwitched();
             Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): isSwitched="+isSwitched);
 
             // update icon
             int iconId = isSwitched?R.drawable.ic_material_switch_video_pink_red:R.drawable.ic_material_switch_video_grey;
-            mSwichRearFrontCameraImageView.setImageResource(iconId);
+            mSwitchRearFrontCameraImageView.setImageResource(iconId);
         } else {
             Log.d(LOG_TAG,"## refreshSwitchRearFrontCameraButton(): View.INVISIBLE");
-            mSwichRearFrontCameraImageView.setVisibility(View.INVISIBLE);
+            mSwitchRearFrontCameraImageView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -967,7 +997,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * hangup the call.
      */
     private void onHangUp(String hangUpMsg) {
-        mSavedCallview = null;
+        mSavedCallView = null;
         mHangUpReason = hangUpMsg;
 
         if (null != mCall) {
@@ -1090,7 +1120,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         if ((null != mCall) && !mCall.getCallState().equals(IMXCall.CALL_STATE_ENDED) && (null != mCallView) && (null != mCallView.getParent())) {
             ViewGroup parent = (ViewGroup) mCallView.getParent();
             parent.removeView(mCallView);
-            mSavedCallview = mCallView;
+            mSavedCallView = mCallView;
 
             EventStreamService.getInstance().displayCallInProgressNotification(mSession, mCall.getRoom(), mCall.getCallId());
             mCallView = null;
