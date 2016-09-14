@@ -297,6 +297,16 @@ public class EventStreamService extends Service {
                     catchup(false);
                 } else if (StreamAction.CATCHUP == mServiceState) {
                     Log.d(LOG_TAG, "onLiveEventsChunkProcessed : no Active call");
+
+                    // in some race conditions
+                    // the call listener does not dispatch the call end
+                    // for example when the call is stopped while the incoming call activity is creating
+                    // the call is not initialized so the answerelsewhere / stop don't make sense.
+                    if (VectorCallSoundManager.isRinging()) {
+                        Log.d(LOG_TAG, "onLiveEventsChunkProcessed : there is no more call but the device is still ringing");
+                        hideCallNotifications();
+                        VectorCallSoundManager.stopRinging();
+                    }
                     setServiceState(StreamAction.PAUSE);
                 }
             }
@@ -567,9 +577,11 @@ public class EventStreamService extends Service {
         } else {
             Log.d(LOG_TAG, "catchup with state " + state + " CurrentActivity " + VectorApp.getCurrentActivity());
 
-            // the catchup should only be done when the thread is suspended
-            // or the application has been launched by a push so there is no displayed activity
-            canCatchup = (state == StreamAction.PAUSE) ||
+            // the catchup should only be done
+            // 1- the state is in catchup : the event stream might have gone to sleep between two catchups
+            // 2- the thread is suspended
+            // 3- the application has been launched by a push so there is no displayed activity
+            canCatchup = (state == StreamAction.CATCHUP) || (state == StreamAction.PAUSE) ||
                     ((StreamAction.START == state) && (null == VectorApp.getCurrentActivity()));
         }
 
@@ -1155,7 +1167,6 @@ public class EventStreamService extends Service {
 
         // hide the call
         if ((FOREGROUND_NOTIF_ID_PENDING_CALL == mForegroundServiceIdentifier) || (FOREGROUND_ID_INCOMING_CALL == mForegroundServiceIdentifier)) {
-
             if (FOREGROUND_NOTIF_ID_PENDING_CALL == mForegroundServiceIdentifier) {
                 mCallIdInProgress = null;
             } else {

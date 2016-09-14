@@ -33,6 +33,7 @@ import org.matrix.androidsdk.call.IMXCall;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -151,6 +152,11 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 finish();
             } else if(null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))){
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
+                // assume that the user tap on a staled notification
+                if (VectorCallSoundManager.isRinging()) {
+                    Log.e(LOG_TAG, "## onCreate(): the device was ringing so assume that the call " + mCallId + " does not exist anymore");
+                    VectorCallSoundManager.stopRinging();
+                }
                 finish();
             } else {
                 synchronized (LOG_TAG) {
