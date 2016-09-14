@@ -4,7 +4,7 @@
     <string name="resouces_country">UK</string>
 
     <!-- titles -->
-    <string name="app_name">Vector</string>
+    <string name="app_name">Riot</string>
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
@@ -92,7 +92,7 @@
     <string name="about">About</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="with_email">With email</string>
-    <string name="with_vector">With Vector</string>
+    <string name="with_vector">With Riot</string>
     <string name="bug_report_password">Set a password to your bug report</string>
     <string name="disable">Disable</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
@@ -278,7 +278,7 @@
     <!-- contacts list screen -->
     <string name="contacts">Contacts</string>
     <string name="invite_this_user_to_use_matrix">Invite this user to use matrix with</string>
-    <string name="invitation_message">I\'d like to chat with you with Vector. Please, visit the website http://vector.im to have more information.</string>
+    <string name="invitation_message">I\'d like to chat with you with Riot. Please, visit the website http://vector.im to have more information.</string>
 
     <!-- Notification settings screen -->
     <string name="notification_settings_title">Notification Settings</string>
@@ -382,13 +382,13 @@
     <string name="media_picker_library">Library"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">Vector permissions</string>
+    <string name="permissions_rationale_popup_title">Riot permissions</string>
     <string name="permissions_rationale_msg_title">You are about to be asked to grant permissions..</string>
-    <string name="permissions_rationale_msg_storage">Vector needs access to media files to display photos in the media picker or to store your medias.\n\n</string>
-    <string name="permissions_rationale_msg_camera">Vector needs access to the camera to take pictures, video calls..</string>
-    <string name="permissions_rationale_msg_record_audio">Vector needs access to the microphone to perform audio calls</string>
+    <string name="permissions_rationale_msg_storage">Riot needs access to media files to display photos in the media picker or to store your medias.\n\n</string>
+    <string name="permissions_rationale_msg_camera">Riot needs access to the camera to take pictures, video calls..</string>
+    <string name="permissions_rationale_msg_record_audio">Riot needs access to the microphone to perform audio calls</string>
     <string name="permissions_rationale_msg_contacts">Your address book emails are uploaded for discovering matrix IDs.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Your address book emails are uploaded for discovering matrix IDs.\nAllow Vector to access your contacts ?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Your address book emails are uploaded for discovering matrix IDs.\nAllow Riot to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
 
@@ -588,8 +588,7 @@
     <string name="directory_search_rooms_for">%1$d rooms found for %2$s</string>
     <string name="directory_searching_title">Searching directory..</string>
     <string name="directory_search_fail">Failed to fetch data</string>
-    <string name="splash_screen_display_text">Vector</string>
-    <string name="splash_screen_copyright">Copyright (c) 2016 vector.im. All rights reserved.</string>
+    <string name="splash_screen_copyright">Copyright (c) 2016 riot.im. All rights reserved.</string>
 
     <!-- home room settings -->
     <string name="room_settings_notifications">Notifications</string>
@@ -747,6 +746,6 @@
     <string name="ga_use_disable_alert_message">You need to restart the application to disable the crash reports.</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">Vector was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
+    <string name="failed_to_load_timeline_position">Riot was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
 
 </resources>
