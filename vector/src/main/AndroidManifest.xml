@@ -276,6 +276,7 @@
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
                 <data android:host="vector.im" />
+                <data android:host="riot.im" />
                 <data android:pathPrefix="/app/" />
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
