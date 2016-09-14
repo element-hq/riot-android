@@ -55,6 +55,7 @@ import im.vector.util.RageShake;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -258,6 +259,13 @@ public class Matrix {
      */
     public LoginStorage getLoginStorage() {
         return mLoginStorage;
+    }
+
+    /**
+     * @return the application name
+     */
+    public static String getApplicationName() {
+        return instance.mAppContext.getApplicationInfo().loadLabel(instance.mAppContext.getPackageManager()).toString();
     }
 
     /**

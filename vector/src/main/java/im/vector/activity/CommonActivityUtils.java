@@ -584,11 +584,11 @@ public class CommonActivityUtils {
                     // add the user info text to be displayed to explain why the permission is required by the App
                     for(String permissionAlreadyDenied : permissionListAlreadyDenied) {
                         if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
-                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera);
+                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera, Matrix.getApplicationName());
                         } else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio);
+                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio, Matrix.getApplicationName());
                         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage);
+                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage, Matrix.getApplicationName());
                         } else if(Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)){
                             explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_contacts);
                         } else {
@@ -603,7 +603,7 @@ public class CommonActivityUtils {
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
                 if(null != resource) {
-                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
                 }
 
                 permissionsInfoDialog.setMessage(explanationMessage);
@@ -637,10 +637,10 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
 
                         if (null != resource) {
-                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
                         }
 
-                        permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_other_androids);
+                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids, Matrix.getApplicationName()));
 
                         // gives the contacts book access
                         permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
