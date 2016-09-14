@@ -327,7 +327,7 @@ public class BugReporter {
 
                 // list the intent which supports email
                 // it should avoid having lot of unexpected applications (like bluetooth...)
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rageshake@vector.im", null));
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rageshake@riot.im", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Mail subject");
                 List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(emailIntent, 0);
 
@@ -339,7 +339,7 @@ public class BugReporter {
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@vector.im"});
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@riot.im"});
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Vector bug report");
                 intent.putExtra(Intent.EXTRA_TEXT, message);
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
