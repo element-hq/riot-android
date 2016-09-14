@@ -200,10 +200,10 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 // otherwise call API is not enabled
                 mMxCall.createCallView();
             }
-        }
 
-        // the user can only accept if the dedicated permissions are granted
-        mAcceptCallButton.setVisibility(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, InComingCallActivity.this) ? View.VISIBLE : View.INVISIBLE);
+            // the user can only accept if the dedicated permissions are granted
+            mAcceptCallButton.setVisibility(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, InComingCallActivity.this) ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     @Override
