@@ -255,7 +255,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     Context context = VectorHomeActivity.this;
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_invite_people), context.getString(R.string.room_recents_create_room)};
+                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_talk_to_someone), context.getString(R.string.room_recents_create_room)};
                     dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int n) {
