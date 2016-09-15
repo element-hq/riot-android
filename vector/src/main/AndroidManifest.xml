@@ -260,6 +260,33 @@
                 <!-- mail validation -->
                 <data android:pathPrefix="/_matrix/" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="riot.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
+                <!-- mail validation -->
+                <data android:pathPrefix="/_matrix/" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="matrix.to" />
+            </intent-filter>
+
         </activity>
 
         <activity android:name=".activity.VectorFakeRoomPreviewActivity"
@@ -274,14 +301,31 @@
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="matrix.to" />
                 <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
                 <data android:host="riot.im" />
                 <data android:pathPrefix="/app/" />
                 <data android:pathPrefix="/beta/" />
                 <data android:pathPrefix="/develop/" />
                 <data android:pathPrefix="/staging/" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="matrix.to" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
             </intent-filter>

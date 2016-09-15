@@ -329,15 +329,15 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            if (!TextUtils.equals(uri.getHost(), "vector.im") && !TextUtils.equals(uri.getHost(), "matrix.to")) {
+            if (!TextUtils.equals(uri.getHost(), "vector.im") && !TextUtils.equals(uri.getHost(), "riot.im") && !TextUtils.equals(uri.getHost(), "matrix.to")) {
                 Log.e(LOG_TAG, "## parseUniversalLink : unsupported host " + uri.getHost());
                 return null;
             }
 
-            boolean isVectorImHost = TextUtils.equals(uri.getHost(), "vector.im");
+            boolean isSupportedHost = TextUtils.equals(uri.getHost(), "vector.im") || TextUtils.equals(uri.getHost(), "riot.im") ;
 
             // when the uri host is vector.im, it is followed by a dedicated path
-            if (isVectorImHost && !mSupportedVectorLinkPaths.contains(uri.getPath())) {
+            if (isSupportedHost && !mSupportedVectorLinkPaths.contains(uri.getPath())) {
                 Log.e(LOG_TAG, "## parseUniversalLink : not supported");
                 return null;
             }
@@ -353,7 +353,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
             String temp[] = uriFragment.split("/", 3); // limit to 3 for security concerns (stack overflow injection)
 
-            if (!isVectorImHost) {
+            if (!isSupportedHost) {
                 ArrayList<String> compliantList = new ArrayList<>(Arrays.asList(temp));
                 compliantList.add(0, "room");
                 temp = compliantList.toArray(new String[compliantList.size()]);

@@ -25,7 +25,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import im.vector.activity.LoginActivity;
@@ -41,7 +43,8 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
 
     // Supported path
     public static final String SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION = "/_matrix/identity/api/v1/validate/email/submitToken";
-    public static final String SUPPORTED_HOST = "vector.im";
+    private static final List<String> mSupportedHosts = Arrays.asList("vector.im", "riot.im");
+
 
     // mail validation url query parameters
     // Examples:
@@ -114,7 +117,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                 String uriFragment, host=uri.getHost();
                 Log.i(LOG_TAG,"## parseMailRegistrationLink(): host="+host);
 
-                if (!TextUtils.equals(host, SUPPORTED_HOST)) {
+                if (!mSupportedHosts.contains(host)) {
                     Log.e(LOG_TAG, "## parseUniversalLink : unsupported host ="+host);
                     return null;
                 }
