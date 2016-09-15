@@ -608,6 +608,8 @@ public class LoginActivity extends MXCActionBarActivity {
             mHomeserverConnectionConfig = null;
             // the account creation is not always supported so ensure that the dedicated button is always displayed.
             mRegisterButton.setVisibility(View.VISIBLE);
+
+            checkFlows();
         }
     }
 
