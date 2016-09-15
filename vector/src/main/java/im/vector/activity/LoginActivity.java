@@ -1799,6 +1799,7 @@ public class LoginActivity extends MXCActionBarActivity {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
                         enableLoadingScreen(false);
                         setActionButtonsEnabled(false);
+                        showMainLayout();
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     }
                 }
