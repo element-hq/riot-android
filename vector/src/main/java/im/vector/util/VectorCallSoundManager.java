@@ -237,6 +237,14 @@ public class VectorCallSoundManager {
     }
 
     /**
+     * Tells that the device is ringing.
+     * @return true if the device is ringing
+     */
+    public static boolean isRinging() {
+        return (null != mRingTone);
+    }
+
+    /**
      * Stop any playing ring tones.
      */
     private static void stopRingTones() {

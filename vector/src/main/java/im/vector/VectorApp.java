@@ -34,6 +34,7 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
+import im.vector.util.VectorCallSoundManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -186,6 +187,7 @@ public class VectorApp extends Application {
 
         // the sessions are not anymore seen as "online"
         ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
+
         for(MXSession session : sessions) {
             if (session.isAlive()) {
                 session.setIsOnline(false);
@@ -269,12 +271,21 @@ public class VectorApp extends Application {
             // get the contact update at application launch
             ContactsManager.refreshLocalContactsSnapshot(this);
 
+            boolean hasActiveCall = false;
+
             ArrayList<MXSession> sessions = Matrix.getInstance(this).getSessions();
             for(MXSession session : sessions) {
                 session.getMyUser().refreshUserInfos(null);
                 session.setIsOnline(true);
                 session.setSyncDelay(0);
                 session.setSyncTimeout(0);
+                hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
+            }
+
+            // detect if an infinite ringing has been triggered
+            if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
+                Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
+                EventStreamService.getInstance().hideCallNotifications();
             }
         }
 

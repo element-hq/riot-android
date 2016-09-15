@@ -405,6 +405,13 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     /**
+     * Refresh the summaries list
+     */
+    public void refresh() {
+        notifyDataSetChanged();
+    }
+
+    /**
      * Refresh the summaries list.
      * It also expands or collapses the section according to the latest known user preferences.
      */
