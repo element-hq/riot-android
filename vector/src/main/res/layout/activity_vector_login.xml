@@ -86,9 +86,8 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/login_large_logo"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-
+                    android:layout_width="172dp"
+                    android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/logo_large">
                 </ImageView>
