@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_170"
+        android:src="@drawable/logo_large"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"/>
 
