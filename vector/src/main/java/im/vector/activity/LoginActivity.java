@@ -153,6 +153,13 @@ public class LoginActivity extends MXCActionBarActivity {
     // the login password
     private TextView mLoginPasswordTextView;
 
+    // if the taps on login button
+    // after updating the IS / HS urls
+    // without selecting another item
+    // the IS/HS textviews don't loose the focus
+    // and the flow is not checked.
+    private boolean mIsPendingLogin;
+
     // the creation email
     private TextView mCreationEmailTextView;
 
@@ -581,8 +588,9 @@ public class LoginActivity extends MXCActionBarActivity {
 
     /**
      * Check if the home server url has been updated
+     * @return true if the HS url has been updated
      */
-    private void onHomeserverUrlUpdate() {
+    private boolean onHomeserverUrlUpdate() {
         if (!TextUtils.equals(mHomeServerUrl, getHomeServerUrl())) {
             mHomeServerUrl = getHomeServerUrl();
             mRegistrationResponse = null;
@@ -593,13 +601,18 @@ public class LoginActivity extends MXCActionBarActivity {
             mRegisterButton.setVisibility(View.VISIBLE);
 
             checkFlows();
+
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Check if the identity server url has been updated
+     * @return true if the IS url has been updated
      */
-    private void onIdentityserverUrlUpdate() {
+    private boolean onIdentityserverUrlUpdate() {
         if (!TextUtils.equals(mIdentityServerUrl, getIdentityServerUrl())) {
             mIdentityServerUrl = getIdentityServerUrl();
             mRegistrationResponse = null;
@@ -610,7 +623,11 @@ public class LoginActivity extends MXCActionBarActivity {
             mRegisterButton.setVisibility(View.VISIBLE);
 
             checkFlows();
+
+            return true;
         }
+
+        return false;
     }
 
 
@@ -1898,6 +1915,12 @@ public class LoginActivity extends MXCActionBarActivity {
      * @param password the user password
      */
     private void onLoginClick(final HomeserverConnectionConfig hsConfig, final String hsUrlString, final String identityUrlString, final String username, final String password) {
+        if (onHomeserverUrlUpdate() || onIdentityserverUrlUpdate()) {
+            mIsPendingLogin = true;
+            Log.d(LOG_TAG, "## onLoginClick() : The user taps on login but the IS/HS did not loos the focus");
+            return;
+        }
+
         onClick();
 
         // the user switches to another mode
@@ -1909,6 +1932,8 @@ public class LoginActivity extends MXCActionBarActivity {
             refreshDisplay();
             return;
         }
+
+        mIsPendingLogin = false;
 
         // --------------------- sanity tests for input values.. ---------------------
         if (!hsUrlString.startsWith("http")) {
@@ -2016,6 +2041,10 @@ public class LoginActivity extends MXCActionBarActivity {
                                 Intent intent = new Intent(LoginActivity.this, FallbackLoginActivity.class);
                                 intent.putExtra(FallbackLoginActivity.EXTRA_HOME_SERVER_ID, hsConfig.getHomeserverUri().toString());
                                 startActivityForResult(intent, FALLBACK_LOGIN_ACTIVITY_REQUEST_CODE);
+                            } else if (mIsPendingLogin) {
+                                String username = mLoginEmailTextView.getText().toString().trim();
+                                String password = mLoginPasswordTextView.getText().toString().trim();
+                                onLoginClick(getHsConfig(), getHomeServerUrl(), getIdentityServerUrl(), username, password);
                             }
                         }
                     }
