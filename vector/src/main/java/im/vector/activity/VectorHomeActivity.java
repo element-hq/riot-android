@@ -761,6 +761,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 Log.d(LOG_TAG, "## markAllMessagesAsRead(): no more sessions - end");
                 mReadReceiptSessionListIterator = null;
                 mReadReceiptSummaryListIterator = null;
+                mRecentsListFragment.refresh();
             }
             // 2 - loop on next summary
         } else if (mReadReceiptSummaryListIterator.hasNext()) {
