@@ -883,13 +883,23 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         break;
                     }
 
-                    case R.id.sliding_menu_terms: {
-                        VectorUtils.displayLicenses(VectorHomeActivity.this);
+                    case R.id.sliding_copyright_terms: {
+                        VectorUtils.displayAppCopyright(VectorHomeActivity.this);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_app_tac: {
+                        VectorUtils.displayAppTac(VectorHomeActivity.this);
                         break;
                     }
 
                     case R.id.sliding_menu_privacy_policy: {
-                        VectorUtils.displayPrivacyPolicy(VectorHomeActivity.this);
+                        VectorUtils.displayAppPrivacyPolicy(VectorHomeActivity.this);
+                        break;
+                    }
+
+                    case R.id.sliding_menu_third_party_notices: {
+                        VectorUtils.displayThirdPartyLicenses(VectorHomeActivity.this);
                         break;
                     }
                 }

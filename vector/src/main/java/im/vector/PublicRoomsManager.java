@@ -58,8 +58,8 @@ public class PublicRoomsManager {
     // public room listeners
     private static final ArrayList<PublicRoomsManagerListener> mListeners = new ArrayList<PublicRoomsManagerListener>();
 
-    // when the homeserver url is set to vector.im
-    // the manager lists the public rooms from vector.im and matrix.org
+    // when the homeserver url is set to riot.im
+    // the manager lists the public rooms from riot.im and matrix.org
     private static EventsRestClient mMatrixEventsRestClient = null;
 
     /**
@@ -97,10 +97,10 @@ public class PublicRoomsManager {
                     @Override
                     public void onSuccess(final List<PublicRoom> publicRooms) {
 
-                        // when the home server is vector.im
+                        // when the home server is riot.im
                         // get the public rooms list from matrix.org
-                        if (mSession.getHomeserverConfig().getHomeserverUri().toString().startsWith("https://vector.im")) {
-                            Log.d(LOG_TAG, "Got the vector.im public rooms in " + (System.currentTimeMillis() - t0) + " ms");
+                        if (mSession.getHomeserverConfig().getHomeserverUri().toString().startsWith("https://riot.im")) {
+                            Log.d(LOG_TAG, "Got the riot.im public rooms in " + (System.currentTimeMillis() - t0) + " ms");
                             refreshMatrixPublicRoomsList(t0, publicRooms);
                         } else {
                             Log.d(LOG_TAG, "Got the rooms public list : " + publicRooms.size() + " rooms in " + (System.currentTimeMillis() - t0) + " ms");

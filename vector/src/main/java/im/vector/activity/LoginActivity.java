@@ -919,7 +919,7 @@ public class LoginActivity extends MXCActionBarActivity {
                         } else if (TextUtils.equals(e.errcode, MatrixError.NOT_FOUND)) {
                             String hsUrlString = hsConfig.getHomeserverUri().toString();
 
-                            // if the identifier is not found on vector.im
+                            // if the identifier is not found on riot.im
                             // check if it was created with matrix.org
                             if (TextUtils.equals(hsUrlString, getString(R.string.vector_im_server_url))) {
                                 hsConfig.setHomeserverUri(Uri.parse(getString(R.string.matrix_org_server_url)));

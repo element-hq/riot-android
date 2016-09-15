@@ -644,7 +644,7 @@ public class VectorUtils {
      * Display the licenses text.
      * @param activity the activity
      */
-    public static void displayLicenses(final Activity activity) {
+    public static void displayThirdPartyLicenses(final Activity activity) {
 
         if (null != mMainAboutDialog) {
             mMainAboutDialog.dismiss();
@@ -672,14 +672,15 @@ public class VectorUtils {
     }
 
     /**
-     * Display the privacy policy.
+     * Open a webview above the current activity.
      * @param activity the activity
+     * @param url the url to open
      */
-    public static void displayPrivacyPolicy(final Activity activity) {
+    private static void displayInWebview(final Activity activity, String url) {
         AlertDialog.Builder alert = new AlertDialog.Builder(activity);
 
         WebView wv = new WebView(activity);
-        wv.loadUrl("https://vector.im/privacy.html");
+        wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -692,6 +693,30 @@ public class VectorUtils {
         alert.setView(wv);
         alert.setPositiveButton(android.R.string.ok, null);
         alert.show();
+    }
+
+    /**
+     * Display the term and conditions.
+     * @param activity the activity
+     */
+    public static void displayAppTac(final Activity activity) {
+        displayInWebview(activity, "https://riot.im/tac");
+    }
+
+    /**
+     * Display the copyright.
+     * @param activity the activity
+     */
+    public static void displayAppCopyright(final Activity activity) {
+        displayInWebview(activity, "https://riot.im/copyright");
+    }
+
+    /**
+     * Display the privacy policy.
+     * @param activity the activity
+     */
+    public static void displayAppPrivacyPolicy(final Activity activity) {
+        displayInWebview(activity, "https://riot.im/privacy");
     }
 
     //==============================================================================================================
