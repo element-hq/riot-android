@@ -78,7 +78,7 @@ public class HeadsetConnectionReceiver extends BroadcastReceiver {
                 // toggle the call speaker when the headset is plugged/unplugged
                 // TODO : all this stuff should be done in a vector calls manager
                 // via a dedicated listener.
-                // do it here until this manager is implemented.
+                // do it here until this manager is not implemented.
                 IMXCall call = VectorCallViewActivity.getActiveCall();
                 if (null != call) {
                     boolean isSpeakerOn = getAudioManager().isSpeakerphoneOn();
