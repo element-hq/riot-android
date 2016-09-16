@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <!-- videocall permissions-->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -243,8 +244,8 @@
                 android:value="im.vector.activity.VectorHomeActivity"/>
         </activity>
 
-        <activity android:name=".activity.VectorUniversalLinkActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+        <activity android:name=".activity.VectorUniversalLinkActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
