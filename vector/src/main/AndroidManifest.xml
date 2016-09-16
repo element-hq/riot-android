@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="im.vector" xmlns:tools="http://schemas.android.com/tools" android:installLocation="auto">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <!-- videocall permissions-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- shared files from external application -->
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+
+    <!-- to be able to turn on display when a notification is received-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- videocall feature-->
+    <!-- android.permission.CAMERA defines android.hardware.camera -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.any" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <uses-feature android:glEsVersion="0x00020000" android:required="false" />
+
+    <!-- android.permission.RECORD_AUDIO defines android.hardware.microphone -->
+    <uses-feature android:name="android.hardware.microphone" android:required="false"/>
+
+    <!-- ShortcutBadger permissions-->
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
+    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT"/>
+    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE"/>
+    <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT"/>
+    <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE"/>
+
+    <!-- libjingle is designed for API >= 15 but the app should work from API >= 11 -->
+    <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
+
+    <application
+        android:allowBackup="true"
+        android:name="im.vector.VectorApp"
+        android:icon="@drawable/logo"
+        android:logo="@drawable/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme" >
+
+        <!-- activities list starts here -->
+        <activity
+            android:name="im.vector.activity.LoginActivity"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="im.vector.activity.AccountCreationActivity"
+            android:label="@string/create_account" >
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.AccountCreationCaptchaActivity"
+            android:label="@string/create_account" >
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.FallbackLoginActivity"
+            android:label="@string/login" >
+        </activity>
+        <activity
+            android:name="im.vector.activity.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name="im.vector.activity.VectorHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_home">
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorRoomActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_room"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorRoomMessagesSearchActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorRoomActivity"/>
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorRoomDetailsActivity"
+            android:label="@string/room_details_title"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorRoomActivity"/>
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorMemberDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_member_details"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorRoomActivity"/>
+        </activity>
+        <activity
+            android:name="im.vector.activity.LockScreenActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name="im.vector.activity.InComingCallActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name="im.vector.activity.VectorMediasViewerActivity"
+            android:label="a filename"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorRoomActivity"/>
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorCallViewActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+
+        <activity
+            android:name="im.vector.activity.VectorMediasPickerActivity"
+            android:label="@string/media_picker_both_capture_title"
+            android:parentActivityName="im.vector.activity.VectorRoomActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+        </activity>
+
+        <activity
+            android:name="im.vector.activity.VectorPublicRoomsActivity"
+            android:label="@string/directory_title"
+            android:parentActivityName="im.vector.activity.VectorUnifiedSearchActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorUnifiedSearchActivity"/>
+        </activity>
+
+        <activity
+            android:name=".activity.VectorUnifiedSearchActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.VectorHomeActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".activity.VectorRoomInviteMembersActivity"
+            android:label="Vector searches"
+            android:parentActivityName="im.vector.activity.VectorRoomDetailsActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SearchesAppTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="im.vector.activity.VectorHomeActivity"/>
+        </activity>
+
+        <activity android:name=".activity.VectorUniversalLinkActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
+                <!-- mail validation -->
+                <data android:pathPrefix="/_matrix/" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.VectorFakeRoomPreviewActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+        </activity>
+
+        <!-- broadcast receiver -->
+        <receiver
+            android:name=".receiver.VectorUniversalLinkReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <data android:pathPrefix="/app/" />
+                <data android:pathPrefix="/beta/" />
+                <data android:pathPrefix="/develop/" />
+                <data android:pathPrefix="/staging/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".receiver.VectorRegistrationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="im.vector.receiver.BROADCAST_ACTION_REGISTRATION" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="vector.im" />
+                <!-- mail validation -->
+                <data android:pathPrefix="/_matrix/" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Shared items  -->
+        <activity android:name=".activity.VectorSharedFilesActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+
+            <intent-filter> 
+                <action android:name="android.intent.action.SEND" /> 
+                <category android:name="android.intent.category.DEFAULT" /> 
+                <data android:mimeType="*/*" /> 
+            </intent-filter> 
+
+            <intent-filter> 
+                <action android:name="android.intent.action.SEND_MULTIPLE" /> 
+                <category android:name="android.intent.category.DEFAULT" /> 
+                <data android:mimeType="*/*" /> 
+            </intent-filter>
+        </activity>
+
+        <service android:name="im.vector.services.EventStreamService" />
+
+        <provider
+            android:authorities="im.vector.VectorApp.provider"
+            android:name="im.vector.db.VectorContentProvider"
+            android:exported="true"/>
+    </application>
+
+</manifest>

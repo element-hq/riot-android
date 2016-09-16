@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/member_details_activity_main_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/room_background">
+
+    <RelativeLayout
+        android:id="@+id/memeber_details_action_bar"
+        android:layout_width="match_parent"
+        android:background="@color/vector_green_color"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/action_bar_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            android:layout_marginTop="16dp">
+
+            <!-- the member avatar-->
+            <RelativeLayout
+                android:id="@+id/member_avatar_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+
+                <include layout="@layout/vector_large_round_avatar"
+                    android:id="@+id/memberDetails_roundAvatar"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/member_avatar_badge"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="-7dp"
+                android:layout_marginTop="-0dp"
+                android:src="@drawable/admin_icon"
+                android:layout_alignRight="@id/member_avatar_container"
+                android:layout_alignTop="@id/member_avatar_container"
+                android:visibility="gone"/>
+
+            <!-- the member name -->
+            <TextView
+                android:id="@+id/member_details_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/member_avatar_container"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp" />
+
+            <!-- the member presence -->
+            <TextView
+                android:id="@+id/member_details_presence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/member_details_name"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="14sp"
+                android:textColor="@color/vector_0_54_black_color"
+                android:layout_marginBottom="16dp" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/member_details_toolbar"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp"
+            android:background="@android:color/transparent"
+            style="@style/VectorToolbarStyle">
+
+        </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+
+    <!-- the member actions list: start new room, Make admin, block.. -->
+    <ListView
+        android:id="@+id/member_details_actions_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/memeber_details_action_bar"
+        android:dividerHeight="0dp"
+        android:divider="#00000000"/>
+
+    <!-- progress bar view, displayed when an action in the list view is pressed -->
+    <include layout="@layout/progress_bar_view"
+        android:id="@+id/member_details_list_view_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+</RelativeLayout>

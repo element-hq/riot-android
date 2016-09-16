@@ -1,0 +1,6 @@
+include ':vector'
+
+
+// uncomment theses lines to compile matrix SDK as project sources instead of external lib
+//include ':matrix-sdk'
+//project(':matrix-sdk').projectDir = new File(settingsDir, '../matrix-android-sdk/matrix-sdk')

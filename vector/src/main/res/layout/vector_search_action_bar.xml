@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/room_action_bar_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20sp"
+        android:focusable="true"
+        android:hint="@string/search_hint"
+        android:textColorHint="@color/vector_search_hint_color"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"
+        android:background="@android:color/transparent"
+        android:textCursorDrawable="@drawable/searches_cursor_background"/>
+
+</RelativeLayout>

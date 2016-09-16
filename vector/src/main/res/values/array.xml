@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Room tags -->
+    <string-array name="tag_entries">
+        <item>@string/room_settings_tag_pref_entry_favourite</item>
+        <item>@string/room_settings_tag_pref_entry_low_priority</item>
+        <item>@string/room_settings_tag_pref_entry_none</item>
+    </string-array>
+
+    <string-array name="tag_values">
+        <item>@string/room_settings_tag_pref_entry_value_favourite</item>
+        <item>@string/room_settings_tag_pref_entry_value_low_priority</item>
+        <item>@string/room_settings_tag_pref_entry_value_none</item>
+    </string-array>
+
+    <!-- access rules: Who can access this room? -->
+    <string-array name="room_access_rules_entries">
+        <item>Only people who have been invited</item>
+        <item>Anyone who knows the room\'s link, apart from guests</item>
+        <item>Anyone who knows the room\'s link, including guests</item>
+    </string-array>
+    
+    <string-array name="room_access_rules_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- read history rules: Who can read history? -->
+    <string-array name="room_read_history_rules_entries">
+        <item>@string/room_settings_read_history_entry_anyone</item>
+        <item>@string/room_settings_read_history_entry_members_only_option_time_shared</item>
+        <item>@string/room_settings_read_history_entry_members_only_invited</item>
+        <item>@string/room_settings_read_history_entry_members_only_joined</item>
+    </string-array>
+    <string-array name="room_read_history_rules_values">
+        <item>@string/room_settings_read_history_entry_value_anyone</item>
+        <item>@string/room_settings_read_history_entry_value_members_only_option_time_shared</item>
+        <item>@string/room_settings_read_history_entry_value_members_only_invited</item>
+        <item>@string/room_settings_read_history_entry_value_members_only_joined</item>
+    </string-array>
+
+</resources>

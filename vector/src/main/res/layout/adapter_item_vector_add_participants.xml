@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="74dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/filtered_list_actions"
+        android:background="@color/vector_fuchsia_color"
+        android:layout_width="55dp"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/filtered_list_delete_action"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_material_eject_white"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/filtered_list_cell"
+        android:background="#FFF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <CheckBox
+            android:id="@+id/filtered_list_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentRight="true"/>
+
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/filtered_list_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/filtered_list_matrix_user"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginRight="-7dp"
+            android:src="@drawable/logo"
+            android:layout_alignRight="@+id/filtered_list_avatar"
+            android:layout_alignTop="@+id/filtered_list_avatar"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/filtered_list_avatar_badge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginRight="-7dp"
+            android:src="@drawable/admin_icon"
+            android:layout_alignRight="@id/filtered_list_avatar"
+            android:layout_alignTop="@id/filtered_list_avatar"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/filtered_list_name"
+            android:layout_toRightOf="@id/filtered_list_avatar"
+            android:layout_alignTop="@id/filtered_list_avatar"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@id/filtered_list_checkbox"
+            android:textColor="@color/vector_21_black"
+            android:text="A member name" />
+
+        <TextView
+            android:id="@+id/filtered_list_status"
+            android:layout_alignLeft="@id/filtered_list_name"
+            android:layout_alignBottom="@id/filtered_list_avatar"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@id/filtered_list_checkbox"
+            android:textColor="@color/vector_80_gray"
+            android:text="A member status" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/vector_dc_gray"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <PreferenceCategory
+        android:key="@string/settings_user_settings"
+        android:title="@string/settings_user_settings" >
+
+        <im.vector.preference.UserAvatarPreference
+            android:title="@string/settings_profile_picture"
+            android:key="matrixId">
+        </im.vector.preference.UserAvatarPreference>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:title="@string/settings_display_name"
+            android:summary="@string/settings_display_name"
+            android:key="@string/settings_display_name"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_change_password"
+            android:summary="********"
+            android:key="@string/settings_change_password"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_notifications">
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_enable_all_notif"
+            android:key="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_enable_this_device"
+            android:key="@string/settings_enable_this_device"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_turn_screen_on"
+            android:key="@string/settings_turn_screen_on"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_containing_my_name"
+            android:key="@string/settings_containing_my_name"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_messages_in_one_to_one"
+            android:key="@string/settings_messages_in_one_to_one"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_messages_in_group_chat"
+            android:key="@string/settings_messages_in_group_chat"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_invited_to_room"
+            android:key="@string/settings_invited_to_room"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_call_invitations"
+            android:key="@string/settings_call_invitations"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_messages_sent_by_bot"
+            android:key="@string/settings_messages_sent_by_bot"
+            android:dependency="@string/settings_enable_all_notif"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_notifications_targets"
+        android:key="@string/settings_notifications_targets">
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_ignored_users"
+        android:key="@string/settings_ignored_users">
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_advanced" >
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_logged_in"
+            android:summary="1.2.3"
+            android:key="@string/settings_logged_in"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_home_server"
+            android:summary="1.2.3"
+            android:key="@string/settings_home_server"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_identity_server"
+            android:summary="1.2.3"
+            android:key="@string/settings_identity_server"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/settings_background_sync"
+        android:title="@string/settings_background_sync" >
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_enable_background_sync"
+            android:key="@string/settings_enable_background_sync"/>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_timeout"
+            android:key="@string/settings_set_sync_timeout"/>
+
+        <EditTextPreference
+            android:focusable="true"
+            android:numeric="integer"
+            android:title="@string/settings_set_sync_delay"
+            android:key="@string/settings_set_sync_delay"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_other"
+        android:key="@string/settings_other" >
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/ga_use_settings"
+            android:key="@string/ga_use_settings"/>
+
+        <Preference
+            android:key="application_info_link"
+            android:title="@string/settings_title_app_info_link"
+            android:summary="@string/settings_summary_app_info_link" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_version"
+            android:summary="1.2.3"
+            android:key="@string/settings_version"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_term_conditions"
+            android:key="@string/settings_term_conditions"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/room_sliding_privacy_policy"
+            android:key="@string/room_sliding_privacy_policy"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_clear_cache"
+            android:key="@string/settings_clear_cache"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

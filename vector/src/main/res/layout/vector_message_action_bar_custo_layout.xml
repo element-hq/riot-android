@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/header_texts_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/open_chat_header_arrow">
+
+        <TextView
+            android:id="@+id/room_action_bar_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/room_action_bar_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/open_chat_header_arrow"
+        android:src="@drawable/ic_arrow_drop_down_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"/>
+
+</RelativeLayout>

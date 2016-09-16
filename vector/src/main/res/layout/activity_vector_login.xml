@@ -1,0 +1,313 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/login_actions_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/vector_silver_color"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/vector_silver_color"/>
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_width="94dp"
+            android:layout_height="36dp"
+            android:background="@color/vector_green_color"
+            android:textColor="@android:color/white"
+            android:text="@string/auth_login"/>
+
+        <Button
+            android:id="@+id/button_register"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="94dp"
+            android:layout_height="36dp"
+            android:textColor="@color/vector_green_color"
+            android:background="@android:color/white"
+            android:text="@string/auth_register"/>
+
+        <Button
+            android:id="@+id/button_reset_password"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_width="150dp"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            android:background="@color/vector_green_color"
+            android:textColor="@android:color/white"
+            android:text="@string/auth_send_reset_email"/>
+
+        <Button
+            android:id="@+id/button_forgot_email_validate"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            android:background="@color/vector_green_color"
+            android:textColor="@android:color/white"
+            android:text="@string/auth_send_reset_email"/>
+
+    </RelativeLayout>
+
+    <!-- the main body is defined in a scroll view to avoid split items -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/login_actions_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/login_large_logo"
+                    android:layout_width="172dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/logo_large">
+                </ImageView>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/main_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="19dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+
+                <LinearLayout
+                    android:id="@+id/login_inputs_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/login_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/auth_user_id_placeholder"/>
+
+                    <EditText
+                        android:id="@+id/login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_password_placeholder"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/forget_password_inputs_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_reset_password_message"/>
+
+                    <EditText
+                        android:id="@+id/forget_email_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/auth_email_placeholder"/>
+
+                    <EditText
+                        android:id="@+id/forget_new_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_new_password_placeholder"
+                        android:layout_marginTop="10dp" />
+
+                    <EditText
+                        android:id="@+id/forget_confirm_new_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_repeat_new_password_placeholder"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/creation_inputs_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/creation_email_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/auth_email_placeholder" />
+
+                    <EditText
+                        android:id="@+id/creation_your_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/auth_user_name_placeholder" />
+
+                    <EditText
+                        android:id="@+id/creation_password1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_password_placeholder"/>
+
+                    <EditText
+                        android:id="@+id/creation_password2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="@string/auth_repeat_password_placeholder"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/display_server_url_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_use_server_options"/>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/display_server_url_expand_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_material_arrow_drop_up_black"/>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/login_matrix_server_options_layout"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_home_server"/>
+
+                    <EditText
+                        android:id="@+id/login_matrix_server_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/hs_url"/>
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auth_identity_server"/>
+
+                    <EditText
+                        android:id="@+id/login_identity_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/identity_url"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/login_forgot_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/vector_green_color"
+                    android:text="@string/auth_forgot_password"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/flow_progress_message_textview"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:text="A text here" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- flow mask view: to be displayed above the entire screen -->
+    <RelativeLayout
+        android:id="@+id/flow_ui_mask_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/search_progress"
+            android:layout_centerInParent="true"
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:indeterminate="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>
+

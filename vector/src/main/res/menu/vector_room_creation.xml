@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.matrix.vector.activity.VectorRoomCreationActivity" >
+
+    <item
+        android:id="@+id/action_create_room"
+        android:title="@string/room_participants_create"
+        android:icon="@drawable/ic_material_done_white"
+        app:showAsAction="always"
+        android:orderInCategory="0"/>
+
+</menu>
