@@ -741,7 +741,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             isSpeakerPhoneOn = mSavedSpeakerValue;
         } else {
             // default value: video => speaker ON, voice => speaker OFF
-            isSpeakerPhoneOn = mCall.isVideo();
+            isSpeakerPhoneOn = mCall.isVideo() && !VectorCallSoundManager.isHeadsetPlugged() ;
         }
         VectorCallSoundManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
     }

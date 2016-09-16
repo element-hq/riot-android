@@ -428,7 +428,7 @@ public class VectorCallSoundManager {
         mRingBackPlayer.setLooping(true);
 
         if (null != mRingBackPlayer) {
-            setSpeakerphoneOn(true, isVideo);
+            setSpeakerphoneOn(true, isVideo && !isHeadsetPlugged());
             mRingBackPlayer.start();
         } else {
             Log.e(LOG_TAG, "startRingBackSound : fail to retrieve RING_TONE_RING_BACK");
@@ -605,7 +605,7 @@ public class VectorCallSoundManager {
      * Tells if there is a plugged headset.
      * @return
      */
-    private static boolean isHeadsetPlugged() {
+    public static boolean isHeadsetPlugged() {
         AudioManager audioManager = getAudioManager();
 
         return audioManager.isBluetoothA2dpOn() || audioManager.isWiredHeadsetOn();
@@ -628,17 +628,14 @@ public class VectorCallSoundManager {
 
         AudioManager audioManager = getAudioManager();
 
-        // ignore speaker button if a headset is connected
-        if (!isHeadsetPlugged()) {
-            int audioMode = isInCall ? AudioManager.MODE_IN_COMMUNICATION : AudioManager.MODE_RINGTONE;
+        int audioMode = isInCall ? AudioManager.MODE_IN_COMMUNICATION : AudioManager.MODE_RINGTONE;
 
-            if (audioManager.getMode() != audioMode) {
-                audioManager.setMode(audioMode);
-            }
+        if (audioManager.getMode() != audioMode) {
+            audioManager.setMode(audioMode);
+        }
 
-            if (isSpeakerOn != audioManager.isSpeakerphoneOn()) {
-                audioManager.setSpeakerphoneOn(isSpeakerOn);
-            }
+        if (isSpeakerOn != audioManager.isSpeakerphoneOn()) {
+            audioManager.setSpeakerphoneOn(isSpeakerOn);
         }
     }
 
@@ -646,9 +643,7 @@ public class VectorCallSoundManager {
      * Toggle the speaker
      */
     public static void toggleSpeaker() {
-        if (!isHeadsetPlugged()) {
-            AudioManager audioManager = getAudioManager();
-            audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
-        }
+        AudioManager audioManager = getAudioManager();
+        audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
     }
 }
