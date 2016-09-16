@@ -1442,22 +1442,39 @@ public class CommonActivityUtils {
 
         File dstFile = new File(dstDir, dstFileName);
 
+        // if the file already exists, append a marker
+        if (dstFile.exists()) {
+            String baseFileName = dstFileName;
+            String fileExt = "";
+
+            int lastDotPos = dstFileName.lastIndexOf(".");
+
+            if (lastDotPos > 0) {
+                baseFileName = dstFileName.substring(0, lastDotPos);
+                fileExt = dstFileName.substring(lastDotPos);
+            }
+
+            int counter = 1;
+
+            while(dstFile.exists()) {
+                dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
+                counter ++;
+            }
+        }
+
         // Copy source file to destination
         FileInputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
-            // create only the
-            if (!dstFile.exists()) {
-                dstFile.createNewFile();
+            dstFile.createNewFile();
 
-                inputStream = new FileInputStream(sourceFile);
-                outputStream = new FileOutputStream(dstFile);
+            inputStream = new FileInputStream(sourceFile);
+            outputStream = new FileOutputStream(dstFile);
 
-                byte[] buffer = new byte[1024 * 10];
-                int len;
-                while ((len = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, len);
-                }
+            byte[] buffer = new byte[1024 * 10];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, len);
             }
         } catch (Exception e) {
             dstFile = null;
