@@ -84,7 +84,7 @@
                 android:layout_height="36dp"
                 android:textColor="@color/vector_fuchsia_color"
                 android:background="@android:color/white"
-                android:text="@string/decline"/>
+                android:text="@string/cancel"/>
         </RelativeLayout>
 
         <TextView
