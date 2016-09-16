@@ -52,6 +52,7 @@ import java.util.TimerTask;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
@@ -315,7 +316,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     /**
      * @return the callViewActivity instance
      */
-    private static VectorCallViewActivity getInstance() {
+    public static VectorCallViewActivity getInstance() {
         return instance;
     }
 
@@ -741,7 +742,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             isSpeakerPhoneOn = mSavedSpeakerValue;
         } else {
             // default value: video => speaker ON, voice => speaker OFF
-            isSpeakerPhoneOn = mCall.isVideo() && !VectorCallSoundManager.isHeadsetPlugged() ;
+            isSpeakerPhoneOn = mCall.isVideo() && !HeadsetConnectionReceiver.isHeadsetPlugged() ;
         }
         VectorCallSoundManager.setCallSpeakerphoneOn(isSpeakerPhoneOn);
     }
@@ -910,7 +911,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     /**
      * Update the mute speaker icon according to speaker status.
      */
-    private void refreshSpeakerButton() {
+    public void refreshSpeakerButton() {
         AudioManager audioManager = (AudioManager) VectorCallViewActivity.this.getSystemService(Context.AUDIO_SERVICE);
         boolean isOn = audioManager.isSpeakerphoneOn();
         Log.d(LOG_TAG,"## refreshSpeakerButton(): isOn="+isOn);
