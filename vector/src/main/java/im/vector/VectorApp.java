@@ -17,6 +17,8 @@
 package im.vector;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,6 +33,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
@@ -169,6 +172,9 @@ public class VectorApp extends Application {
                 }
             }
         });
+
+        // detect if the headset is plugged / unplugged.
+        registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
     }
 
     /**
