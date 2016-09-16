@@ -43,6 +43,7 @@ import java.util.TimerTask;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.receiver.HeadsetConnectionReceiver;
 
 /**
  * This class manages the sound for vector.
@@ -82,6 +83,7 @@ public class VectorCallSoundManager {
 
     // audio focus management
     private final static ArrayList<IVectorCallSoundListener> mCallSoundListenersList = new ArrayList<>();
+
     private final static AudioManager.OnAudioFocusChangeListener mFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int aFocusEvent) {
@@ -428,7 +430,7 @@ public class VectorCallSoundManager {
         mRingBackPlayer.setLooping(true);
 
         if (null != mRingBackPlayer) {
-            setSpeakerphoneOn(true, isVideo);
+            setSpeakerphoneOn(true, isVideo && !HeadsetConnectionReceiver.isHeadsetPlugged());
             mRingBackPlayer.start();
         } else {
             Log.e(LOG_TAG, "startRingBackSound : fail to retrieve RING_TONE_RING_BACK");
@@ -552,63 +554,11 @@ public class VectorCallSoundManager {
     }
 
     /**
-     * Restore the audio config after a specified delay
-     * @param delayMs the delay in ms
-     */
-    private static void restoreAudioConfigAfter(int delayMs) {
-        if (null == mUIHandler) {
-            mUIHandler = new Handler(Looper.getMainLooper());
-        }
-
-        mRestoreAudioConfigTimer = new Timer();
-        mRestoreAudioConfigTimerMask = new TimerTask() {
-            public void run() {
-                mUIHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != mRestoreAudioConfigTimer) {
-                            mRestoreAudioConfigTimer.cancel();
-                        }
-                        mRestoreAudioConfigTimer = null;
-                        mRestoreAudioConfigTimerMask = null;
-
-                        mUIHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                restoreAudioConfig();
-                            }
-                        });
-                    }
-                });
-            }
-        };
-
-        mRestoreAudioConfigTimer.schedule(mRestoreAudioConfigTimerMask, delayMs);
-    }
-
-    /**
-     * Turn the speaker on to be ready to ring
-     */
-    private static void enableRingToneSpeaker() {
-        setSpeakerphoneOn(false, true);
-    }
-
-    /**
      * Set the speakerphone ON or OFF.
      * @param isOn true to enable the speaker (ON), false to disable it (OFF)
      */
     public static void setCallSpeakerphoneOn(boolean isOn) {
         setSpeakerphoneOn(true, isOn);
-    }
-
-    /**
-     * Tells if there is a plugged headset.
-     * @return
-     */
-    private static boolean isHeadsetPlugged() {
-        AudioManager audioManager = getAudioManager();
-
-        return audioManager.isBluetoothA2dpOn() || audioManager.isWiredHeadsetOn();
     }
 
     /**
@@ -628,17 +578,14 @@ public class VectorCallSoundManager {
 
         AudioManager audioManager = getAudioManager();
 
-        // ignore speaker button if a headset is connected
-        if (!isHeadsetPlugged()) {
-            int audioMode = isInCall ? AudioManager.MODE_IN_COMMUNICATION : AudioManager.MODE_RINGTONE;
+        int audioMode = isInCall ? AudioManager.MODE_IN_COMMUNICATION : AudioManager.MODE_RINGTONE;
 
-            if (audioManager.getMode() != audioMode) {
-                audioManager.setMode(audioMode);
-            }
+        if (audioManager.getMode() != audioMode) {
+            audioManager.setMode(audioMode);
+        }
 
-            if (isSpeakerOn != audioManager.isSpeakerphoneOn()) {
-                audioManager.setSpeakerphoneOn(isSpeakerOn);
-            }
+        if (isSpeakerOn != audioManager.isSpeakerphoneOn()) {
+            audioManager.setSpeakerphoneOn(isSpeakerOn);
         }
     }
 
@@ -646,9 +593,7 @@ public class VectorCallSoundManager {
      * Toggle the speaker
      */
     public static void toggleSpeaker() {
-        if (!isHeadsetPlugged()) {
-            AudioManager audioManager = getAudioManager();
-            audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
-        }
+        AudioManager audioManager = getAudioManager();
+        audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
     }
 }
