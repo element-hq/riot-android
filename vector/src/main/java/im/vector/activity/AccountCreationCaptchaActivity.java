@@ -1,18 +1,18 @@
 /*
-* Copyright 2016 OpenMarket Ltd
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2016 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package im.vector.activity;
 
@@ -45,32 +45,32 @@ public class AccountCreationCaptchaActivity extends Activity {
     public static String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
 
     private static final String mRecaptchaHTMLString = "<html> " +
-            " <head> " +
-            " <script type=\"text/javascript\"> " +
-            " var verifyCallback = function(response) { " +
-            // Generic method to make a bridge between JS and the UIWebView
-            " var iframe = document.createElement('iframe'); " +
-            " iframe.setAttribute('src', 'js:' + JSON.stringify({'action': 'verifyCallback', 'response': response})); " +
-            " document.documentElement.appendChild(iframe); " +
-            " iframe.parentNode.removeChild(iframe); " +
-            " iframe = null; " +
-            " }; " +
+                        " <head> " +
+                         " <script type=\"text/javascript\"> " +
+                         " var verifyCallback = function(response) { " +
+                        // Generic method to make a bridge between JS and the UIWebView
+                        " var iframe = document.createElement('iframe'); " +
+                        " iframe.setAttribute('src', 'js:' + JSON.stringify({'action': 'verifyCallback', 'response': response})); " +
+                        " document.documentElement.appendChild(iframe); " +
+                        " iframe.parentNode.removeChild(iframe); " +
+                        " iframe = null; " +
+                        " }; " +
 
-            " var onloadCallback = function() { " +
+                        " var onloadCallback = function() { " +
 
-            " grecaptcha.render('recaptcha_widget', { " +
-            " 'sitekey' : '%s', " +
-            " 'callback': verifyCallback " +
-            " }); " +
-            " }; " +
-            " </script> " +
-            " </head> " +
-            " <body> " +
-            " <div id=\"recaptcha_widget\"></div> " +
-            " <script src=\"https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit\" async defer> " +
-            " </script> " +
-            " </body> " +
-            " </html> ";
+                        " grecaptcha.render('recaptcha_widget', { " +
+                        " 'sitekey' : '%s', " +
+                        " 'callback': verifyCallback " +
+                        " }); " +
+                        " }; " +
+                        " </script> " +
+                        " </head> " +
+                        " <body> " +
+                        " <div id=\"recaptcha_widget\"></div> " +
+                        " <script src=\"https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit\" async defer> " +
+                        " </script> " +
+                        " </body> " +
+                        " </html> ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {

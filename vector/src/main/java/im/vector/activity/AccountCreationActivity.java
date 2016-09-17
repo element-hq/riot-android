@@ -85,7 +85,7 @@ public class AccountCreationActivity extends Activity {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler,
                                            SslError error) {
-                final SslErrorHandler fHandler = handler;
+                final SslErrorHandler fHander = handler;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AccountCreationActivity.this);
 
@@ -94,14 +94,14 @@ public class AccountCreationActivity extends Activity {
                 builder.setPositiveButton(R.string.ssl_trust, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fHandler.proceed();
+                        fHander.proceed();
                     }
                 });
 
                 builder.setNegativeButton(R.string.ssl_do_not_trust, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fHandler.cancel();
+                        fHander.cancel();
                     }
                 });
 
@@ -109,7 +109,7 @@ public class AccountCreationActivity extends Activity {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            fHandler.cancel();
+                            fHander.cancel();
                             dialog.dismiss();
                             return true;
                         }
