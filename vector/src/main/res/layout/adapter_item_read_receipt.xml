@@ -3,7 +3,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/internal_container"
-    android:background="@android:color/white"
+    android:background="@color/vector_deemed_background_view_gray_color"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 

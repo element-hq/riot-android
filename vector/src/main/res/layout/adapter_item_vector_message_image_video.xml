@@ -10,6 +10,8 @@
     <LinearLayout
         android:id="@+id/messagesAdapter_body_view"
         android:layout_marginLeft="16dp"
+        android:background="@color/vector_deemed_background_view_gray_color"
+        android:padding="5dp"
         android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
