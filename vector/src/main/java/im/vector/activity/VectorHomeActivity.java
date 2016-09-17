@@ -255,7 +255,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     Context context = VectorHomeActivity.this;
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_invite_people), context.getString(R.string.room_recents_create_room)};
+                    CharSequence items[] = new CharSequence[]{context.getString(R.string.room_recents_start_chat), context.getString(R.string.room_recents_create_room)};
                     dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int n) {
@@ -761,6 +761,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 Log.d(LOG_TAG, "## markAllMessagesAsRead(): no more sessions - end");
                 mReadReceiptSessionListIterator = null;
                 mReadReceiptSummaryListIterator = null;
+                mRecentsListFragment.refresh();
             }
             // 2 - loop on next summary
         } else if (mReadReceiptSummaryListIterator.hasNext()) {
