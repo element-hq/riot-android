@@ -4,7 +4,7 @@
     <string name="resouces_country">UK</string>
 
     <!-- titles -->
-    <string name="app_name">Vector</string>
+    <string name="app_name">Riot</string>
     <string name="title_activity_home">Messages</string>
     <string name="title_activity_room">Room</string>
     <string name="title_activity_public_rooms">Public Rooms</string>
