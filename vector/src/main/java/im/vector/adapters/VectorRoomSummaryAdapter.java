@@ -63,6 +63,8 @@ import im.vector.util.VectorUtils;
  * An adapter which can display room information.
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
+    private static final String LOG_TAG = "VRoomSummaryAdapter";
+
     public interface RoomEventListener {
         void onPreviewRoom(MXSession session, String roomId);
         void onRejectInvitation(MXSession session, String roomId);
@@ -141,7 +143,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Set to true to always display the directory group.
-     * @param forceDirectoryGroupDisplay
+     * @param forceDirectoryGroupDisplay true to always display the directory group.
      */
     public void setForceDirectoryGroupDisplay(boolean forceDirectoryGroupDisplay) {
         mForceDirectoryGroupDisplay = forceDirectoryGroupDisplay;
@@ -226,7 +228,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             if (!TextUtils.isEmpty(mSearchedPattern)) {
                 String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
-                res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().indexOf(mSearchedPattern) >= 0));
+                res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
             }
         }
 
@@ -245,7 +247,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (mIsSearchMode && !TextUtils.isEmpty(mSearchedPattern)) {
             String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
 
-            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
+            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().contains(mSearchedPattern)));
         }
 
         return res;
@@ -335,7 +337,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @return an array of summary lists splitted by sections
      */
     private ArrayList<ArrayList<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
-        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<ArrayList<RoomSummary>>();
+        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<>();
         String roomSummaryId;
 
         // init index with default values
@@ -355,10 +357,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
-            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<RoomSummary>();
-            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<RoomSummary>(favouriteRoomIdList.size());
-            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<RoomSummary>();
-            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<RoomSummary>(lowPriorityRoomIdList.size());
+            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
+            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
+            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
+            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
 
             fillList(favouriteRoomSummaryList, dummyRoomSummary, favouriteRoomIdList.size());
             fillList(lowPriorityRoomSummaryList, dummyRoomSummary, lowPriorityRoomIdList.size());
@@ -406,7 +408,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // in search mode
             // the public rooms have a dedicated section
             if (mIsSearchMode || mDisplayDirectoryGroupWhenEmpty || mForceDirectoryGroupDisplay) {
-                mMatchedPublicRooms = new ArrayList<PublicRoom>();
+                mMatchedPublicRooms = new ArrayList<>();
 
                 if (null != mPublicRooms) {
                     for (PublicRoom publicRoom : mPublicRooms) {
@@ -528,7 +530,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // reset the highlight
-            retCode = roomSummary.setHighlighted(Boolean.valueOf(false));
+            retCode = roomSummary.setHighlighted(false);
         }
 
         return retCode;
@@ -631,7 +633,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // update/retrieve the complete summary list
-            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(dataHandler.getStore().getSummaries());
+            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
 
             // define comparator logic
             Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
@@ -1024,6 +1026,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 }
             }
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage());
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -1163,7 +1166,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     /**
      * Update the public rooms list.
      * null means that there is a pending request.
-     * @param publicRoomsList
+     * @param publicRoomsList the new public rooms list.
      */
     public void setPublicRoomsList(List<PublicRoom> publicRoomsList) {
         mPublicRooms = publicRoomsList;

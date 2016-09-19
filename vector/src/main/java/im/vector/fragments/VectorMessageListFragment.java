@@ -69,7 +69,6 @@ import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.db.RiotContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
-import im.vector.util.BugReporter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.VectorUtils;
 

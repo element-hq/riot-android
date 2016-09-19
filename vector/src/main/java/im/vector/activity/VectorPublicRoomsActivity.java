@@ -40,7 +40,7 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     private VectorPublicRoomsListFragment mVectorPublicRoomsListFragment;
 
     // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-    public static ArrayList<PublicRoom> mPublicRooms = new ArrayList<PublicRoom>();
+    public static ArrayList<PublicRoom> mPublicRooms = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         // reset the list to reduce memory usage
-        mPublicRooms = new ArrayList<PublicRoom>();
+        mPublicRooms = new ArrayList<>();
     }
 }
 

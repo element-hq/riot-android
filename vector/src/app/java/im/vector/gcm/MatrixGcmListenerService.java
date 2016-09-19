@@ -20,19 +20,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.bingrules.BingRule;
-
-import java.util.Set;
-
 import im.vector.Matrix;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;

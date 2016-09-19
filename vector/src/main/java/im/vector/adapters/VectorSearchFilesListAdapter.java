@@ -17,35 +17,21 @@
 package im.vector.adapters;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.text.format.Formatter;
-import android.text.style.CharacterStyle;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.FileInfo;
 import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageInfo;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.Message;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.rest.model.VideoInfo;
 import org.matrix.androidsdk.rest.model.VideoMessage;
-import org.matrix.androidsdk.util.EventDisplay;
-import org.matrix.androidsdk.util.EventUtils;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import im.vector.R;

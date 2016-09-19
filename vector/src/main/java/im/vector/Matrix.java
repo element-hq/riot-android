@@ -19,9 +19,7 @@ package im.vector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
-import android.net.ConnectivityManager;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,7 +38,6 @@ import org.matrix.androidsdk.db.MXLatestChatMessageCache;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.network.NetworkConnectivityReceiver;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 
@@ -51,11 +48,9 @@ import im.vector.activity.VectorHomeActivity;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 import im.vector.store.LoginStorage;
-import im.vector.util.RageShake;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -283,6 +278,7 @@ public class Matrix {
                 versionName += " (" + flavor +")";
             }
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
         }
 
         String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
@@ -313,11 +309,11 @@ public class Matrix {
      * @return The list of sessions
      */
     public ArrayList<MXSession> getSessions() {
-        ArrayList<MXSession> sessions = new ArrayList<MXSession>();
+        ArrayList<MXSession> sessions = new ArrayList<>();
 
         synchronized (LOG_TAG) {
             if (null != mMXSessions) {
-                sessions = new ArrayList<MXSession>(mMXSessions);
+                sessions = new ArrayList<>(mMXSessions);
             }
         }
 
@@ -344,8 +340,8 @@ public class Matrix {
             return null;
         }
 
-        ArrayList<String> matrixIds = new ArrayList<String>();
-        sessions = new ArrayList<MXSession>();
+        ArrayList<String> matrixIds = new ArrayList<>();
+        sessions = new ArrayList<>();
 
         for(HomeserverConnectionConfig config: hsConfigList) {
             // avoid duplicated accounts.

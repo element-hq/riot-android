@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,21 +30,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
-
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.model.ReceiptData;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import org.matrix.androidsdk.util.ContentManager;
 import im.vector.R;
 import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.util.VectorUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * An adapter which can display receipts

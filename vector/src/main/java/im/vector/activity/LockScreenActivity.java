@@ -21,7 +21,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,8 +37,6 @@ import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
-
-import java.util.logging.Handler;
 
 import im.vector.Matrix;
 import im.vector.R;

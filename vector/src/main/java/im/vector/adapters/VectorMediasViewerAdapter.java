@@ -21,15 +21,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,9 +53,7 @@ import im.vector.R;
 
 import org.matrix.androidsdk.db.MXMediasCache;
 
-import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;
@@ -69,6 +66,8 @@ import java.util.List;
  * An images slider
  */
 public class VectorMediasViewerAdapter extends PagerAdapter {
+    private static final String LOG_TAG = "MediasViewerAdapter";
+
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
@@ -79,7 +78,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private int mLatestPrimaryItemPosition = -1;
     private View mLatestPrimaryView = null;
     private MXMediasCache mMediasCache;
-    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<Integer>();
+    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
     // current playing video
     private VideoView mPlayingVideoView = null;
     private MXSession mSession;
@@ -138,7 +137,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      *
-     * @param position
+     * @param position the position of the item to play.
      */
     public void autoPlayItemAt(int position) {
         mAutoPlayItemAt = position;
@@ -345,7 +344,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick(position, videoLayout);
+                VectorMediasViewerAdapter.this.onLongClick();
                 return true;
             }
         });
@@ -353,7 +352,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         thumbView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick(position, videoLayout);
+                VectorMediasViewerAdapter.this.onLongClick();
                 return true;
             }
         });
@@ -518,6 +517,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         }
                     }
                 } catch (Exception e) {
+                    Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage());
                     dstFile = null;
                 } finally {
                     // Close resources
@@ -525,6 +525,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         if (inputStream != null) inputStream.close();
                         if (outputStream != null) outputStream.close();
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage());
                     }
                 }
 
@@ -538,6 +539,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 videoView.start();
 
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## playVideo() : videoView.start(); failed " + e.getMessage());
             }
         }
     }
@@ -586,10 +588,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Long click management
-     * @param position
-     * @param view
      */
-    private void onLongClick(final int position, final View view) {
+    private void onLongClick() {
         // The user is trying to leave with unsaved changes. Warn about that
         new AlertDialog.Builder(mContext)
                 .setMessage(R.string.media_slider_saved_message)
@@ -712,6 +712,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         try {
             mediaUri = Uri.parse(mediaUrl);
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## computeCss() : Uri.parse failed " + e.getMessage());
         }
 
         if (null == mediaUri) {
@@ -743,6 +744,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 try {
                     fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
                 } catch (OutOfMemoryError e) {
+                    Log.e(LOG_TAG, "## computeCss() : BitmapFactory.decodeStream failed " + e.getMessage());
                 }
 
                 imageWidth = options.outWidth;
@@ -751,6 +753,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 imageStream.close();
                 fullSizeBitmap.recycle();
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## computeCss() : failed " + e.getMessage());
             }
 
             String cssRotation = calcCssRotation(rotationAngle, imageWidth, imageHeight);

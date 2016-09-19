@@ -21,10 +21,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.EventTimeline;
@@ -41,11 +39,12 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
+    private static final String LOG_TAG = "VSearchMsgListFrag";
 
     // parameters
     protected String mPendingPattern;
     protected String mSearchingPattern;
-    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
+    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<>();
 
     protected View mProgressView = null;
 
@@ -53,7 +52,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * static constructor
      * @param matrixId the session Id.
      * @param layoutResId the used layout.
-     * @return
      */
     public static VectorSearchMessagesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchMessagesListFragment frag = new VectorSearchMessagesListFragment();
@@ -206,6 +204,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                         try {
                             listener.onSearchSucceed(0);
                         } catch (Exception e) {
+                            Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
                         }
                     }
                     mSearchListeners.clear();
@@ -242,7 +241,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             try {
                                 listener.onSearchSucceed(nbrMessages);
                             } catch (Exception e) {
-
+                                Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
                             }
                         }
                         mSearchListeners.clear();
@@ -261,6 +260,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                         try {
                             listener.onSearchFailed();
                         } catch (Exception e) {
+                            Log.e(LOG_TAG, "## searchPattern() : onSearchFailed failed " + e.getMessage());
                         }
                     }
                     mSearchListeners.clear();

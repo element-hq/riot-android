@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -41,6 +42,8 @@ import java.util.HashMap;
  * AccountCreationCaptchaActivity displays a webview to check captchas.
  */
 public class AccountCreationCaptchaActivity extends Activity {
+    private static String LOG_TAG = "ACCCaptchaActivity";
+
     public static String EXTRA_HOME_SERVER_URL = "AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL";
     public static String EXTRA_SITE_KEY = "AccountCreationCaptchaActivity.EXTRA_SITE_KEY";
 
@@ -168,6 +171,7 @@ public class AccountCreationCaptchaActivity extends Activity {
                         parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {}.getType());
 
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
                     }
 
                     // succeeds to parse parameters

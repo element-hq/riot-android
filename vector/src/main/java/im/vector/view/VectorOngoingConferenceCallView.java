@@ -17,8 +17,6 @@
 package im.vector.view;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -31,21 +29,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import im.vector.R;
-import im.vector.activity.VectorCallViewActivity;
-import im.vector.util.CallUtilities;
-import im.vector.util.VectorUtils;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.call.MXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomState;
-import org.matrix.androidsdk.listeners.MXEventListener;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.RoomMember;
-import org.w3c.dom.Text;
-import org.w3c.dom.ls.LSOutput;
 
 /**
  * This class displays if there is an ongoing conference call.
@@ -64,7 +52,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
          * The user clicks on the video text.
          */
         void onVideoCallClick();
-    };
+    }
 
     // call information
     private MXSession mSession;

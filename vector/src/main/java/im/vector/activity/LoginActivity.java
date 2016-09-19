@@ -1100,7 +1100,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                         Boolean status = (Boolean)mapResp.get(KEY_SUBMIT_TOKEN_SUCCESS);
                         if (null != status) {
-                            if (status.booleanValue()) {
+                            if (status) {
                                 // the validation of mail ownership succeed, just resume the registration flow
                                 // next step: just register
                                 Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");

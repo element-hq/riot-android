@@ -48,7 +48,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -671,7 +670,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * The user clicked on a gallery image
-     * @param aMediaItem
      */
     private void onClickGalleryImage(final RecentMedia aMediaItem){
         if (null != mCamera) {

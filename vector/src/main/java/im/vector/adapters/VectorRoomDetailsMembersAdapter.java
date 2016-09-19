@@ -17,8 +17,6 @@
 package im.vector.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -68,7 +66,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         /**
          * The user selects / deselects a member.
-         * @param userId
+         * @param userId the selected user id.
          */
         void onSelectUserId(String userId);
 
@@ -107,11 +105,11 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     private final int mGroupLayoutResourceId;
 
     private boolean mIsMultiSelectionMode;
-    private ArrayList<String> mSelectedUserIds = new ArrayList<String>();
+    private ArrayList<String> mSelectedUserIds = new ArrayList<>();
 
     private ArrayList<ArrayList<ParticipantAdapterItem>> mRoomMembersListByGroupPosition;
 
-    private ArrayList<String> mDisplaynamesList = new ArrayList<String>();
+    private ArrayList<String> mDisplaynamesList = new ArrayList<>();
 
     private int mGroupIndexInvitedMembers = -1;  // "Invited" index
     private int mGroupIndexPresentMembers = -1; // "Favourites" index
@@ -223,8 +221,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Update the paticipants listener
-     * @param onParticipantsListener
+     * Update the participants listener
+     * @param onParticipantsListener the listener.
      */
     public void setOnParticipantsListener(OnParticipantsListener onParticipantsListener) {
         mOnParticipantsListener = onParticipantsListener;
@@ -242,7 +240,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      */
     public void setMultiSelectionMode(boolean isMultiSelectionMode) {
         mIsMultiSelectionMode = isMultiSelectionMode;
-        mSelectedUserIds = new ArrayList<String>();
+        mSelectedUserIds = new ArrayList<>();
     }
 
     /**
@@ -282,27 +280,27 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         boolean isSearchEnabled = false;
         int groupIndex = 0;
         ParticipantAdapterItem participantItem;
-        ArrayList<ParticipantAdapterItem> presentMembersList = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> presentMembersList = new ArrayList<>();
 
         if (isSearchModeEnabled()) {
             isSearchEnabled = true;
         }
 
         if (null == mRoomMembersListByGroupPosition) {
-            mRoomMembersListByGroupPosition = new ArrayList<ArrayList<ParticipantAdapterItem>>();
+            mRoomMembersListByGroupPosition = new ArrayList<>();
         } else {
             mRoomMembersListByGroupPosition.clear();
         }
 
-        mDisplaynamesList = new ArrayList<String>();
+        mDisplaynamesList = new ArrayList<>();
 
         // reset group indexes
         mGroupIndexPresentMembers = -1;
         mGroupIndexInvitedMembers = -1;
 
         // retrieve the room members
-        ArrayList<ParticipantAdapterItem> actualParticipants = new ArrayList<ParticipantAdapterItem>();
-        ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<ParticipantAdapterItem>();
+        ArrayList<ParticipantAdapterItem> actualParticipants = new ArrayList<>();
+        ArrayList<ParticipantAdapterItem> invitedMembers = new ArrayList<>();
 
         Collection<RoomMember> activeMembers = mRoom.getActiveMembers();
         String myUserId = mSession.getMyUserId();
@@ -456,7 +454,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
      * @return the participant User Ids except oneself.
      */
     public ArrayList<String> getUserIdsList() {
-        ArrayList<String> idsListRetValue = new ArrayList<String>();
+        ArrayList<String> idsListRetValue = new ArrayList<>();
 
         if (mGroupIndexPresentMembers >= 0) {
             int listSize = mRoomMembersListByGroupPosition.get(mGroupIndexPresentMembers).size();

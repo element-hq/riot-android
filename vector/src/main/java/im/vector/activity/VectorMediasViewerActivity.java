@@ -19,7 +19,6 @@ package im.vector.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,15 +32,11 @@ import com.google.gson.JsonElement;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
-import org.matrix.androidsdk.rest.model.FileMessage;
-import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.util.JsonUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -226,6 +221,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                             renamedFile = mediasCache.mediaCacheFile(tmpUrl, mediaInfo.mMimeType);
                         }
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onAction() : mediasCache.mediaCacheFile.absolutePathToUri failed " + e.getMessage());
                     }
 
 
@@ -233,6 +229,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                     try {
                         mediaUri = RiotContentProvider.absolutePathToUri(this, renamedFile.getAbsolutePath());
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onAction() : RiotContentProvider.absolutePathToUri failed " + e.getMessage());
                     }
                 }
 

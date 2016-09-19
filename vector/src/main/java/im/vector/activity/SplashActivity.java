@@ -97,7 +97,7 @@ public class SplashActivity extends MXCActionBarActivity {
                 }
 
                 if (getIntent().hasExtra(EXTRA_ROOM_ID) && getIntent().hasExtra(EXTRA_MATRIX_ID)) {
-                    HashMap<String, Object> params = new HashMap<String, Object>();
+                    HashMap<String, Object> params = new HashMap<>();
 
                     params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
                     params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
@@ -128,12 +128,10 @@ public class SplashActivity extends MXCActionBarActivity {
             return;
         }
 
-        mListeners = new HashMap<MXSession, IMXEventListener>();
-        mDoneListeners = new HashMap<MXSession, IMXEventListener>();
+        mListeners = new HashMap<>();
+        mDoneListeners = new HashMap<>();
 
-        ArrayList<String> matrixIds = new ArrayList<String>();
-
-        final long startTime = System.currentTimeMillis();
+        ArrayList<String> matrixIds = new ArrayList<>();
 
         for(MXSession session : mSessions) {
             final MXSession fSession = session;
@@ -179,7 +177,7 @@ public class SplashActivity extends MXCActionBarActivity {
         // when the events stream has been disconnected by the user
         // they must be awoken even if they are initialized
         if (Matrix.getInstance(this).mHasBeenDisconnected) {
-            matrixIds = new ArrayList<String>();
+            matrixIds = new ArrayList<>();
 
             for(MXSession session : mSessions) {
                 matrixIds.add(session.getCredentials().userId);

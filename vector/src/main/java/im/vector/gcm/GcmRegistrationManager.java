@@ -19,12 +19,8 @@ package im.vector.gcm;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -38,7 +34,6 @@ import org.matrix.androidsdk.rest.model.PushersResponse;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.gcm.GCMHelper;
 import retrofit.RetrofitError;
 
 
@@ -967,7 +962,7 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * @aparam syncDelay the delay between two syncs in ms..
+     * @aparam syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
         getGcmSharedPreferences().edit()
