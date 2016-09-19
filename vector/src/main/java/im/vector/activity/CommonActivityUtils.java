@@ -144,6 +144,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_TAKE_PHOTO = PERMISSION_CAMERA | PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
+    public static final int REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
@@ -528,6 +529,7 @@ public class CommonActivityUtils {
                 && (REQUEST_CODE_PERMISSION_MEMBERS_SEARCH !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_HOME_ACTIVITY !=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_MEMBER_DETAILS !=aPermissionsToBeGrantedBitMap)
+                && (REQUEST_CODE_PERMISSION_ROOM_DETAILS !=aPermissionsToBeGrantedBitMap)
                 ) {
             Log.w(LOG_TAG, "## checkPermissions(): permissions to be granted are not supported");
             isPermissionGranted = false;
@@ -582,11 +584,11 @@ public class CommonActivityUtils {
                     // add the user info text to be displayed to explain why the permission is required by the App
                     for(String permissionAlreadyDenied : permissionListAlreadyDenied) {
                         if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
-                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera);
+                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera, Matrix.getApplicationName());
                         } else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio);
+                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio, Matrix.getApplicationName());
                         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage);
+                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage, Matrix.getApplicationName());
                         } else if(Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)){
                             explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_contacts);
                         } else {
@@ -601,7 +603,7 @@ public class CommonActivityUtils {
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
                 if(null != resource) {
-                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
                 }
 
                 permissionsInfoDialog.setMessage(explanationMessage);
@@ -635,10 +637,10 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
 
                         if (null != resource) {
-                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
+                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
                         }
 
-                        permissionsInfoDialog.setMessage(R.string.permissions_msg_contacts_warning_other_androids);
+                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids, Matrix.getApplicationName()));
 
                         // gives the contacts book access
                         permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -1440,22 +1442,39 @@ public class CommonActivityUtils {
 
         File dstFile = new File(dstDir, dstFileName);
 
+        // if the file already exists, append a marker
+        if (dstFile.exists()) {
+            String baseFileName = dstFileName;
+            String fileExt = "";
+
+            int lastDotPos = dstFileName.lastIndexOf(".");
+
+            if (lastDotPos > 0) {
+                baseFileName = dstFileName.substring(0, lastDotPos);
+                fileExt = dstFileName.substring(lastDotPos);
+            }
+
+            int counter = 1;
+
+            while(dstFile.exists()) {
+                dstFile = new File(dstDir, baseFileName + "(" + counter + ")" + fileExt);
+                counter ++;
+            }
+        }
+
         // Copy source file to destination
         FileInputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
-            // create only the
-            if (!dstFile.exists()) {
-                dstFile.createNewFile();
+            dstFile.createNewFile();
 
-                inputStream = new FileInputStream(sourceFile);
-                outputStream = new FileOutputStream(dstFile);
+            inputStream = new FileInputStream(sourceFile);
+            outputStream = new FileOutputStream(dstFile);
 
-                byte[] buffer = new byte[1024 * 10];
-                int len;
-                while ((len = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, len);
-                }
+            byte[] buffer = new byte[1024 * 10];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, len);
             }
         } catch (Exception e) {
             dstFile = null;

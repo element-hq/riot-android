@@ -50,14 +50,14 @@ public class MyPresenceManager {
             User.PRESENCE_OFFLINE
     };
     // We need the reverse structure to associate an order to a given presence state
-    private static Map<String, Integer> presenceOrderMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> presenceOrderMap = new HashMap<>();
     static {
         for (int i = 0; i < orderedPresenceArray.length; i++) {
             presenceOrderMap.put(orderedPresenceArray[i], i);
         }
     }
 
-    private static HashMap<MXSession, MyPresenceManager> instances = new HashMap<MXSession, MyPresenceManager>();
+    private static HashMap<MXSession, MyPresenceManager> instances = new HashMap<>();
 
     private MyUser myUser;
     private Handler mHandler;
@@ -92,9 +92,9 @@ public class MyPresenceManager {
 
     /**
      * Create an instance without any check.
-     * @param context
-     * @param session
-     * @return
+     * @param context the context
+     * @param session the session
+     * @return the presence manager
      */
     private static MyPresenceManager createInstance(Context context, MXSession session) {
         MyPresenceManager instance = new MyPresenceManager(context, session);

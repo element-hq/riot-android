@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon_170"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo_splash"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"/>
 
@@ -20,7 +20,7 @@
         android:layout_centerVertical="true"
         android:indeterminate="true"/>
 
-    <TextView
+    <!--TextView
         android:id="@+id/copyright_txt_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +28,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
         android:textColor="@color/vector_silver_color"
-        android:text="@string/splash_screen_copyright" />
+        android:text="@string/splash_screen_copyright" /-->
 
 </RelativeLayout>

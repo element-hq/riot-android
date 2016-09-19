@@ -172,7 +172,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<PublicRoom>(matchedPublicRooms);
+                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<>(matchedPublicRooms);
                         getActivity().startActivity(intent);
                     }
                 } else {
@@ -199,7 +199,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                     // launch corresponding room activity
                     if (null != roomId) {
-                        HashMap<String, Object> params = new HashMap<String, Object>();
+                        HashMap<String, Object> params = new HashMap<>();
                         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                         params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 
@@ -402,6 +402,13 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
 
         return mScrollEventListener;
+    }
+
+    /**
+     * Refresh the summaries list
+     */
+    public void refresh() {
+        notifyDataSetChanged();
     }
 
     /**
@@ -858,8 +865,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Retrieves the RoomTag.ROOM_TAG.XX value from the group position
-     * @param groupPosition
-     * @return
+     * @param groupPosition the group position.
+     * @return the room tag.
      */
     private String roomTagAt(int groupPosition) {
         if (mAdapter.isFavouriteRoomPosition(groupPosition)) {

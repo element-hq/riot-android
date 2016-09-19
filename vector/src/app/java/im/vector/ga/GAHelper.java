@@ -25,6 +25,7 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.ExceptionParser;
 
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 
@@ -119,9 +120,10 @@ public class GAHelper {
                 @Override
                 public String getDescription(String threadName, Throwable throwable) {
                     StringBuilder b = new StringBuilder();
+                    String appName = Matrix.getApplicationName();
 
-                    b.append("Vector Build : " + VectorApp.VERSION_BUILD + "\n");
-                    b.append("Vector Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
+                    b.append(appName + " Build : " + VectorApp.VERSION_BUILD + "\n");
+                    b.append(appName + " Version : " + VectorApp.VECTOR_VERSION_STRING + "\n");
                     b.append("SDK Version : " + VectorApp.SDK_VERSION_STRING + "\n");
                     b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n");
 

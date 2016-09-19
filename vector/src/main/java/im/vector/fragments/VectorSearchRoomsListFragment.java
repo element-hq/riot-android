@@ -18,9 +18,6 @@ package im.vector.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,24 +26,18 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.data.RoomPreviewData;
-import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
@@ -157,7 +148,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                         Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<PublicRoom>(matchedPublicRooms);
+                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<>(matchedPublicRooms);
                         getActivity().startActivity(intent);
                     }
                 } else {
@@ -245,8 +236,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Search a pattern in the room
-     * @param pattern
-     * @param onSearchResultListener
+     * @param pattern the pattern to search
+     * @param onSearchResultListener the search listener.
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
         // will be done while resuming

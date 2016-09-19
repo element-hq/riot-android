@@ -39,11 +39,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -327,7 +325,7 @@ public class BugReporter {
 
                 // list the intent which supports email
                 // it should avoid having lot of unexpected applications (like bluetooth...)
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rageshake@vector.im", null));
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rageshake@riot.im", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Mail subject");
                 List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(emailIntent, 0);
 
@@ -339,7 +337,7 @@ public class BugReporter {
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@vector.im"});
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@riot.im"});
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Vector bug report");
                 intent.putExtra(Intent.EXTRA_TEXT, message);
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
@@ -366,7 +364,7 @@ public class BugReporter {
         AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
         dialog.setTitle(R.string.send_bug_report);
 
-        CharSequence items[] = new CharSequence[] {currentActivity.getString(R.string.with_email), currentActivity.getString(R.string.with_vector)};
+        CharSequence items[] = new CharSequence[] {currentActivity.getString(R.string.with_email), currentActivity.getString(R.string.with_vector, Matrix.getApplicationName())};
         dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int n) {

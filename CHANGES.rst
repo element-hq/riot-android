@@ -1,3 +1,28 @@
+Changes in Vector 0.5.1 (2016-09-19)
+===================================================
+
+Bugfixes:
+ * Restore applicationId "im.vector.alpha" as application Id.
+ 
+
+Changes in Vector 0.5.0 (2016-09-19)
+===================================================
+
+Bugfixes:
+ * #489 : The incoming call activity is not always displayed
+ * #490 : Start a call conference and stop it asap don't stop it
+ * #493 : Voip caller : the ringtone should be played in the earspeakers instead of the loud speakers 
+ * #495 : add_missing_camera_permission_requests
+ * #497 : The speaker is turned on when placing a Voice call
+ * #501 : [VoIP] crash in caller side when a started video call is stopped asap
+ * #502 : Some infinite ringing issues
+ * #505 : Account creation : tapping on register button does nothing after customizing the IS
+ * #506 : Registration failure : the registration is not restored in error cases
+ * #518 : Fix calls headset issues 
+ * #519 : During room preview, we should replace 'decline' by 'cancel'
+ * #525 : can we have a larger area of action around the send button?
+ * The recents were not refreshed after triggering a "read all".
+
 Changes in Vector 0.4.1 (2016-09-13)
 ===================================================
 

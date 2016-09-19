@@ -16,7 +16,6 @@
 
 package im.vector.fragments;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -113,7 +112,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
                             CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                         } else {
                             Log.d(LOG_TAG, "manageRoom : open the room");
-                            HashMap<String, Object> params = new HashMap<String, Object>();
+                            HashMap<String, Object> params = new HashMap<>();
                             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                             params.put(VectorRoomActivity.EXTRA_ROOM_ID, publicRoom.roomId);
 

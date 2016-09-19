@@ -17,7 +17,6 @@ package im.vector.gcm;
 
 import android.content.Context;
 import android.util.Log;
-import java.io.IOException;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -45,9 +44,6 @@ public class GCMHelper {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
             Log.d(LOG_TAG, "GCM Registration Token: " + registrationToken);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
-            registrationToken = null;
         } catch (Exception e) {
             Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
             registrationToken = null;

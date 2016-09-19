@@ -24,10 +24,8 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.client.EventsRestClient;
-import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
-import org.matrix.androidsdk.rest.model.ThreePid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,10 +54,10 @@ public class PublicRoomsManager {
     private static boolean mRefreshInProgress = false;
 
     // public room listeners
-    private static final ArrayList<PublicRoomsManagerListener> mListeners = new ArrayList<PublicRoomsManagerListener>();
+    private static final ArrayList<PublicRoomsManagerListener> mListeners = new ArrayList<>();
 
-    // when the homeserver url is set to vector.im
-    // the manager lists the public rooms from vector.im and matrix.org
+    // when the homeserver url is set to riot.im
+    // the manager lists the public rooms from riot.im and matrix.org
     private static EventsRestClient mMatrixEventsRestClient = null;
 
     /**
@@ -97,10 +95,10 @@ public class PublicRoomsManager {
                     @Override
                     public void onSuccess(final List<PublicRoom> publicRooms) {
 
-                        // when the home server is vector.im
+                        // when the home server is riot.im
                         // get the public rooms list from matrix.org
-                        if (mSession.getHomeserverConfig().getHomeserverUri().toString().startsWith("https://vector.im")) {
-                            Log.d(LOG_TAG, "Got the vector.im public rooms in " + (System.currentTimeMillis() - t0) + " ms");
+                        if (mSession.getHomeserverConfig().getHomeserverUri().toString().startsWith("https://riot.im")) {
+                            Log.d(LOG_TAG, "Got the riot.im public rooms in " + (System.currentTimeMillis() - t0) + " ms");
                             refreshMatrixPublicRoomsList(t0, publicRooms);
                         } else {
                             Log.d(LOG_TAG, "Got the rooms public list : " + publicRooms.size() + " rooms in " + (System.currentTimeMillis() - t0) + " ms");
@@ -169,12 +167,12 @@ public class PublicRoomsManager {
 
             @Override
             public void onSuccess(List<PublicRoom> matrixPublicRooms) {
-                ArrayList<PublicRoom> mergedPublicRooms = new ArrayList<PublicRoom>();
+                ArrayList<PublicRoom> mergedPublicRooms = new ArrayList<>();
                 mergedPublicRooms.addAll(publicRooms);
                 mergedPublicRooms.addAll(matrixPublicRooms);
 
                 // avoid duplicated definitions
-                HashMap<String, PublicRoom> publicRoomsMap = new HashMap<String, PublicRoom>();
+                HashMap<String, PublicRoom> publicRoomsMap = new HashMap<>();
 
                 for(PublicRoom publicRoom : mergedPublicRooms) {
 
@@ -184,7 +182,7 @@ public class PublicRoomsManager {
                     }
                 }
 
-                onMerged(new ArrayList<PublicRoom>(publicRoomsMap.values()));
+                onMerged(new ArrayList<>(publicRoomsMap.values()));
             }
 
             @Override

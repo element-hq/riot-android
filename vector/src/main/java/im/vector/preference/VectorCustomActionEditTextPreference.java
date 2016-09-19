@@ -17,10 +17,8 @@
 package im.vector.preference;
 
 import android.content.Context;
-import android.os.Build;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;

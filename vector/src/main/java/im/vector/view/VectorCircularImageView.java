@@ -67,8 +67,6 @@ public class VectorCircularImageView extends ImageView {
                             height,
                             height
                     );
-                } catch (OutOfMemoryError error) {
-                    Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + error.getMessage());
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
                 }
@@ -83,8 +81,6 @@ public class VectorCircularImageView extends ImageView {
                             width,
                             width
                     );
-                } catch (OutOfMemoryError error) {
-                    Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + error.getMessage());
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## setImageBitmap - createBitmap " + e.getMessage());
                 }
@@ -98,9 +94,6 @@ public class VectorCircularImageView extends ImageView {
 
                 // apply it to the image
                 this.setImageDrawable(img);
-            } catch (OutOfMemoryError error) {
-                Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + error.getMessage());
-                super.setImageBitmap(null);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + e.getMessage());
                 super.setImageBitmap(null);

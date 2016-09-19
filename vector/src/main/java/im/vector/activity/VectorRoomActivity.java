@@ -1632,6 +1632,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
         if (0 == aPermissions.length) {
             Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS) {
+            boolean isCameraPermissionGranted = false;
+
+            for( int i = 0; i < aPermissions.length; i++ ) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): "+aPermissions[i]+"="+aGrantResults[i]);
+
+                if( Manifest.permission.CAMERA.equals(aPermissions[i])) {
+                    if (PackageManager.PERMISSION_GRANTED == aGrantResults[i]) {
+                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission granted");
+                        isCameraPermissionGranted = true;
+                    } else {
+                        Log.d(LOG_TAG, "## onRequestPermissionsResult(): CAMERA permission not granted");
+                    }
+                }
+            }
+
+     	    // the user allows to use to the camera.
+            if(isCameraPermissionGranted){
+                Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
+            } else {
+                launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
+            }
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             boolean isCameraPermissionGranted = false;
 
@@ -2143,7 +2167,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     /**
      * Tell if the user can send a message in this room.
-     * @return
+     * @return true if the user is allowed to send messages in this room.
      */
     private boolean canSendMessages() {
         boolean canSendMessage = false;
@@ -2730,13 +2754,15 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                         if (null != powerLevels) {
                             int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-                            canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);
-                        }
+                            canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);}
 
                         if (canUpdateAvatar) {
-                            Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
-                            intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                            startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
+                            // need to check if the camera permission has been granted
+                            if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, VectorRoomActivity.this)) {
+                                Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
+                                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                                startActivityForResult(intent, REQUEST_ROOM_AVATAR_CODE);
+                            }
                         } else {
                             launchRoomDetails(VectorRoomDetailsActivity.SETTINGS_TAB_INDEX);
                         }

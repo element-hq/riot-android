@@ -24,6 +24,8 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.rest.model.MatrixError;
+
+import im.vector.Matrix;
 import im.vector.R;
 
 public class VectorMessagesFragment extends MatrixMessagesFragment {
@@ -60,7 +62,7 @@ public class VectorMessagesFragment extends MatrixMessagesFragment {
             MatrixError matrixError = (MatrixError)error;
 
             if (TextUtils.equals(matrixError.errcode, MatrixError.NOT_FOUND)) {
-                errorMessage = getContext().getString(R.string.failed_to_load_timeline_position);
+                errorMessage = getContext().getString(R.string.failed_to_load_timeline_position, Matrix.getApplicationName());
             } else {
                 errorMessage = matrixError.getLocalizedMessage();
             }

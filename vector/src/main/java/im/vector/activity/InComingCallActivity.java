@@ -33,6 +33,7 @@ import org.matrix.androidsdk.call.IMXCall;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
 
 /**
@@ -151,6 +152,11 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 finish();
             } else if(null == (mMxCall = mSession.mCallsManager.getCallWithCallId(mCallId))){
                 Log.e(LOG_TAG, "## onCreate(): invalid call ID (null)");
+                // assume that the user tap on a staled notification
+                if (VectorCallSoundManager.isRinging()) {
+                    Log.e(LOG_TAG, "## onCreate(): the device was ringing so assume that the call " + mCallId + " does not exist anymore");
+                    VectorCallSoundManager.stopRinging();
+                }
                 finish();
             } else {
                 synchronized (LOG_TAG) {
@@ -163,8 +169,8 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 }
 
                 // UI widgets binding
-                mCallingUserAvatarView = (ImageView)findViewById(R.id.avatar_img);
-                mRoomNameTextView = (TextView)findViewById(R.id.room_name);
+                mCallingUserAvatarView = (ImageView) findViewById(R.id.avatar_img);
+                mRoomNameTextView = (TextView) findViewById(R.id.room_name);
                 mAcceptCallButton = (Button) findViewById(R.id.button_incoming_call_accept);
                 mIgnoreCallButton = (Button) findViewById(R.id.button_incoming_call_ignore);
 
@@ -172,7 +178,7 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                     @Override
                     public void run() {
                         // set the avatar
-                        VectorUtils.loadCallAvatar(InComingCallActivity.this, mSession, mCallingUserAvatarView,  mMxCall.getRoom());
+                        VectorUtils.loadCallAvatar(InComingCallActivity.this, mSession, mCallingUserAvatarView, mMxCall.getRoom());
                     }
                 });
 
@@ -188,6 +194,9 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                     }
                 });
 
+                // the user can only accept if the dedicated permissions are granted
+                mAcceptCallButton.setVisibility(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, InComingCallActivity.this) ? View.VISIBLE : View.INVISIBLE);
+
                 mAcceptCallButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -195,15 +204,12 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                         finish();
                     }
                 });
-
+                
                 // create the call view to enable mMxCallListener being used,
                 // otherwise call API is not enabled
                 mMxCall.createCallView();
             }
         }
-
-        // the user can only accept if the dedicated permissions are granted
-        mAcceptCallButton.setVisibility(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_IP_CALL, InComingCallActivity.this) ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

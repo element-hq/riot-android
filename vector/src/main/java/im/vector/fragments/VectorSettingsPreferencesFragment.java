@@ -231,26 +231,52 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // terms & conditions
-        EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_term_conditions));
+        EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_app_term_conditions));
 
         if (null != termConditionsPreference) {
             termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayLicenses(getActivity());
+                    VectorUtils.displayAppTac(getActivity());
                     return false;
                 }
             });
         }
 
-        // terms & conditions
-        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_sliding_privacy_policy));
+        // privacy policy
+        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_privacy_policy));
 
         if (null != termConditionsPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayPrivacyPolicy(getActivity());
+                    VectorUtils.displayAppPrivacyPolicy(getActivity());
+                    return false;
+                }
+            });
+        }
+
+        // third party notice
+        EditTextPreference thirdPartyNotices = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_third_party_notices));
+
+        if (null != termConditionsPreference) {
+            thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    VectorUtils.displayThirdPartyLicenses(getActivity());
+                    return false;
+                }
+            });
+        }
+
+        // copyright
+        EditTextPreference copyrightNotices = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_copyright));
+
+        if (null != termConditionsPreference) {
+            copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    VectorUtils.displayAppCopyright(getActivity());
                     return false;
                 }
             });

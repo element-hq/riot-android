@@ -25,7 +25,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import im.vector.activity.LoginActivity;
@@ -41,7 +43,8 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
 
     // Supported path
     public static final String SUPPORTED_PATH_ACCOUNT_EMAIL_VALIDATION = "/_matrix/identity/api/v1/validate/email/submitToken";
-    public static final String SUPPORTED_HOST = "vector.im";
+    private static final List<String> mSupportedHosts = Arrays.asList("vector.im", "riot.im");
+
 
     // mail validation url query parameters
     // Examples:
@@ -98,8 +101,8 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
      * This flow flow is part of the registration process {@see <a href="http://matrix.org/speculator/spec/HEAD/identity_service.html">Indenty spec server</a>}:
      * https://vector.im/_matrix/identity/api/v1/validate/email/submitToken?token=172230&client_secret=3a164877-1f6a-4aa3-a056-0dc20ebe6392&sid=3672&nextLink=https%3A//vector.im/develop/%23/register%3Fclient_secret%3D3a164877-1f6a-4aa3-a056-0dc20ebe6392%26hs_url%3Dhttps%3A//matrix.org%26is_url%3Dhttps%3A//vector.im%26session_id%3DipLKXEvRArNFZkDVpIZvqJMa%26sid%3D3672
      *
-     * @param uri
-     * @return
+     * @param uri the uri to parse
+     * @return the parameters extracted from the the URI.
      */
     public static HashMap<String, String> parseMailRegistrationLink(Uri uri) {
         HashMap<String, String> mapParams = new HashMap<>();
@@ -114,7 +117,7 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
                 String uriFragment, host=uri.getHost();
                 Log.i(LOG_TAG,"## parseMailRegistrationLink(): host="+host);
 
-                if (!TextUtils.equals(host, SUPPORTED_HOST)) {
+                if (!mSupportedHosts.contains(host)) {
                     Log.e(LOG_TAG, "## parseUniversalLink : unsupported host ="+host);
                     return null;
                 }

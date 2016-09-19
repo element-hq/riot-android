@@ -21,7 +21,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -68,7 +67,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
     /**
      * Define the pattern to highlight into the message body.
-     * @param pattern
+     * @param pattern the pattern to hilight
      */
     public void setTextToHighlight(String pattern) {
         mPattern = pattern;

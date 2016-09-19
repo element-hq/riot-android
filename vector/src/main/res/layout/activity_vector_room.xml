@@ -84,7 +84,7 @@
                 android:layout_height="36dp"
                 android:textColor="@color/vector_fuchsia_color"
                 android:background="@android:color/white"
-                android:text="@string/decline"/>
+                android:text="@string/cancel"/>
         </RelativeLayout>
 
         <TextView
@@ -188,10 +188,14 @@
                         android:textCursorDrawable="@drawable/searches_cursor_background"
                         android:textColorHint="@color/vector_0_54_black_color"/>
 
+                    <View
+                        android:id="@+id/room_button_margin_left"
+                        android:layout_width="6dp"
+                        android:layout_height="match_parent" />
+
                     <RelativeLayout
                         android:id="@+id/room_send_layout"
-                        android:layout_marginLeft="13dp"
-                        android:layout_width="24dp"
+                        android:layout_width="37dp"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/send">
 
@@ -199,15 +203,14 @@
                             android:id="@+id/room_send_image_view"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:layout_centerVertical="true"
+                            android:layout_centerInParent="true"
                             android:src="@drawable/ic_material_file"/>
 
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/room_start_call_layout"
-                        android:layout_marginLeft="13dp"
-                        android:layout_width="24dp"
+                        android:layout_width="37dp"
                         android:layout_height="match_parent"
                         android:visibility="gone"
                         android:contentDescription="@string/call_connecting">
@@ -215,15 +218,14 @@
                         <ImageView
                             android:id="@+id/room_start_call_image_view"
                             android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_centerVertical="true"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
                             android:src="@drawable/voice_call_start_green"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/room_end_call_layout"
-                        android:layout_marginLeft="13dp"
-                        android:layout_width="24dp"
+                        android:layout_width="37dp"
                         android:layout_height="match_parent"
                         android:visibility="gone"
                         android:contentDescription="@string/call_ended">
@@ -237,9 +239,9 @@
                     </RelativeLayout>
 
                     <View
-                        android:layout_width="12dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/room_button_margin" />
+                        android:id="@+id/room_button_margin_right"
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
                 <TextView
