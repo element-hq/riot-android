@@ -2167,7 +2167,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     /**
      * Tell if the user can send a message in this room.
-     * @return
+     * @return true if the user is allowed to send messages in this room.
      */
     private boolean canSendMessages() {
         boolean canSendMessage = false;

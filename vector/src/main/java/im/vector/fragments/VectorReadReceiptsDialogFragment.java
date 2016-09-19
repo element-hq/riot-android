@@ -27,7 +27,6 @@ import android.widget.ListView;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
-import org.matrix.androidsdk.rest.model.ReceiptData;
 
 import java.util.ArrayList;
 

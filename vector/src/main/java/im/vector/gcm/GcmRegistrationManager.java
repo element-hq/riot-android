@@ -962,7 +962,7 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * @aparam syncDelay the delay between two syncs in ms..
+     * @aparam syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
         getGcmSharedPreferences().edit()

@@ -236,8 +236,8 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
 
     /**
      * Search a pattern in the room
-     * @param pattern
-     * @param onSearchResultListener
+     * @param pattern the pattern to search
+     * @param onSearchResultListener the search listener.
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
         // will be done while resuming

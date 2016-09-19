@@ -670,7 +670,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * The user clicked on a gallery image
-     * @param aMediaItem
      */
     private void onClickGalleryImage(final RecentMedia aMediaItem){
         if (null != mCamera) {

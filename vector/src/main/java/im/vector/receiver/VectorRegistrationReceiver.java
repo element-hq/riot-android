@@ -101,8 +101,8 @@ public class VectorRegistrationReceiver extends BroadcastReceiver {
      * This flow flow is part of the registration process {@see <a href="http://matrix.org/speculator/spec/HEAD/identity_service.html">Indenty spec server</a>}:
      * https://vector.im/_matrix/identity/api/v1/validate/email/submitToken?token=172230&client_secret=3a164877-1f6a-4aa3-a056-0dc20ebe6392&sid=3672&nextLink=https%3A//vector.im/develop/%23/register%3Fclient_secret%3D3a164877-1f6a-4aa3-a056-0dc20ebe6392%26hs_url%3Dhttps%3A//matrix.org%26is_url%3Dhttps%3A//vector.im%26session_id%3DipLKXEvRArNFZkDVpIZvqJMa%26sid%3D3672
      *
-     * @param uri
-     * @return
+     * @param uri the uri to parse
+     * @return the parameters extracted from the the URI.
      */
     public static HashMap<String, String> parseMailRegistrationLink(Uri uri) {
         HashMap<String, String> mapParams = new HashMap<>();

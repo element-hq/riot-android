@@ -141,7 +141,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Set to true to always display the directory group.
-     * @param forceDirectoryGroupDisplay
+     * @param forceDirectoryGroupDisplay true to always display the directory group.
      */
     public void setForceDirectoryGroupDisplay(boolean forceDirectoryGroupDisplay) {
         mForceDirectoryGroupDisplay = forceDirectoryGroupDisplay;
@@ -1163,7 +1163,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     /**
      * Update the public rooms list.
      * null means that there is a pending request.
-     * @param publicRoomsList
+     * @param publicRoomsList the new public rooms list.
      */
     public void setPublicRoomsList(List<PublicRoom> publicRoomsList) {
         mPublicRooms = publicRoomsList;

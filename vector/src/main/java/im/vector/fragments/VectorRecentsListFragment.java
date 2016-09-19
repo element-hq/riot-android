@@ -865,8 +865,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     /**
      * Retrieves the RoomTag.ROOM_TAG.XX value from the group position
-     * @param groupPosition
-     * @return
+     * @param groupPosition the group position.
+     * @return the room tag.
      */
     private String roomTagAt(int groupPosition) {
         if (mAdapter.isFavouriteRoomPosition(groupPosition)) {

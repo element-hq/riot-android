@@ -99,8 +99,8 @@ public class MXCActionBarActivity extends ActionBarActivity {
     
     /**
      * Return the used MXSession from an intent.
-     * @param intent
-     * @return the MXsession if it exists.
+     * @param intent the intent
+     * @return the MXSession if it exists.
      */
     protected MXSession getSession(Intent intent) {
         String matrixId = null;

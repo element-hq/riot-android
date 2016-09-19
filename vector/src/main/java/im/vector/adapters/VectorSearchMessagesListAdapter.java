@@ -67,7 +67,7 @@ public class VectorSearchMessagesListAdapter extends VectorMessagesAdapter {
 
     /**
      * Define the pattern to highlight into the message body.
-     * @param pattern
+     * @param pattern the pattern to hilight
      */
     public void setTextToHighlight(String pattern) {
         mPattern = pattern;

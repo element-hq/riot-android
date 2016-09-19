@@ -134,7 +134,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      *
-     * @param position
+     * @param position the position of the item to play.
      */
     public void autoPlayItemAt(int position) {
         mAutoPlayItemAt = position;
@@ -341,7 +341,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         imageWebView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick(position, videoLayout);
+                VectorMediasViewerAdapter.this.onLongClick();
                 return true;
             }
         });
@@ -349,7 +349,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         thumbView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                VectorMediasViewerAdapter.this.onLongClick(position, videoLayout);
+                VectorMediasViewerAdapter.this.onLongClick();
                 return true;
             }
         });
@@ -582,10 +582,8 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
     /**
      * Long click management
-     * @param position
-     * @param view
      */
-    private void onLongClick(final int position, final View view) {
+    private void onLongClick() {
         // The user is trying to leave with unsaved changes. Warn about that
         new AlertDialog.Builder(mContext)
                 .setMessage(R.string.media_slider_saved_message)

@@ -48,7 +48,6 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
      * static constructor
      * @param matrixId the session Id.
      * @param layoutResId the used layout.
-     * @return
      */
     public static VectorSearchRoomFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchRoomFilesListFragment frag = new VectorSearchRoomFilesListFragment();

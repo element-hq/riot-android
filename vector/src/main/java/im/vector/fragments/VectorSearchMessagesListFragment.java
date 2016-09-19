@@ -50,7 +50,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
      * static constructor
      * @param matrixId the session Id.
      * @param layoutResId the used layout.
-     * @return
      */
     public static VectorSearchMessagesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
         VectorSearchMessagesListFragment frag = new VectorSearchMessagesListFragment();

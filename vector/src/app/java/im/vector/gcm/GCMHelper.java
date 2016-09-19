@@ -17,7 +17,6 @@ package im.vector.gcm;
 
 import android.content.Context;
 import android.util.Log;
-import java.io.IOException;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;

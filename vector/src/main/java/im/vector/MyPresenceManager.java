@@ -92,9 +92,9 @@ public class MyPresenceManager {
 
     /**
      * Create an instance without any check.
-     * @param context
-     * @param session
-     * @return
+     * @param context the context
+     * @param session the session
+     * @return the presence manager
      */
     private static MyPresenceManager createInstance(Context context, MXSession session) {
         MyPresenceManager instance = new MyPresenceManager(context, session);

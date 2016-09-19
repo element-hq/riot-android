@@ -66,7 +66,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
 
         /**
          * The user selects / deselects a member.
-         * @param userId
+         * @param userId the selected user id.
          */
         void onSelectUserId(String userId);
 
@@ -221,8 +221,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Update the paticipants listener
-     * @param onParticipantsListener
+     * Update the participants listener
+     * @param onParticipantsListener the listener.
      */
     public void setOnParticipantsListener(OnParticipantsListener onParticipantsListener) {
         mOnParticipantsListener = onParticipantsListener;
