@@ -72,10 +72,10 @@ public class Contact implements java.io.Serializable {
     private Bitmap mThumbnail;
 
     // phone numbers list
-    private final ArrayList<String> mPhoneNumbers = new ArrayList<String>();
+    private final ArrayList<String> mPhoneNumbers = new ArrayList<>();
 
     // emails list
-    private final ArrayList<String> mEmails = new ArrayList<String>();
+    private final ArrayList<String> mEmails = new ArrayList<>();
 
     // MXID by email address
     private HashMap<String, MXID> mMXIDsByElement;

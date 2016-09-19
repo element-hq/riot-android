@@ -148,7 +148,7 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                         Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
                         intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                         // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<PublicRoom>(matchedPublicRooms);
+                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<>(matchedPublicRooms);
                         getActivity().startActivity(intent);
                     }
                 } else {

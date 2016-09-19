@@ -103,7 +103,7 @@ public class VectorReadReceiptsDialogFragment extends DialogFragment {
         final Room room = mSession.getDataHandler().getRoom(mRoomId);
         mAdapter = new VectorReadReceiptsAdapter(getActivity(), R.layout.adapter_item_read_receipt, mSession, room, getMXMediasCache());
 
-        mAdapter.addAll(new ArrayList<ReceiptData>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId, true, true)));
+        mAdapter.addAll(new ArrayList<>(mSession.getDataHandler().getStore().getEventReceipts(mRoomId, mEventId, true, true)));
         mListView.setAdapter(mAdapter);
 
         return v;

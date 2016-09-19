@@ -42,7 +42,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     // parameters
     protected String mPendingPattern;
     protected String mSearchingPattern;
-    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<OnSearchResultListener>();
+    protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<>();
 
     protected View mProgressView = null;
 

@@ -335,7 +335,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @return an array of summary lists splitted by sections
      */
     private ArrayList<ArrayList<RoomSummary>> buildSummariesByGroups(final Collection<RoomSummary> aRoomSummaryCollection) {
-        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<ArrayList<RoomSummary>>();
+        ArrayList<ArrayList<RoomSummary>> summaryListByGroupsRetValue = new ArrayList<>();
         String roomSummaryId;
 
         // init index with default values
@@ -355,10 +355,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
-            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<RoomSummary>();
-            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<RoomSummary>(favouriteRoomIdList.size());
-            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<RoomSummary>();
-            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<RoomSummary>(lowPriorityRoomIdList.size());
+            ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
+            ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
+            ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
+            ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
 
             fillList(favouriteRoomSummaryList, dummyRoomSummary, favouriteRoomIdList.size());
             fillList(lowPriorityRoomSummaryList, dummyRoomSummary, lowPriorityRoomIdList.size());
@@ -406,7 +406,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // in search mode
             // the public rooms have a dedicated section
             if (mIsSearchMode || mDisplayDirectoryGroupWhenEmpty || mForceDirectoryGroupDisplay) {
-                mMatchedPublicRooms = new ArrayList<PublicRoom>();
+                mMatchedPublicRooms = new ArrayList<>();
 
                 if (null != mPublicRooms) {
                     for (PublicRoom publicRoom : mPublicRooms) {
@@ -631,7 +631,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // update/retrieve the complete summary list
-            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<RoomSummary>(dataHandler.getStore().getSummaries());
+            ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
 
             // define comparator logic
             Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {

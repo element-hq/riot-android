@@ -58,7 +58,7 @@ public class ImageSizeSelectionDialogFragment  extends DialogFragment {
     private ImageSizeListener mListener = null;
 
     public void setEntries(Collection<ImageCompressionDescription> entries) {
-        mEntries = new ArrayList<ImageCompressionDescription>(entries);
+        mEntries = new ArrayList<>(entries);
     }
 
     public void setListener(ImageSizeListener listener) {

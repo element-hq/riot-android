@@ -132,7 +132,7 @@ public class SlashComandsParser {
                         @Override
                         public void onSuccess(String roomId) {
                             if (null != roomId) {
-                                HashMap<String, Object> params = new HashMap<String, Object>();
+                                HashMap<String, Object> params = new HashMap<>();
                                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
                                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
 

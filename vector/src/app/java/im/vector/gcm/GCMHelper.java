@@ -45,9 +45,6 @@ public class GCMHelper {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
             Log.d(LOG_TAG, "GCM Registration Token: " + registrationToken);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
-            registrationToken = null;
         } catch (Exception e) {
             Log.e(LOG_TAG, "getRegistrationToken failed with exception : " + e.getLocalizedMessage());
             registrationToken = null;

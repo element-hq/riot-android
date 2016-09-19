@@ -75,7 +75,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
     private int mLatestPrimaryItemPosition = -1;
     private View mLatestPrimaryView = null;
     private MXMediasCache mMediasCache;
-    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<Integer>();
+    private ArrayList<Integer> mHighResMediaIndex = new ArrayList<>();
     // current playing video
     private VideoView mPlayingVideoView = null;
     private MXSession mSession;

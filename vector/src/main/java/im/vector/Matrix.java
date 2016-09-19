@@ -308,11 +308,11 @@ public class Matrix {
      * @return The list of sessions
      */
     public ArrayList<MXSession> getSessions() {
-        ArrayList<MXSession> sessions = new ArrayList<MXSession>();
+        ArrayList<MXSession> sessions = new ArrayList<>();
 
         synchronized (LOG_TAG) {
             if (null != mMXSessions) {
-                sessions = new ArrayList<MXSession>(mMXSessions);
+                sessions = new ArrayList<>(mMXSessions);
             }
         }
 
@@ -339,8 +339,8 @@ public class Matrix {
             return null;
         }
 
-        ArrayList<String> matrixIds = new ArrayList<String>();
-        sessions = new ArrayList<MXSession>();
+        ArrayList<String> matrixIds = new ArrayList<>();
+        sessions = new ArrayList<>();
 
         for(HomeserverConnectionConfig config: hsConfigList) {
             // avoid duplicated accounts.
