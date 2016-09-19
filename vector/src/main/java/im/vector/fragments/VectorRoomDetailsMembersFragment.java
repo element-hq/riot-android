@@ -377,7 +377,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                     for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
 
                         if (null != mIsListViewGroupExpandedMap) {
-                            isExpanded = mIsListViewGroupExpandedMap.get(Integer.valueOf(groupIndex));
+                            isExpanded = mIsListViewGroupExpandedMap.get(groupIndex);
                         }
 
                         if ((null == isExpanded) || (CommonActivityUtils.GROUP_IS_EXPANDED == isExpanded)) {
@@ -923,14 +923,14 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             @Override
             public void onGroupCollapsedNotif(int aGroupPosition){
                 if(null != mIsListViewGroupExpandedMap) {
-                    mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_COLLAPSED);
+                    mIsListViewGroupExpandedMap.put(aGroupPosition, CommonActivityUtils.GROUP_IS_COLLAPSED);
                 }
             }
 
             @Override
             public void onGroupExpandedNotif(int aGroupPosition){
                 if(null != mIsListViewGroupExpandedMap) {
-                    mIsListViewGroupExpandedMap.put(Integer.valueOf(aGroupPosition), CommonActivityUtils.GROUP_IS_EXPANDED);
+                    mIsListViewGroupExpandedMap.put(aGroupPosition, CommonActivityUtils.GROUP_IS_EXPANDED);
                 }
             }
         });

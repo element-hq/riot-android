@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -30,6 +31,7 @@ import android.webkit.WebViewClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import im.vector.LoginHandler;
 import im.vector.R;
 
 import java.net.URLDecoder;
@@ -39,6 +41,8 @@ import java.util.HashMap;
  * AccountCreationActivity is the fallback account creation activity
  */
 public class AccountCreationActivity extends Activity {
+    private static final String LOG_TAG = "ACCreationActivity";
+
     public static String EXTRA_HOME_SERVER_ID = "AccountCreationActivity.EXTRA_HOME_SERVER_ID";
 
     // home server url
@@ -163,6 +167,7 @@ public class AccountCreationActivity extends Activity {
                         parameters = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {}.getType());
 
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
                     }
 
                     // succeeds to parse parameters

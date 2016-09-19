@@ -18,6 +18,7 @@ package im.vector.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -141,6 +142,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     try {
                         listener.onSearchSucceed(messageRows.size());
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchSucceed failed " + e.getMessage());
                     }
                 }
 
@@ -158,6 +160,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                     try {
                         listener.onSearchFailed();
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## remoteRoomHistoryRequest() : onSearchFailed failed " + e.getMessage());
                     }
                 }
 

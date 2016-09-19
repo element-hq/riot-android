@@ -28,6 +28,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,8 @@ import java.util.List;
  * An images slider
  */
 public class VectorMediasViewerAdapter extends PagerAdapter {
+    private static final String LOG_TAG = "MediasViewerAdapter";
+
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
@@ -514,6 +517,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         }
                     }
                 } catch (Exception e) {
+                    Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage());
                     dstFile = null;
                 } finally {
                     // Close resources
@@ -521,6 +525,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                         if (inputStream != null) inputStream.close();
                         if (outputStream != null) outputStream.close();
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## playVideo() : failed " + e.getMessage());
                     }
                 }
 
@@ -534,6 +539,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 videoView.start();
 
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## playVideo() : videoView.start(); failed " + e.getMessage());
             }
         }
     }
@@ -706,6 +712,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         try {
             mediaUri = Uri.parse(mediaUrl);
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## computeCss() : Uri.parse failed " + e.getMessage());
         }
 
         if (null == mediaUri) {
@@ -737,6 +744,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 try {
                     fullSizeBitmap = BitmapFactory.decodeStream(imageStream, null, options);
                 } catch (OutOfMemoryError e) {
+                    Log.e(LOG_TAG, "## computeCss() : BitmapFactory.decodeStream failed " + e.getMessage());
                 }
 
                 imageWidth = options.outWidth;
@@ -745,6 +753,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
                 imageStream.close();
                 fullSizeBitmap.recycle();
             } catch (Exception e) {
+                Log.e(LOG_TAG, "## computeCss() : failed " + e.getMessage());
             }
 
             String cssRotation = calcCssRotation(rotationAngle, imageWidth, imageHeight);

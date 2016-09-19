@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -38,6 +39,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
+    private static final String LOG_TAG = "VSearchMsgListFrag";
 
     // parameters
     protected String mPendingPattern;
@@ -202,6 +204,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                         try {
                             listener.onSearchSucceed(0);
                         } catch (Exception e) {
+                            Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
                         }
                     }
                     mSearchListeners.clear();
@@ -238,7 +241,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             try {
                                 listener.onSearchSucceed(nbrMessages);
                             } catch (Exception e) {
-
+                                Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
                             }
                         }
                         mSearchListeners.clear();
@@ -257,6 +260,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                         try {
                             listener.onSearchFailed();
                         } catch (Exception e) {
+                            Log.e(LOG_TAG, "## searchPattern() : onSearchFailed failed " + e.getMessage());
                         }
                     }
                     mSearchListeners.clear();

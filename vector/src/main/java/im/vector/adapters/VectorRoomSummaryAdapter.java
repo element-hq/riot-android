@@ -63,6 +63,8 @@ import im.vector.util.VectorUtils;
  * An adapter which can display room information.
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
+    private static final String LOG_TAG = "VRoomSummaryAdapter";
+
     public interface RoomEventListener {
         void onPreviewRoom(MXSession session, String roomId);
         void onRejectInvitation(MXSession session, String roomId);
@@ -226,7 +228,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             if (!TextUtils.isEmpty(mSearchedPattern)) {
                 String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
-                res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().indexOf(mSearchedPattern) >= 0));
+                res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
             }
         }
 
@@ -245,7 +247,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (mIsSearchMode && !TextUtils.isEmpty(mSearchedPattern)) {
             String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
 
-            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().indexOf(mSearchedPattern) >= 0));
+            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().contains(mSearchedPattern)));
         }
 
         return res;
@@ -528,7 +530,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             }
 
             // reset the highlight
-            retCode = roomSummary.setHighlighted(Boolean.valueOf(false));
+            retCode = roomSummary.setHighlighted(false);
         }
 
         return retCode;
@@ -1024,6 +1026,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 }
             }
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## displayPopupMenu() : failed " + e.getMessage());
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

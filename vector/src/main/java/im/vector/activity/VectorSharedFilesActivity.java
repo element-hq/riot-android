@@ -65,6 +65,7 @@ public class VectorSharedFilesActivity extends Activity {
                         isLaunched = session.getDataHandler().getStore().isReady();
                     }
                 } catch (Exception e) {
+                    Log.e(LOG_TAG, "## onCreate() : failed " + e.getMessage());
                 }
 
                 // go to the home screen if the application is launched

@@ -278,6 +278,7 @@ public class Matrix {
                 versionName += " (" + flavor +")";
             }
         } catch (Exception e) {
+            Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
         }
 
         String gitVersion = mAppContext.getResources().getString(R.string.git_revision);

@@ -195,12 +195,12 @@ public class Contact implements java.io.Serializable {
         boolean matched = false;
 
         if (!TextUtils.isEmpty(mDisplayName)) {
-            matched = (mDisplayName.toLowerCase().indexOf(pattern) >= 0);
+            matched = (mDisplayName.toLowerCase().contains(pattern));
         }
 
         if (!matched) {
             for(String email : mEmails) {
-                matched |= email.toLowerCase().indexOf(pattern) >= 0;
+                matched |= email.toLowerCase().contains(pattern);
             }
         }
 

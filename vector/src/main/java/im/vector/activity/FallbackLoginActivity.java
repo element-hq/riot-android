@@ -186,6 +186,7 @@ public class FallbackLoginActivity extends Activity {
                         serverParams = new Gson().fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
 
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.getMessage());
                     }
 
                     // succeeds to parse parameters
@@ -222,6 +223,7 @@ public class FallbackLoginActivity extends Activity {
                                 }
                             }
                         } catch (Exception e) {
+                            Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : failed " + e.getMessage());
                         }
                     }
                     return true;

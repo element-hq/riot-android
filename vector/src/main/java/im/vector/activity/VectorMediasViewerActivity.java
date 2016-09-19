@@ -221,6 +221,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                             renamedFile = mediasCache.mediaCacheFile(tmpUrl, mediaInfo.mMimeType);
                         }
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onAction() : mediasCache.mediaCacheFile.absolutePathToUri failed " + e.getMessage());
                     }
 
 
@@ -228,6 +229,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
                     try {
                         mediaUri = RiotContentProvider.absolutePathToUri(this, renamedFile.getAbsolutePath());
                     } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onAction() : RiotContentProvider.absolutePathToUri failed " + e.getMessage());
                     }
                 }
 

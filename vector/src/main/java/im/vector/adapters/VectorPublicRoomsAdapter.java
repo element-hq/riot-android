@@ -64,8 +64,6 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
         TextView roomMessageTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomMessage);
-        ImageView wordReadableView = (ImageView)convertView.findViewById(R.id.roomSummaryAdapter_word_readable);
-        ImageView guestAccessView = (ImageView)convertView.findViewById(R.id.roomSummaryAdapter_guest_access);
 
         TextView timestampTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_ts);
         View separatorView = convertView.findViewById(R.id.recents_separator);
