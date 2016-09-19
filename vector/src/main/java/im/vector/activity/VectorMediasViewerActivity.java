@@ -43,7 +43,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.adapters.VectorMediasViewerAdapter;
-import im.vector.db.RiotContentProvider;
+import im.vector.db.VectorContentProvider;
 import im.vector.util.SlidableMediaInfo;
 
 public class VectorMediasViewerActivity extends MXCActionBarActivity {
@@ -227,7 +227,7 @@ public class VectorMediasViewerActivity extends MXCActionBarActivity {
 
                 if (null != renamedFile) {
                     try {
-                        mediaUri = RiotContentProvider.absolutePathToUri(this, renamedFile.getAbsolutePath());
+                        mediaUri = VectorContentProvider.absolutePathToUri(this, renamedFile.getAbsolutePath());
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## onAction() : RiotContentProvider.absolutePathToUri failed " + e.getMessage());
                     }

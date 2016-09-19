@@ -365,8 +365,8 @@
         <service android:name="im.vector.services.EventStreamService" />
 
         <provider
-            android:authorities="im.vector.riot.provider"
-            android:name="im.vector.db.RiotContentProvider"
+            android:authorities="im.vector.VectorApp.provider"
+            android:name="im.vector.db.VectorContentProvider"
             android:exported="true"/>
     </application>
 

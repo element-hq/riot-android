@@ -27,8 +27,8 @@ import android.webkit.MimeTypeMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class RiotContentProvider extends ContentProvider {
-    public static String AUTHORITIES = "im.vector.riot.provider";
+public class VectorContentProvider extends ContentProvider {
+    public static String AUTHORITIES = "im.vector.VectorApp.provider";
 
     /**
      * Convert an absolute file path to a Content path
@@ -40,7 +40,7 @@ public class RiotContentProvider extends ContentProvider {
         String basePath = context.getFilesDir().getAbsolutePath();
 
         if ((null != path) && path.startsWith(basePath)) {
-            return Uri.parse("content://" + RiotContentProvider.AUTHORITIES + path.substring(basePath.length()));
+            return Uri.parse("content://" + VectorContentProvider.AUTHORITIES + path.substring(basePath.length()));
         }
 
         return null;

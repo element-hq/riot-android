@@ -67,7 +67,7 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.activity.VectorMediasViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
-import im.vector.db.RiotContentProvider;
+import im.vector.db.VectorContentProvider;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.util.VectorUtils;
@@ -484,7 +484,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                 if (null != renamedFile) {
                     try {
-                        mediaUri = RiotContentProvider.absolutePathToUri(getActivity(), renamedFile.getAbsolutePath());
+                        mediaUri = VectorContentProvider.absolutePathToUri(getActivity(), renamedFile.getAbsolutePath());
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "onMediaAction VectorContentProvider.absolutePathToUri: " + e.getLocalizedMessage());
                     }
