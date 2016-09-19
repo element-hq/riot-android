@@ -35,7 +35,6 @@ import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collection;

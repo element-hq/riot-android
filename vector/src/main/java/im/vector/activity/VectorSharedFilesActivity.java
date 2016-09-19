@@ -18,27 +18,17 @@ package im.vector.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
-import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.ContentUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import im.vector.Matrix;
-import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
-import im.vector.util.VectorUtils;
 
 /**
  * Dummy activity used to manage the shared

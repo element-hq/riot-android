@@ -21,14 +21,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -54,9 +52,7 @@ import im.vector.R;
 
 import org.matrix.androidsdk.db.MXMediasCache;
 
-import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.util.SlidableMediaInfo;
 
 import java.io.File;

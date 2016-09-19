@@ -16,15 +16,12 @@
 
 package im.vector.preference;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context;;
 import android.util.AttributeSet;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
-import org.matrix.androidsdk.rest.model.User;
 
-import im.vector.R;
 import im.vector.util.VectorUtils;
 
 /**
