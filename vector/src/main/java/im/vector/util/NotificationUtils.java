@@ -231,7 +231,7 @@ public class NotificationUtils {
 
         builder.setContentText(body);
         builder.setAutoCancel(true);
-        builder.setSmallIcon(R.drawable.logo_transparent);
+        builder.setSmallIcon(R.drawable.message_notification_transparent);
 
         if (null != largeIcon) {
             largeIcon = createSquareBitmap(largeIcon);
