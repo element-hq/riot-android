@@ -1,3 +1,9 @@
+Changes in Vector 0.5.2 (2016-09-20)
+===================================================
+
+Bugfixes:
+ * The notification icons were not displayed on some devices.
+
 Changes in Vector 0.5.1 (2016-09-19)
 ===================================================
 
