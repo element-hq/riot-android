@@ -975,7 +975,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if ((requestCode == REQUEST_FILES_REQUEST_CODE) || (requestCode == TAKE_IMAGE_REQUEST_CODE)) {
                 sendMediasIntent(data);
             } else if (requestCode == GET_MENTION_REQUEST_CODE) {
-                insertUserDisplayenInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
+                insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
             } else if (requestCode == REQUEST_ROOM_AVATAR_CODE) {
                 onActivityResultRoomAvatarUpdate(data);
             }
@@ -1737,10 +1737,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Insert a text in the message editor.
+     * Insert an user displayname  in the message editor.
      * @param text the text to insert.
      */
-    public void insertUserDisplayenInTextEditor(String text) {
+    public void insertUserDisplayNameInTextEditor(String text) {
         if (null != text) {
             if (TextUtils.isEmpty(mEditText.getText())) {
                 mEditText.append(sanitizeDisplayname(text) + ": ");
@@ -1751,12 +1751,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Init the edited with a provided text
-     * @param text the text
+     * Insert a quote  in the message editor.
+     * @param quote the quote to insert.
      */
-    public void initEditText(String text) {
-        mEditText.setText("");
-        mEditText.append(text);
+    public void insertQuoteInTextEditor(String quote) {
+        if (!TextUtils.isEmpty(quote)) {
+            if (TextUtils.isEmpty(mEditText.getText())) {
+                mEditText.setText("");
+                mEditText.append(quote);
+            } else {
+                mEditText.getText().insert(mEditText.getSelectionStart(), "\n" + quote);
+            }
+        }
     }
 
     //================================================================================

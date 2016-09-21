@@ -304,7 +304,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
                 Message message = JsonUtils.toMessage(event.content);
-                ((VectorRoomActivity)attachedActivity).initEditText( "> " + message.body + "\n\n");
+                ((VectorRoomActivity)attachedActivity).insertQuoteInTextEditor( "> " + message.body + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
@@ -733,7 +733,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             if (null != state) {
                 String displayName = state.getMemberName(userId);
                 if (!TextUtils.isEmpty(displayName)) {
-                    ((VectorRoomActivity)getActivity()).insertUserDisplayenInTextEditor(displayName);
+                    ((VectorRoomActivity)getActivity()).insertUserDisplayNameInTextEditor(displayName);
                 }
             }
         }
@@ -743,7 +743,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onSenderNameClick(String userId, String displayName) {
         if (getActivity() instanceof VectorRoomActivity) {
-            ((VectorRoomActivity)getActivity()).insertUserDisplayenInTextEditor(displayName);
+            ((VectorRoomActivity)getActivity()).insertUserDisplayNameInTextEditor(displayName);
         }
     }
 
