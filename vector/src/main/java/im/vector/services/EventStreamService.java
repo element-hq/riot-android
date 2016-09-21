@@ -698,7 +698,7 @@ public class EventStreamService extends Service {
 
         // build the notification builder
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this);
-        notifBuilder.setSmallIcon(R.drawable.logo_transparent);
+        notifBuilder.setSmallIcon(R.drawable.permanent_notification_transparent);
         notifBuilder.setWhen(System.currentTimeMillis());
         notifBuilder.setContentTitle(getString(R.string.app_name));
         notifBuilder.setContentText(NOTIFICATION_SUB_TITLE);
@@ -834,7 +834,6 @@ public class EventStreamService extends Service {
             return;
         }
 
-
         if (event.isCallEvent()) {
             prepareCallNotification(event, bingRule);
             return;
@@ -878,20 +877,22 @@ public class EventStreamService extends Service {
         }
 
         boolean isInvitationEvent = false;
-        String body;
+       
+        EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
+        eventDisplay.setPrependMessagesWithAuthor(false);
+        String body = eventDisplay.getTextualDisplay().toString();
 
+        if (TextUtils.isEmpty(body)) {
+            Log.e(LOG_TAG, "prepareNotification : the event " + event.eventId + " cannot be displayed");
+            return;
+        }
 
-         if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-            body = EventDisplay.getMembershipNotice(getApplicationContext(), event, roomState);
-
+        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
             try {
                 isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
             } catch (Exception e) {
                 Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
             }
-
-        } else {
-            body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
         }
 
         String from = "";

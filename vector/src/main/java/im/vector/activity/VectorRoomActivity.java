@@ -975,7 +975,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if ((requestCode == REQUEST_FILES_REQUEST_CODE) || (requestCode == TAKE_IMAGE_REQUEST_CODE)) {
                 sendMediasIntent(data);
             } else if (requestCode == GET_MENTION_REQUEST_CODE) {
-                insertUserDisplayenInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
+                insertUserDisplayNameInTextEditor(data.getStringExtra(VectorMemberDetailsActivity.RESULT_MENTION_ID));
             } else if (requestCode == REQUEST_ROOM_AVATAR_CODE) {
                 onActivityResultRoomAvatarUpdate(data);
             }
@@ -1737,10 +1737,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Insert a text in the message editor.
+     * Insert an user displayname  in the message editor.
      * @param text the text to insert.
      */
-    public void insertUserDisplayenInTextEditor(String text) {
+    public void insertUserDisplayNameInTextEditor(String text) {
         if (null != text) {
             if (TextUtils.isEmpty(mEditText.getText())) {
                 mEditText.append(sanitizeDisplayname(text) + ": ");
@@ -1751,12 +1751,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     }
 
     /**
-     * Init the edited with a provided text
-     * @param text the text
+     * Insert a quote  in the message editor.
+     * @param quote the quote to insert.
      */
-    public void initEditText(String text) {
-        mEditText.setText("");
-        mEditText.append(text);
+    public void insertQuoteInTextEditor(String quote) {
+        if (!TextUtils.isEmpty(quote)) {
+            if (TextUtils.isEmpty(mEditText.getText())) {
+                mEditText.setText("");
+                mEditText.append(quote);
+            } else {
+                mEditText.getText().insert(mEditText.getSelectionStart(), "\n" + quote);
+            }
+        }
     }
 
     //================================================================================
@@ -2748,15 +2754,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 public void onClick(View v) {
                     // sanity checks : reported by GA
                     if ((null != mRoom) && (null != mRoom.getLiveState())) {
-                        boolean canUpdateAvatar = false;
-
-                        PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-
-                        if (null != powerLevels) {
-                            int powerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
-                            canUpdateAvatar = powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR);}
-
-                        if (canUpdateAvatar) {
+                        if (CommonActivityUtils.isPowerLevelEnoughForAvatarUpdate(mRoom, mSession)) {
                             // need to check if the camera permission has been granted
                             if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_ROOM_DETAILS, VectorRoomActivity.this)) {
                                 Intent intent = new Intent(VectorRoomActivity.this, VectorMediasPickerActivity.class);
