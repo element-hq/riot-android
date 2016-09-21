@@ -55,6 +55,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
@@ -135,7 +136,8 @@ public class CommonActivityUtils {
     // Android M permission request code management
     private static final boolean PERMISSIONS_GRANTED = true;
     private static final boolean PERMISSIONS_DENIED = !PERMISSIONS_GRANTED;
-    private static final int PERMISSION_CAMERA = 0x1;
+    public static final int PERMISSION_BYPASSED = 0x0;
+    public static final int PERMISSION_CAMERA = 0x1;
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1<<1;
     private static final int PERMISSION_RECORD_AUDIO = 0x1<<2;
     private static final int PERMISSION_READ_CONTACTS = 0x1<<3;
@@ -146,6 +148,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
+    public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
     public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
@@ -502,6 +505,30 @@ public class CommonActivityUtils {
     }
 
     /**
+     * Check if the user power level allows to update the room avatar. This is mainly used to
+     * determine if camera permission must be checked or not.
+     *
+     * @param aRoom the room
+     * @param aSession the session
+     * @return true if the user power level allows to update the avatar, false otherwise.
+     */
+    public static boolean isPowerLevelEnoughForAvatarUpdate(Room aRoom, MXSession aSession) {
+        boolean canUpdateAvatarWithCamera = false;
+        PowerLevels powerLevels;
+
+        if ((null != aRoom) && (null != aSession)) {
+            if (null != (powerLevels = aRoom.getLiveState().getPowerLevels())) {
+                int powerLevel = powerLevels.getUserPowerLevel(aSession.getMyUserId());
+
+                // check the power level against avatar level
+                canUpdateAvatarWithCamera = (powerLevel >= powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_STATE_ROOM_AVATAR));
+            }
+        }
+
+        return canUpdateAvatarWithCamera;
+    }
+
+    /**
      * Check if the permissions provided in the list are granted.
      * This is an asynchronous method if permissions are requested, the final response
      * is provided in onRequestPermissionsResult(). In this case checkPermissions()
@@ -523,6 +550,8 @@ public class CommonActivityUtils {
         if(null == aCallingActivity){
             Log.w(LOG_TAG, "## checkPermissions(): invalid input data");
             isPermissionGranted = false;
+        } else if(REQUEST_CODE_PERMISSION_BY_PASS == aPermissionsToBeGrantedBitMap) {
+            isPermissionGranted = true;
         } else if((REQUEST_CODE_PERMISSION_TAKE_PHOTO!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_AUDIO_IP_CALL!=aPermissionsToBeGrantedBitMap)
                 && (REQUEST_CODE_PERMISSION_VIDEO_IP_CALL!=aPermissionsToBeGrantedBitMap)
