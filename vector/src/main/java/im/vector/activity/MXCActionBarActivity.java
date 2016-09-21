@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,8 @@ import java.util.ArrayList;
  * extends ActionBarActivity to manage the rageshake
  */
 public class MXCActionBarActivity extends ActionBarActivity {
+    private static final String LOG_TAG = "MXCActBarActivity";
+
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
@@ -218,9 +221,14 @@ public class MXCActionBarActivity extends ActionBarActivity {
         }
 
         if (item.getItemId() == android.R.id.home) {
-            // pop the activity to avoid creating a new instance of the parent activity
-            this.onBackPressed();
-            return true;
+            // issue by GA
+            try {
+                // pop the activity to avoid creating a new instance of the parent activity
+                this.onBackPressed();
+                return true;
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onOptionsItemSelected : " + e.getMessage());
+            }
         }
         return super.onOptionsItemSelected(item);
     }
