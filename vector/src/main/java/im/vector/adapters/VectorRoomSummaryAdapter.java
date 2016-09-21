@@ -106,8 +106,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private boolean mForceDirectoryGroupDisplay;
 
     // public room search
-    private List<PublicRoom> mPublicRooms;
-    private ArrayList<PublicRoom> mMatchedPublicRooms;
+    private Integer mPublicRoomsCount;
 
     // the listener
     private RoomEventListener mListener;
@@ -302,29 +301,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * @return the matched public rooms list
-     */
-    public List<PublicRoom> getMatchedPublicRooms() {
-
-        if (null != mMatchedPublicRooms) {
-            Collections.sort(mMatchedPublicRooms, new Comparator<PublicRoom>() {
-                @Override
-                public int compare(PublicRoom r1, PublicRoom r2) {
-                    int diff = r2.numJoinedMembers - r1.numJoinedMembers;
-
-                    if (0 == diff) {
-                        diff = VectorUtils.getPublicRoomDisplayName(r1).compareTo(VectorUtils.getPublicRoomDisplayName(r2));
-                    }
-
-                    return diff;
-                }
-            });
-        }
-
-        return mMatchedPublicRooms;
-    }
-
-    /**
      * Build an array of RoomSummary objects organized according to the room tags (sections).
      * So far we have 4 sections
      * - the invited rooms
@@ -408,15 +384,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // in search mode
             // the public rooms have a dedicated section
             if (mIsSearchMode || mDisplayDirectoryGroupWhenEmpty || mForceDirectoryGroupDisplay) {
-                mMatchedPublicRooms = new ArrayList<>();
-
-                if (null != mPublicRooms) {
-                    for (PublicRoom publicRoom : mPublicRooms) {
-                        if (isMatchedPattern(publicRoom)) {
-                            mMatchedPublicRooms.add(publicRoom);
-                        }
-                    }
-                }
 
                 // detect if the pattern might a room ID or an alias
                 if (!TextUtils.isEmpty(mSearchedPattern)) {
@@ -819,24 +786,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             unreadCountTxtView.setVisibility(View.GONE);
 
             if (mDirectoryGroupPosition == groupPosition) {
-                if (null == mPublicRooms) {
-                    roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
-                    roomMsgTxtView.setText("");
-                } else {
-                    roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
+                roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
-                    if (TextUtils.isEmpty(mSearchedPattern)) {
-                        if (mMatchedPublicRooms.size() > 1) {
-                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mMatchedPublicRooms.size()));
-                        } else {
-                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mMatchedPublicRooms.size()));
-                        }
+                if (!TextUtils.isEmpty(mSearchedPattern) || (null == mPublicRoomsCount)) {
+                    roomMsgTxtView.setText(null);
+                } else {
+                    if (mPublicRoomsCount > 1) {
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mPublicRoomsCount));
                     } else {
-                        if (mMatchedPublicRooms.size() > 1) {
-                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms_for, mMatchedPublicRooms.size(), mSearchedPattern));
-                        } else {
-                            roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRooms.size(), mSearchedPattern));
-                        }
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mPublicRoomsCount));
                     }
                 }
 
@@ -1164,12 +1122,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Update the public rooms list.
-     * null means that there is a pending request.
-     * @param publicRoomsList the new public rooms list.
+     * Update the public rooms list count
+     * @param roomsListCount the new public rooms count
      */
-    public void setPublicRoomsList(List<PublicRoom> publicRoomsList) {
-        mPublicRooms = publicRoomsList;
+    public void setPublicRoomsCount(Integer roomsListCount) {
+        mPublicRoomsCount = roomsListCount;
     }
 
     /**

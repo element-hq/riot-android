@@ -48,15 +48,17 @@ public class VectorPublicRoomsListFragment extends Fragment {
 
     public static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";
     public static final String ARG_MATRIX_ID = "VectorPublicRoomsListFragment.ARG_MATRIX_ID";
-    public static final String ARG_ROOMS_LIST_ID = "VectorPublicRoomsListFragment.ARG_ROOMS_LIST_ID";
+    public static final String ARG_SEARCHED_PATTERN = "VectorPublicRoomsListFragment.ARG_SEARCHED_PATTERN";
 
-
-    public static VectorPublicRoomsListFragment newInstance(String matrixId, int layoutResId, ArrayList<PublicRoom> publicRooms) {
+    public static VectorPublicRoomsListFragment newInstance(String matrixId, int layoutResId, String pattern) {
         VectorPublicRoomsListFragment f = new VectorPublicRoomsListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
-        args.putSerializable(ARG_ROOMS_LIST_ID, publicRooms);
+
+        if (!TextUtils.isEmpty(pattern)) {
+            args.putString(ARG_SEARCHED_PATTERN, pattern);
+        }
         f.setArguments(args);
         return f;
     }
@@ -64,9 +66,9 @@ public class VectorPublicRoomsListFragment extends Fragment {
     protected String mMatrixId;
     protected MXSession mSession;
     protected ListView mRecentsListView;
-    protected ArrayList<PublicRoom> mPublicRooms;
     protected VectorPublicRoomsAdapter mAdapter;
     protected View mSpinnerView;
+    protected String mPattern;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,7 +81,8 @@ public class VectorPublicRoomsListFragment extends Fragment {
         if (null == mSession) {
             throw new RuntimeException("Must have valid default MXSession.");
         }
-        mPublicRooms = (ArrayList<PublicRoom>)args.getSerializable(ARG_ROOMS_LIST_ID);
+
+        mPattern = args.getString(ARG_SEARCHED_PATTERN, null);
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
         mRecentsListView = (ListView)v.findViewById(R.id.fragment_public_rooms_list);
@@ -87,7 +90,6 @@ public class VectorPublicRoomsListFragment extends Fragment {
 
         // create the adapter
         mAdapter = new VectorPublicRoomsAdapter(getActivity(), R.layout.adapter_item_vector_recent_room);
-        mAdapter.addAll(mPublicRooms);
         mRecentsListView.setAdapter(mAdapter);
 
         // Set rooms click listener:

@@ -57,6 +57,7 @@ public class MXCActionBarActivity extends ActionBarActivity {
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
+
     protected MXSession mSession = null;
     protected Room mRoom = null;
 

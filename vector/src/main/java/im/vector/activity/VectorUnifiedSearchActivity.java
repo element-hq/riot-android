@@ -193,7 +193,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         if ((currentIndex == mSearchInRoomNamesTabIndex) && (null != mSearchInRoomNamesFragment)) {
             // display a spinner if the public rooms list are not yet initialized
             // else the search should be quite fast because it is only performed on the known rooms list/
-            if (null == PublicRoomsManager.getPublicRooms()) {
+            if (PublicRoomsManager.isRequestInProgress()) {
                 mWaitWhileSearchInProgressView.setVisibility(View.VISIBLE);
             }
 
