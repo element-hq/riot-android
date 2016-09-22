@@ -737,6 +737,13 @@ public class LoginActivity extends MXCActionBarActivity {
      * the user forgot his password
      */
     private void onForgotPasswordClick() {
+        final HomeserverConnectionConfig hsConfig = getHsConfig();
+
+        // it might be null if the identity / homeserver urls are invalids
+        if (null == hsConfig) {
+            return;
+        }
+
         // parameters
         final String email = mForgotEmailTextView.getText().toString().trim();
         final String password = mForgotPassword1TextView.getText().toString().trim();
@@ -761,7 +768,6 @@ public class LoginActivity extends MXCActionBarActivity {
 
         enableLoadingScreen(true);
 
-        final HomeserverConnectionConfig hsConfig = getHsConfig();
         final ThreePid thirdPid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
 
         ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
