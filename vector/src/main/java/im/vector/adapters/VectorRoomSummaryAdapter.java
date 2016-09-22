@@ -56,6 +56,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import im.vector.Matrix;
+import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.util.VectorUtils;
 
@@ -107,6 +108,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // public room search
     private Integer mPublicRoomsCount;
+    private Integer mMatchedPublicRoomsCount;
 
     // the listener
     private RoomEventListener mListener;
@@ -716,8 +718,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param aTargetView view to apply the background
      * @param aBackgroundColor background colour
      */
-    private static void setUnreadBackground(View aTargetView, int aBackgroundColor)
-    {
+    private static void setUnreadBackground(View aTargetView, int aBackgroundColor) {
         if(null != aTargetView) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -788,10 +789,24 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             if (mDirectoryGroupPosition == groupPosition) {
                 roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
-                if (!TextUtils.isEmpty(mSearchedPattern) || (null == mPublicRoomsCount)) {
-                    roomMsgTxtView.setText(null);
+                if (!TextUtils.isEmpty(mSearchedPattern)) {
+                    if (null == mMatchedPublicRoomsCount) {
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
+                    } else if (mMatchedPublicRoomsCount < 2) {
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRoomsCount, mSearchedPattern));
+                    } else {
+                        String value = mMatchedPublicRoomsCount.toString();
+
+                        if (mMatchedPublicRoomsCount >= PublicRoomsManager.PUBLIC_ROOMS_LIMIT) {
+                            value = "> " + PublicRoomsManager.PUBLIC_ROOMS_LIMIT;
+                        }
+
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms_for, value, mSearchedPattern));
+                    }
                 } else {
-                    if (mPublicRoomsCount > 1) {
+                    if (null == mPublicRoomsCount) {
+                        roomMsgTxtView.setText(null);
+                    } else if (mPublicRoomsCount > 1) {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mPublicRoomsCount));
                     } else {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mPublicRoomsCount));
@@ -1101,13 +1116,17 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @param pattern the new searched pattern
      */
     public void setSearchPattern(String pattern) {
-        if (!TextUtils.equals(pattern, mSearchedPattern)) {
+        String trimmedPattern = pattern;
 
-            if (null != pattern) {
-                pattern.trim().toLowerCase();
-            }
+        if (null != pattern) {
+            trimmedPattern = pattern.trim().toLowerCase();
+            trimmedPattern = TextUtils.getTrimmedLength(trimmedPattern) == 0 ? null : trimmedPattern;
+        }
 
-            mSearchedPattern = TextUtils.getTrimmedLength(pattern) == 0 ? null : pattern;
+        if (!TextUtils.equals(trimmedPattern, mSearchedPattern)) {
+
+            mSearchedPattern = trimmedPattern;
+            mMatchedPublicRoomsCount = null;
 
             // refresh the layout
             this.notifyDataSetChanged();
@@ -1122,11 +1141,32 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Update the public rooms list count
+     * Update the public rooms list count and refresh the display.
      * @param roomsListCount the new public rooms count
      */
     public void setPublicRoomsCount(Integer roomsListCount) {
-        mPublicRoomsCount = roomsListCount;
+        if (roomsListCount != mPublicRoomsCount) {
+            mPublicRoomsCount = roomsListCount;
+            super.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * @return the matched public rooms count
+     */
+    public int getMatchedPublicRoomsCount() {
+        return mMatchedPublicRoomsCount;
+    }
+
+    /**
+     * Update the matched public rooms list count and refresh the display.
+     * @param roomsListCount the new public rooms count
+     */
+    public void setMatchedPublicRoomsCount(Integer roomsListCount) {
+        if (roomsListCount != mMatchedPublicRoomsCount) {
+            mMatchedPublicRoomsCount = roomsListCount;
+            super.notifyDataSetChanged();
+        }
     }
 
     /**

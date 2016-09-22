@@ -137,13 +137,15 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                 }
                 // display the public rooms list
                 else if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
-                    Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
-                    intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                    if (TextUtils.isEmpty(mAdapter.getSearchedPattern()) || (mAdapter.getMatchedPublicRoomsCount() > 0)) {
+                        Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
+                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
 
-                    if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
-                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN, mAdapter.getSearchedPattern());
+                        if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+                            intent.putExtra(VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN, mAdapter.getSearchedPattern());
+                        }
+                        getActivity().startActivity(intent);
                     }
-                    getActivity().startActivity(intent);
                 } else {
                     // open the dedicated room activity
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
@@ -237,7 +239,37 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         if (null == mRecentsListView) {
             return;
         }
+
         mAdapter.setSearchPattern(pattern);
+
+        if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+            PublicRoomsManager.startPublicRoomsSearch(null, mAdapter.getSearchedPattern(), new ApiCallback<List<PublicRoom>>() {
+
+                private void onDone(int size) {
+                    mAdapter.setMatchedPublicRoomsCount(size);
+                }
+
+                @Override
+                public void onSuccess(List<PublicRoom> info) {
+                    onDone(info.size());
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone(0);
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone(0);
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone(0);
+                }
+            });
+        }
 
         mRecentsListView.post(new Runnable() {
             @Override

@@ -319,15 +319,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                         mIsLoadingPublicRooms = false;
 
                                         mAdapter.setPublicRoomsCount(publicRoomsCount);
-
-                                        // refreshed
-                                        mAdapter.notifyDataSetChanged();
                                     }
                                 });
                             }
                         }
                     });
-
                 }
             }
         });
