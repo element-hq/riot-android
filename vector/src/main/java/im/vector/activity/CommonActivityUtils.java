@@ -46,6 +46,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.IMXStore;
@@ -1682,6 +1683,50 @@ public class CommonActivityUtils {
      */
     public static int getBadgeCount() {
         return mBadgeValue;
+    }
+
+    /**
+     * Refresh the badge count when the device is offline.
+     * Notifications rooms are parsed to track the notification count value.
+     * @param aSession session value
+     * @param aActivity calling activity
+     */
+    public static void offlineRefreshBadgeUnreadCount(MXSession aSession, Activity aActivity) {
+        MXDataHandler dataHandler;
+        Context appCtxt;
+
+        // sanity check
+        if ((null == aActivity) || (null == aSession)){
+            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): unexpected input null values");
+        } else if(null == (appCtxt=aActivity.getApplicationContext())) {
+            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): invalid Context");
+        } else if( (null == (dataHandler=aSession.getDataHandler())) || (null == dataHandler.getStore())) {
+            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): invalid DataHandler or Store");
+        } else {
+            // update the badge count only if the device is offline
+            if (!Matrix.getInstance(aActivity).isConnected()) {
+                ArrayList<Room> roomCompleteList = new ArrayList<>(dataHandler.getStore().getRooms());
+                int unreadRoomsCount = 0;
+
+                // compute the number of rooms with unread notifications
+                if (null != roomCompleteList) {
+
+                    // invite to join a room counts as check settings
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appCtxt);
+                    boolean isInvitedNotifEnabled = preferences.getBoolean(aActivity.getResources().getString(R.string.settings_invited_to_room), false);
+
+                    for (Room room : roomCompleteList) {
+                        if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                            unreadRoomsCount++;
+                        }
+                    }
+
+                    // update the badge counter
+                    Log.d(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): badge update count="+unreadRoomsCount);
+                    CommonActivityUtils.updateBadgeCount(appCtxt, unreadRoomsCount);
+                }
+            }
+        }
     }
 
     //==============================================================================================================
