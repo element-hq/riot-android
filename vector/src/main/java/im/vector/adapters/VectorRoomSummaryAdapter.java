@@ -100,9 +100,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // search mode
     private String mSearchedPattern;
-    private boolean mIsSearchMode;
+    private final boolean mIsSearchMode;
     // when set to true, avoid empty history by displaying the directory group
-    private boolean mDisplayDirectoryGroupWhenEmpty;
+    private final boolean mDisplayDirectoryGroupWhenEmpty;
     // force to display the directory group
     private boolean mForceDirectoryGroupDisplay;
 
@@ -111,7 +111,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private Integer mMatchedPublicRoomsCount;
 
     // the listener
-    private RoomEventListener mListener;
+    private final RoomEventListener mListener;
 
     // drag and drop mode
     private boolean mIsDragAndDropMode = false;
@@ -231,24 +231,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, room);
                 res = (!TextUtils.isEmpty(roomName) && (roomName.toLowerCase().contains(mSearchedPattern)));
             }
-        }
-
-        return res;
-    }
-
-    /**
-     * Check a public room contains a patter,
-     * @param publicRoom the public room.
-     * @return true of the pattern is found.
-     */
-    private boolean isMatchedPattern(PublicRoom publicRoom) {
-        boolean res = true;
-
-        // test only in search
-        if (mIsSearchMode && !TextUtils.isEmpty(mSearchedPattern)) {
-            String displayname = publicRoom.getDisplayName(mMxSession.getMyUserId());
-
-            res = (!TextUtils.isEmpty(displayname) && (displayname.toLowerCase().contains(mSearchedPattern)));
         }
 
         return res;
@@ -478,8 +460,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @return the corresponding room summary
      */
     public RoomSummary getRoomSummaryAt(int aGroupPosition, int aChildPosition) {
-        RoomSummary roomSummaryRetValue = mSummaryListByGroupPosition.get(aGroupPosition).get(aChildPosition);
-        return roomSummaryRetValue;
+        return mSummaryListByGroupPosition.get(aGroupPosition).get(aChildPosition);
     }
 
     /**
@@ -500,27 +481,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
             // reset the highlight
             retCode = roomSummary.setHighlighted(false);
-        }
-
-        return retCode;
-    }
-
-    /**
-     * Reset the count of the unread messages of the section whose index is given in aSection
-     * @param aSection the section index
-     * @return true if at least one summary had a unread count reseted
-     */
-    public boolean resetUnreadCounts(int aSection) {
-        boolean retCode = false;
-
-        ArrayList<RoomSummary> summariesList = mSummaryListByGroupPosition.get(aSection);
-        if(null != summariesList) {
-            for (int summaryIdx = 0; summaryIdx < summariesList.size(); summaryIdx++) {
-                retCode |= resetUnreadCount(aSection, summaryIdx);
-            }
-        }
-        else {
-            Log.w(DBG_CLASS_NAME, "## resetUnreadCounts(): section " + aSection + " was not found in the sections summary list");
         }
 
         return retCode;
@@ -550,37 +510,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         return roomRetValue;
     }
-
-    /**
-     * Find a summary from its room Ids.
-     * @param aSectionIndex the section to search withing
-     * @param aRoomId the room Id
-     * @return the room summary if it is found.
-     */
-    public RoomSummary getSummaryByRoomId(int aSectionIndex, String aRoomId) {
-        RoomSummary roomSummaryRetValue = null;
-        String roomIdStr;
-
-        if (null != mSummaryListByGroupPosition) {
-            ArrayList<RoomSummary> summariesList = mSummaryListByGroupPosition.get(aSectionIndex);
-            if (null != summariesList) {
-                for (int summaryIdx = 0; summaryIdx < summariesList.size(); summaryIdx++) {
-                    roomIdStr = (summariesList.get(summaryIdx)).getRoomId();
-                    if (aRoomId.equals(roomIdStr)) {
-                        roomSummaryRetValue = summariesList.get(summaryIdx);
-                        break;
-                    }
-                }
-            }
-        }
-
-        if(null == roomSummaryRetValue) {
-            Log.w(DBG_CLASS_NAME, "## getSummaryByRoomId(): no summary list found for: section=" + aSectionIndex + " roomId=" + aRoomId);
-        }
-
-        return roomSummaryRetValue;
-    }
-
 
     @Override
     public boolean hasStableIds() {
@@ -672,8 +601,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             return 1;
         }
 
-        int countRetValue = mSummaryListByGroupPosition.get(groupPosition).size();
-        return countRetValue;
+        return mSummaryListByGroupPosition.get(groupPosition).size();
     }
 
     @Override
