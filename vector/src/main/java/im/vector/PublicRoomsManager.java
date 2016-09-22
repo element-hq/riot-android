@@ -16,21 +16,17 @@
 
 package im.vector;
 
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.rest.model.PublicRoomsResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,6 +34,8 @@ import java.util.List;
  */
 public class PublicRoomsManager {
     private static final String LOG_TAG = "PublicRoomsManager";
+
+    public static final int PUBLIC_ROOMS_LIMIT = 20;
 
     public interface PublicRoomsManagerListener {
         /**
@@ -59,7 +57,6 @@ public class PublicRoomsManager {
     private static String mRequestKey = null;
 
     // pagination information
-    private static boolean mCanPaginate = false;
     private static String mRequestServer = null;
     private static String mSearchedPattern = null;
     private static String mForwardPaginationToken = null;
@@ -83,14 +80,21 @@ public class PublicRoomsManager {
     }
 
     /**
+     * @return true if there are some other public rooms to find.
+     */
+    public static boolean hasMoreResults() {
+        return !TextUtils.isEmpty(mForwardPaginationToken);
+    }
+
+    /**
      * Trigger a public rooms request.
      * @param callback the asynchronous callback.
      */
-    private static void launchPublicRoomsRequest(final SimpleApiCallback<List<PublicRoom>> callback) {
+    private static void launchPublicRoomsRequest(final ApiCallback<List<PublicRoom>> callback) {
         final String fToken = mRequestKey;
 
         //final String server, final String pattern, final String since, final ApiCallback<PublicRoomsResponse> callback
-        mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mSearchedPattern, mForwardPaginationToken, new ApiCallback<PublicRoomsResponse>() {
+        mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
             @Override
             public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
                 // check if the request response is still expected
@@ -169,7 +173,7 @@ public class PublicRoomsManager {
      * @param pattern the pattern to search
      * @param callback the asynchronous callback
      */
-    public static void startPublicRoomsSearch(final String server, final String pattern, final SimpleApiCallback<List<PublicRoom>> callback) {
+    public static void startPublicRoomsSearch(final String server, final String pattern, final ApiCallback<List<PublicRoom>> callback) {
         Log.d(LOG_TAG, "## startPublicRoomsSearch() " + " : server " + server + " pattern " + pattern);
 
         // on android, a request cannot be cancelled
@@ -185,26 +189,26 @@ public class PublicRoomsManager {
     }
 
     /**
-     * Paginate the public rooms search.
+     * Forward paginate the public rooms search.
      * @param callback the asynchronous callback
      * @return true if the pagination starts
      */
-    public static boolean paginate(final SimpleApiCallback<List<PublicRoom>> callback) {
-        Log.d(LOG_TAG, "## paginate() " + " : server " + mRequestServer + " pattern " + mSearchedPattern + " mForwardPaginationToken " + mForwardPaginationToken);
+    public static boolean forwardPaginate(final ApiCallback<List<PublicRoom>> callback) {
+        Log.d(LOG_TAG, "## forwardPaginate() " + " : server " + mRequestServer + " pattern " + mSearchedPattern + " mForwardPaginationToken " + mForwardPaginationToken);
 
         if (isRequestInProgress()) {
-            Log.d(LOG_TAG, "## paginate() : a request is already in progress");
+            Log.d(LOG_TAG, "## forwardPaginate() : a request is already in progress");
             return false;
         }
 
         if (TextUtils.isEmpty(mForwardPaginationToken)) {
-            Log.d(LOG_TAG, "## paginate() : there is no forward token");
+            Log.d(LOG_TAG, "## forwardPaginate() : there is no forward token");
             return false;
         }
 
         // on android, a request cannot be cancelled
         // so define a key to detect if the request makes senses
-        mRequestKey =  "paginate" + System.currentTimeMillis();
+        mRequestKey =  "forwardPaginate" + System.currentTimeMillis();
 
         launchPublicRoomsRequest(callback);
 

@@ -11,7 +11,7 @@
         android:divider="#00000000"/>
 
     <RelativeLayout
-        android:id="@+id/listView_spinner_views"
+        android:id="@+id/listView_global_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -25,4 +25,11 @@
             android:visibility="visible"/>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/listView_forward_spinner_view"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:indeterminate="true" />
 </RelativeLayout>
