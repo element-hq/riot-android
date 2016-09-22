@@ -573,16 +573,16 @@ public class Matrix {
      * Reload the matrix sessions.
      * The session caches are cleared before being reloaded.
      * Any opened activity is closed and the application switches to the splash screen.
-     * @param fromActivity the caller activity
+     * @param context the context
      */
-    public void reloadSessions(Activity fromActivity) {
-        ArrayList<MXSession> sessions = getMXSessions(fromActivity);
+    public void reloadSessions(Context context) {
+        ArrayList<MXSession> sessions = getMXSessions(context);
 
         for(MXSession session : sessions) {
-            CommonActivityUtils.logout(fromActivity, session, false);
+            CommonActivityUtils.logout(context, session, false);
         }
 
-        clearSessions(fromActivity, false);
+        clearSessions(context, false);
 
         synchronized (LOG_TAG) {
             // build a new sessions list
@@ -594,11 +594,13 @@ public class Matrix {
             }
         }
 
-        Intent intent = new Intent(fromActivity, SplashActivity.class);
+        Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.getApplicationContext().startActivity(intent);
 
-        fromActivity.startActivity(intent);
-        fromActivity.finish();
+        if (null != VectorApp.getCurrentActivity()) {
+            VectorApp.getCurrentActivity().finish();
+        }
     }
 
     /**
