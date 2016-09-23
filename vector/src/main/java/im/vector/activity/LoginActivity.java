@@ -1492,7 +1492,7 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         }
 
-        if (supportedFlows.size() > 0) {
+        if (supportedFlows.size() == registrationFlowResponse.flows.size()) {
             Log.d(LOG_TAG, "## onRegistrationFlow(): mRegistrationResponse updated");
             mRegistrationResponse = registrationFlowResponse;
             registrationFlowResponse.flows = supportedFlows;
