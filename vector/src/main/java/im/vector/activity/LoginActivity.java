@@ -1458,6 +1458,23 @@ public class LoginActivity extends MXCActionBarActivity {
         return false;
     }
 
+
+    /**
+     * return true if a captcha flow is required
+     */
+    private boolean isDummyFlow() {
+        // sanity checks
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow loginFlow : mRegistrationResponse.flows){
+                if (loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Check if the client supports the registration kind.
      *
@@ -1483,7 +1500,8 @@ public class LoginActivity extends MXCActionBarActivity {
                 for (String stage : flow.stages) {
                     isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, stage) ||
-                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage);
+                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage)||
+                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY, stage);
                 }
             }
 
@@ -1492,7 +1510,9 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         }
 
-        if (supportedFlows.size() > 0) {
+        // Check whether all listed flows in this authentication session are supported
+        // We suggest using the fallback page (if any), when at least one flow is not supported.
+        if (supportedFlows.size() == registrationFlowResponse.flows.size()) {
             Log.d(LOG_TAG, "## onRegistrationFlow(): mRegistrationResponse updated");
             mRegistrationResponse = registrationFlowResponse;
             registrationFlowResponse.flows = supportedFlows;
@@ -1886,8 +1906,13 @@ public class LoginActivity extends MXCActionBarActivity {
         RegistrationParams params = new RegistrationParams();
 
         HashMap<String, Object> authParams = new HashMap<>();
+
+        if (isDummyFlow()) {
+            authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
+        } else {
+            authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+        }
         authParams.put("session", mRegistrationResponse.session);
-        authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
 
         params.auth = authParams;
         params.username = name;
