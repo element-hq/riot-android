@@ -304,7 +304,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
                 Message message = JsonUtils.toMessage(event.content);
-                ((VectorRoomActivity)attachedActivity).insertQuoteInTextEditor( "> " + message.body + "\n\n");
+                ((VectorRoomActivity)attachedActivity).insertQuoteInTextEditor( "> " + textMsg + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
@@ -341,10 +341,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 final Intent sendIntent = new Intent();
 
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, message.body);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, textMsg);
                 sendIntent.setType("text/plain");
 
-                if ((action == R.id.ic_action_vector_forward) ||(action == R.id.ic_action_vector_quote)) {
+                if (action == R.id.ic_action_vector_forward) {
                     CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
                 } else {
                     startActivity(sendIntent);
