@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
@@ -33,6 +34,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -503,6 +505,20 @@ public class EventStreamService extends Service {
                     public void onStoreCorrupted(String accountId, String description) {
                         //Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
                         startEventStream(fSession, store);
+                    }
+
+                    @Override
+                    public void onStoreOOM(final String accountId, final String description) {
+                        Handler uiHandler = new Handler(getMainLooper());
+
+                        uiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
+
+                                Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
+                            }
+                        });
                     }
                 });
             }

@@ -151,7 +151,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
-    public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
+    public static void logout(Context context, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
@@ -160,17 +160,17 @@ public class CommonActivityUtils {
             eventStreamService.stopAccounts(matrixIds);
 
             // Publish to the server that we're now offline
-            MyPresenceManager.getInstance(activity, session).advertiseOffline();
+            MyPresenceManager.getInstance(context, session).advertiseOffline();
             MyPresenceManager.remove(session);
 
             // clear notification
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(activity).getSharedGCMRegistrationManager().unregister(session, null);
+            Matrix.getInstance(context).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
-            Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
+            Matrix.getInstance(context).clearSession(context, session, clearCredentials);
         }
     }
 
