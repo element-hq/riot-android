@@ -197,7 +197,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
                     // update badge unread count in case device is offline
-                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, getActivity());
+                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, getContext());
 
                     // launch corresponding room activity
                     if (null != roomId) {

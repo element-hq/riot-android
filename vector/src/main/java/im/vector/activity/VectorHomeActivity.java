@@ -630,7 +630,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             case R.id.ic_action_mark_all_as_read:
                 if(markAllMessagesAsReadWhenOffline()) {
                     // update badge unread count in case device is offline
-                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, this);
+                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, getApplicationContext());
                 } else {
                     markAllMessagesAsRead();
                 }
@@ -787,9 +787,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         boolean isOperationDone = false;
 
         if(!Matrix.getInstance(this).isConnected()) {
-
             ArrayList<MXSession> sessionsList = new ArrayList<>(Matrix.getMXSessions(this));
-            mReadReceiptSessionListIterator = sessionsList.iterator();
 
             if (null == sessionsList) {
                 Log.w(LOG_TAG, "## markAllMessagesAsReadWhenOffline(): invalid session list");
@@ -802,8 +800,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         if(null != roomCompleteList) {
                             // for each room send the receipt for the latest message
                             for (Room room : roomCompleteList) {
-                                room.sendReadReceipt(null);
-                                isOperationDone = true;
+                                isOperationDone |= room.sendReadReceipt(null);
                             }
                         }
                     }
@@ -811,7 +808,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
         }
 
-        if(isOperationDone){
+        if(isOperationDone) {
             // update the room badges
             mRecentsListFragment.refresh();
         }
