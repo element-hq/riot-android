@@ -628,7 +628,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
             // search in rooms content
             case R.id.ic_action_mark_all_as_read:
-                markAllMessagesAsRead();
+                if(markAllMessagesAsReadWhenOffline()) {
+                    // update badge unread count in case device is offline
+                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, getApplicationContext());
+                } else {
+                    markAllMessagesAsRead();
+                }
                 break;
 
             default:
@@ -771,6 +776,44 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             mReadReceiptSummaryListIterator = null;
             markAllMessagesAsRead();
         }
+    }
+
+    /**
+     * Send a read receipt when the device is offline, for each room, on the last
+     * message of the room.
+     * @return true if operation was performed, false otherwise
+     */
+    private boolean markAllMessagesAsReadWhenOffline() {
+        boolean isOperationDone = false;
+
+        if(!Matrix.getInstance(this).isConnected()) {
+            ArrayList<MXSession> sessionsList = new ArrayList<>(Matrix.getMXSessions(this));
+
+            if (null == sessionsList) {
+                Log.w(LOG_TAG, "## markAllMessagesAsReadWhenOffline(): invalid session list");
+            } else {
+                for (MXSession session : sessionsList) {
+                    if (null != session) {
+                        // test if the session is still alive i.e the account has not been logged out
+                        ArrayList<Room> roomCompleteList = new ArrayList<>(session.getDataHandler().getStore().getRooms());
+
+                        if(null != roomCompleteList) {
+                            // for each room send the receipt for the latest message
+                            for (Room room : roomCompleteList) {
+                                isOperationDone |= room.sendReadReceipt(null);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(isOperationDone) {
+            // update the room badges
+            mRecentsListFragment.refresh();
+        }
+
+        return isOperationDone;
     }
 
     /**
