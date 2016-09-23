@@ -46,6 +46,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.data.IMXStore;
@@ -150,7 +151,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
-    public static void logout(Activity activity, MXSession session, Boolean clearCredentials) {
+    public static void logout(Context context, MXSession session, Boolean clearCredentials) {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
@@ -159,17 +160,17 @@ public class CommonActivityUtils {
             eventStreamService.stopAccounts(matrixIds);
 
             // Publish to the server that we're now offline
-            MyPresenceManager.getInstance(activity, session).advertiseOffline();
+            MyPresenceManager.getInstance(context, session).advertiseOffline();
             MyPresenceManager.remove(session);
 
             // clear notification
             EventStreamService.removeNotification();
 
             // unregister from the GCM.
-            Matrix.getInstance(activity).getSharedGCMRegistrationManager().unregister(session, null);
+            Matrix.getInstance(context).getSharedGCMRegistrationManager().unregister(session, null);
 
             // clear credentials
-            Matrix.getInstance(activity).clearSession(activity, session, clearCredentials);
+            Matrix.getInstance(context).clearSession(context, session, clearCredentials);
         }
     }
 
@@ -1682,6 +1683,47 @@ public class CommonActivityUtils {
      */
     public static int getBadgeCount() {
         return mBadgeValue;
+    }
+
+    /**
+     * Refresh the badge count when the device is offline.
+     * Notifications rooms are parsed to track the notification count value.
+     * @param aSession session value
+     * @param aContext App context
+     */
+    public static void offlineRefreshBadgeUnreadCount(MXSession aSession, Context aContext) {
+        MXDataHandler dataHandler;
+
+        // sanity check
+        if ((null == aContext) || (null == aSession)){
+            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): unexpected input null values");
+        } else if( (null == (dataHandler=aSession.getDataHandler())) || (null == dataHandler.getStore())) {
+            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): invalid DataHandler or Store");
+        } else {
+            // update the badge count only if the device is offline
+            if (!Matrix.getInstance(aContext).isConnected()) {
+                ArrayList<Room> roomCompleteList = new ArrayList<>(dataHandler.getStore().getRooms());
+                int unreadRoomsCount = 0;
+
+                // compute the number of rooms with unread notifications
+                if (null != roomCompleteList) {
+
+                    // "invite to join a room" counts as a notification
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
+                    boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
+
+                    for (Room room : roomCompleteList) {
+                        if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                            unreadRoomsCount++;
+                        }
+                    }
+
+                    // update the badge counter
+                    Log.d(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): badge update count="+unreadRoomsCount);
+                    CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
+                }
+            }
+        }
     }
 
     //==============================================================================================================
