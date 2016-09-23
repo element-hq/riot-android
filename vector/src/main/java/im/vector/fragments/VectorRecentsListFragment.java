@@ -123,7 +123,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected boolean refreshOnChunkEnd = false;
 
     // public room management
-    private List<PublicRoom> mPublicRoomsList = null;
     private boolean mIsLoadingPublicRooms = false;
     private long mLatestPublicRoomsRefresh = System.currentTimeMillis();
 
@@ -166,15 +165,15 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 if (mAdapter.isDirectoryGroupPosition(groupPosition)) {
-                    List<PublicRoom> matchedPublicRooms = mAdapter.getMatchedPublicRooms();
+                    Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
+                    intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
 
-                    if ((null != matchedPublicRooms) && (matchedPublicRooms.size() > 0)) {
-                        Intent intent = new Intent(getActivity(), VectorPublicRoomsActivity.class);
-                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-                        VectorPublicRoomsActivity.mPublicRooms = new ArrayList<>(matchedPublicRooms);
-                        getActivity().startActivity(intent);
+                    if (!TextUtils.isEmpty(mAdapter.getSearchedPattern())) {
+                        intent.putExtra(VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN, mAdapter.getSearchedPattern());
                     }
+
+                    getActivity().startActivity(intent);
+
                 } else {
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
@@ -294,7 +293,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         mIsPaused = false;
         addSessionListener();
 
-        mAdapter.setPublicRoomsList(PublicRoomsManager.getPublicRooms());
+        mAdapter.setPublicRoomsCount(PublicRoomsManager.getPublicRoomsCount());
 
         // some unsent messages could have been added
         // it does not trigger any live event.
@@ -307,10 +306,10 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             public void run() {
 
                 // trigger a public room refresh if the list was not initialized or too old (5 mins)
-                if (((null == mPublicRoomsList) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
-                    PublicRoomsManager.refresh(new PublicRoomsManager.PublicRoomsManagerListener() {
+                if (((null == PublicRoomsManager.getPublicRoomsCount()) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
+                    PublicRoomsManager.refreshPublicRoomsCount(new PublicRoomsManager.PublicRoomsManagerListener() {
                         @Override
-                        public void onRefresh() {
+                        public void onPublicRoomsCountRefresh(final Integer publicRoomsCount) {
                             if (null != getActivity()) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
@@ -319,18 +318,12 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                                         mLatestPublicRoomsRefresh = System.currentTimeMillis();
                                         mIsLoadingPublicRooms = false;
 
-                                        // save the public rooms list
-                                        mPublicRoomsList = PublicRoomsManager.getPublicRooms();
-                                        mAdapter.setPublicRoomsList(mPublicRoomsList);
-
-                                        // refreshed
-                                        mAdapter.notifyDataSetChanged();
+                                        mAdapter.setPublicRoomsCount(publicRoomsCount);
                                     }
                                 });
                             }
                         }
                     });
-
                 }
             }
         });

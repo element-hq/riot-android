@@ -436,7 +436,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // initialize the public rooms list
         PublicRoomsManager.setSession(mSession);
-        PublicRoomsManager.refresh(null);
+        PublicRoomsManager.refreshPublicRoomsCount(null);
     }
 
     @Override

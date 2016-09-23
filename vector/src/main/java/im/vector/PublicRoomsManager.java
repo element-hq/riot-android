@@ -16,19 +16,17 @@
 
 package im.vector;
 
-import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
-import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
-import org.matrix.androidsdk.rest.client.EventsRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
+import org.matrix.androidsdk.rest.model.PublicRoomsResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,28 +35,34 @@ import java.util.List;
 public class PublicRoomsManager {
     private static final String LOG_TAG = "PublicRoomsManager";
 
+    public static final int PUBLIC_ROOMS_LIMIT = 20;
+
     public interface PublicRoomsManagerListener {
         /**
-         * Called when the public rooms list have been refreshed
+         * Called when the number of public rooms count have been updated
          */
-        void onRefresh();
+        void onPublicRoomsCountRefresh(Integer publicRoomsCount);
     }
 
     // session
     private static MXSession mSession;
 
-    // current public Rooms List
-    private static List<PublicRoom> mPublicRoomsList = null;
-
     // refresh status
-    private static boolean mRefreshInProgress = false;
+    private static boolean mCountRefreshInProgress = false;
+
+    // define the number of public rooms
+    private static Integer mPublicRoomsCount = null;
+
+    // request key to avoid dispatching invalid data
+    private static String mRequestKey = null;
+
+    // pagination information
+    private static String mRequestServer = null;
+    private static String mSearchedPattern = null;
+    private static String mForwardPaginationToken = null;
 
     // public room listeners
     private static final ArrayList<PublicRoomsManagerListener> mListeners = new ArrayList<>();
-
-    // when the homeserver url is set to riot.im
-    // the manager lists the public rooms from riot.im and matrix.org
-    private static EventsRestClient mMatrixEventsRestClient = null;
 
     /**
      * Set the current session
@@ -69,140 +73,209 @@ public class PublicRoomsManager {
     }
 
     /**
-     * @return the public rooms list
+     * @return true if there is a public room requests in progress
      */
-    public static List<PublicRoom> getPublicRooms() {
-        return mPublicRoomsList;
+    public static boolean isRequestInProgress() {
+        return !TextUtils.isEmpty(mRequestKey);
     }
 
     /**
-     * Refresh the public rooms list
+     * @return true if there are some other public rooms to find.
+     */
+    public static boolean hasMoreResults() {
+        return !TextUtils.isEmpty(mForwardPaginationToken);
+    }
+
+    /**
+     * Trigger a public rooms request.
+     * @param callback the asynchronous callback.
+     */
+    private static void launchPublicRoomsRequest(final ApiCallback<List<PublicRoom>> callback) {
+        final String fToken = mRequestKey;
+
+        //final String server, final String pattern, final String since, final ApiCallback<PublicRoomsResponse> callback
+        mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
+            @Override
+            public void onSuccess(PublicRoomsResponse publicRoomsResponse) {
+                // check if the request response is still expected
+                if (TextUtils.equals(fToken, mRequestKey)) {
+                    List<PublicRoom> list = publicRoomsResponse.chunk;
+
+                    // avoid the null case
+                    if (null == list) {
+                        list = new ArrayList<>();
+                    }
+
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : retrieves " + list.size() + " rooms");
+
+                    mForwardPaginationToken = publicRoomsResponse.next_batch;
+
+                    if (null != callback) {
+                        callback.onSuccess(list);
+                    }
+
+                    mRequestKey = null;
+                } else {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                // check if the request response is still expected
+                if (TextUtils.equals(fToken, mRequestKey)) {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onNetworkError " + e.getMessage());
+
+                    if (null != callback) {
+                        callback.onNetworkError(e);
+                    }
+                    mRequestKey = null;
+                } else {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                // check if the request response is still expected
+                if (TextUtils.equals(fToken, mRequestKey)) {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : MatrixError " + e.getLocalizedMessage());
+
+                    if (null != callback) {
+                        callback.onMatrixError(e);
+                    }
+                    mRequestKey = null;
+                } else {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                // check if the request response is still expected
+                if (TextUtils.equals(fToken, mRequestKey)) {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : onUnexpectedError " + e.getLocalizedMessage());
+
+                    if (null != callback) {
+                        callback.onUnexpectedError(e);
+                    }
+                    mRequestKey = null;
+                } else {
+                    Log.d(LOG_TAG, "## launchPublicRoomsRequest() : the request has been cancelled");
+                }
+            }
+        });
+    }
+
+    /**
+     * Start a new public rooms search
+     * @param server set the server in which searches, null if any
+     * @param pattern the pattern to search
+     * @param callback the asynchronous callback
+     */
+    public static void startPublicRoomsSearch(final String server, final String pattern, final ApiCallback<List<PublicRoom>> callback) {
+        Log.d(LOG_TAG, "## startPublicRoomsSearch() " + " : server " + server + " pattern " + pattern);
+
+        // on android, a request cannot be cancelled
+        // so define a key to detect if the request makes senses
+        mRequestKey =  "startPublicRoomsSearch" + System.currentTimeMillis();
+
+        // init the parameters
+        mRequestServer = server;
+        mSearchedPattern = pattern;
+        mForwardPaginationToken = null;
+
+        launchPublicRoomsRequest(callback);
+    }
+
+    /**
+     * Forward paginate the public rooms search.
+     * @param callback the asynchronous callback
+     * @return true if the pagination starts
+     */
+    public static boolean forwardPaginate(final ApiCallback<List<PublicRoom>> callback) {
+        Log.d(LOG_TAG, "## forwardPaginate() " + " : server " + mRequestServer + " pattern " + mSearchedPattern + " mForwardPaginationToken " + mForwardPaginationToken);
+
+        if (isRequestInProgress()) {
+            Log.d(LOG_TAG, "## forwardPaginate() : a request is already in progress");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mForwardPaginationToken)) {
+            Log.d(LOG_TAG, "## forwardPaginate() : there is no forward token");
+            return false;
+        }
+
+        // on android, a request cannot be cancelled
+        // so define a key to detect if the request makes senses
+        mRequestKey =  "forwardPaginate" + System.currentTimeMillis();
+
+        launchPublicRoomsRequest(callback);
+
+        return true;
+    }
+
+    /**
+     * @return the number of public rooms
+     */
+    public static Integer getPublicRoomsCount() {
+        return mPublicRoomsCount;
+    }
+
+    /**
+     * Refresh the public rooms count
      * @param listener the update listener
      */
-    public static void refresh(final PublicRoomsManagerListener listener) {
+    public static void refreshPublicRoomsCount(final PublicRoomsManagerListener listener) {
         if (null != mSession) {
-            if (mRefreshInProgress) {
+            if (mCountRefreshInProgress) {
                 if (null != listener) {
                     mListeners.add(listener);
                 }
             } else {
-                mRefreshInProgress = true;
+                mCountRefreshInProgress = true;
 
-                final long t0 = System.currentTimeMillis();
+                if (null != listener) {
+                    mListeners.add(listener);
+                }
 
                 // use any session to get the public rooms list
-                mSession.getEventsApiClient().loadPublicRooms(new SimpleApiCallback<List<PublicRoom>>() {
+                mSession.getEventsApiClient().getPublicRoomsCount(new SimpleApiCallback<Integer>() {
                     @Override
-                    public void onSuccess(final List<PublicRoom> publicRooms) {
+                    public void onSuccess(final Integer publicRoomsCount) {
+                        Log.d(LOG_TAG, "## refreshPublicRoomsCount() : Got the rooms public list count : " + publicRoomsCount);
+                        mPublicRoomsCount = publicRoomsCount;
 
-                        // when the home server is riot.im
-                        // get the public rooms list from matrix.org
-                        if (mSession.getHomeserverConfig().getHomeserverUri().toString().startsWith("https://riot.im")) {
-                            Log.d(LOG_TAG, "Got the riot.im public rooms in " + (System.currentTimeMillis() - t0) + " ms");
-                            refreshMatrixPublicRoomsList(t0, publicRooms);
-                        } else {
-                            Log.d(LOG_TAG, "Got the rooms public list : " + publicRooms.size() + " rooms in " + (System.currentTimeMillis() - t0) + " ms");
-                            mPublicRoomsList = publicRooms;
-
-                            for (PublicRoomsManagerListener listener : mListeners) {
-                                listener.onRefresh();
-                            }
-                            mListeners.clear();
-                            mRefreshInProgress = false;
+                        for (PublicRoomsManagerListener listener : mListeners) {
+                            listener.onPublicRoomsCountRefresh(mPublicRoomsCount);
                         }
+                        mListeners.clear();
+                        mCountRefreshInProgress = false;
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
                         super.onNetworkError(e);
-                        mRefreshInProgress = false;
-                        Log.e(LOG_TAG, "fails to retrieve the public room list " + e.getLocalizedMessage());
+                        mCountRefreshInProgress = false;
+                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
                         super.onMatrixError(e);
-                        mRefreshInProgress = false;
-                        Log.e(LOG_TAG, "fails to retrieve the public room list " + e.getLocalizedMessage());
+                        mCountRefreshInProgress = false;
+                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
                         super.onUnexpectedError(e);
-                        mRefreshInProgress = false;
-                        Log.e(LOG_TAG, "fails to retrieve the public room list " + e.getLocalizedMessage());
+                        mCountRefreshInProgress = false;
+                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
                     }
                 });
             }
         }
-    }
-
-    /**
-     * List the matrix.org public rooms.
-     * @param t0 public rooms request start time
-     * @param publicRooms the known public rooms
-     */
-    private static void refreshMatrixPublicRoomsList(final long t0, final List<PublicRoom> publicRooms) {
-
-        // create a dedicated events rest client
-        if (null == mMatrixEventsRestClient) {
-            final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(Uri.parse("https://matrix.org"));
-            mMatrixEventsRestClient = new EventsRestClient(hsConfig);
-        }
-
-        Log.d(LOG_TAG, "refresh the matrix.org public rooms");
-
-        mMatrixEventsRestClient.loadPublicRooms(new ApiCallback<List<PublicRoom>>() {
-            private void onMerged(List<PublicRoom> publicRooms) {
-                Log.d(LOG_TAG,"Got the merged rooms public list : "+publicRooms.size()+" rooms in "+(System.currentTimeMillis()-t0)+" ms");
-                mPublicRoomsList = publicRooms;
-
-                for(PublicRoomsManagerListener listener :mListeners) {
-                    listener.onRefresh();
-                }
-
-                mListeners.clear();
-                mRefreshInProgress=false;
-            }
-
-            @Override
-            public void onSuccess(List<PublicRoom> matrixPublicRooms) {
-                ArrayList<PublicRoom> mergedPublicRooms = new ArrayList<>();
-                mergedPublicRooms.addAll(publicRooms);
-                mergedPublicRooms.addAll(matrixPublicRooms);
-
-                // avoid duplicated definitions
-                HashMap<String, PublicRoom> publicRoomsMap = new HashMap<>();
-
-                for(PublicRoom publicRoom : mergedPublicRooms) {
-
-                    // prefer the vector.im public room definition
-                    if (!publicRoomsMap.containsKey(publicRoom.roomId)) {
-                        publicRoomsMap.put(publicRoom.roomId, publicRoom);
-                    }
-                }
-
-                onMerged(new ArrayList<>(publicRoomsMap.values()));
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                Log.e(LOG_TAG, "fails to retrieve the matrix public room list " + e.getLocalizedMessage());
-                onMerged(publicRooms);
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                Log.e(LOG_TAG, "fails to retrieve the matrix public room list " + e.getLocalizedMessage());
-                onMerged(publicRooms);
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                Log.e(LOG_TAG, "fails to retrieve the matrix public room list " + e.getLocalizedMessage());
-                onMerged(publicRooms);
-            }
-        });
     }
 }
 
