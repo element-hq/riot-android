@@ -281,7 +281,14 @@ public class EventStreamService extends Service {
         public void onLiveEventsChunkProcessed() {
             triggerPreparedNotification(true);
             mPendingNotifications.clear();
-            
+
+            // update badge unread count in case device does not support GCM (ie. FDroid)
+            MXSession defaultSession;
+            Context appContext = getApplicationContext();
+            if((null != appContext) && (null != (defaultSession=Matrix.getInstance(appContext).getDefaultSession()))) {
+                CommonActivityUtils.specificUpdateBadgeUnreadCount(defaultSession, appContext);
+            }
+
             // do not suspend the application if there is some active calls
             if ((StreamAction.CATCHUP == mServiceState) || (StreamAction.PAUSE == mServiceState)) {
                 boolean hasActiveCalls = false;

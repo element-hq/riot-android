@@ -630,7 +630,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             case R.id.ic_action_mark_all_as_read:
                 if(markAllMessagesAsReadWhenOffline()) {
                     // update badge unread count in case device is offline
-                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, getApplicationContext());
+                    CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getApplicationContext());
                 } else {
                     markAllMessagesAsRead();
                 }
@@ -779,8 +779,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     /**
-     * Send a read receipt when the device is offline, for each room, on the last
-     * message of the room.
+     * Send a read receipt for the last message of the room, when the device is offline.
      * @return true if operation was performed, false otherwise
      */
     private boolean markAllMessagesAsReadWhenOffline() {
