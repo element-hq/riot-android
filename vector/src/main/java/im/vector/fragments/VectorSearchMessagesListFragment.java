@@ -80,9 +80,9 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             cancelSearch();
 
             if (mIsMediaSearch) {
-                mSession.cancelSearchMediaName();
+                mSession.cancelSearchMediasByText();
             } else {
-                mSession.cancelSearchMessageText();
+                mSession.cancelSearchMessagesByText();
             }
             mSearchingPattern = null;
         }
