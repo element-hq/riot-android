@@ -191,7 +191,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
     /**
      * Search the pattern on a pagination server side.
      */
-    public void backPaginate() {
+    @Override
+    public void backPaginate(boolean fillHistory) {
         // please wait
         if (mIsBackPaginating || !mCanPaginateBack) {
             return;
