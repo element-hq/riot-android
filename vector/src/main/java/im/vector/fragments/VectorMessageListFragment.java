@@ -773,9 +773,13 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
                 getActivity().startActivity(intent);
             } else {
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.putExtra(Browser.EXTRA_APPLICATION_ID, getActivity().getPackageName());
-                getActivity().startActivity(intent);
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.putExtra(Browser.EXTRA_APPLICATION_ID, getActivity().getPackageName());
+                    getActivity().startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## onURLClick() : has to viewser to open " + uri +" with error" + e.getMessage());
+                }
             }
         }
     }
