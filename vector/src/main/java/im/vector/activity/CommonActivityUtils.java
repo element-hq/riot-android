@@ -1688,8 +1688,10 @@ public class CommonActivityUtils {
 
     /**
      * Refresh the badge count for specific configurations.<br>
-     * The refresh is only effective if the device is <b>offline</b> or the device <b>does not support GCM</b>.
-     * Notifications rooms are parsed to track the notification count value.
+     * The refresh is only effective if the device is:
+     * <ul><li>offline</li><li>does not support GCM</li>
+     * <li>GCM registration failed</li>
+     * <br>Notifications rooms are parsed to track the notification count value.
      * @param aSession session value
      * @param aContext App context
      */
@@ -1702,13 +1704,17 @@ public class CommonActivityUtils {
         } else if( (null == (dataHandler=aSession.getDataHandler()))) {
             Log.w(LOG_TAG,"## specificUpdateBadgeUnreadCount(): invalid DataHandler instance");
         } else {
-            boolean isRefreshRequired;
-            GcmRegistrationManager mGcmRegistrationManager = Matrix.getInstance(aContext).getSharedGCMRegistrationManager();
+            if(aSession.isAlive()) {
+                boolean isRefreshRequired;
+                GcmRegistrationManager gcmMgr = Matrix.getInstance(aContext).getSharedGCMRegistrationManager();
 
-            // update the badge count if the device is offline or GCM is not supported
-            isRefreshRequired = !Matrix.getInstance(aContext).isConnected()?true:((null!=mGcmRegistrationManager)&&!mGcmRegistrationManager.useGCM());
-            if (isRefreshRequired) {
-                updateBadgeCount(aContext, dataHandler);
+                // update the badge count if the device is offline, GCM is not supported or GCM registration failed
+                isRefreshRequired = !Matrix.getInstance(aContext).isConnected();
+                isRefreshRequired |= (null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken());
+
+                if (isRefreshRequired) {
+                    updateBadgeCount(aContext, dataHandler);
+                }
             }
         }
     }
