@@ -115,19 +115,6 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.VectorRoomMessagesSearchActivity"
-            android:label="Vector searches"
-            android:parentActivityName="im.vector.activity.VectorRoomActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/SearchesAppTheme"
-            android:windowSoftInputMode="adjustResize">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="im.vector.activity.VectorRoomActivity"/>
-        </activity>
-
-        <activity
             android:name="im.vector.activity.VectorRoomDetailsActivity"
             android:label="@string/room_details_title"
             android:parentActivityName="im.vector.activity.VectorRoomActivity"
