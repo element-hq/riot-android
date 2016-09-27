@@ -37,7 +37,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -115,6 +117,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private List<Pusher> mDisplayedPushers = new ArrayList<>();
 
     // displayed the ignored users list
+    private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
     private PreferenceCategory mIgnoredUserSettingsCategory;
 
     // background sync category
@@ -378,6 +381,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
         mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
+        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
+
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -403,6 +408,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if (Build.VERSION.SDK_INT >= 23) {
             // hide the dedicated section
             getPreferenceScreen().removePreference(getPreferenceManager().findPreference(getResources().getString(R.string.settings_app_permission)));
+            getPreferenceScreen().removePreference(getPreferenceManager().findPreference("settings_app_permission_divider"));
         }
 
         // background sync management
@@ -413,6 +419,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshPushersList();
         refreshEmailsList();
         refreshIgnoredUsersList();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View listView = view.findViewById(android.R.id.list);
+
+        if (null != listView) {
+            listView.setPadding(0, 0, 0, 0);
+        }
+
+        return view;
     }
 
     @Override
@@ -1004,9 +1023,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         PreferenceScreen preferenceScreen = getPreferenceScreen();
 
         preferenceScreen.removePreference(mIgnoredUserSettingsCategory);
+        preferenceScreen.removePreference(mIgnoredUserSettingsCategoryDivider);
         mIgnoredUserSettingsCategory.removeAll();
 
         if (ignoredUsersList.size() > 0) {
+            preferenceScreen.addPreference(mIgnoredUserSettingsCategoryDivider);
             preferenceScreen.addPreference(mIgnoredUserSettingsCategory);
 
             for (final String userId : ignoredUsersList) {

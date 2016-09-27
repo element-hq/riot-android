@@ -25,6 +25,8 @@
 
     </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory />
+
     <PreferenceCategory android:title="@string/settings_notifications">
 
         <im.vector.preference.VectorSwitchPreference
@@ -73,15 +75,23 @@
 
     </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory />
+
     <PreferenceCategory
         android:title="@string/settings_notifications_targets"
         android:key="@string/settings_notifications_targets">
     </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory
+        android:key="ignore_users_divider"
+        android:title="ignore_users_divider"/>
+
     <PreferenceCategory
         android:title="@string/settings_ignored_users"
         android:key="@string/settings_ignored_users">
     </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory />
 
     <PreferenceCategory android:title="@string/settings_advanced" >
 
@@ -100,6 +110,8 @@
             android:summary="1.2.3"
             android:key="@string/settings_identity_server"/>
     </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory />
 
     <PreferenceCategory
         android:key="@string/settings_background_sync"
@@ -122,6 +134,10 @@
             android:key="@string/settings_set_sync_delay"/>
 
     </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory
+        android:key="settings_app_permission_divider"
+        android:title="settings_app_permission_divider"/>
 
     <PreferenceCategory
         android:key="@string/settings_app_permission"

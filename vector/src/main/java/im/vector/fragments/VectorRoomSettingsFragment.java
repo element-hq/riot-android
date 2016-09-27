@@ -39,9 +39,11 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -111,6 +113,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_ROOM_INTERNAL_ID = "roomInternalId";
     private static final String PREF_KEY_ADDRESSES = "addresses";
     private static final String PREF_KEY_BANNED = "banned";
+    private static final String PREF_KEY_BANNED_DIVIDER = "banned_divider";
 
     private static final String ADDRESSES_PREFERENCE_KEY_BASE = "ADDRESSES_PREFERENCE_KEY_BASE";
     private static final String NO_LOCAL_ADDRESS_PREFERENCE_KEY = "NO_LOCAL_ADDRESS_PREFERENCE_KEY";
@@ -131,6 +134,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     // banned members
     private PreferenceCategory mBannedMembersSettingsCategory;
+    private PreferenceCategory mBannedMembersSettingsCategoryDivider;
 
     // UI elements
     private RoomAvatarPreference mRoomPhotoAvatar;
@@ -313,6 +317,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
         mAddressesSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_ADDRESSES);
         mBannedMembersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_BANNED);
+        mBannedMembersSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
 
         mRoomAccessRulesListPreference.setOnPreferenceWarningIconClickListener(new VectorListPreference.OnPreferenceWarningIconClickListener() {
             @Override
@@ -425,6 +430,18 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         enableSharedPreferenceListener(true);
 
         setRetainInstance(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View listView = view.findViewById(android.R.id.list);
+
+        if (null != listView) {
+            listView.setPadding(0, 0, 0, 0);
+        }
+
+        return view;
     }
 
     /**
@@ -1258,10 +1275,12 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
         PreferenceScreen preferenceScreen = getPreferenceScreen();
 
+        preferenceScreen.removePreference(mBannedMembersSettingsCategoryDivider);
         preferenceScreen.removePreference(mBannedMembersSettingsCategory);
         mBannedMembersSettingsCategory.removeAll();
 
         if (bannedMembers.size() > 0) {
+            preferenceScreen.addPreference(mBannedMembersSettingsCategoryDivider);
             preferenceScreen.addPreference(mBannedMembersSettingsCategory);
 
             for (RoomMember member : bannedMembers) {
