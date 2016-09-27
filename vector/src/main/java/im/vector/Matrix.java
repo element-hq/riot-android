@@ -99,13 +99,13 @@ public class Matrix {
 
         @Override
         public void onLiveEventsChunkProcessed() {
-            // when the client does not use GCM
+            // when the client does not use GCM (ie. FDroid),
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
                 GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
-                // check if the GCM is not available
+                // perform update: if the GCM is not available or if GCM registration failed
                 if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
                     int unreadCount = 0;
 

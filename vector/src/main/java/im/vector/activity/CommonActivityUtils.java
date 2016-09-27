@@ -69,6 +69,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.ga.GAHelper;
+import im.vector.gcm.GcmRegistrationManager;
 import im.vector.services.EventStreamService;
 
 import java.io.File;
@@ -1686,42 +1687,70 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Refresh the badge count when the device is offline.
-     * Notifications rooms are parsed to track the notification count value.
+     * Refresh the badge count for specific configurations.<br>
+     * The refresh is only effective if the device is:
+     * <ul><li>offline</li><li>does not support GCM</li>
+     * <li>GCM registration failed</li>
+     * <br>Notifications rooms are parsed to track the notification count value.
      * @param aSession session value
      * @param aContext App context
      */
-    public static void offlineRefreshBadgeUnreadCount(MXSession aSession, Context aContext) {
+    public static void specificUpdateBadgeUnreadCount(MXSession aSession, Context aContext) {
         MXDataHandler dataHandler;
 
         // sanity check
         if ((null == aContext) || (null == aSession)){
-            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): unexpected input null values");
-        } else if( (null == (dataHandler=aSession.getDataHandler())) || (null == dataHandler.getStore())) {
-            Log.w(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): invalid DataHandler or Store");
+            Log.w(LOG_TAG,"## specificUpdateBadgeUnreadCount(): invalid input null values");
+        } else if( (null == (dataHandler=aSession.getDataHandler()))) {
+            Log.w(LOG_TAG,"## specificUpdateBadgeUnreadCount(): invalid DataHandler instance");
         } else {
-            // update the badge count only if the device is offline
-            if (!Matrix.getInstance(aContext).isConnected()) {
-                ArrayList<Room> roomCompleteList = new ArrayList<>(dataHandler.getStore().getRooms());
-                int unreadRoomsCount = 0;
+            if(aSession.isAlive()) {
+                boolean isRefreshRequired;
+                GcmRegistrationManager gcmMgr = Matrix.getInstance(aContext).getSharedGCMRegistrationManager();
 
-                // compute the number of rooms with unread notifications
-                if (null != roomCompleteList) {
+                // update the badge count if the device is offline, GCM is not supported or GCM registration failed
+                isRefreshRequired = !Matrix.getInstance(aContext).isConnected();
+                isRefreshRequired |= (null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken());
 
-                    // "invite to join a room" counts as a notification
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
-                    boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
-
-                    for (Room room : roomCompleteList) {
-                        if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
-                            unreadRoomsCount++;
-                        }
-                    }
-
-                    // update the badge counter
-                    Log.d(LOG_TAG,"## offlineRefreshBadgeUnreadCount(): badge update count="+unreadRoomsCount);
-                    CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
+                if (isRefreshRequired) {
+                    updateBadgeCount(aContext, dataHandler);
                 }
+            }
+        }
+    }
+
+    /**
+     * Update the badge count value according to the rooms content.
+     *
+     * @param aContext App context
+     * @param aDataHandler data handler instance
+     */
+    public static void updateBadgeCount(Context aContext, MXDataHandler aDataHandler) {
+        //sanity check
+        if((null == aContext) || (null == aDataHandler)) {
+            Log.w(LOG_TAG, "## updateBadgeCount(): invalid input null values");
+        } else if(null == aDataHandler.getStore()) {
+            Log.w(LOG_TAG, "## updateBadgeCount(): invalid store instance");
+        } else {
+            ArrayList<Room> roomCompleteList = new ArrayList<>(aDataHandler.getStore().getRooms());
+            int unreadRoomsCount = 0;
+
+            // compute the number of rooms with unread notifications
+            if (null != roomCompleteList) {
+
+                // "invite to join a room" counts as a notification
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
+                boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
+
+                for (Room room : roomCompleteList) {
+                    if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                        unreadRoomsCount++;
+                    }
+                }
+
+                // update the badge counter
+                Log.d(LOG_TAG,"## updateBadgeCount(): badge update count=" + unreadRoomsCount);
+                CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
             }
         }
     }

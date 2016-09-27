@@ -44,7 +44,6 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
 import im.vector.Matrix;
@@ -58,7 +57,6 @@ import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -196,7 +194,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         session.getDataHandler().getStore().flushSummary(roomSummary);
                     }
                     // update badge unread count in case device is offline
-                    CommonActivityUtils.offlineRefreshBadgeUnreadCount(mSession, getContext());
+                    CommonActivityUtils.specificUpdateBadgeUnreadCount(mSession, getContext());
 
                     // launch corresponding room activity
                     if (null != roomId) {
