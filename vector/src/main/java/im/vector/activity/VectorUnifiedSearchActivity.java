@@ -18,6 +18,8 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -341,6 +343,9 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
         // restore the searched pattern
         mPatternToSearchEditText.setText((null != aSavedInstanceState) ? aSavedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
+
+        // define the background behind the tabs
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
     }
 
     @Override

@@ -19,6 +19,7 @@ package im.vector.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -316,6 +317,8 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             // default value: display the search in rooms tab
             tabIndexToRestore = PEOPLE_TAB_INDEX;
         }
+
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
 
         // set the tab to display & set current tab index
         mActionBar.setSelectedNavigationItem(tabIndexToRestore);
