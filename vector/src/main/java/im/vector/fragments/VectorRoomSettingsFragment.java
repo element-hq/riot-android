@@ -1534,7 +1534,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                             // ignore empty alias
                             if (!TextUtils.isEmpty(newAddress)) {
-                                if (!MXSession.PATTERN_MATRIX_ALIAS.matcher(newAddress).matches()) {
+                                if (!MXSession.PATTERN_CONTAIN_MATRIX_ALIAS.matcher(newAddress).matches()) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                     builder.setTitle(R.string.room_settings_addresses_invalid_format_dialog_title);
                                     builder.setMessage(getString(R.string.room_settings_addresses_invalid_format_dialog_body, newAddress));
