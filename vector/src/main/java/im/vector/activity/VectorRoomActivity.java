@@ -1086,11 +1086,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             try {
                 enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-                // pop to the home activity
-                Intent intent = new Intent(VectorRoomActivity.this, VectorRoomMessagesSearchActivity.class);
-                intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                intent.putExtra(VectorRoomMessagesSearchActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                VectorRoomActivity.this.startActivity(intent);
+                final Intent searchIntent = new Intent(VectorRoomActivity.this, VectorUnifiedSearchActivity.class);
+                searchIntent.putExtra(VectorUnifiedSearchActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                VectorRoomActivity.this.startActivity(searchIntent);
+
             } catch (Exception e){
                 Log.i(LOG_TAG,"## onOptionsItemSelected(): ");
             }
