@@ -1009,7 +1009,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Send a read receipt to the latest displayed event.
      */
     private void sendReadReceipt() {
-        if (null != mRoom) {
+        if ((null != mRoom) && (null == sRoomPreviewData)) {
             // send the read receipt
             mRoom.sendReadReceipt(mLatestDisplayedEvent, null);
             refreshNotificationsArea();
@@ -1775,7 +1775,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void refreshNotificationsArea() {
         // sanity check
         // might happen when the application is logged out
-        if ((null == mSession.getDataHandler()) || (null == mRoom)) {
+        if ((null == mSession.getDataHandler()) || (null == mRoom) || (null != sRoomPreviewData)) {
             return;
         }
 
