@@ -50,6 +50,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -60,6 +61,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.ByteArrayInputStream;
@@ -217,6 +219,28 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             @Override
             public void onClick(View v) {
                 VectorMediasPickerActivity.this.onClickTakeImage();
+            }
+        });
+
+        mTakeImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startVideoRecord();
+                return true;
+            }
+        });
+
+        mTakeImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mIsRecording &&
+                        ((event.getAction() == MotionEvent.ACTION_UP) ||
+                                (event.getAction() == MotionEvent.ACTION_CANCEL))) {
+                    stopVideoRecord();
+                    return true;
+                }
+
+                return false;
             }
         });
 
@@ -787,11 +811,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     private void onClickTakeImage() {
         Log.d(LOG_TAG, "onClickTakeImage");
-
-        if (true) {
-            startVideoRecord();
-            return;
-        }
 
         if (null != mCamera) {
             try {
