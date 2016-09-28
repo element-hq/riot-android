@@ -42,18 +42,16 @@ import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorPublicRoomsAdapter;
-import im.vector.util.VectorUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class VectorPublicRoomsListFragment extends Fragment {
     private static final String LOG_TAG = "VectorPubRoomsListFrg";
 
-    public static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";
-    public static final String ARG_MATRIX_ID = "VectorPublicRoomsListFragment.ARG_MATRIX_ID";
-    public static final String ARG_SEARCHED_PATTERN = "VectorPublicRoomsListFragment.ARG_SEARCHED_PATTERN";
+    private static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";
+    private static final String ARG_MATRIX_ID = "VectorPublicRoomsListFragment.ARG_MATRIX_ID";
+    private static final String ARG_SEARCHED_PATTERN = "VectorPublicRoomsListFragment.ARG_SEARCHED_PATTERN";
 
     public static VectorPublicRoomsListFragment newInstance(String matrixId, int layoutResId, String pattern) {
         VectorPublicRoomsListFragment f = new VectorPublicRoomsListFragment();
@@ -68,14 +66,14 @@ public class VectorPublicRoomsListFragment extends Fragment {
         return f;
     }
 
-    protected String mMatrixId;
-    protected MXSession mSession;
-    protected ListView mRecentsListView;
-    protected VectorPublicRoomsAdapter mAdapter;
-    protected String mPattern;
+    private String mMatrixId;
+    private MXSession mSession;
+    private ListView mRecentsListView;
+    private VectorPublicRoomsAdapter mAdapter;
+    private String mPattern;
 
-    protected View mInitializationSpinnerView;
-    protected View mForwardPaginationView;
+    private View mInitializationSpinnerView;
+    private View mForwardPaginationView;
 
     /**
      * Customize the scrolls behaviour.
@@ -125,7 +123,7 @@ public class VectorPublicRoomsListFragment extends Fragment {
         mForwardPaginationView = v.findViewById(R.id.listView_forward_spinner_view);
 
         // create the adapter
-        mAdapter = new VectorPublicRoomsAdapter(getActivity(), R.layout.adapter_item_vector_recent_room);
+        mAdapter = new VectorPublicRoomsAdapter(getActivity(), R.layout.adapter_item_vector_recent_room, mSession);
         mRecentsListView.setAdapter(mAdapter);
 
         // Set rooms click listener:
@@ -295,10 +293,5 @@ public class VectorPublicRoomsListFragment extends Fragment {
         if (hasStarted) {
             mForwardPaginationView.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 }
