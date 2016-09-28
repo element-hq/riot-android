@@ -39,11 +39,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <!-- button to record a video -->
+                <im.vector.view.VideoRecordView
+                    android:id="@+id/medias_record_animation"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="26dp"
+                    android:layout_alignParentBottom="true"/>
+
                 <!-- button to take the picture -->
                 <ImageView
                     android:id="@+id/medias_picker_camera_button"
-                    android:layout_width="71dp"
-                    android:layout_height="71dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="30dp"
                     android:layout_alignParentBottom="true"

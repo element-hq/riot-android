@@ -42,6 +42,8 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.ResourceUtils;
 import im.vector.view.RecentMediaLayout;
+import im.vector.view.VideoRecordProgressView;
+import im.vector.view.VideoRecordView;
 
 import android.hardware.Camera;
 import android.os.HandlerThread;
@@ -169,6 +171,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private HandlerThread mHandlerThread;
     private android.os.Handler mFileHandler;
 
+    private VideoRecordView mRecordAnimationView;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,6 +201,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCameraTextureView =  (TextureView) findViewById(R.id.medias_picker_texture_view);
         mCameraTextureView.setSurfaceTextureListener(this);
         mCameraTextureMaskView = (ImageView) findViewById(R.id.medias_picker_texture_mask_view);
+        mRecordAnimationView = (VideoRecordView)findViewById(R.id.medias_record_animation);
 
         // image preview
         mImagePreviewLayout = findViewById(R.id.medias_picker_preview);
@@ -225,6 +231,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                mRecordAnimationView.startAnimation();
                 startVideoRecord();
                 return true;
             }
@@ -1673,6 +1680,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             return;
         }
 
+        mTakeImageView.setAlpha(0.0f);
+        mRecordAnimationView.setVisibility(View.VISIBLE);
+        mRecordAnimationView.startAnimation();
+
         mIsVideoMode = true;
 
         initCameraSettings();
@@ -1717,6 +1728,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Stop the video recording
      */
     private void stopVideoRecord() {
+        mTakeImageView.setAlpha(1.0f);
+        mRecordAnimationView.setVisibility(View.GONE);
+        mRecordAnimationView.startAnimation();
+
         mMediaRecorder.stop();
         mMediaRecorder.release();
 
