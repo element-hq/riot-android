@@ -31,7 +31,9 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.SurfaceTexture;
+import android.media.CamcorderProfile;
 import android.media.MediaActionSound;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -786,6 +788,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void onClickTakeImage() {
         Log.d(LOG_TAG, "onClickTakeImage");
 
+        if (true) {
+            startVideoRecord();
+            return;
+        }
+
         if (null != mCamera) {
             try {
                 List<String> supportedFocusModes = null;
@@ -1303,41 +1310,51 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // apply the rotation
         params.setRotation(imageRotation);
 
-        // set the best quality
-        List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
-        if (supportedSizes.size() > 0) {
+        if (!mIsVideoMode) {
+            // set the best quality
+            List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
+            if (supportedSizes.size() > 0) {
 
-            // search the highest image quality
-            // they are not always sorted in the same order (sometimes it is asc sort ..)
-            Camera.Size maxSizePicture = supportedSizes.get(0);
-            long mult = maxSizePicture.width * maxSizePicture.height;
+                // search the highest image quality
+                // they are not always sorted in the same order (sometimes it is asc sort ..)
+                Camera.Size maxSizePicture = supportedSizes.get(0);
+                long mult = maxSizePicture.width * maxSizePicture.height;
 
-            for(int i = 1; i < supportedSizes.size(); i++) {
-                Camera.Size curSizePicture = supportedSizes.get(i);
-                long curMult = curSizePicture.width * curSizePicture.height;
+                for (int i = 1; i < supportedSizes.size(); i++) {
+                    Camera.Size curSizePicture = supportedSizes.get(i);
+                    long curMult = curSizePicture.width * curSizePicture.height;
 
-                if (curMult > mult) {
-                    mult = curMult;
-                    maxSizePicture = curSizePicture;
+                    if (curMult > mult) {
+                        mult = curMult;
+                        maxSizePicture = curSizePicture;
+                    }
                 }
+
+                // and use it.
+                params.setPictureSize(maxSizePicture.width, maxSizePicture.height);
             }
 
-            // and use it.
-            params.setPictureSize(maxSizePicture.width, maxSizePicture.height);
-        }
-
-        try {
-            mCamera.setParameters(params);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
+            try {
+                mCamera.setParameters(params);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initCameraSettings(): set size fails EXCEPTION Msg=" + e.getMessage());
+            }
         }
 
         // set the preview size to have the same aspect ratio than the picture size
         List<Camera.Size> supportedPreviewSizes = params.getSupportedPreviewSizes();
 
         if (supportedPreviewSizes.size() > 0) {
-            Camera.Size picturesSize = params.getPictureSize();
-            int cameraAR = picturesSize.width * 100 / picturesSize.height;
+            int cameraAR;
+
+            if (mIsVideoMode) {
+                mCamcorderProfile = getCamcorderProfile(mCameraId);
+                cameraAR = mCamcorderProfile.videoFrameWidth * 100 / mCamcorderProfile.videoFrameHeight;
+
+            } else {
+                Camera.Size picturesSize =  params.getPictureSize();
+                cameraAR = picturesSize.width * 100 / picturesSize.height;
+            }
 
             Camera.Size bestPreviewSize = null;
             int resolution = 0;
@@ -1365,21 +1382,23 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         }
 
-        // set auto focus
-        try {
-            params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-            mCamera.setParameters(params);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage());
-        }
+        if (!mIsVideoMode) {
+            // set auto focus
+            try {
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                mCamera.setParameters(params);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initCameraSettings(): set auto focus fails EXCEPTION Msg=" + e.getMessage());
+            }
 
-        // set jpeg quality
-        try {
-            params.setPictureFormat(ImageFormat.JPEG);
-            params.setJpegQuality(JPEG_QUALITY_MAX);
-            mCamera.setParameters(params);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
+            // set jpeg quality
+            try {
+                params.setPictureFormat(ImageFormat.JPEG);
+                params.setJpegQuality(JPEG_QUALITY_MAX);
+                mCamera.setParameters(params);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
+            }
         }
     }
 
@@ -1543,5 +1562,160 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         return true;
     }
 
-    // *********************************************************************************************
+    //==============================================================================================================
+    // Video recording
+    //==============================================================================================================
+
+    // true when the activity is in video recording mode
+    private boolean mIsVideoMode = false;
+
+    // the video recording profile
+    private CamcorderProfile mCamcorderProfile = null;
+
+    // the recording video file
+    private File mVideoFile = null;
+
+    // true when a recording is in progress
+    private boolean mIsRecording = false;
+
+    // the media recorder
+    private MediaRecorder mMediaRecorder;
+
+    /**
+     * Provide the camera recording profile
+     * @param cameraId the selected camera id
+     * @return the profile (cannot be null);
+     */
+    private static CamcorderProfile getCamcorderProfile(int cameraId) {
+        CamcorderProfile camcorderProfile = null;
+
+        // we should test by camera id but hasProfile failed on some devices
+        if (CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_480P)) {
+             try {
+                 camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+             } catch (Exception e) {
+                 Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage());
+             }
+        }
+
+        if ((null == camcorderProfile) && CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)) {
+            try {
+                camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getCamcorderProfile() : " + e.getMessage());
+            }
+        }
+
+        if (null == camcorderProfile) {
+            camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+        }
+
+        Log.d(LOG_TAG, "getCamcorderProfile for camera " + cameraId + " width " + camcorderProfile.videoFrameWidth + " height " + camcorderProfile.videoFrameWidth);
+        return camcorderProfile;
+    }
+
+    /**
+     * @return an unique video file name
+     */
+    private static String buildNewVideoName(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hhmmss") ;
+        return "VectorVideo_" + dateFormat.format(new Date()) + ".mp4";
+    }
+
+    /**
+     * @return the video rotation angle
+     */
+    private int getVideoRotation() {
+        android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(mCameraId, info);
+
+        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            return (info.orientation + degrees) % 360;
+        } else {  // back-facing
+            return (info.orientation - degrees + 360) % 360;
+        }
+    }
+
+    /**
+     * Start the video recording
+     */
+    private void startVideoRecord() {
+        if (mIsRecording) {
+            stopVideoRecord();
+            return;
+        }
+
+        mIsVideoMode = true;
+
+        initCameraSettings();
+
+        // BEGIN_INCLUDE (configure_media_recorder)
+        mMediaRecorder = new MediaRecorder();
+
+        // Step 1: Unlock and set camera to MediaRecorder
+        mCamera.unlock();
+        mMediaRecorder.setCamera(mCamera);
+
+        // Step 2: Set sources
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+
+        // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
+        mMediaRecorder.setProfile(mCamcorderProfile);
+
+        // Step 4: Set output file
+        mVideoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
+
+        mMediaRecorder.setOutputFile(mVideoFile.getPath());
+
+        mMediaRecorder.setOrientationHint(getVideoRotation());
+
+        // Step 5: Prepare configured MediaRecorder
+        try {
+            mMediaRecorder.prepare();
+        } catch (IllegalStateException e) {
+            // Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.getMessage());
+            // releaseMediaRecorder();
+            // return false;
+        } catch (IOException e) {
+        }
+
+        mMediaRecorder.start();
+
+        mIsRecording = true;
+    }
+
+    /**
+     * Stop the video recording
+     */
+    private void stopVideoRecord() {
+        mMediaRecorder.stop();
+        mMediaRecorder.release();
+
+        try {
+            mCamera.reconnect();
+        } catch (Exception e) {
+
+        }
+
+        Uri uri = Uri.fromFile(mVideoFile);
+
+        // provide the Uri
+        Bundle conData = new Bundle();
+        Intent intent = new Intent();
+        intent.setData(uri);
+        intent.putExtras(conData);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
 }
