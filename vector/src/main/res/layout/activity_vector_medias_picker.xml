@@ -42,33 +42,48 @@
                 <!-- button to take the picture -->
                 <ImageView
                     android:id="@+id/medias_picker_camera_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_alignParentBottom="true"
                     android:src="@drawable/ic_take_picture_vector_green" />
 
                 <!-- toggle button to swap between front/rear camera-->
-                <ImageView
+                <RelativeLayout
                     android:id="@+id/medias_picker_switch_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:onClick="onExitButton"
+                    android:background="@drawable/vector_medias_picker_button_background"
                     android:layout_alignRight="@+id/medias_picker_texture_view"
                     android:layout_alignParentTop="true"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_switch_camera" />
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_switch_camera" />
+                </RelativeLayout>
 
                 <!-- Exit button: = back button -->
-                <ImageView
+                <RelativeLayout
                     android:id="@+id/medias_picker_exit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
                     android:onClick="onExitButton"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_exit_media_picker_vector_green" />
+                    android:background="@drawable/vector_medias_picker_button_background"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="12dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_exit_media_picker_vector_green" />
+                </RelativeLayout>
 
             </RelativeLayout>
 

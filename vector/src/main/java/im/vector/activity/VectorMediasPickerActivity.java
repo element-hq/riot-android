@@ -131,7 +131,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private int mCameraOrientation = 0;
 
     // graphical items
-    private ImageView mSwitchCameraImageView;
+    private View mSwitchCameraImageView;
 
     // camera preview and gallery selection layout
     private View mPreviewScrollView;
@@ -188,7 +188,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // camera preview
         mPreviewScrollView = findViewById(R.id.medias_picker_scrollView);
-        mSwitchCameraImageView = (ImageView) findViewById(R.id.medias_picker_switch_camera);
+        mSwitchCameraImageView = findViewById(R.id.medias_picker_switch_camera);
         mCameraTextureView =  (TextureView) findViewById(R.id.medias_picker_texture_view);
         mCameraTextureView.setSurfaceTextureListener(this);
         mCameraTextureMaskView = (ImageView) findViewById(R.id.medias_picker_texture_mask_view);
