@@ -148,6 +148,7 @@
             android:key="CONTACT_BOOK_ACCESS_KEY"/>
     </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory/>
 
     <PreferenceCategory
         android:title="@string/settings_other"
