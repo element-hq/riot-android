@@ -1607,6 +1607,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // the media recorder
     private MediaRecorder mMediaRecorder;
 
+    // the orientation is locked during the video recording
+    private int mActivityOrientation;
+
     /**
      * Provide the camera recording profile
      * @param cameraId the selected camera id
@@ -1675,11 +1678,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Start the video recording
      */
     private void startVideoRecord() {
-        if (mIsRecording) {
-            stopVideoRecord();
-            return;
-        }
-
         mTakeImageView.setAlpha(0.0f);
         mRecordAnimationView.setVisibility(View.VISIBLE);
         mRecordAnimationView.startAnimation();
@@ -1721,6 +1719,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         mMediaRecorder.start();
 
+        mActivityOrientation = getRequestedOrientation();
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+
         mIsRecording = true;
     }
 
@@ -1740,6 +1742,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         } catch (Exception e) {
 
         }
+
+        setRequestedOrientation(mActivityOrientation);
 
         Uri uri = Uri.fromFile(mVideoFile);
 
