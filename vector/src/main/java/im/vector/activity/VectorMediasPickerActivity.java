@@ -45,13 +45,13 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.util.ResourceUtils;
 import im.vector.view.RecentMediaLayout;
-import im.vector.view.VideoRecordProgressView;
 import im.vector.view.VideoRecordView;
 
 import android.hardware.Camera;
 import android.os.HandlerThread;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -67,7 +67,6 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.ImageUtils;
 
 import java.io.ByteArrayInputStream;
@@ -164,6 +163,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     private RelativeLayout mPreviewAndGalleryLayout;
     private int mGalleryImageCount;
+    private int mScreenHeight;
     private int mScreenWidth;
 
     // display a mask to create a good avatar
@@ -174,7 +174,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private int mTakenImageOrigin;
 
     private String mShootedPicturePath;
-    private int mCameraPreviewHeight = 0;
+    private int mCameraPreviewLayoutHeight;
+    private int mPreviewTextureWidth;
+    private int mPreviewTextureheight;
 
     /**
      * The recent requests are performed in a dedicated thread
@@ -251,8 +253,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                mRecordAnimationView.startAnimation();
-                startVideoRecord();
+                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING, VectorMediasPickerActivity.this)){
+                    mRecordAnimationView.startAnimation();
+                    startVideoRecord();
+                }
+
                 return true;
             }
         });
@@ -264,6 +269,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         ((event.getAction() == MotionEvent.ACTION_UP) ||
                                 (event.getAction() == MotionEvent.ACTION_CANCEL))) {
                     stopVideoRecord();
+                    startVideoPreviewVideo(mVideoUri);
                     return true;
                 }
 
@@ -311,6 +317,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING) {
+            // do nothing
+            // the user has to long press again on the focus button
+        }
+    }
+
     /**
      * Init the camera layout to make the surface texture + the gallery layout, both
      * enough large to enable scrolling.
@@ -318,15 +332,15 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void initCameraLayout() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screenHeight = metrics.heightPixels;
+        mScreenHeight = metrics.heightPixels;
         mScreenWidth = metrics.widthPixels;
 
-        mCameraPreviewHeight = (int)(screenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+        mCameraPreviewLayoutHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
 
         // set the height of the relative layout containing the texture view
         mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
         ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
-        previewLayoutParams.height = mCameraPreviewHeight;
+        previewLayoutParams.height = mCameraPreviewLayoutHeight;
         mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
 
         // set the height of the layout including the texture view and the gallery (total sum > screen height to allow scrolling)
@@ -336,7 +350,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Compute the height of the view containing the texture and the table layout.
-     * This height is the sum of mCameraPreviewHeight + gallery height.
+     * This height is the sum of mCameraPreviewLayoutHeight + gallery height.
      * The gallery height depends of the number of the gallery rows {@link #getGalleryRowsCount()}).
      */
     private void computePreviewAndGalleryHeight() {
@@ -345,7 +359,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         if(null != mPreviewAndGalleryLayout) {
             ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
             int galleryHeight = (galleryRowsCount * mScreenWidth / GALLERY_COLUMN_COUNT);
-            previewAndGalleryLayoutParams.height = mCameraPreviewHeight + galleryHeight;
+            previewAndGalleryLayoutParams.height = mCameraPreviewLayoutHeight + galleryHeight;
             mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
         }
         else
@@ -1454,6 +1468,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 Log.e(LOG_TAG, "## initCameraSettings(): set jpeg quality fails EXCEPTION Msg=" + e.getMessage());
             }
         }
+
+        resizeCameraPreviewTexture();
     }
 
     /**
@@ -1492,6 +1508,83 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         maskView.setImageBitmap(bitmap);
     }
 
+    /**
+     * Resize the camera preview texture from the camera preview size.
+     * The aspect ratio is kept.
+     */
+    private void resizeCameraPreviewTexture() {
+        Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
+
+        //  Valid values are 0, 90, 180, and 270 (0 = landscape)
+        if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
+            int tmp = previewSize.width;
+            previewSize.width = previewSize.height;
+            previewSize.height = tmp;
+        }
+
+        // check that the aspect ratio is kept
+        int sourceRatio = previewSize.height * 100 / previewSize.width;
+        int dstRatio = mPreviewTextureheight * 100 / mPreviewTextureWidth;
+
+        // the camera preview size must fit the size provided by the surface texture
+        if (sourceRatio != dstRatio) {
+            int newWidth;
+            int newHeight;
+
+            // don't update the mCameraPreviewLayout frame when recording the video
+            // else medias_picker_camera_button will move and the video recording would stop
+            newHeight = mIsVideoMode ? mCameraPreviewLayoutHeight : mPreviewTextureheight;
+            newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
+
+            if (newWidth > mPreviewTextureWidth) {
+                newWidth = mPreviewTextureWidth;
+                newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
+
+                // max value
+                if (newHeight > (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO)) {
+                    newHeight =  (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+                    newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
+                }
+            }
+
+            // apply the size provided by the texture to the texture layout
+            ViewGroup.LayoutParams layout = mCameraTextureView.getLayoutParams();
+            layout.width = newWidth;
+            layout.height = newHeight;
+            mCameraTextureView.setLayoutParams(layout);
+
+            if (mIsAvatarMode) {
+                mCameraTextureMaskView.setVisibility(View.VISIBLE);
+                final int fWidth = newWidth;
+                final int fHeight = newHeight;
+
+                mCameraTextureMaskView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawCircleMask(mCameraTextureMaskView, fWidth, fHeight);
+                    }
+                });
+            } else {
+                mCameraTextureMaskView.setVisibility(View.GONE);
+            }
+
+            // don't update the mCameraPreviewLayout frame when recording the video
+            // else medias_picker_camera_button will move and the video recording would stop
+            if ((layout.height != mCameraPreviewLayoutHeight) && !mIsVideoMode) {
+                mCameraPreviewLayoutHeight = layout.height;
+                // set the height of the relative layout containing the texture view
+                if(null != mCameraPreviewLayout) {
+                    RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams)mCameraPreviewLayout.getLayoutParams();
+                    previewLayoutParams.height = mCameraPreviewLayoutHeight;
+                    mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+                }
+
+                // define the gallery height: height of the texture view + height of the gallery (total sum > screen height to allow scrolling)
+                computePreviewAndGalleryHeight();
+            }
+        }
+    }
+
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         try {
@@ -1520,69 +1613,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         try {
             mSurfaceTexture = surface;
             mCamera.setPreviewTexture(surface);
+
+            mPreviewTextureWidth = width;
+            mPreviewTextureheight = height;
+
             initCameraSettings();
-
-            Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
-
-            //  Valid values are 0, 90, 180, and 270 (0 = landscape)
-            if ((mCameraOrientation == 90) || (mCameraOrientation == 270)) {
-                int tmp = previewSize.width;
-                previewSize.width = previewSize.height;
-                previewSize.height = tmp;
-            }
-
-            // check that the aspect ratio is kept
-            int sourceRatio = previewSize.height * 100 / previewSize.width;
-            int dstRatio = height * 100 / width;
-
-            // the camera preview size must fit the size provided by the surface texture
-            if (sourceRatio != dstRatio) {
-                int newWidth;
-                int newHeight;
-
-                newHeight = height;
-                newWidth = (int) (((float) newHeight) * previewSize.width / previewSize.height);
-
-                if (newWidth > width) {
-                    newWidth = width;
-                    newHeight = (int) (((float) newWidth) * previewSize.height / previewSize.width);
-                }
-
-                // apply the size provided by the texture to the texture layout
-                ViewGroup.LayoutParams layout = mCameraTextureView.getLayoutParams();
-                layout.width = newWidth;
-                layout.height = newHeight;
-                mCameraTextureView.setLayoutParams(layout);
-
-                if (mIsAvatarMode) {
-                    mCameraTextureMaskView.setVisibility(View.VISIBLE);
-                    final int fWidth = newWidth;
-                    final int fHeight = newHeight;
-
-                    mCameraTextureMaskView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            drawCircleMask(mCameraTextureMaskView, fWidth, fHeight);
-                        }
-                    });
-                } else {
-                    mCameraTextureMaskView.setVisibility(View.GONE);
-                }
-
-                if (layout.height < mCameraPreviewHeight) {
-                    mCameraPreviewHeight = layout.height;
-
-                    // set the height of the relative layout containing the texture view
-                    if(null != mCameraPreviewLayout) {
-                        RelativeLayout.LayoutParams previewLayoutParams = (RelativeLayout.LayoutParams)mCameraPreviewLayout.getLayoutParams();
-                        previewLayoutParams.height = mCameraPreviewHeight;
-                        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
-                    }
-
-                    // define the gallery height: height of the texture view + height of the gallery (total sum > screen height to allow scrolling)
-                    computePreviewAndGalleryHeight();
-                }
-            }
 
             mCamera.startPreview();
 
@@ -1708,6 +1743,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Start the video recording
      */
     private void startVideoRecord() {
+        // lock the orientation
+        mActivityOrientation = getRequestedOrientation();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+
         mTakeImageView.setAlpha(0.0f);
         mRecordAnimationView.setVisibility(View.VISIBLE);
         mRecordAnimationView.startAnimation();
@@ -1716,21 +1755,29 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         initCameraSettings();
 
-        // BEGIN_INCLUDE (configure_media_recorder)
         mMediaRecorder = new MediaRecorder();
 
-        // Step 1: Unlock and set camera to MediaRecorder
         mCamera.unlock();
         mMediaRecorder.setCamera(mCamera);
 
-        // Step 2: Set sources
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        try {
+            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## startVideoRecord() : setAudioSource fails " + e.getMessage());
+        }
 
-        // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
-        mMediaRecorder.setProfile(mCamcorderProfile);
+        try {
+            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## startVideoRecord() : setVideoSource fails " + e.getMessage());
+        }
 
-        // Step 4: Set output file
+        try {
+            mMediaRecorder.setProfile(mCamcorderProfile);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## startVideoRecord() : setProfile fails " + e.getMessage());
+        }
+
         File videoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
         mVideoUri = Uri.fromFile(videoFile);
 
@@ -1740,19 +1787,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // Step 5: Prepare configured MediaRecorder
         try {
             mMediaRecorder.prepare();
-        } catch (IllegalStateException e) {
-            // Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.getMessage());
-            // releaseMediaRecorder();
-            // return false;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## startVideoRecord() : cannot prepare the media recorder " + e.getMessage());
+            Toast.makeText(this, getString(R.string.media_picker_cannot_record_video), Toast.LENGTH_SHORT).show();
+            stopVideoRecord();
+            return;
         }
 
         mMediaRecorder.start();
-
-        mActivityOrientation = getRequestedOrientation();
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-
         mIsRecording = true;
     }
 
@@ -1782,15 +1824,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Stop the video recording
      */
     private void stopVideoRecord() {
+        mIsVideoMode = false;
         mIsRecording = false;
         mTakeImageView.setAlpha(1.0f);
         mRecordAnimationView.setVisibility(View.GONE);
         mRecordAnimationView.startAnimation();
 
         releaseMediaRecorder();
-
         setRequestedOrientation(mActivityOrientation);
-        startVideoPreviewVideo(mVideoUri);
+
+        initCameraSettings();
     }
 
     /**
@@ -1895,7 +1938,4 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private void refreshPlayVideoButton() {
         mVideoButtonView.setImageResource(((null != mVideoView) && mVideoView.isPlaying()) ? R.drawable.camera_stop : R.drawable.camera_play);
     }
-
-
-
 }
