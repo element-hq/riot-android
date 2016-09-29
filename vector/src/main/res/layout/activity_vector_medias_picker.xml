@@ -111,24 +111,52 @@
 
     <!-- preview container: imageview + redo and cancel buttons -->
     <RelativeLayout
-        android:id="@+id/medias_picker_preview"
+        android:id="@+id/medias_picker_preview_layout"
         android:visibility="gone"
         android:background="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <!-- image view used to display the image preview (from gallery or camera) -->
-        <ImageView
-            android:id="@+id/medias_picker_preview_image_view"
+        <RelativeLayout
+            android:id="@+id/medias_picker_preview_image_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:visibility="visible" />
+            android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/medias_picker_preview_image_mask_view"
+            <ImageView
+                android:id="@+id/medias_picker_preview_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true" />
+
+            <ImageView
+                android:id="@+id/medias_picker_preview_avatar_mode_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <!-- video preview -->
+        <RelativeLayout
+            android:id="@+id/medias_picker_preview_video_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+
+            <VideoView
+                android:id="@+id/medias_picker_preview_video_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:id="@+id/medias_picker_preview_video_button"
+                android:layout_centerInParent="true"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/camera_play"/>
+        </RelativeLayout>
 
         <!-- layout containing the attach/redo buttons associated with the android:scaleType="centerCrop"
         preview of the taken image -->
@@ -142,7 +170,7 @@
 
             <!-- REDO button: cancel the image preview -->
             <ImageView
-                android:id="@+id/medias_picker_cancel_take_picture_imageview"
+                android:id="@+id/medias_picker_cancel_capture_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="30"
@@ -158,7 +186,7 @@
             <!-- CHECK button: attach the image preview -->
 
             <ImageView
-                android:id="@+id/medias_picker_attach_take_picture_imageview"
+                android:id="@+id/medias_picker_attach_media_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="30"

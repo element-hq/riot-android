@@ -31,9 +31,12 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.CamcorderProfile;
 import android.media.MediaActionSound;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,6 +65,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.util.ImageUtils;
@@ -148,9 +152,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private ImageView mCameraTextureMaskView;
     private SurfaceTexture mSurfaceTexture;
 
+    private View mPreviewLayout;
+
     private View mImagePreviewLayout;
     private ImageView mImagePreviewImageView;
-    private ImageView mImagePreviewImageMaskView;
+    private ImageView mImagePreviewAvatarModeMaskView;
+
+    private View mVideoPreviewLayout;
+    private VideoView mVideoView;
+    private ImageView mVideoButtonView;
+
     private RelativeLayout mPreviewAndGalleryLayout;
     private int mGalleryImageCount;
     private int mScreenWidth;
@@ -203,10 +214,19 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mCameraTextureMaskView = (ImageView) findViewById(R.id.medias_picker_texture_mask_view);
         mRecordAnimationView = (VideoRecordView)findViewById(R.id.medias_record_animation);
 
+        // preview
+        mPreviewLayout = findViewById(R.id.medias_picker_preview_layout);
+
         // image preview
-        mImagePreviewLayout = findViewById(R.id.medias_picker_preview);
+        mImagePreviewLayout = findViewById(R.id.medias_picker_preview_image_layout);
         mImagePreviewImageView = (ImageView) findViewById(R.id.medias_picker_preview_image_view);
-        mImagePreviewImageMaskView = (ImageView) findViewById(R.id.medias_picker_preview_image_mask_view);
+        mImagePreviewAvatarModeMaskView = (ImageView) findViewById(R.id.medias_picker_preview_avatar_mode_mask);
+
+        // video preview
+        mVideoPreviewLayout = findViewById(R.id.medias_picker_preview_video_layout);
+        mVideoView = (VideoView) findViewById(R.id.medias_picker_preview_video_view);
+        mVideoButtonView = (ImageView) findViewById(R.id.medias_picker_preview_video_button);
+
         mTakeImageView = (ImageView) findViewById(R.id.medias_picker_camera_button);
         mGalleryTableLayout = (TableLayout)findViewById(R.id.gallery_table_layout);
 
@@ -252,17 +272,25 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         });
 
 
-        findViewById(R.id.medias_picker_cancel_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.medias_picker_cancel_capture_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.cancelTakeImage();
+                if (null != mVideoUri) {
+                    stopVideoPreview();
+                } else {
+                    cancelTakeImage();
+                }
             }
         });
 
-        findViewById(R.id.medias_picker_attach_take_picture_imageview).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.medias_picker_attach_media_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VectorMediasPickerActivity.this.attachImageFrom(mTakenImageOrigin);
+                if (null != mVideoUri) {
+                    sendVideoFile();
+                } else {
+                   attachImageFrom(mTakenImageOrigin);
+                }
             }
         });
 
@@ -992,7 +1020,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // save bitmap to speed up UI restore (life cycle)
         VectorApp.setSavedCameraImagePreview(newBitmap);
 
-        mImagePreviewImageMaskView.setVisibility(View.GONE);
+        mImagePreviewAvatarModeMaskView.setVisibility(View.GONE);
 
         if (!mIsAvatarMode) {
             // update the UI part
@@ -1052,8 +1080,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     newHeight = (int) (((float) newWidth) * imageH / imageW);
                 }
 
-                mImagePreviewImageMaskView.setVisibility(View.VISIBLE);
-                drawCircleMask(mImagePreviewImageMaskView, newWidth, newHeight);
+                mImagePreviewAvatarModeMaskView.setVisibility(View.VISIBLE);
+                drawCircleMask(mImagePreviewAvatarModeMaskView, newWidth, newHeight);
             }
         }
 
@@ -1086,13 +1114,13 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
 
         if (aIsTakenImageDisplayed) {
-            mImagePreviewLayout.setVisibility(View.VISIBLE);
+            mPreviewLayout.setVisibility(View.VISIBLE);
             mPreviewScrollView.setVisibility(View.GONE);
         }
         else {
             // the default UI: hide gallery preview, show the surface view
             mPreviewScrollView.setVisibility(View.VISIBLE);
-            mImagePreviewLayout.setVisibility(View.GONE);
+            mPreviewLayout.setVisibility(View.GONE);
         }
     }
 
@@ -1599,7 +1627,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private CamcorderProfile mCamcorderProfile = null;
 
     // the recording video file
-    private File mVideoFile = null;
+    private Uri mVideoUri = null;
 
     // true when a recording is in progress
     private boolean mIsRecording = false;
@@ -1609,6 +1637,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     // the orientation is locked during the video recording
     private int mActivityOrientation;
+
+    private BitmapDrawable mVideoThumbnail;
 
     /**
      * Provide the camera recording profile
@@ -1701,10 +1731,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mMediaRecorder.setProfile(mCamcorderProfile);
 
         // Step 4: Set output file
-        mVideoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
+        File videoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
+        mVideoUri = Uri.fromFile(videoFile);
 
-        mMediaRecorder.setOutputFile(mVideoFile.getPath());
-
+        mMediaRecorder.setOutputFile(videoFile.getPath());
         mMediaRecorder.setOrientationHint(getVideoRotation());
 
         // Step 5: Prepare configured MediaRecorder
@@ -1727,33 +1757,145 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     /**
-     * Stop the video recording
+     * Release the media recorder
      */
-    private void stopVideoRecord() {
-        mTakeImageView.setAlpha(1.0f);
-        mRecordAnimationView.setVisibility(View.GONE);
-        mRecordAnimationView.startAnimation();
+    private void releaseMediaRecorder() {
+        if (null != mMediaRecorder) {
+            try {
+                mMediaRecorder.stop();
+                mMediaRecorder.release();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## releaseMediaRecorder() : mMediaRecorder release failed " + e.getMessage());
+            }
 
-        mMediaRecorder.stop();
-        mMediaRecorder.release();
+            mMediaRecorder = null;
+        }
 
         try {
             mCamera.reconnect();
         } catch (Exception e) {
-
+            Log.e(LOG_TAG, "## releaseMediaRecorder() : mCamera reconnect failed " + e.getMessage());
         }
+    }
+
+    /**
+     * Stop the video recording
+     */
+    private void stopVideoRecord() {
+        mIsRecording = false;
+        mTakeImageView.setAlpha(1.0f);
+        mRecordAnimationView.setVisibility(View.GONE);
+        mRecordAnimationView.startAnimation();
+
+        releaseMediaRecorder();
 
         setRequestedOrientation(mActivityOrientation);
+        startVideoPreviewVideo(mVideoUri);
+    }
 
-        Uri uri = Uri.fromFile(mVideoFile);
-
-        // provide the Uri
+    /**
+     * Provide the video file to the caller activity.
+     */
+    private void sendVideoFile() {
         Bundle conData = new Bundle();
         Intent intent = new Intent();
-        intent.setData(uri);
+        intent.setData(mVideoUri);
         intent.putExtras(conData);
         setResult(RESULT_OK, intent);
         finish();
     }
+
+    /**
+     * Stop the video preview.
+     */
+    private void stopVideoPreview() {
+        if (mVideoView.isPlaying()) {
+            mVideoView.stopPlayback();
+            mVideoView.setVideoURI(null);
+        }
+
+        mPreviewLayout.setVisibility(View.GONE);
+        mImagePreviewLayout.setVisibility(View.VISIBLE);
+        mVideoPreviewLayout.setVisibility(View.GONE);
+        mVideoUri = null;
+        refreshPlayVideoButton();
+    }
+
+    /**
+     * Start the video preview
+     * @param videoUri the video URI
+     */
+    private void startVideoPreviewVideo(Uri videoUri) {
+        mPreviewLayout.setVisibility(View.VISIBLE);
+        mImagePreviewLayout.setVisibility(View.GONE);
+        mVideoPreviewLayout.setVisibility(View.VISIBLE);
+
+        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(videoUri.getPath(), MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+
+        if (null == thumb) {
+            thumb = ThumbnailUtils.createVideoThumbnail(videoUri.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+        }
+
+        mVideoThumbnail = (null != thumb) ? new BitmapDrawable(thumb) : null;
+
+        mVideoView.setBackground(mVideoThumbnail);
+        mVideoView.setVideoURI(videoUri);
+
+        refreshPlayVideoButton();
+
+        mVideoButtonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mVideoView.isPlaying()) {
+                    mVideoView.stopPlayback();
+
+                    mVideoView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mVideoView.setBackground(mVideoThumbnail);
+                            refreshPlayVideoButton();
+                        }
+                    });
+                } else {
+                    mVideoView.setBackground(null);
+                    mVideoView.start();
+
+                    mVideoView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshPlayVideoButton();
+                        }
+                    });
+                }
+            }
+        });
+
+        mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mVideoView.setBackground(mVideoThumbnail);
+                refreshPlayVideoButton();
+            }
+        });
+
+        // manage video error cases
+        mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                mVideoView.setBackground(mVideoThumbnail);;
+                refreshPlayVideoButton();
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Update the video button.
+     */
+    private void refreshPlayVideoButton() {
+        mVideoButtonView.setImageResource(((null != mVideoView) && mVideoView.isPlaying()) ? R.drawable.camera_stop : R.drawable.camera_play);
+    }
+
+
 
 }
