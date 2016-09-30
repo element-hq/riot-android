@@ -152,7 +152,7 @@
     <string name="message_unsaved_changes">There are unsaved changes. Leaving will discard them.</string>
 
     <string name="option_send_files">Send files</string>
-    <string name="option_take_photo">Take photo</string>
+    <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_attach_video">Attach video</string>
 
     <!-- Authentication -->

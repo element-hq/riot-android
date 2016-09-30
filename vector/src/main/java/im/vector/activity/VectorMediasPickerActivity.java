@@ -100,6 +100,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // boolean, display a mask to show the avatar rendering
     public static final String EXTRA_AVATAR_MODE = "EXTRA_AVATAR_MODE";
 
+    // boolean, tell if the video recording is supported
+    public static final String EXTRA_VIDEO_RECORDING_MODE = "EXTRA_VIDEO_RECORDING_MODE";
+
     // internal keys
     private static final String KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED = "IS_TAKEN_IMAGE_DISPLAYED";
     private static final String KEY_EXTRA_TAKEN_IMAGE_ORIGIN = "TAKEN_IMAGE_ORIGIN";
@@ -139,7 +142,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     }
 
     // recents medias list
-    private final ArrayList<RecentMedia> mMediaStoreImagesList = new ArrayList<>();
+    private final ArrayList<RecentMedia> mMediaStoreMediasList = new ArrayList<>();
     private final ArrayList<RecentMedia> mSelectedGalleryItemsList = new ArrayList<>();
 
     // camera object
@@ -177,6 +180,9 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // display a mask to create a good avatar
     private boolean mIsAvatarMode;
 
+    // manage video recording
+    private boolean mIsVideoRecordingSupported;
+
     // lifecycle management variable
     private boolean mIsTakenImageDisplayed;
     private int mTakenImageOrigin;
@@ -213,6 +219,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         Intent intent = getIntent();
         mIsAvatarMode = intent.getBooleanExtra(EXTRA_AVATAR_MODE, false);
+        mIsVideoRecordingSupported = intent.getBooleanExtra(EXTRA_VIDEO_RECORDING_MODE, false);
 
         mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
@@ -261,12 +268,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mTakeImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING, VectorMediasPickerActivity.this)){
+                if (mIsVideoRecordingSupported && CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING, VectorMediasPickerActivity.this)) {
                     mRecordAnimationView.startAnimation();
                     startVideoRecord();
                 }
 
-                return true;
+                return mIsVideoRecordingSupported;
             }
         });
 
@@ -277,7 +284,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         ((event.getAction() == MotionEvent.ACTION_UP) ||
                                 (event.getAction() == MotionEvent.ACTION_CANCEL))) {
                     stopVideoRecord();
-                    startVideoPreviewVideo(mVideoUri);
+                    startVideoPreviewVideo(null);
                     return true;
                 }
 
@@ -474,7 +481,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
 
             if (null != mVideoUri) {
-                startVideoPreviewVideo(mVideoUri);
+                startVideoPreviewVideo(null);
             }
         }
         return isRestoredInstance;
@@ -513,36 +520,40 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Populate mMediaStoreImagesList with the images retrieved from the MediaStore.
-     * Max number of retrieved images is set to GALLERY_TABLE_ITEM_SIZE.
+     * Max number of retrieved medias is set to GALLERY_TABLE_ITEM_SIZE.
+     * @return the medias list
      */
-    private void addImagesThumbnails() {
-        final String[] projection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
-        Cursor thumbnailsCursor = null;
+    private List<RecentMedia> listLatestMedias() {
+        ArrayList<RecentMedia> mediasList = new ArrayList<>();
+
+        // images
+        String[] imagesProjection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
+        Cursor imagesThumbnailsCursor = null;
 
         try {
-            thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection, // Which columns to return
+            imagesThumbnailsCursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    imagesProjection, // Which columns to return
                     null,       // Return all image files
                     null,
                     MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "addImagesThumbnails" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## listLatestMedias() : " + e.getMessage());
         }
 
-        if (null != thumbnailsCursor) {
-            int timeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
-            int idIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
-            int mimeTypeIndex = thumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
+        if (null != imagesThumbnailsCursor) {
+            int timeIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
+            int idIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+            int mimeTypeIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
 
-            if (thumbnailsCursor.moveToFirst()) {
+            if (imagesThumbnailsCursor.moveToFirst()) {
                 do {
                     try {
                         RecentMedia recentMedia = new RecentMedia();
                         recentMedia.mIsVideo = false;
 
-                        String id = thumbnailsCursor.getString(idIndex);
-                        String dateAsString = thumbnailsCursor.getString(timeIndex);
-                        recentMedia.mMimeType = thumbnailsCursor.getString(mimeTypeIndex);
+                        String id = imagesThumbnailsCursor.getString(idIndex);
+                        String dateAsString = imagesThumbnailsCursor.getString(timeIndex);
+                        recentMedia.mMimeType = imagesThumbnailsCursor.getString(mimeTypeIndex);
                         recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
                         recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
@@ -556,46 +567,134 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                             recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
                         }
 
-                        // Note: getThumbnailUriFromMediaStorage() can return null for non jpeg images (ie png).
-                        // We could then use the bitmap(mThumbnail)) that is never null, but with no rotation applied
-                        mMediaStoreImagesList.add(recentMedia);
+                        mediasList.add(recentMedia);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "## addImagesThumbnails(): Msg=" + e.getMessage());
+                        Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
                     }
-                } while (thumbnailsCursor.moveToNext());
+                } while (imagesThumbnailsCursor.moveToNext());
             }
-            thumbnailsCursor.close();
+            imagesThumbnailsCursor.close();
         }
 
-        Log.d(LOG_TAG, "## addImagesThumbnails(): Added count=" + mMediaStoreImagesList.size());
+        if (mIsVideoRecordingSupported) {
+
+            // videos
+            String[] videosProjection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN, MediaStore.Video.VideoColumns.MIME_TYPE};
+            Cursor videoThumbnailsCursor = null;
+
+            try {
+                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        videosProjection, // Which columns to return
+                        null,       // Return all image files
+                        null,
+                        MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getLocalizedMessage());
+            }
+
+            if (null != videoThumbnailsCursor) {
+                int timeIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                int idIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+                int mimeTypeIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
+
+                if (videoThumbnailsCursor.moveToFirst()) {
+                    do {
+                        try {
+                            RecentMedia recentMedia = new RecentMedia();
+                            recentMedia.mIsVideo = true;
+
+                            String id = videoThumbnailsCursor.getString(idIndex);
+                            String dateAsString = videoThumbnailsCursor.getString(timeIndex);
+                            recentMedia.mMimeType = videoThumbnailsCursor.getString(mimeTypeIndex);
+                            recentMedia.mCreationTime = Long.parseLong(dateAsString);
+
+                            recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MINI_KIND, null);
+                            recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+
+                            mediasList.add(recentMedia);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
+                        }
+                    } while (videoThumbnailsCursor.moveToNext());
+                }
+                videoThumbnailsCursor.close();
+            }
+        }
+
+        Collections.sort(mediasList, new Comparator<RecentMedia>() {
+            @Override
+            public int compare(RecentMedia r1, RecentMedia r2) {
+                long t1 = r1.mCreationTime;
+                long t2 = r2.mCreationTime;
+
+                // sort from the most recent
+                return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
+            }
+        });
+
+        if (mediasList.size() > GALLERY_TABLE_ITEM_SIZE) {
+            Log.d(LOG_TAG, "## listLatestMedias(): Added count=" + GALLERY_TABLE_ITEM_SIZE);
+            return mediasList.subList(0, GALLERY_TABLE_ITEM_SIZE);
+        } else {
+            Log.d(LOG_TAG, "## listLatestMedias(): Added count=" + mediasList.size());
+            return mediasList;
+        }
     }
 
-    private int getMediaStoreImageCount(){
+    /**
+     * Provides the number of medias which will be displayed in the gallery.
+     * The maximum value is GALLERY_TABLE_ITEM_SIZE.
+     * @return the number of displayed medias
+     */
+    private int getMediaStoreMediasCount(){
         int retValue = 0;
-        Cursor thumbnailsCursor = null;
+        Cursor imageThumbnailsCursor = null;
 
         try {
-            thumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            imageThumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     null, // no projection
                     null,
                     null,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
+                    null);
         } catch (Exception e) {
-            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getLocalizedMessage());
+            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
         }
 
-        if (null != thumbnailsCursor) {
-            retValue = thumbnailsCursor.getCount();
-            thumbnailsCursor.close();
+        if (null != imageThumbnailsCursor) {
+            retValue += imageThumbnailsCursor.getCount();
+            imageThumbnailsCursor.close();
         }
 
-        return retValue;
+        if (mIsVideoRecordingSupported) {
+            Cursor videoThumbnailsCursor = null;
+
+            try {
+                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        null, // no projection
+                        null,
+                        null,
+                        null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
+            }
+
+            if (null != videoThumbnailsCursor) {
+                retValue += videoThumbnailsCursor.getCount();
+                videoThumbnailsCursor.close();
+            }
+        }
+
+        return Math.min(retValue, GALLERY_TABLE_ITEM_SIZE);
     }
 
+    /**
+     * Computes the gallery rows count.
+     * @return teh gallery rows count.
+     */
     private int getGalleryRowsCount() {
         int rowsCountRetVal;
 
-        mGalleryImageCount = getMediaStoreImageCount();
+        mGalleryImageCount = getMediaStoreMediasCount();
         if((0==mGalleryImageCount) || (0 != (mGalleryImageCount%GALLERY_COLUMN_COUNT))) {
             rowsCountRetVal = (mGalleryImageCount/GALLERY_COLUMN_COUNT) +1;
         } else {
@@ -610,37 +709,27 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Populate the gallery view with the image/video contents.
      */
     private void refreshRecentsMediasList() {
-        // start the pregress bar and disable the take button
+        // start the progress bar and disable the take button
         final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
         progressBar.setVisibility(View.VISIBLE);
         mTakeImageView.setEnabled(false);
         mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
 
-        mMediaStoreImagesList.clear();
+        mMediaStoreMediasList.clear();
 
         // run away from the UI thread
         mFileHandler.post(new Runnable() {
             @Override
             public void run() {
                 // populate the image thumbnails from multimedia store
-                addImagesThumbnails();
-
-                Collections.sort(mMediaStoreImagesList, new Comparator<RecentMedia>() {
-                    @Override
-                    public int compare(RecentMedia r1, RecentMedia r2) {
-                        long t1 = r1.mCreationTime;
-                        long t2 = r2.mCreationTime;
-
-                        // sort from the most recent
-                        return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
-                    }
-                });
+                final List<RecentMedia> medias = listLatestMedias();
 
                 // update the UI part
-                VectorMediasPickerActivity.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        buildGalleryImageTableLayout();
+                        mMediaStoreMediasList.addAll(medias);
+                        buildGalleryTableLayout();
                         progressBar.setVisibility(View.GONE);
                         mTakeImageView.setEnabled(true);
                         mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
@@ -653,10 +742,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Build the image gallery widget programmatically.
      */
-    private void buildGalleryImageTableLayout() {
+    private void buildGalleryTableLayout() {
         final int CELL_MARGIN = 2;
         TableRow tableRow = null;
-        RecentMediaLayout recentImageView;
+        RecentMediaLayout recentMediaView;
         int tableLayoutWidth;
         int cellWidth;
         int cellHeight;
@@ -692,7 +781,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // loop to produce full raws filled in, with an icon folder in last cell
             for(itemIndex=0; itemIndex<mGalleryImageCount; itemIndex++) {
                 try {
-                    recentMedia = mMediaStoreImagesList.get(itemIndex);
+                    recentMedia = mMediaStoreMediasList.get(itemIndex);
                 } catch (IndexOutOfBoundsException e) {
                     recentMedia = null;
                 }
@@ -707,39 +796,49 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
                 // build the content layout for each cell
                 if(null != recentMedia) {
-                    recentImageView = new RecentMediaLayout(this);
+                    recentMediaView = new RecentMediaLayout(this);
 
                     if (null != recentMedia.mThumbnail) {
-                        recentImageView.setThumbnail(recentMedia.mThumbnail);
+                        recentMediaView.setThumbnail(recentMedia.mThumbnail);
                     } else {
-                        recentImageView.setThumbnailByUri(recentMedia.mFileUri);
+                        recentMediaView.setThumbnailByUri(recentMedia.mFileUri);
                     }
 
-                    recentImageView.setBackgroundColor(Color.BLACK);
-                    recentImageView.setThumbnailScaleType(scaleType);
+                    recentMediaView.setBackgroundColor(Color.BLACK);
+                    recentMediaView.setThumbnailScaleType(scaleType);
                     final RecentMedia finalRecentMedia = recentMedia;
-                    recentImageView.setOnClickListener(new View.OnClickListener() {
+
+                    recentMediaView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            onClickGalleryImage(finalRecentMedia);
+                            if (!finalRecentMedia.mIsVideo) {
+                                onClickGalleryImage(finalRecentMedia);
+                            } else {
+                                mVideoUri = finalRecentMedia.mFileUri;
+                                startVideoPreviewVideo(finalRecentMedia.mThumbnail);
+                            }
                         }
                     });
 
                     // set image logo: gif, image or video
-                    recentImageView.enableGifLogoImage(MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
-                    recentImageView.enableMediaTypeLogoImage(!MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
-                    recentImageView.setIsVideo(recentMedia.mMimeType.contains(MIME_TYPE_IMAGE));
+                    recentMediaView.setIsVideo(recentMedia.mIsVideo);
 
-                    if(null != tableRow)
-                        tableRow.addView(recentImageView, rawLayoutParams);
+                    if (!recentMedia.mIsVideo) {
+                        recentMediaView.enableGifLogoImage(MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
+                        recentMediaView.enableMediaTypeLogoImage(!MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
+                    }
+
+                    if (null != tableRow) {
+                        tableRow.addView(recentMediaView, rawLayoutParams);
+                    }
                 }
             }
 
             // add the icon folder in last cell
-            recentImageView = new RecentMediaLayout(this);
-            recentImageView.setThumbnailScaleType(scaleType);
-            recentImageView.setThumbnailByResource(R.drawable.ic_material_folder_green_vector);
-            recentImageView.setOnClickListener(new View.OnClickListener() {
+            recentMediaView = new RecentMediaLayout(this);
+            recentMediaView.setThumbnailScaleType(scaleType);
+            recentMediaView.setThumbnailByResource(R.drawable.ic_material_folder_green_vector);
+            recentMediaView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openFileExplorer();
@@ -751,7 +850,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
 
             if(null != tableRow)
-                tableRow.addView(recentImageView, rawLayoutParams);
+                tableRow.addView(recentMediaView, rawLayoutParams);
 
             // do not forget to add last row
             if (null != tableRow)
@@ -1930,24 +2029,27 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     /**
      * Start the video preview
-     * @param videoUri the video URI
      */
-    private void startVideoPreviewVideo(Uri videoUri) {
+    private void startVideoPreviewVideo(Bitmap aThumbnail) {
         mPreviewLayout.setVisibility(View.VISIBLE);
         mImagePreviewLayout.setVisibility(View.GONE);
         mVideoPreviewLayout.setVisibility(View.VISIBLE);
 
-        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(videoUri.getPath(), MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+        Bitmap thumb = aThumbnail;
 
         if (null == thumb) {
-            thumb = ThumbnailUtils.createVideoThumbnail(videoUri.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+            ThumbnailUtils.createVideoThumbnail(mVideoUri.getPath(), MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+        }
+
+        if (null == thumb) {
+            thumb = ThumbnailUtils.createVideoThumbnail(mVideoUri.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
         }
 
         mVideoThumbnail = (null != thumb) ? new BitmapDrawable(thumb) : null;
 
         mVideoView.setVisibility(View.VISIBLE);
         mVideoView.setBackground(mVideoThumbnail);
-        mVideoView.setVideoURI(videoUri);
+        mVideoView.setVideoURI(mVideoUri);
 
         refreshPlayVideoButton();
 
