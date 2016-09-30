@@ -117,11 +117,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- layout containing the attach/redo buttons associated with the android:scaleType="centerCrop"
+preview of the taken image -->
+        <LinearLayout
+            android:id="@+id/cancel_attach_picture_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <!-- REDO button: cancel the image preview -->
+            <TextView
+                android:id="@+id/medias_picker_redo_text_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:text="@string/cancel"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:visibility="invisible" />
+
+            <!-- CHECK button: attach the image preview -->
+
+            <TextView
+                android:id="@+id/medias_picker_attach_text_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:text="@string/ok" />
+        </LinearLayout>
+
         <!-- image view used to display the image preview (from gallery or camera) -->
         <RelativeLayout
             android:id="@+id/medias_picker_preview_image_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/cancel_attach_picture_layout"
             android:visibility="visible">
 
             <ImageView
@@ -142,6 +183,7 @@
             android:id="@+id/medias_picker_preview_video_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/cancel_attach_picture_layout"
             android:visibility="gone" >
 
             <VideoView
@@ -158,41 +200,6 @@
                 android:src="@drawable/camera_play"/>
         </RelativeLayout>
 
-        <!-- layout containing the attach/redo buttons associated with the android:scaleType="centerCrop"
-        preview of the taken image -->
-        <LinearLayout
-            android:id="@+id/cancel_attach_picture_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <!-- REDO button: cancel the image preview -->
-            <ImageView
-                android:id="@+id/medias_picker_cancel_capture_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_material_redo_green_vector" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="40"
-                android:visibility="invisible" />
-
-            <!-- CHECK button: attach the image preview -->
-
-            <ImageView
-                android:id="@+id/medias_picker_attach_media_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_material_check_green_vector" />
-        </LinearLayout>
     </RelativeLayout>
 
     <!-- progress bar -->

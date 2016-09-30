@@ -38,6 +38,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.opengl.GLES20;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -82,6 +83,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLSurface;
 
 /**
  * VectorMediasPickerActivity is used to take a photo or to send an old one.
@@ -279,7 +286,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         });
 
 
-        findViewById(R.id.medias_picker_cancel_capture_view).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.medias_picker_redo_text_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mVideoUri) {
@@ -290,7 +297,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         });
 
-        findViewById(R.id.medias_picker_attach_media_view).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.medias_picker_attach_text_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mVideoUri) {
@@ -465,7 +472,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
             // general data to be restored
             mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
-            
+
             if (null != mVideoUri) {
                 startVideoPreviewVideo(mVideoUri);
             }
@@ -1645,6 +1652,47 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         Log.d(LOG_TAG, "## onSurfaceTextureSizeChanged(): width="+width+" height="+height);
+
+        if (null != surface) {
+            // clear the texture to avoid staled area
+            // when switching the camera, some texture areas are not refreshed/cleared
+            // so, paint it in black
+            EGL10 egl = (EGL10) EGLContext.getEGL();
+            EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            egl.eglInitialize(display, null);
+
+            int[] attribList = {
+                    EGL10.EGL_RED_SIZE, 8,
+                    EGL10.EGL_GREEN_SIZE, 8,
+                    EGL10.EGL_BLUE_SIZE, 8,
+                    EGL10.EGL_ALPHA_SIZE, 8,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL10.EGL_WINDOW_BIT,
+                    EGL10.EGL_NONE, 0,
+                    EGL10.EGL_NONE
+            };
+            EGLConfig[] configs = new EGLConfig[1];
+            int[] numConfigs = new int[1];
+            egl.eglChooseConfig(display, attribList, configs, configs.length, numConfigs);
+            EGLConfig config = configs[0];
+            EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, new int[]{
+                    12440, 2,
+                    EGL10.EGL_NONE
+            });
+            EGLSurface eglSurface = egl.eglCreateWindowSurface(display, config, surface,
+                    new int[]{
+                            EGL10.EGL_NONE
+                    });
+
+            egl.eglMakeCurrent(display, eglSurface, eglSurface, context);
+            GLES20.glClearColor(0, 0, 0, 1);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            egl.eglSwapBuffers(display, eglSurface);
+            egl.eglDestroySurface(display, eglSurface);
+            egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
+                    EGL10.EGL_NO_CONTEXT);
+            egl.eglDestroyContext(display, context);
+            egl.eglTerminate(display);
+        }
     }
 
     @Override
@@ -1869,6 +1917,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             mVideoView.setVideoURI(null);
         }
 
+        // we need to set the visibility to gone
+        // to remove the staled video texture
+        mVideoView.setVisibility(View.GONE);
+
         mPreviewLayout.setVisibility(View.GONE);
         mImagePreviewLayout.setVisibility(View.VISIBLE);
         mVideoPreviewLayout.setVisibility(View.GONE);
@@ -1893,6 +1945,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         mVideoThumbnail = (null != thumb) ? new BitmapDrawable(thumb) : null;
 
+        mVideoView.setVisibility(View.VISIBLE);
         mVideoView.setBackground(mVideoThumbnail);
         mVideoView.setVideoURI(videoUri);
 
