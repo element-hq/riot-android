@@ -62,14 +62,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     // the universal link
     public static final String EXTRA_UNIVERSAL_LINK_URI = "EXTRA_UNIVERSAL_LINK_URI";
     // the flow id
-    public static final String EXTRA_UNIVERSAL_LINK_FLOW_ID = "EXTRA_UNIVERSAL_LINK_FLOW_ID";
+    //public static final String EXTRA_UNIVERSAL_LINK_FLOW_ID = "EXTRA_UNIVERSAL_LINK_FLOW_ID";
     // the sender identifier (XXX_SENDER_ID)
     public static final String EXTRA_UNIVERSAL_LINK_SENDER_ID = "EXTRA_UNIVERSAL_LINK_SENDER_ID";
 
     // sender activities
     public static final String HOME_SENDER_ID = VectorHomeActivity.class.getSimpleName();
-    public static final String LOGIN_SENDER_ID = LoginActivity.class.getSimpleName();
-    public static final String SPLASH_SENDER_ID = SplashActivity.class.getSimpleName();
+    //public static final String LOGIN_SENDER_ID = LoginActivity.class.getSimpleName();
+    //public static final String SPLASH_SENDER_ID = SplashActivity.class.getSimpleName();
 
     // the supported paths
     private static final String SUPPORTED_PATH_BETA = "/beta/";
@@ -81,13 +81,13 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     public static final String ULINK_ROOM_ID_OR_ALIAS_KEY = "ULINK_ROOM_ID_OR_ALIAS_KEY";
     public static final String ULINK_MATRIX_USER_ID_KEY = "ULINK_MATRIX_USER_ID_KEY";
     public static final String ULINK_EVENT_ID_KEY = "ULINK_EVENT_ID_KEY";
-    public static final String ULINK_EMAIL_ID_KEY = "email";
+    /*public static final String ULINK_EMAIL_ID_KEY = "email";
     public static final String ULINK_SIGN_URL_KEY = "signurl";
     public static final String ULINK_ROOM_NAME_KEY = "room_name";
     public static final String ULINK_ROOM_AVATAR_URL_KEY = "room_avatar_url";
     public static final String ULINK_INVITER_NAME_KEY = "inviter_name";
     public static final String ULINK_GUEST_ACCESS_TOKEN_KEY = "guest_access_token";
-    public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";
+    public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";*/
 
     // supported paths list
     private static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
@@ -454,7 +454,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         }
 
         // check if the parsing succeeds
-        if (map.size() < 1) {
+        if ((null != map) && (map.size() < 1)) {
             Log.e(LOG_TAG, "## parseUniversalLink : empty dictionary");
             return null;
         }
