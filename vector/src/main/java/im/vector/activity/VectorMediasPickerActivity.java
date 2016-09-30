@@ -101,6 +101,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private static final String KEY_EXTRA_CAMERA_SIDE = "TAKEN_IMAGE_CAMERA_SIDE";
     private static final String KEY_PREFERENCE_CAMERA_IMAGE_NAME = "KEY_PREFERENCE_CAMERA_IMAGE_NAME";
     private static final String KEY_IS_AVATAR_MODE = "KEY_IS_AVATAR_MODE";
+    private static final String KEY_EXTRA_TAKEN_VIDEO_URI = "KEY_EXTRA_TAKEN_VIDEO_URI";
 
     // activity request
     private static final int REQUEST_MEDIAS = 54;
@@ -425,11 +426,16 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // -gallery flow
         Uri uriImage = (Uri) mImagePreviewImageView.getTag();
         outState.putParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI, uriImage);
+
+        if (null != mVideoUri) {
+            outState.putParcelable(KEY_EXTRA_TAKEN_VIDEO_URI, mVideoUri);
+        }
     }
 
     private boolean restoreInstanceState(Bundle savedInstanceState) {
         boolean isRestoredInstance = false;
-        if(null != savedInstanceState){
+
+        if (null != savedInstanceState) {
             isRestoredInstance = true;
             mIsAvatarMode = savedInstanceState.getBoolean(KEY_IS_AVATAR_MODE);
             mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
@@ -439,6 +445,8 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             // restore gallery image preview (the image can be saved from the preview even after rotation)
             Uri uriImage = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI);
             mImagePreviewImageView.setTag(uriImage);
+
+            mVideoUri = savedInstanceState.getParcelable(KEY_EXTRA_TAKEN_VIDEO_URI);
 
             // display a preview image?
             if (mIsTakenImageDisplayed) {
@@ -457,6 +465,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
             // general data to be restored
             mCameraId = savedInstanceState.getInt(KEY_EXTRA_CAMERA_SIDE);
+            
+            if (null != mVideoUri) {
+                startVideoPreviewVideo(mVideoUri);
+            }
         }
         return isRestoredInstance;
     }
