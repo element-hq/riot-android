@@ -17,7 +17,7 @@
 package im.vector.activity;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -116,34 +116,47 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     // activity request
     private static final int REQUEST_MEDIAS = 54;
 
+    // common definitions
+    private static final int JPEG_QUALITY_MAX = 100;
+    private static final String MIME_TYPE_IMAGE_GIF = "image/gif";
     private static final int AVATAR_COMPRESSION_LEVEL = 50;
 
-    private final int IMAGE_ORIGIN_CAMERA = 1;
-    private final int IMAGE_ORIGIN_GALLERY = 2;
-    private final boolean UI_SHOW_TAKEN_IMAGE = true;
-    private final boolean UI_SHOW_CAMERA_PREVIEW = false;
-    private final int GALLERY_COLUMN_COUNT = 4;
-    private final int GALLERY_RAW_COUNT = 3;
-    private final double SURFACE_VIEW_HEIGHT_RATIO = 0.95;
-    private final int GALLERY_TABLE_ITEM_SIZE = (GALLERY_COLUMN_COUNT * GALLERY_RAW_COUNT);
-    private final int JPEG_QUALITY_MAX = 100;
-    private final String MIME_TYPE_IMAGE_GIF = "image/gif";
-    private final String MIME_TYPE_IMAGE = "image";
+    private static final int GALLERY_COLUMN_COUNT = 4;
+    private static final int GALLERY_RAW_COUNT = 3;
+    private static final double SURFACE_VIEW_HEIGHT_RATIO = 0.95;
+    private static final int GALLERY_TABLE_ITEM_SIZE = (GALLERY_COLUMN_COUNT * GALLERY_RAW_COUNT);
+
+    private static final int IMAGE_ORIGIN_CAMERA = 1;
+    private static final int IMAGE_ORIGIN_GALLERY = 2;
+
+    private static final boolean UI_SHOW_TAKEN_IMAGE = true;
+    private static final boolean UI_SHOW_CAMERA_PREVIEW = false;
 
     /**
      * define a recent media
      */
-    private class RecentMedia {
+    private class MediaStoreMedia {
+        // the media file URI
         public Uri mFileUri;
+
+        // the media creation time
         public long mCreationTime;
+
+        // the media thumbnail
         public Bitmap mThumbnail;
-        public Boolean mIsVideo;
+
+        // tell if the media is a video
+        public boolean mIsVideo;
+
+        // mime type
         public String mMimeType = "";
     }
 
     // recents medias list
-    private final ArrayList<RecentMedia> mMediaStoreMediasList = new ArrayList<>();
-    private final ArrayList<RecentMedia> mSelectedGalleryItemsList = new ArrayList<>();
+    private final ArrayList<MediaStoreMedia> mMediaStoreMediasList = new ArrayList<>();
+
+    //
+    private MediaStoreMedia mSelectedGalleryImage;
 
     // camera object
     private Camera mCamera;
@@ -162,16 +175,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private ImageView mCameraTextureMaskView;
     private SurfaceTexture mSurfaceTexture;
 
+    // preview UI items
     private View mPreviewLayout;
 
+    // image preview
     private View mImagePreviewLayout;
     private ImageView mImagePreviewImageView;
     private ImageView mImagePreviewAvatarModeMaskView;
 
+    // video preview
     private View mVideoPreviewLayout;
     private VideoView mVideoView;
     private ImageView mVideoButtonView;
 
+    // gallery management
     private RelativeLayout mPreviewAndGalleryLayout;
     private int mGalleryImageCount;
     private int mScreenHeight;
@@ -187,7 +204,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     private boolean mIsTakenImageDisplayed;
     private int mTakenImageOrigin;
 
-    private String mShootedPicturePath;
+    private String mShotPicturePath;
     private int mCameraPreviewLayoutHeight;
     private int mPreviewTextureWidth;
     private int mPreviewTextureheight;
@@ -322,7 +339,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mHandlerThread.start();
         mFileHandler = new android.os.Handler(mHandlerThread.getLooper());
 
-        if(!restoreInstanceState(savedInstanceState)){
+        if (!restoreInstanceState(savedInstanceState)){
             // default UI: if a taken image is not in preview, then display: live camera preview + "take picture"/switch/exit buttons
             updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
         }
@@ -334,59 +351,10 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
     @Override
     public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING) {
+        //if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_VIDEO_RECORDING) {
             // do nothing
             // the user has to long press again on the focus button
-        }
-    }
-
-    /**
-     * Init the camera layout to make the surface texture + the gallery layout, both
-     * enough large to enable scrolling.
-     */
-    private void initCameraLayout() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mScreenHeight = metrics.heightPixels;
-        mScreenWidth = metrics.widthPixels;
-
-        mCameraPreviewLayoutHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
-
-        // set the height of the relative layout containing the texture view
-        mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
-        ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
-        previewLayoutParams.height = mCameraPreviewLayoutHeight;
-        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
-
-        // set the height of the layout including the texture view and the gallery (total sum > screen height to allow scrolling)
-        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
-        computePreviewAndGalleryHeight();
-    }
-
-    /**
-     * Compute the height of the view containing the texture and the table layout.
-     * This height is the sum of mCameraPreviewLayoutHeight + gallery height.
-     * The gallery height depends of the number of the gallery rows {@link #getGalleryRowsCount()}).
-     */
-    private void computePreviewAndGalleryHeight() {
-        int galleryRowsCount = getGalleryRowsCount();
-
-        if(null != mPreviewAndGalleryLayout) {
-            ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
-            int galleryHeight = (galleryRowsCount * mScreenWidth / GALLERY_COLUMN_COUNT);
-            previewAndGalleryLayoutParams.height = mCameraPreviewLayoutHeight + galleryHeight;
-            mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
-        }
-        else
-            Log.w(LOG_TAG, "## computePreviewAndGalleryHeight(): GalleryTable height not set");
-    }
-
-    /**
-     * Exit activity handler.
-     * @param aView view
-     */
-    public void onExitButton(@SuppressWarnings("UnusedParameters") View aView) {
-        finish();
+        //}
     }
 
     @Override
@@ -421,6 +389,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         // update gallery content
         refreshRecentsMediasList();
 
+        // restart the preview
         startCameraPreview();
     }
 
@@ -436,7 +405,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         // save image preview that may be currently displayed:
         // -camera flow
-        outState.putString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL, mShootedPicturePath);
+        outState.putString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL, mShotPicturePath);
         // -gallery flow
         Uri uriImage = (Uri) mImagePreviewImageView.getTag();
         outState.putParcelable(KEY_EXTRA_TAKEN_IMAGE_GALLERY_URI, uriImage);
@@ -446,6 +415,11 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
+    /**
+     * Restores the saved instance.
+     * @param savedInstanceState the savedInstanceState
+     * @return true if some items have been restored
+     */
     private boolean restoreInstanceState(Bundle savedInstanceState) {
         boolean isRestoredInstance = false;
 
@@ -453,7 +427,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             isRestoredInstance = true;
             mIsAvatarMode = savedInstanceState.getBoolean(KEY_IS_AVATAR_MODE);
             mIsTakenImageDisplayed = savedInstanceState.getBoolean(KEY_EXTRA_IS_TAKEN_IMAGE_DISPLAYED);
-            mShootedPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL);
+            mShotPicturePath = savedInstanceState.getString(KEY_EXTRA_TAKEN_IMAGE_CAMERA_URL);
             mTakenImageOrigin = savedInstanceState.getInt(KEY_EXTRA_TAKEN_IMAGE_ORIGIN);
 
             // restore gallery image preview (the image can be saved from the preview even after rotation)
@@ -470,7 +444,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                     mImagePreviewImageView.setImageBitmap(savedBitmap);
                 } else {
                     // image preview from gallery or camera (mShootedPicturePath)
-                    displayImagePreview(savedBitmap, mShootedPicturePath, uriImage, mTakenImageOrigin);
+                    displayImagePreview(savedBitmap, mShotPicturePath, uriImage, mTakenImageOrigin);
                 }
             }
 
@@ -518,853 +492,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         }
     }
 
-    /**
-     * Populate mMediaStoreImagesList with the images retrieved from the MediaStore.
-     * Max number of retrieved medias is set to GALLERY_TABLE_ITEM_SIZE.
-     * @return the medias list
-     */
-    private List<RecentMedia> listLatestMedias() {
-        ArrayList<RecentMedia> mediasList = new ArrayList<>();
-
-        // images
-        String[] imagesProjection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
-        Cursor imagesThumbnailsCursor = null;
-
-        try {
-            imagesThumbnailsCursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    imagesProjection, // Which columns to return
-                    null,       // Return all image files
-                    null,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## listLatestMedias() : " + e.getMessage());
-        }
-
-        if (null != imagesThumbnailsCursor) {
-            int timeIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
-            int idIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
-            int mimeTypeIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
-
-            if (imagesThumbnailsCursor.moveToFirst()) {
-                do {
-                    try {
-                        RecentMedia recentMedia = new RecentMedia();
-                        recentMedia.mIsVideo = false;
-
-                        String id = imagesThumbnailsCursor.getString(idIndex);
-                        String dateAsString = imagesThumbnailsCursor.getString(timeIndex);
-                        recentMedia.mMimeType = imagesThumbnailsCursor.getString(mimeTypeIndex);
-                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
-
-                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
-                        recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
-
-                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
-
-                        if (0 != rotationAngle) {
-                            android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
-                            bitmapMatrix.postRotate(rotationAngle);
-                            recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
-                        }
-
-                        mediasList.add(recentMedia);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
-                    }
-                } while (imagesThumbnailsCursor.moveToNext());
-            }
-            imagesThumbnailsCursor.close();
-        }
-
-        if (mIsVideoRecordingSupported) {
-
-            // videos
-            String[] videosProjection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN, MediaStore.Video.VideoColumns.MIME_TYPE};
-            Cursor videoThumbnailsCursor = null;
-
-            try {
-                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        videosProjection, // Which columns to return
-                        null,       // Return all image files
-                        null,
-                        MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getLocalizedMessage());
-            }
-
-            if (null != videoThumbnailsCursor) {
-                int timeIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
-                int idIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
-                int mimeTypeIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
-
-                if (videoThumbnailsCursor.moveToFirst()) {
-                    do {
-                        try {
-                            RecentMedia recentMedia = new RecentMedia();
-                            recentMedia.mIsVideo = true;
-
-                            String id = videoThumbnailsCursor.getString(idIndex);
-                            String dateAsString = videoThumbnailsCursor.getString(timeIndex);
-                            recentMedia.mMimeType = videoThumbnailsCursor.getString(mimeTypeIndex);
-                            recentMedia.mCreationTime = Long.parseLong(dateAsString);
-
-                            recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MINI_KIND, null);
-                            recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
-
-                            mediasList.add(recentMedia);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
-                        }
-                    } while (videoThumbnailsCursor.moveToNext());
-                }
-                videoThumbnailsCursor.close();
-            }
-        }
-
-        Collections.sort(mediasList, new Comparator<RecentMedia>() {
-            @Override
-            public int compare(RecentMedia r1, RecentMedia r2) {
-                long t1 = r1.mCreationTime;
-                long t2 = r2.mCreationTime;
-
-                // sort from the most recent
-                return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
-            }
-        });
-
-        if (mediasList.size() > GALLERY_TABLE_ITEM_SIZE) {
-            Log.d(LOG_TAG, "## listLatestMedias(): Added count=" + GALLERY_TABLE_ITEM_SIZE);
-            return mediasList.subList(0, GALLERY_TABLE_ITEM_SIZE);
-        } else {
-            Log.d(LOG_TAG, "## listLatestMedias(): Added count=" + mediasList.size());
-            return mediasList;
-        }
-    }
-
-    /**
-     * Provides the number of medias which will be displayed in the gallery.
-     * The maximum value is GALLERY_TABLE_ITEM_SIZE.
-     * @return the number of displayed medias
-     */
-    private int getMediaStoreMediasCount(){
-        int retValue = 0;
-        Cursor imageThumbnailsCursor = null;
-
-        try {
-            imageThumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    null, // no projection
-                    null,
-                    null,
-                    null);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
-        }
-
-        if (null != imageThumbnailsCursor) {
-            retValue += imageThumbnailsCursor.getCount();
-            imageThumbnailsCursor.close();
-        }
-
-        if (mIsVideoRecordingSupported) {
-            Cursor videoThumbnailsCursor = null;
-
-            try {
-                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        null, // no projection
-                        null,
-                        null,
-                        null);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
-            }
-
-            if (null != videoThumbnailsCursor) {
-                retValue += videoThumbnailsCursor.getCount();
-                videoThumbnailsCursor.close();
-            }
-        }
-
-        return Math.min(retValue, GALLERY_TABLE_ITEM_SIZE);
-    }
-
-    /**
-     * Computes the gallery rows count.
-     * @return teh gallery rows count.
-     */
-    private int getGalleryRowsCount() {
-        int rowsCountRetVal;
-
-        mGalleryImageCount = getMediaStoreMediasCount();
-        if((0==mGalleryImageCount) || (0 != (mGalleryImageCount%GALLERY_COLUMN_COUNT))) {
-            rowsCountRetVal = (mGalleryImageCount/GALLERY_COLUMN_COUNT) +1;
-        } else {
-            rowsCountRetVal = mGalleryImageCount/GALLERY_COLUMN_COUNT;
-            mGalleryImageCount--; // save one cell for the folder icon
-        }
-
-        return rowsCountRetVal;
-    }
-
-    /**
-     * Populate the gallery view with the image/video contents.
-     */
-    private void refreshRecentsMediasList() {
-        // start the progress bar and disable the take button
-        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
-        progressBar.setVisibility(View.VISIBLE);
-        mTakeImageView.setEnabled(false);
-        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
-
-        mMediaStoreMediasList.clear();
-
-        // run away from the UI thread
-        mFileHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // populate the image thumbnails from multimedia store
-                final List<RecentMedia> medias = listLatestMedias();
-
-                // update the UI part
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMediaStoreMediasList.addAll(medias);
-                        buildGalleryTableLayout();
-                        progressBar.setVisibility(View.GONE);
-                        mTakeImageView.setEnabled(true);
-                        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * Build the image gallery widget programmatically.
-     */
-    private void buildGalleryTableLayout() {
-        final int CELL_MARGIN = 2;
-        TableRow tableRow = null;
-        RecentMediaLayout recentMediaView;
-        int tableLayoutWidth;
-        int cellWidth;
-        int cellHeight;
-        int itemIndex;
-        ImageView.ScaleType scaleType;
-        TableRow.LayoutParams rawLayoutParams;
-        TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
-
-        if(null != mGalleryTableLayout) {
-            mGalleryTableLayout.removeAllViews();
-            mGalleryTableLayout.setBackgroundColor(Color.WHITE);
-
-            DisplayMetrics metrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            tableLayoutWidth = metrics.widthPixels;
-
-            // raw layout configuration
-            cellWidth = (tableLayoutWidth -(GALLERY_COLUMN_COUNT * CELL_MARGIN)) / GALLERY_COLUMN_COUNT;
-            cellHeight = cellWidth;
-            if(0 == tableLayoutWidth) {
-                // fall back
-                scaleType = ImageView.ScaleType.FIT_XY;
-                rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            } else {
-                scaleType = ImageView.ScaleType.FIT_CENTER;
-                rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
-            }
-            rawLayoutParams.setMargins(CELL_MARGIN, 0, CELL_MARGIN, 0);
-            tableLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
-
-
-            RecentMedia recentMedia;
-            // loop to produce full raws filled in, with an icon folder in last cell
-            for(itemIndex=0; itemIndex<mGalleryImageCount; itemIndex++) {
-                try {
-                    recentMedia = mMediaStoreMediasList.get(itemIndex);
-                } catch (IndexOutOfBoundsException e) {
-                    recentMedia = null;
-                }
-
-                // detect raw is complete
-                if (0 == (itemIndex % GALLERY_COLUMN_COUNT)) {
-                    if (null != tableRow) {
-                        mGalleryTableLayout.addView(tableRow, tableLayoutParams);
-                    }
-                    tableRow = new TableRow(this);
-                }
-
-                // build the content layout for each cell
-                if(null != recentMedia) {
-                    recentMediaView = new RecentMediaLayout(this);
-
-                    if (null != recentMedia.mThumbnail) {
-                        recentMediaView.setThumbnail(recentMedia.mThumbnail);
-                    } else {
-                        recentMediaView.setThumbnailByUri(recentMedia.mFileUri);
-                    }
-
-                    recentMediaView.setBackgroundColor(Color.BLACK);
-                    recentMediaView.setThumbnailScaleType(scaleType);
-                    final RecentMedia finalRecentMedia = recentMedia;
-
-                    recentMediaView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (!finalRecentMedia.mIsVideo) {
-                                onClickGalleryImage(finalRecentMedia);
-                            } else {
-                                mVideoUri = finalRecentMedia.mFileUri;
-                                startVideoPreviewVideo(finalRecentMedia.mThumbnail);
-                            }
-                        }
-                    });
-
-                    // set image logo: gif, image or video
-                    recentMediaView.setIsVideo(recentMedia.mIsVideo);
-
-                    if (!recentMedia.mIsVideo) {
-                        recentMediaView.enableGifLogoImage(MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
-                        recentMediaView.enableMediaTypeLogoImage(!MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
-                    }
-
-                    if (null != tableRow) {
-                        tableRow.addView(recentMediaView, rawLayoutParams);
-                    }
-                }
-            }
-
-            // add the icon folder in last cell
-            recentMediaView = new RecentMediaLayout(this);
-            recentMediaView.setThumbnailScaleType(scaleType);
-            recentMediaView.setThumbnailByResource(R.drawable.ic_material_folder_green_vector);
-            recentMediaView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openFileExplorer();
-                }
-            });
-
-            if(0 == itemIndex) {
-                tableRow = new TableRow(this);
-            }
-
-            if(null != tableRow)
-                tableRow.addView(recentMediaView, rawLayoutParams);
-
-            // do not forget to add last row
-            if (null != tableRow)
-                mGalleryTableLayout.addView(tableRow, tableLayoutParams);
-
-        } else {
-            Log.w(LOG_TAG, "## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
-        }
-    }
-
-    /**
-     * The user clicked on a gallery image
-     */
-    private void onClickGalleryImage(final RecentMedia aMediaItem){
-        if (null != mCamera) {
-            mCamera.stopPreview();
-        }
-
-        // add the selected image to be returned by the activity
-        mSelectedGalleryItemsList.add(aMediaItem);
-
-        // display the image as preview
-        if ((null != aMediaItem.mThumbnail) && !mIsAvatarMode) {
-            updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_GALLERY);
-            mImagePreviewImageView.setImageBitmap(aMediaItem.mThumbnail);
-            // save bitmap to speed up UI restore (life cycle)
-            VectorApp.setSavedCameraImagePreview(aMediaItem.mThumbnail);
-        } else if (null != aMediaItem.mFileUri) {
-            // fall back in case bitmap is not available (unlikely..)
-            displayImagePreview(null, null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
-        } else {
-            Log.e(LOG_TAG, "## onClickGalleryImage(): no image to display");
-        }
-
-        // save the uri to be accessible for life cycle management
-        mImagePreviewImageView.setTag(aMediaItem.mFileUri);
-    }
-
-    /**
-     * Take a photo
-     */
-    private void takePhoto() {
-        Log.d(LOG_TAG, "## takePhoto");
-
-        try {
-            mCamera.takePicture(null, null, new Camera.PictureCallback() {
-                @Override
-                public void onPictureTaken(byte[] data, Camera camera) {
-                    Log.d(LOG_TAG, "## onPictureTaken(): success");
-
-                    // replace the high res picture with the preview one
-                    // because the aspect ratio is not the same
-                    // and the user would not understand that the shooted image is not the previewed one
-                    if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
-                        data = bos.toByteArray();
-                    }
-
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-                    File dstFile;
-                    String fileName = getSavedImageName();
-
-                    // remove any previously saved image
-                    if (!TextUtils.isEmpty(fileName)) {
-                        dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
-                        if (dstFile.exists()) {
-                            dstFile.delete();
-                        }
-                    }
-
-                    // get new name
-                    fileName = buildNewImageName();
-                    dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
-
-                    // Copy source file to destination
-                    FileOutputStream outputStream = null;
-
-                    try {
-                        dstFile.createNewFile();
-
-                        outputStream = new FileOutputStream(dstFile);
-
-                        byte[] buffer = new byte[1024 * 10];
-                        int len;
-                        while ((len = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, len);
-                        }
-
-                        mShootedPicturePath = dstFile.getAbsolutePath();
-                        displayImagePreview(null, mShootedPicturePath, null, IMAGE_ORIGIN_CAMERA);
-
-                        // force to stop preview:
-                        // some devices do not stop preview after the picture was taken (ie. G6 edge)
-                        mCamera.stopPreview();
-
-                        Log.d(LOG_TAG, "onPictureTaken processed");
-
-                    } catch (Exception e) {
-                        Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    } finally {
-
-                        // Close resources
-                        try {
-                            inputStream.close();
-
-                            if (outputStream != null) {
-                                outputStream.close();
-                            }
-
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
-                        }
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## takePicture(): EXCEPTION Msg=" + e.getMessage());
-        }
-    }
-
-    /**
-     * Take a picture of the current preview
-     */
-    private void onClickTakeImage() {
-        Log.d(LOG_TAG, "onClickTakeImage");
-
-        if (null != mCamera) {
-            try {
-                List<String> supportedFocusModes = null;
-
-                if (null != mCamera.getParameters()) {
-                    supportedFocusModes = mCamera.getParameters().getSupportedFocusModes();
-                }
-
-                Log.d(LOG_TAG, "onClickTakeImage : supported focus modes " + supportedFocusModes);
-
-                if ((null != supportedFocusModes) && (supportedFocusModes.indexOf(Camera.Parameters.FOCUS_MODE_AUTO) >= 0)) {
-                    Log.d(LOG_TAG, "onClickTakeImage : autofocus starts");
-
-                    mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                        public void onAutoFocus(boolean success, Camera camera) {
-                            if (!success) {
-                                Log.e(LOG_TAG, "## autoFocus(): fails");
-                            } else {
-                                Log.d(LOG_TAG, "## autoFocus(): succeeds");
-                            }
-
-                            playShutterSound();
-
-                            // take a photo event if the autofocus fails
-                            takePhoto();
-                        }
-                    });
-                } else {
-                    Log.d(LOG_TAG, "onClickTakeImage : no autofocus : take photo");
-                    playShutterSound();
-                    takePhoto();
-                }
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage());
-
-                // take a photo event if the autofocus fails
-                playShutterSound();
-                takePhoto();
-            }
-        }
-    }
-
-
-    private String buildNewImageName(){
-        String nameRetValue;
-
-        // build name based on the date
-        //String fileSufixTime = DateFormat.getDateTimeInstance().format(new Date());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hhmmss") ;
-        String fileSufixTime = dateFormat.format(new Date());
-        //fileSufixTime += "_"+ (SystemClock.uptimeMillis()/1000);
-        nameRetValue = "VectorImage_"+fileSufixTime+".jpg";
-
-        // save new name in preference
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, nameRetValue);
-        editor.commit();
-
-        return nameRetValue;
-    }
-
-    private String getSavedImageName(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, null);
-    }
-
-    /**
-     * Create a thumbnail from an image stream with a rotation angle.
-     * @param imageStream the image stream
-     * @param rotationAngle the rotation angle
-     * @return the thumbnail
-     */
-    private Bitmap createPhotoThumbnail(InputStream imageStream, int rotationAngle) {
-        Bitmap bitmapRetValue = null;
-        final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        options.outWidth = -1;
-        options.outHeight = -1;
-
-        try {
-            // create a thumbnail
-            InputStream stream = ImageUtils.resizeImage(imageStream, MAX_SIZE, SAMPLE_SIZE, QUALITY);
-            imageStream.close();
-
-            bitmapRetValue = BitmapFactory.decodeStream(stream, null, options);
-
-            if (0 != rotationAngle) {
-                // apply a rotation
-                android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
-                bitmapMatrix.postRotate(rotationAngle);
-                bitmapRetValue = Bitmap.createBitmap(bitmapRetValue, 0, 0, bitmapRetValue.getWidth(), bitmapRetValue.getHeight(), bitmapMatrix, false);
-            }
-
-            System.gc();
-
-        } catch (OutOfMemoryError e) {
-            Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
-        }
-
-        return bitmapRetValue;
-    }
-
-    /**
-     * Create a thumbnail bitmap from an image URL if there is some exif metadata which implies to rotate
-     * the image. This method is used to process the image taken by the from the camera.
-     * @param aImageUrl the image url
-     * @return a thumbnail if the exif metadata implies to rotate the image.
-     */
-    private Bitmap createPhotoThumbnail(final String aImageUrl) {
-        Bitmap bitmapRetValue = null;
-
-        // sanity check
-        if (null != aImageUrl) {
-            Uri imageUri = Uri.fromFile(new File(aImageUrl));
-            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, imageUri);
-
-            try {
-                final String filename = imageUri.getPath();
-
-                FileInputStream imageStream = new FileInputStream(new File(filename));
-                bitmapRetValue = createPhotoThumbnail(imageStream, rotationAngle);
-                imageStream.close();
-
-                System.gc();
-
-            } catch (OutOfMemoryError e) {
-                Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
-            }
-
-        }
-
-        return bitmapRetValue;
-    }
-
-    /**
-     * Display the image preview.
-     *
-     * @param bitmap the bitmap.
-     * @param aCameraImageUrl image from camera
-     * @param aGalleryImageUri image ref as an Uri
-     * @param aOrigin CAMERA or GALLERY
-     */
-    private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
-        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
-        progressBar.setVisibility(View.VISIBLE);
-        mTakeImageView.setEnabled(false);
-
-        Bitmap newBitmap = bitmap;
-        Uri defaultUri = null;
-
-        if (null == newBitmap) {
-            if (IMAGE_ORIGIN_CAMERA == aOrigin) {
-                newBitmap = mCameraTextureView.getBitmap();
-                if (null == newBitmap) {
-                    newBitmap = createPhotoThumbnail(aCameraImageUrl);
-                }
-                defaultUri = Uri.fromFile(new File(aCameraImageUrl));
-            } else {
-                // in gallery
-                defaultUri = aGalleryImageUri;
-            }
-        }
-
-        // save bitmap to speed up UI restore (life cycle)
-        VectorApp.setSavedCameraImagePreview(newBitmap);
-
-        mImagePreviewAvatarModeMaskView.setVisibility(View.GONE);
-
-        if (!mIsAvatarMode) {
-            // update the UI part
-            if (null != newBitmap) {// from camera
-                mImagePreviewImageView.setImageBitmap(newBitmap);
-            } else {
-                if(null != defaultUri) {
-                    mImagePreviewImageView.setImageURI(defaultUri);
-                }
-            }
-        } else {
-            // not bitmap but
-            if ((null == newBitmap) && (null != defaultUri)) {
-                try {
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(this, defaultUri, null);
-
-                    if ((null != resource) && (null != resource.mContentStream)) {
-                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, defaultUri);
-                        newBitmap = createPhotoThumbnail(resource.mContentStream, rotationAngle);
-                        resource.mContentStream.close();
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri");
-                }
-            }
-
-            // update the UI part
-            if (null != newBitmap) {// from camera
-                mImagePreviewImageView.setImageBitmap(newBitmap);
-
-                // compute the image size in the screen
-                int imageW = newBitmap.getWidth();
-                int imageH = newBitmap.getHeight();
-
-                int screenHeight = this.getWindow().getDecorView().getHeight();
-                int screenWidth = this.getWindow().getDecorView().getWidth();
-
-                if ((0 == screenHeight) || (0 == screenWidth)) {
-                    mImagePreviewImageView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayImagePreview(bitmap, aCameraImageUrl, aGalleryImageUri, aOrigin);
-                        }
-                    });
-
-                    return;
-                }
-
-                int newWidth;
-                int newHeight;
-
-                newHeight = screenHeight;
-                newWidth = (int) (((float) newHeight) * imageW/ imageH);
-
-                if (newWidth > screenWidth) {
-                    newWidth = screenWidth;
-                    newHeight = (int) (((float) newWidth) * imageH / imageW);
-                }
-
-                mImagePreviewAvatarModeMaskView.setVisibility(View.VISIBLE);
-                drawCircleMask(mImagePreviewAvatarModeMaskView, newWidth, newHeight);
-            }
-        }
-
-        mTakeImageView.setEnabled(true);
-        updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
-        progressBar.setVisibility(View.GONE);
-    }
-
-    /**
-     * Update the UI according to camera action. Two UIs are displayed:
-     * the camera real time preview (default configuration) or the taken picture.
-     * (the taken picture comes from the camera or from the gallery)
-     *
-     * When the taken image is displayed, only two buttons are displayed: "attach"
-     * the current image or "re take"(cancel) another image with the camera.
-     * We also have to distinguish the origin of the taken image: from the camera
-     * or from the gallery.
-     *
-     * @param aIsTakenImageDisplayed true to display the taken image, false to show the camera preview
-     * @param aImageOrigin IMAGE_ORIGIN_CAMERA or IMAGE_ORIGIN_GALLERY
-     */
-    private void updateUiConfiguration(boolean aIsTakenImageDisplayed, int aImageOrigin){
-        // save current configuration for lifecyle management
-        mIsTakenImageDisplayed = aIsTakenImageDisplayed;
-        mTakenImageOrigin = aImageOrigin;
-
-        if (!aIsTakenImageDisplayed) {
-            // clear the selected image from the gallery (if any)
-            mSelectedGalleryItemsList.clear();
-        }
-
-        if (aIsTakenImageDisplayed) {
-            mPreviewLayout.setVisibility(View.VISIBLE);
-            mPreviewScrollView.setVisibility(View.GONE);
-        }
-        else {
-            // the default UI: hide gallery preview, show the surface view
-            mPreviewScrollView.setVisibility(View.VISIBLE);
-            mPreviewLayout.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Start the camera preview
-     */
-    private void startCameraPreview() {
-        try {
-            if (null != mCamera) {
-                mCamera.startPreview();
-            }
-        } catch (Exception ex){
-            Log.w(LOG_TAG,"## startCameraPreview(): Exception Msg="+ ex.getMessage());
-        }
-    }
-
-    /**
-     * Cancel the current image preview, and setup the UI to
-     * start a new image capture.
-     */
-    private void cancelTakeImage() {
-        mShootedPicturePath = null;
-        mSelectedGalleryItemsList.clear();
-        VectorApp.setSavedCameraImagePreview(null);
-
-        startCameraPreview();
-        // reset UI ot default: "take picture" button screen
-        updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
-    }
-
-    /**
-     * "attach image" dispatcher.
-     *
-     * @param aImageOrigin camera, otherwise gallery
-     */
-    private void attachImageFrom(int aImageOrigin) {
-        if(IMAGE_ORIGIN_CAMERA == aImageOrigin){
-            attachImageFromCamera();
-        }
-        else if(IMAGE_ORIGIN_GALLERY == aImageOrigin){
-            attachImageFrommGallery();
-        }
-        else {
-            Log.w(LOG_TAG,"## attachImageFrom(): unknown image origin");
-        }
-    }
-
-    /**
-     * Returns the thumbnail path of shot image.
-     * @param picturePath the image path
-     * @return the thumbnail image path.
-     */
-    public static String getThumbnailPath(String picturePath) {
-        if (!TextUtils.isEmpty(picturePath) && picturePath.endsWith(".jpg")) {
-            return picturePath.replace(".jpg", "_thumb.jpg");
-        }
-
-        return null;
-    }
-
-    /**
-     * Return the taken image from the camera to the calling activity.
-     * This method returns to the calling activity.
-     */
-    private void attachImageFromCamera() {
-        try {
-            // sanity check
-            if (null != mShootedPicturePath) {
-                Uri uri = Uri.fromFile(new File(mShootedPicturePath));
-
-                try {
-                    Bitmap previewBitmap = VectorApp.getSavedPickerImagePreview();
-                    String thumbnailPath = getThumbnailPath(mShootedPicturePath);
-
-                    int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, uri);
-
-                    // detect exif rotation
-                    if (0 != rotationAngle) {
-                        android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
-                        bitmapMatrix.postRotate(360 - rotationAngle);
-                        previewBitmap = Bitmap.createBitmap(previewBitmap, 0, 0, previewBitmap.getWidth(), previewBitmap.getHeight(), bitmapMatrix, false);
-                    }
-
-                    File file = new File(thumbnailPath);
-                    FileOutputStream outStream = new FileOutputStream(file);
-                    previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
-                    outStream.flush();
-                    outStream.close();
-
-
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file");
-                }
-
-
-
-                // provide the Uri
-                Bundle conData = new Bundle();
-                Intent intent = new Intent();
-                intent.setData(uri);
-                intent.putExtras(conData);
-                setResult(RESULT_OK, intent);
-            }
-        } catch (Exception e) {
-            setResult(RESULT_CANCELED, null);
-
-        } finally {
-            // clean footprint in App
-            VectorApp.setSavedCameraImagePreview(null);
-            finish();
-        }
-    }
 
     @SuppressLint("NewApi")
     private void openFileExplorer() {
@@ -1374,52 +501,20 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
             }
-            // no mime type filter to allow any kind of content
-            fileIntent.setType(CommonActivityUtils.MIME_TYPE_IMAGE_ALL);
+            if (mIsVideoRecordingSupported) {
+                fileIntent.setType(CommonActivityUtils.MIME_TYPE_ALL_CONTENT);
+            } else {
+                fileIntent.setType(CommonActivityUtils.MIME_TYPE_IMAGE_ALL);
+            }
             startActivityForResult(fileIntent, REQUEST_MEDIAS);
         } catch(Exception e) {
             Toast.makeText(VectorMediasPickerActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
-    /**
-     * Return the taken image from the gallery to the calling activity.
-     * This method returns to the calling activity.
-     */
-    @SuppressLint("NewApi")
-    private void attachImageFrommGallery() {
-
-        Bundle conData = new Bundle();
-        Intent intent = new Intent();
-
-        if ((mSelectedGalleryItemsList.size() == 1) || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)) {
-            // provide the Uri
-            intent.setData(mSelectedGalleryItemsList.get(0).mFileUri);
-        } else if (mSelectedGalleryItemsList.size() > 0) {
-            ClipData.Item firstUri = new ClipData.Item(null, null, null, mSelectedGalleryItemsList.get(0).mFileUri);
-            String[] mimeType = { "*/*" };
-            ClipData clipData = new ClipData("", mimeType, firstUri);
-
-            for(int index = 1; index < mSelectedGalleryItemsList.size(); index++) {
-                ClipData.Item item = new ClipData.Item(null, null, null, mSelectedGalleryItemsList.get(index).mFileUri);
-                clipData.addItem(item);
-            }
-            intent.setClipData(clipData);
-        } else {
-            // attach after a screen rotation, the file uri must was saved in the tag
-            Uri uriSavedFromLifeCycle = (Uri) mImagePreviewImageView.getTag();
-
-            if (null != uriSavedFromLifeCycle) {
-                intent.setData(uriSavedFromLifeCycle);
-            }
-        }
-
-        intent.putExtras(conData);
-        setResult(RESULT_OK, intent);
-        // clean footprint in App
-        VectorApp.setSavedCameraImagePreview(null);
-        finish();
-    }
+    //==============================================================================================================
+    // Camera management
+    //==============================================================================================================
 
     /**
      * Switch camera (front <-> back)
@@ -1590,41 +685,6 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         resizeCameraPreviewTexture();
     }
 
-    /**
-     * Play the camera shutter shound
-     */
-    private void playShutterSound() {
-        MediaActionSound sound = new MediaActionSound();
-        sound.play(MediaActionSound.SHUTTER_CLICK);
-    }
-
-    /**
-     * Compute the avatar mask bitmap and apply it to the provided ImageView
-     * @param maskView the mask view
-     * @param width the image width to hide
-     * @param height the image height to hide
-     */
-    private void drawCircleMask(final ImageView maskView, final int width, final int height) {
-        // remove any background
-        maskView.setBackgroundResource(0);
-
-        // create a bitmap with a transparent hole
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-
-        canvas.drawColor(getResources().getColor(android.R.color.black));
-
-        Paint eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
-        eraser.setStyle(Paint.Style.FILL);
-        // require to make a transparent hole
-        eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
-        eraser.setColor(Color.TRANSPARENT);
-
-        canvas.drawCircle(width/2, height/2, Math.min(width/2, height/2), eraser);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-
-        maskView.setImageBitmap(bitmap);
-    }
 
     /**
      * Resize the camera preview texture from the camera preview size.
@@ -1702,6 +762,581 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
             }
         }
     }
+
+    //==============================================================================================================
+    // Layout management
+    //==============================================================================================================
+
+    /**
+     * Init the camera layout to make the surface texture + the gallery layout, both
+     * enough large to enable scrolling.
+     */
+    private void initCameraLayout() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        mScreenHeight = metrics.heightPixels;
+        mScreenWidth = metrics.widthPixels;
+
+        mCameraPreviewLayoutHeight = (int)(mScreenHeight * SURFACE_VIEW_HEIGHT_RATIO);
+
+        // set the height of the relative layout containing the texture view
+        mCameraPreviewLayout = (RelativeLayout)findViewById(R.id.medias_picker_camera_preview_layout);
+        ViewGroup.LayoutParams previewLayoutParams = mCameraPreviewLayout.getLayoutParams();
+        previewLayoutParams.height = mCameraPreviewLayoutHeight;
+        mCameraPreviewLayout.setLayoutParams(previewLayoutParams);
+
+        // set the height of the layout including the texture view and the gallery (total sum > screen height to allow scrolling)
+        mPreviewAndGalleryLayout = (RelativeLayout)findViewById(R.id.medias_picker_preview_gallery_layout);
+        computePreviewAndGalleryHeight();
+    }
+
+    /**
+     * Compute the height of the view containing the texture and the table layout.
+     * This height is the sum of mCameraPreviewLayoutHeight + gallery height.
+     * The gallery height depends of the number of the gallery rows {@link #getGalleryRowsCount()}).
+     */
+    private void computePreviewAndGalleryHeight() {
+        int galleryRowsCount = getGalleryRowsCount();
+
+        if(null != mPreviewAndGalleryLayout) {
+            ViewGroup.LayoutParams previewAndGalleryLayoutParams = mPreviewAndGalleryLayout.getLayoutParams();
+            int galleryHeight = (galleryRowsCount * mScreenWidth / GALLERY_COLUMN_COUNT);
+            previewAndGalleryLayoutParams.height = mCameraPreviewLayoutHeight + galleryHeight;
+            mPreviewAndGalleryLayout.setLayoutParams(previewAndGalleryLayoutParams);
+        }
+        else
+            Log.w(LOG_TAG, "## computePreviewAndGalleryHeight(): GalleryTable height not set");
+    }
+
+    /**
+     * Exit activity handler.
+     * @param aView view
+     */
+    public void onExitButton(@SuppressWarnings("UnusedParameters") View aView) {
+        finish();
+    }
+
+    /**
+     * Display the image preview.
+     *
+     * @param bitmap the bitmap.
+     * @param aCameraImageUrl image from camera
+     * @param aGalleryImageUri image ref as an Uri
+     * @param aOrigin CAMERA or GALLERY
+     */
+    private void displayImagePreview(final Bitmap bitmap, final String aCameraImageUrl, final Uri aGalleryImageUri, final int aOrigin){
+        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
+        progressBar.setVisibility(View.VISIBLE);
+        mTakeImageView.setEnabled(false);
+
+        Bitmap newBitmap = bitmap;
+        Uri defaultUri = null;
+
+        if (null == newBitmap) {
+            if (IMAGE_ORIGIN_CAMERA == aOrigin) {
+                newBitmap = mCameraTextureView.getBitmap();
+                if (null == newBitmap) {
+                    newBitmap = createPhotoThumbnail(aCameraImageUrl);
+                }
+                defaultUri = Uri.fromFile(new File(aCameraImageUrl));
+            } else {
+                // in gallery
+                defaultUri = aGalleryImageUri;
+            }
+        }
+
+        // save bitmap to speed up UI restore (life cycle)
+        VectorApp.setSavedCameraImagePreview(newBitmap);
+
+        mImagePreviewAvatarModeMaskView.setVisibility(View.GONE);
+
+        if (!mIsAvatarMode) {
+            // update the UI part
+            if (null != newBitmap) {// from camera
+                mImagePreviewImageView.setImageBitmap(newBitmap);
+            } else {
+                if(null != defaultUri) {
+                    mImagePreviewImageView.setImageURI(defaultUri);
+                }
+            }
+        } else {
+            // not bitmap but
+            if ((null == newBitmap) && (null != defaultUri)) {
+                try {
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(this, defaultUri, null);
+
+                    if ((null != resource) && (null != resource.mContentStream)) {
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, defaultUri);
+                        newBitmap = createPhotoThumbnail(resource.mContentStream, rotationAngle);
+                        resource.mContentStream.close();
+                    }
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "fails to retrieve the bitmap from uri");
+                }
+            }
+
+            // update the UI part
+            if (null != newBitmap) {// from camera
+                mImagePreviewImageView.setImageBitmap(newBitmap);
+
+                // compute the image size in the screen
+                int imageW = newBitmap.getWidth();
+                int imageH = newBitmap.getHeight();
+
+                int screenHeight = this.getWindow().getDecorView().getHeight();
+                int screenWidth = this.getWindow().getDecorView().getWidth();
+
+                if ((0 == screenHeight) || (0 == screenWidth)) {
+                    mImagePreviewImageView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayImagePreview(bitmap, aCameraImageUrl, aGalleryImageUri, aOrigin);
+                        }
+                    });
+
+                    return;
+                }
+
+                int newWidth;
+                int newHeight;
+
+                newHeight = screenHeight;
+                newWidth = (int) (((float) newHeight) * imageW/ imageH);
+
+                if (newWidth > screenWidth) {
+                    newWidth = screenWidth;
+                    newHeight = (int) (((float) newWidth) * imageH / imageW);
+                }
+
+                mImagePreviewAvatarModeMaskView.setVisibility(View.VISIBLE);
+                drawCircleMask(mImagePreviewAvatarModeMaskView, newWidth, newHeight);
+            }
+        }
+
+        mTakeImageView.setEnabled(true);
+        updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, aOrigin);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * Update the UI according to camera action. Two UIs are displayed:
+     * the camera real time preview (default configuration) or the taken picture.
+     * (the taken picture comes from the camera or from the gallery)
+     *
+     * When the taken image is displayed, only two buttons are displayed: "attach"
+     * the current image or "re take"(cancel) another image with the camera.
+     * We also have to distinguish the origin of the taken image: from the camera
+     * or from the gallery.
+     *
+     * @param aIsTakenImageDisplayed true to display the taken image, false to show the camera preview
+     * @param aImageOrigin IMAGE_ORIGIN_CAMERA or IMAGE_ORIGIN_GALLERY
+     */
+    private void updateUiConfiguration(boolean aIsTakenImageDisplayed, int aImageOrigin) {
+        // save current configuration for lifecyle management
+        mIsTakenImageDisplayed = aIsTakenImageDisplayed;
+        mTakenImageOrigin = aImageOrigin;
+
+        if (!aIsTakenImageDisplayed) {
+            // clear the selected image from the gallery (if any)
+            mSelectedGalleryImage = null;
+        }
+
+        if (aIsTakenImageDisplayed) {
+            mPreviewLayout.setVisibility(View.VISIBLE);
+            mPreviewScrollView.setVisibility(View.GONE);
+        }
+        else {
+            // the default UI: hide gallery preview, show the surface view
+            mPreviewScrollView.setVisibility(View.VISIBLE);
+            mPreviewLayout.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Start the camera preview
+     */
+    private void startCameraPreview() {
+        try {
+            if (null != mCamera) {
+                mCamera.startPreview();
+            }
+        } catch (Exception ex){
+            Log.w(LOG_TAG,"## startCameraPreview(): Exception Msg="+ ex.getMessage());
+        }
+    }
+
+    //==============================================================================================================
+    // image management
+    //==============================================================================================================
+
+    /**
+     * Take a photo
+     */
+    private void takePhoto() {
+        Log.d(LOG_TAG, "## takePhoto");
+
+        try {
+            mCamera.takePicture(null, null, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    Log.d(LOG_TAG, "## onPictureTaken(): success");
+
+                    // replace the high res picture with the preview one
+                    // because the aspect ratio is not the same
+                    // and the user would not understand that the mShotPicturePath image is not the previewed one
+                    if (mIsAvatarMode && (null != mCameraTextureView.getBitmap())) {
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        mCameraTextureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, AVATAR_COMPRESSION_LEVEL, bos);
+                        data = bos.toByteArray();
+                    }
+
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+                    File dstFile;
+                    String fileName = getSavedImageName(VectorMediasPickerActivity.this);
+
+                    // remove any previously saved image
+                    if (!TextUtils.isEmpty(fileName)) {
+                        dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+                        if (dstFile.exists()) {
+                            dstFile.delete();
+                        }
+                    }
+
+                    // get new name
+                    fileName = buildNewImageName(VectorMediasPickerActivity.this);
+                    dstFile = new File(getCacheDir().getAbsolutePath(), fileName);
+
+                    // Copy source file to destination
+                    FileOutputStream outputStream = null;
+
+                    try {
+                        dstFile.createNewFile();
+
+                        outputStream = new FileOutputStream(dstFile);
+
+                        byte[] buffer = new byte[1024 * 10];
+                        int len;
+                        while ((len = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, len);
+                        }
+
+                        mShotPicturePath = dstFile.getAbsolutePath();
+                        displayImagePreview(null, mShotPicturePath, null, IMAGE_ORIGIN_CAMERA);
+
+                        // force to stop preview:
+                        // some devices do not stop preview after the picture was taken (ie. G6 edge)
+                        mCamera.stopPreview();
+
+                        Log.d(LOG_TAG, "onPictureTaken processed");
+
+                    } catch (Exception e) {
+                        Toast.makeText(VectorMediasPickerActivity.this, "Exception onPictureTaken(): " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    } finally {
+
+                        // Close resources
+                        try {
+                            inputStream.close();
+
+                            if (outputStream != null) {
+                                outputStream.close();
+                            }
+
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## onPictureTaken(): EXCEPTION Msg=" + e.getMessage());
+                        }
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## takePicture(): EXCEPTION Msg=" + e.getMessage());
+        }
+    }
+
+    /**
+     * Take a picture of the current preview
+     */
+    private void onClickTakeImage() {
+        Log.d(LOG_TAG, "onClickTakeImage");
+
+        if (null != mCamera) {
+            try {
+                List<String> supportedFocusModes = null;
+
+                if (null != mCamera.getParameters()) {
+                    supportedFocusModes = mCamera.getParameters().getSupportedFocusModes();
+                }
+
+                Log.d(LOG_TAG, "onClickTakeImage : supported focus modes " + supportedFocusModes);
+
+                if ((null != supportedFocusModes) && (supportedFocusModes.indexOf(Camera.Parameters.FOCUS_MODE_AUTO) >= 0)) {
+                    Log.d(LOG_TAG, "onClickTakeImage : autofocus starts");
+
+                    mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            if (!success) {
+                                Log.e(LOG_TAG, "## autoFocus(): fails");
+                            } else {
+                                Log.d(LOG_TAG, "## autoFocus(): succeeds");
+                            }
+
+                            playShutterSound();
+
+                            // take a photo event if the autofocus fails
+                            takePhoto();
+                        }
+                    });
+                } else {
+                    Log.d(LOG_TAG, "onClickTakeImage : no autofocus : take photo");
+                    playShutterSound();
+                    takePhoto();
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## autoFocus(): EXCEPTION Msg=" + e.getMessage());
+
+                // take a photo event if the autofocus fails
+                playShutterSound();
+                takePhoto();
+            }
+        }
+    }
+
+    /**
+     * Create an unique image name.
+     * @return the unique file name
+     */
+    private static String buildNewImageName(Context context) {
+        String nameRetValue = "VectorImage_"+ new SimpleDateFormat("yyyy-MM-dd_hhmmss").format(new Date()) + ".jpg";
+
+        // save new name in preference
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, nameRetValue);
+        editor.commit();
+
+        return nameRetValue;
+    }
+
+    /**
+     * Retrieves the saved image name.
+     * @param context the context
+     * @return the saved image name.
+     */
+    private String getSavedImageName(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(KEY_PREFERENCE_CAMERA_IMAGE_NAME, null);
+    }
+
+    /**
+     * Create a thumbnail from an image stream with a rotation angle.
+     * @param imageStream the image stream
+     * @param rotationAngle the rotation angle
+     * @return the thumbnail
+     */
+    private Bitmap createPhotoThumbnail(InputStream imageStream, int rotationAngle) {
+        Bitmap bitmapRetValue = null;
+        final int MAX_SIZE = 1024, SAMPLE_SIZE = 0, QUALITY = 100;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.outWidth = -1;
+        options.outHeight = -1;
+
+        try {
+            // create a thumbnail
+            InputStream stream = ImageUtils.resizeImage(imageStream, MAX_SIZE, SAMPLE_SIZE, QUALITY);
+            imageStream.close();
+
+            bitmapRetValue = BitmapFactory.decodeStream(stream, null, options);
+
+            if (0 != rotationAngle) {
+                // apply a rotation
+                android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                bitmapMatrix.postRotate(rotationAngle);
+                bitmapRetValue = Bitmap.createBitmap(bitmapRetValue, 0, 0, bitmapRetValue.getWidth(), bitmapRetValue.getHeight(), bitmapMatrix, false);
+            }
+
+            System.gc();
+
+        } catch (OutOfMemoryError e) {
+            Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
+        }
+
+        return bitmapRetValue;
+    }
+
+    /**
+     * Create a thumbnail bitmap from an image URL if there is some exif metadata which implies to rotate
+     * the image. This method is used to process the image taken by the from the camera.
+     * @param aImageUrl the image url
+     * @return a thumbnail if the exif metadata implies to rotate the image.
+     */
+    private Bitmap createPhotoThumbnail(final String aImageUrl) {
+        Bitmap bitmapRetValue = null;
+
+        // sanity check
+        if (null != aImageUrl) {
+            Uri imageUri = Uri.fromFile(new File(aImageUrl));
+            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, imageUri);
+
+            try {
+                final String filename = imageUri.getPath();
+
+                FileInputStream imageStream = new FileInputStream(new File(filename));
+                bitmapRetValue = createPhotoThumbnail(imageStream, rotationAngle);
+                imageStream.close();
+
+                System.gc();
+
+            } catch (OutOfMemoryError e) {
+                Log.e(LOG_TAG, "## createPhotoThumbnail : out of memory");
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## createPhotoThumbnail() Exception Msg=" + e.getMessage());
+            }
+
+        }
+
+        return bitmapRetValue;
+    }
+
+    /**
+     * Cancel the current image preview, and setup the UI to
+     * start a new image capture.
+     */
+    private void cancelTakeImage() {
+        mShotPicturePath = null;
+        mSelectedGalleryImage = null;
+        VectorApp.setSavedCameraImagePreview(null);
+
+        startCameraPreview();
+        // reset UI ot default: "take picture" button screen
+        updateUiConfiguration(UI_SHOW_CAMERA_PREVIEW, IMAGE_ORIGIN_CAMERA);
+    }
+
+    /**
+     * "attach image" dispatcher.
+     *
+     * @param aImageOrigin camera, otherwise gallery
+     */
+    private void attachImageFrom(int aImageOrigin) {
+        if(IMAGE_ORIGIN_CAMERA == aImageOrigin){
+            attachImageFromCamera();
+        }
+        else if(IMAGE_ORIGIN_GALLERY == aImageOrigin){
+            attachImageFromGallery();
+        }
+        else {
+            Log.w(LOG_TAG,"## attachImageFrom(): unknown image origin");
+        }
+    }
+
+    /**
+     * Returns the thumbnail path of shot image.
+     * @param picturePath the image path
+     * @return the thumbnail image path.
+     */
+    public static String getThumbnailPath(String picturePath) {
+        if (!TextUtils.isEmpty(picturePath) && picturePath.endsWith(".jpg")) {
+            return picturePath.replace(".jpg", "_thumb.jpg");
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the taken image from the camera to the calling activity.
+     * This method returns to the calling activity.
+     */
+    private void attachImageFromCamera() {
+        try {
+            // sanity check
+            if (null != mShotPicturePath) {
+                Uri uri = Uri.fromFile(new File(mShotPicturePath));
+
+                try {
+                    Bitmap previewBitmap = VectorApp.getSavedPickerImagePreview();
+                    String thumbnailPath = getThumbnailPath(mShotPicturePath);
+
+                    int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, uri);
+
+                    // detect exif rotation
+                    if (0 != rotationAngle) {
+                        android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                        bitmapMatrix.postRotate(360 - rotationAngle);
+                        previewBitmap = Bitmap.createBitmap(previewBitmap, 0, 0, previewBitmap.getWidth(), previewBitmap.getHeight(), bitmapMatrix, false);
+                    }
+
+                    File file = new File(thumbnailPath);
+                    FileOutputStream outStream = new FileOutputStream(file);
+                    previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
+                    outStream.flush();
+                    outStream.close();
+
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "attachImageFromCamera fails to create thumbnail file");
+                }
+
+
+
+                // provide the Uri
+                Bundle conData = new Bundle();
+                Intent intent = new Intent();
+                intent.setData(uri);
+                intent.putExtras(conData);
+                setResult(RESULT_OK, intent);
+            }
+        } catch (Exception e) {
+            setResult(RESULT_CANCELED, null);
+
+        } finally {
+            // clean footprint in App
+            VectorApp.setSavedCameraImagePreview(null);
+            finish();
+        }
+    }
+
+    /**
+     * Play the camera shutter shound
+     */
+    private void playShutterSound() {
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
+    }
+
+    /**
+     * Compute the avatar mask bitmap and apply it to the provided ImageView
+     * @param maskView the mask view
+     * @param width the image width to hide
+     * @param height the image height to hide
+     */
+    private void drawCircleMask(final ImageView maskView, final int width, final int height) {
+        // remove any background
+        maskView.setBackgroundResource(0);
+
+        // create a bitmap with a transparent hole
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        canvas.drawColor(getResources().getColor(android.R.color.black));
+
+        Paint eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
+        eraser.setStyle(Paint.Style.FILL);
+        // require to make a transparent hole
+        eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT));
+        eraser.setColor(Color.TRANSPARENT);
+
+        canvas.drawCircle(width/2, height/2, Math.min(width/2, height/2), eraser);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+
+        maskView.setImageBitmap(bitmap);
+    }
+
+    //==============================================================================================================
+    // TextureView.SurfaceTextureListener
+    //==============================================================================================================
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -1901,60 +1536,63 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
     /**
      * Start the video recording
      */
+    @SuppressLint("NewApi")
     private void startVideoRecord() {
-        // lock the orientation
-        mActivityOrientation = getRequestedOrientation();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        if (null != mCamera) {
+            // lock the orientation
+            mActivityOrientation = getRequestedOrientation();
+            setRequestedOrientation((Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) ? ActivityInfo.SCREEN_ORIENTATION_LOCKED : ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
-        mTakeImageView.setAlpha(0.0f);
-        mRecordAnimationView.setVisibility(View.VISIBLE);
-        mRecordAnimationView.startAnimation();
+            mTakeImageView.setAlpha(0.0f);
+            mRecordAnimationView.setVisibility(View.VISIBLE);
+            mRecordAnimationView.startAnimation();
 
-        mIsVideoMode = true;
+            mIsVideoMode = true;
 
-        initCameraSettings();
+            initCameraSettings();
 
-        mMediaRecorder = new MediaRecorder();
+            mMediaRecorder = new MediaRecorder();
 
-        mCamera.unlock();
-        mMediaRecorder.setCamera(mCamera);
+            mCamera.unlock();
+            mMediaRecorder.setCamera(mCamera);
 
-        try {
-            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## startVideoRecord() : setAudioSource fails " + e.getMessage());
+            try {
+                mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startVideoRecord() : setAudioSource fails " + e.getMessage());
+            }
+
+            try {
+                mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startVideoRecord() : setVideoSource fails " + e.getMessage());
+            }
+
+            try {
+                mMediaRecorder.setProfile(mCamcorderProfile);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startVideoRecord() : setProfile fails " + e.getMessage());
+            }
+
+            File videoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
+            mVideoUri = Uri.fromFile(videoFile);
+
+            mMediaRecorder.setOutputFile(videoFile.getPath());
+            mMediaRecorder.setOrientationHint(getVideoRotation());
+
+            // Step 5: Prepare configured MediaRecorder
+            try {
+                mMediaRecorder.prepare();
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startVideoRecord() : cannot prepare the media recorder " + e.getMessage());
+                Toast.makeText(this, getString(R.string.media_picker_cannot_record_video), Toast.LENGTH_SHORT).show();
+                stopVideoRecord();
+                return;
+            }
+
+            mMediaRecorder.start();
+            mIsRecording = true;
         }
-
-        try {
-            mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## startVideoRecord() : setVideoSource fails " + e.getMessage());
-        }
-
-        try {
-            mMediaRecorder.setProfile(mCamcorderProfile);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## startVideoRecord() : setProfile fails " + e.getMessage());
-        }
-
-        File videoFile = new File(getCacheDir().getAbsolutePath(), buildNewVideoName());
-        mVideoUri = Uri.fromFile(videoFile);
-
-        mMediaRecorder.setOutputFile(videoFile.getPath());
-        mMediaRecorder.setOrientationHint(getVideoRotation());
-
-        // Step 5: Prepare configured MediaRecorder
-        try {
-            mMediaRecorder.prepare();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "## startVideoRecord() : cannot prepare the media recorder " + e.getMessage());
-            Toast.makeText(this, getString(R.string.media_picker_cannot_record_video), Toast.LENGTH_SHORT).show();
-            stopVideoRecord();
-            return;
-        }
-
-        mMediaRecorder.start();
-        mIsRecording = true;
     }
 
     /**
@@ -1983,16 +1621,18 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      * Stop the video recording
      */
     private void stopVideoRecord() {
-        mIsVideoMode = false;
-        mIsRecording = false;
-        mTakeImageView.setAlpha(1.0f);
-        mRecordAnimationView.setVisibility(View.GONE);
-        mRecordAnimationView.startAnimation();
+        if (mIsRecording) {
+            mIsVideoMode = false;
+            mIsRecording = false;
+            mTakeImageView.setAlpha(1.0f);
+            mRecordAnimationView.setVisibility(View.GONE);
+            mRecordAnimationView.startAnimation();
 
-        releaseMediaRecorder();
-        setRequestedOrientation(mActivityOrientation);
+            releaseMediaRecorder();
+            setRequestedOrientation(mActivityOrientation);
 
-        initCameraSettings();
+            initCameraSettings();
+        }
     }
 
     /**
@@ -2092,7 +1732,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
         mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                mVideoView.setBackground(mVideoThumbnail);;
+                mVideoView.setBackground(mVideoThumbnail);
                 refreshPlayVideoButton();
                 return false;
             }
@@ -2104,5 +1744,409 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
      */
     private void refreshPlayVideoButton() {
         mVideoButtonView.setImageResource(((null != mVideoView) && mVideoView.isPlaying()) ? R.drawable.camera_stop : R.drawable.camera_play);
+    }
+
+    //==============================================================================================================
+    // Medias gallery
+    //==============================================================================================================
+
+    /**
+     * Populate mMediaStoreImagesList with the images retrieved from the MediaStore.
+     * Max number of retrieved medias is set to GALLERY_TABLE_ITEM_SIZE.
+     * @return the medias list
+     */
+    private List<MediaStoreMedia> listLatestMedias() {
+        ArrayList<MediaStoreMedia> mediasList = new ArrayList<>();
+
+        // images
+        String[] imagesProjection = {MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images.ImageColumns.MIME_TYPE};
+        Cursor imagesThumbnailsCursor = null;
+
+        try {
+            imagesThumbnailsCursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    imagesProjection, // Which columns to return
+                    null,       // Return all image files
+                    null,
+                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC LIMIT "+ GALLERY_TABLE_ITEM_SIZE);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## listLatestMedias() : " + e.getMessage());
+        }
+
+        if (null != imagesThumbnailsCursor) {
+            int timeIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
+            int idIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+            int mimeTypeIndex = imagesThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
+
+            if (imagesThumbnailsCursor.moveToFirst()) {
+                do {
+                    try {
+                        MediaStoreMedia recentMedia = new MediaStoreMedia();
+                        recentMedia.mIsVideo = false;
+
+                        String id = imagesThumbnailsCursor.getString(idIndex);
+                        String dateAsString = imagesThumbnailsCursor.getString(timeIndex);
+                        recentMedia.mMimeType = imagesThumbnailsCursor.getString(mimeTypeIndex);
+                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
+
+                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+
+                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
+
+                        if (0 != rotationAngle) {
+                            android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                            bitmapMatrix.postRotate(rotationAngle);
+                            recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
+                        }
+
+                        mediasList.add(recentMedia);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
+                    }
+                } while (imagesThumbnailsCursor.moveToNext());
+            }
+            imagesThumbnailsCursor.close();
+        }
+
+        if (mIsVideoRecordingSupported) {
+
+            // videos
+            String[] videosProjection = {MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.DATE_TAKEN, MediaStore.Video.VideoColumns.MIME_TYPE};
+            Cursor videoThumbnailsCursor = null;
+
+            try {
+                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        videosProjection, // Which columns to return
+                        null,       // Return all image files
+                        null,
+                        MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC LIMIT " + GALLERY_TABLE_ITEM_SIZE);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## listLatestMedias(): " + e.getLocalizedMessage());
+            }
+
+            if (null != videoThumbnailsCursor) {
+                int timeIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                int idIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+                int mimeTypeIndex = videoThumbnailsCursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE);
+
+                if (videoThumbnailsCursor.moveToFirst()) {
+                    do {
+                        try {
+                            MediaStoreMedia recentMedia = new MediaStoreMedia();
+                            recentMedia.mIsVideo = true;
+
+                            String id = videoThumbnailsCursor.getString(idIndex);
+                            String dateAsString = videoThumbnailsCursor.getString(timeIndex);
+                            recentMedia.mMimeType = videoThumbnailsCursor.getString(mimeTypeIndex);
+                            recentMedia.mCreationTime = Long.parseLong(dateAsString);
+
+                            recentMedia.mThumbnail = MediaStore.Video.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Video.Thumbnails.MINI_KIND, null);
+                            recentMedia.mFileUri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+
+                            mediasList.add(recentMedia);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## listLatestMedias(): Msg=" + e.getMessage());
+                        }
+                    } while (videoThumbnailsCursor.moveToNext());
+                }
+                videoThumbnailsCursor.close();
+            }
+
+            Collections.sort(mediasList, new Comparator<MediaStoreMedia>() {
+                @Override
+                public int compare(MediaStoreMedia r1, MediaStoreMedia r2) {
+                    long t1 = r1.mCreationTime;
+                    long t2 = r2.mCreationTime;
+
+                    // sort from the most recent
+                    return -(t1 < t2 ? -1 : (t1 == t2 ? 0 : 1));
+                }
+            });
+        }
+
+        if (mediasList.size() > GALLERY_TABLE_ITEM_SIZE) {
+            Log.d(LOG_TAG, "## listLatestMedias(): Added count=" + GALLERY_TABLE_ITEM_SIZE);
+            return mediasList.subList(0, GALLERY_TABLE_ITEM_SIZE);
+        } else {
+            Log.d(LOG_TAG, "## listLatestMedias(): Added count=" + mediasList.size());
+            return mediasList;
+        }
+    }
+
+    /**
+     * Provides the number of medias which will be displayed in the gallery.
+     * The maximum value is GALLERY_TABLE_ITEM_SIZE.
+     * @return the number of displayed medias
+     */
+    private int getMediaStoreMediasCount(){
+        int retValue = 0;
+        Cursor imageThumbnailsCursor = null;
+
+        try {
+            imageThumbnailsCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    null, // no projection
+                    null,
+                    null,
+                    null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
+        }
+
+        if (null != imageThumbnailsCursor) {
+            retValue += imageThumbnailsCursor.getCount();
+            imageThumbnailsCursor.close();
+        }
+
+        if (mIsVideoRecordingSupported) {
+            Cursor videoThumbnailsCursor = null;
+
+            try {
+                videoThumbnailsCursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        null, // no projection
+                        null,
+                        null,
+                        null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## getMediaStoreImageCount() Exception Msg=" + e.getMessage());
+            }
+
+            if (null != videoThumbnailsCursor) {
+                retValue += videoThumbnailsCursor.getCount();
+                videoThumbnailsCursor.close();
+            }
+        }
+
+        return Math.min(retValue, GALLERY_TABLE_ITEM_SIZE);
+    }
+
+    /**
+     * Computes the gallery rows count.
+     * @return teh gallery rows count.
+     */
+    private int getGalleryRowsCount() {
+        int rowsCountRetVal;
+
+        mGalleryImageCount = getMediaStoreMediasCount();
+        if((0==mGalleryImageCount) || (0 != (mGalleryImageCount%GALLERY_COLUMN_COUNT))) {
+            rowsCountRetVal = (mGalleryImageCount/GALLERY_COLUMN_COUNT) +1;
+        } else {
+            rowsCountRetVal = mGalleryImageCount/GALLERY_COLUMN_COUNT;
+            mGalleryImageCount--; // save one cell for the folder icon
+        }
+
+        return rowsCountRetVal;
+    }
+
+    /**
+     * Populate the gallery view with the image/video contents.
+     */
+    private void refreshRecentsMediasList() {
+        // start the progress bar and disable the take button
+        final RelativeLayout progressBar = (RelativeLayout)(findViewById(R.id.medias_preview_progress_bar_layout));
+        progressBar.setVisibility(View.VISIBLE);
+        mTakeImageView.setEnabled(false);
+        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_HALF);
+
+        mMediaStoreMediasList.clear();
+
+        // run away from the UI thread
+        mFileHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // populate the image thumbnails from multimedia store
+                final List<MediaStoreMedia> medias = listLatestMedias();
+
+                // update the UI part
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMediaStoreMediasList.addAll(medias);
+                        buildGalleryTableLayout();
+                        progressBar.setVisibility(View.GONE);
+                        mTakeImageView.setEnabled(true);
+                        mTakeImageView.setAlpha(CommonActivityUtils.UTILS_OPACITY_NONE);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Build the image gallery widget programmatically.
+     */
+    private void buildGalleryTableLayout() {
+        final int CELL_MARGIN = 2;
+        TableRow tableRow = null;
+        RecentMediaLayout recentMediaView;
+        int tableLayoutWidth;
+        int cellWidth;
+        int cellHeight;
+        int itemIndex;
+        ImageView.ScaleType scaleType;
+        TableRow.LayoutParams rawLayoutParams;
+        TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
+
+        if(null != mGalleryTableLayout) {
+            mGalleryTableLayout.removeAllViews();
+            mGalleryTableLayout.setBackgroundColor(Color.WHITE);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            tableLayoutWidth = metrics.widthPixels;
+
+            // raw layout configuration
+            cellWidth = (tableLayoutWidth -(GALLERY_COLUMN_COUNT * CELL_MARGIN)) / GALLERY_COLUMN_COUNT;
+            cellHeight = cellWidth;
+
+            if (0 == tableLayoutWidth) {
+                // fall back
+                scaleType = ImageView.ScaleType.FIT_XY;
+                rawLayoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            } else {
+                scaleType = ImageView.ScaleType.FIT_CENTER;
+                rawLayoutParams = new TableRow.LayoutParams(cellWidth, cellHeight);
+            }
+            rawLayoutParams.setMargins(CELL_MARGIN, 0, CELL_MARGIN, 0);
+            tableLayoutParams.setMargins(CELL_MARGIN, CELL_MARGIN, CELL_MARGIN, CELL_MARGIN);
+
+
+            MediaStoreMedia recentMedia;
+            // loop to produce full raws filled in, with an icon folder in last cell
+            for(itemIndex=0; itemIndex<mGalleryImageCount; itemIndex++) {
+                try {
+                    recentMedia = mMediaStoreMediasList.get(itemIndex);
+                } catch (IndexOutOfBoundsException e) {
+                    recentMedia = null;
+                }
+
+                // detect raw is complete
+                if (0 == (itemIndex % GALLERY_COLUMN_COUNT)) {
+                    if (null != tableRow) {
+                        mGalleryTableLayout.addView(tableRow, tableLayoutParams);
+                    }
+                    tableRow = new TableRow(this);
+                }
+
+                // build the content layout for each cell
+                if(null != recentMedia) {
+                    recentMediaView = new RecentMediaLayout(this);
+
+                    if (null != recentMedia.mThumbnail) {
+                        recentMediaView.setThumbnail(recentMedia.mThumbnail);
+                    } else {
+                        recentMediaView.setThumbnailByUri(recentMedia.mFileUri);
+                    }
+
+                    recentMediaView.setBackgroundColor(Color.BLACK);
+                    recentMediaView.setThumbnailScaleType(scaleType);
+                    final MediaStoreMedia finalRecentMedia = recentMedia;
+
+                    recentMediaView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!finalRecentMedia.mIsVideo) {
+                                onClickGalleryImage(finalRecentMedia);
+                            } else {
+                                mVideoUri = finalRecentMedia.mFileUri;
+                                startVideoPreviewVideo(finalRecentMedia.mThumbnail);
+                            }
+                        }
+                    });
+
+                    // set image logo: gif, image or video
+                    recentMediaView.setIsVideo(recentMedia.mIsVideo);
+
+                    if (!recentMedia.mIsVideo) {
+                        recentMediaView.enableGifLogoImage(MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
+                        recentMediaView.enableMediaTypeLogoImage(!MIME_TYPE_IMAGE_GIF.equals(recentMedia.mMimeType));
+                    }
+
+                    if (null != tableRow) {
+                        tableRow.addView(recentMediaView, rawLayoutParams);
+                    }
+                }
+            }
+
+            // add the icon folder in last cell
+            recentMediaView = new RecentMediaLayout(this);
+            recentMediaView.setThumbnailScaleType(scaleType);
+            recentMediaView.setThumbnailByResource(R.drawable.ic_material_folder_green_vector);
+            recentMediaView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openFileExplorer();
+                }
+            });
+
+            if(0 == itemIndex) {
+                tableRow = new TableRow(this);
+            }
+
+            if(null != tableRow)
+                tableRow.addView(recentMediaView, rawLayoutParams);
+
+            // do not forget to add last row
+            if (null != tableRow)
+                mGalleryTableLayout.addView(tableRow, tableLayoutParams);
+
+        } else {
+            Log.w(LOG_TAG, "## buildGalleryImageTableLayout(): failure - TableLayout widget missing");
+        }
+    }
+
+    /**
+     * The user clicked on a gallery image
+     */
+    private void onClickGalleryImage(final MediaStoreMedia aMediaItem){
+        if (null != mCamera) {
+            mCamera.stopPreview();
+        }
+
+        // add the selected image to be returned by the activity
+        mSelectedGalleryImage = aMediaItem;
+
+        // display the image as preview
+        if ((null != aMediaItem.mThumbnail) && !mIsAvatarMode) {
+            updateUiConfiguration(UI_SHOW_TAKEN_IMAGE, IMAGE_ORIGIN_GALLERY);
+            mImagePreviewImageView.setImageBitmap(aMediaItem.mThumbnail);
+            // save bitmap to speed up UI restore (life cycle)
+            VectorApp.setSavedCameraImagePreview(aMediaItem.mThumbnail);
+        } else if (null != aMediaItem.mFileUri) {
+            // fall back in case bitmap is not available (unlikely..)
+            displayImagePreview(null, null, aMediaItem.mFileUri, IMAGE_ORIGIN_GALLERY);
+        } else {
+            Log.e(LOG_TAG, "## onClickGalleryImage(): no image to display");
+        }
+
+        // save the uri to be accessible for life cycle management
+        mImagePreviewImageView.setTag(aMediaItem.mFileUri);
+    }
+
+    /**
+     * Return the taken image from the gallery to the calling activity.
+     * This method returns to the calling activity.
+     */
+    @SuppressLint("NewApi")
+    private void attachImageFromGallery() {
+
+        Bundle conData = new Bundle();
+        Intent intent = new Intent();
+
+        if (null != mSelectedGalleryImage) {
+            intent.setData(mSelectedGalleryImage.mFileUri);
+        } else {
+            // attach after a screen rotation, the file uri must was saved in the tag
+            Uri uriSavedFromLifeCycle = (Uri) mImagePreviewImageView.getTag();
+
+            if (null != uriSavedFromLifeCycle) {
+                intent.setData(uriSavedFromLifeCycle);
+            }
+        }
+
+        intent.putExtras(conData);
+        setResult(RESULT_OK, intent);
+        // clean footprint in App
+        VectorApp.setSavedCameraImagePreview(null);
+        finish();
     }
 }
