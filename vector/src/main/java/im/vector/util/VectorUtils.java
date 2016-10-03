@@ -365,8 +365,14 @@ public class VectorUtils {
             int chars = 1;
             char first = name.charAt(idx);
 
+            // LEFT-TO-RIGHT MARK
+            if ((name.length() >= 2) && (0x200e == first)) {
+                idx++;
+                first = name.charAt(idx);
+            }
+
             // check if it’s the start of a surrogate pair
-            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > 2)) {
+            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > (idx + 1))) {
                 char second = name.charAt(idx+1);
                 if (second >= 0xDC00 && second <= 0xDFFF) {
                     chars++;
