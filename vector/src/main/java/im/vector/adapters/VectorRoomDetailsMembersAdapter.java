@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediasCache;
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import im.vector.R;
@@ -281,6 +283,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
 
         final Handler uiHandler = new Handler();
+        final String fPattern = mSearchPattern;
 
         Thread t = new Thread(new Runnable() {
             public void run() {
@@ -340,12 +343,43 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
+                final MXDataHandler fDataHandler = mSession.getDataHandler();
+
                 // Comparator to order members alphabetically
                 final Comparator<ParticipantAdapterItem> comparator = new Comparator<ParticipantAdapterItem>() {
+
+                    private HashMap<String, User> usersMap = new HashMap<>();
+
+                    /**
+                     * Get an user snapshot from an user id.
+                     * @param userId the user id to find out
+                     * @return teh user if it exists
+                     */
+                    private User getUser(String userId) {
+                        User user = null;
+
+                        if (null != userId) {
+                            user = usersMap.get(userId);
+
+                            if (null == user) {
+                                user = fDataHandler.getUser(userId);
+
+                                if (null != user) {
+                                    // create a snapshot to avoid error while sorting the list
+                                    // some exceptions could be triggered because of updates.
+                                    user = user.deepCopy();
+                                    usersMap.put(userId, user);
+                                }
+                            }
+                        }
+
+                        return user;
+                    }
+
                     @Override
                     public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-                        User userA = mSession.getDataHandler().getUser(part1.mUserId);
-                        User userB = mSession.getDataHandler().getUser(part2.mUserId);
+                        User userA = getUser(part1.mUserId);
+                        User userB = getUser(part2.mUserId);
 
                         String userADisplayName = part1.getComparisonDisplayName();
                         String userBDisplayName = part2.getComparisonDisplayName();
@@ -415,37 +449,34 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                     }
                 };
 
-                long t0 = System.currentTimeMillis();
-
                 // create "members present in the room" list
                 try {
                     Collections.sort(actualParticipants, comparator);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## updateRoomMembersDataModel failed while sorting " + e.getMessage());
 
-                    // most of the sort exception are triggered with
-                    //  java.lang.IllegalArgumentException: Comparison method violates its general contract!
-                    // it is triggered because the presences are updated while sorting.
-                    uiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateRoomMembersDataModel(aSearchListener);
-                        }
-                    });
+                    if (TextUtils.equals(fPattern, mSearchPattern)) {
+
+                        // most of the sort exception are triggered with
+                        //  java.lang.IllegalArgumentException: Comparison method violates its general contract!
+                        // it is triggered because the presences are updated while sorting.
+                        uiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateRoomMembersDataModel(aSearchListener);
+                            }
+                        });
+                    }
 
                     return;
                 }
 
-                long d0 = System.currentTimeMillis() - t0;
-
                 presentMembersList.addAll(actualParticipants);
-
-                final String fPattern = mSearchPattern;
 
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        // tes if the pattern has been updated while searching the items.
+                        // test if the pattern has been updated while searching the items.
                         if (TextUtils.equals(mSearchPattern, fPattern)) {
                             mDisplayNamesList = displayNamesList;
                             mRoomMembersListByGroupPosition = roomMembersListByGroupPosition;
