@@ -113,6 +113,8 @@ import java.util.regex.Pattern;
  */
 public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener, MatrixMessageListFragment.IOnScrollListener {
 
+    /** the session **/
+    public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
     /** the room id (string) **/
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
     /** the event id (universal link management - string) **/
@@ -462,7 +464,7 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
             return;
         }
 
-        mSession = getSession(intent);
+        mSession = MXCActionBarActivity.getSession(this, intent);
 
         if (mSession == null) {
             Log.e(LOG_TAG, "No MXSession.");

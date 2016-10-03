@@ -321,6 +321,25 @@ public class Matrix {
     }
 
     /**
+     * Tell if there is a corrupted store in the active session/
+     * @param context the application context
+     * @return true if there is a corrupted store.
+     */
+    public static boolean hasCorruptedStore(Context context) {
+        boolean hasCorruptedStore = false;
+        ArrayList<MXSession> sessions = Matrix.getMXSessions(context);
+
+        if (null != sessions) {
+            for (MXSession session : sessions) {
+                if (session.isAlive()) {
+                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
+                }
+            }
+        }
+        return hasCorruptedStore;
+    }
+
+    /**
      * Retrieve the default session if one exists.
      *
      * The default session may be user-configured, or it may be the last session the user was using.
