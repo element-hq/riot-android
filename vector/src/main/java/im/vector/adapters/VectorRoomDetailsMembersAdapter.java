@@ -19,7 +19,6 @@ package im.vector.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +46,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
