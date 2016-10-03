@@ -50,6 +50,7 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RequestEmailValidationResponse;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
@@ -67,6 +68,8 @@ import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import retrofit.http.Body;
+import retrofit.http.POST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -768,19 +771,15 @@ public class LoginActivity extends MXCActionBarActivity {
 
         enableLoadingScreen(true);
 
-        final ThreePid thirdPid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
-
-        ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
+        ProfileRestClient pRest = new ProfileRestClient(hsConfig);
 
         // privacy
         //Log.d(LOG_TAG, "onForgotPasswordClick for email " + email);
         Log.d(LOG_TAG, "onForgotPasswordClick");
 
-        // check if there is an account linked to this email
-        // 3Pid does the job
-        thirdPid.requestValidationToken(client, null, new ApiCallback<Void>() {
+        pRest.forgetPassword(email, new ApiCallback<ThreePid>() {
             @Override
-            public void onSuccess(Void info) {
+            public void onSuccess(ThreePid thirdPid) {
                 if (mMode == MODE_FORGOT_PASSWORD) {
                     Log.d(LOG_TAG, "onForgotPasswordClick : requestValidationToken succeeds");
 
