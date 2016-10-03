@@ -55,6 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.commonsware.cwac.anddown.AndDown;
+import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -110,7 +111,7 @@ import java.util.regex.Pattern;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener, MatrixMessageListFragment.IOnScrollListener {
+public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener, MatrixMessageListFragment.IOnScrollListener {
 
     /** the room id (string) **/
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
@@ -481,6 +482,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             Log.d(LOG_TAG, "onCreate : Going to splash screen");
             return;
         }
+
+        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
         // bind the widgets of the room header view. The room header view is displayed by
         // clicking on the title of the action bar
