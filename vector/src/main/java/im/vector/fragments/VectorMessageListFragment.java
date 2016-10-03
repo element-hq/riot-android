@@ -76,6 +76,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -766,12 +767,22 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onURLClick(Uri uri) {
         if (null != uri) {
-            if (null != VectorUniversalLinkReceiver.parseUniversalLink(uri)) {
-                // pop to the home activity
-                Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
-                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
-                getActivity().startActivity(intent);
+            HashMap<String, String> universalParams = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+
+            if (null != universalParams) {
+                // open the member sheet from the current activity
+                if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
+                    Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                    roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
+                    roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+                } else {
+                    // pop to the home activity
+                    Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
+                    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
+                    getActivity().startActivity(intent);
+                }
             } else {
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
