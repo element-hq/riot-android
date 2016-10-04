@@ -793,15 +793,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                     mForgotPid = new HashMap<>();
                     mForgotPid.put("client_secret", thirdPid.clientSecret);
-                    String identityServerHost = getIdentityServerUrl();
-
-                    if (identityServerHost.startsWith("http://")) {
-                        identityServerHost = identityServerHost.substring("http://".length());
-                    } else if (identityServerHost.startsWith("https://")) {
-                        identityServerHost = identityServerHost.substring("https://".length());
-                    }
-
-                    mForgotPid.put("id_server", identityServerHost);
+                    mForgotPid.put("id_server", hsConfig.getIdentityServerUri().getHost());
                     mForgotPid.put("sid", thirdPid.sid);
                 }
             }
@@ -1810,16 +1802,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 public void onSuccess(ThreePid thirdPid) {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
                         HashMap<String, Object> pidsCredentialsAuth = new HashMap<>();
+
                         pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
-                        String identityServerHost = getIdentityServerUrl();
-
-                        if (identityServerHost.startsWith("http://")) {
-                            identityServerHost = identityServerHost.substring("http://".length());
-                        } else if (identityServerHost.startsWith("https://")) {
-                            identityServerHost = identityServerHost.substring("https://".length());
-                        }
-
-                        pidsCredentialsAuth.put("id_server", identityServerHost);
+                        pidsCredentialsAuth.put("id_server", hsConfig.getIdentityServerUri().getHost());
                         pidsCredentialsAuth.put("sid", thirdPid.sid);
                         RegistrationParams params = new RegistrationParams();
 
