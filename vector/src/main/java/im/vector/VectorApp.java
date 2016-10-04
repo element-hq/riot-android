@@ -38,6 +38,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
+import im.vector.view.MatrixMarkdownView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,6 +95,11 @@ public class VectorApp extends Application {
      * Monitor the created activities to detect memory leaks.
      */
     private final ArrayList<String> mCreatedActivities = new ArrayList<>();
+
+    /**
+     * Markdown parser
+     */
+    public MatrixMarkdownView mMatrixMarkdownView;
 
     /**
      * @return the current instance
@@ -175,6 +181,8 @@ public class VectorApp extends Application {
 
         // detect if the headset is plugged / unplugged.
         registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
+        mMatrixMarkdownView = new MatrixMarkdownView(this);
     }
 
     /**
