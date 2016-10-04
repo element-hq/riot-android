@@ -192,8 +192,8 @@ public class VectorApp extends Application {
      * @param text the text to parse
      * @param listener the result listener
      */
-    public static void parseMarkDown(String text, VectorMarkdownParser.IVectorMarkdownParserListener listener) {
-        getInstance().mMarkdownParser.parseMarkDown(text, listener);
+    public static void markdownToHtml(String text, VectorMarkdownParser.IVectorMarkdownParserListener listener) {
+        getInstance().mMarkdownParser.markdownToHtml(text, listener);
     }
 
     /**

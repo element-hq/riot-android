@@ -65,7 +65,7 @@ public class VectorMarkdownParser extends WebView {
      * @param markdownText the text to parse
      * @param listener the parser listener
      */
-    public void parseMarkDown(final String markdownText, final IVectorMarkdownParserListener listener) {
+    public void markdownToHtml(final String markdownText, final IVectorMarkdownParserListener listener) {
         // sanity check
         if (null == listener) {
             return;
@@ -90,7 +90,7 @@ public class VectorMarkdownParser extends WebView {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             loadUrl(String.format("javascript:convertToHtml('%s')", escapeText(markdownText)));
         } else {
-            evaluateJavascript(String.format("convertToHtml('%s')", markdownText), null);
+            evaluateJavascript(String.format("convertToHtml('%s')", escapeText(markdownText)), null);
         }
     }
 
