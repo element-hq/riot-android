@@ -43,12 +43,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:background="@color/room_background"
         android:layout_below="@+id/room_action_bar">
         
         <View
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="16dp">
         </View>
 
@@ -58,12 +57,16 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="A text here"
-            android:textColor="@color/vector_text_black_color"/>
+            android:textColor="@color/vector_text_black_color"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
 
         <RelativeLayout
             android:id="@+id/preview_actions_bar"
             android:layout_width="match_parent"
-            android:layout_height="65dp">
+            android:layout_height="65dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <Button
                 android:id="@+id/button_join_room"
@@ -91,6 +94,8 @@
             android:id="@+id/room_preview_subinvitation_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:textSize="14sp"
             android:text=""
             android:textColor="@color/vector_silver_color"/>
