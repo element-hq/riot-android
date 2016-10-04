@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 /**
@@ -52,12 +51,7 @@ public class VectorMarkdownParser extends WebView {
         // java <-> web interface
         addJavascriptInterface(mMarkDownWebAppInterface, "Android");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            getSettings().setAllowUniversalAccessFromFileURLs(true);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
+        getSettings().setAllowUniversalAccessFromFileURLs(true);
     }
 
     /**
