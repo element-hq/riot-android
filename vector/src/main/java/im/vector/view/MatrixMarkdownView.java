@@ -67,7 +67,7 @@ public class MatrixMarkdownView extends WebView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initialize() {
-        loadUrl("file:///android_asset/html/preview.html");
+        loadUrl("file:///android_asset/html/markdown.html");
 
         // allow java script
         getSettings().setJavaScriptEnabled(true);
@@ -106,15 +106,9 @@ public class MatrixMarkdownView extends WebView {
         mMarkDownWebAppInterface.initParams(markdownText, listener);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            loadUrl(String.format("javascript:preview('%s')", escapeForText(markdownText)));
+            loadUrl(String.format("javascript:convertToHtml('%s')", escapeText(markdownText)));
         } else {
-
-            evaluateJavascript(String.format("preview('%s')", markdownText), new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-                    MatrixMarkdownView.this.loadUrl("javascript:getValue()");
-                }
-            });
+            evaluateJavascript(String.format("convertToHtml('%s')", markdownText), null);
         }
     }
 
@@ -123,7 +117,7 @@ public class MatrixMarkdownView extends WebView {
      * @param text the text to escape
      * @return the escaped text
      */
-    private  static String escapeForText(String text) {
+    private  static String escapeText(String text) {
         text = text.replace("\n", "\\\\n");
         text = text.replace("'", "\\\'");
         text = text.replace("\r", "");
@@ -153,7 +147,7 @@ public class MatrixMarkdownView extends WebView {
         }
 
         @JavascriptInterface
-        public void wSalut(String HTMLText) {
+        public void wOnParse(String HTMLText) {
             if (!TextUtils.isEmpty(HTMLText)) {
                 HTMLText = HTMLText.trim();
 
