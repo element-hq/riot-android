@@ -15,6 +15,7 @@
  */
 
 package im.vector;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
@@ -38,7 +39,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
-import im.vector.view.MatrixMarkdownView;
+import im.vector.util.VectorMarkdownParser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class VectorApp extends Application {
     /**
      * Markdown parser
      */
-    public MatrixMarkdownView mMatrixMarkdownView;
+    public VectorMarkdownParser mMarkdownParser;
 
     /**
      * @return the current instance
@@ -182,7 +183,17 @@ public class VectorApp extends Application {
         // detect if the headset is plugged / unplugged.
         registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
-        mMatrixMarkdownView = new MatrixMarkdownView(this);
+        // create the markdown parser
+        mMarkdownParser = new VectorMarkdownParser(this);
+    }
+
+    /**
+     * Parse a markdown text
+     * @param text the text to parse
+     * @param listener the result listener
+     */
+    public static void parseMarkDown(String text, VectorMarkdownParser.IVectorMarkdownParserListener listener) {
+        getInstance().mMarkdownParser.parseMarkDown(text, listener);
     }
 
     /**

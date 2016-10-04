@@ -54,7 +54,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.commonsware.cwac.anddown.AndDown;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.matrix.androidsdk.MXSession;
@@ -93,21 +92,18 @@ import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.VectorCallSoundManager;
+import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
-import im.vector.view.MatrixMarkdownView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Pattern;
 
 /**
  * Displays a single room with messages.
@@ -154,8 +150,6 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
     private static final int TAKE_IMAGE_REQUEST_CODE = 1;
     public static final int GET_MENTION_REQUEST_CODE = 2;
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
-
-    private static final AndDown mAndDown = new AndDown();
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
@@ -1272,44 +1266,17 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
     public void cancelSelectionMode() {
         mVectorMessageListFragment.cancelSelectionMode();
     }
-
-    private static final Pattern mHashPattern = Pattern.compile("(#+)[^( |#)]", Pattern.CASE_INSENSITIVE);
-
-    /**
-     * The antdown parser does not manage as expected the # to display header.
-     * It should only be displayed when there is a pending space after the # char.
-     * @param markdownString the text to check.
-     * @return the filtered string.
-     */
-    private static String checkHashes(String markdownString) {
-        if (TextUtils.isEmpty(markdownString) || !markdownString.contains("#")) {
-            return markdownString;
-        }
-
-        // search pattern with starting with # and finishing with # or space
-        // replace first character (#+) i.e #
-        return mHashPattern.matcher(markdownString).replaceAll("\\\\$0");
-    }
-
     /**
      * Send the editText text.
      */
     private void sendTextMessage() {
-        String body = mEditText.getText().toString().trim();
-
-        VectorApp.getInstance().mMatrixMarkdownView.setMarkDownText(body, new MatrixMarkdownView.IMatrixMarkdownViewListener() {
+        VectorApp.parseMarkDown(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
             @Override
-            public void onMarkdownParsed(final String text, final String HTMLText) {
+            public void onMarkdownParsed(String text, String HTMLText) {
+                enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-                VectorRoomActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-                        sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
-                        mEditText.setText("");
-                    }
-                });
+                sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
+                mEditText.setText("");
             }
         });
     }

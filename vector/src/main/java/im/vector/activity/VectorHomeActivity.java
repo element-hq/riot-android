@@ -64,7 +64,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.BugReporter;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorUtils;
-import im.vector.view.MatrixMarkdownView;
 import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
@@ -74,7 +73,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create

@@ -1,45 +1,23 @@
-package im.vector.view;
+package im.vector.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+/**
+ * Markdown parser.
+ * This class uses a webview.
+ */
+public class VectorMarkdownParser extends WebView {
+    private static String LOG_TAG = "VMarkdownParser";
 
-import org.matrix.androidsdk.call.IMXCall;
-import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.model.Event;
-import org.matrix.androidsdk.rest.model.MatrixError;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.acl.LastOwnerException;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class MatrixMarkdownView extends WebView {
-    private static String LOG_TAG = "MMarkdownView";
-
-    public interface IMatrixMarkdownViewListener {
+    public interface IVectorMarkdownParserListener {
         /**
          * A markdown text has been parsed.
          * @param text the text to parse.
@@ -51,17 +29,16 @@ public class MatrixMarkdownView extends WebView {
     /** Java <-> JS interface **/
     private MarkDownWebAppInterface mMarkDownWebAppInterface = new MarkDownWebAppInterface();
 
-    public MatrixMarkdownView(Context context) {
+    public VectorMarkdownParser(Context context) {
         this(context, null);
     }
 
-    public MatrixMarkdownView(Context context, AttributeSet attrs) {
+    public VectorMarkdownParser(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MatrixMarkdownView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VectorMarkdownParser(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         initialize();
     }
 
@@ -84,10 +61,12 @@ public class MatrixMarkdownView extends WebView {
     }
 
     /**
-     *
-     * @param markdownText
+     * Parse the MarkDown text.
+     * @param markdownText the text to parse
+     * @param listener the parser listener
      */
-    public void setMarkDownText(final String markdownText, final IMatrixMarkdownViewListener listener) {
+    public void parseMarkDown(final String markdownText, final IVectorMarkdownParserListener listener) {
+        // sanity check
         if (null == listener) {
             return;
         }
@@ -98,13 +77,16 @@ public class MatrixMarkdownView extends WebView {
             text = markdownText.trim();
         }
 
+        // empty text ?
         if (TextUtils.isEmpty(text)) {
+            // nothing to do
             listener.onMarkdownParsed(markdownText, text);
             return;
         }
 
         mMarkDownWebAppInterface.initParams(markdownText, listener);
 
+        // call the javascript method
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             loadUrl(String.format("javascript:convertToHtml('%s')", escapeText(markdownText)));
         } else {
@@ -134,14 +116,14 @@ public class MatrixMarkdownView extends WebView {
         /**
          * The parser listener
          */
-        private IMatrixMarkdownViewListener mListener;
+        private IVectorMarkdownParserListener mListener;
 
         /**
          * Init the search params.
          * @param textToParse the text to parse
          * @param listener the listener.
          */
-        public void initParams(String textToParse, IMatrixMarkdownViewListener listener) {
+        public void initParams(String textToParse, IVectorMarkdownParserListener listener) {
             mTextToParse = textToParse;
             mListener = listener;
         }
@@ -166,7 +148,7 @@ public class MatrixMarkdownView extends WebView {
                 try {
                     mListener.onMarkdownParsed(mTextToParse, HTMLText);
                 } catch (Exception e) {
-
+                    Log.e(LOG_TAG, "## wOnParse() " + e.getMessage());
                 }
             }
         }
