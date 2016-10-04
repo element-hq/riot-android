@@ -54,7 +54,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.commonsware.cwac.anddown.AndDown;
 import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.matrix.androidsdk.MXSession;
@@ -93,6 +92,7 @@ import im.vector.util.ResourceUtils;
 import im.vector.util.SharedDataItem;
 import im.vector.util.SlashComandsParser;
 import im.vector.util.VectorCallSoundManager;
+import im.vector.util.VectorMarkdownParser;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
 import im.vector.view.VectorOngoingConferenceCallView;
@@ -100,13 +100,10 @@ import im.vector.view.VectorPendingCallView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Pattern;
 
 /**
  * Displays a single room with messages.
@@ -153,8 +150,6 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
     private static final int TAKE_IMAGE_REQUEST_CODE = 1;
     public static final int GET_MENTION_REQUEST_CODE = 2;
     private static final int REQUEST_ROOM_AVATAR_CODE = 3;
-
-    private static final AndDown mAndDown = new AndDown();
 
     private VectorMessageListFragment mVectorMessageListFragment;
     private MXSession mSession;
@@ -1271,87 +1266,23 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
     public void cancelSelectionMode() {
         mVectorMessageListFragment.cancelSelectionMode();
     }
-
-    private static final Pattern mHashPattern = Pattern.compile("(#+)[^( |#)]", Pattern.CASE_INSENSITIVE);
-
-    /**
-     * The antdown parser does not manage as expected the # to display header.
-     * It should only be displayed when there is a pending space after the # char.
-     * @param markdownString the text to check.
-     * @return the filtered string.
-     */
-    private static String checkHashes(String markdownString) {
-        if (TextUtils.isEmpty(markdownString) || !markdownString.contains("#")) {
-            return markdownString;
-        }
-
-        // search pattern with starting with # and finishing with # or space
-        // replace first character (#+) i.e #
-        return mHashPattern.matcher(markdownString).replaceAll("\\\\$0");
-    }
-
     /**
      * Send the editText text.
      */
     private void sendTextMessage() {
-        String body = mEditText.getText().toString().trim();
-
-        // markdownToHtml does not manage properly urls with underscores
-        // so we replace the urls by a tmp value before parsing it.
-        List<String> urls = VectorUtils.listURLs(body);
-        List<String> tmpUrlsValue = new ArrayList<>();
-
-        String modifiedBody = body;
-
-        if (urls.size() > 0) {
-            // sort by length -> largest before
-            Collections.sort(urls, new Comparator<String>() {
-                @Override
-                public int compare(String str1, String str2) {
-                    return str2.length() - str1.length();
-                }
-            });
-
-            for(String url : urls) {
-                String tmpValue = "url" + Math.abs(url.hashCode());
-
-                modifiedBody = modifiedBody.replace(url, tmpValue);
-                tmpUrlsValue.add(tmpValue);
+        VectorApp.markdownToHtml(mEditText.getText().toString().trim(), new VectorMarkdownParser.IVectorMarkdownParserListener() {
+            @Override
+            public void onMarkdownParsed(final String text, final String HTMLText) {
+                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
+                        sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
+                        mEditText.setText("");
+                    }
+                });
             }
-        }
-
-        String html = mAndDown.markdownToHtml(checkHashes(modifiedBody));
-
-        if (null != html) {
-            for(int index = 0; index < tmpUrlsValue.size(); index++) {
-                html = html.replace(tmpUrlsValue.get(index), urls.get(index));
-            }
-
-            html = html.trim();
-
-            if (html.startsWith("<p>")) {
-                html = html.substring("<p>".length());
-            }
-
-            if (html.endsWith("</p>\n")) {
-                html = html.substring(0, html.length() - "</p>\n".length());
-            } else if (html.endsWith("</p>")) {
-                html = html.substring(0, html.length() - "</p>".length());
-            }
-
-            if (TextUtils.equals(html, body)) {
-                html = null;
-            } else {
-                // remove the markdowns
-                body = Html.fromHtml(html).toString();
-            }
-        }
-
-        // hide the header room
-        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        sendMessage(body, html, Message.FORMAT_MATRIX_HTML);
-        mEditText.setText("");
+        });
     }
 
     /**

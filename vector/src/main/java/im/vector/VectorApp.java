@@ -15,6 +15,7 @@
  */
 
 package im.vector;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import im.vector.services.EventStreamService;
 import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
+import im.vector.util.VectorMarkdownParser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,6 +96,11 @@ public class VectorApp extends Application {
      * Monitor the created activities to detect memory leaks.
      */
     private final ArrayList<String> mCreatedActivities = new ArrayList<>();
+
+    /**
+     * Markdown parser
+     */
+    public VectorMarkdownParser mMarkdownParser;
 
     /**
      * @return the current instance
@@ -175,6 +182,18 @@ public class VectorApp extends Application {
 
         // detect if the headset is plugged / unplugged.
         registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
+        // create the markdown parser
+        mMarkdownParser = new VectorMarkdownParser(this);
+    }
+
+    /**
+     * Parse a markdown text
+     * @param text the text to parse
+     * @param listener the result listener
+     */
+    public static void markdownToHtml(String text, VectorMarkdownParser.IVectorMarkdownParserListener listener) {
+        getInstance().mMarkdownParser.markdownToHtml(text, listener);
     }
 
     /**
