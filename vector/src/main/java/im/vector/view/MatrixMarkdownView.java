@@ -37,75 +37,144 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MatrixMarkdownView extends WebView {
+    private static String LOG_TAG = "MMarkdownView";
 
-
-  private static String LOG_TAG = "MatrixMarkdownView";
-
-  MarkDownWebAppInterface mMarkDownWebAppInterface = new MarkDownWebAppInterface();
-
-  public MatrixMarkdownView(Context context) {
-    this(context, null);
-  }
-
-  public MatrixMarkdownView(Context context, AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
-
-  public MatrixMarkdownView(Context context, AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-
-    initialize();
-  }
-
-  @SuppressLint("SetJavaScriptEnabled")
-  private void initialize() {
-    loadUrl("file:///android_asset/html/preview.html");
-
-    // allow java script
-    getSettings().setJavaScriptEnabled(true);
-
-    // java <-> web interface
-    addJavascriptInterface(mMarkDownWebAppInterface, "Android");
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      getSettings().setAllowUniversalAccessFromFileURLs(true);
+    public interface IMatrixMarkdownViewListener {
+        /**
+         * A markdown text has been parsed.
+         * @param text the text to parse.
+         * @param HTMLText the parsed text
+         */
+        void onMarkdownParsed(String text, String HTMLText);
     }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+
+    /** Java <-> JS interface **/
+    private MarkDownWebAppInterface mMarkDownWebAppInterface = new MarkDownWebAppInterface();
+
+    public MatrixMarkdownView(Context context) {
+        this(context, null);
     }
-  }
 
-  /**
-   *
-   * @param markdownText
-   */
-  public void setMarkDownText(String markdownText) {
-    String escMdText = escapeForText(markdownText);
+    public MatrixMarkdownView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-      loadUrl(String.format("javascript:preview('%s')", escMdText));
-    } else {
-      evaluateJavascript(String.format("preview('%s')", escMdText), new ValueCallback<String>() {
-        @Override
-        public void onReceiveValue(String value) {
-          MatrixMarkdownView.this.loadUrl("javascript:getValue()");
+    public MatrixMarkdownView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        initialize();
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initialize() {
+        loadUrl("file:///android_asset/html/preview.html");
+
+        // allow java script
+        getSettings().setJavaScriptEnabled(true);
+
+        // java <-> web interface
+        addJavascriptInterface(mMarkDownWebAppInterface, "Android");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            getSettings().setAllowUniversalAccessFromFileURLs(true);
         }
-      });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
     }
-  }
 
-  private  static String escapeForText(String mdText) {
-    String escText = mdText.replace("\n", "\\\\n");
-    escText = escText.replace("'", "\\\'");
-    escText = escText.replace("\r", "");
-    return escText;
-  }
+    /**
+     *
+     * @param markdownText
+     */
+    public void setMarkDownText(final String markdownText, final IMatrixMarkdownViewListener listener) {
+        if (null == listener) {
+            return;
+        }
 
-  // private class
-  private class MarkDownWebAppInterface {
-    @JavascriptInterface
-    public void wSalut(String anObject) {
-      Log.e("GG", "---> " + anObject);
+        String text = markdownText;
+
+        if (null != markdownText) {
+            text = markdownText.trim();
+        }
+
+        if (TextUtils.isEmpty(text)) {
+            listener.onMarkdownParsed(markdownText, text);
+            return;
+        }
+
+        mMarkDownWebAppInterface.initParams(markdownText, listener);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            loadUrl(String.format("javascript:preview('%s')", escapeForText(markdownText)));
+        } else {
+
+            evaluateJavascript(String.format("preview('%s')", markdownText), new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    MatrixMarkdownView.this.loadUrl("javascript:getValue()");
+                }
+            });
+        }
     }
-  }
+
+    /**
+     * Escape text before converting it.
+     * @param text the text to escape
+     * @return the escaped text
+     */
+    private  static String escapeForText(String text) {
+        text = text.replace("\n", "\\\\n");
+        text = text.replace("'", "\\\'");
+        text = text.replace("\r", "");
+        return text;
+    }
+
+    // private class
+    private class MarkDownWebAppInterface {
+        /**
+         * The text to parse
+         */
+        private String mTextToParse;
+
+        /**
+         * The parser listener
+         */
+        private IMatrixMarkdownViewListener mListener;
+
+        /**
+         * Init the search params.
+         * @param textToParse the text to parse
+         * @param listener the listener.
+         */
+        public void initParams(String textToParse, IMatrixMarkdownViewListener listener) {
+            mTextToParse = textToParse;
+            mListener = listener;
+        }
+
+        @JavascriptInterface
+        public void wSalut(String HTMLText) {
+            if (!TextUtils.isEmpty(HTMLText)) {
+                HTMLText = HTMLText.trim();
+
+                if (HTMLText.startsWith("<p>")) {
+                    HTMLText = HTMLText.substring("<p>".length());
+                }
+
+                if (HTMLText.endsWith("</p>\n")) {
+                    HTMLText = HTMLText.substring(0, HTMLText.length() - "</p>\n".length());
+                } else if (HTMLText.endsWith("</p>")) {
+                    HTMLText = HTMLText.substring(0, HTMLText.length() - "</p>".length());
+                }
+            }
+
+            if (null != mListener) {
+                try {
+                    mListener.onMarkdownParsed(mTextToParse, HTMLText);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    }
 }

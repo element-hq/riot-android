@@ -453,8 +453,6 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // initialize the public rooms list
         PublicRoomsManager.setSession(mSession);
         PublicRoomsManager.refreshPublicRoomsCount(null);
-
-        VectorApp.getInstance().mMatrixMarkdownView.setMarkDownText("### allo la terre");
     }
 
     @Override

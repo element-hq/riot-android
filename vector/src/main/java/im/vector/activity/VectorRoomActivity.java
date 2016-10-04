@@ -95,6 +95,7 @@ import im.vector.util.SlashComandsParser;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorRoomMediasSender;
 import im.vector.util.VectorUtils;
+import im.vector.view.MatrixMarkdownView;
 import im.vector.view.VectorOngoingConferenceCallView;
 import im.vector.view.VectorPendingCallView;
 
@@ -1296,62 +1297,21 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
     private void sendTextMessage() {
         String body = mEditText.getText().toString().trim();
 
-        // markdownToHtml does not manage properly urls with underscores
-        // so we replace the urls by a tmp value before parsing it.
-        List<String> urls = VectorUtils.listURLs(body);
-        List<String> tmpUrlsValue = new ArrayList<>();
+        VectorApp.getInstance().mMatrixMarkdownView.setMarkDownText(body, new MatrixMarkdownView.IMatrixMarkdownViewListener() {
+            @Override
+            public void onMarkdownParsed(final String text, final String HTMLText) {
 
-        String modifiedBody = body;
+                VectorRoomActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
-        if (urls.size() > 0) {
-            // sort by length -> largest before
-            Collections.sort(urls, new Comparator<String>() {
-                @Override
-                public int compare(String str1, String str2) {
-                    return str2.length() - str1.length();
-                }
-            });
-
-            for(String url : urls) {
-                String tmpValue = "url" + Math.abs(url.hashCode());
-
-                modifiedBody = modifiedBody.replace(url, tmpValue);
-                tmpUrlsValue.add(tmpValue);
+                        sendMessage(text, TextUtils.equals(text, HTMLText) ? null : HTMLText, Message.FORMAT_MATRIX_HTML);
+                        mEditText.setText("");
+                    }
+                });
             }
-        }
-
-        String html = mAndDown.markdownToHtml(checkHashes(modifiedBody));
-
-        if (null != html) {
-            for(int index = 0; index < tmpUrlsValue.size(); index++) {
-                html = html.replace(tmpUrlsValue.get(index), urls.get(index));
-            }
-
-            html = html.trim();
-
-            if (html.startsWith("<p>")) {
-                html = html.substring("<p>".length());
-            }
-
-            if (html.endsWith("</p>\n")) {
-                html = html.substring(0, html.length() - "</p>\n".length());
-            } else if (html.endsWith("</p>")) {
-                html = html.substring(0, html.length() - "</p>".length());
-            }
-
-            if (TextUtils.equals(html, body)) {
-                html = null;
-            } else {
-                // remove the markdowns
-                body = Html.fromHtml(html).toString();
-            }
-        }
-
-        // hide the header room
-        enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        sendMessage(body, html, Message.FORMAT_MATRIX_HTML);
-        mEditText.setText("");
+        });
     }
 
     /**
