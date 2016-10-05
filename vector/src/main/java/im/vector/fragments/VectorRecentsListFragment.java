@@ -433,7 +433,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
                         } else if (mAdapter.isDirectoryGroupPosition(groupIndex)) { // public rooms (search mode)
                             isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
-                        } else if (mAdapter.isDirectChatRoomPosition(groupIndex)) { // public rooms (search mode)
+                        } else if (mAdapter.isDirectChatRoomPosition(groupIndex)) { // "People" group
                             isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
                         } else {
                             // unknown group index, just skipp
@@ -514,7 +514,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                     @Override
                     public void run() {
                         Log.d(LOG_TAG, "onLiveEventsChunkProcessed");
-                        if (!mIsPaused && refreshOnChunkEnd && !mIsWaitingTagOrderEcho) {
+                        if (!mIsPaused && refreshOnChunkEnd && !mIsWaitingTagOrderEcho && !mIsWaitingDirectChatEcho) {
                             notifyDataSetChanged();
                         }
 
@@ -610,7 +610,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             @Override
             public void onDirectMessageChatRoomsListUpdate() {
-                onForceRefresh();
+                mIsWaitingDirectChatEcho = false;
+                refreshOnChunkEnd = true;
             }
         };
 
@@ -817,6 +818,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      */
     private void startDragAndDrop() {
         mIsWaitingTagOrderEcho = false;
+        mIsWaitingDirectChatEcho = false;
 
         if (isDragAndDropSupported() && groupIsMovable(mRecentsListView.getTouchedGroupPosition())) {
             // enable the drag and drop mode
@@ -1003,7 +1005,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         if (mAdapter.isInDragAndDropMode()) {
             mSession.getDataHandler().addListener(mEventsListener);
             mAdapter.setIsDragAndDropMode(false);
-            if (!mIsWaitingTagOrderEcho) {
+            if (!mIsWaitingTagOrderEcho && !mIsWaitingDirectChatEcho) {
                 notifyDataSetChanged();
             }
         }
