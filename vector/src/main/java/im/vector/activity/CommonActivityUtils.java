@@ -1201,15 +1201,45 @@ public class CommonActivityUtils {
                     final SimpleApiCallback inviteCallback = new SimpleApiCallback<Void>(this) {
                         @Override
                         public void onSuccess(Void info) {
-                            HashMap<String, Object> params = new HashMap<>();
-                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
-                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
-                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                            // by default, the 1:1 rooms are Direct chat one
+                            aSession.toogleDirectChatRoom(room.getRoomId(), new ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                    HashMap<String, Object> params = new HashMap<>();
+                                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, fSession.getMyUserId());
+                                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
+                                    params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
-                            Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
-                            CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);
+                                    Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onSuccess - start goToRoomPage");
+                                    CommonActivityUtils.goToRoomPage(fromActivity, fSession, params);
 
-                            callback.onSuccess(null);
+                                    callback.onSuccess(null);
+                                }
+
+                                @Override
+                                public void onNetworkError(Exception e) {
+                                    Log.d(LOG_TAG, "## toogleDirectChatRoom(): invite() onNetworkError Msg="+e.getLocalizedMessage());
+                                    if (null != callback) {
+                                        callback.onNetworkError(e);
+                                    }
+                                }
+
+                                @Override
+                                public void onMatrixError(MatrixError e) {
+                                    Log.d(LOG_TAG, "## toogleDirectChatRoom(): invite() onMatrixError Msg="+e.getLocalizedMessage());
+                                    if (null != callback) {
+                                        callback.onMatrixError(e);
+                                    }
+                                }
+
+                                @Override
+                                public void onUnexpectedError(Exception e) {
+                                    Log.d(LOG_TAG, "## toogleDirectChatRoom(): invite() onUnexpectedError Msg="+e.getLocalizedMessage());
+                                    if (null != callback) {
+                                        callback.onUnexpectedError(e);
+                                    }
+                                }
+                            });
                         }
 
                         @Override
