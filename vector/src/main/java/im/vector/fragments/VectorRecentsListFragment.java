@@ -66,6 +66,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private static final String KEY_EXPAND_STATE_ROOMS_GROUP = "KEY_EXPAND_STATE_ROOMS_GROUP";
     private static final String KEY_EXPAND_STATE_LOW_PRIORITY_GROUP = "KEY_EXPAND_STATE_LOW_PRIORITY_GROUP";
     private static final String KEY_EXPAND_STATE_FAVOURITE_GROUP = "KEY_EXPAND_STATE_FAVOURITE_GROUP";
+    private static final String KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP = "KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP";
 
     /**
      * warns the activity when there is a scroll in the recents
@@ -431,6 +432,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
                         } else if (mAdapter.isDirectoryGroupPosition(groupIndex)) { // public rooms (search mode)
                             isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                        } else if (mAdapter.isDirectMessageRoomPosition(groupIndex)) { // public rooms (search mode)
+                            isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
                         } else {
                             // unknown group index, just skipp
                             break;
@@ -467,6 +470,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
             } else if(mAdapter.isDirectoryGroupPosition(aGroupPosition)) { // public rooms (search mode)
                 groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
+            } else if(mAdapter.isDirectMessageRoomPosition(aGroupPosition)) { // Direct messages
+                groupKey = KEY_EXPAND_STATE_DIRECT_MESSAGES_GROUP;
             } else {
                 // unknown group position, just skipp
                 Log.w(LOG_TAG, "## updateGroupExpandStatus(): Failure - Unknown group: "+aGroupPosition);
@@ -599,6 +604,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
             @Override
             public void onJoinRoom(String roomId) {
+                onForceRefresh();
+            }
+
+            @Override
+            public void onDirectMessageRoomsListUpdate() {
                 onForceRefresh();
             }
         };

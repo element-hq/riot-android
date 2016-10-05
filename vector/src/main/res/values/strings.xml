@@ -572,6 +572,7 @@
     <string name="room_recents_join">JOIN</string>
     <string name="room_recents_directory">DIRECTORY</string>
     <string name="room_recents_favourites">FAVORITES</string>
+    <string name="room_recents_pepole">PEOPLE</string>
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
@@ -591,6 +592,7 @@
     <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
+    <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
 
     <!-- home sliding menu -->

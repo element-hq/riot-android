@@ -93,6 +93,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private int mDirectoryGroupPosition = -1;  // public rooms index
     private int mInvitedGroupPosition = -1;  // "Invited" index
     private int mFavouritesGroupPosition = -1;// "Favourites" index
+    private int mDirectMessagesGroupPosition = -1;  // "People" index
     private int mNoTagGroupPosition = -1;    // "Rooms" index
     private int mLowPriorGroupPosition = -1;  // "Low Priority" index
 
@@ -191,6 +192,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
         else if (mInvitedGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_invites);
+        }
+        else if (mDirectMessagesGroupPosition == groupPosition) {
+            retValue = mContext.getResources().getString(R.string.room_recents_pepole);
         }
         else {
             // unknown section
@@ -307,6 +311,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         mFavouritesGroupPosition = -1;
         mNoTagGroupPosition = -1;
         mLowPriorGroupPosition = -1;
+        mDirectMessagesGroupPosition = -1;
 
         if(null != aRoomSummaryCollection) {
 
@@ -315,10 +320,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
+            final List<String> directMessagesRoomIdList = mMxSession.getDirectMessageRoomIdsList();
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
             ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
             ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
+            ArrayList<RoomSummary> directMessagesRoomSummaryList = new ArrayList<>(directMessagesRoomIdList.size());
             ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
             ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
 
@@ -347,6 +354,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             // update the favourites list
                             // the favorites are ordered
                             favouriteRoomSummaryList.set(pos, roomSummary);
+                        } else if (directMessagesRoomIdList.indexOf(roomSummaryId) >= 0) {
+                            directMessagesRoomSummaryList.add(roomSummary);
                         } else if ((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0) {
                             // update the low priority list
                             // the low priority are ordered
@@ -422,6 +431,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 groupIndex++;
             }
 
+            if (0 != directMessagesRoomSummaryList.size()) {
+                summaryListByGroupsRetValue.add(directMessagesRoomSummaryList);
+                mDirectMessagesGroupPosition = groupIndex; // save section index
+                groupIndex++;
+            }
+
             // no tag
             if (0 != noTagRoomSummaryList.size()) {
                 summaryListByGroupsRetValue.add(noTagRoomSummaryList);
@@ -447,6 +462,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 mFavouritesGroupPosition--;
                 mNoTagGroupPosition--;
                 mLowPriorGroupPosition--;
+                mDirectMessagesGroupPosition--;
             }
         }
 
@@ -913,6 +929,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             item.setIcon(null);
         }
 
+        if (mMxSession.getDirectMessageRoomIdsList().indexOf(childRoom.getRoomId()) < 0) {
+            item = popup.getMenu().getItem(3);
+            item.setIcon(null);
+        }
+
         // force to display the icon
         try {
             Field[] fields = popup.getClass().getDeclaredFields();
@@ -1167,5 +1188,14 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     public boolean isLowPriorityRoomPosition(int groupPos) {
         return mLowPriorGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the direct messages one.
+     * @param groupPos the proup position.
+     * @return true if the  group position is the direct messages one.
+     */
+    public boolean isDirectMessageRoomPosition(int groupPos) {
+        return mDirectMessagesGroupPosition == groupPos;
     }
 }
