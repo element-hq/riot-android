@@ -113,6 +113,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     protected int mDestGroupPosition = -1;
     protected int mDestChildPosition = -1;
     protected boolean mIsWaitingTagOrderEcho;
+    protected boolean mIsWaitingDirectChatEcho;
 
     protected int mFirstVisibleIndex = 0;
 
@@ -608,7 +609,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             }
 
             @Override
-            public void onDirectMessageRoomsListUpdate() {
+            public void onDirectMessageChatRoomsListUpdate() {
                 onForceRefresh();
             }
         };
@@ -746,6 +747,66 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         }
     }
 
+    @Override
+    public void onToggleDirectChat(MXSession session, String roomId) {
+        Room room = session.getDataHandler().getRoom(roomId);
+
+        if (null != room) {
+            // show a spinner
+            showWaitingView();
+
+            mIsWaitingDirectChatEcho = true;
+            mSession.getDataHandler().addListener(mEventsListener);
+
+
+            mSession.toogleDirectChatRoom(roomId, new ApiCallback<Void>() {
+                @Override
+                public void onSuccess(Void info) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideWaitingView();
+                                stopDragAndDropMode();
+                            }
+                        });
+                    }
+                }
+
+                private void onFails(final String errorMessage) {
+                    if (null != getActivity()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mIsWaitingDirectChatEcho = false;
+                                hideWaitingView();
+                                stopDragAndDropMode();
+
+                                if (!TextUtils.isEmpty(errorMessage)) {
+                                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onFails(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onFails(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onFails(e.getLocalizedMessage());
+                }
+            });
+        }
+    }
 
     protected boolean isDragAndDropSupported() {
         return true;

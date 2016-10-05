@@ -71,10 +71,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         void onRejectInvitation(MXSession session, String roomId);
 
         void onToggleRoomNotifications(MXSession session, String roomId);
+        void onToggleDirectChat(MXSession session, String roomId);
 
         void moveToFavorites(MXSession session, String roomId);
         void moveToConversations(MXSession session, String roomId);
         void moveToLowPriority(MXSession session, String roomId);
+
 
         void onLeaveRoom(MXSession session, String roomId);
         void onGroupCollapsedNotif(int aGroupPosition);
@@ -320,7 +322,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-            final List<String> directMessagesRoomIdList = mMxSession.getDirectMessageRoomIdsList();
+            final List<String> directMessagesRoomIdList = mMxSession.getDirectChatRoomIdsList();
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
             ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
@@ -929,7 +931,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             item.setIcon(null);
         }
 
-        if (mMxSession.getDirectMessageRoomIdsList().indexOf(childRoom.getRoomId()) < 0) {
+        if (mMxSession.getDirectChatRoomIdsList().indexOf(childRoom.getRoomId()) < 0) {
             item = popup.getMenu().getItem(3);
             item.setIcon(null);
         }
@@ -978,6 +980,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     }
                     case R.id.ic_action_select_remove: {
                         mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
+                        break;
+                    }
+                    case R.id.ic_action_select_direct_chat : {
+                        mListener.onToggleDirectChat(mMxSession, childRoom.getRoomId());
                         break;
                     }
                 }
