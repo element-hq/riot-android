@@ -108,7 +108,7 @@ import java.util.TimerTask;
 /**
  * Displays a single room with messages.
  */
-public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener, MatrixMessageListFragment.IOnScrollListener {
+public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMessageListFragment.IRoomPreviewDataListener, MatrixMessageListFragment.IEventSendingListener, MatrixMessageListFragment.IOnScrollListener {
 
     /** the session **/
     public static final String EXTRA_MATRIX_ID = MXCActionBarActivity.EXTRA_MATRIX_ID;
@@ -480,7 +480,7 @@ public class VectorRoomActivity extends MXSwipeActivity implements MatrixMessage
             return;
         }
 
-        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+        //setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 
         // bind the widgets of the room header view. The room header view is displayed by
         // clicking on the title of the action bar
