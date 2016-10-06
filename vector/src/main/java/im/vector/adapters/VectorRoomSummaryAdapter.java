@@ -540,10 +540,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 groupIndex++;
             }
 
-            if (null != mHistoricalRoomSummaries) {
-                summaryListByGroupsRetValue.add(new ArrayList<>(mHistoricalRoomSummaries));
-            } else {
-                summaryListByGroupsRetValue.add(new ArrayList<RoomSummary>());
+            if (!mIsSearchMode ) {
+                if (null != mHistoricalRoomSummaries) {
+                    summaryListByGroupsRetValue.add(new ArrayList<>(mHistoricalRoomSummaries));
+                } else {
+                    summaryListByGroupsRetValue.add(new ArrayList<RoomSummary>());
+                }
             }
 
             mHistoricalGroupPosition = groupIndex;
