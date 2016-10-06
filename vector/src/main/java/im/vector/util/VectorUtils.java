@@ -236,7 +236,6 @@ public class VectorUtils {
                 RoomMember member = activeMembers.get(0);
 
                 if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-
                     if (!TextUtils.isEmpty(member.getInviterId())) {
                         // extract who invited us to the room
                         displayName = context.getString(R.string.room_displayname_invite_from, roomState.getMemberName(member.getInviterId()));
@@ -247,6 +246,9 @@ public class VectorUtils {
                 else {
                     displayName = context.getString(R.string.room_displayname_no_title);
                 }
+            } else if (room.isHistorical()) {
+                // historical case : the user was the last active user
+                displayName = context.getString(R.string.room_displayname_no_title);
             }
         }
         else if (othersActiveMembers.size() == 1) {

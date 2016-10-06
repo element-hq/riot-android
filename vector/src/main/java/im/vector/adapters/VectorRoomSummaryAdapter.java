@@ -867,7 +867,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // display the room avatar
         avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-        final String roomName = (groupPosition == mHistoricalGroupPosition) ? childRoomSummary.getRoomName() : VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
+        final String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name

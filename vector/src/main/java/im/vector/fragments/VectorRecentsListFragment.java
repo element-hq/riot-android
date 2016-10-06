@@ -19,6 +19,7 @@ package im.vector.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.ViewedRoomTracker;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
@@ -179,6 +181,19 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                     getActivity().startActivity(intent);
 
+                } else if (mAdapter.isHistoricalRoomPosition(groupPosition)) {
+                    RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+
+                    if (!TextUtils.isEmpty(roomSummary.getRoomId())) {
+                        Uri uri = Uri.parse("https://matrix.to/#/" + roomSummary.getRoomId());
+
+                        // pop to the home activity
+                        Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
+                        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
+                        getActivity().startActivity(intent);
+
+                    }
                 } else {
                     RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
                     MXSession session = Matrix.getInstance(getActivity()).getSession(roomSummary.getMatrixId());
