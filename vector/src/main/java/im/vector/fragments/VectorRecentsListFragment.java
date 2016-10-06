@@ -34,6 +34,7 @@ import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
