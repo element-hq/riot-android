@@ -575,6 +575,7 @@
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
+    <string name="room_recents_historical">HISTORICAL</string>
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_create_room">Create room</string>
 

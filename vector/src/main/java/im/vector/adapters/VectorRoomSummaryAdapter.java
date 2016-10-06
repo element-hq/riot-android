@@ -37,6 +37,7 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.data.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -65,6 +66,11 @@ import im.vector.util.VectorUtils;
  */
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private static final String LOG_TAG = "VRoomSummaryAdapter";
+
+    //
+    private static final int ROW_TYPE_RECENTS = 0;
+    private static final int ROW_TYPE_SPINNER = 1;
+    private static final int NUM_ROW_TYPES = 2;
 
     public interface RoomEventListener {
         void onPreviewRoom(MXSession session, String roomId);
@@ -95,6 +101,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private int mFavouritesGroupPosition = -1;// "Favourites" index
     private int mNoTagGroupPosition = -1;    // "Rooms" index
     private int mLowPriorGroupPosition = -1;  // "Low Priority" index
+    private int mHistoricalGroupPosition = -1;  // "Low Priority" index
 
     private final String DBG_CLASS_NAME;
 
@@ -115,6 +122,38 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // drag and drop mode
     private boolean mIsDragAndDropMode = false;
+
+    // the historical rooms summaries
+    private ArrayList<RoomSummary> mHistoricalRoomSummaries;
+    private boolean mIsLoadingHistorical;
+    // use to have a summary when loading a room summary
+    private RoomSummary mDummyRoomSummary = new RoomSummary();
+
+    // define comparator logic
+    private static  final Comparator<RoomSummary> mSummaryComparator = new Comparator<RoomSummary>() {
+        public int compare(RoomSummary aLeftObj, RoomSummary aRightObj) {
+            int retValue;
+            long deltaTimestamp;
+
+            if((null == aLeftObj) || (null == aLeftObj.getLatestReceivedEvent())){
+                retValue = 1;
+            }
+            else if((null == aRightObj) || (null == aRightObj.getLatestReceivedEvent())){
+                retValue = -1;
+            }
+            else if((deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs()) > 0) {
+                retValue = 1;
+            }
+            else if (deltaTimestamp < 0) {
+                retValue = -1;
+            }
+            else {
+                retValue = 0;
+            }
+
+            return retValue;
+        }
+    };
 
     /**
      * Constructor
@@ -142,6 +181,52 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         mDisplayDirectoryGroupWhenEmpty = displayDirectoryGroupWhenEmpty;
     }
 
+    /**
+     * The historical room summaries have been updated.
+     * Update the summaries list of lists.
+     */
+    private void refreshHistoricalRoomSummries() {
+        // the group was not yet defined
+        if (-1 == mHistoricalGroupPosition) {
+            mHistoricalGroupPosition = mSummaryListByGroupPosition.size();
+            mSummaryListByGroupPosition.add(mHistoricalRoomSummaries);
+        } else {
+            // update the list
+            mSummaryListByGroupPosition.set(mHistoricalGroupPosition, mHistoricalRoomSummaries);
+        }
+
+        super.notifyDataSetChanged();
+    }
+
+    /**
+     * The historical rooms are requesting
+     */
+    public void startHistoricalRoomsRequest() {
+        mHistoricalRoomSummaries = new ArrayList<>();
+        mHistoricalRoomSummaries.add(mDummyRoomSummary);
+
+        mIsLoadingHistorical = true;
+
+        refreshHistoricalRoomSummries();
+    }
+
+    /**
+     * Update the historical room summaries
+     * @param historicalRoomSummaries teh historical room summaries
+     */
+    public void setHistoricalRoomSummaries(Collection<RoomSummary> historicalRoomSummaries) {
+        ArrayList<RoomSummary> sorted = new ArrayList<>();
+
+        if (null != historicalRoomSummaries) {
+            sorted = new ArrayList<>(historicalRoomSummaries);
+            Collections.sort(sorted, mSummaryComparator);
+        }
+
+        mHistoricalRoomSummaries = sorted;
+        mIsLoadingHistorical = false;
+
+        refreshHistoricalRoomSummries();
+    }
     /**
      * Set to true to always display the directory group.
      * @param forceDirectoryGroupDisplay true to always display the directory group.
@@ -188,6 +273,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
         else if (mLowPriorGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_low_priority);
+        }
+        else if (mHistoricalGroupPosition == groupPosition) {
+            retValue = mContext.getResources().getString(R.string.room_recents_historical);
         }
         else if (mInvitedGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_invites);
@@ -284,6 +372,20 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    @Override
+    public int getChildType(int groupPosition, int childPosition) {
+        if (mIsLoadingHistorical && (groupPosition == mHistoricalGroupPosition)) {
+            return ROW_TYPE_SPINNER;
+        }
+
+        return ROW_TYPE_RECENTS;
+    }
+
+    @Override
+    public int getChildTypeCount() {
+        return NUM_ROW_TYPES;
+    }
+
     /**
      * Build an array of RoomSummary objects organized according to the room tags (sections).
      * So far we have 4 sections
@@ -307,6 +409,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         mFavouritesGroupPosition = -1;
         mNoTagGroupPosition = -1;
         mLowPriorGroupPosition = -1;
+        mHistoricalGroupPosition = -1;
 
         if(null != aRoomSummaryCollection) {
 
@@ -437,6 +540,15 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 groupIndex++;
             }
 
+            if (null != mHistoricalRoomSummaries) {
+                summaryListByGroupsRetValue.add(new ArrayList<>(mHistoricalRoomSummaries));
+            } else {
+                summaryListByGroupsRetValue.add(new ArrayList<RoomSummary>());
+            }
+
+            mHistoricalGroupPosition = groupIndex;
+            groupIndex++;
+
             // in avoiding empty history mode
             // check if there is really nothing else
             if (mDisplayDirectoryGroupWhenEmpty && !mForceDirectoryGroupDisplay && (groupIndex > 1)) {
@@ -447,6 +559,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 mFavouritesGroupPosition--;
                 mNoTagGroupPosition--;
                 mLowPriorGroupPosition--;
+                mHistoricalGroupPosition --;
             }
         }
 
@@ -533,33 +646,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // update/retrieve the complete summary list
             ArrayList<RoomSummary> roomSummariesCompleteList = new ArrayList<>(dataHandler.getStore().getSummaries());
 
-            // define comparator logic
-            Comparator<RoomSummary> summaryComparator = new Comparator<RoomSummary>() {
-                public int compare(RoomSummary aLeftObj, RoomSummary aRightObj) {
-                    int retValue;
-                    long deltaTimestamp;
-
-                    if((null == aLeftObj) || (null == aLeftObj.getLatestReceivedEvent())){
-                        retValue = 1;
-                    }
-                    else if((null == aRightObj) || (null == aRightObj.getLatestReceivedEvent())){
-                        retValue = -1;
-                    }
-                    else if((deltaTimestamp = aRightObj.getLatestReceivedEvent().getOriginServerTs() - aLeftObj.getLatestReceivedEvent().getOriginServerTs()) > 0) {
-                        retValue = 1;
-                    }
-                    else if (deltaTimestamp < 0) {
-                        retValue = -1;
-                    }
-                    else {
-                        retValue = 0;
-                    }
-
-                    return retValue;
-                }
-            };
-
-            Collections.sort(roomSummariesCompleteList, summaryComparator);
+            Collections.sort(roomSummariesCompleteList, mSummaryComparator);
 
             // init data model used to be be displayed in the list view
             mSummaryListByGroupPosition = buildSummariesByGroups(roomSummariesCompleteList);
@@ -666,6 +753,16 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (null == mSummaryListByGroupPosition){
             return null;
         }
+
+        // display a loading cell
+        if (mIsLoadingHistorical && (groupPosition == mHistoricalGroupPosition)) {
+            if (null == convertView) {
+                convertView = mLayoutInflater.inflate(R.layout.adapter_item_vector_recent_spinner, parent, false);
+            }
+
+            return convertView;
+        }
+
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mChildLayoutResourceId, parent, false);
         }
@@ -754,7 +851,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         showMoreView.setVisibility(View.GONE);
 
         RoomSummary childRoomSummary = mSummaryListByGroupPosition.get(groupPosition).get(childPosition);
-        final Room childRoom =  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
+
+        final Room childRoom = (groupPosition == mHistoricalGroupPosition) ? mMxSession.getHistoricalRoom(childRoomSummary.getRoomId()) :  mMxSession.getDataHandler().getStore().getRoom(childRoomSummary.getRoomId());
         int unreadMsgCount = childRoomSummary.getUnreadEventsCount();
         int highlightCount = 0;
         int notificationCount = 0;
@@ -769,7 +867,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         // display the room avatar
         avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-        final String roomName = VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
+        final String roomName = (groupPosition == mHistoricalGroupPosition) ? childRoomSummary.getRoomName() : VectorUtils.getRoomDisplayName(mContext, mMxSession, childRoom);
         VectorUtils.loadRoomAvatar(mContext, mMxSession, avatarImageView, childRoom);
 
         // display the room name
@@ -1135,7 +1233,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the invited one.
-     * @param groupPos the proup position.
+     * @param groupPos the group position.
      * @return true if the  group position is the invited one.
      */
     public boolean isInvitedRoomPosition(int groupPos) {
@@ -1144,7 +1242,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the favourite one.
-     * @param groupPos the proup position.
+     * @param groupPos the group position.
      * @return true if the  group position is the favourite one.
      */
     public boolean isFavouriteRoomPosition(int groupPos) {
@@ -1153,7 +1251,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the no tag one.
-     * @param groupPos the proup position.
+     * @param groupPos the group position.
      * @return true if the  group position is the no tag one.
      */
     public boolean isNoTagRoomPosition(int groupPos) {
@@ -1162,10 +1260,19 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tell if a group position is the low priority one.
-     * @param groupPos the proup position.
+     * @param groupPos the group position.
      * @return true if the  group position is the low priority one.
      */
     public boolean isLowPriorityRoomPosition(int groupPos) {
         return mLowPriorGroupPosition == groupPos;
+    }
+
+    /**
+     * Tell if a group position is the historical rooms one.
+     * @param groupPos the group position.
+     * @return true if the  group position is the historical rooms one.
+     */
+    public boolean isHistoricalRoomPosition(int groupPos) {
+        return mHistoricalGroupPosition == groupPos;
     }
 }

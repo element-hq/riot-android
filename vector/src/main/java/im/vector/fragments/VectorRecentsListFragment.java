@@ -57,15 +57,20 @@ import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
 
+    private static final String KEY_EXPAND_STATE_DIRECTORY_GROUP = "KEY_EXPAND_STATE_DIRECTORY_GROUP";
     private static final String KEY_EXPAND_STATE_INVITES_GROUP = "KEY_EXPAND_STATE_INVITES_GROUP";
     private static final String KEY_EXPAND_STATE_ROOMS_GROUP = "KEY_EXPAND_STATE_ROOMS_GROUP";
     private static final String KEY_EXPAND_STATE_LOW_PRIORITY_GROUP = "KEY_EXPAND_STATE_LOW_PRIORITY_GROUP";
     private static final String KEY_EXPAND_STATE_FAVOURITE_GROUP = "KEY_EXPAND_STATE_FAVOURITE_GROUP";
+    private static final String KEY_EXPAND_STATE_HISTORICAL_GROUP = "KEY_EXPAND_STATE_HISTORICAL_GROUP";
+
 
     /**
      * warns the activity when there is a scroll in the recents
@@ -85,7 +90,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
     public static final String ARG_LAYOUT_ID = "VectorRecentsListFragment.ARG_LAYOUT_ID";
     public static final String ARG_MATRIX_ID = "VectorRecentsListFragment.ARG_MATRIX_ID";
-
 
     public static VectorRecentsListFragment newInstance(String matrixId, int layoutResId) {
         VectorRecentsListFragment f = new VectorRecentsListFragment();
@@ -123,6 +127,9 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     // public room management
     private boolean mIsLoadingPublicRooms = false;
     private long mLatestPublicRoomsRefresh = System.currentTimeMillis();
+
+    private boolean mAreHistoricalRoomsListRefreshed = false;
+    private boolean mIsHistoricalGroupExpanded = false;
 
     // scroll events listener
     IVectorRecentsScrollEventListener mScrollEventListener = null;
@@ -430,7 +437,9 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                         } else if (mAdapter.isLowPriorityRoomPosition(groupIndex)) {
                             isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
                         } else if (mAdapter.isDirectoryGroupPosition(groupIndex)) { // public rooms (search mode)
-                            isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_LOW_PRIORITY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                            isExpanded = preferences.getBoolean(KEY_EXPAND_STATE_DIRECTORY_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+                        } else if (mAdapter.isHistoricalRoomPosition(groupIndex)) {
+                            isExpanded = mIsHistoricalGroupExpanded;
                         } else {
                             // unknown group index, just skipp
                             break;
@@ -452,7 +461,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
      * @param aGroupPosition the group position
      * @param aValue the new value.
      */
-    protected void updateGroupExpandStatus(int aGroupPosition, boolean aValue) {
+    protected void updateGroupExpandStatus(final int aGroupPosition, boolean aValue) {
         if (null != getActivity()) {
             Context context;
             String groupKey;
@@ -466,7 +475,53 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             } else if(mAdapter.isLowPriorityRoomPosition(aGroupPosition)){
                 groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
             } else if(mAdapter.isDirectoryGroupPosition(aGroupPosition)) { // public rooms (search mode)
-                groupKey = KEY_EXPAND_STATE_LOW_PRIORITY_GROUP;
+                groupKey = KEY_EXPAND_STATE_DIRECTORY_GROUP;
+            } else if (mAdapter.isHistoricalRoomPosition(aGroupPosition)) {
+                mIsHistoricalGroupExpanded = aValue;
+                if (aValue) {
+                    mAdapter.startHistoricalRoomsRequest();
+                    mSession.getHistoricalRoomSummaries(!mAreHistoricalRoomsListRefreshed, new ApiCallback<Collection<RoomSummary>>() {
+                        @Override
+                        public void onSuccess(final Collection<RoomSummary> roomSummaries) {
+                            if (null != getActivity()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mAreHistoricalRoomsListRefreshed = true;
+                                        mAdapter.setHistoricalRoomSummaries(roomSummaries);
+                                    }
+                                });
+                            }
+                        }
+
+                        private void onFailure() {
+                            if (null != getActivity()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mAdapter.setHistoricalRoomSummaries(new ArrayList<RoomSummary>());
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onFailure();
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onFailure();
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onFailure();
+                        }
+                    });
+                }
+                return;
             } else {
                 // unknown group position, just skipp
                 Log.w(LOG_TAG, "## updateGroupExpandStatus(): Failure - Unknown group: "+aGroupPosition);
