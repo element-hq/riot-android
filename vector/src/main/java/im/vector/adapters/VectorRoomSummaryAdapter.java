@@ -65,7 +65,7 @@ import im.vector.util.VectorUtils;
 public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private static final String LOG_TAG = "VRoomSummaryAdapter";
 
-    //
+    // cell type
     private static final int ROW_TYPE_RECENTS = 0;
     private static final int ROW_TYPE_SPINNER = 1;
     private static final int NUM_ROW_TYPES = 2;
@@ -99,7 +99,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private int mFavouritesGroupPosition = -1;// "Favourites" index
     private int mNoTagGroupPosition = -1;    // "Rooms" index
     private int mLowPriorGroupPosition = -1;  // "Low Priority" index
-    private int mHistoricalGroupPosition = -1;  // "Low Priority" index
+    private int mHistoricalGroupPosition = -1;  // "Historical" index
 
     private final String DBG_CLASS_NAME;
 
