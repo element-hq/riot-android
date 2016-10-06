@@ -2374,7 +2374,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 public void onClick(View v) {
                     Log.d(LOG_TAG, "The user clicked on Join.");
 
-                    Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+                    final Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
 
                     String signUrl = null;
 
@@ -2391,6 +2391,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         }
 
                         private void onError(String errorMessage) {
+                            mSession.getDataHandler().getStore().deleteRoom(room.getRoomId());
 							CommonActivityUtils.displayToast(VectorRoomActivity.this, errorMessage);
                             setProgressVisibility(View.GONE);
                         }
