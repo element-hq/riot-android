@@ -130,7 +130,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private boolean mIsLoadingPublicRooms = false;
     private long mLatestPublicRoomsRefresh = System.currentTimeMillis();
 
-    private boolean mAreHistoricalRoomsListRefreshed = false;
     private boolean mIsHistoricalGroupExpanded = false;
 
     // scroll events listener
@@ -494,47 +493,56 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             } else if (mAdapter.isHistoricalRoomPosition(aGroupPosition)) {
                 mIsHistoricalGroupExpanded = aValue;
                 if (aValue) {
-                    mAdapter.startHistoricalRoomsRequest();
-                    mSession.getHistoricalRoomSummaries(!mAreHistoricalRoomsListRefreshed, new ApiCallback<Collection<RoomSummary>>() {
-                        @Override
-                        public void onSuccess(final Collection<RoomSummary> roomSummaries) {
-                            if (null != getActivity()) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mAreHistoricalRoomsListRefreshed = true;
-                                        mAdapter.setHistoricalRoomSummaries(roomSummaries);
-                                    }
-                                });
+                    if (!mSession.getDataHandler().areLeftRoomsSynced()) {
+                        mSession.getDataHandler().retrieveLeftRooms(new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                if (null != getActivity()) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
                             }
-                        }
 
-                        private void onFailure() {
-                            if (null != getActivity()) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mAdapter.setHistoricalRoomSummaries(new ArrayList<RoomSummary>());
-                                    }
-                                });
+                            private void onFailure() {
+                                if (null != getActivity()) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            onFailure();
-                        }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onFailure();
+                            }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            onFailure();
-                        }
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onFailure();
+                            }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            onFailure();
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onFailure();
+                            }
+                        });
+
+                        if (null != getActivity()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
                         }
-                    });
+                    }
                 }
                 return;
             } else {

@@ -17,6 +17,7 @@
 package im.vector.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorBaseSearchActivity;
+import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorPublicRoomsActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
@@ -145,6 +147,19 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                             intent.putExtra(VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN, mAdapter.getSearchedPattern());
                         }
                         getActivity().startActivity(intent);
+                    }
+                } else if (mAdapter.isHistoricalRoomPosition(groupPosition)) {
+                    RoomSummary roomSummary = mAdapter.getRoomSummaryAt(groupPosition, childPosition);
+
+                    if (!TextUtils.isEmpty(roomSummary.getRoomId())) {
+                        Uri uri = Uri.parse("https://matrix.to/#/" + roomSummary.getRoomId());
+
+                        // pop to the home activity
+                        Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
+                        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
+                        getActivity().startActivity(intent);
+
                     }
                 } else {
                     // open the dedicated room activity
