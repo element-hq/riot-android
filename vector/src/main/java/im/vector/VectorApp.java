@@ -145,33 +145,40 @@ public class VectorApp extends Application {
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
+                Log.d(LOG_TAG, "onActivityStarted " + activity);
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
+                Log.d(LOG_TAG, "onActivityResumed " + activity);
                 setCurrentActivity(activity);
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
+                Log.d(LOG_TAG, "onActivityPaused " + activity);
                 setCurrentActivity(null);
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
+                Log.d(LOG_TAG, "onActivityStopped " + activity);
             }
 
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+                Log.d(LOG_TAG, "onActivitySaveInstanceState " + activity);
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
+                Log.d(LOG_TAG, "onActivityDestroyed " + activity);
                 mCreatedActivities.remove(activity.toString());
 
                 if (mCreatedActivities.size() > 1) {
