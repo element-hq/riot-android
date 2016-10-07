@@ -334,7 +334,7 @@ public class VectorApp extends Application {
      * @param activity the current activity, null if there is no more one.
      */
     private void setCurrentActivity(Activity activity) {
-        Log.d(LOG_TAG, "## setCurrentActivity() : activity " + activity);
+        Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
 
         if (VectorApp.isAppInBackground() && (null != activity)) {
             Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
