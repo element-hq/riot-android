@@ -252,6 +252,7 @@ public class VectorApp extends Application {
                 // the application is not suspended
                 if (!mIsCallingInBackground) {
                     Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within 2 seconds");
+                    CommonActivityUtils.displayMemoryInformation(null, " app suspended");
                     suspendApp();
                 } else {
                     Log.d(LOG_TAG, "App not suspended due to call in progress");
@@ -336,7 +337,7 @@ public class VectorApp extends Application {
 
             Log.d(LOG_TAG, "The application is resumed");
             // display the memory usage when the application is put iun foreground..
-            CommonActivityUtils.displayMemoryInformation(activity);
+            CommonActivityUtils.displayMemoryInformation(activity, " app resumed");
         }
 
         // wait 2s to check that the application is put in background
