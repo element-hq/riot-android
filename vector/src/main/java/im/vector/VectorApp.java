@@ -66,7 +66,7 @@ public class VectorApp extends Application {
      * Delay to detect if the application is in background.
      * If there is no active activity during the elapsed time, it means that the application is in background.
      */
-    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
+    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 4000;
 
     /**
      * The current active activity
@@ -258,7 +258,7 @@ public class VectorApp extends Application {
                 // if there is a pending call
                 // the application is not suspended
                 if (!mIsCallingInBackground) {
-                    Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within 2 seconds");
+                    Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
                     CommonActivityUtils.displayMemoryInformation(null, " app suspended");
                     suspendApp();
                 } else {
@@ -334,6 +334,8 @@ public class VectorApp extends Application {
      * @param activity the current activity, null if there is no more one.
      */
     private void setCurrentActivity(Activity activity) {
+        Log.d(LOG_TAG, "## setCurrentActivity() : activity " + activity);
+
         if (VectorApp.isAppInBackground() && (null != activity)) {
             Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
 
@@ -344,7 +346,7 @@ public class VectorApp extends Application {
 
             Log.d(LOG_TAG, "The application is resumed");
             // display the memory usage when the application is put iun foreground..
-            CommonActivityUtils.displayMemoryInformation(activity, " app resumed");
+            CommonActivityUtils.displayMemoryInformation(activity, " app resumed with " + activity);
         }
 
         // wait 2s to check that the application is put in background
@@ -354,6 +356,8 @@ public class VectorApp extends Application {
             } else {
                 getInstance().stopActivityTransitionTimer();
             }
+        } else {
+            Log.e(LOG_TAG, "The application is resumed but there is no active instance");
         }
 
         mCurrentActivity = activity;
