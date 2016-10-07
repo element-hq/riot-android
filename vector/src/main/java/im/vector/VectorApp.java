@@ -238,6 +238,8 @@ public class VectorApp extends Application {
      * i.e wait 2s before assuming that the application is put in background.
      */
     private void startActivityTransitionTimer() {
+        Log.d(LOG_TAG, "## startActivityTransitionTimer()");
+
         mActivityTransitionTimer = new Timer();
         mActivityTransitionTimerTask = new TimerTask() {
             @Override
@@ -252,17 +254,21 @@ public class VectorApp extends Application {
                     mActivityTransitionTimer = null;
                 }
 
-                VectorApp.this.mIsInBackground = true;
-                mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
-
-                // if there is a pending call
-                // the application is not suspended
-                if (!mIsCallingInBackground) {
-                    Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
-                    CommonActivityUtils.displayMemoryInformation(null, " app suspended");
-                    suspendApp();
+                if (null != mCurrentActivity) {
+                    Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                 } else {
-                    Log.d(LOG_TAG, "App not suspended due to call in progress");
+                    VectorApp.this.mIsInBackground = true;
+                    mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
+
+                    // if there is a pending call
+                    // the application is not suspended
+                    if (!mIsCallingInBackground) {
+                        Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                        CommonActivityUtils.displayMemoryInformation(null, " app suspended");
+                        suspendApp();
+                    } else {
+                        Log.d(LOG_TAG, "App not suspended due to call in progress");
+                    }
                 }
             }
         };
@@ -274,6 +280,8 @@ public class VectorApp extends Application {
      * Stop the background detection.
      */
     private void stopActivityTransitionTimer() {
+        Log.d(LOG_TAG, "## stopActivityTransitionTimer()");
+
         if (mActivityTransitionTimerTask != null) {
             mActivityTransitionTimerTask.cancel();
             mActivityTransitionTimerTask = null;
