@@ -69,7 +69,7 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
-            resValue "string", "flavor_description", "FDroid version"
+            resValue "string", "flavor_description", "FDroid"
         }
     }
 
