@@ -1101,6 +1101,41 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_delete_unsent) {
             mVectorMessageListFragment.deleteUnsentMessages();
             refreshNotificationsArea();
+        } else if (id == R.id.ic_action_room_leave) {
+            if (null != mRoom) {
+                Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
+
+                setProgressVisibility(View.VISIBLE);
+
+                mRoom.leave(new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
+                        // close the activity
+                        finish();
+                    }
+
+                    private void onError(String errorMessage) {
+                        setProgressVisibility(View.GONE);
+                        Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
+            }
         }
 
         return super.onOptionsItemSelected(item);
