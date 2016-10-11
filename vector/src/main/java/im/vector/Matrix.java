@@ -268,14 +268,16 @@ public class Matrix {
      */
     public String getVersion(boolean longformat) {
         String versionName = "";
+        String flavor = "";
+
         try {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            String flavor = mAppContext.getResources().getString(R.string.flavor_description);
+            flavor = mAppContext.getResources().getString(R.string.flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
-                versionName += " (" + flavor +")";
+                flavor += "-";
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
@@ -284,9 +286,9 @@ public class Matrix {
         String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
         if (longformat) {
             String date = mAppContext.getResources().getString(R.string.git_revision_date);
-            versionName += " (" + gitVersion + "-" + date + ")";
+            versionName += " (" + flavor + gitVersion + "-" + date + ")";
         } else {
-            versionName += " (" + gitVersion + ")";
+            versionName += " (" + flavor + gitVersion + ")";
         }
 
         return versionName;
@@ -318,6 +320,25 @@ public class Matrix {
         }
 
         return sessions;
+    }
+
+    /**
+     * Tell if there is a corrupted store in the active session/
+     * @param context the application context
+     * @return true if there is a corrupted store.
+     */
+    public static boolean hasCorruptedStore(Context context) {
+        boolean hasCorruptedStore = false;
+        ArrayList<MXSession> sessions = Matrix.getMXSessions(context);
+
+        if (null != sessions) {
+            for (MXSession session : sessions) {
+                if (session.isAlive()) {
+                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
+                }
+            }
+        }
+        return hasCorruptedStore;
     }
 
     /**

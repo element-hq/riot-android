@@ -36,6 +36,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.matrix.androidsdk.rest.model.Event;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -115,11 +117,22 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
         mPatternToSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if ((actionId == EditorInfo.IME_ACTION_SEARCH) ||
+                        // hardware keyboard : detect the keydown event
+                        ((null != event) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))
+                        ) {
                     onPatternUpdate(false);
                     return true;
                 }
                 return false;
+            }
+        });
+
+        // required to avoid having the crash
+        // focus search returned a view that wasn't able to take focus!
+        mPatternToSearchEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
             }
         });
     }

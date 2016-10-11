@@ -46,6 +46,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.LoginActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.activity.VectorHomeActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomActivity;
 
 @SuppressLint("LongLogTag")
@@ -61,14 +62,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     // the universal link
     public static final String EXTRA_UNIVERSAL_LINK_URI = "EXTRA_UNIVERSAL_LINK_URI";
     // the flow id
-    public static final String EXTRA_UNIVERSAL_LINK_FLOW_ID = "EXTRA_UNIVERSAL_LINK_FLOW_ID";
+    //public static final String EXTRA_UNIVERSAL_LINK_FLOW_ID = "EXTRA_UNIVERSAL_LINK_FLOW_ID";
     // the sender identifier (XXX_SENDER_ID)
     public static final String EXTRA_UNIVERSAL_LINK_SENDER_ID = "EXTRA_UNIVERSAL_LINK_SENDER_ID";
 
     // sender activities
     public static final String HOME_SENDER_ID = VectorHomeActivity.class.getSimpleName();
-    public static final String LOGIN_SENDER_ID = LoginActivity.class.getSimpleName();
-    public static final String SPLASH_SENDER_ID = SplashActivity.class.getSimpleName();
+    //public static final String LOGIN_SENDER_ID = LoginActivity.class.getSimpleName();
+    //public static final String SPLASH_SENDER_ID = SplashActivity.class.getSimpleName();
 
     // the supported paths
     private static final String SUPPORTED_PATH_BETA = "/beta/";
@@ -77,15 +78,16 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
     private static final String SUPPORTED_PATH_STAGING = "/staging/";
 
     // index of each item in path
-    public static final String ULINK_ROOM_ID_KEY = "ULINK_ROOM_ID_KEY";
+    public static final String ULINK_ROOM_ID_OR_ALIAS_KEY = "ULINK_ROOM_ID_OR_ALIAS_KEY";
+    public static final String ULINK_MATRIX_USER_ID_KEY = "ULINK_MATRIX_USER_ID_KEY";
     public static final String ULINK_EVENT_ID_KEY = "ULINK_EVENT_ID_KEY";
-    public static final String ULINK_EMAIL_ID_KEY = "email";
+    /*public static final String ULINK_EMAIL_ID_KEY = "email";
     public static final String ULINK_SIGN_URL_KEY = "signurl";
     public static final String ULINK_ROOM_NAME_KEY = "room_name";
     public static final String ULINK_ROOM_AVATAR_URL_KEY = "room_avatar_url";
     public static final String ULINK_INVITER_NAME_KEY = "inviter_name";
     public static final String ULINK_GUEST_ACCESS_TOKEN_KEY = "guest_access_token";
-    public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";
+    public static final String ULINK_GUEST_USER_ID_KEY = "guest_user_id";*/
 
     // supported paths list
     private static final List<String> mSupportedVectorLinkPaths = Arrays.asList(SUPPORTED_PATH_BETA, SUPPORTED_PATH_DEVELOP, SUPPORTED_PATH_APP, SUPPORTED_PATH_STAGING);
@@ -173,12 +175,42 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                         aContext.startActivity(intent);
                     } else {
                         mParameters = params;
-                        manageRoomOnActivity(aContext);
+
+                        if (mParameters.containsKey(ULINK_ROOM_ID_OR_ALIAS_KEY)) {
+                            manageRoomOnActivity(aContext);
+                        } else if (mParameters.containsKey(ULINK_MATRIX_USER_ID_KEY)) {
+                            manageMemberDetailsActivity(aContext);
+                        } else {
+                            Log.e(LOG_TAG, "## onReceive() : nothing to do");
+                        }
                     }
                 } else {
                     Log.e(LOG_TAG, "## onReceive() Path not supported: " + intentUri.getPath());
                 }
             }
+        }
+    }
+
+    /**
+     * Start the universal link to process to manage member details activity
+     * @param aContext the context.
+     */
+    private void manageMemberDetailsActivity(final Context aContext) {
+        Log.d(LOG_TAG, "## manageMemberDetailsActivity() : open " + mParameters.get(ULINK_MATRIX_USER_ID_KEY) + " page");
+
+        final Activity currentActivity = VectorApp.getCurrentActivity();
+
+        if (null != currentActivity) {
+            Intent startRoomInfoIntent = new Intent(currentActivity, VectorMemberDetailsActivity.class);
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, mParameters.get(ULINK_MATRIX_USER_ID_KEY));
+            startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            currentActivity.startActivity(startRoomInfoIntent);
+        } else {
+            // clear the activity stack to home activity
+            Intent intent = new Intent(aContext, VectorHomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(VectorHomeActivity.EXTRA_MEMBER_ID, mParameters.get(ULINK_MATRIX_USER_ID_KEY));
+            aContext.startActivity(intent);
         }
     }
 
@@ -233,9 +265,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
      * @param aContext the context
      */
     private void manageRoom(final Context aContext, final String roomAlias) {
-        final String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_KEY);
+        final String roomIdOrAlias = mParameters.get(ULINK_ROOM_ID_OR_ALIAS_KEY);
 
         Log.d(LOG_TAG, "manageRoom roomIdOrAlias");
+
+        // sanity check
+        if (TextUtils.isEmpty(roomIdOrAlias)) {
+            return;
+        }
 
         if (roomIdOrAlias.startsWith("!"))  { // usual room Id format (not alias)
             final RoomPreviewData roomPreviewData = new RoomPreviewData(mSession, roomIdOrAlias, mParameters.get(ULINK_EVENT_ID_KEY), roomAlias, mParameters);
@@ -264,7 +301,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 public void onSuccess(final String roomId) {
                     Log.d(LOG_TAG, "manageRoom : retrieve the room ID " + roomId);
                     if (!TextUtils.isEmpty(roomId)) {
-                        mParameters.put(ULINK_ROOM_ID_KEY, roomId);
+                        mParameters.put(ULINK_ROOM_ID_OR_ALIAS_KEY, roomId);
                         manageRoom(aContext, roomIdOrAlias);
                     }
                 }
@@ -300,7 +337,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
         HashMap<String, Object> params = new HashMap<>();
 
         params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        params.put(VectorRoomActivity.EXTRA_ROOM_ID, mParameters.get(ULINK_ROOM_ID_KEY));
+        params.put(VectorRoomActivity.EXTRA_ROOM_ID, mParameters.get(ULINK_ROOM_ID_OR_ALIAS_KEY));
 
         if (mParameters.containsKey(ULINK_EVENT_ID_KEY)) {
             params.put(VectorRoomActivity.EXTRA_EVENT_ID, mParameters.get(ULINK_EVENT_ID_KEY));
@@ -371,19 +408,30 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
             map = new HashMap<>();
 
+            String firstParam = temp[1];
+
+            if (MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(firstParam).matches()) {
+                if (temp.length > 2) {
+                    Log.e(LOG_TAG, "## parseUniversalLink : universal link to member id is too long");
+                    return null;
+                }
+
+                map.put(ULINK_MATRIX_USER_ID_KEY, firstParam);
+            } else if (MXSession.PATTERN_CONTAIN_MATRIX_ALIAS.matcher(firstParam).matches() ||
+                    MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER.matcher(firstParam).matches()) {
+                map.put(ULINK_ROOM_ID_OR_ALIAS_KEY, firstParam);
+            }
+
             // room id only ?
-            if (temp.length == 2) {
-                map.put(ULINK_ROOM_ID_KEY, temp[1]);
-            } else {
+            if (temp.length > 2) {
                 String eventId = temp[2];
 
-                if (eventId.startsWith("$")) {
-                    map.put(ULINK_ROOM_ID_KEY, temp[1]);
+                if (MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER.matcher(eventId).matches()) {
                     map.put(ULINK_EVENT_ID_KEY, temp[2]);
                 } else {
                     uri = Uri.parse(uri.toString().replace("#/room/", "room/"));
 
-                    map.put(ULINK_ROOM_ID_KEY, uri.getLastPathSegment());
+                    map.put(ULINK_ROOM_ID_OR_ALIAS_KEY, uri.getLastPathSegment());
 
                     Set<String> names = uri.getQueryParameterNames();
 
@@ -394,6 +442,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                             value = URLDecoder.decode(value, "UTF-8");
                         } catch (Exception e) {
                             Log.e(LOG_TAG, "## parseUniversalLink : URLDecoder.decode " + e.getMessage());
+                            return null;
                         }
 
                         map.put(name, value);
@@ -402,6 +451,12 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## parseUniversalLink : crashes " + e.getLocalizedMessage());
+        }
+
+        // check if the parsing succeeds
+        if ((null != map) && (map.size() < 1)) {
+            Log.e(LOG_TAG, "## parseUniversalLink : empty dictionary");
+            return null;
         }
 
         return map;

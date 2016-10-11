@@ -61,7 +61,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
     @Override
     public MessagesAdapter createMessagesAdapter() {
         mIsMediaSearch = true;
-        return new VectorSearchFilesListAdapter(mSession, getActivity(), (null == mRoom), getMXMediasCache());
+        return new VectorSearchFilesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
     }
 
     @Override

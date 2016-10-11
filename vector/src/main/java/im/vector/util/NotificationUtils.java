@@ -34,6 +34,7 @@ import android.util.Log;
 
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.JoinScreenActivity;
 import im.vector.activity.LockScreenActivity;
 import im.vector.activity.VectorFakeRoomPreviewActivity;
 import im.vector.activity.VectorHomeActivity;
@@ -359,9 +360,41 @@ public class NotificationUtils {
                 quickReplyIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
                 PendingIntent pIntent = PendingIntent.getActivity(context, 0, quickReplyIntent, 0);
                 builder.addAction(
-                        R.drawable.ic_material_mode_edit_green_vector,
+                        R.drawable.vector_notification_quick_reply,
                         context.getString(R.string.action_quick_reply),
                         pIntent);
+            } else {
+                {
+                    // offer to type a quick reject button
+                    Intent leaveIntent = new Intent(context, JoinScreenActivity.class);
+                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomId);
+                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, matrixId);
+                    leaveIntent.putExtra(JoinScreenActivity.EXTRA_REJECT, true);
+
+                    // the action must be unique else the parameters are ignored
+                    leaveIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
+                    PendingIntent pIntent = PendingIntent.getActivity(context, 0, leaveIntent, 0);
+                    builder.addAction(
+                            R.drawable.vector_notification_reject_invitation,
+                            context.getString(R.string.reject),
+                            pIntent);
+                }
+
+                {
+                    // offer to type a quick accept button
+                    Intent acceptIntent = new Intent(context, JoinScreenActivity.class);
+                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_ROOM_ID, roomId);
+                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_MATRIX_ID, matrixId);
+                    acceptIntent.putExtra(JoinScreenActivity.EXTRA_JOIN, true);
+
+                    // the action must be unique else the parameters are ignored
+                    acceptIntent.setAction(QUICK_LAUNCH_ACTION + ((int) (System.currentTimeMillis())));
+                    PendingIntent pIntent = PendingIntent.getActivity(context, 0, acceptIntent, 0);
+                    builder.addAction(
+                            R.drawable.vector_notification_accept_invitation,
+                            context.getString(R.string.join),
+                            pIntent);
+                }
             }
 
             // Build the pending intent for when the notification is clicked
@@ -382,7 +415,7 @@ public class NotificationUtils {
                     .addNextIntent(roomIntentTap);
 
             builder.addAction(
-                    R.drawable.ic_material_message_green_vector,
+                    R.drawable.vector_notification_open,
                     context.getString(R.string.action_open),
                     stackBuilderTap.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
         }

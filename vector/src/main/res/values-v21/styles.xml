@@ -22,6 +22,11 @@
         <item name="android:windowBackground">@color/vector_activity_background_color</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.Swipe" parent="@style/AppTheme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <!-- NoActionBar + FullScreen -->
     <style name="AppTheme.NoActionBar.FullScreen" parent="@style/AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>

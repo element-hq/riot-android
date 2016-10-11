@@ -39,7 +39,7 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        mSession = getSession(intent);
+        mSession = getSession(this, intent);
 
         if (null == mSession) {
             mSession = Matrix.getInstance(VectorSettingsActivity.this).getDefaultSession();
