@@ -449,22 +449,26 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                         String id = thumbnailsCursor.getString(idIndex);
                         String dateAsString = thumbnailsCursor.getString(timeIndex);
                         recentMedia.mMimeType = thumbnailsCursor.getString(mimeTypeIndex);
-                        recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
-                        recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
-                        recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
+                        // GA issue : ignore the media when he mime type is null.
+                        if (!TextUtils.isEmpty(recentMedia.mMimeType)) {
+                            recentMedia.mCreationTime = Long.parseLong(dateAsString);
 
-                        int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
+                            recentMedia.mThumbnail = MediaStore.Images.Thumbnails.getThumbnail(this.getContentResolver(), Long.parseLong(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
+                            recentMedia.mFileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString() + "/" + id);
 
-                        if (0 != rotationAngle) {
-                            android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
-                            bitmapMatrix.postRotate(rotationAngle);
-                            recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
+                            int rotationAngle = ImageUtils.getRotationAngleForBitmap(VectorMediasPickerActivity.this, recentMedia.mFileUri);
+
+                            if (0 != rotationAngle) {
+                                android.graphics.Matrix bitmapMatrix = new android.graphics.Matrix();
+                                bitmapMatrix.postRotate(rotationAngle);
+                                recentMedia.mThumbnail = Bitmap.createBitmap(recentMedia.mThumbnail, 0, 0, recentMedia.mThumbnail.getWidth(), recentMedia.mThumbnail.getHeight(), bitmapMatrix, false);
+                            }
+
+                            // Note: getThumbnailUriFromMediaStorage() can return null for non jpeg images (ie png).
+                            // We could then use the bitmap(mThumbnail)) that is never null, but with no rotation applied
+                            mMediaStoreImagesList.add(recentMedia);
                         }
-
-                        // Note: getThumbnailUriFromMediaStorage() can return null for non jpeg images (ie png).
-                        // We could then use the bitmap(mThumbnail)) that is never null, but with no rotation applied
-                        mMediaStoreImagesList.add(recentMedia);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "## addImagesThumbnails(): Msg=" + e.getMessage());
                     }
