@@ -25,8 +25,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,17 +47,18 @@ import org.matrix.androidsdk.rest.model.User;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.adapters.MemberDetailsAdapter;
-import im.vector.adapters.MemberDetailsAdapter.AdapterMemberActionItems;
+import im.vector.adapters.VectorMemberDetailsAdapter;
 import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * VectorMemberDetailsActivity displays the member information and allows to perform some dedicated actions.
  */
-public class VectorMemberDetailsActivity extends MXCActionBarActivity implements MemberDetailsAdapter.IEnablingActions {
+public class VectorMemberDetailsActivity extends MXCActionBarActivity implements VectorMemberDetailsAdapter.IEnablingActions {
     private static final String LOG_TAG = "VectorMemberDetAct";
 
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
@@ -95,9 +96,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private RoomMember mRoomMember; // room member corresponding to mMemberId
     private MXSession mSession;
     //private ArrayList<MemberDetailsAdapter.AdapterMemberActionItems> mActionItemsArrayList;
-    private MemberDetailsAdapter mListViewAdapter;
-
-    private Room mCallableRoom;
+    private VectorMemberDetailsAdapter mListViewAdapter;
 
     // UI widgets
     private ImageView mMemberAvatarImageView;
@@ -109,6 +108,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     // full screen avatar
     private View mFullMemberAvatarLayout;
     private ImageView mFullMemberAvatarImageView;
+
+    // listview
+    private ExpandableListView mExpandableListView;
 
     // MX event listener
     private final MXEventListener mLiveEventsListener = new MXEventListener() {
@@ -284,11 +286,21 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
-    /**
-     * Start the corresponding action given by aActionType value.
-     *
-     * @param aActionType the action associated to the list row
-     */
+    @Override
+    public void selectRoom(final Room aRoom) {
+        VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, aRoom.getRoomId());
+
+                Log.d(LOG_TAG, "## selectRoom(): open the room " + aRoom.getRoomId());
+                CommonActivityUtils.goToRoomPage(VectorMemberDetailsActivity.this, mSession, params);
+            }
+        });
+    }
+
     @Override
     public void performItemAction(final int aActionType) {
         if (!mSession.isAlive()) {
@@ -307,7 +319,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        CommonActivityUtils.goToOneToOneRoom(mSession, mMemberId, VectorMemberDetailsActivity.this, mRoomActionsListener);
+                        CommonActivityUtils.createDirectMessagesRoom(mSession, mMemberId, VectorMemberDetailsActivity.this, mRoomActionsListener);
                     }
                 });
                 break;
@@ -486,7 +498,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return null;
         }
 
-        mCallableRoom = null;
         Collection<Room> rooms = mSession.getDataHandler().getStore().getRooms();
 
         for (Room room : rooms) {
@@ -495,7 +506,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (members.size() == 2) {
                 for (RoomMember member : members) {
                     if (member.getUserId().equals(mMemberId) && room.canPerformCall()) {
-                        return mCallableRoom = room;
+                        return room;
                     }
                 }
             }
@@ -561,11 +572,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             }
         } else if (null != mRoomMember) {
-            // offer to start a new chat only if the room is not a 1:1 room with this user
-            if (!CommonActivityUtils.isOneToOneRoomJoinedByUserId(mRoom, mRoomMember.getUserId())) {
-                supportedActions.add(ITEM_ACTION_START_CHAT);
-            }
-
             // 1:1 call
             if ((null != searchCallableRoom()) && mSession.isVoipCallSupported() && (null == VectorCallViewActivity.getActiveCall())) {
                 // Offer voip call options
@@ -643,8 +649,6 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 supportedActions.add(ITEM_ACTION_MENTION);
             }
         } else if (!TextUtils.isEmpty(mMemberId)) {
-            supportedActions.add(ITEM_ACTION_START_CHAT);
-
             if (!mSession.isUserIgnored(mMemberId)) {
                 supportedActions.add(ITEM_ACTION_IGNORE);
             } else {
@@ -669,104 +673,139 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             Log.w(LOG_TAG, "## updateListViewItemsContent(): list view adapter not initialized");
         } else {
             // reset action lists & allocate items list
-            mListViewAdapter.clear();
+            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> adminActions = new ArrayList<>();
+            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> callActions = new ArrayList<>();
+            ArrayList<VectorMemberDetailsAdapter.AdapterMemberActionItems> directMessagesActions = new ArrayList<>();
 
             ArrayList<Integer> supportedActionsList = supportedActionsList();
-
-            // build the "start chat" item
-            if (supportedActionsList.indexOf(ITEM_ACTION_START_CHAT) >= 0) {
-                imageResource = R.drawable.ic_person_add_black;
-                actionText = getResources().getString(R.string.start_chat);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
-            }
 
             if (supportedActionsList.indexOf(ITEM_ACTION_START_VOICE_CALL) >= 0) {
                 imageResource = R.drawable.voice_call_black;
                 actionText = getResources().getString(R.string.start_voice_call);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VOICE_CALL));
+                callActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VOICE_CALL));
             }
 
             if (supportedActionsList.indexOf(ITEM_ACTION_START_VIDEO_CALL) >= 0) {
                 imageResource = R.drawable.video_call_black;
                 actionText = getResources().getString(R.string.start_video_call);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VIDEO_CALL));
+                callActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_VIDEO_CALL));
             }
 
             if (supportedActionsList.indexOf(ITEM_ACTION_INVITE) >= 0) {
                 imageResource = R.drawable.ic_person_add_black;
                 actionText = getResources().getString(R.string.room_participants_action_invite);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_INVITE));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_INVITE));
             }
 
             // build the leave item
             if (supportedActionsList.indexOf(ITEM_ACTION_LEAVE) >= 0)             {
                 imageResource = R.drawable.vector_leave_room_black;
                 actionText = getResources().getString(R.string.room_participants_action_leave);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_LEAVE));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_LEAVE));
             }
 
             // build the "default" item
             if (supportedActionsList.indexOf(ITEM_ACTION_SET_DEFAULT_POWER_LEVEL) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
                 actionText = getResources().getString(R.string.room_participants_action_set_default_power_level);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_DEFAULT_POWER_LEVEL));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_DEFAULT_POWER_LEVEL));
             }
 
             // build the "moderator" item
             if (supportedActionsList.indexOf(ITEM_ACTION_SET_MODERATOR) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
                 actionText = getResources().getString(R.string.room_participants_action_set_moderator);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_MODERATOR));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_MODERATOR));
             }
 
             // build the "make admin" item
             if (supportedActionsList.indexOf(ITEM_ACTION_SET_ADMIN) >= 0) {
                 imageResource = R.drawable.ic_verified_user_black;
                 actionText = getResources().getString(R.string.room_participants_action_set_admin);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_ADMIN));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_SET_ADMIN));
             }
 
             // build the "remove from" item (ban)
             if (supportedActionsList.indexOf(ITEM_ACTION_KICK) >= 0) {
                 imageResource = R.drawable.ic_remove_circle_outline_red;
                 actionText = getResources().getString(R.string.room_participants_action_remove);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_KICK));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_KICK));
             }
 
             // build the "block" item (block)
             if (supportedActionsList.indexOf(ITEM_ACTION_BAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
                 actionText = getResources().getString(R.string.room_participants_action_ban);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
             }
 
             // build the "unblock" item (unblock)
             if (supportedActionsList.indexOf(ITEM_ACTION_UNBAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
                 actionText = getResources().getString(R.string.room_participants_action_unban);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNBAN));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNBAN));
             }
 
             // build the "ignore" item
             if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_outline_black;
                 actionText = getResources().getString(R.string.room_participants_action_ignore);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
             }
 
             // build the "unignore" item
             if (supportedActionsList.indexOf(ITEM_ACTION_UNIGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_black;
                 actionText = getResources().getString(R.string.room_participants_action_unignore);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNIGNORE));
             }
 
             // build the "mention" item
             if (supportedActionsList.indexOf(ITEM_ACTION_MENTION) >= 0) {
                 imageResource = R.drawable.ic_comment_black;
                 actionText = getResources().getString(R.string.room_participants_action_mention);
-                mListViewAdapter.add(new AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
+                adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
             }
+
+            mListViewAdapter.setAdminActionsList(adminActions);
+            mListViewAdapter.setCallActionsList(callActions);
+
+            // direct chats management
+
+            // list other direct rooms
+            List<String> roomIds = mSession.getDirectChatRoomIdsList();
+
+            for(String roomId : roomIds) {
+                // not the current one
+                if (!TextUtils.equals(mRoomId, roomId)) {
+                    Room room = mSession.getDataHandler().getRoom(roomId);
+                    if (null != room) {
+                        RoomMember member = room.getMember(mMemberId);
+
+                        if ((null != member) && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
+                            directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(room));
+                        }
+                    }
+                }
+            }
+
+            imageResource = R.drawable.vector_create_direct_room;
+            actionText = getResources().getString(R.string.start_new_chat);
+            directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
+
+            mListViewAdapter.setDirectCallsActionsList(directMessagesActions);
+            mListViewAdapter.notifyDataSetChanged();
+
+            mExpandableListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int count = mListViewAdapter.getGroupCount();
+
+                    for(int pos = 0; pos < count; pos++) {
+                        mExpandableListView.expandGroup(pos);
+                    }
+                }
+            });
         }
     }
 
@@ -821,15 +860,22 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mProgressBarView = findViewById(R.id.member_details_list_view_progress_bar);
 
             // setup the list view
-            mListViewAdapter = new MemberDetailsAdapter(this, R.layout.vector_adapter_member_details_items);
+            mListViewAdapter = new VectorMemberDetailsAdapter(this, mSession, R.layout.vector_adapter_member_details_items, R.layout.adapter_item_vector_recent_header);
             mListViewAdapter.setActionListener(this);
-            updateAdapterListViewItems();
 
-            ListView actionItemsListView = (ListView) findViewById(R.id.member_details_actions_list_view);
+            mExpandableListView = (ExpandableListView) findViewById(R.id.member_details_actions_list_view);
+            // the chevron is managed in the header view
+            mExpandableListView.setGroupIndicator(null);
+            mExpandableListView.setAdapter(mListViewAdapter);
 
-            if (null != actionItemsListView) {
-                actionItemsListView.setAdapter(mListViewAdapter);
-            }
+            mExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                    // the groups are always expanded
+                    return true;
+                }
+            });
+
 
             // when clicking on the username
             // switch member name <-> member id
@@ -1142,8 +1188,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (null != mRoom) {
                 mRoom.addEventListener(mLiveEventsListener);
             }
-
             mSession.getDataHandler().addListener(mPresenceEventsListener);
+
+            updateAdapterListViewItems();
         }
     }
 

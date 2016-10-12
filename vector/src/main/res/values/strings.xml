@@ -135,6 +135,7 @@
     <string name="membership_kick">Kicked</string>
     <string name="membership_ban">Banned</string>
     <string name="start_chat">Start chat</string>
+    <string name="start_new_chat">Start New Chat</string>
     <string name="start_voice_call">Start Voice Call</string>
     <string name="start_video_call">Start Video Call</string>
 
@@ -467,6 +468,11 @@
     <string name="room_participants_ban">Banned</string>
 
     <string name="you">You</string>
+
+    <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
+    <string name="room_participants_header_call">CALL</string>
+    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
+    <string name="room_participants_header_devices">DEVICES</string>
 
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
