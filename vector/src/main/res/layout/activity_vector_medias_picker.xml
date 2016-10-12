@@ -64,7 +64,6 @@
                     android:id="@+id/medias_picker_switch_camera"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:onClick="onExitButton"
                     android:background="@drawable/vector_medias_picker_button_background"
                     android:layout_alignRight="@+id/medias_picker_texture_view"
                     android:layout_alignParentTop="true"
