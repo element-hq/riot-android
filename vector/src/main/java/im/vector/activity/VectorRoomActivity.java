@@ -572,7 +572,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                     final Integer[] messages = new Integer[]{
                             R.string.option_send_files,
-                            R.string.option_take_photo,
+                            R.string.option_take_photo_video,
                     };
 
                     final Integer[] icons = new Integer[]{
@@ -589,7 +589,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                             if (selectedVal == R.string.option_send_files) {
                                 VectorRoomActivity.this.launchFileSelectionIntent();
-                            } else if (selectedVal == R.string.option_take_photo) {
+                            } else if (selectedVal == R.string.option_take_photo_video) {
                                 if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
                                     launchCamera();
                                 }
@@ -1595,6 +1595,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
         Intent intent = new Intent(this, VectorMediasPickerActivity.class);
+        intent.putExtra(VectorMediasPickerActivity.EXTRA_VIDEO_RECORDING_MODE, true);
         startActivityForResult(intent, TAKE_IMAGE_REQUEST_CODE);
     }
 
