@@ -94,7 +94,7 @@ public class Matrix {
 
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
-            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.type) || Event.EVENT_TYPE_RECEIPT.equals(event.type);
+            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
         }
 
         @Override

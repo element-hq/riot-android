@@ -304,12 +304,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             Activity attachedActivity = getActivity();
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
-                Message message = JsonUtils.toMessage(event.content);
+                Message message = JsonUtils.toMessage(event.getContent());
                 ((VectorRoomActivity)attachedActivity).insertQuoteInTextEditor( "> " + textMsg + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
             //
-            Message message = JsonUtils.toMessage(event.content);
+            Message message = JsonUtils.toMessage(event.getContent());
 
             String mediaUrl = null;
             String mediaMimeType = null;
@@ -595,7 +595,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         for(int position = 0; position < mAdapter.getCount(); position++) {
             MessageRow row = mAdapter.getItem(position);
-            Message message = JsonUtils.toMessage(row.getEvent().content);
+            Message message = JsonUtils.toMessage(row.getEvent().getContent());
 
             if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
                 ImageMessage imageMessage = (ImageMessage)message;
@@ -675,7 +675,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             return;
         }
 
-        Message message = JsonUtils.toMessage(event.content);
+        Message message = JsonUtils.toMessage(event.getContent());
 
         // video and images are displayed inside a medias slider.
         if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
@@ -694,7 +694,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 getActivity().startActivity(viewImageIntent);
             }
         } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
-            FileMessage fileMessage = JsonUtils.toFileMessage(event.content);
+            FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
             if (null != fileMessage.url) {
                 onMediaAction(ACTION_VECTOR_OPEN, fileMessage.url, fileMessage.getMimeType(), fileMessage.body);

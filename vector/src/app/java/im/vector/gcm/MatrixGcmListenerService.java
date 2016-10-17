@@ -56,7 +56,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
             event.eventId = bundle.getString("id");
             event.sender = bundle.getString("sender");
             event.roomId = bundle.getString("room_id");
-            event.type = bundle.getString("type");
+            event.setType(bundle.getString("type"));
             event.updateContent((new JsonParser()).parse(bundle.getString("content")).getAsJsonObject());
 
             return event;

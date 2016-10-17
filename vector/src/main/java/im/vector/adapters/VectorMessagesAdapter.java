@@ -544,7 +544,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
             menu.findItem(R.id.ic_action_vector_redact_message).setVisible(canBeRedacted);
 
-            if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
+            if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
                 // share / forward the message
@@ -927,17 +927,17 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         if (null == mediaDownloadId) {
             mediaDownloadId = "";
 
-            if (TextUtils.equals(event.type, Event.EVENT_TYPE_MESSAGE)) {
-                Message message = JsonUtils.toMessage(event.content);
+            if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE)) {
+                Message message = JsonUtils.toMessage(event.getContent());
 
                 String url = null;
 
                 if (TextUtils.equals(message.msgtype, Message.MSGTYPE_IMAGE)) {
-                    url = JsonUtils.toImageMessage(event.content).url;
+                    url = JsonUtils.toImageMessage(event.getContent()).url;
                 } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_VIDEO)) {
-                    url = JsonUtils.toVideoMessage(event.content).url;
+                    url = JsonUtils.toVideoMessage(event.getContent()).url;
                 } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_FILE)) {
-                    url = JsonUtils.toFileMessage(event.content).url;
+                    url = JsonUtils.toFileMessage(event.getContent()).url;
                 }
 
                 if (!TextUtils.isEmpty(url)) {

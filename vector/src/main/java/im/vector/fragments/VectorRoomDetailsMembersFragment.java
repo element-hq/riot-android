@@ -115,9 +115,11 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) ||
-                            Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(event.type) ||
-                            Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
+                    String eventType = event.getType();
+
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType) ||
+                            Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType) ||
+                            Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
                         refreshRoomMembersList(mPatternValue, REFRESH_FORCED);
                     }
                 }

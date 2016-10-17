@@ -82,7 +82,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                     return;
                 }
 
-                Message message = JsonUtils.toMessage(event.content);
+                Message message = JsonUtils.toMessage(event.getContent());
 
                 // video and images are displayed inside a medias slider.
                 if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
@@ -101,7 +101,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                         getActivity().startActivity(viewImageIntent);
                     }
                 } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
-                    FileMessage fileMessage = JsonUtils.toFileMessage(event.content);
+                    FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
                     if (null != fileMessage.url) {
                         onMediaAction(ACTION_VECTOR_OPEN, fileMessage.url, fileMessage.getMimeType(), fileMessage.body);

@@ -117,9 +117,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    String eventType = event.getType();
+
                     // check if the event is received for the current room
                     // check if there is a member update
-                    if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type))) {
+                    if ((Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) || (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType))) {
                         // update only if it is the current user
                         VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                             @Override

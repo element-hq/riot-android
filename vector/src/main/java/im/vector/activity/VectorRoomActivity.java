@@ -312,25 +312,27 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                 @Override
                 public void run() {
+                    String eventType = event.getType();
+
                     // The various events that could possibly change the room title
-                    if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                    if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) {
                         setTitle();
                         updateRoomHeaderMembersStatus();
                         updateRoomHeaderAvatar();
-                    } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)) {
+                    } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
                         checkSendEventStatus();
-                    } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)) {
+                    } else if (Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)) {
                         Log.d(LOG_TAG, "Updating room topic.");
-                        RoomState roomState = JsonUtils.toRoomState(event.content);
+                        RoomState roomState = JsonUtils.toRoomState(event.getContent());
                         setTopic(roomState.topic);
-                    } else if (Event.EVENT_TYPE_TYPING.equals(event.type)) {
+                    } else if (Event.EVENT_TYPE_TYPING.equals(eventType)) {
                         Log.d(LOG_TAG, "on room typing");
                         onRoomTypings();
                     }
                     // header room specific
-                    else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)) {
+                    else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)) {
                         Log.d(LOG_TAG, "Event room avatar");
                         updateRoomHeaderAvatar();
                     }
@@ -338,7 +340,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     if (!VectorApp.isAppInBackground()) {
                         // do not send read receipt for the typing events
                         // they are ephemeral ones.
-                        if (!Event.EVENT_TYPE_TYPING.equals(event.type)) {
+                        if (!Event.EVENT_TYPE_TYPING.equals(eventType)) {
                             if (null != mRoom) {
                                 refreshNotificationsArea();
                             }

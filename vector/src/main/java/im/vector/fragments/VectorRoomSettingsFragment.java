@@ -211,33 +211,35 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                 @Override
                 public void run() {
+                    String eventType = event.getType();
+
                     // The various events that could possibly change the fragment items
-                    if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES.equals(event.type)    // room access rules
-                            || Event.EVENT_TYPE_STATE_ROOM_GUEST_ACCESS.equals(event.type)  // room access rules
+                    if (Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES.equals(eventType)    // room access rules
+                            || Event.EVENT_TYPE_STATE_ROOM_GUEST_ACCESS.equals(eventType)  // room access rules
                             )
                     {
-                        Log.d(LOG_TAG, "## onLiveEvent() event = " + event.type);
+                        Log.d(LOG_TAG, "## onLiveEvent() event = " + eventType);
                         updateUi();
                     }
 
 
                     // aliases
-                    if (Event.EVENT_TYPE_STATE_CANONICAL_ALIAS.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(event.type)
-                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(event.type)
+                    if (Event.EVENT_TYPE_STATE_CANONICAL_ALIAS.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_ALIASES.equals(eventType)
+                            || Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)
                             ) {
                         Log.d(LOG_TAG, "## onLiveEvent() refresh the addresses list");
                         refreshAddresses();
                     }
 
-                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+                    if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)) {
                         Log.d(LOG_TAG, "## onLiveEvent() refresh the banned members list");
                         refreshBannedMembersList();
                     }

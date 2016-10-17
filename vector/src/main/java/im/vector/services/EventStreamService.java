@@ -786,7 +786,7 @@ public class EventStreamService extends Service {
 
         // display only the invitation messages by now
         // because the other ones are not displayed.
-        if (!event.type.equals(Event.EVENT_TYPE_CALL_INVITE)) {
+        if (!event.getType().equals(Event.EVENT_TYPE_CALL_INVITE)) {
             Log.d(LOG_TAG, "prepareCallNotification : don't bing - Call invite");
             return;
         }
@@ -865,9 +865,9 @@ public class EventStreamService extends Service {
 
         String senderID = event.getSender();
         // FIXME: Support event contents with no body
-        if (!event.content.getAsJsonObject().has("body")) {
+        if (!event.getContent().getAsJsonObject().has("body")) {
             // only the membership events are supported
-            if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && !event.isCallEvent()) {
+            if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType()) && !event.isCallEvent()) {
                 Log.d(LOG_TAG, "onBingEvent : don't bing - no body and not a call event");
                 return;
             }
@@ -903,7 +903,7 @@ public class EventStreamService extends Service {
             return;
         }
 
-        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
+        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
             try {
                 isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
             } catch (Exception e) {
