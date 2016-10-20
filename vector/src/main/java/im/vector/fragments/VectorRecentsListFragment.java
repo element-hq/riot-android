@@ -19,9 +19,9 @@ package im.vector.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +46,10 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.util.BingRulesManager;
 import org.matrix.androidsdk.util.EventUtils;
+
+import java.util.HashMap;
+import java.util.List;
+
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
@@ -56,9 +60,6 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorRoomSummaryAdapter;
 import im.vector.services.EventStreamService;
 import im.vector.view.RecentsExpandableListView;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class VectorRecentsListFragment extends Fragment implements VectorRoomSummaryAdapter.RoomEventListener, RecentsExpandableListView.DragAndDropEventsListener {
 
@@ -306,10 +307,13 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             public void run() {
 
                 // trigger a public room refresh if the list was not initialized or too old (5 mins)
-                if (((null == PublicRoomsManager.getPublicRoomsCount()) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
+                if (!mIsLoadingPublicRooms &&
+                        (PublicRoomsManager.PUBLIC_ROOMS_NOT_INITIALIZED == PublicRoomsManager.getPublicRoomsCount()
+                                || (System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) {
+
                     PublicRoomsManager.refreshPublicRoomsCount(new PublicRoomsManager.PublicRoomsManagerListener() {
                         @Override
-                        public void onPublicRoomsCountRefresh(final Integer publicRoomsCount) {
+                        public void onPublicRoomsCountRefresh(final int publicRoomsCount) {
                             if (null != getActivity()) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override

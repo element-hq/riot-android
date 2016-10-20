@@ -107,8 +107,8 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private boolean mForceDirectoryGroupDisplay;
 
     // public room search
-    private Integer mPublicRoomsCount;
-    private Integer mMatchedPublicRoomsCount;
+    private int mPublicRoomsCount = 0;
+    private int mMatchedPublicRoomsCount = 0;
 
     // the listener
     private final RoomEventListener mListener;
@@ -718,12 +718,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
 
                 if (!TextUtils.isEmpty(mSearchedPattern)) {
-                    if (null == mMatchedPublicRoomsCount) {
+                    if (mMatchedPublicRoomsCount < 1) {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_searching_title));
-                    } else if (mMatchedPublicRoomsCount < 2) {
+                    } else if (mMatchedPublicRoomsCount == 1) {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room_for, mMatchedPublicRoomsCount, mSearchedPattern));
                     } else {
-                        String value = mMatchedPublicRoomsCount.toString();
+                        String value = String.valueOf(mMatchedPublicRoomsCount);
 
                         if (mMatchedPublicRoomsCount >= PublicRoomsManager.PUBLIC_ROOMS_LIMIT) {
                             value = "> " + PublicRoomsManager.PUBLIC_ROOMS_LIMIT;
@@ -732,12 +732,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms_for, value, mSearchedPattern));
                     }
                 } else {
-                    if (null == mPublicRoomsCount) {
+                    if (mPublicRoomsCount < 1) {
                         roomMsgTxtView.setText(null);
-                    } else if (mPublicRoomsCount > 1) {
-                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mPublicRoomsCount));
-                    } else {
+                    } else if (mPublicRoomsCount == 1) {
                         roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_room, mPublicRoomsCount));
+                    } else {
+                        roomMsgTxtView.setText(mContext.getResources().getString(R.string.directory_search_rooms, mPublicRoomsCount));
                     }
                 }
 
@@ -1054,7 +1054,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         if (!TextUtils.equals(trimmedPattern, mSearchedPattern)) {
 
             mSearchedPattern = trimmedPattern;
-            mMatchedPublicRoomsCount = null;
+            mMatchedPublicRoomsCount = 0;
 
             // refresh the layout
             this.notifyDataSetChanged();
@@ -1072,7 +1072,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * Update the public rooms list count and refresh the display.
      * @param roomsListCount the new public rooms count
      */
-    public void setPublicRoomsCount(Integer roomsListCount) {
+    public void setPublicRoomsCount(int roomsListCount) {
         if (roomsListCount != mPublicRoomsCount) {
             mPublicRoomsCount = roomsListCount;
             super.notifyDataSetChanged();
@@ -1090,7 +1090,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * Update the matched public rooms list count and refresh the display.
      * @param roomsListCount the new public rooms count
      */
-    public void setMatchedPublicRoomsCount(Integer roomsListCount) {
+    public void setMatchedPublicRoomsCount(int roomsListCount) {
         if (roomsListCount != mMatchedPublicRoomsCount) {
             mMatchedPublicRoomsCount = roomsListCount;
             super.notifyDataSetChanged();
