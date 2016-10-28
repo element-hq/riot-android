@@ -495,7 +495,11 @@ public class EventStreamService extends Service {
             } else {
                 final MXSession fSession = session;
                 // wait that the store is ready  before starting the events listener
-                store.setMXStoreListener(new IMXStore.MXStoreListener() {
+                store.addMXStoreListener(new IMXStore.MXStoreListener() {
+                    @Override
+                    public void postProcess(String accountId) {
+                    }
+
                     @Override
                     public void onStoreReady(String accountId) {
                         startEventStream(fSession, store);

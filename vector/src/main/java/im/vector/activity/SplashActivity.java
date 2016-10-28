@@ -15,6 +15,7 @@
  */
 package im.vector.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -102,6 +103,11 @@ public class SplashActivity extends MXCActionBarActivity {
                     params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
                     params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
                     intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+                }
+
+                // TODO add a toggle
+                for(MXSession session : mSessions) {
+                    session.setCryptoEnabled(true);
                 }
 
                 startActivity(intent);
