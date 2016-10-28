@@ -149,6 +149,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_MEMBER_DETAILS = PERMISSION_READ_CONTACTS;
     public static final int REQUEST_CODE_PERMISSION_ROOM_DETAILS = PERMISSION_CAMERA;
+    public static final int REQUEST_CODE_PERMISSION_VIDEO_RECORDING = PERMISSION_CAMERA | PERMISSION_RECORD_AUDIO;
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
@@ -1828,7 +1829,7 @@ public class CommonActivityUtils {
      * @param activity the calling activity
      * @return if the device is running on low memory.
      */
-    public static boolean displayMemoryInformation(Activity activity) {
+    public static boolean displayMemoryInformation(Activity activity, String title) {
         long freeSize = 0L;
         long totalSize = 0L;
         long usedSize = -1L;
@@ -1842,23 +1843,28 @@ public class CommonActivityUtils {
         }
 
         Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+        Log.e(LOW_MEMORY_LOG_TAG, "----------- " + title + " -----------------");
+        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
         Log.e(LOW_MEMORY_LOG_TAG, "usedSize   " + (usedSize / 1048576L) + " MB");
         Log.e(LOW_MEMORY_LOG_TAG, "freeSize   " + (freeSize / 1048576L) + " MB");
         Log.e(LOW_MEMORY_LOG_TAG, "totalSize  " + (totalSize / 1048576L) + " MB");
         Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
 
 
-        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        ActivityManager activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.getMemoryInfo(mi);
+        if (null != activity) {
+            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+            ActivityManager activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+            activityManager.getMemoryInfo(mi);
 
-        Log.e(LOW_MEMORY_LOG_TAG, "availMem   " + (mi.availMem / 1048576L) + " MB");
-        Log.e(LOW_MEMORY_LOG_TAG, "totalMem   " + (mi.totalMem / 1048576L) + " MB");
-        Log.e(LOW_MEMORY_LOG_TAG, "threshold  " + (mi.threshold / 1048576L) + " MB");
-        Log.e(LOW_MEMORY_LOG_TAG, "lowMemory  " + (mi.lowMemory));
-        Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
-
-        return mi.lowMemory;
+            Log.e(LOW_MEMORY_LOG_TAG, "availMem   " + (mi.availMem / 1048576L) + " MB");
+            Log.e(LOW_MEMORY_LOG_TAG, "totalMem   " + (mi.totalMem / 1048576L) + " MB");
+            Log.e(LOW_MEMORY_LOG_TAG, "threshold  " + (mi.threshold / 1048576L) + " MB");
+            Log.e(LOW_MEMORY_LOG_TAG, "lowMemory  " + (mi.lowMemory));
+            Log.e(LOW_MEMORY_LOG_TAG, "---------------------------------------------------");
+            return mi.lowMemory;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1873,7 +1879,7 @@ public class CommonActivityUtils {
 
             // it seems that onLowMemory is called whereas the device is seen on low memory condition
             // so, test if the both conditions
-            if (displayMemoryInformation(activity)) {
+            if (displayMemoryInformation(activity, "onLowMemory test")) {
                 if (CommonActivityUtils.shouldRestartApp(activity)) {
                     Log.e(LOW_MEMORY_LOG_TAG, "restart");
                     CommonActivityUtils.restartApp(activity);
@@ -1888,7 +1894,7 @@ public class CommonActivityUtils {
             Log.e(LOW_MEMORY_LOG_TAG, "background application : onLowMemory ");
         }
 
-        displayMemoryInformation(activity);
+        displayMemoryInformation(activity, "onLowMemory global");
     }
 
     /**
@@ -1901,6 +1907,6 @@ public class CommonActivityUtils {
         Log.e(LOW_MEMORY_LOG_TAG, "Active application : onTrimMemory from "+ activityName+" level=" + level);
         // TODO implement things to reduce memory usage
 
-        displayMemoryInformation(activity);
+        displayMemoryInformation(activity, "onTrimMemory");
     }
 }

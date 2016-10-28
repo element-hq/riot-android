@@ -94,6 +94,7 @@ public class VectorMarkdownParser extends WebView {
      * @return the escaped text
      */
     private  static String escapeText(String text) {
+        text = text.replace("\\", "\\\\");
         text = text.replace("\n", "\\\\n");
         text = text.replace("'", "\\\'");
         text = text.replace("\r", "");

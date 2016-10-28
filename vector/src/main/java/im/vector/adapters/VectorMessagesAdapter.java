@@ -256,12 +256,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        //  do not refresh the room when the application is in background
-        // on large rooms, it drains a lot of battery
-        if (!VectorApp.isAppInBackground()) {
-            super.notifyDataSetChanged();
-        }
-
         // the event with invalid timestamp must be pushed at the end of the history
         this.setNotifyOnChange(false);
         ArrayList<MessageRow> undeliverableEvents = null;
@@ -304,6 +298,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         synchronized (this) {
             mMessagesDateList = dates;
             mReferenceDate = new Date();
+        }
+
+        //  do not refresh the room when the application is in background
+        // on large rooms, it drains a lot of battery
+        if (!VectorApp.isAppInBackground()) {
+            super.notifyDataSetChanged();
         }
     }
 

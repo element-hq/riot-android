@@ -28,6 +28,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -153,6 +154,10 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
 
         // image
         if (imageInfo.mMessageType.equals(Message.MSGTYPE_IMAGE)) {
+            //
+            if (TextUtils.isEmpty(imageInfo.mMimeType)) {
+                imageInfo.mMimeType = "image/jpeg";
+            }
             downloadHighResPict(view, position);
         } else {
             downloadVideo(view, position);
@@ -376,6 +381,11 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             videoLayout.setVisibility(View.GONE);
 
             final int rotationAngle = mediaInfo.mRotationAngle;
+
+            if (TextUtils.isEmpty(mediaInfo.mMimeType)) {
+                mediaInfo.mMimeType = "image/jpeg";
+            }
+
             final String mimeType = mediaInfo.mMimeType;
             File mediaFile = mMediasCache.mediaCacheFile(mediaUrl, mimeType);
 

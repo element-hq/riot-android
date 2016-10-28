@@ -153,7 +153,7 @@
     <string name="message_unsaved_changes">There are unsaved changes. Leaving will discard them.</string>
 
     <string name="option_send_files">Send files</string>
-    <string name="option_take_photo">Take photo</string>
+    <string name="option_take_photo_video">Take photo or video</string>
     <string name="option_attach_video">Attach video</string>
 
     <!-- Authentication -->
@@ -379,6 +379,7 @@
     <string name="media_picker_attach">Attach"</string>
     <string name="media_picker_choose_from_library">Choose from library"</string>
     <string name="media_picker_library">Library"</string>
+    <string name="media_picker_cannot_record_video">Cannot record video"</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">%s permissions</string>

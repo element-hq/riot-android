@@ -572,7 +572,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                     final Integer[] messages = new Integer[]{
                             R.string.option_send_files,
-                            R.string.option_take_photo,
+                            R.string.option_take_photo_video,
                     };
 
                     final Integer[] icons = new Integer[]{
@@ -589,7 +589,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
                             if (selectedVal == R.string.option_send_files) {
                                 VectorRoomActivity.this.launchFileSelectionIntent();
-                            } else if (selectedVal == R.string.option_take_photo) {
+                            } else if (selectedVal == R.string.option_take_photo_video) {
                                 if(CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, VectorRoomActivity.this)){
                                     launchCamera();
                                 }
@@ -1101,6 +1101,41 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_delete_unsent) {
             mVectorMessageListFragment.deleteUnsentMessages();
             refreshNotificationsArea();
+        } else if (id == R.id.ic_action_room_leave) {
+            if (null != mRoom) {
+                Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
+
+                setProgressVisibility(View.VISIBLE);
+
+                mRoom.leave(new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
+                        // close the activity
+                        finish();
+                    }
+
+                    private void onError(String errorMessage) {
+                        setProgressVisibility(View.GONE);
+                        Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onError(e.getLocalizedMessage());
+                    }
+                });
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -1560,6 +1595,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
 
         Intent intent = new Intent(this, VectorMediasPickerActivity.class);
+        intent.putExtra(VectorMediasPickerActivity.EXTRA_VIDEO_RECORDING_MODE, true);
         startActivityForResult(intent, TAKE_IMAGE_REQUEST_CODE);
     }
 

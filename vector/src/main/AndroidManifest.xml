@@ -90,7 +90,7 @@
 
         <activity
             android:name="im.vector.activity.VectorRoomActivity"
-            android:theme="@style/AppTheme.NoActionBar.Swipe"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_room"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
@@ -147,8 +147,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="im.vector.activity.VectorRoomActivity"/>
         </activity>
+
         <activity
             android:name="im.vector.activity.LockScreenActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name="im.vector.activity.JoinScreenActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"

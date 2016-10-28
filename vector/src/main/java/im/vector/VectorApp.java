@@ -66,7 +66,7 @@ public class VectorApp extends Application {
      * Delay to detect if the application is in background.
      * If there is no active activity during the elapsed time, it means that the application is in background.
      */
-    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 2000;
+    private static final long MAX_ACTIVITY_TRANSITION_TIME_MS = 4000;
 
     /**
      * The current active activity
@@ -145,33 +145,40 @@ public class VectorApp extends Application {
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                Log.d(LOG_TAG, "onActivityCreated " + activity);
                 mCreatedActivities.add(activity.toString());
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
+                Log.d(LOG_TAG, "onActivityStarted " + activity);
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
+                Log.d(LOG_TAG, "onActivityResumed " + activity);
                 setCurrentActivity(activity);
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
+                Log.d(LOG_TAG, "onActivityPaused " + activity);
                 setCurrentActivity(null);
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
+                Log.d(LOG_TAG, "onActivityStopped " + activity);
             }
 
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+                Log.d(LOG_TAG, "onActivitySaveInstanceState " + activity);
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
+                Log.d(LOG_TAG, "onActivityDestroyed " + activity);
                 mCreatedActivities.remove(activity.toString());
 
                 if (mCreatedActivities.size() > 1) {
@@ -231,6 +238,8 @@ public class VectorApp extends Application {
      * i.e wait 2s before assuming that the application is put in background.
      */
     private void startActivityTransitionTimer() {
+        Log.d(LOG_TAG, "## startActivityTransitionTimer()");
+
         mActivityTransitionTimer = new Timer();
         mActivityTransitionTimerTask = new TimerTask() {
             @Override
@@ -245,16 +254,21 @@ public class VectorApp extends Application {
                     mActivityTransitionTimer = null;
                 }
 
-                VectorApp.this.mIsInBackground = true;
-                mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
-
-                // if there is a pending call
-                // the application is not suspended
-                if (!mIsCallingInBackground) {
-                    Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within 2 seconds");
-                    suspendApp();
+                if (null != mCurrentActivity) {
+                    Log.e(LOG_TAG, "## startActivityTransitionTimer() : the timer expires but there is an active activity.");
                 } else {
-                    Log.d(LOG_TAG, "App not suspended due to call in progress");
+                    VectorApp.this.mIsInBackground = true;
+                    mIsCallingInBackground = (null != VectorCallViewActivity.getActiveCall());
+
+                    // if there is a pending call
+                    // the application is not suspended
+                    if (!mIsCallingInBackground) {
+                        Log.d(LOG_TAG, "Suspend the application because there was no resumed activity within " + (MAX_ACTIVITY_TRANSITION_TIME_MS / 1000) + " seconds");
+                        CommonActivityUtils.displayMemoryInformation(null, " app suspended");
+                        suspendApp();
+                    } else {
+                        Log.d(LOG_TAG, "App not suspended due to call in progress");
+                    }
                 }
             }
         };
@@ -266,6 +280,8 @@ public class VectorApp extends Application {
      * Stop the background detection.
      */
     private void stopActivityTransitionTimer() {
+        Log.d(LOG_TAG, "## stopActivityTransitionTimer()");
+
         if (mActivityTransitionTimerTask != null) {
             mActivityTransitionTimerTask.cancel();
             mActivityTransitionTimerTask = null;
@@ -326,6 +342,8 @@ public class VectorApp extends Application {
      * @param activity the current activity, null if there is no more one.
      */
     private void setCurrentActivity(Activity activity) {
+        Log.d(LOG_TAG, "## setCurrentActivity() : from " + mCurrentActivity + " to " + activity);
+
         if (VectorApp.isAppInBackground() && (null != activity)) {
             Matrix matrixInstance =  Matrix.getInstance(activity.getApplicationContext());
 
@@ -336,7 +354,7 @@ public class VectorApp extends Application {
 
             Log.d(LOG_TAG, "The application is resumed");
             // display the memory usage when the application is put iun foreground..
-            CommonActivityUtils.displayMemoryInformation(activity);
+            CommonActivityUtils.displayMemoryInformation(activity, " app resumed with " + activity);
         }
 
         // wait 2s to check that the application is put in background
@@ -346,6 +364,8 @@ public class VectorApp extends Application {
             } else {
                 getInstance().stopActivityTransitionTimer();
             }
+        } else {
+            Log.e(LOG_TAG, "The application is resumed but there is no active instance");
         }
 
         mCurrentActivity = activity;
