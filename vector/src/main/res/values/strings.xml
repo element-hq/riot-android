@@ -135,6 +135,7 @@
     <string name="membership_kick">Kicked</string>
     <string name="membership_ban">Banned</string>
     <string name="start_chat">Start chat</string>
+    <string name="start_new_chat">Start New Chat</string>
     <string name="start_voice_call">Start Voice Call</string>
     <string name="start_video_call">Start Video Call</string>
 
@@ -469,6 +470,11 @@
 
     <string name="you">You</string>
 
+    <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
+    <string name="room_participants_header_call">CALL</string>
+    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
+    <string name="room_participants_header_devices">DEVICES</string>
+
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
     <string name="room_participants_action_remove">Remove from this room</string>
@@ -573,6 +579,7 @@
     <string name="room_recents_join">JOIN</string>
     <string name="room_recents_directory">DIRECTORY</string>
     <string name="room_recents_favourites">FAVORITES</string>
+    <string name="room_recents_pepole">PEOPLE</string>
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
@@ -592,6 +599,7 @@
     <string name="room_settings_notifications">Notifications</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
+    <string name="room_settings_direct_chat">Direct Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
 
     <!-- home sliding menu -->

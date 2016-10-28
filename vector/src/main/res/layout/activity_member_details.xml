@@ -88,12 +88,14 @@
     </RelativeLayout>
 
     <!-- the member actions list: start new room, Make admin, block.. -->
-    <ListView
+    <ExpandableListView
         android:id="@+id/member_details_actions_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/memeber_details_action_bar"
         android:dividerHeight="0dp"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
         android:divider="#00000000"/>
 
     <!-- progress bar view, displayed when an action in the list view is pressed -->
