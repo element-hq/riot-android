@@ -29,9 +29,9 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import org.matrix.androidsdk.data.IMXStore;
-import org.matrix.androidsdk.data.MXFileStore;
-import org.matrix.androidsdk.data.MXMemoryStore;
+import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.data.store.MXFileStore;
+import org.matrix.androidsdk.data.store.MXMemoryStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
@@ -585,6 +585,8 @@ public class Matrix {
             }
         }), mAppContext);
 
+        // TODO add a switch
+        session.enableCryptoWhenStarting();
         session.getDataHandler().addListener(mLiveEventListener);
         session.mCallsManager.addListener(mCallsManagerListener);
         return session;

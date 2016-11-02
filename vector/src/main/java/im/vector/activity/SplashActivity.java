@@ -105,11 +105,6 @@ public class SplashActivity extends MXCActionBarActivity {
                     intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
                 }
 
-                // TODO add a toggle
-                for(MXSession session : mSessions) {
-                    session.setCryptoEnabled(true);
-                }
-
                 startActivity(intent);
                 SplashActivity.this.finish();
             } else {
