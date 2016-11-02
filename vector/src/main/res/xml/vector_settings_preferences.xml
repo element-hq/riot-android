@@ -169,6 +169,11 @@
             android:key="@string/settings_version"/>
 
         <im.vector.preference.VectorCustomActionEditTextPreference
+            android:title="@string/settings_olm_version"
+            android:summary="1.2.3"
+            android:key="@string/settings_olm_version"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
             android:title="@string/settings_copyright"
             android:key="@string/settings_copyright"/>
 

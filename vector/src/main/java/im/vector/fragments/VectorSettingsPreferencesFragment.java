@@ -215,6 +215,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
         }
 
+        // olm version
+        EditTextPreference olmTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_olm_version));
+        if (null != olmTextPreference) {
+            olmTextPreference.setSummary(Matrix.getInstance(getActivity()).getDefaultSession().getCryptoVersion());
+        }
+
         // user account
         EditTextPreference accountIdTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_logged_in));
         if (null != accountIdTextPreference) {
