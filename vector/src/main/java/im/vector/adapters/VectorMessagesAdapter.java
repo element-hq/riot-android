@@ -132,6 +132,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 mediasCache);
     }
 
+    @Override
+    public int getEncryptingMessageTextColor(Context context) {
+        return context.getResources().getColor(R.color.vector_green_color);
+    }
+
     /**
      * the parent fragment is paused.
      */
