@@ -512,14 +512,14 @@ public class Matrix {
      * @param session the session to clear.
      * @param clearCredentials true to clear the credentials.
      */
-    public synchronized void clearSession(Context context, MXSession session, Boolean clearCredentials) {
+    public synchronized void clearSession(Context context, MXSession session, boolean clearCredentials) {
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
 
         session.getDataHandler().removeListener(mLiveEventListener);
         session.mCallsManager.removeListener(mCallsManagerListener);
-        session.clear(context);
+        session.logout(context, null);
 
         synchronized (LOG_TAG) {
             mMXSessions.remove(session);
@@ -531,7 +531,7 @@ public class Matrix {
      * @param context the context.
      * @param clearCredentials  true to clear the credentials.
      */
-    public synchronized void clearSessions(Context context, Boolean clearCredentials) {
+    public synchronized void clearSessions(Context context, boolean clearCredentials) {
         synchronized (LOG_TAG) {
             while (mMXSessions.size() > 0) {
                 clearSession(context, mMXSessions.get(0), clearCredentials);
@@ -585,8 +585,6 @@ public class Matrix {
             }
         }), mAppContext);
 
-        // TODO add a switch
-        session.enableCryptoWhenStarting();
         session.getDataHandler().addListener(mLiveEventListener);
         session.mCallsManager.addListener(mCallsManagerListener);
         return session;

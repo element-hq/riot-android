@@ -384,6 +384,57 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        final SwitchPreference useCryptoPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
+        useCryptoPref.setChecked(mSession.isCryptoEnabled());
+        useCryptoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
+                boolean newValue = (boolean)newValueAsVoid;
+
+                if (mSession.isCryptoEnabled() != newValue) {
+                    displayLoadingView();
+
+                    mSession.enableCrypto(newValue, new ApiCallback<Void>() {
+
+                        private void refresh() {
+                            if (null != getActivity()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideLoadingView();
+                                        useCryptoPref.setChecked(mSession.isCryptoEnabled());
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(Void info) {
+                            refresh();
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            refresh();
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            refresh();
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            refresh();
+                        }
+                    });
+                }
+
+                return true;
+            }
+        });
+
+
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
         mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
