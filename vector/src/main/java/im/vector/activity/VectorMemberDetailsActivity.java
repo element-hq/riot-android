@@ -773,19 +773,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // direct chats management
 
             // list other direct rooms
-            List<String> roomIds = mSession.getDirectChatRoomIdsList();
-
+            List<String> roomIds = mSession.getDirectChatRoomIdsList(mMemberId);
             for(String roomId : roomIds) {
-                // not the current one
-                if (!TextUtils.equals(mRoomId, roomId)) {
-                    Room room = mSession.getDataHandler().getRoom(roomId);
-                    if (null != room) {
-                        RoomMember member = room.getMember(mMemberId);
-
-                        if ((null != member) && TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-                            directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(room));
-                        }
-                    }
+                Room room = mSession.getDataHandler().getRoom(roomId);
+                if (null != room) {
+                    directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(room));
                 }
             }
 
