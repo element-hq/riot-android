@@ -745,6 +745,10 @@
     <string name="room_settings_copy_room_address">Copy Room Address</string>
     <string name="room_details_copy_room_url">Copy Room URL</string>
 
+    <string name="room_settings_addresses_e2e_enable">Encryption is enabled in this room.</string>
+    <string name="room_settings_addresses_e2e_disable">Enable encryption \n(warning: cannot be disabled again!)</string>
+    <string name="room_settings_addresses_e2e_warning">Warning!\nEnd-to-end encryption is in beta and may not be reliable.</string>
+
     <!-- Directory -->
     <string name="directory_title">Directory</string>
 

@@ -30,6 +30,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.MXCryptoAlgorithms;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomAccountData;
 import org.matrix.androidsdk.data.RoomState;
@@ -79,6 +81,8 @@ import im.vector.preference.AddressPreference;
 import im.vector.preference.RoomAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.preference.VectorListPreference;
+import im.vector.preference.VectorSwitchPreference;
+import im.vector.util.BugReporter;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -112,8 +116,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private static final String PREF_KEY_ROOM_LEAVE = "roomLeave";
     private static final String PREF_KEY_ROOM_INTERNAL_ID = "roomInternalId";
     private static final String PREF_KEY_ADDRESSES = "addresses";
+    private static final String PREF_KEY_ADVANCED = "advanced";
+
     private static final String PREF_KEY_BANNED = "banned";
     private static final String PREF_KEY_BANNED_DIVIDER = "banned_divider";
+    private static final String PREF_KEY_ENCRYPTION = "encryptionKey";
 
     private static final String ADDRESSES_PREFERENCE_KEY_BASE = "ADDRESSES_PREFERENCE_KEY_BASE";
     private static final String NO_LOCAL_ADDRESS_PREFERENCE_KEY = "NO_LOCAL_ADDRESS_PREFERENCE_KEY";
@@ -131,6 +138,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
     // addresses
     private PreferenceCategory mAddressesSettingsCategory;
+
+    // other
+    private PreferenceCategory mAdvandceSettingsCategory;
 
     // banned members
     private PreferenceCategory mBannedMembersSettingsCategory;
@@ -229,6 +239,9 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                         updateUi();
                     }
 
+                    if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                        refreshEndToEnd();
+                    }
 
                     // aliases
                     if (Event.EVENT_TYPE_STATE_CANONICAL_ALIAS.equals(eventType)
@@ -318,6 +331,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomAccessRulesListPreference = (VectorListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
         mAddressesSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_ADDRESSES);
+        mAdvandceSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_ADVANCED);
         mBannedMembersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_BANNED);
         mBannedMembersSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(PREF_KEY_BANNED_DIVIDER);
 
@@ -502,6 +516,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
             refreshAddresses();
             refreshBannedMembersList();
+            refreshEndToEnd();
         }
     }
 
@@ -1608,6 +1623,101 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     });
 
             mAddressesSettingsCategory.addPreference(addAddressPreference);
+        }
+    }
+
+
+    /**
+     * Refresh the addresses section
+     */
+    private void refreshEndToEnd() {
+        final String key = PREF_KEY_ENCRYPTION + mRoom.getRoomId();
+
+        // remove the displayed preferences
+        Preference e2ePref = mAdvandceSettingsCategory.findPreference(key);
+
+        if (null != e2ePref) {
+            mAdvandceSettingsCategory.removePreference(e2ePref);
+        }
+
+        // remove the preference because it might switch from a SwitchPreference to  VectorCustomActionEditTextPreference
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(key);
+        editor.commit();
+
+        if (mRoom.isEncrypted()) {
+            VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
+            isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_enable);
+            isEncryptedPreference.setKey(key);
+            isEncryptedPreference.setIcon(getResources().getDrawable(R.drawable.e2e_verified));
+            mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
+        } else if (mSession.isCryptoEnabled()) {
+            final VectorSwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
+            encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_disable);
+            encryptSwitchPreference.setKey(key);
+            encryptSwitchPreference.setIcon(getResources().getDrawable(R.drawable.e2e_unencrypted));
+            encryptSwitchPreference.setChecked(false);
+            mAdvandceSettingsCategory.addPreference(encryptSwitchPreference);
+
+            encryptSwitchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
+                    boolean newValue = (boolean)newValueAsVoid;
+
+                    if (newValue != mRoom.isEncrypted()) {
+                        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                                .setMessage(R.string.room_settings_addresses_e2e_warning)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+
+                                        displayLoadingView();
+                                        mRoom.enableEncryptionWithAlgorithm(MXCryptoAlgorithms.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
+
+                                            private void onDone() {
+                                                hideLoadingView(false);
+                                                refreshEndToEnd();
+                                            }
+
+                                            @Override
+                                            public void onSuccess(Void info) {
+                                                onDone();
+                                            }
+
+                                            @Override
+                                            public void onNetworkError(Exception e) {
+                                                onDone();
+                                            }
+
+                                            @Override
+                                            public void onMatrixError(MatrixError e) {
+                                                onDone();
+                                            }
+
+                                            @Override
+                                            public void onUnexpectedError(Exception e) {
+                                                onDone();
+                                            }
+                                        });
+
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        encryptSwitchPreference.setChecked(false);
+                                    }
+                                })
+                                .create()
+                                .show();
+                    }
+                    return true;
+                }
+            });
+
         }
     }
 

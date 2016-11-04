@@ -170,6 +170,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private EditText mEditText;
     private ImageView mAvatarImageView;
     private View mCanNotPostTextView;
+    private View mE2eImageView;
 
     // call
     private View mStartCallLayout;
@@ -335,6 +336,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     else if (Event.EVENT_TYPE_STATE_ROOM_AVATAR.equals(eventType)) {
                         Log.d(LOG_TAG, "Event room avatar");
                         updateRoomHeaderAvatar();
+                    }
+                    else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                        // should be always visible
+                        mE2eImageView.setVisibility(mRoom.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
                     }
 
                     if (!VectorApp.isAppInBackground()) {
@@ -505,6 +510,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
+        mE2eImageView = findViewById(R.id.room_encrypted_image_view);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -898,6 +904,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mEditText.append(cachedText);
                 mIgnoreTextUpdate = false;
             }
+
+            mE2eImageView.setVisibility(mRoom.isEncrypted() ? View.VISIBLE  : View.INVISIBLE);
         }
 
         manageSendMoreButtons();

@@ -171,13 +171,26 @@
 
                 <LinearLayout
                     android:id="@+id/room_sending_message_layout"
-                    android:layout_marginLeft="16dp"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:minHeight="24dp"
                     android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/room_encrypted_layout"
+                        android:layout_width="16dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/room_encrypted_image_view"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/e2e_verified"/>
+
+                    </RelativeLayout>
 
                     <EditText
                         android:layout_width="0dp"

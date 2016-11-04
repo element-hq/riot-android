@@ -87,7 +87,7 @@
     <im.vector.preference.VectorDividerCategory />
 
     <im.vector.preference.VectorPreferenceCategory
-        android:key="@string/room_settings_category_advanced_title"
+        android:key="advanced"
         android:title="@string/room_settings_category_advanced_title">
 
         <im.vector.preference.VectorCustomActionEditTextPreference
