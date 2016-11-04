@@ -1266,7 +1266,7 @@ public class CommonActivityUtils {
         if((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
             Log.d(LOG_TAG, "## setDirectChatRoom(): failure - invalid input parameters");
         } else {
-            aSession.toogleDirectChatRoom(aRoomId, aParticipantUserId, new ApiCallback<Void>() {
+            aSession.toggleDirectChatRoom(aRoomId, aParticipantUserId, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     HashMap<String, Object> params = new HashMap<>();

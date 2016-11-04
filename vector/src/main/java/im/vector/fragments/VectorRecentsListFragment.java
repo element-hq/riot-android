@@ -756,7 +756,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             mSession.getDataHandler().addListener(mEventsListener);
 
 
-            mSession.toogleDirectChatRoom(roomId, null, new ApiCallback<Void>() {
+            mSession.toggleDirectChatRoom(roomId, null, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     if (null != getActivity()) {
