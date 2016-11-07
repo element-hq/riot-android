@@ -298,15 +298,15 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 MessageRow row = getItem(index);
                 Event event = row.getEvent();
 
-                // not encrypted event
-                if (!event.isEncrypted()) {
-                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_unencrypted);
-                }
                 // oneself event
-                else if (event.isEncrypting()) {
+                if (event.mSentState != Event.SentState.SENT) {
                     e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                }
+                // not encrypted event
+                else if (!event.isEncrypted()) {
+                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_unencrypted);
                 } else {
-                    JsonObject jsonObject = event.getContentAsJsonObject();
+                    JsonObject jsonObject = event.getWireContent().getAsJsonObject();
                     String deviceId = null;
                     MXDeviceInfo deviceInfo = null;
 

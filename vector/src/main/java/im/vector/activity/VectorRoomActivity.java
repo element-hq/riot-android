@@ -339,8 +339,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
                     else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                         // should be always visible
-                        mE2eImageView.setVisibility(View.VISIBLE);
-                        mVectorMessageListFragment.setIsEncrypted(true);
+                        mE2eImageView.setVisibility(mSession.isCryptoEnabled() ? View.VISIBLE : View.GONE);
+                        mVectorMessageListFragment.setIsEncrypted(mSession.isCryptoEnabled());
                     }
 
                     if (!VectorApp.isAppInBackground()) {
@@ -906,7 +906,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 mIgnoreTextUpdate = false;
             }
 
-            mE2eImageView.setVisibility(mRoom.isEncrypted() ? View.VISIBLE  : View.INVISIBLE);
+            mE2eImageView.setVisibility((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ? View.VISIBLE  : View.INVISIBLE);
         }
 
         manageSendMoreButtons();
