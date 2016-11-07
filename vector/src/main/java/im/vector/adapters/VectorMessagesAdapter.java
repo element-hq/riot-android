@@ -247,6 +247,19 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             senderMargin.setVisibility(senderNameView.getVisibility());
             e2eIconView.setVisibility(View.VISIBLE);
             e2eIconView.setImageResource(mE2eIconByEventId.get(event.eventId));
+
+            int type = getItemViewType(position);
+
+            if ((type == ROW_TYPE_IMAGE) || (type == ROW_TYPE_VIDEO)) {
+                View bodyLayoutView = view.findViewById(org.matrix.androidsdk.R.id.messagesAdapter_body_layout);
+                ViewGroup.MarginLayoutParams bodyLayout = (ViewGroup.MarginLayoutParams) bodyLayoutView.getLayoutParams();
+                ViewGroup.MarginLayoutParams e2eIconViewLayout = (ViewGroup.MarginLayoutParams) e2eIconView.getLayoutParams();
+
+                e2eIconViewLayout.setMargins(bodyLayout.leftMargin, e2eIconViewLayout.topMargin, e2eIconViewLayout.rightMargin, e2eIconViewLayout.bottomMargin);
+                bodyLayout.setMargins(4, bodyLayout.topMargin, bodyLayout.rightMargin, bodyLayout.bottomMargin);
+                e2eIconView.setLayoutParams(e2eIconViewLayout);
+                bodyLayoutView.setLayoutParams(bodyLayout);
+            }
         } else {
             e2eIconView.setVisibility(View.GONE);
             senderMargin.setVisibility(View.GONE);
