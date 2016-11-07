@@ -28,6 +28,16 @@
             android:layout_toRightOf="@id/bing_indicator_unread_message"
             android:layout_centerVertical="true" />
 
+        <ImageView
+            android:id="@+id/room_avatar_direct_chat_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_alignTop="@+id/room_avatar_image_view"
+            android:layout_alignLeft="@+id/room_avatar_image_view"
+            android:visibility="gone"
+            android:src="@drawable/icon_person" />
+
         <RelativeLayout
             android:id="@+id/roomSummaryAdapter_show_more_layout"
             android:layout_width="24dp"

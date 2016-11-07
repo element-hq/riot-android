@@ -71,10 +71,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         void onRejectInvitation(MXSession session, String roomId);
 
         void onToggleRoomNotifications(MXSession session, String roomId);
+        void onToggleDirectChat(MXSession session, String roomId);
 
         void moveToFavorites(MXSession session, String roomId);
         void moveToConversations(MXSession session, String roomId);
         void moveToLowPriority(MXSession session, String roomId);
+
 
         void onLeaveRoom(MXSession session, String roomId);
         void onGroupCollapsedNotif(int aGroupPosition);
@@ -115,6 +117,9 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
     // drag and drop mode
     private boolean mIsDragAndDropMode = false;
+
+    // the direct
+    private List<String> mDirectChatRoomIdsList = new ArrayList<>();
 
     /**
      * Constructor
@@ -191,8 +196,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
         else if (mInvitedGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_invites);
-        }
-        else {
+        } else {
             // unknown section
             retValue = "??";
         }
@@ -315,6 +319,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // Retrieve lists of room IDs(strings) according to their tags
             final List<String> favouriteRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
             final List<String> lowPriorityRoomIdList = mMxSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
+            mDirectChatRoomIdsList = mMxSession.getDirectChatRoomIdsList();
 
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
             ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
@@ -329,7 +334,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // here we translate the roomIds (Strings) to their corresponding RoomSummary objects
             for(RoomSummary roomSummary : aRoomSummaryCollection) {
                 roomSummaryId = roomSummary.getRoomId();
-
                 Room room = mMxSession.getDataHandler().getStore().getRoom(roomSummaryId);
 
                 // check if the room exists
@@ -680,7 +684,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         int vectorGreenColor = mContext.getResources().getColor(R.color.vector_green_color);
         int vectorSilverColor = mContext.getResources().getColor(R.color.vector_silver_color);
 
-
         // retrieve the UI items
         ImageView avatarImageView = (ImageView)convertView.findViewById(R.id.room_avatar_image_view);
         TextView roomNameTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_roomName);
@@ -692,7 +695,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         final View actionView = convertView.findViewById(R.id.roomSummaryAdapter_action);
         final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
         TextView unreadCountTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_unread_count);
-
+        View directChatIcon = convertView.findViewById(R.id.room_avatar_direct_chat_icon);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
         Button preViewButton = (Button)convertView.findViewById(R.id.recents_invite_preview_button);
@@ -713,6 +716,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             showMoreView.setVisibility(View.VISIBLE);
             actionClickArea.setVisibility(View.GONE);
             unreadCountTxtView.setVisibility(View.GONE);
+            directChatIcon.setVisibility(View.GONE);
 
             if (mDirectoryGroupPosition == groupPosition) {
                 roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
@@ -815,6 +819,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             isInvited = childRoom.isInvited();
         }
 
+        directChatIcon.setVisibility(mDirectChatRoomIdsList.indexOf(childRoom.getRoomId()) < 0 ? View.GONE : View.VISIBLE);
         bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(isInvited ? View.VISIBLE : View.GONE);
 
@@ -913,6 +918,11 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             item.setIcon(null);
         }
 
+        if (mMxSession.getDirectChatRoomIdsList().indexOf(childRoom.getRoomId()) < 0) {
+            item = popup.getMenu().getItem(3);
+            item.setIcon(null);
+        }
+
         // force to display the icon
         try {
             Field[] fields = popup.getClass().getDeclaredFields();
@@ -957,6 +967,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                     }
                     case R.id.ic_action_select_remove: {
                         mListener.onLeaveRoom(mMxSession, childRoom.getRoomId());
+                        break;
+                    }
+                    case R.id.ic_action_select_direct_chat : {
+                        mListener.onToggleDirectChat(mMxSession, childRoom.getRoomId());
                         break;
                     }
                 }
