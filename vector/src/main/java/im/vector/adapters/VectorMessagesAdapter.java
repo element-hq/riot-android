@@ -35,9 +35,12 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
@@ -57,6 +60,7 @@ import im.vector.util.VectorUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.acl.LastOwnerException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,6 +105,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     // formatted time by event id
     // it avoids computing them several times
     private final HashMap<String, String> mEventFormattedTsMap = new HashMap<>();
+
+    // define the e2e icon to use for a dedicated eventId
+    private HashMap<String, Integer> mE2eIconByEventId = new HashMap<>();
+
+    // true when the room is encrypted
+    public boolean mIsEncrypted;
 
     /**
      * Expanded constructor.
@@ -226,6 +236,22 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             view.setBackgroundColor(Color.TRANSPARENT);
         }
 
+        ImageView e2eIconView = (ImageView)view.findViewById(R.id.message_adapter_e2e_icon);
+        View senderMargin = view.findViewById(R.id.e2e_sender_margin);
+        View senderNameView = view.findViewById(R.id.messagesAdapter_sender);
+
+        MessageRow row = getItem(position);
+        Event event = row.getEvent();
+
+        if (mE2eIconByEventId.containsKey(event.eventId)) {
+            senderMargin.setVisibility(senderNameView.getVisibility());
+            e2eIconView.setVisibility(View.VISIBLE);
+            e2eIconView.setImageResource(mE2eIconByEventId.get(event.eventId));
+        } else {
+            e2eIconView.setVisibility(View.GONE);
+            senderMargin.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
@@ -257,6 +283,78 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } else {
             VectorUtils.loadUserAvatar(mContext, mSession, avatarView, url, userId, displayName);
         }
+    }
+
+    /**
+     * Found the dedicated icon to display for each event id
+     */
+    private void manageCryptoEvents() {
+        HashMap<String, Integer> e2eIconByEventId = new HashMap<>();
+
+        if (mIsEncrypted &&  mSession.isCryptoEnabled()) {
+            // the key is "userid_deviceid"
+            HashMap<String, MXDeviceInfo> deviceInfoHashMap = new HashMap<>();
+            for (int index = 0; index < this.getCount(); index++) {
+                MessageRow row = getItem(index);
+                Event event = row.getEvent();
+
+                // not encrypted event
+                if (!event.isEncrypted()) {
+                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_unencrypted);
+                }
+                // oneself event
+                else if (event.isEncrypting()) {
+                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                } else {
+                    JsonObject jsonObject = event.getContentAsJsonObject();
+                    String deviceId = null;
+                    MXDeviceInfo deviceInfo = null;
+
+                    try {
+                        if (jsonObject.has("device_id")) {
+                            deviceId = jsonObject.get("device_id").getAsString();
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## manageCryptoEvents() : " + e.getMessage());
+                    }
+
+                    if (TextUtils.equals(mSession.getCredentials().deviceId, deviceId) &&
+                            TextUtils.equals(mSession.getMyUserId(), event.getSender())
+                            ) {
+                        e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                    } else {
+                        if (null != deviceId) {
+                            String deviceInfoKey = event.getSender() + "_" + deviceId;
+
+                            if (!deviceInfoHashMap.containsKey(deviceInfoKey)) {
+                                List<MXDeviceInfo> deviceInfos = mSession.getCrypto().storedDevicesForUser(event.senderKey());
+
+                                if (null != deviceInfos) {
+                                    for (MXDeviceInfo di : deviceInfos) {
+                                        deviceInfoHashMap.put(event.getSender() + "_" + di.deviceId, di);
+                                    }
+                                }
+                                deviceInfo = deviceInfoHashMap.get(deviceInfoKey);
+                            }
+                        }
+
+                        if (null != deviceInfo) {
+                            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                                e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                            } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
+                                e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
+                            } else {
+                                e2eIconByEventId.put(event.eventId, R.drawable.e2e_warning);
+                            }
+                        } else {
+                            e2eIconByEventId.put(event.eventId, R.drawable.e2e_warning);
+                        }
+                    }
+                }
+            }
+        }
+
+        mE2eIconByEventId = e2eIconByEventId;
     }
 
     @Override
@@ -304,6 +402,8 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             mMessagesDateList = dates;
             mReferenceDate = new Date();
         }
+
+        manageCryptoEvents();
 
         //  do not refresh the room when the application is in background
         // on large rooms, it drains a lot of battery

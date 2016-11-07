@@ -131,6 +131,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             ((VectorMessagesAdapter) mAdapter).setSearchedEventId(args.getString(ARG_EVENT_ID, ""));
         }
 
+        ((VectorMessagesAdapter) mAdapter).mIsEncrypted = mRoom.isEncrypted();
+
         return v;
     }
 
@@ -222,6 +224,15 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         // notify host activity
         if(null != mHostActivityListener)
             mHostActivityListener.onListTouch();
+    }
+
+    /**
+     * Update the encrypted status of the room
+     * @param isEncrypted
+     */
+    public void setIsEncrypted(boolean isEncrypted) {
+        ((VectorMessagesAdapter) mAdapter).mIsEncrypted = isEncrypted;
+        mAdapter.notifyDataSetChanged();
     }
 
     /**

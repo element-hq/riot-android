@@ -60,7 +60,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:id="@+id/messagesAdapter_body_layout">
 
@@ -70,15 +69,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
+                        <ImageView
+                            android:id="@+id/message_adapter_e2e_icon"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/e2e_verified" />
+
                         <!-- the media -->
                         <ImageView
+                            android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                            android:layout_alignParentRight="true"
                             android:layout_height="match_parent"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_marginLeft="4dp"
                             android:id="@+id/messagesAdapter_image"
                             android:adjustViewBounds="true" />
 
                         <!-- the media type -->
                         <ImageView
+                            android:layout_alignLeft="@+id/messagesAdapter_image"
                             android:layout_width="@dimen/chat_avatar_size"
                             android:layout_height="@dimen/chat_avatar_size"
                             android:id="@+id/messagesAdapter_image_type"

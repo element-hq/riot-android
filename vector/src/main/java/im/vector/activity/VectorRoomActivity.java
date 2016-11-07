@@ -339,7 +339,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                     }
                     else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
                         // should be always visible
-                        mE2eImageView.setVisibility(mRoom.isEncrypted() ? View.VISIBLE : View.INVISIBLE);
+                        mE2eImageView.setVisibility(View.VISIBLE);
+                        mVectorMessageListFragment.setIsEncrypted(true);
                     }
 
                     if (!VectorApp.isAppInBackground()) {
