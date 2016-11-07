@@ -95,7 +95,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
     private int mDirectoryGroupPosition = -1;  // public rooms index
     private int mInvitedGroupPosition = -1;  // "Invited" index
     private int mFavouritesGroupPosition = -1;// "Favourites" index
-    private int mDirectChatsGroupPosition = -1;  // "People" index
     private int mNoTagGroupPosition = -1;    // "Rooms" index
     private int mLowPriorGroupPosition = -1;  // "Low Priority" index
 
@@ -197,11 +196,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         }
         else if (mInvitedGroupPosition == groupPosition) {
             retValue = mContext.getResources().getString(R.string.room_recents_invites);
-        }
-        else if (mDirectChatsGroupPosition == groupPosition) {
-            retValue = mContext.getResources().getString(R.string.room_recents_pepole);
-        }
-        else {
+        } else {
             // unknown section
             retValue = "??";
         }
@@ -316,7 +311,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         mFavouritesGroupPosition = -1;
         mNoTagGroupPosition = -1;
         mLowPriorGroupPosition = -1;
-        mDirectChatsGroupPosition = -1;
 
         if(null != aRoomSummaryCollection) {
 
@@ -330,7 +324,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             // ArrayLists allocations: will contain the RoomSummary objects deduced from roomIdsWithTag()
             ArrayList<RoomSummary> inviteRoomSummaryList = new ArrayList<>();
             ArrayList<RoomSummary> favouriteRoomSummaryList = new ArrayList<>(favouriteRoomIdList.size());
-            ArrayList<RoomSummary> directChatRoomSummaryList = new ArrayList<>(mDirectChatRoomIdsList.size());
             ArrayList<RoomSummary> lowPriorityRoomSummaryList = new ArrayList<>();
             ArrayList<RoomSummary> noTagRoomSummaryList = new ArrayList<>(lowPriorityRoomIdList.size());
 
@@ -358,8 +351,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                             // update the favourites list
                             // the favorites are ordered
                             favouriteRoomSummaryList.set(pos, roomSummary);
-                        } else if (mDirectChatRoomIdsList.indexOf(roomSummaryId) >= 0) {
-                            directChatRoomSummaryList.add(roomSummary);
                         } else if ((pos = lowPriorityRoomIdList.indexOf(roomSummaryId)) >= 0) {
                             // update the low priority list
                             // the low priority are ordered
@@ -435,12 +426,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 groupIndex++;
             }
 
-            if (0 != directChatRoomSummaryList.size()) {
-                summaryListByGroupsRetValue.add(directChatRoomSummaryList);
-                mDirectChatsGroupPosition = groupIndex; // save section index
-                groupIndex++;
-            }
-
             // no tag
             if (0 != noTagRoomSummaryList.size()) {
                 summaryListByGroupsRetValue.add(noTagRoomSummaryList);
@@ -466,7 +451,6 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
                 mFavouritesGroupPosition--;
                 mNoTagGroupPosition--;
                 mLowPriorGroupPosition--;
-                mDirectChatsGroupPosition--;
             }
         }
 
@@ -1197,14 +1181,5 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      */
     public boolean isLowPriorityRoomPosition(int groupPos) {
         return mLowPriorGroupPosition == groupPos;
-    }
-
-    /**
-     * Tell if a group position is the direct chat one.
-     * @param groupPos the proup position.
-     * @return true if the  group position is the direct chat one.
-     */
-    public boolean isDirectChatRoomPosition(int groupPos) {
-        return mDirectChatsGroupPosition == groupPos;
     }
 }

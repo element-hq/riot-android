@@ -35,7 +35,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginLeft="24dp"
-                android:layout_alignBottom="@+id/room_avatar_image_view"
+                android:layout_alignTop="@+id/room_avatar_image_view"
                 android:layout_alignLeft="@+id/room_avatar_image_view"
                 android:src="@drawable/icon_person" />
 
