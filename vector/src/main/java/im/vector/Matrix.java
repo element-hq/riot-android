@@ -519,7 +519,10 @@ public class Matrix {
 
         session.getDataHandler().removeListener(mLiveEventListener);
         session.mCallsManager.removeListener(mCallsManagerListener);
-        session.logout(context, null);
+
+        if (clearCredentials) {
+            session.logout(context, null);
+        }
 
         synchronized (LOG_TAG) {
             mMXSessions.remove(session);
