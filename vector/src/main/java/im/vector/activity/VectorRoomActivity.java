@@ -1694,7 +1694,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        boolean hasText = (mEditText.getText().length() > 0) || (mRoom.isEncrypted() && mSession.isCryptoEnabled());
+        boolean hasText = (mEditText.getText().length() > 0) || ((null != mRoom) && mRoom.isEncrypted() && mSession.isCryptoEnabled());
         mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
     }
 
