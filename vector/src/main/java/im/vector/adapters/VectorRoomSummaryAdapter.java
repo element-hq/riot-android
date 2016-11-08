@@ -1097,7 +1097,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
      * @return the matched public rooms count
      */
     public int getMatchedPublicRoomsCount() {
-        return mMatchedPublicRoomsCount;
+        return (null == mMatchedPublicRoomsCount) ? 0 : mMatchedPublicRoomsCount;
     }
 
     /**
