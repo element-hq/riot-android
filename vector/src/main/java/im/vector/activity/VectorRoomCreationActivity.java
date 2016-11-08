@@ -291,7 +291,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
      * @return a room ID if search succeed, null otherwise.
      */
     private String isDirectChatRoomAlreadyExist(String aUserId) {
-        String roomFound = null;
+
 
         if(null != mSession) {
             IMXStore store = mSession.getDataHandler().getStore();
@@ -300,19 +300,27 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
 
             if (null != store.getDirectChatRoomsDict()) {
                 directChatRoomsDict = new HashMap<>(store.getDirectChatRoomsDict());
-                ArrayList<String> roomIdsList = new ArrayList<>();
 
                 if (directChatRoomsDict.containsKey(aUserId)) {
-                    roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
+                    ArrayList<String> roomIdsList = new ArrayList<>(directChatRoomsDict.get(aUserId));
 
                     if (0 != roomIdsList.size()) {
-                        roomFound = roomIdsList.get(0);
+
+                        for(String roomId : roomIdsList) {
+                            Room room = mSession.getDataHandler().getRoom(roomId, false);
+
+                            // check if the room is already initialized
+                            if ((null != room) && room.isReady() && !room.isInvited() && !room.isLeaving()) {
+                                Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user="+aUserId+" roomFound=" + roomId);
+                                return roomId;
+                            }
+                        }
                     }
                 }
             }
         }
-        Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user="+aUserId+" roomFound="+roomFound);
-        return roomFound;
+        Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user=" + aUserId + " no found room");
+        return null;
     }
 
 
