@@ -33,7 +33,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -53,8 +52,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.liuguangqiang.swipeback.SwipeBackLayout;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -1696,7 +1693,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        boolean hasText = mEditText.getText().length() > 0;
+        boolean hasText = (mEditText.getText().length() > 0) || (mRoom.isEncrypted() && mSession.isCryptoEnabled());
         mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
     }
 
@@ -1885,7 +1882,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void refreshCallButtons() {
         if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
-            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
+            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && !mRoom.isEncrypted();
             IMXCall call = VectorCallViewActivity.getActiveCall();
 
             if (null == call) {
