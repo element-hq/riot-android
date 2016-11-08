@@ -116,6 +116,7 @@
     <string name="create_account">Register</string>
     <string name="matrix_login">Matrix Login</string>
     <string name="login">Log in</string>
+    <string name="logout">Log out</string>
     <string name="hs_url">Home Server URL</string>
     <string name="identity_url">Identity Server URL</string>
     <string name="user">user</string>
@@ -736,7 +737,8 @@
     <string name="room_settings_addresses_pref_title">Addresses</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
-    <string name="room_settings_labs_end_to_end">End-to-End Encryption.</string>
+    <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
+    <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>

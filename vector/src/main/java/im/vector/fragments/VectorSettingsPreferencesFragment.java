@@ -48,6 +48,7 @@ import android.widget.Toast;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.MXCryptoAlgorithms;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
@@ -70,6 +71,7 @@ import java.util.List;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
@@ -385,49 +387,72 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         final SwitchPreference useCryptoPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
-        useCryptoPref.setChecked(mSession.isCryptoEnabled());
+        useCryptoPref.setEnabled(!mSession.isCryptoEnabled());
         useCryptoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
-                boolean newValue = (boolean)newValueAsVoid;
+                if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
+                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            .setMessage(R.string.room_settings_labs_end_to_end_warnings)
+                            .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    CommonActivityUtils.logout(getActivity(), true);
 
-                if (mSession.isCryptoEnabled() != newValue) {
-                    displayLoadingView();
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    useCryptoPref.setChecked(false);
+                                }
+                            })
+                            .create()
+                            .show();
+                } else {
+                    boolean newValue = (boolean) newValueAsVoid;
 
-                    mSession.enableCrypto(newValue, new ApiCallback<Void>() {
+                    if (mSession.isCryptoEnabled() != newValue) {
+                        displayLoadingView();
 
-                        private void refresh() {
-                            if (null != getActivity()) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hideLoadingView();
-                                        useCryptoPref.setChecked(mSession.isCryptoEnabled());
-                                    }
-                                });
+                        mSession.enableCrypto(newValue, new ApiCallback<Void>() {
+
+                            private void refresh() {
+                                if (null != getActivity()) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hideLoadingView();
+                                            useCryptoPref.setChecked(mSession.isCryptoEnabled());
+                                        }
+                                    });
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onSuccess(Void info) {
-                            refresh();
-                        }
+                            @Override
+                            public void onSuccess(Void info) {
+                                useCryptoPref.setEnabled(false);
+                                refresh();
+                            }
 
-                        @Override
-                        public void onNetworkError(Exception e) {
-                            refresh();
-                        }
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                useCryptoPref.setChecked(false);
+                            }
 
-                        @Override
-                        public void onMatrixError(MatrixError e) {
-                            refresh();
-                        }
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                useCryptoPref.setChecked(false);
+                            }
 
-                        @Override
-                        public void onUnexpectedError(Exception e) {
-                            refresh();
-                        }
-                    });
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                useCryptoPref.setChecked(false);
+                            }
+                        });
+                    }
                 }
 
                 return true;
