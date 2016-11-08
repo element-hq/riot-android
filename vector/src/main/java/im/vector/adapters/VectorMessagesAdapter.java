@@ -110,7 +110,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     private HashMap<String, Integer> mE2eIconByEventId = new HashMap<>();
 
     // true when the room is encrypted
-    public boolean mIsEncrypted;
+    public boolean mIsRoomEncrypted;
 
     /**
      * Expanded constructor.
@@ -304,7 +304,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     private void manageCryptoEvents() {
         HashMap<String, Integer> e2eIconByEventId = new HashMap<>();
 
-        if (mIsEncrypted &&  mSession.isCryptoEnabled()) {
+        if (mIsRoomEncrypted &&  mSession.isCryptoEnabled()) {
             // the key is "userid_deviceid"
             HashMap<String, MXDeviceInfo> deviceInfoHashMap = new HashMap<>();
             for (int index = 0; index < this.getCount(); index++) {
