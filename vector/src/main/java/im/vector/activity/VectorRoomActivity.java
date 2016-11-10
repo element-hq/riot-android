@@ -167,7 +167,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private EditText mEditText;
     private ImageView mAvatarImageView;
     private View mCanNotPostTextView;
-    private View mE2eImageView;
+    private ImageView mE2eImageView;
 
     // call
     private View mStartCallLayout;
@@ -335,8 +335,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                         updateRoomHeaderAvatar();
                     }
                     else if (Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
-                        // should be always visible
-                        mE2eImageView.setVisibility(mSession.isCryptoEnabled() ? View.VISIBLE : View.GONE);
+                        boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
+                        mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified :  R.drawable.e2e_unencrypted);
                         mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
                     }
 
@@ -508,7 +508,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mRoomPreviewLayout = findViewById(R.id.room_preview_info_layout);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.room_pending_call_view);
         mVectorOngoingConferenceCallView = (VectorOngoingConferenceCallView) findViewById(R.id.room_ongoing_conference_call_view);
-        mE2eImageView = findViewById(R.id.room_encrypted_image_view);
+        mE2eImageView = (ImageView)findViewById(R.id.room_encrypted_image_view);
 
         // hide the header room as soon as the bottom layout (text edit zone) is touched
         findViewById(R.id.room_bottom_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -904,7 +904,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             }
 
             mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
-            mE2eImageView.setVisibility((mRoom.isEncrypted() && mSession.isCryptoEnabled()) ? View.VISIBLE  : View.INVISIBLE);
+
+            boolean canSendEncryptedEvent = mRoom.isEncrypted() && mSession.isCryptoEnabled();
+            mE2eImageView.setImageResource(canSendEncryptedEvent ? R.drawable.e2e_verified :  R.drawable.e2e_unencrypted);
+            mVectorMessageListFragment.setIsRoomEncrypted(mRoom.isEncrypted());
         }
 
         manageSendMoreButtons();

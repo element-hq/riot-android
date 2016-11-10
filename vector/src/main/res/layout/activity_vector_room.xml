@@ -179,14 +179,13 @@
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
-                        android:id="@+id/room_encrypted_layout"
-                        android:layout_width="16dp"
+                        android:layout_width="20dp"
                         android:layout_height="match_parent">
 
                         <ImageView
                             android:id="@+id/room_encrypted_image_view"
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/e2e_verified"/>
 
