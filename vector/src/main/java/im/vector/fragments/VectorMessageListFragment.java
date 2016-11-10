@@ -43,6 +43,7 @@ import com.google.gson.JsonElement;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -50,13 +51,17 @@ import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.VideoMessage;
+import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.JsonUtils;
+
+import im.vector.EventEmitter;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -77,6 +82,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -243,6 +249,184 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
+     * Display the device verification warning
+     * @param deviceInfo the device info
+     */
+    private void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender) {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
+
+        TextView textView;
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_name);
+        textView.setText(deviceInfo.displayName());
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_id);
+        textView.setText(deviceInfo.deviceId);
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
+        textView.setText(deviceInfo.identityKey());
+
+        builder.setView(layout);
+        builder.setTitle(R.string.encryption_information_verify_device);
+
+        builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.create().show();
+    }
+
+    /**
+     * the user taps on the e2e icon
+     * @param event the event
+     * @param deviceInfo the deviceinfo
+     */
+    public void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo) {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
+
+        View layout = inflater.inflate(R.layout.encrypted_event_info, null);
+
+        TextView textView;
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_info_user_id);
+        textView.setText(event.getSender());
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_info_curve25519_identity_key);
+        if (null != deviceInfo) {
+            textView.setText(encryptedEventContent.sender_key);
+        } else {
+            textView.setText(getActivity().getString(R.string.encryption_information_none));
+        }
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_info_claimed_ed25519_fingerprint_key);
+        if (null != deviceInfo) {
+            textView.setText(deviceInfo.fingerprint());
+        } else {
+            textView.setText(getActivity().getString(R.string.encryption_information_none));
+        }
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_info_algorithm);
+        textView.setText(encryptedEventContent.algorithm);
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_info_session_id);
+        textView.setText(encryptedEventContent.session_id);
+
+        View decryptionErrorLabelTextView = layout.findViewById(R.id.encrypted_info_decryption_error_label);
+        textView = (TextView)layout.findViewById(R.id.encrypted_info_decryption_error);
+
+        if (null != event.getCryptoError()) {
+            decryptionErrorLabelTextView.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
+            textView.setText("**" + event.getCryptoError().getLocalizedMessage() + "**");
+        } else {
+            decryptionErrorLabelTextView.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+        }
+
+        View noDeviceInfoLayout = layout.findViewById(R.id.encrypted_info_no_device_information_layout);
+        View deviceInfoLayout = layout.findViewById(R.id.encrypted_info_sender_device_information_layout);
+
+        if (null != deviceInfo) {
+            noDeviceInfoLayout.setVisibility(View.GONE);
+            deviceInfoLayout.setVisibility(View.VISIBLE);
+
+            textView = (TextView)layout.findViewById(R.id.encrypted_info_name);
+            textView.setText(deviceInfo.displayName());
+
+            textView = (TextView)layout.findViewById(R.id.encrypted_info_device_id);
+            textView.setText(deviceInfo.deviceId);
+
+            textView = (TextView)layout.findViewById(R.id.encrypted_info_verification);
+
+            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
+                textView.setText(getActivity().getString(R.string.encryption_information_not_verified));
+            } else  if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                textView.setText(getActivity().getString(R.string.encryption_information_verified));
+            } else {
+                textView.setText(getActivity().getString(R.string.encryption_information_blocked));
+            }
+
+            textView = (TextView)layout.findViewById(R.id.encrypted_ed25519_fingerprint);
+            textView.setText(deviceInfo.fingerprint());
+        } else {
+            noDeviceInfoLayout.setVisibility(View.VISIBLE);
+            deviceInfoLayout.setVisibility(View.GONE);
+        }
+
+        builder.setView(layout);
+        builder.setTitle(R.string.encryption_information_title);
+
+        builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // nothing to do
+            }
+        });
+
+        if ((null == event.getCryptoError()) && (null != deviceInfo)) {
+            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
+                builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        displayDeviceVerificationDialog(deviceInfo,  event.getSender());
+                    }
+                });
+
+                builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            } else { // BLOCKED
+                builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        displayDeviceVerificationDialog(deviceInfo,  event.getSender());
+                    }
+                });
+
+                builder.setPositiveButton(R.string.encryption_information_unblock, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }
+
+        final android.support.v7.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
      * An action has been  triggered on an event.
      * @param event the event.
      * @param textMsg the event text
@@ -315,7 +499,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             Activity attachedActivity = getActivity();
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
-                Message message = JsonUtils.toMessage(event.getContent());
                 ((VectorRoomActivity)attachedActivity).insertQuoteInTextEditor( "> " + textMsg + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
@@ -388,9 +571,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     builder.create().show();
                 }
             });
+        } else if  (action == R.id.ic_action_device_verification) {
+            onE2eIconClick(event, ((VectorMessagesAdapter)mAdapter).getDeviceInfo(event.eventId));
         }
     }
-
     /**
      * The user reports a content problem to the server
      * @param event the event to report

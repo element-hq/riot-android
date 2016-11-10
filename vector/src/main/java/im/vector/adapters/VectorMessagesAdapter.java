@@ -47,6 +47,7 @@ import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.listeners.IMXMediaDownloadListener;
 import org.matrix.androidsdk.listeners.IMXMediaUploadListener;
+import org.matrix.androidsdk.rest.model.EncryptedEventContent;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -83,6 +84,13 @@ public class VectorMessagesAdapter extends MessagesAdapter {
          * @param action an action ic_action_vector_XXX
          */
         void onEventAction(final Event event, final String textMsg, final int action);
+
+        /**
+         * the user taps on the e2e icon
+         * @param event the event
+         * @param deviceInfo the deviceinfo
+         */
+        void onE2eIconClick(final Event event, final MXDeviceInfo deviceInfo);
     }
 
     // an event is highlighted when the user taps on it
@@ -108,6 +116,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
     // define the e2e icon to use for a dedicated eventId
     private HashMap<String, Integer> mE2eIconByEventId = new HashMap<>();
+
+    // device info by device id
+    private HashMap<String, MXDeviceInfo> mE2eDeviceByEventId = new HashMap<>();
 
     // true when the room is encrypted
     public boolean mIsRoomEncrypted;
@@ -241,7 +252,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         View senderNameView = view.findViewById(R.id.messagesAdapter_sender);
 
         MessageRow row = getItem(position);
-        Event event = row.getEvent();
+        final Event event = row.getEvent();
 
         if (mE2eIconByEventId.containsKey(event.eventId)) {
             senderMargin.setVisibility(senderNameView.getVisibility());
@@ -260,12 +271,37 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 e2eIconView.setLayoutParams(e2eIconViewLayout);
                 bodyLayoutView.setLayoutParams(bodyLayout);
             }
+
+            e2eIconView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mVectorMessagesAdapterEventsListener) {
+                        mVectorMessagesAdapterEventsListener.onE2eIconClick(event, mE2eDeviceByEventId.get(event.eventId));
+                    }
+                }
+            });
         } else {
             e2eIconView.setVisibility(View.GONE);
             senderMargin.setVisibility(View.GONE);
         }
 
         return view;
+    }
+
+
+    /**
+     * Retrieves the MXDevice info from an event id
+     * @param eventId the event id
+     * @return the linked device info, null it it does not exist.
+     */
+    public MXDeviceInfo getDeviceInfo(String eventId) {
+        MXDeviceInfo deviceInfo = null;
+
+        if (null != eventId) {
+            deviceInfo = mE2eDeviceByEventId.get(eventId);
+        }
+
+        return deviceInfo;
     }
 
     @Override
@@ -303,6 +339,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
      */
     private void manageCryptoEvents() {
         HashMap<String, Integer> e2eIconByEventId = new HashMap<>();
+        HashMap<String, MXDeviceInfo> e2eDeviceInfoByEventId = new HashMap<>();
 
         if (mIsRoomEncrypted &&  mSession.isCryptoEnabled()) {
             // the key is "userid_deviceid"
@@ -318,40 +355,22 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 // not encrypted event
                 else if (!event.isEncrypted()) {
                     e2eIconByEventId.put(event.eventId, R.drawable.e2e_unencrypted);
+                }
+                // in error cases, do not display
+                else if (null != event.getCryptoError()) {
+                    e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
                 } else {
-                    JsonObject jsonObject = event.getWireContent().getAsJsonObject();
-                    String deviceId = null;
-                    MXDeviceInfo deviceInfo = null;
+                    EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
 
-                    try {
-                        if (jsonObject.has("device_id")) {
-                            deviceId = jsonObject.get("device_id").getAsString();
-                        }
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## manageCryptoEvents() : " + e.getMessage());
-                    }
-
-                    if (TextUtils.equals(mSession.getCredentials().deviceId, deviceId) &&
+                    if (TextUtils.equals(mSession.getCredentials().deviceId, encryptedEventContent.device_id) &&
                             TextUtils.equals(mSession.getMyUserId(), event.getSender())
                             ) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                     } else {
-                        if (null != deviceId) {
-                            String deviceInfoKey = event.getSender() + "_" + deviceId;
-
-                            if (!deviceInfoHashMap.containsKey(deviceInfoKey)) {
-                                List<MXDeviceInfo> deviceInfos = mSession.getCrypto().storedDevicesForUser(event.senderKey());
-
-                                if (null != deviceInfos) {
-                                    for (MXDeviceInfo di : deviceInfos) {
-                                        deviceInfoHashMap.put(event.getSender() + "_" + di.deviceId, di);
-                                    }
-                                }
-                                deviceInfo = deviceInfoHashMap.get(deviceInfoKey);
-                            }
-                        }
+                        MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
 
                         if (null != deviceInfo) {
+                            e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
                             if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
                             } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
@@ -367,6 +386,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
         }
 
+        mE2eDeviceByEventId = e2eDeviceInfoByEventId;
         mE2eIconByEventId = e2eIconByEventId;
     }
 
@@ -679,6 +699,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
 
         }
+
+        // e2e
+        menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId));
 
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

@@ -74,4 +74,10 @@
         android:title="@string/report_content"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/ic_action_device_verification"
+        android:icon="@drawable/ic_perm_device_information_black"
+        android:title="@string/device_verification"
+        app:showAsAction="never" />
+
 </menu>

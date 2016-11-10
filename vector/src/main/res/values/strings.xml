@@ -52,6 +52,7 @@
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
+    <string name="device_verification">Device verification</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
@@ -769,5 +770,45 @@
 
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room\'s timeline but was unable to find it.</string>
+
+
+    <!-- encryption dialog -->
+    <string name="encryption_information_title">End-to-end encryption information</string>
+
+    <string name="encryption_information_device_info">Event information</string>
+    <string name="encryption_information_user_id">User id</string>
+    <string name="encryption_information_curve25519_identity_key">Curve25519 identity key</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">Claimed Ed25519 fingerprint key</string>
+    <string name="encryption_information_algorithm">Algorithm</string>
+    <string name="encryption_information_session_id">Session ID</string>
+    <string name="encryption_information_decryption_error">Decryption error</string>
+
+    <string name="encryption_information_sender_device_information">Sender device information</string>
+    <string name="encryption_information_device_name">Device name</string>
+    <string name="encryption_information_name">Name</string>
+    <string name="encryption_information_device_id">Device ID</string>
+    <string name="encryption_information_device_key">Device key</string>
+    <string name="encryption_information_verification">Verification</string>
+    <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
+
+    <string name="encryption_information_not_verified">NOT verified</string>
+    <string name="encryption_information_verified">verified</string>
+    <string name="encryption_information_blocked">blocked</string>
+
+    <string name="encryption_information_unknown_device">unknown device</string>
+    <string name="encryption_information_none">none</string>
+
+    <string name="encryption_information_verify">Verify</string>
+    <string name="encryption_information_unverify">Unverify</string>
+    <string name="encryption_information_block">Block</string>
+    <string name="encryption_information_unblock">Unblock</string>
+
+    <string name="encryption_information_verify_device">Verify device</string>
+    <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesnt, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_key_match">I verify that the keys match</string>
+
+
+
 
 </resources>
