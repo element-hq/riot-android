@@ -288,6 +288,22 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         return view;
     }
 
+
+    /**
+     * Retrieves the MXDevice info from an event id
+     * @param eventId the event id
+     * @return the linked device info, null it it does not exist.
+     */
+    public MXDeviceInfo getDeviceInfo(String eventId) {
+        MXDeviceInfo deviceInfo = null;
+
+        if (null != eventId) {
+            deviceInfo = mE2eDeviceByEventId.get(eventId);
+        }
+
+        return deviceInfo;
+    }
+
     @Override
     protected void setTypingVisibility(View avatarLayoutView, int status) {
     }
@@ -363,7 +379,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_warning);
                             }
                         } else {
-                            e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
+                            e2eIconByEventId.put(event.eventId, R.drawable.e2e_warning);
                         }
                     }
                 }
@@ -683,6 +699,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
 
         }
+
+        // e2e
+        menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId));
 
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

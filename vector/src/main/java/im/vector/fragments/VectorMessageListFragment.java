@@ -499,7 +499,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             Activity attachedActivity = getActivity();
 
             if ((null != attachedActivity) && (attachedActivity instanceof VectorRoomActivity)) {
-                Message message = JsonUtils.toMessage(event.getContent());
                 ((VectorRoomActivity)attachedActivity).insertQuoteInTextEditor( "> " + textMsg + "\n\n");
             }
         } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_save)) {
@@ -572,9 +571,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                     builder.create().show();
                 }
             });
+        } else if  (action == R.id.ic_action_device_verification) {
+            onE2eIconClick(event, ((VectorMessagesAdapter)mAdapter).getDeviceInfo(event.eventId));
         }
     }
-
     /**
      * The user reports a content problem to the server
      * @param event the event to report

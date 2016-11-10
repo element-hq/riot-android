@@ -17,7 +17,7 @@
             android:layout_marginTop="10dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:text="Event information"/>
+            android:text="@string/encryption_information_device_info"/>
 
         <TextView
             android:layout_marginTop="5dp"
