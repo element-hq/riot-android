@@ -898,8 +898,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
             FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
-            if (null != fileMessage.url) {
-                onMediaAction(ACTION_VECTOR_OPEN, fileMessage.url, fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+            if (null != fileMessage.getUrl()) {
+                onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
             }
         } else {
             // switch in section mode
