@@ -511,12 +511,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             if (message instanceof ImageMessage) {
                 ImageMessage imageMessage = (ImageMessage) message;
 
-                mediaUrl = imageMessage.url;
+                mediaUrl = imageMessage.getUrl();
                 mediaMimeType = imageMessage.getMimeType();
             } else if (message instanceof VideoMessage) {
                 VideoMessage videoMessage = (VideoMessage) message;
 
-                mediaUrl = videoMessage.url;
+                mediaUrl = videoMessage.getUrl();
 
                 if (null != videoMessage.info) {
                     mediaMimeType = videoMessage.info.mimetype;
@@ -524,7 +524,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             } else if (message instanceof FileMessage) {
                 FileMessage fileMessage = (FileMessage) message;
 
-                mediaUrl = fileMessage.url;
+                mediaUrl = fileMessage.getUrl();
                 mediaMimeType = fileMessage.getMimeType();
             }
 
@@ -798,7 +798,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 SlidableMediaInfo info = new SlidableMediaInfo();
                 info.mMessageType = Message.MSGTYPE_IMAGE;
                 info.mFileName = imageMessage.body;
-                info.mMediaUrl = imageMessage.url;
+                info.mMediaUrl = imageMessage.getUrl();
                 info.mRotationAngle = imageMessage.getRotation();
                 info.mOrientation = imageMessage.getOrientation();
                 info.mMimeType = imageMessage.getMimeType();
@@ -809,7 +809,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 VideoMessage videoMessage = (VideoMessage)message;
                 info.mMessageType = Message.MSGTYPE_VIDEO;
                 info.mFileName = videoMessage.body;
-                info.mMediaUrl = videoMessage.url;
+                info.mMediaUrl = videoMessage.getUrl();
                 info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
                 info.mMimeType = videoMessage.getVideoMimeType();
                 res.add(info);
@@ -829,9 +829,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         String url = null;
 
         if (mediaMessage instanceof ImageMessage) {
-            url = ((ImageMessage)mediaMessage).url;
+            url = ((ImageMessage)mediaMessage).getUrl();
         } else if (mediaMessage instanceof VideoMessage) {
-            url = ((VideoMessage)mediaMessage).url;
+            url = ((VideoMessage)mediaMessage).getUrl();
         }
 
         // sanity check
