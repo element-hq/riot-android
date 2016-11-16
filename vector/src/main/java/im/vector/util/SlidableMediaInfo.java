@@ -15,6 +15,8 @@
  */
 package im.vector.util;
 
+import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
+
 import java.io.Serializable;
 
 public class SlidableMediaInfo implements Serializable {
@@ -26,6 +28,7 @@ public class SlidableMediaInfo implements Serializable {
     public String mMediaUrl;
     public String mThumbnailUrl;
     public String mMimeType;
+    public EncryptedFileInfo mEncryptedFileInfo;
 
     // exif infos
     public int mRotationAngle = 0;

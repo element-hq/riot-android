@@ -209,7 +209,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // else download it
-        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), loadingUri, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -276,7 +276,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         final SlidableMediaInfo imageInfo = mMediasMessagesList.get(position);
         final String viewportContent = "width=640";
         final String loadingUri = imageInfo.mMediaUrl;
-        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeserverConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType);
+        final String downloadId = mMediasCache.loadBitmap(mContext, mSession.getHomeserverConfig(), loadingUri, imageInfo.mRotationAngle, imageInfo.mOrientation, imageInfo.mMimeType, imageInfo.mEncryptedFileInfo);
 
         webView.getSettings().setDisplayZoomControls(false);
 
@@ -418,7 +418,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         }
 
         // check if the media is downloading
-        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaUrl, mediaInfo.mMimeType);
+        String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
         if (null != downloadId) {
             pieFractionView.setVisibility(View.VISIBLE);
@@ -567,7 +567,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
             }
         } else {
             downloadVideo(mLatestPrimaryView, mLatestPrimaryItemPosition, true);
-            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType);
+            final String downloadId = mMediasCache.downloadMedia(mContext, mSession.getHomeserverConfig(), mediaInfo.mMediaUrl, mediaInfo.mMimeType, mediaInfo.mEncryptedFileInfo);
 
             if (null != downloadId) {
                 mMediasCache.addDownloadListener(downloadId, new MXMediaDownloadListener() {
@@ -662,7 +662,7 @@ public class VectorMediasViewerAdapter extends PagerAdapter {
         });
 
         // init the thumbnail views
-        mMediasCache.loadBitmap(mSession.getHomeserverConfig(), thumbView, thumbnailUrl, 0, 0, null);
+        mMediasCache.loadBitmap(mSession.getHomeserverConfig(), thumbView, thumbnailUrl, 0, 0, null, null);
 
         playView.setOnClickListener(new View.OnClickListener() {
             @Override

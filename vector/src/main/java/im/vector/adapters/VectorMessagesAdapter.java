@@ -1074,11 +1074,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                 String url = null;
 
                 if (TextUtils.equals(message.msgtype, Message.MSGTYPE_IMAGE)) {
-                    url = JsonUtils.toImageMessage(event.getContent()).url;
+                    url = JsonUtils.toImageMessage(event.getContent()).getUrl();
                 } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_VIDEO)) {
-                    url = JsonUtils.toVideoMessage(event.getContent()).url;
+                    url = JsonUtils.toVideoMessage(event.getContent()).getUrl();
                 } else if (TextUtils.equals(message.msgtype, Message.MSGTYPE_FILE)) {
-                    url = JsonUtils.toFileMessage(event.getContent()).url;
+                    url = JsonUtils.toFileMessage(event.getContent()).getUrl();
                 }
 
                 if (!TextUtils.isEmpty(url)) {
