@@ -52,6 +52,7 @@ import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.EncryptedEventContent;
+import org.matrix.androidsdk.rest.model.EncryptedFileInfo;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.FileMessage;
 import org.matrix.androidsdk.rest.model.ImageMessage;
@@ -507,16 +508,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
             String mediaUrl = null;
             String mediaMimeType = null;
+            EncryptedFileInfo encryptedFileInfo = null;
 
             if (message instanceof ImageMessage) {
                 ImageMessage imageMessage = (ImageMessage) message;
 
                 mediaUrl = imageMessage.getUrl();
                 mediaMimeType = imageMessage.getMimeType();
+                encryptedFileInfo = imageMessage.file;
             } else if (message instanceof VideoMessage) {
                 VideoMessage videoMessage = (VideoMessage) message;
 
                 mediaUrl = videoMessage.getUrl();
+                encryptedFileInfo = videoMessage.file;
 
                 if (null != videoMessage.info) {
                     mediaMimeType = videoMessage.info.mimetype;
@@ -526,11 +530,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                 mediaUrl = fileMessage.getUrl();
                 mediaMimeType = fileMessage.getMimeType();
+                encryptedFileInfo = fileMessage.file;
             }
 
             // media file ?
             if (null != mediaUrl) {
-                onMediaAction(action, mediaUrl, mediaMimeType, message.body);
+                onMediaAction(action, mediaUrl, mediaMimeType, message.body, encryptedFileInfo);
             } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_quote)) {
                 // use the body
                 final Intent sendIntent = new Intent();
@@ -642,7 +647,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
      * @param mediaMimeType the mime type
      * @param filename the filename
      */
-    protected void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename) {
+    protected void onMediaAction(final int menuAction, final String mediaUrl, final String mediaMimeType, final String filename, final EncryptedFileInfo encryptedFileInfo) {
         MXMediasCache mediasCache = Matrix.getInstance(getActivity()).getMediasCache();
         File file = mediasCache.mediaCacheFile(mediaUrl, mediaMimeType);
 
@@ -701,7 +706,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         } else {
             // else download it
-            final String downloadId = mediasCache.downloadMedia(getActivity(), mSession.getHomeserverConfig(), mediaUrl, mediaMimeType);
+            final String downloadId = mediasCache.downloadMedia(getActivity(), mSession.getHomeserverConfig(), mediaUrl, mediaMimeType, encryptedFileInfo);
             mAdapter.notifyDataSetChanged();
 
             if (null != downloadId) {
@@ -722,7 +727,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             VectorMessageListFragment.this.getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onMediaAction(menuAction, mediaUrl, mediaMimeType, filename);
+                                    onMediaAction(menuAction, mediaUrl, mediaMimeType, filename, encryptedFileInfo);
                                 }
                             });
                         }
@@ -803,6 +808,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 info.mOrientation = imageMessage.getOrientation();
                 info.mMimeType = imageMessage.getMimeType();
                 info.mIdentifier = row.getEvent().eventId;
+                info.mEncryptedFileInfo = imageMessage.file;
                 res.add(info);
             } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
                 SlidableMediaInfo info = new SlidableMediaInfo();
@@ -812,6 +818,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 info.mMediaUrl = videoMessage.getUrl();
                 info.mThumbnailUrl = (null != videoMessage.info) ?  videoMessage.info.thumbnail_url : null;
                 info.mMimeType = videoMessage.getVideoMimeType();
+                info.mEncryptedFileInfo = videoMessage.file;
                 res.add(info);
             }
         }
@@ -892,7 +899,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
             if (null != fileMessage.url) {
-                onMediaAction(ACTION_VECTOR_OPEN, fileMessage.url, fileMessage.getMimeType(), fileMessage.body);
+                onMediaAction(ACTION_VECTOR_OPEN, fileMessage.url, fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
             }
         } else {
             // switch in section mode
