@@ -27,6 +27,7 @@
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>
     <string name="share">Share</string>
+    <string name="later">Later</string>
     <string name="paste_username">Paste username</string>
     <string name="view_profile">View profile</string>
     <string name="direct_message">Direct message</string>
@@ -53,6 +54,7 @@
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
     <string name="device_verification">Device verification</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>
@@ -770,7 +772,8 @@
 
     <string name="room_settings_addresses_e2e_enable">Encryption is enabled in this room.</string>
     <string name="room_settings_addresses_e2e_disable">Enable encryption \n(warning: cannot be disabled again!)</string>
-    <string name="room_settings_addresses_e2e_warning">Warning!\nEnd-to-end encryption is in beta and may not be reliable.</string>
+    <string name="room_settings_addresses_e2e_prompt_title">Warning!</string>
+    <string name="room_settings_addresses_e2e_prompt_message">End-to-end encryption is experimental and may not be reliable.\n\nYou should not yet trust it to secure data. File transfers are not yet encrypted.\n\nDevices will not yet be able to decrypt history from before they joined the room.\n\nOnce encryption is enabled for a room it cannot be turned off again (for now).\n\nEncrypted messages will not be visible on clients that do not yet implement encryption.</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
@@ -820,7 +823,5 @@
     <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesnt, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
-
-
-
+    <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
 </resources>

@@ -687,7 +687,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isUserAllowedToStartConfCall()) {
+                if ((null != mRoom) && mRoom.isEncrypted() && (mRoom.getActiveMembers().size() > 2))  {
+                    // display the dialog with the info text
+                    AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(VectorRoomActivity.this);
+                    Resources resource = getResources();
+                    permissionsInfoDialog.setMessage(resource.getString(R.string.room_no_conference_call_in_encrypted_rooms));
+                    permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                    permissionsInfoDialog.setPositiveButton(resource.getString(R.string.ok),null);
+                    permissionsInfoDialog.show();
+
+                } else if(isUserAllowedToStartConfCall()) {
                     displayVideoCallIpDialog();
                 } else {
                     displayConfCallNotAllowed();
@@ -1697,7 +1706,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        boolean hasText = (mEditText.getText().length() > 0) || ((null != mRoom) && mRoom.isEncrypted() && mSession.isCryptoEnabled());
+        boolean hasText = (mEditText.getText().length() > 0);
         mSendImageView.setImageResource(hasText ? R.drawable.ic_material_send_green : R.drawable.ic_material_file);
     }
 
@@ -1886,7 +1895,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     private void refreshCallButtons() {
         if ((null == sRoomPreviewData) && (null == mEventId) && canSendMessages()) {
-            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported() && !mRoom.isEncrypted();
+            boolean isCallSupported = mRoom.canPerformCall() && mSession.isVoipCallSupported();
             IMXCall call = VectorCallViewActivity.getActiveCall();
 
             if (null == call) {

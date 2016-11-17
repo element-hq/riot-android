@@ -401,6 +401,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         final SwitchPreference useCryptoPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
+        useCryptoPref.setChecked(mSession.isCryptoEnabled());
         useCryptoPref.setEnabled(!mSession.isCryptoEnabled());
         useCryptoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

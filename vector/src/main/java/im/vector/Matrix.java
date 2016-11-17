@@ -588,6 +588,11 @@ public class Matrix {
             }
         }), mAppContext);
 
+        // if a device id is defined, enable the encryption
+        if (!TextUtils.isEmpty(credentials.deviceId)) {
+            session.enableCryptoWhenStarting();
+        }
+
         session.getDataHandler().addListener(mLiveEventListener);
         session.mCallsManager.addListener(mCallsManagerListener);
         return session;

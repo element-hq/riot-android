@@ -22,8 +22,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -599,6 +601,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // https://github.com/vector-im/vector-android/issues/323
         // the tool bar color is not restored on some devices.
         mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
+
+        checkDeviceId();
     }
 
     @Override
@@ -1164,6 +1168,46 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 }
             });
+        }
+    }
+
+    //==============================================================================================================
+    // encryption
+    //==============================================================================================================
+
+    private static final String NO_DEVICE_ID_WARNING_KEY = "NO_DEVICE_ID_WARNING_KEY";
+
+    /**
+     * In case of the app update for the e2e encryption, the app starts with no device id provided by the homeserver.
+     * Ask the user to login again in order to enable e2e. Ask it once
+     */
+    private void checkDeviceId() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (preferences.getBoolean(NO_DEVICE_ID_WARNING_KEY, true)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(NO_DEVICE_ID_WARNING_KEY, false);
+            editor.commit();
+
+            if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setMessage(R.string.e2e_enabling_on_app_update)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                CommonActivityUtils.logout(VectorHomeActivity.this, true);
+                            }
+                        })
+                        .setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
         }
     }
 }
