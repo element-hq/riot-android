@@ -441,6 +441,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                         public void run() {
                                             hideLoadingView();
                                             useCryptoPref.setChecked(mSession.isCryptoEnabled());
+
+                                            if(mSession.isCryptoEnabled()){
+                                                refreshDevicesList();
+                                            }
                                         }
                                     });
                                 }
@@ -1577,22 +1581,27 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     // devices list
     //==============================================================================================================
 
+    private void removeDevicesPreference() {
+        PreferenceScreen preferenceScreen;
+        if(null != (preferenceScreen = getPreferenceScreen())) {
+            preferenceScreen.removePreference(mDevicesListSettingsCategory);
+            preferenceScreen.removePreference(mDevicesListSettingsCategoryDivider);
+        }
+    }
+
     /**
      * Force the refresh of the devices list.<br>
      * The devices list is the list of the devices where the user as looged in.
      * It can be any mobile device, as any browser.
      */
     private void refreshDevicesList() {
-        if(null != mSession) {
+        if((null != mSession) && (mSession.isCryptoEnabled()) && (!TextUtils.isEmpty(mSession.getCredentials().deviceId))) {
             mSession.getDevicesList(new ApiCallback<DevicesListResponse>() {
 
                 @Override
                 public void onSuccess(DevicesListResponse info) {
-                    PreferenceScreen preferenceScreen = getPreferenceScreen();
                     if(0 == info.devices.size()) {
-                        // empty list: just remove the settings
-                        preferenceScreen.removePreference(mDevicesListSettingsCategory);
-                        preferenceScreen.removePreference(mDevicesListSettingsCategoryDivider);
+                        removeDevicesPreference();
                     } else {
                         buildDevicesSettings(info.devices);
                     }
@@ -1600,19 +1609,24 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                 @Override
                 public void onNetworkError(Exception e) {
+                    removeDevicesPreference();
                     onCommonDone(e.getMessage());
                 }
 
                 @Override
                 public void onMatrixError(MatrixError e) {
+                    removeDevicesPreference();
                     onCommonDone(e.getMessage());
                 }
 
                 @Override
                 public void onUnexpectedError(Exception e) {
+                    removeDevicesPreference();
                     onCommonDone(e.getMessage());
                 }
             });
+        } else {
+            removeDevicesPreference();
         }
     }
 
