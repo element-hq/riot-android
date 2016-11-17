@@ -54,6 +54,7 @@
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
     <string name="device_verification">Device verification</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>

@@ -138,7 +138,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             ((VectorMessagesAdapter) mAdapter).setSearchedEventId(args.getString(ARG_EVENT_ID, ""));
         }
 
-        ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = mRoom.isEncrypted();
+        if (null != mRoom) {
+            ((VectorMessagesAdapter) mAdapter).mIsRoomEncrypted = mRoom.isEncrypted();
+        }
 
         return v;
     }
