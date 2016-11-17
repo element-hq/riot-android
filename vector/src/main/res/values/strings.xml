@@ -27,6 +27,7 @@
     <string name="redact">Redact</string>
     <string name="quote">Quote</string>
     <string name="share">Share</string>
+    <string name="later">Later</string>
     <string name="paste_username">Paste username</string>
     <string name="view_profile">View profile</string>
     <string name="direct_message">Direct message</string>
@@ -809,7 +810,5 @@
     <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesnt, then someone else is intercepting this device and you probably want to press the block button instead.\nIn future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
-
-
-
+    <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
 </resources>
