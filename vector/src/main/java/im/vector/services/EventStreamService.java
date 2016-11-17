@@ -17,6 +17,7 @@
 package im.vector.services;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -502,13 +503,23 @@ public class EventStreamService extends Service {
 
                     @Override
                     public void onStoreReady(String accountId) {
-                        startEventStream(fSession, store);
+                        if (fSession.isCryptoEnabled() && fSession.getCrypto().isCorrupted()) {
+                            Log.e(LOG_TAG, "## start : accountId " + accountId + "'s crypto is corrupted");
+                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
+                        } else {
+                            startEventStream(fSession, store);
+                        }
                     }
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        //Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
-                        startEventStream(fSession, store);
+                        if (fSession.isCryptoEnabled() && fSession.getCrypto().isCorrupted()) {
+                            Log.e(LOG_TAG, "## start : accountId " + accountId + "'s crypto is corrupted");
+                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
+                        } else {
+                            // the sync will start from scratch
+                            startEventStream(fSession, store);
+                        }
                     }
 
                     @Override
