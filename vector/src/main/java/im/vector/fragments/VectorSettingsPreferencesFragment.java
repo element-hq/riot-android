@@ -1733,14 +1733,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             final DeviceInfo fDeviceInfo = aDeviceInfo;
 
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
 
-            /*builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     displayDeviceDeletionDialog(fDeviceInfo);
@@ -1763,7 +1757,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                     return false;
                 }
-            });*/
+            });
 
             builder.create().show();
         } else {
@@ -1784,7 +1778,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         View layout = inflater.inflate(R.layout.devices_settings_delete, null);
 
         if ((null!=aDeviceInfoToDelete) && (null!=builder)) {
-            final EditText password = (EditText) layout.findViewById(R.id.delete_password);
+            final EditText passwordEditText = (EditText) layout.findViewById(R.id.delete_password);
             builder.setIcon(android.R.drawable.ic_dialog_alert);
             builder.setTitle(R.string.devices_delete_dialog_title);
             builder.setView(layout);
@@ -1793,13 +1787,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if(null != mSession) {
-                        if(TextUtils.isEmpty(password.toString())) {
+                        if(TextUtils.isEmpty(passwordEditText.toString())) {
                             CommonActivityUtils.displayToast(VectorSettingsPreferencesFragment.this.getActivity().getApplicationContext(), "Password missing..");
                             return;
                         }
 
                         displayLoadingView();
-                        mSession.deleteDevice(aDeviceInfoToDelete.device_id, password.toString(), new ApiCallback<Void>() {
+                        mSession.deleteDevice(aDeviceInfoToDelete.device_id, passwordEditText.getText().toString(), new ApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void info) {
                                 hideLoadingView();
