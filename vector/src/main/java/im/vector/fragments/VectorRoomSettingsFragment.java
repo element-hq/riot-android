@@ -1668,6 +1668,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     if (newValue != mRoom.isEncrypted()) {
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
                                 .setTitle(R.string.room_settings_addresses_e2e_prompt_title)
+                                .setTitle(R.string.room_settings_addresses_e2e_prompt_message)
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
