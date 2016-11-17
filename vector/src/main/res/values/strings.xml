@@ -666,6 +666,18 @@
     <string name="settings_advanced">Advanced</string>
     <string name="settings_notifications_targets">Notification Targets</string>
     <string name="settings_app_permission">App permissions</string>
+    <string name="settings_devices_list">Devices</string>
+    <string name="devices_divider">devices_devider</string>
+    <string name="devices_details_dialog_title">Device details</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="devices_details_name_title">Name</string>
+    <string name="devices_details_last_seen_title">Last seen</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_date_time_format">yyyy/MM/dd, HH:mm:ss</string>
+    <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
+    <string name="devices_delete_dialog_title">Authentication</string>
+    <string name="devices_delete_pswd">Password:</string>
+    <string name="devices_delete_submit_button_label">Submit</string>
 
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Home Server</string>
