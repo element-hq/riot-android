@@ -365,6 +365,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
                             TextUtils.equals(mSession.getMyUserId(), event.getSender())
                             ) {
                         e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
+                        MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+
+                        if (null != deviceInfo) {
+                            e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
+                        }
+
                     } else {
                         MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
 

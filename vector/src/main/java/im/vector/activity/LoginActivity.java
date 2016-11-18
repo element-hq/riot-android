@@ -2353,9 +2353,16 @@ public class LoginActivity extends MXCActionBarActivity {
                 authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
 
                 params.auth = authParams;
-                params.username = mCreationUsernameTextView.getText().toString().trim();
-                params.password = mCreationPassword1TextView.getText().toString().trim();
-                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
+
+                if(null == mEmailValidationExtraParams) {
+                    params.username = mCreationUsernameTextView.getText().toString().trim();
+                    params.password = mCreationPassword1TextView.getText().toString().trim();
+                    params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
+                } else {
+                    // if LoginActivity was started from an email validation do not set username, pswd and email,
+                    // otherwise the server returns M_USER_IN_USE error code
+                    Log.d(LOG_TAG, "## onActivityResult(): mail validation in progress => username, pswd and email not set in register()");
+                }
 
                 runOnUiThread(new Runnable() {
                     @Override

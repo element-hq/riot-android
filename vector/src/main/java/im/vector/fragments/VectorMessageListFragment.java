@@ -381,47 +381,49 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         });
 
-        if ((null == event.getCryptoError()) && (null != deviceInfo)) {
-            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
-                builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        displayDeviceVerificationDialog(deviceInfo,  event.getSender());
-                    }
-                });
+        if (!TextUtils.equals(event.getSender(), mSession.getMyUserId())) {
+            if ((null == event.getCryptoError()) && (null != deviceInfo)) {
+                if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
+                    builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            displayDeviceVerificationDialog(deviceInfo, event.getSender());
+                        }
+                    });
 
-                builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
-                builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                    builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                    builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
 
-                builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            } else { // BLOCKED
-                builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        displayDeviceVerificationDialog(deviceInfo,  event.getSender());
-                    }
-                });
+                    builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } else { // BLOCKED
+                    builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            displayDeviceVerificationDialog(deviceInfo, event.getSender());
+                        }
+                    });
 
-                builder.setPositiveButton(R.string.encryption_information_unblock, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                    builder.setPositiveButton(R.string.encryption_information_unblock, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         }
 
