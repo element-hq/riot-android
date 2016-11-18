@@ -83,6 +83,7 @@ import im.vector.adapters.AdapterUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.ResourceUtils;
@@ -1596,8 +1597,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      */
     private void refreshDevicesList() {
         if((null != mSession) && (mSession.isCryptoEnabled()) && (!TextUtils.isEmpty(mSession.getCredentials().deviceId))) {
+            // display a spinner while loading the devices list
+            if (0 == mDevicesListSettingsCategory.getPreferenceCount()) {
+                ProgressBarPreference preference = new ProgressBarPreference(getActivity());
+                mDevicesListSettingsCategory.addPreference(preference);
+            }
+            
             mSession.getDevicesList(new ApiCallback<DevicesListResponse>() {
-
                 @Override
                 public void onSuccess(DevicesListResponse info) {
                     if(0 == info.devices.size()) {
