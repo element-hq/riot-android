@@ -53,7 +53,7 @@
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing..</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
-    <string name="device_verification">Device verification</string>
+    <string name="device_information">Device information</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
 
     <!-- server urls -->
