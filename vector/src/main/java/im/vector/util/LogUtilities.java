@@ -142,6 +142,12 @@ public class LogUtilities {
             "Ext4Crypt:S",
             "MccTable:S",
             "DiracAPI:S",
+            "skia:S",
+            "libc-netbsd:S",
+            "chromium:S",
+            "v8:S",
+            "PreferenceGroup:S",
+            "Preference:S",
             "*:*"
     };
 

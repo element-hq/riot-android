@@ -28,6 +28,7 @@ import android.widget.TextView;
 import im.vector.R;
 import im.vector.util.VectorUtils;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
 /**
@@ -35,20 +36,22 @@ import org.matrix.androidsdk.rest.model.PublicRoom;
  */
 public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private int mLayoutResourceId;
+    private final MXSession mSession;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
+    private final int mLayoutResourceId;
 
     /**
      * Constructor of a public rooms adapter.
      * @param context the context
      * @param layoutResourceId the layout
      */
-    public VectorPublicRoomsAdapter(Context context, int layoutResourceId) {
+    public VectorPublicRoomsAdapter(Context context, int layoutResourceId, MXSession session) {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
         mLayoutInflater = LayoutInflater.from(mContext);
+        mSession = session;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class VectorPublicRoomsAdapter extends ArrayAdapter<PublicRoom> {
 
         // display the room avatar
         avatarImageView.setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-        VectorUtils.setDefaultRoomVectorAvatar(avatarImageView, publicRoom.roomId, roomName);
+        VectorUtils.loadUserAvatar(mContext, mSession, avatarImageView, publicRoom.getAvatarUrl(),  publicRoom.roomId, roomName);
 
         // set the topic
         roomMessageTxtView.setText(publicRoom.topic);

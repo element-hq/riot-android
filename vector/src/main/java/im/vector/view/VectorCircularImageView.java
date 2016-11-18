@@ -18,6 +18,10 @@ package im.vector.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.AttributeSet;
@@ -28,7 +32,6 @@ import android.widget.ImageView;
  * Display a circular image.
  */
 public class VectorCircularImageView extends ImageView {
-
     private static final String LOG_TAG = "VCirImageView";
 
     public VectorCircularImageView(Context context) {
@@ -42,6 +45,25 @@ public class VectorCircularImageView extends ImageView {
     public VectorCircularImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
+
+    @Override
+    public void setImageDrawable(@Nullable Drawable drawable) {
+        super.setImageDrawable(drawable);
+
+        if ((null != drawable) && (drawable instanceof BitmapDrawable)) {
+            final Bitmap b = ((BitmapDrawable)drawable).getBitmap();
+
+            if (null != b) {
+                this.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setImageBitmap(b);
+                    }
+                });
+            }
+        }
+    }
+
 
     /**
      * Update the bitmap.
@@ -93,7 +115,7 @@ public class VectorCircularImageView extends ImageView {
                 img.setCornerRadius(height / 2.0f);
 
                 // apply it to the image
-                this.setImageDrawable(img);
+                super.setImageDrawable(img);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## setImageBitmap - RoundedBitmapDrawableFactory.create " + e.getMessage());
                 super.setImageBitmap(null);

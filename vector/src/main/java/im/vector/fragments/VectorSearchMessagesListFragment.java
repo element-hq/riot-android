@@ -21,8 +21,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.data.EventTimeline;
@@ -36,6 +38,7 @@ import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorRoomActivity;
 
+import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {
@@ -47,6 +50,8 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
     protected ArrayList<OnSearchResultListener> mSearchListeners = new ArrayList<>();
 
     protected View mProgressView = null;
+
+    protected String mRoomId;
 
     /**
      * static constructor
@@ -67,9 +72,22 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         return frag;
     }
 
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle args = getArguments();
+
+        if (null != args) {
+            mRoomId = args.getString(ARG_ROOM_ID, null);
+        }
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     public MessagesAdapter createMessagesAdapter() {
-        return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoom), getMXMediasCache());
+        return new VectorSearchMessagesListAdapter(mSession, getActivity(), (null == mRoomId), getMXMediasCache());
     }
 
     @Override
@@ -80,9 +98,9 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
             cancelSearch();
 
             if (mIsMediaSearch) {
-                mSession.cancelSearchMediaName();
+                mSession.cancelSearchMediasByText();
             } else {
-                mSession.cancelSearchMessageText();
+                mSession.cancelSearchMessagesByText();
             }
             mSearchingPattern = null;
         }

@@ -23,4 +23,9 @@
         android:icon="@drawable/ic_material_settings_small"
         app:showAsAction="collapseActionView" />
 
+    <item android:id="@+id/ic_action_room_leave"
+        android:title="@string/leave"
+        android:icon="@drawable/vector_leave_room_black"
+        app:showAsAction="collapseActionView" />
+
 </menu>

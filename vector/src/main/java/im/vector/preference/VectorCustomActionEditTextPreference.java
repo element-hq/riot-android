@@ -17,6 +17,7 @@
 package im.vector.preference;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -45,11 +46,18 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
         boolean onPreferenceLongClick(Preference preference);
     }
 
+    int mTypeface = Typeface.NORMAL;
+
     // long press listener
     private OnPreferenceLongClickListener mOnClickLongListener;
 
     public VectorCustomActionEditTextPreference(Context context) {
         super(context);
+    }
+
+    public VectorCustomActionEditTextPreference(Context context, int aTypeface) {
+        super(context);
+        mTypeface = aTypeface;
     }
 
     public VectorCustomActionEditTextPreference(Context context, AttributeSet attrs) {
@@ -93,10 +101,17 @@ public class VectorCustomActionEditTextPreference extends EditTextPreference {
 
         // display the title in multi-line to avoid ellipsing.
         try {
-            TextView textView = (TextView) view.findViewById(android.R.id.title);
-            if (textView != null) {
-                textView.setSingleLine(false);
+            TextView title = (TextView) view.findViewById(android.R.id.title);
+            TextView summary = (TextView) view.findViewById(android.R.id.summary);
+            if (title != null) {
+                title.setSingleLine(false);
+                title.setTypeface(null, mTypeface);
             }
+
+            if (title != summary) {
+                summary.setTypeface(null, mTypeface);
+            }
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "onBindView " + e.getMessage());
         }

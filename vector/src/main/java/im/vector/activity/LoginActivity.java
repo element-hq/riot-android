@@ -50,6 +50,7 @@ import org.matrix.androidsdk.rest.client.LoginRestClient;
 import org.matrix.androidsdk.rest.client.ProfileRestClient;
 import org.matrix.androidsdk.rest.client.ThirdPidRestClient;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RequestEmailValidationResponse;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.login.Credentials;
 import org.matrix.androidsdk.rest.model.login.LoginFlow;
@@ -67,6 +68,8 @@ import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
+import retrofit.http.Body;
+import retrofit.http.POST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -737,6 +740,13 @@ public class LoginActivity extends MXCActionBarActivity {
      * the user forgot his password
      */
     private void onForgotPasswordClick() {
+        final HomeserverConnectionConfig hsConfig = getHsConfig();
+
+        // it might be null if the identity / homeserver urls are invalids
+        if (null == hsConfig) {
+            return;
+        }
+
         // parameters
         final String email = mForgotEmailTextView.getText().toString().trim();
         final String password = mForgotPassword1TextView.getText().toString().trim();
@@ -761,20 +771,15 @@ public class LoginActivity extends MXCActionBarActivity {
 
         enableLoadingScreen(true);
 
-        final HomeserverConnectionConfig hsConfig = getHsConfig();
-        final ThreePid thirdPid = new ThreePid(email, ThreePid.MEDIUM_EMAIL);
-
-        ThirdPidRestClient client = new ThirdPidRestClient(hsConfig);
+        ProfileRestClient pRest = new ProfileRestClient(hsConfig);
 
         // privacy
         //Log.d(LOG_TAG, "onForgotPasswordClick for email " + email);
         Log.d(LOG_TAG, "onForgotPasswordClick");
 
-        // check if there is an account linked to this email
-        // 3Pid does the job
-        thirdPid.requestValidationToken(client, null, new ApiCallback<Void>() {
+        pRest.forgetPassword(email, new ApiCallback<ThreePid>() {
             @Override
-            public void onSuccess(Void info) {
+            public void onSuccess(ThreePid thirdPid) {
                 if (mMode == MODE_FORGOT_PASSWORD) {
                     Log.d(LOG_TAG, "onForgotPasswordClick : requestValidationToken succeeds");
 
@@ -788,15 +793,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
                     mForgotPid = new HashMap<>();
                     mForgotPid.put("client_secret", thirdPid.clientSecret);
-                    String identityServerHost = getIdentityServerUrl();
-
-                    if (identityServerHost.startsWith("http://")) {
-                        identityServerHost = identityServerHost.substring("http://".length());
-                    } else if (identityServerHost.startsWith("https://")) {
-                        identityServerHost = identityServerHost.substring("https://".length());
-                    }
-
-                    mForgotPid.put("id_server", identityServerHost);
+                    mForgotPid.put("id_server", hsConfig.getIdentityServerUri().getHost());
                     mForgotPid.put("sid", thirdPid.sid);
                 }
             }
@@ -1452,6 +1449,23 @@ public class LoginActivity extends MXCActionBarActivity {
         return false;
     }
 
+
+    /**
+     * return true if a captcha flow is required
+     */
+    private boolean isDummyFlow() {
+        // sanity checks
+        if ((null != mRegistrationResponse) && (null != mRegistrationResponse.flows)) {
+            for (LoginFlow loginFlow : mRegistrationResponse.flows){
+                if (loginFlow.stages.contains(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Check if the client supports the registration kind.
      *
@@ -1477,7 +1491,8 @@ public class LoginActivity extends MXCActionBarActivity {
                 for (String stage : flow.stages) {
                     isSupported &= TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD, stage) ||
                             TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, stage) ||
-                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage);
+                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA, stage)||
+                            TextUtils.equals(LoginRestClient.LOGIN_FLOW_TYPE_DUMMY, stage);
                 }
             }
 
@@ -1486,7 +1501,9 @@ public class LoginActivity extends MXCActionBarActivity {
             }
         }
 
-        if (supportedFlows.size() > 0) {
+        // Check whether all listed flows in this authentication session are supported
+        // We suggest using the fallback page (if any), when at least one flow is not supported.
+        if (supportedFlows.size() == registrationFlowResponse.flows.size()) {
             Log.d(LOG_TAG, "## onRegistrationFlow(): mRegistrationResponse updated");
             mRegistrationResponse = registrationFlowResponse;
             registrationFlowResponse.flows = supportedFlows;
@@ -1785,16 +1802,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 public void onSuccess(ThreePid thirdPid) {
                     if ((mMode == MODE_ACCOUNT_CREATION) && (TextUtils.equals(fSession, getRegistrationSession()))) {
                         HashMap<String, Object> pidsCredentialsAuth = new HashMap<>();
+
                         pidsCredentialsAuth.put("client_secret", thirdPid.clientSecret);
-                        String identityServerHost = getIdentityServerUrl();
-
-                        if (identityServerHost.startsWith("http://")) {
-                            identityServerHost = identityServerHost.substring("http://".length());
-                        } else if (identityServerHost.startsWith("https://")) {
-                            identityServerHost = identityServerHost.substring("https://".length());
-                        }
-
-                        pidsCredentialsAuth.put("id_server", identityServerHost);
+                        pidsCredentialsAuth.put("id_server", hsConfig.getIdentityServerUri().getHost());
                         pidsCredentialsAuth.put("sid", thirdPid.sid);
                         RegistrationParams params = new RegistrationParams();
 
@@ -1880,8 +1890,13 @@ public class LoginActivity extends MXCActionBarActivity {
         RegistrationParams params = new RegistrationParams();
 
         HashMap<String, Object> authParams = new HashMap<>();
+
+        if (isDummyFlow()) {
+            authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_DUMMY);
+        } else {
+            authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
+        }
         authParams.put("session", mRegistrationResponse.session);
-        authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
 
         params.auth = authParams;
         params.username = name;
@@ -2338,15 +2353,9 @@ public class LoginActivity extends MXCActionBarActivity {
                 authParams.put("type", LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_RECAPTCHA);
 
                 params.auth = authParams;
-                if(null == mEmailValidationExtraParams) {
-                    params.username = mCreationUsernameTextView.getText().toString().trim();
-                    params.password = mCreationPassword1TextView.getText().toString().trim();
-                    params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
-                } else {
-                    // if LoginActivity was started from an email validation do not set username, pswd and email,
-                    // otherwise the server returns M_USER_IN_USE error code
-                    Log.d(LOG_TAG, "## onActivityResult(): mail validation in progress => username, pswd and email not set in register()");
-                }
+                params.username = mCreationUsernameTextView.getText().toString().trim();
+                params.password = mCreationPassword1TextView.getText().toString().trim();
+                params.bind_email = !TextUtils.isEmpty(mCreationEmailTextView.getText().toString().trim());
 
                 runOnUiThread(new Runnable() {
                     @Override

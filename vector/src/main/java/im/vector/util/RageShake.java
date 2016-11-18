@@ -65,37 +65,40 @@ public class RageShake implements SensorEventListener {
             return;
         }
 
-        // The user is trying to leave with unsaved changes. Warn about that
-        new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                .setMessage(R.string.send_bug_report_alert_message)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        BugReporter.sendBugReport();
-                    }
-                })
-                .setNeutralButton(R.string.disable, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        try {
+            // The user is trying to leave with unsaved changes. Warn about that
+            new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                    .setMessage(R.string.send_bug_report_alert_message)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            BugReporter.sendBugReport();
+                        }
+                    })
+                    .setNeutralButton(R.string.disable, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), false);
-                        editor.commit();
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putBoolean(mContext.getString(im.vector.R.string.settings_key_use_rage_shake), false);
+                            editor.commit();
 
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create()
-                .show();
-
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "promptForReport " + e.getMessage());
+        }
     }
 
     /**

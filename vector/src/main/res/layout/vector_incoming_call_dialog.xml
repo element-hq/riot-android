@@ -2,10 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
-    android:layout_height="246dp"
+    android:layout_height="wrap_content"
     android:background="@android:color/white">
-<!--android:layout_width="280dp"
-    android:layout_height="246dp" -->
+
     <RelativeLayout
         android:id="@+id/incoming_call_avatar_container"
         android:layout_width="wrap_content"

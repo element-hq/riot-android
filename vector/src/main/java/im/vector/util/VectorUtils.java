@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -364,8 +365,14 @@ public class VectorUtils {
             int chars = 1;
             char first = name.charAt(idx);
 
+            // LEFT-TO-RIGHT MARK
+            if ((name.length() >= 2) && (0x200e == first)) {
+                idx++;
+                first = name.charAt(idx);
+            }
+
             // check if it’s the start of a surrogate pair
-            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > 2)) {
+            if (first >= 0xD800 && first <= 0xDBFF && (name.length() > (idx + 1))) {
                 char second = name.charAt(idx+1);
                 if (second >= 0xDC00 && second <= 0xDFFF) {
                     chars++;
@@ -647,7 +654,13 @@ public class VectorUtils {
     public static void displayThirdPartyLicenses(final Activity activity) {
 
         if (null != mMainAboutDialog) {
-            mMainAboutDialog.dismiss();
+            if (mMainAboutDialog.isShowing() && (null != mMainAboutDialog.getOwnerActivity())) {
+                try {
+                    mMainAboutDialog.dismiss();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "## displayThirdPartyLicenses() : " + e.getMessage());
+                }
+            }
             mMainAboutDialog = null;
         }
 
@@ -663,7 +676,18 @@ public class VectorUtils {
                 mMainAboutDialog = new AlertDialog.Builder(activity)
                         .setCustomTitle(titleView)
                         .setView(view)
-                        .setPositiveButton(android.R.string.ok, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mMainAboutDialog = null;
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                mMainAboutDialog = null;
+                            }
+                        })
                         .create();
 
                 mMainAboutDialog.show();

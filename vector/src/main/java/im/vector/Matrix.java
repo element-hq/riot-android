@@ -29,9 +29,9 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import org.matrix.androidsdk.data.IMXStore;
-import org.matrix.androidsdk.data.MXFileStore;
-import org.matrix.androidsdk.data.MXMemoryStore;
+import org.matrix.androidsdk.data.store.IMXStore;
+import org.matrix.androidsdk.data.store.MXFileStore;
+import org.matrix.androidsdk.data.store.MXMemoryStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXLatestChatMessageCache;
@@ -94,18 +94,18 @@ public class Matrix {
 
         @Override
         public void onLiveEvent(Event event, RoomState roomState) {
-            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.type) || Event.EVENT_TYPE_RECEIPT.equals(event.type);
+            mRefreshUnreadCounter |=  Event.EVENT_TYPE_MESSAGE.equals(event.getType()) || Event.EVENT_TYPE_RECEIPT.equals(event.getType());
         }
 
         @Override
         public void onLiveEventsChunkProcessed() {
-            // when the client does not use GCM
+            // when the client does not use GCM (ie. FDroid),
             // we need to compute the application badge values
 
             if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
                 GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
-                // check if the GCM is not available
+                // perform update: if the GCM is not available or if GCM registration failed
                 if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
                     int unreadCount = 0;
 
@@ -268,14 +268,16 @@ public class Matrix {
      */
     public String getVersion(boolean longformat) {
         String versionName = "";
+        String flavor = "";
+
         try {
             PackageInfo pInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), 0);
             versionName = pInfo.versionName;
 
-            String flavor = mAppContext.getResources().getString(R.string.flavor_description);
+            flavor = mAppContext.getResources().getString(R.string.flavor_description);
 
             if (!TextUtils.isEmpty(flavor)) {
-                versionName += " (" + flavor +")";
+                flavor += "-";
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## versionName() : failed " + e.getMessage());
@@ -284,9 +286,9 @@ public class Matrix {
         String gitVersion = mAppContext.getResources().getString(R.string.git_revision);
         if (longformat) {
             String date = mAppContext.getResources().getString(R.string.git_revision_date);
-            versionName += " (" + gitVersion + "-" + date + ")";
+            versionName += " (" + flavor + gitVersion + "-" + date + ")";
         } else {
-            versionName += " (" + gitVersion + ")";
+            versionName += " (" + flavor + gitVersion + ")";
         }
 
         return versionName;
@@ -318,6 +320,25 @@ public class Matrix {
         }
 
         return sessions;
+    }
+
+    /**
+     * Tell if there is a corrupted store in the active session/
+     * @param context the application context
+     * @return true if there is a corrupted store.
+     */
+    public static boolean hasCorruptedStore(Context context) {
+        boolean hasCorruptedStore = false;
+        ArrayList<MXSession> sessions = Matrix.getMXSessions(context);
+
+        if (null != sessions) {
+            for (MXSession session : sessions) {
+                if (session.isAlive()) {
+                    hasCorruptedStore |= session.getDataHandler().getStore().isCorrupted();
+                }
+            }
+        }
+        return hasCorruptedStore;
     }
 
     /**
@@ -491,14 +512,17 @@ public class Matrix {
      * @param session the session to clear.
      * @param clearCredentials true to clear the credentials.
      */
-    public synchronized void clearSession(Context context, MXSession session, Boolean clearCredentials) {
+    public synchronized void clearSession(Context context, MXSession session, boolean clearCredentials) {
         if (clearCredentials) {
             mLoginStorage.removeCredentials(session.getHomeserverConfig());
         }
 
         session.getDataHandler().removeListener(mLiveEventListener);
         session.mCallsManager.removeListener(mCallsManagerListener);
-        session.clear(context);
+
+        if (clearCredentials) {
+            session.logout(context, null);
+        }
 
         synchronized (LOG_TAG) {
             mMXSessions.remove(session);
@@ -510,7 +534,7 @@ public class Matrix {
      * @param context the context.
      * @param clearCredentials  true to clear the credentials.
      */
-    public synchronized void clearSessions(Context context, Boolean clearCredentials) {
+    public synchronized void clearSessions(Context context, boolean clearCredentials) {
         synchronized (LOG_TAG) {
             while (mMXSessions.size() > 0) {
                 clearSession(context, mMXSessions.get(0), clearCredentials);
@@ -564,6 +588,11 @@ public class Matrix {
             }
         }), mAppContext);
 
+        // if a device id is defined, enable the encryption
+        if (!TextUtils.isEmpty(credentials.deviceId)) {
+            session.enableCryptoWhenStarting();
+        }
+
         session.getDataHandler().addListener(mLiveEventListener);
         session.mCallsManager.addListener(mCallsManagerListener);
         return session;
@@ -573,16 +602,16 @@ public class Matrix {
      * Reload the matrix sessions.
      * The session caches are cleared before being reloaded.
      * Any opened activity is closed and the application switches to the splash screen.
-     * @param fromActivity the caller activity
+     * @param context the context
      */
-    public void reloadSessions(Activity fromActivity) {
-        ArrayList<MXSession> sessions = getMXSessions(fromActivity);
+    public void reloadSessions(Context context) {
+        ArrayList<MXSession> sessions = getMXSessions(context);
 
         for(MXSession session : sessions) {
-            CommonActivityUtils.logout(fromActivity, session, false);
+            CommonActivityUtils.logout(context, session, false);
         }
 
-        clearSessions(fromActivity, false);
+        clearSessions(context, false);
 
         synchronized (LOG_TAG) {
             // build a new sessions list
@@ -594,11 +623,13 @@ public class Matrix {
             }
         }
 
-        Intent intent = new Intent(fromActivity, SplashActivity.class);
+        Intent intent = new Intent(context.getApplicationContext(), SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.getApplicationContext().startActivity(intent);
 
-        fromActivity.startActivity(intent);
-        fromActivity.finish();
+        if (null != VectorApp.getCurrentActivity()) {
+            VectorApp.getCurrentActivity().finish();
+        }
     }
 
     /**

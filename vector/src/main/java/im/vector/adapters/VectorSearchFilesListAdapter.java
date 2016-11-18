@@ -71,7 +71,7 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         MessageRow row = getItem(position);
         Event event = row.getEvent();
 
-        Message message = JsonUtils.toMessage(event.content);
+        Message message = JsonUtils.toMessage(event.getContent());
 
         // common info
         String thumbUrl = null;
@@ -79,11 +79,11 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         int avatarId = org.matrix.androidsdk.R.drawable.filetype_attachment;
 
         if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
-            ImageMessage imageMessage = JsonUtils.toImageMessage(event.content);
-            thumbUrl = imageMessage.thumbnailUrl;
+            ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
+            thumbUrl = imageMessage.getThumbnailUrl();
 
             if (null == thumbUrl) {
-                thumbUrl = imageMessage.url;
+                thumbUrl = imageMessage.getUrl();
             }
 
             if (null != imageMessage.info) {
@@ -97,17 +97,18 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
             }
 
         } else if (Message.MSGTYPE_VIDEO.equals(message.msgtype)) {
-            VideoMessage videoMessage = JsonUtils.toVideoMessage(event.content);
+            VideoMessage videoMessage = JsonUtils.toVideoMessage(event.getContent());
+
+            thumbUrl = videoMessage.getThumbnailUrl();
 
             if (null != videoMessage.info) {
-                thumbUrl = videoMessage.info.thumbnail_url;
                 mediaSize = videoMessage.info.size;
             }
 
             avatarId = org.matrix.androidsdk.R.drawable.filetype_video;
 
         } else if(Message.MSGTYPE_FILE.equals(message.msgtype)) {
-            FileMessage fileMessage = JsonUtils.toFileMessage(event.content);
+            FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
             if (null != fileMessage.info) {
                 mediaSize = fileMessage.info.size;

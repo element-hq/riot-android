@@ -17,6 +17,7 @@
 package im.vector.services;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,6 +27,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
@@ -33,11 +35,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.call.MXCallsManager;
-import org.matrix.androidsdk.data.IMXStore;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -279,7 +282,7 @@ public class EventStreamService extends Service {
         public void onLiveEventsChunkProcessed() {
             triggerPreparedNotification(true);
             mPendingNotifications.clear();
-            
+
             // do not suspend the application if there is some active calls
             if ((StreamAction.CATCHUP == mServiceState) || (StreamAction.PAUSE == mServiceState)) {
                 boolean hasActiveCalls = false;
@@ -493,16 +496,44 @@ public class EventStreamService extends Service {
             } else {
                 final MXSession fSession = session;
                 // wait that the store is ready  before starting the events listener
-                store.setMXStoreListener(new IMXStore.MXStoreListener() {
+                store.addMXStoreListener(new IMXStore.MXStoreListener() {
+                    @Override
+                    public void postProcess(String accountId) {
+                    }
+
                     @Override
                     public void onStoreReady(String accountId) {
-                        startEventStream(fSession, store);
+                        if (fSession.isCryptoEnabled() && fSession.getCrypto().isCorrupted()) {
+                            Log.e(LOG_TAG, "## start : accountId " + accountId + "'s crypto is corrupted");
+                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
+                        } else {
+                            startEventStream(fSession, store);
+                        }
                     }
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        //Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
-                        startEventStream(fSession, store);
+                        if (fSession.isCryptoEnabled() && fSession.getCrypto().isCorrupted()) {
+                            Log.e(LOG_TAG, "## start : accountId " + accountId + "'s crypto is corrupted");
+                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
+                        } else {
+                            // the sync will start from scratch
+                            startEventStream(fSession, store);
+                        }
+                    }
+
+                    @Override
+                    public void onStoreOOM(final String accountId, final String description) {
+                        Handler uiHandler = new Handler(getMainLooper());
+
+                        uiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), accountId + " : " + description, Toast.LENGTH_LONG).show();
+
+                                Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
+                            }
+                        });
                     }
                 });
             }
@@ -770,7 +801,7 @@ public class EventStreamService extends Service {
 
         // display only the invitation messages by now
         // because the other ones are not displayed.
-        if (!event.type.equals(Event.EVENT_TYPE_CALL_INVITE)) {
+        if (!event.getType().equals(Event.EVENT_TYPE_CALL_INVITE)) {
             Log.d(LOG_TAG, "prepareCallNotification : don't bing - Call invite");
             return;
         }
@@ -834,7 +865,6 @@ public class EventStreamService extends Service {
             return;
         }
 
-
         if (event.isCallEvent()) {
             prepareCallNotification(event, bingRule);
             return;
@@ -850,9 +880,9 @@ public class EventStreamService extends Service {
 
         String senderID = event.getSender();
         // FIXME: Support event contents with no body
-        if (!event.content.getAsJsonObject().has("body")) {
+        if (!event.getContent().getAsJsonObject().has("body")) {
             // only the membership events are supported
-            if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type) && !event.isCallEvent()) {
+            if (!Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType()) && !event.isCallEvent()) {
                 Log.d(LOG_TAG, "onBingEvent : don't bing - no body and not a call event");
                 return;
             }
@@ -878,20 +908,22 @@ public class EventStreamService extends Service {
         }
 
         boolean isInvitationEvent = false;
-        String body;
+       
+        EventDisplay eventDisplay = new EventDisplay(getApplicationContext(), event, roomState);
+        eventDisplay.setPrependMessagesWithAuthor(false);
+        String body = eventDisplay.getTextualDisplay().toString();
 
+        if (TextUtils.isEmpty(body)) {
+            Log.e(LOG_TAG, "prepareNotification : the event " + event.eventId + " cannot be displayed");
+            return;
+        }
 
-         if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.type)) {
-            body = EventDisplay.getMembershipNotice(getApplicationContext(), event, roomState);
-
+        if (Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(event.getType())) {
             try {
                 isInvitationEvent = "invite".equals(event.getContentAsJsonObject().getAsJsonPrimitive("membership").getAsString());
             } catch (Exception e) {
                 Log.e(LOG_TAG, "prepareNotification : invitation parsing failed");
             }
-
-        } else {
-            body = event.getContentAsJsonObject().getAsJsonPrimitive("body").getAsString();
         }
 
         String from = "";

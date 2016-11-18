@@ -56,51 +56,64 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:id="@+id/messagesAdapter_body_layout">
+                    android:orientation="horizontal">
 
-                    <RelativeLayout
-                        android:layout_gravity="right"
-                        android:id="@+id/messagesAdapter_image_layout"
+                    <ImageView
+                        android:id="@+id/message_adapter_e2e_icon"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/e2e_verified" />
+
+                    <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingRight="4dp"
+                        android:id="@+id/messagesAdapter_body_layout">
 
-                        <!-- the media -->
-                        <ImageView
-                            android:layout_height="match_parent"
-                            android:layout_width="match_parent"
-                            android:id="@+id/messagesAdapter_image"
-                            android:adjustViewBounds="true" />
+                        <RelativeLayout
+                            android:layout_gravity="right"
+                            android:id="@+id/messagesAdapter_image_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <!-- the media type -->
-                        <ImageView
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"
-                            android:id="@+id/messagesAdapter_image_type"
-                            android:src="@drawable/filetype_image"/>
+                            <!-- the media -->
+                            <ImageView
+                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_marginLeft="4dp"
+                                android:id="@+id/messagesAdapter_image"
+                                android:adjustViewBounds="true" />
 
-                        <!-- the upload fails -->
-                        <ImageView
-                            android:id="@+id/media_upload_failed"
-                            android:src="@drawable/file_upload_failed"
-                            android:layout_centerInParent="true"
-                            android:visibility="gone"
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"/>
+                            <!-- the media type -->
+                            <ImageView
+                                android:layout_alignLeft="@+id/messagesAdapter_image"
+                                android:layout_width="@dimen/chat_avatar_size"
+                                android:layout_height="@dimen/chat_avatar_size"
+                                android:id="@+id/messagesAdapter_image_type"
+                                android:src="@drawable/filetype_image"/>
 
-                        <!-- the thumbnail has been uploaded : sending the message -->
-                        <ProgressBar
-                            android:id="@+id/upload_event_spinner"
-                            android:layout_centerInParent="true"
-                            android:layout_width="@dimen/chat_avatar_size"
-                            android:layout_height="@dimen/chat_avatar_size"/>
-                    </RelativeLayout>
-                </FrameLayout>
+                            <!-- the upload fails -->
+                            <ImageView
+                                android:id="@+id/media_upload_failed"
+                                android:src="@drawable/file_upload_failed"
+                                android:layout_centerInParent="true"
+                                android:visibility="gone"
+                                android:layout_width="@dimen/chat_avatar_size"
+                                android:layout_height="@dimen/chat_avatar_size"/>
+
+                            <!-- the thumbnail has been uploaded : sending the message -->
+                            <ProgressBar
+                                android:id="@+id/upload_event_spinner"
+                                android:layout_centerInParent="true"
+                                android:layout_width="@dimen/chat_avatar_size"
+                                android:layout_height="@dimen/chat_avatar_size"/>
+                        </RelativeLayout>
+                    </FrameLayout>
+                </LinearLayout>
 
                 <include layout="@layout/media_upload_download_progress_layout"
                     android:layout_width="match_parent"

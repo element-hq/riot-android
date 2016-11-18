@@ -62,19 +62,35 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:id="@+id/messagesAdapter_body_layout">
 
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:textSize="14sp"
+                    <!-- the body is here -->
+                    <RelativeLayout
                         android:layout_gravity="left"
-                        android:textIsSelectable="false"
-                        android:text="A body"
-                        android:autoLink="web"
-                        android:id="@+id/messagesAdapter_body"/>
+                        android:id="@+id/messagesAdapter_text_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/message_adapter_e2e_icon"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/e2e_verified" />
+
+                        <TextView
+                            android:layout_marginLeft="4dp"
+                            android:layout_toRightOf="@id/message_adapter_e2e_icon"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:textSize="14sp"
+                            android:layout_gravity="left"
+                            android:textIsSelectable="false"
+                            android:text="A body"
+                            android:autoLink="web"
+                            android:id="@+id/messagesAdapter_body"/>
+
+                    </RelativeLayout>
 
                 </FrameLayout>
             </LinearLayout>

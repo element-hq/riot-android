@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,10 +38,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
@@ -53,25 +58,32 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
+import org.matrix.androidsdk.rest.model.DeviceInfo;
+import org.matrix.androidsdk.rest.model.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.adapters.AdapterUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
+import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.ResourceUtils;
@@ -85,11 +97,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private static final String EMAIL_PREFERENCE_KEY_BASE = "EMAIL_PREFERENCE_KEY_BASE";
     private static final String PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE";
+    private static final String DEVICES_PREFERENCE_KEY_BASE = "DEVICES_PREFERENCE_KEY_BASE";
     private static final String IGNORED_USER_KEY_BASE = "IGNORED_USER_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
     private static final String APP_INFO_LINK_PREFERENCE_KEY = "application_info_link";
 
     private static final String DUMMY_RULE = "DUMMY_RULE";
+    private static final String LABEL_UNAVAILABLE_DATA = "none";
 
     // members
     private MXSession mSession;
@@ -114,7 +128,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mPushersSettingsCategory;
     private List<Pusher> mDisplayedPushers = new ArrayList<>();
 
+    // devices: device IDs and device names
+    private PreferenceCategory mDevicesListSettingsCategory;
+    private PreferenceCategory mDevicesListSettingsCategoryDivider;
+    private List<DeviceInfo> mDevicesNameList = new ArrayList<>();
+
     // displayed the ignored users list
+    private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
     private PreferenceCategory mIgnoredUserSettingsCategory;
 
     // background sync category
@@ -210,6 +230,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         EditTextPreference versionTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
         if (null != versionTextPreference) {
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
+        }
+
+        // olm version
+        EditTextPreference olmTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_olm_version));
+        if (null != olmTextPreference) {
+            olmTextPreference.setSummary(Matrix.getInstance(getActivity()).getDefaultSession().getCryptoVersion());
         }
 
         // user account
@@ -375,9 +401,92 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        final SwitchPreference useCryptoPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
+        useCryptoPref.setChecked(mSession.isCryptoEnabled());
+        useCryptoPref.setEnabled(!mSession.isCryptoEnabled());
+        useCryptoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
+                if (TextUtils.isEmpty(mSession.getCredentials().deviceId)) {
+                    new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                            .setMessage(R.string.room_settings_labs_end_to_end_warnings)
+                            .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    CommonActivityUtils.logout(getActivity(), true);
+
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    useCryptoPref.setChecked(false);
+                                }
+                            })
+                            .create()
+                            .show();
+                } else {
+                    boolean newValue = (boolean) newValueAsVoid;
+
+                    if (mSession.isCryptoEnabled() != newValue) {
+                        displayLoadingView();
+
+                        mSession.enableCrypto(newValue, new ApiCallback<Void>() {
+
+                            private void refresh() {
+                                if (null != getActivity()) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hideLoadingView();
+                                            useCryptoPref.setChecked(mSession.isCryptoEnabled());
+
+                                            if(mSession.isCryptoEnabled()){
+                                                refreshDevicesList();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onSuccess(Void info) {
+                                useCryptoPref.setEnabled(false);
+                                refresh();
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                useCryptoPref.setChecked(false);
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                useCryptoPref.setChecked(false);
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                useCryptoPref.setChecked(false);
+                            }
+                        });
+                    }
+                }
+
+                return true;
+            }
+        });
+
+
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
         mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
+        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
+        mDevicesListSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
+        mDevicesListSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
+
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -403,6 +512,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if (Build.VERSION.SDK_INT >= 23) {
             // hide the dedicated section
             getPreferenceScreen().removePreference(getPreferenceManager().findPreference(getResources().getString(R.string.settings_app_permission)));
+            getPreferenceScreen().removePreference(getPreferenceManager().findPreference("settings_app_permission_divider"));
         }
 
         // background sync management
@@ -413,6 +523,20 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshPushersList();
         refreshEmailsList();
         refreshIgnoredUsersList();
+        refreshDevicesList();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View listView = view.findViewById(android.R.id.list);
+
+        if (null != listView) {
+            listView.setPadding(0, 0, 0, 0);
+        }
+
+        return view;
     }
 
     @Override
@@ -1004,9 +1128,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         PreferenceScreen preferenceScreen = getPreferenceScreen();
 
         preferenceScreen.removePreference(mIgnoredUserSettingsCategory);
+        preferenceScreen.removePreference(mIgnoredUserSettingsCategoryDivider);
         mIgnoredUserSettingsCategory.removeAll();
 
         if (ignoredUsersList.size() > 0) {
+            preferenceScreen.addPreference(mIgnoredUserSettingsCategoryDivider);
             preferenceScreen.addPreference(mIgnoredUserSettingsCategory);
 
             for (final String userId : ignoredUsersList) {
@@ -1451,4 +1577,294 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
         }
     }
+
+    //==============================================================================================================
+    // devices list
+    //==============================================================================================================
+
+    private void removeDevicesPreference() {
+        PreferenceScreen preferenceScreen;
+        if(null != (preferenceScreen = getPreferenceScreen())) {
+            preferenceScreen.removePreference(mDevicesListSettingsCategory);
+            preferenceScreen.removePreference(mDevicesListSettingsCategoryDivider);
+        }
+    }
+
+    /**
+     * Force the refresh of the devices list.<br>
+     * The devices list is the list of the devices where the user as looged in.
+     * It can be any mobile device, as any browser.
+     */
+    private void refreshDevicesList() {
+        if((null != mSession) && (mSession.isCryptoEnabled()) && (!TextUtils.isEmpty(mSession.getCredentials().deviceId))) {
+            // display a spinner while loading the devices list
+            if (0 == mDevicesListSettingsCategory.getPreferenceCount()) {
+                ProgressBarPreference preference = new ProgressBarPreference(getActivity());
+                mDevicesListSettingsCategory.addPreference(preference);
+            }
+            
+            mSession.getDevicesList(new ApiCallback<DevicesListResponse>() {
+                @Override
+                public void onSuccess(DevicesListResponse info) {
+                    if(0 == info.devices.size()) {
+                        removeDevicesPreference();
+                    } else {
+                        buildDevicesSettings(info.devices);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    removeDevicesPreference();
+                    onCommonDone(e.getMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    removeDevicesPreference();
+                    onCommonDone(e.getMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    removeDevicesPreference();
+                    onCommonDone(e.getMessage());
+                }
+            });
+        } else {
+            removeDevicesPreference();
+        }
+    }
+
+    /**
+     * Build the devices portion of the settings.<br>
+     * Each row correspond to a device ID and its corresponding device name. Clicking on the row
+     * display a dialog containing: the device ID, the device name and the "last seen" information.
+     * @param aDeviceInfoList the list of the devices
+     */
+    private void buildDevicesSettings(List<DeviceInfo> aDeviceInfoList) {
+        VectorCustomActionEditTextPreference preference;
+        int typeFaceHighlight;
+        boolean isNewList = true;
+        String myDeviceId = mSession.getCredentials().deviceId;
+
+        if ((null != mDevicesNameList) && (aDeviceInfoList.size() == mDevicesNameList.size())) {
+            isNewList = !mDevicesNameList.containsAll(aDeviceInfoList);
+        }
+
+        if(isNewList) {
+            int prefIndex=0;
+            mDevicesNameList = aDeviceInfoList;
+
+            // sort before display: most recent first
+            Collections.sort(mDevicesNameList, new Comparator<DeviceInfo>() {
+                @Override
+                public int compare(DeviceInfo info1, DeviceInfo info2) {
+                    return -(info1.last_seen_ts < info2.last_seen_ts ? -1 : (info1.last_seen_ts == info2.last_seen_ts ? 0 : 1));
+                }
+            });
+
+            // start from scratch: remove the displayed ones
+            mDevicesListSettingsCategory.removeAll();
+
+            for (DeviceInfo deviceInfo : mDevicesNameList) {
+                // set bold to distinguish current device ID
+                if((null!=myDeviceId) && myDeviceId.equals(deviceInfo.device_id)) {
+                    typeFaceHighlight = Typeface.BOLD;
+                } else {
+                    typeFaceHighlight = Typeface.NORMAL;
+                }
+
+                // add the edit text preference
+                preference = new VectorCustomActionEditTextPreference(getActivity(), typeFaceHighlight);
+
+                if((null==deviceInfo.device_id) && (null==deviceInfo.display_name)) {
+                    continue;
+                } else {
+                    if (null != deviceInfo.device_id) {
+                        preference.setTitle(deviceInfo.device_id);
+                    }
+
+                    // display name parameter can be null (new JSON API)
+                    if (null != deviceInfo.display_name) {
+                        preference.setSummary(deviceInfo.display_name);
+                    }
+                }
+
+                preference.setKey(DEVICES_PREFERENCE_KEY_BASE+prefIndex);
+                prefIndex++;
+
+                // onClick handler: display device details dialog
+                final DeviceInfo fDeviceInfo = deviceInfo;
+                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        displayDeviceDetailsDialog(fDeviceInfo);
+                        return true;
+                    }
+                });
+
+                mDevicesListSettingsCategory.addPreference(preference);
+            }
+        }
+    }
+
+    /**
+     * Display a dialog containing the device ID, the device name and the "last seen" information.<>
+     * This dialog allow to delete the corresponding device (see {@link #displayDeviceDeletionDialog(DeviceInfo)})
+     * @param aDeviceInfo the device information
+     */
+    private void displayDeviceDetailsDialog(DeviceInfo aDeviceInfo) {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View layout = inflater.inflate(R.layout.devices_details_settings, null);
+
+        if ((null!=aDeviceInfo) && (null!=builder)) {
+            //device ID
+            TextView textView = (TextView) layout.findViewById(R.id.device_id);
+            textView.setText(aDeviceInfo.device_id);
+
+            // device name
+            textView = (TextView) layout.findViewById(R.id.device_name);
+            String displayName = (TextUtils.isEmpty(aDeviceInfo.display_name))?LABEL_UNAVAILABLE_DATA:aDeviceInfo.display_name;
+            textView.setText(displayName);
+
+            // last seen info
+            textView = (TextView) layout.findViewById(R.id.device_last_seen);
+            if(!TextUtils.isEmpty(aDeviceInfo.last_seen_ip)) {
+                String lastSeenIp = aDeviceInfo.last_seen_ip;
+                String lastSeenTime = LABEL_UNAVAILABLE_DATA;
+
+                if(null != getActivity() /*&& (0!=aDeviceInfo.last_seen_ts)*/) {
+                    SimpleDateFormat dateFormat =  new SimpleDateFormat(getString(R.string.devices_details_date_time_format));
+                    lastSeenTime = dateFormat.format(new Date(aDeviceInfo.last_seen_ts));
+                }
+                String lastSeenInfo = this.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime);
+                textView.setText(lastSeenInfo);
+            } else {
+                // hide last time seen section
+                layout.findViewById(R.id.device_last_seen_title).setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+            }
+
+            // title & icon
+            builder.setTitle(R.string.devices_details_dialog_title);
+            builder.setIcon(android.R.drawable.ic_dialog_info);
+            builder.setView(layout);
+
+            final DeviceInfo fDeviceInfo = aDeviceInfo;
+
+
+            builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    displayDeviceDeletionDialog(fDeviceInfo);
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                        dialog.cancel();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            builder.create().show();
+        } else {
+            Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure");
+            if(null != getActivity())
+                CommonActivityUtils.displayToast(getActivity().getApplicationContext(),"DeviceDetailsDialog cannot be displayed.\nBad input parameters.");
+        }
+    }
+
+    /**
+     * Display a delete confirmation dialog to remove a device.<br>
+     * The user is invited to enter his password to confirm the deletion.
+     * @param aDeviceInfoToDelete device info
+     */
+    private void displayDeviceDeletionDialog(final DeviceInfo aDeviceInfoToDelete) {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View layout = inflater.inflate(R.layout.devices_settings_delete, null);
+
+        if ((null!=aDeviceInfoToDelete) && (null!=builder)) {
+            final EditText passwordEditText = (EditText) layout.findViewById(R.id.delete_password);
+            builder.setIcon(android.R.drawable.ic_dialog_alert);
+            builder.setTitle(R.string.devices_delete_dialog_title);
+            builder.setView(layout);
+
+            builder.setPositiveButton(R.string.devices_delete_submit_button_label, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(null != mSession) {
+                        if(TextUtils.isEmpty(passwordEditText.toString())) {
+                            CommonActivityUtils.displayToast(VectorSettingsPreferencesFragment.this.getActivity().getApplicationContext(), "Password missing..");
+                            return;
+                        }
+
+                        displayLoadingView();
+                        mSession.deleteDevice(aDeviceInfoToDelete.device_id, passwordEditText.getText().toString(), new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                hideLoadingView();
+                                refreshDevicesList(); // force settings update
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onCommonDone(e.getMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onCommonDone(e.getMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onCommonDone(e.getMessage());
+                            }
+                        });
+                    }
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    hideLoadingView();
+                }
+            });
+
+            builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                        dialog.cancel();
+                        hideLoadingView();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            builder.create().show();
+        } else {
+            Log.e(LOG_TAG, "## displayDeviceDeletionDialog(): sanity check failure");
+        }
+    }
+
+
 }

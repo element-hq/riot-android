@@ -191,7 +191,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
     /**
      * Search the pattern on a pagination server side.
      */
-    public void backPaginate() {
+    @Override
+    public void backPaginate(boolean fillHistory) {
         // please wait
         if (mIsBackPaginating || !mCanPaginateBack) {
             return;
@@ -279,8 +280,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         // filter
         ArrayList<Event> filteredEvents = new ArrayList<>(eventsToAppend.size());
         for(Event event : eventsToAppend) {
-            if (Event.EVENT_TYPE_MESSAGE.equals(event.type)) {
-                Message message = JsonUtils.toMessage(event.content);
+            if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
+                Message message = JsonUtils.toMessage(event.getContent());
 
                 if (Message.MSGTYPE_FILE.equals(message.msgtype) ||
                         Message.MSGTYPE_IMAGE.equals(message.msgtype) ||

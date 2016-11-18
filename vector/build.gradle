@@ -69,7 +69,7 @@ android {
             versionName rootProject.ext.versionNameProp
             resValue "string", "allow_gcm_use", "false"
             resValue "string", "allow_ga_use", "false"
-            resValue "string", "flavor_description", "FDroid version"
+            resValue "string", "flavor_description", "FDroid"
         }
     }
 
@@ -108,6 +108,8 @@ dependencies {
 
     compile 'me.leolin:ShortcutBadger:1.1.2@aar'
 
+    compile 'com.github.liuguangqiang.swipeback:library:1.0.2@aar'
+
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:cardview-v7:23.3.0'
@@ -119,14 +121,13 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'io.pristine:libjingle:9690@aar'
 
-    compile 'com.commonsware.cwac:anddown:0.2.+'
-
     // bug report encryption
     compile 'net.lingala.zip4j:zip4j:1.3.1'
 
     /************* Matrix SDK management **************/
     // use the matrix SDK as external lib
     compile(name: 'matrix-sdk', ext: 'aar')
+    compile(name: 'olm-sdk', ext: 'aar')
 
     // use the matrix SDK as a part of the project
     // you have to uncomment some lines in settings.gradle

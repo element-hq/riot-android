@@ -5,6 +5,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <View
+        android:id="@+id/e2e_sender_margin"
+        android:background="@android:color/transparent"
+        android:layout_width="14dp"
+        android:layout_height="14dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

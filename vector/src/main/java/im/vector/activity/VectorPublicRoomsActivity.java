@@ -35,12 +35,11 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
     private static final String LOG_TAG = "VectorPublicRoomsAct";
 
+    public  static final String EXTRA_SEARCHED_PATTERN = "VectorPublicRoomsActivity.EXTRA_SEARCHED_PATTERN";
     private static final String TAG_FRAGMENT_PUBLIC_ROOMS_LIST = "VectorPublicRoomsActivity.TAG_FRAGMENT_PUBLIC_ROOMS_LIST";
 
     private VectorPublicRoomsListFragment mVectorPublicRoomsListFragment;
 
-    // cannot send the public rooms list in parameters because it might trigger a stackoverflow
-    public static ArrayList<PublicRoom> mPublicRooms = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +59,19 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
 
         Intent intent = getIntent();
 
-        MXSession session = getSession(intent);
+        MXSession session = getSession(this, intent);
 
         FragmentManager fm = getSupportFragmentManager();
         mVectorPublicRoomsListFragment = (VectorPublicRoomsListFragment) fm.findFragmentByTag(TAG_FRAGMENT_PUBLIC_ROOMS_LIST);
 
         if (null == mVectorPublicRoomsListFragment) {
-            mVectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, mPublicRooms);
+            String pattern = null;
+
+            if (intent.hasExtra(EXTRA_SEARCHED_PATTERN)) {
+                pattern = intent.getStringExtra(EXTRA_SEARCHED_PATTERN);
+            }
+
+            mVectorPublicRoomsListFragment = VectorPublicRoomsListFragment.newInstance(session.getMyUserId(), R.layout.fragment_vector_public_rooms_list, pattern);
             fm.beginTransaction().add(R.id.layout_public__rooms_list, mVectorPublicRoomsListFragment, TAG_FRAGMENT_PUBLIC_ROOMS_LIST).commit();
         }
     }
@@ -74,8 +79,6 @@ public class VectorPublicRoomsActivity extends MXCActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // reset the list to reduce memory usage
-        mPublicRooms = new ArrayList<>();
     }
 }
 

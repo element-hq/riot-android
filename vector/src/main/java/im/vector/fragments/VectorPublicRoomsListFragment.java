@@ -23,8 +23,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
@@ -34,39 +36,72 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PublicRoom;
 
 import im.vector.Matrix;
+import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorPublicRoomsAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class VectorPublicRoomsListFragment extends Fragment {
     private static final String LOG_TAG = "VectorPubRoomsListFrg";
 
-    public static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";
-    public static final String ARG_MATRIX_ID = "VectorPublicRoomsListFragment.ARG_MATRIX_ID";
-    public static final String ARG_ROOMS_LIST_ID = "VectorPublicRoomsListFragment.ARG_ROOMS_LIST_ID";
+    private static final String ARG_LAYOUT_ID = "VectorPublicRoomsListFragment.ARG_LAYOUT_ID";
+    private static final String ARG_MATRIX_ID = "VectorPublicRoomsListFragment.ARG_MATRIX_ID";
+    private static final String ARG_SEARCHED_PATTERN = "VectorPublicRoomsListFragment.ARG_SEARCHED_PATTERN";
 
-
-    public static VectorPublicRoomsListFragment newInstance(String matrixId, int layoutResId, ArrayList<PublicRoom> publicRooms) {
+    public static VectorPublicRoomsListFragment newInstance(String matrixId, int layoutResId, String pattern) {
         VectorPublicRoomsListFragment f = new VectorPublicRoomsListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_ID, layoutResId);
         args.putString(ARG_MATRIX_ID, matrixId);
-        args.putSerializable(ARG_ROOMS_LIST_ID, publicRooms);
+
+        if (!TextUtils.isEmpty(pattern)) {
+            args.putString(ARG_SEARCHED_PATTERN, pattern);
+        }
         f.setArguments(args);
         return f;
     }
 
-    protected String mMatrixId;
-    protected MXSession mSession;
-    protected ListView mRecentsListView;
-    protected ArrayList<PublicRoom> mPublicRooms;
-    protected VectorPublicRoomsAdapter mAdapter;
-    protected View mSpinnerView;
+    private String mMatrixId;
+    private MXSession mSession;
+    private ListView mRecentsListView;
+    private VectorPublicRoomsAdapter mAdapter;
+    private String mPattern;
+
+    private View mInitializationSpinnerView;
+    private View mForwardPaginationView;
+
+    /**
+     * Customize the scrolls behaviour.
+     * -> scroll over the top triggers a back pagination
+     * -> scroll over the bottom triggers a forward pagination
+     */
+    protected final AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            //check only when the user scrolls the content
+            if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                int lastVisibleRow = mRecentsListView.getLastVisiblePosition();
+                int count = mRecentsListView.getCount();
+
+                if ((lastVisibleRow + 10) >= count) {
+                    forwardPaginate();
+                }
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            if ((firstVisibleItem + visibleItemCount + 10) >= totalItemCount) {
+                forwardPaginate();
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,15 +114,16 @@ public class VectorPublicRoomsListFragment extends Fragment {
         if (null == mSession) {
             throw new RuntimeException("Must have valid default MXSession.");
         }
-        mPublicRooms = (ArrayList<PublicRoom>)args.getSerializable(ARG_ROOMS_LIST_ID);
+
+        mPattern = args.getString(ARG_SEARCHED_PATTERN, null);
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
         mRecentsListView = (ListView)v.findViewById(R.id.fragment_public_rooms_list);
-        mSpinnerView = v.findViewById(R.id.listView_spinner_views);
+        mInitializationSpinnerView = v.findViewById(R.id.listView_global_spinner_views);
+        mForwardPaginationView = v.findViewById(R.id.listView_forward_spinner_view);
 
         // create the adapter
-        mAdapter = new VectorPublicRoomsAdapter(getActivity(), R.layout.adapter_item_vector_recent_room);
-        mAdapter.addAll(mPublicRooms);
+        mAdapter = new VectorPublicRoomsAdapter(getActivity(), R.layout.adapter_item_vector_recent_room, mSession);
         mRecentsListView.setAdapter(mAdapter);
 
         // Set rooms click listener:
@@ -127,11 +163,11 @@ public class VectorPublicRoomsListFragment extends Fragment {
                             CommonActivityUtils.goToRoomPage(getActivity(), mSession, params);
                         }
                     } else {
-                        mSpinnerView.setVisibility(View.VISIBLE);
+                        mInitializationSpinnerView.setVisibility(View.VISIBLE);
 
                         roomPreviewData.fetchPreviewData(new ApiCallback<Void>() {
                             private void onDone() {
-                                mSpinnerView.setVisibility(View.GONE);
+                                mInitializationSpinnerView.setVisibility(View.GONE);
                                 CommonActivityUtils.previewRoom(getActivity(), roomPreviewData);
                             }
 
@@ -167,5 +203,95 @@ public class VectorPublicRoomsListFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (0 == mAdapter.getCount()) {
+            mInitializationSpinnerView.setVisibility(View.VISIBLE);
+
+            PublicRoomsManager.startPublicRoomsSearch(null, mPattern, new ApiCallback<List<PublicRoom>>() {
+                @Override
+                public void onSuccess(List<PublicRoom> publicRooms) {
+                    if (null != getActivity()) {
+                        mAdapter.addAll(publicRooms);
+                        mRecentsListView.setOnScrollListener(mScrollListener);
+                        mInitializationSpinnerView.setVisibility(View.GONE);
+                    }
+                }
+
+                private void onError(String message) {
+                    if (null != getActivity()) {
+                        Log.e(LOG_TAG, "## startPublicRoomsSearch() failed " + message);
+                        Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
+                        mInitializationSpinnerView.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onError(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
+        }
+    }
+
+    /**
+     * Trigger a forward room pagination
+     */
+    private void forwardPaginate() {
+        boolean hasStarted = PublicRoomsManager.forwardPaginate(new ApiCallback<List<PublicRoom>>() {
+            @Override
+            public void onSuccess(List<PublicRoom> publicRooms) {
+                if (null != getActivity()) {
+                    mForwardPaginationView.setVisibility(View.GONE);
+                    mAdapter.addAll(publicRooms);
+
+                    // unplug the scroll listener if there is no more data to find
+                    if (!PublicRoomsManager.hasMoreResults()) {
+                        mRecentsListView.setOnScrollListener(null);
+                    }
+                }
+            }
+
+            private void onError(String message) {
+                if (null != getActivity()) {
+                    Log.e(LOG_TAG, "## forwardPaginate() failed " + message);
+                    Toast.makeText(getActivity(),message, Toast.LENGTH_SHORT).show();
+                    mForwardPaginationView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
+
+        if (hasStarted) {
+            mForwardPaginationView.setVisibility(View.VISIBLE);
+        }
     }
 }

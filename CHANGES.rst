@@ -1,3 +1,48 @@
+Changes in Vector 0.6.0 (2016-11-18)
+===================================================
+ 
+Features:
+ * Encryption (beta feature).
+ 
+Bugfixes:
+ * GA issues
+ * #503 : register users without email verification
+ * #521 : Search: Unable to submit query if hardware keyboard is active  
+ * #528 : The emotes are not properly displayed on notifications
+ * #531 : The application badge should be updated even if the device is offline.
+ * #536 : The room preview does not always display the right member info
+ * #539 : Quoting a msg overrides what I already typed
+ * #540 : All the store data is lost if there is an OOM error while saving it 
+ * #542 : Camera permission managements in the room settings
+ * #546 : Invite a left user doesn't display his displayname
+ * #547 : Add public rooms pagination 
+ * #549 : Quoting : displays "null" on membership events 
+ * #558 : global search : the back pagination does not work anymore.
+ * #560 : vector.im/{beta,staging,develop} and riot.im/{app,staging,develop} permalinks should work as well as matrix.to ones
+ * #561 : URLs containing $s aren't linkified correctly 
+ * #562 : Some redacted events were restored at next application launch
+ * #563 : Crash after opening third party notices when the device is turned vertically then horizontaly 
+ * #564 : The room search should contain the file search too.
+ * #568 : Preview on invitation : the arrow to go down is displayed when device is turned 
+ * #571 : Room photos don't appear in Browse Directory
+ * #579 : Room photo : no placeholder for one special room in the browse directory 
+ * #582 : Permalinks to users are broken 
+ * #583 : We should only intercept https://matrix.to links we recognise
+ * #587 : Leave room too hidden 
+ * #589 : Login as email is case sensistive
+ * #592 : Improve members list display 
+ * #590 : Email validation token is sent even to invalid emails
+ * #595 : Underscores have to be escaped with double backslash to prevent markdown parsing 
+ * #601 : Viewing mubot images in fullscreen shows black screen 
+ * #602 : The 1:1 room avatar must be the other member avatar if no room avatar was set 
+ * #608 : Add reject / accept button on the notification when it is a room invitation notification  
+ * #611 : Remove display name event is blank 
+ * #612 : F-Droid develop does not display commit ID after the version string in the main menu
+ * #617 : Back button in the search from a room view leads to the rooms list
+ * #700 : Fix [VoIP] video buttons still active in full screen 
+ * #715 : [Register flow] Register with a mail address fails
+ 
+
 Changes in Vector 0.5.2 (2016-09-20)
 ===================================================
 

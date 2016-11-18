@@ -17,6 +17,7 @@
 package im.vector.gcm;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -56,7 +57,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
             event.eventId = bundle.getString("id");
             event.sender = bundle.getString("sender");
             event.roomId = bundle.getString("room_id");
-            event.type = bundle.getString("type");
+            event.setType(bundle.getString("type"));
             event.updateContent((new JsonParser()).parse(bundle.getString("content")).getAsJsonObject());
 
             return event;
@@ -127,6 +128,10 @@ public class MatrixGcmListenerService extends GcmListenerService {
                                 } catch (Exception e) {
                                     Log.e(LOG_TAG, "Fail to retrieve the roomState of " + event.roomId);
                                 }
+                            }
+
+                            if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
+                                event.setClearEvent(session.getCrypto().decryptEvent(event));
                             }
 
                             eventStreamService.prepareNotification(event, roomState, session.getDataHandler().getBingRulesManager().fulfilledBingRule(event));
