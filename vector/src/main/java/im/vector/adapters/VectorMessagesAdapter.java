@@ -343,7 +343,6 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
         if (mIsRoomEncrypted &&  mSession.isCryptoEnabled()) {
             // the key is "userid_deviceid"
-            HashMap<String, MXDeviceInfo> deviceInfoHashMap = new HashMap<>();
             for (int index = 0; index < this.getCount(); index++) {
                 MessageRow row = getItem(index);
                 Event event = row.getEvent();
