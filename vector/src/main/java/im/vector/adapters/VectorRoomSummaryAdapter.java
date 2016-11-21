@@ -819,7 +819,12 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             isInvited = childRoom.isInvited();
         }
 
-        directChatIcon.setVisibility(mDirectChatRoomIdsList.indexOf(childRoom.getRoomId()) < 0 ? View.GONE : View.VISIBLE);
+        if (null != childRoom) {
+            directChatIcon.setVisibility(mDirectChatRoomIdsList.indexOf(childRoom.getRoomId()) < 0 ? View.GONE : View.VISIBLE);
+        } else {
+            directChatIcon.setVisibility(View.GONE);
+        }
+        
         bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);
         invitationView.setVisibility(isInvited ? View.VISIBLE : View.GONE);
 
