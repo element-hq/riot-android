@@ -666,10 +666,12 @@
     <string name="settings_ignored_users">Ignored users</string>
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
+    <string name="settings_cryptography">Cryptography</string>
     <string name="settings_notifications_targets">Notification Targets</string>
     <string name="settings_app_permission">App permissions</string>
     <string name="settings_devices_list">Devices</string>
     <string name="devices_divider">devices_devider</string>
+    <string name="cryptography_divider">cryptography_divider</string>
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
