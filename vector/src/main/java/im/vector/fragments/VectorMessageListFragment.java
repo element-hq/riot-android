@@ -381,7 +381,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             }
         });
 
-        if (!TextUtils.equals(event.getSender(), mSession.getMyUserId())) {
+        // the current id cannot be blocked, verified...
+        if (!TextUtils.equals(encryptedEventContent.device_id, mSession.getCredentials().deviceId)) {
             if ((null == event.getCryptoError()) && (null != deviceInfo)) {
                 if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
