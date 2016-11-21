@@ -1,3 +1,12 @@
+Changes in Vector 0.6.1 (2016-11-21)
+===================================================
+
+Features:
+ * Add the current device informations in the global settings
+ 
+Improvements:
+ * Reduce the number of lags / application not responding 
+
 Changes in Vector 0.6.0 (2016-11-18)
 ===================================================
  
