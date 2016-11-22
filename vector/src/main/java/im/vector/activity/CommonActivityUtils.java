@@ -78,6 +78,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1149,6 +1150,29 @@ public class CommonActivityUtils {
     }
 
     /**
+     * Create a direct message room with the user ID provided in aParticipantUserId.
+     * @param aParticipantUserId user ID to be invited in the direct message room
+     * @param aCreateRoomCallBack invite call back
+     * @return true if the invite was performed, false otherwise
+     */
+    public static boolean createRoomDirectMessage(MXSession aSession,final String aParticipantUserId, ApiCallback<String> aCreateRoomCallBack) {
+        boolean retCode = false;
+
+        if(!TextUtils.isEmpty(aParticipantUserId) && (null!=aCreateRoomCallBack) && (null!=aSession)) {
+            retCode = true;
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("preset","trusted_private_chat");
+            params.put("is_direct", true);
+            params.put("invite", Arrays.asList(aParticipantUserId));
+
+            // Direct message case
+            aSession.createRoom(params, aCreateRoomCallBack);
+        }
+
+        return retCode;
+    }
+
+    /**
      * Create a 1:1 direct message room.
      * @param aSession the session.
      * @param otherUserId the other user id.
@@ -1187,7 +1211,7 @@ public class CommonActivityUtils {
                     @Override
                     public void onSuccess(Void info) {
                         // by default, the 1:1 rooms are Direct chat one
-                        setDirectChatRoom(fSession, fRoomId, null, fromActivity, callback);
+                        setToggleDirectMessageRoom(fSession, fRoomId, otherUserId, fromActivity, callback, true);
                     }
 
                     @Override
@@ -1218,17 +1242,17 @@ public class CommonActivityUtils {
 
                 // check if the userId defines an email address.
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches()) {
-                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite by mail");
+                    Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onSuccess - start invite by mail");
                     room.inviteByEmail(otherUserId, inviteCallback);
                 } else {
-                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite");
+                    Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onSuccess - start invite");
                     room.invite(otherUserId, inviteCallback);
                 }
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
-                Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onMatrixError Msg="+e.getLocalizedMessage());
+                Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onMatrixError Msg="+e.getLocalizedMessage());
                 if (null != callback) {
                     callback.onMatrixError(e);
                 }
@@ -1236,7 +1260,7 @@ public class CommonActivityUtils {
 
             @Override
             public void onNetworkError(Exception e) {
-                Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onNetworkError Msg="+e.getLocalizedMessage());
+                Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onNetworkError Msg="+e.getLocalizedMessage());
                 if (null != callback) {
                     callback.onNetworkError(e);
                 }
@@ -1244,7 +1268,7 @@ public class CommonActivityUtils {
 
             @Override
             public void onUnexpectedError(Exception e) {
-                Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onUnexpectedError Msg="+e.getLocalizedMessage());
+                Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onUnexpectedError Msg="+e.getLocalizedMessage());
                 if (null != callback) {
                     callback.onUnexpectedError(e);
                 }
@@ -1260,29 +1284,32 @@ public class CommonActivityUtils {
      * @param aParticipantUserId the direct chat invitee user ID
      * @param fromActivity calling activity
      * @param callback async response handler
+     * @param isGoToRoomPage true to display the room, false otherwise
      */
-    public static void setDirectChatRoom(final MXSession aSession, final String aRoomId, String aParticipantUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
+    public static void setToggleDirectMessageRoom(final MXSession aSession, final String aRoomId, String aParticipantUserId, final Activity fromActivity, final ApiCallback<Void> callback, final boolean isGoToRoomPage) {
 
         if((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
-            Log.d(LOG_TAG, "## setDirectChatRoom(): failure - invalid input parameters");
+            Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): failure - invalid input parameters");
         } else {
             aSession.toggleDirectChatRoom(aRoomId, aParticipantUserId, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, aSession.getMyUserId());
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, aRoomId);
-                    params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                    if(isGoToRoomPage) {
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, aSession.getMyUserId());
+                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, aRoomId);
+                        params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
 
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onSuccess - start goToRoomPage");
-                    CommonActivityUtils.goToRoomPage(fromActivity, aSession, params);
+                        Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onSuccess - start goToRoomPage");
+                        CommonActivityUtils.goToRoomPage(fromActivity, aSession, params);
+                    }
 
                     callback.onSuccess(null);
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onNetworkError Msg=" + e.getLocalizedMessage());
+                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onNetworkError Msg=" + e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onNetworkError(e);
                     }
@@ -1290,7 +1317,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onMatrixError Msg=" + e.getLocalizedMessage());
+                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onMatrixError Msg=" + e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onMatrixError(e);
                     }
@@ -1298,7 +1325,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onUnexpectedError Msg=" + e.getLocalizedMessage());
+                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onUnexpectedError Msg=" + e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onUnexpectedError(e);
                     }
