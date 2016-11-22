@@ -270,7 +270,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         textView.setText(deviceInfo.deviceId);
 
         textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
-        textView.setText(deviceInfo.identityKey());
+        textView.setText(deviceInfo.fingerprint());
 
         builder.setView(layout);
         builder.setTitle(R.string.encryption_information_verify_device);
