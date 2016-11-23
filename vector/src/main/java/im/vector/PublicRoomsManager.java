@@ -36,12 +36,13 @@ public class PublicRoomsManager {
     private static final String LOG_TAG = "PublicRoomsManager";
 
     public static final int PUBLIC_ROOMS_LIMIT = 20;
+    public static final int PUBLIC_ROOMS_NOT_INITIALIZED = -1;
 
     public interface PublicRoomsManagerListener {
         /**
          * Called when the number of public rooms count have been updated
          */
-        void onPublicRoomsCountRefresh(Integer publicRoomsCount);
+        void onPublicRoomsCountRefresh(int publicRoomsCount);
     }
 
     // session
@@ -51,7 +52,7 @@ public class PublicRoomsManager {
     private static boolean mCountRefreshInProgress = false;
 
     // define the number of public rooms
-    private static Integer mPublicRoomsCount = null;
+    private static int mPublicRoomsCount = PUBLIC_ROOMS_NOT_INITIALIZED;
 
     // request key to avoid dispatching invalid data
     private static String mRequestKey = null;
@@ -216,9 +217,9 @@ public class PublicRoomsManager {
     }
 
     /**
-     * @return the number of public rooms
+     * @return the number of public rooms or {@link #PUBLIC_ROOMS_NOT_INITIALIZED} it not yet initialized.
      */
-    public static Integer getPublicRoomsCount() {
+    public static int getPublicRoomsCount() {
         return mPublicRoomsCount;
     }
 
@@ -227,55 +228,52 @@ public class PublicRoomsManager {
      * @param listener the update listener
      */
     public static void refreshPublicRoomsCount(final PublicRoomsManagerListener listener) {
-        if (null != mSession) {
-            if (mCountRefreshInProgress) {
-                if (null != listener) {
-                    mListeners.add(listener);
-                }
-            } else {
-                mCountRefreshInProgress = true;
-
-                if (null != listener) {
-                    mListeners.add(listener);
-                }
-
-                // use any session to get the public rooms list
-                mSession.getEventsApiClient().getPublicRoomsCount(new SimpleApiCallback<Integer>() {
-                    @Override
-                    public void onSuccess(final Integer publicRoomsCount) {
-                        Log.d(LOG_TAG, "## refreshPublicRoomsCount() : Got the rooms public list count : " + publicRoomsCount);
-                        mPublicRoomsCount = publicRoomsCount;
-
-                        for (PublicRoomsManagerListener listener : mListeners) {
-                            listener.onPublicRoomsCountRefresh(mPublicRoomsCount);
-                        }
-                        mListeners.clear();
-                        mCountRefreshInProgress = false;
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        super.onNetworkError(e);
-                        mCountRefreshInProgress = false;
-                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        super.onMatrixError(e);
-                        mCountRefreshInProgress = false;
-                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        super.onUnexpectedError(e);
-                        mCountRefreshInProgress = false;
-                        Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
-                    }
-                });
-            }
+        if (null == mSession) {
+            return;
         }
+        if (null != listener) {
+            mListeners.add(listener);
+        }
+        if (mCountRefreshInProgress) {
+            return;
+        }
+        mCountRefreshInProgress = true;
+
+        // use any session to get the public rooms list
+        mSession.getEventsApiClient().getPublicRoomsCount(new SimpleApiCallback<Integer>() {
+            @Override
+            public void onSuccess(final Integer publicRoomsCount) {
+                Log.d(LOG_TAG, "## refreshPublicRoomsCount() : Got the rooms public list count : " + publicRoomsCount);
+                mPublicRoomsCount = publicRoomsCount != null ? publicRoomsCount : 0;
+
+                for (PublicRoomsManagerListener listener : mListeners) {
+                    listener.onPublicRoomsCountRefresh(mPublicRoomsCount);
+                }
+                mListeners.clear();
+                mCountRefreshInProgress = false;
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                super.onNetworkError(e);
+                mCountRefreshInProgress = false;
+                Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                super.onMatrixError(e);
+                mCountRefreshInProgress = false;
+                Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                super.onUnexpectedError(e);
+                mCountRefreshInProgress = false;
+                Log.e(LOG_TAG, "## refreshPublicRoomsCount() : fails to retrieve the public room list " + e.getLocalizedMessage());
+            }
+        });
     }
 }
 
