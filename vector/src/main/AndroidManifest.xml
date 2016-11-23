@@ -9,7 +9,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <!-- universal links management -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <!-- for android 4.1.* devices, reported by GA -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- videocall permissions-->
     <uses-permission android:name="android.permission.CAMERA" />

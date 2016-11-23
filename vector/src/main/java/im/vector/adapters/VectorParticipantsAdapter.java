@@ -575,19 +575,6 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             matrixUserBadge.setVisibility(View.GONE);
         }
 
-        View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                VectorUtils.copyToClipboard(mContext, nameTextView.getText());
-                return true;
-            }
-        };
-
-        // the cellLayout setOnLongClickListener might be trapped by the scroll management
-        // so add it to some UI items.
-        nameTextView.setOnLongClickListener(onLongClickListener);
-        thumbView.setOnLongClickListener(onLongClickListener);
-
         // the checkbox is not managed here
         final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);

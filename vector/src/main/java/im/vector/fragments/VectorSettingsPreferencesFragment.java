@@ -51,6 +51,7 @@ import android.widget.Toast;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
@@ -79,7 +80,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.adapters.AdapterUtils;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
@@ -108,6 +108,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     // members
     private MXSession mSession;
     private View mLoadingView;
+
+    // cryptography
+    private DeviceInfo mMyDeviceInfo;
+    private PreferenceCategory mCryptographyCategory;
+    private PreferenceCategory mCryptographyCategoryDivider;
 
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
@@ -486,6 +491,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
         mDevicesListSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
         mDevicesListSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
+        mCryptographyCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_cryptography));
+        mCryptographyCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.cryptography_divider));
 
 
         // preference to start the App info screen, to facilitate App permissions access
@@ -1579,6 +1586,57 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     //==============================================================================================================
+    // Cryptography
+    //==============================================================================================================
+
+    private void removeCryptographyPreference() {
+        PreferenceScreen preferenceScreen;
+        if(null != (preferenceScreen = getPreferenceScreen())) {
+            preferenceScreen.removePreference(mCryptographyCategory);
+            preferenceScreen.removePreference(mCryptographyCategoryDivider);
+        }
+    }
+
+    /**
+     * Build the cryptography preference section.
+     * @param aMyDeviceInfo the device info
+     */
+    private void refreshCryptographyPreference(DeviceInfo aMyDeviceInfo) {
+        String userId = mSession.getMyUserId();
+        String deviceId = mSession.getCredentials().deviceId;
+        EditTextPreference cryptoInfoTextPreference;
+        MXDeviceInfo deviceInfo;
+
+        // device name
+        if ((null!=aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
+            cryptoInfoTextPreference = (EditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_name));
+            if (null != cryptoInfoTextPreference) {
+                cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
+            }
+        }
+
+        // crypto section: device ID
+        if (!TextUtils.isEmpty(deviceId)) {
+            cryptoInfoTextPreference = (EditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_id));
+            if (null != cryptoInfoTextPreference) {
+                cryptoInfoTextPreference.setSummary(deviceId);
+            }
+        }
+
+        // crypto section: device key (fingerprint)
+        if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId) && (null != (deviceInfo = mSession.getCrypto().getDeviceInfo(userId, deviceId)))) {
+            if (!TextUtils.isEmpty(deviceInfo.fingerprint())) {
+                cryptoInfoTextPreference = (EditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_key));
+                if (null != cryptoInfoTextPreference) {
+                    cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
+                }
+            }
+        }
+
+    }
+
+
+    //==============================================================================================================
     // devices list
     //==============================================================================================================
 
@@ -1633,6 +1691,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         } else {
             removeDevicesPreference();
+            removeCryptographyPreference();
         }
     }
 
@@ -1670,6 +1729,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             for (DeviceInfo deviceInfo : mDevicesNameList) {
                 // set bold to distinguish current device ID
                 if((null!=myDeviceId) && myDeviceId.equals(deviceInfo.device_id)) {
+                    mMyDeviceInfo = deviceInfo;
                     typeFaceHighlight = Typeface.BOLD;
                 } else {
                     typeFaceHighlight = Typeface.NORMAL;
@@ -1706,6 +1766,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                 mDevicesListSettingsCategory.addPreference(preference);
             }
+
+            refreshCryptographyPreference(mMyDeviceInfo);
         }
     }
 

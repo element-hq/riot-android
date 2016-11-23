@@ -820,14 +820,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
             }
         });
 
-        // set long click handler: copy member name to clipboard
-        View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                VectorUtils.copyToClipboard(mContext, viewHolder.mMemberNameTextView.getText());
-                return true;
-            }
-        };
         // the cellLayout setOnLongClickListener might be trapped by the scroll management
         // so add it to some UI items.
         viewHolder.mSwipeCellLayout.setOnLongClickListener(new View.OnLongClickListener() {
@@ -836,10 +828,6 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 return true;
             }
         });
-
-        // long tap on the avatar or the display name copy it into the clipboard.
-        viewHolder.mMemberNameTextView.setOnLongClickListener(onLongClickListener);
-        viewHolder.mMemberAvatarImageView.setOnLongClickListener(onLongClickListener);
 
         // SWIPE: the swipe should be enabled when there is no search and the user can kick other members
         if (isSearchMode || isActionsMenuHidden || (null == participant.mRoomMember)) {
