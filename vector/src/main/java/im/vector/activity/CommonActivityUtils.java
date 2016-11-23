@@ -363,7 +363,9 @@ public class CommonActivityUtils {
                 activity.startActivity(new Intent(activity, LoginActivity.class));
                 activity.finish();
             }  else {
-                context.startActivity(new Intent(context, LoginActivity.class));
+                Intent intent = new Intent(context, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
             }
         }
     }
