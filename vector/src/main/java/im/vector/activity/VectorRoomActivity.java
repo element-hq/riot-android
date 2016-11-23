@@ -2549,6 +2549,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         }
     }
 
+    /**
+     * If the joined room was tagged as "direct chat room", it is required to update the
+     * room as a "direct chat room" (account_data)
+     */
     private void processDirectMessageRoom() {
         Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
         if((null!=room) && (room.isDirectChatInvitation())){

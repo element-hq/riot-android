@@ -64,11 +64,16 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     private boolean mIsFirstResume = true;
 
     // direct message
-    private String mDirectMessageParticipant;
-    final SimpleApiCallback<String> mCreateDirectMessageCallBack = new SimpleApiCallback<String>(VectorRoomCreationActivity.this) {
+    final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
         @Override
         public void onSuccess(final String roomId) {
-            CommonActivityUtils.setToggleDirectMessageRoom(mSession, roomId, mDirectMessageParticipant, VectorRoomCreationActivity.this, mDirectMessageListener, true);
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onSuccess - start goToRoomPage");
+            CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
         }
 
         private void onError(final String message) {
@@ -311,10 +316,8 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 CommonActivityUtils.goToRoomPage(this, mSession, params);
             } else {
                 // direct message flow
-                mDirectMessageParticipant = mParticipants.get(0).mUserId;
-                if(CommonActivityUtils.createRoomDirectMessage(mSession, mDirectMessageParticipant, mCreateDirectMessageCallBack)){
-                    mSpinnerView.setVisibility(View.VISIBLE);
-                }
+                mSpinnerView.setVisibility(View.VISIBLE);
+                mSession.createRoomDirectMessage(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
             }
 
             return true;

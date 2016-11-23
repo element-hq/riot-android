@@ -1353,7 +1353,7 @@ public class CommonActivityUtils {
      * @param fromActivity the caller activity.
      * @param callback the callback.
      */
-    public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, Activity fromActivity, final ApiCallback<Void> callback) {
+    public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, Activity fromActivity, final ApiCallback<String> callback) {
         // sanity check
         if (null == otherUserId) {
             return;
@@ -1390,8 +1390,8 @@ public class CommonActivityUtils {
                 callback.onSuccess(null);
             }
         } else {
-            createDirectMessagesRoom(aSession, otherUserId, fromActivity, callback);
-        }
+            session.createRoomDirectMessage(otherUserId, callback);
+       }
     }
 
     /**

@@ -113,20 +113,22 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private ExpandableListView mExpandableListView;
 
     // direct message
-    /** the participant user ID that will be invited in the direct message **/
-    private String mDirectMessageUserId;
     /** callback for the creation of the direct message room **/
-    final SimpleApiCallback<String> mCreateDirectMessageCallBack = new SimpleApiCallback<String>() {
+    final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
         @Override
         public void onSuccess(String roomId) {
-            final Room room = mSession.getDataHandler().getRoom(roomId);
-            final String fRoomId = roomId;
-            CommonActivityUtils.setToggleDirectMessageRoom(mSession, fRoomId, mDirectMessageUserId, VectorMemberDetailsActivity.this, mRoomActionsListener, true);
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onSuccess - start goToRoomPage");
+            CommonActivityUtils.goToRoomPage(VectorMemberDetailsActivity.this, mSession, params);
         }
 
         @Override
         public void onMatrixError(MatrixError e) {
-            Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onMatrixError Msg="+e.getLocalizedMessage());
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onMatrixError Msg="+e.getLocalizedMessage());
             if (null != mRoomActionsListener) {
                 mRoomActionsListener.onMatrixError(e);
             }
@@ -134,7 +136,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         @Override
         public void onNetworkError(Exception e) {
-            Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onNetworkError Msg="+e.getLocalizedMessage());
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onNetworkError Msg="+e.getLocalizedMessage());
             if (null != mRoomActionsListener) {
                 mRoomActionsListener.onNetworkError(e);
             }
@@ -142,7 +144,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
         @Override
         public void onUnexpectedError(Exception e) {
-            Log.d(LOG_TAG, "## createDirectMessagesRoom(): createRoom() onUnexpectedError Msg="+e.getLocalizedMessage());
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onUnexpectedError Msg="+e.getLocalizedMessage());
             if (null != mRoomActionsListener) {
                 mRoomActionsListener.onUnexpectedError(e);
             }
@@ -356,10 +358,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mDirectMessageUserId = mMemberId;
-                        if(CommonActivityUtils.createRoomDirectMessage(mSession, mMemberId, mCreateDirectMessageCallBack)){
-                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                        }
+                        enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                        mSession.createRoomDirectMessage(mMemberId, mCreateDirectMessageCallBack);
                     }
                 });
                 break;
