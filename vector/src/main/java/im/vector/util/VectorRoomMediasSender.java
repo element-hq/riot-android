@@ -827,7 +827,7 @@ public class VectorRoomMediasSender {
                     mVectorRoomActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mVectorMessageListFragment.uploadImageContent(aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
+                            mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
                             aListener.onDone();
                         }
                     });
@@ -877,7 +877,7 @@ public class VectorRoomMediasSender {
                                             mVectorRoomActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    mVectorMessageListFragment.uploadImageContent(aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
+                                                    mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, fImageUrl, anImageFilename, anImageMimeType);
                                                     aListener.onDone();
                                                 }
                                             });
@@ -912,7 +912,7 @@ public class VectorRoomMediasSender {
             mVectorRoomActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mVectorMessageListFragment.uploadImageContent(aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
+                    mVectorMessageListFragment.uploadImageContent(null, null, aThumbnailURL, anImageUrl, anImageFilename, anImageMimeType);
                     if (null != aListener) {
                         aListener.onDone();
                     }
