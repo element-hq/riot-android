@@ -302,29 +302,32 @@ public class CommonActivityUtils {
      * @param goToLoginPage true to jump to the login page
      */
     public static void logout(Activity activity, boolean goToLoginPage) {
+        // if no activity is provided, use the application context instead.
+        Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
+
         EventStreamService.removeNotification();
-        stopEventStream(activity);
+        stopEventStream(context);
 
         try {
-            ShortcutBadger.setBadge(activity, 0);
+            ShortcutBadger.setBadge(context, 0);
         } catch (Exception e) {
             Log.d(LOG_TAG,"## logout(): Exception Msg="+e.getMessage());
         }
 
         // warn that the user logs out
-        Collection<MXSession> sessions = Matrix.getMXSessions(activity);
+        Collection<MXSession> sessions = Matrix.getMXSessions(context);
         for (MXSession session : sessions) {
             // Publish to the server that we're now offline
-            MyPresenceManager.getInstance(activity, session).advertiseOffline();
+            MyPresenceManager.getInstance(context, session).advertiseOffline();
             MyPresenceManager.remove(session);
         }
 
         // clear the preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, activity.getResources().getString(R.string.default_hs_server_url));
-        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, activity.getResources().getString(R.string.default_identity_server_url));
-        Boolean useGa = GAHelper.useGA(activity);
+        String homeServer = preferences.getString(LoginActivity.HOME_SERVER_URL_PREF, context.getResources().getString(R.string.default_hs_server_url));
+        String identityServer = preferences.getString(LoginActivity.IDENTITY_SERVER_URL_PREF, context.getResources().getString(R.string.default_identity_server_url));
+        Boolean useGa = GAHelper.useGA(context);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
@@ -333,31 +336,37 @@ public class CommonActivityUtils {
         editor.commit();
 
         if (null != useGa) {
-            GAHelper.setUseGA(activity, useGa);
+            GAHelper.setUseGA(context, useGa);
         }
 
         // reset the GCM
-        Matrix.getInstance(activity).getSharedGCMRegistrationManager().reset();
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().reset();
 
         // clear credentials
-        Matrix.getInstance(activity).clearSessions(activity, true);
+        Matrix.getInstance(context).clearSessions(context, true);
 
         // ensure that corrupted values are cleared
-        Matrix.getInstance(activity).getLoginStorage().clear();
+        Matrix.getInstance(context).getLoginStorage().clear();
 
         // clear the tmp store list
-        Matrix.getInstance(activity).clearTmpStoresList();
+        Matrix.getInstance(context).clearTmpStoresList();
 
         // reset the contacts
         PIDsRetriever.getIntance().reset();
         ContactsManager.reset();
 
-        MXMediasCache.clearThumbnailsCache(activity);
+        MXMediasCache.clearThumbnailsCache(context);
 
         if (goToLoginPage) {
-            // go to login page
-            activity.startActivity(new Intent(activity, LoginActivity.class));
-            activity.finish();
+            if (null != activity) {
+                // go to login page
+                activity.startActivity(new Intent(activity, LoginActivity.class));
+                activity.finish();
+            }  else {
+                Intent intent = new Intent(context, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+            }
         }
     }
 
