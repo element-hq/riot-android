@@ -460,6 +460,8 @@ public class VectorRoomMediasSender {
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "cannot restore the medias picker thumbnail " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "cannot restore the medias picker thumbnail oom");
         }
 
         return thumbnailBitmap;

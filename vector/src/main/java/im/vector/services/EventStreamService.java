@@ -951,7 +951,11 @@ public class EventStreamService extends Service {
                 if (null != f) {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                    try {
+                        largeBitmap = BitmapFactory.decodeFile(f.getPath(), options);
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "decodeFile failed with an oom");
+                    }
                 } else {
                     session.getMediasCache().loadAvatarThumbnail(session.getHomeserverConfig(), new ImageView(getApplicationContext()), member.avatarUrl, size);
                 }
