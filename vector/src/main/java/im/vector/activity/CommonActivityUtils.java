@@ -1163,7 +1163,10 @@ public class CommonActivityUtils {
             HashMap<String, Object> params = new HashMap<>();
             params.put("preset","trusted_private_chat");
             params.put("is_direct", true);
-            params.put("invite", Arrays.asList(aParticipantUserId));
+            // do not send invite when the participant ID is the user ID
+            if(!aParticipantUserId.equals(aSession.getMyUserId())) {
+                params.put("invite", Arrays.asList(aParticipantUserId));
+            }
 
             // Direct message case
             aSession.createRoom(params, aCreateRoomCallBack);

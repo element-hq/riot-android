@@ -821,13 +821,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             }
 
-            String mySelf = mSession.getMyUserId();
-            if((null!=mySelf) && !mMemberId.equals(mySelf)) { // do not display start chat for myself
-                imageResource = R.drawable.vector_create_direct_room;
-                actionText = getResources().getString(R.string.start_new_chat);
-                directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
-            }
-
+            imageResource = R.drawable.vector_create_direct_room;
+            actionText = getResources().getString(R.string.start_new_chat);
+            directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_START_CHAT));
 
             mListViewAdapter.setDirectCallsActionsList(directMessagesActions);
             mListViewAdapter.notifyDataSetChanged();
