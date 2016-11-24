@@ -1,3 +1,12 @@
+Changes in Vector 0.6.3 (2016-11-24)
+===================================================
+
+Bugfixes:
+ * Reduce the memory use to avoid oom crashes.
+ * The requests did not work anymore with HTTP v2 servers
+ * The application data were not properly cleared after a "clear cache"
+ * The device information was not refreshed if the device was not yet known
+
 Changes in Vector 0.6.2 (2016-11-23)
 ===================================================
 
