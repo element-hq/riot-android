@@ -117,8 +117,8 @@ dependencies {
 
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile 'com.google.code.gson:gson:2.3'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.5'
-    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'io.pristine:libjingle:9690@aar'
 
     // bug report encryption

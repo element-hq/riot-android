@@ -522,6 +522,8 @@ public class Matrix {
 
         if (clearCredentials) {
             session.logout(context, null);
+        } else {
+            session.clear(context);
         }
 
         synchronized (LOG_TAG) {

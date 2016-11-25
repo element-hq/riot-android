@@ -1,3 +1,30 @@
+Changes in Vector 0.6.3 (2016-11-24)
+===================================================
+
+Bugfixes:
+ * Reduce the memory use to avoid oom crashes.
+ * The requests did not work anymore with HTTP v2 servers
+ * The application data were not properly cleared after a "clear cache"
+ * The device information was not refreshed if the device was not yet known
+
+Changes in Vector 0.6.2 (2016-11-23)
+===================================================
+
+Features:
+ * Attchments encryption v2
+ * libolm update
+ 
+Improvements:
+ * Add try/catch blocks to avoid application crashes when oom
+
+Bugfixes:
+ * #680 Unsupported TLS protocol version
+ * #712 Improve adding member from search/invite page
+ * #730 Crypto : we should be able to block the user account other devices
+ * #731 Crypto : Some device informations are not displayed whereas the messages can be decrypted
+ * #739 [e2e] Ringtone from call is different according to the encryption state of the room
+ * #742 Unable to send messages in #megolm since build 810: Network error
+
 Changes in Vector 0.6.1 (2016-11-21)
 ===================================================
 

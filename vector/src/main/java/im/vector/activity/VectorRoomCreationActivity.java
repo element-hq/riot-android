@@ -309,7 +309,7 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                 createRoom(mParticipants);
             } else if (mParticipants.size() > 1) {
                 createRoom(mParticipants);
-            } else if(null != (existingRoomId=isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId))) {
+            } else if (null != (existingRoomId=isDirectChatRoomAlreadyExist(mParticipants.get(0).mUserId))) {
                 HashMap<String, Object> params = new HashMap<>();
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mParticipants.get(0).mUserId);
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);

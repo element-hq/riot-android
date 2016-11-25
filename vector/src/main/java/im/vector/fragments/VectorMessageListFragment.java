@@ -44,6 +44,7 @@ import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.adapters.MessagesAdapter;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.RoomState;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -59,10 +60,8 @@ import org.matrix.androidsdk.rest.model.ImageMessage;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.VideoMessage;
-import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.util.JsonUtils;
 
-import im.vector.EventEmitter;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
@@ -82,8 +81,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class VectorMessageListFragment extends MatrixMessageListFragment implements VectorMessagesAdapter.VectorMessagesAdapterActionsListener {
     private static final String LOG_TAG = "VectorMessageListFrg";
@@ -430,6 +431,36 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
         final android.support.v7.app.AlertDialog dialog = builder.create();
         dialog.show();
+
+        if (null == deviceInfo) {
+            mSession.getCrypto().downloadKeys(Arrays.asList(event.getSender()), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+                @Override
+                public void onSuccess(MXUsersDevicesMap<MXDeviceInfo> info) {
+                    if (dialog.isShowing()) {
+                        EncryptedEventContent encryptedEventContent = JsonUtils.toEncryptedEventContent(event.getWireContent().getAsJsonObject());
+
+                        MXDeviceInfo deviceInfo = mSession.getCrypto().deviceWithIdentityKey(encryptedEventContent.sender_key, event.getSender(), encryptedEventContent.algorithm);
+
+                        if (null != deviceInfo) {
+                            dialog.cancel();
+                            onE2eIconClick(event, deviceInfo);
+                        }
+                    }
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                }
+            });
+        }
     }
 
     /**
