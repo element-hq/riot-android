@@ -1203,56 +1203,6 @@ public class CommonActivityUtils {
         }
     }
 
-
-    /**
-     * Jump to a 1:1 room with a dedicated user.
-     * If there is no room with this user, the room is created.
-     * @param aSession the session.
-     * @param otherUserId the other user id.
-     * @param fromActivity the caller activity.
-     * @param callback the callback.
-     */
-    public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, Activity fromActivity, final ApiCallback<String> callback) {
-        // sanity check
-        if (null == otherUserId) {
-            return;
-        }
-
-        // check first if the 1:1 room already exists
-        MXSession session = (aSession == null) ? Matrix.getMXSession(fromActivity, null) : aSession;
-
-        // no session is provided
-        if (null == session) {
-            // get the default one.
-            session = Matrix.getInstance(fromActivity.getApplicationContext()).getDefaultSession();
-        }
-
-        // sanity check
-        if ((null == session) || !session.isAlive()) {
-            return;
-        }
-
-        Room room = findLatestOneToOneRoom(session, otherUserId);
-
-        // the room already exists -> switch to it
-        if (null != room) {
-            Log.d(LOG_TAG,"## goToOneToOneRoom(): room already exists");
-            HashMap<String, Object> params = new HashMap<>();
-
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
-
-            CommonActivityUtils.goToRoomPage(fromActivity, session, params);
-
-            // everything is ok
-            if (null != callback) {
-                callback.onSuccess(null);
-            }
-        } else {
-            session.createRoomDirectMessage(otherUserId, callback);
-       }
-    }
-
     /**
      * Offer to send some dedicated intent data to an existing room
      *
