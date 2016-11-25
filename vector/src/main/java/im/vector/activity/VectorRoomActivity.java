@@ -2530,6 +2530,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != sRoomPreviewData) {
             HashMap<String, Object> params = new HashMap<>();
 
+            processDirectMessageRoom();
+
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
 
@@ -2543,7 +2545,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
             VectorRoomActivity.this.startActivity(intent);
-            processDirectMessageRoom();
 
             sRoomPreviewData = null;
         }
@@ -2562,13 +2563,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             if(2==members.size()) {
                 String participantUserId;
 
-                for (RoomMember member : members) {
-                    // search for the second participant
-                    if (!member.getUserId().equals(myUserId)) {
-                        participantUserId = member.getUserId();
-                        CommonActivityUtils.setToggleDirectMessageRoom(mSession, sRoomPreviewData.getRoomId(), participantUserId, this, mDirectMessageListener, false);
-                        break;
+                // test if room is already seen as "direct message"
+                if (mSession.getDirectChatRoomIdsList().indexOf(sRoomPreviewData.getRoomId()) < 0) {
+                    for (RoomMember member : members) {
+                        // search for the second participant
+                        if (!member.getUserId().equals(myUserId)) {
+                            participantUserId = member.getUserId();
+                            CommonActivityUtils.setToggleDirectMessageRoom(mSession, sRoomPreviewData.getRoomId(), participantUserId, this, mDirectMessageListener);
+                            break;
+                        }
                     }
+                } else {
+                    Log.d(LOG_TAG, "## processDirectMessageRoom(): attempt to add an already direct message room");
                 }
             }
         }
