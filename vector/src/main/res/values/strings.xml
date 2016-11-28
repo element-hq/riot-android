@@ -678,6 +678,7 @@
     <string name="devices_details_last_seen_title">Last seen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_date_time_format">yyyy/MM/dd, HH:mm:ss</string>
+    <string name="devices_details_time_format">HH:mm:ss</string>
     <string name="devices_delete_dialog_text">This operation requires additional authentication.\nTo continue, please enter your password.</string>
     <string name="devices_delete_dialog_title">Authentication</string>
     <string name="devices_delete_pswd">Password:</string>

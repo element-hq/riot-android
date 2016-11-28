@@ -112,6 +112,45 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     // listview
     private ExpandableListView mExpandableListView;
 
+    // direct message
+    /** callback for the creation of the direct message room **/
+    final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
+        @Override
+        public void onSuccess(String roomId) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onSuccess - start goToRoomPage");
+            CommonActivityUtils.goToRoomPage(VectorMemberDetailsActivity.this, mSession, params);
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onMatrixError Msg="+e.getLocalizedMessage());
+            if (null != mRoomActionsListener) {
+                mRoomActionsListener.onMatrixError(e);
+            }
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onNetworkError Msg="+e.getLocalizedMessage());
+            if (null != mRoomActionsListener) {
+                mRoomActionsListener.onNetworkError(e);
+            }
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onUnexpectedError Msg="+e.getLocalizedMessage());
+            if (null != mRoomActionsListener) {
+                mRoomActionsListener.onUnexpectedError(e);
+            }
+        }
+    };
+
     // MX event listener
     private final MXEventListener mLiveEventsListener = new MXEventListener() {
         @Override
@@ -316,12 +355,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             case ITEM_ACTION_START_CHAT:
                 Log.d(LOG_TAG,"## performItemAction(): Start new room - start chat");
                 
-                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-
                 VectorMemberDetailsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        CommonActivityUtils.createDirectMessagesRoom(mSession, mMemberId, VectorMemberDetailsActivity.this, mRoomActionsListener);
+                        enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                        mSession.createRoomDirectMessage(mMemberId, mCreateDirectMessageCallBack);
                     }
                 });
                 break;

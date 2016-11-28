@@ -36,7 +36,6 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -64,11 +63,52 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
     // the search is displayed at first call
     private boolean mIsFirstResume = true;
 
+    // direct message
+    final ApiCallback<String> mCreateDirectMessageCallBack = new ApiCallback<String>() {
+        @Override
+        public void onSuccess(final String roomId) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+
+            Log.d(LOG_TAG, "## mCreateDirectMessageCallBack: onSuccess - start goToRoomPage");
+            CommonActivityUtils.goToRoomPage(VectorRoomCreationActivity.this, mSession, params);
+        }
+
+        private void onError(final String message) {
+            mSpinnerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (null != message) {
+                        Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                    mSpinnerView.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onMatrixError(final MatrixError e) {
+            onError(e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onUnexpectedError(final Exception e) {
+            onError(e.getLocalizedMessage());
+        }
+    };
+
     // displayed participants
     private ArrayList<ParticipantAdapterItem> mParticipants = new ArrayList<>();
 
     /** direct chat room creation action listeners **/
-    private final ApiCallback<Void> mDirectChatListener = new SimpleApiCallback<Void>(this) {
+    private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
         @Override
         public void onMatrixError(MatrixError e) {
             if (MatrixError.FORBIDDEN.equals(e.errcode)) {
@@ -261,7 +301,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         String existingRoomId;
 
         if (id == R.id.action_create_room) {
-
             if (0 == mParticipants.size()) {
                 createRoom(mParticipants);
             } else {
@@ -279,10 +318,11 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
                     params.put(VectorRoomActivity.EXTRA_ROOM_ID, existingRoomId);
                     CommonActivityUtils.goToRoomPage(this, mSession, params);
                 } else {
-                    createRoomDirectMessage(mParticipants.get(0).mUserId);
+                    // direct message flow
+                    mSpinnerView.setVisibility(View.VISIBLE);
+                    mSession.createRoomDirectMessage(mParticipants.get(0).mUserId, mCreateDirectMessageCallBack);
                 }
             }
-
             return true;
         }
 
@@ -330,55 +370,6 @@ public class VectorRoomCreationActivity extends MXCActionBarActivity {
         }
         Log.d(LOG_TAG,"## isDirectChatRoomAlreadyExist(): for user=" + aUserId + " no found room");
         return null;
-    }
-
-
-    private void createRoomDirectMessage(final String aParticipantUserId) {
-        mSpinnerView.setVisibility(View.VISIBLE);
-
-        if(!TextUtils.isEmpty(aParticipantUserId)) {
-
-            HashMap<String, Object> params = new HashMap<>();
-            params.put("preset","trusted_private_chat");
-            params.put("is_direct", true);
-            params.put("invite", Arrays.asList(aParticipantUserId));
-
-            // Direct message case
-            mSession.createRoom(params, new SimpleApiCallback<String>(VectorRoomCreationActivity.this) {
-                @Override
-                public void onSuccess(final String roomId) {
-                    CommonActivityUtils.setDirectChatRoom(mSession, roomId, aParticipantUserId, VectorRoomCreationActivity.this, mDirectChatListener);
-                }
-
-                private void onError(final String message) {
-                    mSpinnerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (null != message) {
-                                Toast.makeText(VectorRoomCreationActivity.this, message, Toast.LENGTH_LONG).show();
-                            }
-                            mSpinnerView.setVisibility(View.GONE);
-                        }
-                    });
-                }
-
-                @Override
-                public void onNetworkError(Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(final MatrixError e) {
-                    onError(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onUnexpectedError(final Exception e) {
-                    onError(e.getLocalizedMessage());
-                }
-            });
-
-        }
     }
 
     /**

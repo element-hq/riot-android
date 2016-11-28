@@ -1035,40 +1035,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public void onMatrixUserIdClick(final String userId) {
-
-        showInitLoading();
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                CommonActivityUtils.goToOneToOneRoom(mSession, userId, getActivity(), new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        // nothing to do here
-                    }
-
-                    private void onError(String errorMessage) {
-                        hideInitLoading();
-                        CommonActivityUtils.displayToast(getActivity(), errorMessage);
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
-            }
-        });
+        // start member details UI
+        Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        startActivity(roomDetailsIntent);
     }
 
     @Override

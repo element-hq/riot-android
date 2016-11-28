@@ -67,6 +67,7 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,6 +75,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -1797,9 +1799,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 String lastSeenIp = aDeviceInfo.last_seen_ip;
                 String lastSeenTime = LABEL_UNAVAILABLE_DATA;
 
-                if(null != getActivity() /*&& (0!=aDeviceInfo.last_seen_ts)*/) {
-                    SimpleDateFormat dateFormat =  new SimpleDateFormat(getString(R.string.devices_details_date_time_format));
-                    lastSeenTime = dateFormat.format(new Date(aDeviceInfo.last_seen_ts));
+                if(null != getActivity()) {
+                    SimpleDateFormat dateFormatTime =  new SimpleDateFormat(getString(R.string.devices_details_time_format));
+                    String time = dateFormatTime.format(new Date(aDeviceInfo.last_seen_ts));
+
+                    DateFormat dateFormat =  DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                    lastSeenTime = dateFormat.format(new Date(aDeviceInfo.last_seen_ts)) +", "+time;
                 }
                 String lastSeenInfo = this.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime);
                 textView.setText(lastSeenInfo);

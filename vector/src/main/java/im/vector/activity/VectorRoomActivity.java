@@ -52,6 +52,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
@@ -241,6 +242,30 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     // when an activity is opened from this one.
     // It should not but it does.
     private boolean mIsHeaderViewDisplayed = false;
+
+    /** **/
+    private final ApiCallback<Void> mDirectMessageListener = new SimpleApiCallback<Void>(this) {
+        @Override
+        public void onMatrixError(MatrixError e) {
+            if (MatrixError.FORBIDDEN.equals(e.errcode)) {
+                Toast.makeText(VectorRoomActivity.this, e.error, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void onSuccess(Void info) {
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            Toast.makeText(VectorRoomActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            Toast.makeText(VectorRoomActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    };
 
     /**
      * Presence and room preview listeners
@@ -2505,6 +2530,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != sRoomPreviewData) {
             HashMap<String, Object> params = new HashMap<>();
 
+            processDirectMessageRoom();
+
             params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             params.put(VectorRoomActivity.EXTRA_ROOM_ID, sRoomPreviewData.getRoomId());
 
@@ -2520,6 +2547,36 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             VectorRoomActivity.this.startActivity(intent);
 
             sRoomPreviewData = null;
+        }
+    }
+
+    /**
+     * If the joined room was tagged as "direct chat room", it is required to update the
+     * room as a "direct chat room" (account_data)
+     */
+    private void processDirectMessageRoom() {
+        Room room = sRoomPreviewData.getSession().getDataHandler().getRoom(sRoomPreviewData.getRoomId());
+        if((null!=room) && (room.isDirectChatInvitation())){
+            String myUserId = mSession.getMyUserId();
+            Collection<RoomMember> members = mRoom.getMembers();
+
+            if(2==members.size()) {
+                String participantUserId;
+
+                // test if room is already seen as "direct message"
+                if (mSession.getDirectChatRoomIdsList().indexOf(sRoomPreviewData.getRoomId()) < 0) {
+                    for (RoomMember member : members) {
+                        // search for the second participant
+                        if (!member.getUserId().equals(myUserId)) {
+                            participantUserId = member.getUserId();
+                            CommonActivityUtils.setToggleDirectMessageRoom(mSession, sRoomPreviewData.getRoomId(), participantUserId, this, mDirectMessageListener);
+                            break;
+                        }
+                    }
+                } else {
+                    Log.d(LOG_TAG, "## processDirectMessageRoom(): attempt to add an already direct message room");
+                }
+            }
         }
     }
 
