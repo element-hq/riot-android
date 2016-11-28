@@ -131,7 +131,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
                             }
 
                             if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTED) && session.isCryptoEnabled()) {
-                                event.setClearEvent(session.getCrypto().decryptEvent(event));
+                                event.setClearEvent(session.getCrypto().decryptEvent(event, null));
                             }
 
                             eventStreamService.prepareNotification(event, roomState, session.getDataHandler().getBingRulesManager().fulfilledBingRule(event));
