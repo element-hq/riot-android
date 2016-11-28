@@ -251,6 +251,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         View senderMargin = view.findViewById(R.id.e2e_sender_margin);
         View senderNameView = view.findViewById(R.id.messagesAdapter_sender);
 
+        // GA issue
+        if (position >= getCount()) {
+            return view;
+        }
+
         MessageRow row = getItem(position);
         final Event event = row.getEvent();
 
