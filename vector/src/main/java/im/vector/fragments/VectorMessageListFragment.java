@@ -253,47 +253,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * Display the device verification warning
-     * @param deviceInfo the device info
-     */
-    private void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
-
-        TextView textView;
-
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_name);
-        textView.setText(deviceInfo.displayName());
-
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_id);
-        textView.setText(deviceInfo.deviceId);
-
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
-        textView.setText(deviceInfo.fingerprint());
-
-        builder.setView(layout);
-        builder.setTitle(R.string.encryption_information_verify_device);
-
-        builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        builder.create().show();
-    }
-
-    /**
      * the user taps on the e2e icon
      * @param event the event
      * @param deviceInfo the deviceinfo
@@ -388,7 +347,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            displayDeviceVerificationDialog(deviceInfo, event.getSender());
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, mAdapter, getActivity());
                         }
                     });
 
@@ -415,7 +374,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 } else { // BLOCKED
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            displayDeviceVerificationDialog(deviceInfo, event.getSender());
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, mAdapter, getActivity());
                         }
                     });
 

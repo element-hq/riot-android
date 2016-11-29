@@ -44,12 +44,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
@@ -1773,5 +1777,55 @@ public class CommonActivityUtils {
         // TODO implement things to reduce memory usage
 
         displayMemoryInformation(activity, "onTrimMemory");
+    }
+
+    /**
+     * Display the device verification warning
+     * @param deviceInfo the device info
+     */
+    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, final ArrayAdapter<T> adapter, Activity activiy) {
+
+        // sanity check
+        if((null == deviceInfo) || (null==sender) || (null==session)) {
+            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid imput parameters");
+            return;
+        }
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(activiy);
+        LayoutInflater inflater = activiy.getLayoutInflater();
+
+        View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
+
+        TextView textView;
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_name);
+        textView.setText(deviceInfo.displayName());
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_id);
+        textView.setText(deviceInfo.deviceId);
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
+        textView.setText(deviceInfo.fingerprint());
+
+        builder.setView(layout);
+        builder.setTitle(R.string.encryption_information_verify_device);
+
+        builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender);
+                if(null != adapter) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.create().show();
     }
 }
