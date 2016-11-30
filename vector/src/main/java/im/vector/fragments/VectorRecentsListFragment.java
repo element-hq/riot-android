@@ -611,6 +611,24 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                 mIsWaitingDirectChatEcho = false;
                 refreshOnChunkEnd = true;
             }
+
+            @Override
+            public void onEventDecrypted(Event event) {
+                RoomSummary summary = mSession.getDataHandler().getStore().getSummary(event.roomId);
+
+                if (null != summary) {
+                    // test if the latest event is refreshed
+                    Event latestReceivedEvent = summary.getLatestReceivedEvent();
+                    if ((null != latestReceivedEvent) && TextUtils.equals(latestReceivedEvent.eventId, event.eventId)) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            }
         };
 
         mSession.getDataHandler().addListener(mEventsListener);
