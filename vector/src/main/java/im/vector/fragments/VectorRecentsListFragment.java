@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,6 +132,24 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     // scroll events listener
     IVectorRecentsScrollEventListener mScrollEventListener = null;
 
+    private final PublicRoomsManager.PublicRoomsManagerListener mPublicRoomsListener = new PublicRoomsManager.PublicRoomsManagerListener() {
+        @Override
+        public void onPublicRoomsCountRefresh(final Integer publicRoomsCount) {
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // statuses
+                        mLatestPublicRoomsRefresh = System.currentTimeMillis();
+                        mIsLoadingPublicRooms = false;
+
+                        mAdapter.setPublicRoomsCount(publicRoomsCount);
+                    }
+                });
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View defaultView = super.onCreateView(inflater, container, savedInstanceState);
@@ -224,7 +243,6 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         });
 
         mRecentsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-
             private void onScrollUp() {
                 if (null != getListener()) {
                     mScrollEventListener.onRecentsListScrollUp();
@@ -289,6 +307,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         super.onPause();
         mIsPaused = true;
         removeSessionListener();
+        PublicRoomsManager.removeListener(mPublicRoomsListener);
     }
 
     @Override
@@ -311,23 +330,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
 
                 // trigger a public room refresh if the list was not initialized or too old (5 mins)
                 if (((null == PublicRoomsManager.getPublicRoomsCount()) || ((System.currentTimeMillis() - mLatestPublicRoomsRefresh) < (5 * 60000))) && (!mIsLoadingPublicRooms)) {
-                    PublicRoomsManager.refreshPublicRoomsCount(new PublicRoomsManager.PublicRoomsManagerListener() {
-                        @Override
-                        public void onPublicRoomsCountRefresh(final Integer publicRoomsCount) {
-                            if (null != getActivity()) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // statuses
-                                        mLatestPublicRoomsRefresh = System.currentTimeMillis();
-                                        mIsLoadingPublicRooms = false;
-
-                                        mAdapter.setPublicRoomsCount(publicRoomsCount);
-                                    }
-                                });
-                            }
-                        }
-                    });
+                    PublicRoomsManager.refreshPublicRoomsCount(mPublicRoomsListener);
                 }
 
                 if (-1 != mScrollToIndex) {
@@ -338,9 +341,16 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         });
     }
 
+
     @Override
-    public void onSaveInstanceState(Bundle aOutState) {
-        super.onSaveInstanceState(aOutState);
+    public void onDestroy() {
+        mScrollEventListener = null;
+        mRecentsListView.setOnChildClickListener(null);
+        mRecentsListView.setOnItemLongClickListener(null);
+        mRecentsListView.setOnScrollListener(null);
+        mRecentsListView.mDragAndDropEventsListener = null;
+
+        super.onDestroy();
     }
 
     private void findWaitingView() {

@@ -223,6 +223,16 @@ public class PublicRoomsManager {
     }
 
     /**
+     * Remove a listener
+     * @param listener the listener to remove
+     */
+    public static void removeListener(PublicRoomsManagerListener listener) {
+        if (null != listener) {
+            mListeners.remove(listener);
+        }
+    }
+
+    /**
      * Refresh the public rooms count
      * @param listener the update listener
      */
