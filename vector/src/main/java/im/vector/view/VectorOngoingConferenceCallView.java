@@ -201,7 +201,7 @@ public class VectorOngoingConferenceCallView extends RelativeLayout {
      */
     public void onActivityPause() {
         if (null != mSession) {
-            mSession.mCallsManager.addListener(mCallsListener);
+            mSession.mCallsManager.removeListener(mCallsListener);
         }
     }
 }
