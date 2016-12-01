@@ -155,6 +155,9 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
     private boolean mStorePermissionCheck = false;
 
+    // manage the previous first displayed item
+    private static int mScrollToIndex = -1;
+
     private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
         @Override
         public void onSuccess(Void info) {
@@ -468,6 +471,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+
+        if (mSession.isAlive()) {
+            mScrollToIndex = mRecentsListFragment.getFirstVisiblePosition();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        mScrollToIndex = -1;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -603,6 +622,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
 
         checkDeviceId();
+
+        if (-1 != mScrollToIndex) {
+            mRecentsListFragment.setFirstVisiblePosition(mScrollToIndex);
+            // reinit in the fragment scrolllistener
+            //mScrollToIndex = -1;
+        }
     }
 
     @Override
@@ -1046,6 +1071,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * Hide the (+) button for 1 second.
      */
     private void hideRoomCreationViewWithDelay() {
+        // the recents list scrolls after restoring
+        if (-1 != mScrollToIndex) {
+            mScrollToIndex = -1;
+            return;
+        }
         synchronized (this) {
             if (null != mRoomCreationViewTimer) {
                 mRoomCreationViewTimer.cancel();

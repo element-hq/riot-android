@@ -126,6 +126,8 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     private boolean mIsLoadingPublicRooms = false;
     private long mLatestPublicRoomsRefresh = System.currentTimeMillis();
 
+    private int mScrollToIndex = -1;
+
     // scroll events listener
     IVectorRecentsScrollEventListener mScrollEventListener = null;
 
@@ -326,6 +328,11 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
                             }
                         }
                     });
+                }
+
+                if (-1 != mScrollToIndex) {
+                    mRecentsListView.setSelection(mScrollToIndex);
+                    mScrollToIndex = -1;
                 }
             }
         });
@@ -1109,5 +1116,20 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void moveToLowPriority(MXSession session, String roomId) {
         updateRoomTag(session, roomId, null, RoomTag.ROOM_TAG_LOW_PRIORITY);
+    }
+
+    /**
+     * @return the first visible position of the listview
+     */
+    public int getFirstVisiblePosition() {
+        return mRecentsListView.getFirstVisiblePosition();
+    }
+
+    /**
+     * Update the list position
+     * @param position the new position
+     */
+    public void setFirstVisiblePosition(final int position) {
+        mScrollToIndex = position;
     }
 }
