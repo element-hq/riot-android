@@ -864,7 +864,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mVectorMessageListFragment) {
             mVectorMessageListFragment.onDestroy();
         }
-        mVectorOngoingConferenceCallView.setCallClickListener(null);
+
+        if (null != mVectorOngoingConferenceCallView) {
+            mVectorOngoingConferenceCallView.setCallClickListener(null);
+        }
 
         super.onDestroy();
     }
