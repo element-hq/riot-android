@@ -153,6 +153,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // calls
     private VectorPendingCallView mVectorPendingCallView;
 
+    private View mSyncInProgressView;
+
     private boolean mStorePermissionCheck = false;
 
     // manage the previous first displayed item
@@ -229,6 +231,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.listView_pending_callview);
+        mSyncInProgressView =  findViewById(R.id.home_recents_sync_in_progress);
 
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -561,6 +564,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             public void onAccountInfoUpdate(MyUser myUser) {
                 refreshSlidingMenu();
             }
+
+            @Override
+            public void onLiveEventsChunkProcessed() {
+                mSyncInProgressView.setVisibility(View.GONE);
+            }
         };
 
         if (mSession.isAlive()) {
@@ -628,6 +636,8 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             // reinit in the fragment scrolllistener
             //mScrollToIndex = -1;
         }
+
+        mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
     }
 
     @Override

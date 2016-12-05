@@ -26,6 +26,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -127,7 +128,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         ArrayList<String> matrixIds = new ArrayList<>();
 
-        for(MXSession session : mSessions) {
+        for(final MXSession session : mSessions) {
             final MXSession fSession = session;
             session.getDataHandler().getStore().open();
 
@@ -151,6 +152,7 @@ public class SplashActivity extends MXCActionBarActivity {
                     }
 
                     if (noMoreListener) {
+                        VectorApp.addSyncingSession(session);
                         onFinish();
                     }
                 }

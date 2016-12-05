@@ -31,8 +31,18 @@
             android:layout_height="match_parent"
             tools:context="org.matrix.vector.activity.VectorHomeActivity">
 
+            <ProgressBar
+                android:id="@+id/home_recents_sync_in_progress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@color/vector_green_color"
+                android:indeterminate="true"/>
+
             <FrameLayout
                 android:id="@+id/home_recents_list_anchor"
+                android:layout_below="@+id/home_recents_sync_in_progress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

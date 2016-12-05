@@ -225,6 +225,7 @@ public class VectorApp extends Application {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                removeSyncingSession(session);
             }
         }
 
@@ -321,6 +322,7 @@ public class VectorApp extends Application {
                 session.setSyncDelay(0);
                 session.setSyncTimeout(0);
                 hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
+                addSyncingSession(session);
             }
 
             // detect if an infinite ringing has been triggered
@@ -449,6 +451,56 @@ public class VectorApp extends Application {
 
             mSavedPickerImagePreview = aSavedCameraImagePreview;
         }
+    }
+
+    //==============================================================================================================
+    // Syncing mxSessions
+    //==============================================================================================================
+
+    /**
+     * syncing sessions
+     */
+    private static ArrayList<MXSession> mSyncingSessions = new ArrayList<>();
+
+    /**
+     * Add a session in the syncing sessions list
+     * @param session the session
+     */
+    public static void addSyncingSession(MXSession session) {
+        synchronized (mSyncingSessions) {
+            if ((null != session) && (mSyncingSessions.indexOf(session) < 0)) {
+                mSyncingSessions.add(session);
+            }
+        }
+    }
+
+    /**
+     * Remove a session in the syncing sessions list
+     * @param session the session
+     */
+    public static void removeSyncingSession(MXSession session) {
+        if (null != session) {
+            synchronized (mSyncingSessions) {
+                mSyncingSessions.remove(session);
+            }
+        }
+    }
+
+    /**
+     * Tell if a session is syncing
+     * @param session the session
+     * @return true if the session is syncing
+     */
+    public static boolean isSessionSyncing(MXSession session) {
+        boolean isSyncing = false;
+
+        if (null != session) {
+            synchronized (mSyncingSessions) {
+                isSyncing = (mSyncingSessions.indexOf(session) >= 0);
+            }
+        }
+
+        return isSyncing;
     }
 }
 

@@ -51,6 +51,7 @@ import im.vector.store.LoginStorage;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
 
 /**
  * Singleton to control access to the Matrix SDK and providing point of control for MXSessions.
@@ -102,29 +103,36 @@ public class Matrix {
             // when the client does not use GCM (ie. FDroid),
             // we need to compute the application badge values
 
-            if ((null != instance) && (null != instance.mMXSessions) && mRefreshUnreadCounter) {
-                GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
+            if ((null != instance) && (null != instance.mMXSessions)) {
+                if (mRefreshUnreadCounter) {
+                    GcmRegistrationManager gcmMgr = instance.getSharedGCMRegistrationManager();
 
-                // perform update: if the GCM is not available or if GCM registration failed
-                if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
-                    int unreadCount = 0;
+                    // perform update: if the GCM is not available or if GCM registration failed
+                    if ((null != gcmMgr) && (!gcmMgr.useGCM() || !gcmMgr.hasRegistrationToken())) {
+                        int unreadCount = 0;
 
-                    for(MXSession session :  instance.mMXSessions) {
-                        if (session.isAlive()) {
-                            Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
+                        for (MXSession session : instance.mMXSessions) {
+                            if (session.isAlive()) {
+                                Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
-                            if (null != rooms) {
-                                for(Room room : rooms) {
-                                    if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
-                                        unreadCount++;
+                                if (null != rooms) {
+                                    for (Room room : rooms) {
+                                        if ((0 != room.getNotificationCount()) || (0 != room.getHighlightCount())) {
+                                            unreadCount++;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // update the badge counter
-                    CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                        // update the badge counter
+                        CommonActivityUtils.updateBadgeCount(instance.mAppContext, unreadCount);
+                    }
+                }
+
+                // TODO find a way to detect which session is synced
+                for (MXSession session : instance.mMXSessions) {
+                    VectorApp.removeSyncingSession(session);
                 }
             }
 
@@ -525,6 +533,8 @@ public class Matrix {
         } else {
             session.clear(context);
         }
+
+        VectorApp.removeSyncingSession(session);
 
         synchronized (LOG_TAG) {
             mMXSessions.remove(session);
