@@ -1590,8 +1590,14 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 return;
             }
 
-            mMediaRecorder.start();
-            mIsRecording = true;
+            try {
+                mMediaRecorder.start();
+                mIsRecording = true;
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startVideoRecord() : cannot start the media recorder " + e.getMessage());
+                Toast.makeText(this, getString(R.string.media_picker_cannot_record_video), Toast.LENGTH_SHORT).show();
+                stopVideoRecord();
+            }
         }
     }
 
