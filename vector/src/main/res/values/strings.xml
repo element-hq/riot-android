@@ -810,17 +810,17 @@
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
 
-    <string name="encryption_information_not_verified">NOT verified</string>
-    <string name="encryption_information_verified">verified</string>
-    <string name="encryption_information_blocked">blocked</string>
+    <string name="encryption_information_not_verified">NOT Verified</string>
+    <string name="encryption_information_verified">Verified</string>
+    <string name="encryption_information_blocked">Blacklisted</string>
 
     <string name="encryption_information_unknown_device">unknown device</string>
     <string name="encryption_information_none">none</string>
 
     <string name="encryption_information_verify">Verify</string>
     <string name="encryption_information_unverify">Unverify</string>
-    <string name="encryption_information_block">Block</string>
-    <string name="encryption_information_unblock">Unblock</string>
+    <string name="encryption_information_block">Blacklist</string>
+    <string name="encryption_information_unblock">Unblacklist</string>
 
     <string name="encryption_information_verify_device">Verify device</string>
     <string name="encryption_information_verify_device_warning"> To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
