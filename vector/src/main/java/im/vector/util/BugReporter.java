@@ -284,7 +284,7 @@ public class BugReporter {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setType("text/html");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@riot.im"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Android Riot bug report - " + Matrix.getInstance(context).getVersion(false));
+                intent.putExtra(Intent.EXTRA_SUBJECT, "[Android] Riot bug report - " + Matrix.getInstance(context).getVersion(false));
                 intent.putExtra(Intent.EXTRA_TEXT, message);
                 if (null != file) {
                     intent.putExtra(Intent.EXTRA_STREAM, VectorContentProvider.absolutePathToUri(context, file.getAbsolutePath()));
