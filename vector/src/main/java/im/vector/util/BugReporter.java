@@ -53,6 +53,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.db.VectorContentProvider;
 
 import org.matrix.androidsdk.data.MyUser;
 
@@ -128,11 +129,12 @@ public class BugReporter {
     }
 
     /**
-     * Send the bug report with Vector.
+     * Build the bug report zip file
      * @param context the application context
      * @param password the password
+     * @return the zip file
      */
-    private static void sendBugReportWithVector(Context context, String password) {
+    private static File buildBugZipFile(Context context, String password) {
         Bitmap screenShot = takeScreenshot();
 
         if (null != screenShot) {
@@ -223,14 +225,35 @@ public class BugReporter {
                 // file compressed
                 zipFile.addFiles(logFiles, parameters);
 
+                return compressedFile;
+
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "" + e);
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Send the bug report with Vector.
+     * @param context the application context
+     * @param password the password
+     */
+    private static void sendBugReportWithVector(Context context, String password) {
+        File file = buildBugZipFile(context, password);
+
+        if (null != file) {
+            try {
                 final Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.setType("application/zip");
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(compressedFile));
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
 
                 CommonActivityUtils.sendFilesTo(VectorApp.getCurrentActivity(), sendIntent);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "" + e);
+                Log.e(LOG_TAG, "## sendBugReportWithVector() : failed " + e.getMessage());
             }
         }
     }
@@ -243,85 +266,8 @@ public class BugReporter {
 
         if (null != screenShot) {
             try {
-                // store the file in shared place
-                String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), screenShot, "screenshot-" + new Date(), null);
-                Uri screenUri = null;
-
-                if (null == path) {
-                    try {
-                        File file  = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "screenshot-" + new Date() + ".jpg");
-                        FileOutputStream out = new FileOutputStream(file);
-                        screenShot.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        screenUri = Uri.fromFile(file);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "sendBugReport : " + e.getLocalizedMessage());
-                    }
-                } else {
-                    screenUri = Uri.parse(path);
-                }
-
                 String message = buildBugReportMessage(context);
-
-                ArrayList<Uri> attachmentUris = new ArrayList<>();
-
-                if (null != screenUri) {
-                    // attachments
-                    attachmentUris.add(screenUri);
-                }
-
-                String errorLog = LogUtilities.getLogCatError();
-                String debugLog = LogUtilities.getLogCatDebug();
-
-                errorLog += "\n\n\n\n\n\n\n\n\n\n------------------ Debug logs ------------------\n\n\n\n\n\n\n\n";
-                errorLog += debugLog;
-
-                try {
-                    // add the current device logs
-                    {
-                        ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        GZIPOutputStream gzip = new GZIPOutputStream(os);
-                        gzip.write(errorLog.getBytes());
-                        gzip.finish();
-
-                        File debugLogFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "logs-" + new Date() + ".gz");
-                        FileOutputStream fos = new FileOutputStream(debugLogFile);
-                        os.writeTo(fos);
-                        os.flush();
-                        os.close();
-
-                        attachmentUris.add(Uri.fromFile(debugLogFile));
-                    }
-
-                    // add the stored logs
-                    ArrayList<File> logsList = LogUtilities.getLogsFileList();
-
-                    long marker = System.currentTimeMillis();
-
-                    for(File file : logsList) {
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        GZIPOutputStream glogzip = new GZIPOutputStream(bos);
-
-                        FileInputStream inputStream = new FileInputStream(file);
-
-                        byte[] buffer = new byte[1024 * 10];
-                        int len;
-                        while ((len = inputStream.read(buffer)) != -1) {
-                            glogzip.write(buffer, 0, len);
-                        }
-                        glogzip.finish();
-
-                        File storedLogFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), marker + "-" + file.getName() + ".gz");
-                        FileOutputStream flogOs = new FileOutputStream(storedLogFile);
-                        bos.writeTo(flogOs);
-                        flogOs.flush();
-                        flogOs.close();
-
-                        attachmentUris.add(Uri.fromFile(storedLogFile));
-                    }
-                }
-                catch (IOException e) {
-                    Log.e(LOG_TAG, "" + e);
-                }
+                File file = buildBugZipFile(context, null);
 
                 // list the intent which supports email
                 // it should avoid having lot of unexpected applications (like bluetooth...)
@@ -334,13 +280,16 @@ public class BugReporter {
                     return;
                 }
 
-                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setType("text/html");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@riot.im"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Vector bug report");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Android Riot bug report - " + Matrix.getInstance(context).getVersion(false));
                 intent.putExtra(Intent.EXTRA_TEXT, message);
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
+                if (null != file) {
+                    intent.putExtra(Intent.EXTRA_STREAM, VectorContentProvider.absolutePathToUri(context, file.getAbsolutePath()));
+                }
+
                 context.startActivity(intent);
 
             } catch (Exception e) {

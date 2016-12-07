@@ -27,8 +27,12 @@ import android.webkit.MimeTypeMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import im.vector.util.LogUtilities;
+
 public class VectorContentProvider extends ContentProvider {
     public static String AUTHORITIES = "im.vector.VectorApp.provider";
+
+    private static final String BUG_SEPARATOR = "bugreport";
 
     /**
      * Convert an absolute file path to a Content path
@@ -37,10 +41,24 @@ public class VectorContentProvider extends ContentProvider {
      * @return the content URI.
      */
     public static Uri absolutePathToUri(Context context, String path) {
-        String basePath = context.getFilesDir().getAbsolutePath();
+        if (null == path) {
+            return null;
+        }
 
-        if ((null != path) && path.startsWith(basePath)) {
-            return Uri.parse("content://" + VectorContentProvider.AUTHORITIES + path.substring(basePath.length()));
+        String attachmentsBasePath = context.getFilesDir().getAbsolutePath();
+
+        if (path.startsWith(attachmentsBasePath)) {
+            return Uri.parse("content://" + VectorContentProvider.AUTHORITIES + path.substring(attachmentsBasePath.length()));
+        }
+
+        File logDir = LogUtilities.ensureLogDirectoryExists();
+
+        if (null != logDir) {
+            String logBasePath = logDir.getAbsolutePath();
+
+            if (path.startsWith(logBasePath)) {
+                return Uri.parse("content://" + VectorContentProvider.AUTHORITIES + "/" + BUG_SEPARATOR + path.substring(logBasePath.length()));
+            }
         }
 
         return null;
@@ -49,11 +67,25 @@ public class VectorContentProvider extends ContentProvider {
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
         try {
-            File privateFile = new File(getContext().getFilesDir(), uri.getPath());
-            return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
+            File privateFile = null;
+
+            if (uri.getPath().contains("/" + BUG_SEPARATOR + "/")) {
+                File logDir = LogUtilities.ensureLogDirectoryExists();
+
+                if (null != logDir) {
+                    privateFile = new File(logDir, uri.getLastPathSegment());
+                }
+            } else {
+                privateFile = new File(getContext().getFilesDir(), uri.getPath());
+            }
+
+            if (privateFile.exists()) {
+                return ParcelFileDescriptor.open(privateFile, ParcelFileDescriptor.MODE_READ_ONLY);
+            }
         } catch (Exception e) {
-            return null;
         }
+
+        return null;
     }
 
     @Override
