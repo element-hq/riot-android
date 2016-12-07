@@ -673,7 +673,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } else if (event.mSentState == Event.SentState.SENT) {
 
             // test if the event can be redacted
-            boolean canBeRedacted = !mIsPreviewMode;
+            boolean canBeRedacted = !mIsPreviewMode && !TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTION);
 
             if (canBeRedacted) {
                 // oneself message -> can redact it
