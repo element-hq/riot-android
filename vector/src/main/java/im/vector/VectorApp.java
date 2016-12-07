@@ -24,6 +24,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -191,7 +193,12 @@ public class VectorApp extends Application {
         registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
         // create the markdown parser
-        mMarkdownParser = new VectorMarkdownParser(this);
+        try {
+            mMarkdownParser = new VectorMarkdownParser(this);
+        } catch (Exception e) {
+            // reported by GA
+            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
+        }
     }
 
     /**
@@ -199,8 +206,18 @@ public class VectorApp extends Application {
      * @param text the text to parse
      * @param listener the result listener
      */
-    public static void markdownToHtml(String text, VectorMarkdownParser.IVectorMarkdownParserListener listener) {
-        getInstance().mMarkdownParser.markdownToHtml(text, listener);
+    public static void markdownToHtml(final String text, final VectorMarkdownParser.IVectorMarkdownParserListener listener) {
+        if (null != getInstance().mMarkdownParser) {
+            getInstance().mMarkdownParser.markdownToHtml(text, listener);
+        } else {
+            (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    // GA issue
+                    listener.onMarkdownParsed(text, null);
+                }
+            });
+        }
     }
 
     /**
