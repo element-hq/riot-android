@@ -6,28 +6,9 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo_splash"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"/>
-
-    <ProgressBar
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminate="true"/>
-
-    <!--TextView
-        android:id="@+id/copyright_txt_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:textColor="@color/vector_silver_color"
-        android:text="@string/splash_screen_copyright" /-->
-
+        android:src="@drawable/riot_splash" />
 </RelativeLayout>
