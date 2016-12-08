@@ -1603,40 +1603,62 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Build the cryptography preference section.
      * @param aMyDeviceInfo the device info
      */
-    private void refreshCryptographyPreference(DeviceInfo aMyDeviceInfo) {
-        String userId = mSession.getMyUserId();
-        String deviceId = mSession.getCredentials().deviceId;
-        EditTextPreference cryptoInfoTextPreference;
-        MXDeviceInfo deviceInfo;
+    private void refreshCryptographyPreference(final DeviceInfo aMyDeviceInfo) {
+        final String userId = mSession.getMyUserId();
+        final String deviceId = mSession.getCredentials().deviceId;
+        VectorCustomActionEditTextPreference cryptoInfoTextPreference;
+        final MXDeviceInfo deviceInfo;
 
         // device name
-        if ((null!=aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
-            cryptoInfoTextPreference = (EditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_name));
+        if ((null != aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_name));
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
+
+                cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        VectorUtils.copyToClipboard(getActivity(), aMyDeviceInfo.display_name);
+                        return true;
+                    }
+                });
             }
         }
 
         // crypto section: device ID
         if (!TextUtils.isEmpty(deviceId)) {
-            cryptoInfoTextPreference = (EditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_id));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_id));
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(deviceId);
+
+                cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        VectorUtils.copyToClipboard(getActivity(), deviceId);
+                        return true;
+                    }
+                });
             }
         }
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId) && (null != (deviceInfo = mSession.getCrypto().getDeviceInfo(userId, deviceId)))) {
             if (!TextUtils.isEmpty(deviceInfo.fingerprint())) {
-                cryptoInfoTextPreference = (EditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_key));
+                cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_key));
                 if (null != cryptoInfoTextPreference) {
                     cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
+
+                    cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                        @Override
+                        public boolean onPreferenceLongClick(Preference preference) {
+                            VectorUtils.copyToClipboard(getActivity(), deviceInfo.fingerprint());
+                            return true;
+                        }
+                    });
                 }
             }
         }
-
     }
-
 
     //==============================================================================================================
     // devices list
