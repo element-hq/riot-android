@@ -49,11 +49,14 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.VectorCallSoundManager;
@@ -916,10 +919,17 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         if(null != mCall) {
             String roomId = mCall.getRoom().getRoomId();
 
-            Intent intent = new Intent(getApplicationContext(), VectorRoomActivity.class);
-            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-            intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
-            startActivity(intent);
+            if (null != VectorApp.getCurrentActivity()) {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                CommonActivityUtils.goToRoomPage(VectorApp.getCurrentActivity(), mSession, params);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), VectorRoomActivity.class);
+                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
+                startActivity(intent);
+            }
         }
     }
 
