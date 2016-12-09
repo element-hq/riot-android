@@ -510,7 +510,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // Unregister Broadcast receiver
         stopWaitingView();
-        unregisterReceiver(mBrdRcvStopWaitingView);
+        try {
+            unregisterReceiver(mBrdRcvStopWaitingView);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage());
+        }
 
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
@@ -763,6 +767,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 });
             }
+
 
             private void onError(final String message) {
                 mWaitingView.post(new Runnable() {
