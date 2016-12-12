@@ -676,6 +676,11 @@ public class EventStreamService extends Service {
             return;
         }
 
+        // GA issue
+        if (null == mGcmRegistrationManager) {
+            return;
+        }
+
         if ((!mGcmRegistrationManager.useGCM() || !mGcmRegistrationManager.isServerRegistred()) && mGcmRegistrationManager.isBackgroundSyncAllowed() && mGcmRegistrationManager.areDeviceNotificationsAllowed()) {
             Log.d(LOG_TAG, "## updateServiceForegroundState : put the service in foreground");
 
