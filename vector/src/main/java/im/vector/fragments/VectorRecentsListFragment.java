@@ -854,14 +854,20 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
         mIsWaitingDirectChatEcho = false;
 
         if (isDragAndDropSupported() && groupIsMovable(mRecentsListView.getTouchedGroupPosition())) {
+            int groupPos = mRecentsListView.getTouchedGroupPosition();
+            int childPos = mRecentsListView.getTouchedChildPosition();
+
+            try {
+                mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## startDragAndDrop() : getChildView failed " + e.getMessage());
+                return;
+            }
+            
             // enable the drag and drop mode
             mAdapter.setIsDragAndDropMode(true);
             mSession.getDataHandler().removeListener(mEventsListener);
 
-            int groupPos = mRecentsListView.getTouchedGroupPosition();
-            int childPos = mRecentsListView.getTouchedChildPosition();
-
-            mDraggedView = mAdapter.getChildView(groupPos, childPos, false, null, null);
             mDraggedView.setBackgroundColor(getResources().getColor(R.color.vector_silver_color));
             mDraggedView.setAlpha(0.3f);
 
