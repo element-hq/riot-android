@@ -95,8 +95,10 @@
     <string name="action_resume_call">Resume call</string>
     <string name="about">About</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="with_email">With email</string>
-    <string name="with_vector">With %s</string>
+    <string name="with_email_and_screenshot">With email (with screenshot)</string>
+    <string name="with_email_without_screenshot">With email (without screenshot)</string>
+    <string name="with_vector_and_screenshot">With %s (with screenshot)</string>
+    <string name="with_vector_without_screenshot">With %s (without screenshot)</string>
     <string name="bug_report_password">Set a password to your bug report</string>
     <string name="disable">Disable</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>

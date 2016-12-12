@@ -131,26 +131,28 @@ public class BugReporter {
     /**
      * Build the bug report zip file
      * @param context the application context
-     * @param password the password
+     * @param withScreenshot true to include the screenshort
      * @return the zip file
      */
-    private static File buildBugZipFile(Context context, String password) {
+    private static File buildBugZipFile(Context context, boolean withScreenshot) {
         Bitmap screenShot = takeScreenshot();
 
         if (null != screenShot) {
             try {
                 ArrayList<File> logFiles = new ArrayList<>();
 
-                File screenFile = new File(LogUtilities.ensureLogDirectoryExists(), "screenshot.jpg");
+                if (withScreenshot) {
+                    File screenFile = new File(LogUtilities.ensureLogDirectoryExists(), "screenshot.jpg");
 
-                if (screenFile.exists()) {
-                    screenFile.delete();
+                    if (screenFile.exists()) {
+                        screenFile.delete();
+                    }
+
+                    FileOutputStream screenOutputStream = new FileOutputStream(screenFile);
+                    screenShot.compress(Bitmap.CompressFormat.PNG, 50, screenOutputStream);
+                    screenOutputStream.close();
+                    logFiles.add(screenFile);
                 }
-
-                FileOutputStream screenOutputStream = new FileOutputStream(screenFile);
-                screenShot.compress(Bitmap.CompressFormat.PNG, 50, screenOutputStream);
-                screenOutputStream.close();
-                logFiles.add(screenFile);
 
                 {
                     File configLogFile = new File(LogUtilities.ensureLogDirectoryExists(), "config.txt");
@@ -215,12 +217,13 @@ public class BugReporter {
                 parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
                 parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_FASTEST);
 
-                if (!TextUtils.isEmpty(password)) {
+                /*
+                    // to define a password
                     parameters.setEncryptFiles(true);
                     parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
                     parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
                     parameters.setPassword(password);
-                }
+                */
 
                 // file compressed
                 zipFile.addFiles(logFiles, parameters);
@@ -239,10 +242,10 @@ public class BugReporter {
     /**
      * Send the bug report with Vector.
      * @param context the application context
-     * @param password the password
+     * @param withScreenshot tru to include the screenshot
      */
-    private static void sendBugReportWithVector(Context context, String password) {
-        File file = buildBugZipFile(context, password);
+    private static void sendBugReportWithVector(Context context, boolean withScreenshot) {
+        File file = buildBugZipFile(context, withScreenshot);
 
         if (null != file) {
             try {
@@ -261,13 +264,13 @@ public class BugReporter {
     /**
      * Send the bug report by mail.
      */
-    private static void sendBugReportWithMail(Context context) {
+    private static void sendBugReportWithMail(Context context, boolean withScreenshot) {
         Bitmap screenShot = takeScreenshot();
 
         if (null != screenShot) {
             try {
                 String message = buildBugReportMessage(context);
-                File file = buildBugZipFile(context, null);
+                File file = buildBugZipFile(context, withScreenshot);
 
                 // list the intent which supports email
                 // it should avoid having lot of unexpected applications (like bluetooth...)
@@ -284,7 +287,7 @@ public class BugReporter {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setType("text/html");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"rageshake@riot.im"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "[Android] Riot bug report - " + Matrix.getInstance(context).getVersion(false));
+                intent.putExtra(Intent.EXTRA_SUBJECT, "[Android] Riot bug report - " + Matrix.getInstance(context).getVersion(true));
                 intent.putExtra(Intent.EXTRA_TEXT, message);
                 if (null != file) {
                     intent.putExtra(Intent.EXTRA_STREAM, VectorContentProvider.absolutePathToUri(context, file.getAbsolutePath()));
@@ -306,23 +309,29 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReportWithMail(VectorApp.getInstance().getApplicationContext());
+            sendBugReportWithMail(VectorApp.getInstance().getApplicationContext(), false);
             return;
         }
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
         dialog.setTitle(R.string.send_bug_report);
 
-        CharSequence items[] = new CharSequence[] {currentActivity.getString(R.string.with_email), currentActivity.getString(R.string.with_vector, Matrix.getApplicationName())};
+        final CharSequence items[] = new CharSequence[] {
+                currentActivity.getString(R.string.with_email_and_screenshot),
+                currentActivity.getString(R.string.with_email_without_screenshot),
+                currentActivity.getString(R.string.with_vector_and_screenshot, Matrix.getApplicationName()),
+                currentActivity.getString(R.string.with_vector_without_screenshot, Matrix.getApplicationName()),
+        };
+
         dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface d, int n) {
                 d.cancel();
 
-                if (0 == n) {
-                    sendBugReportWithMail(currentActivity);
+                if ((0 == n) || (1 == n)) {
+                    sendBugReportWithMail(currentActivity, (0 == n));
                 } else {
-                    sendBugReportWithVector(currentActivity, null);
+                    sendBugReportWithVector(currentActivity, (2 == n));
                 }
             }
         });
@@ -330,7 +339,7 @@ public class BugReporter {
         dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendBugReportWithMail(currentActivity);
+                sendBugReportWithMail(currentActivity, true);
             }
         });
 
