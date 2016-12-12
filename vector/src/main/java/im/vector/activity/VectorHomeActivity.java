@@ -993,9 +993,32 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         break;
                     }
 
-                    case R.id.sliding_menu_logout: {
-                        VectorHomeActivity.this.showWaitingView();
-                        CommonActivityUtils.logout(VectorHomeActivity.this);
+                    case R.id.sliding_menu_sign_out: {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
+                        alertDialogBuilder.setMessage(getString(R.string.action_sign_out_confirmation));
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                VectorHomeActivity.this.showWaitingView();
+                                                CommonActivityUtils.logout(VectorHomeActivity.this);
+                                            }
+                                        })
+                                .setNegativeButton(R.string.cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        // show it
+                        alertDialog.show();
+
                         break;
                     }
 

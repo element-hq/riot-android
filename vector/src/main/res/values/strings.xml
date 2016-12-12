@@ -73,7 +73,8 @@
     <string name="action_delete">Delete Room</string>
     <string name="action_invite">Invite</string>
     <string name="action_disconnect">Disconnect</string>
-    <string name="action_logout">Logout</string>
+    <string name="action_sign_out">Sign out</string>
+    <string name="action_sign_out_confirmation">Sign out ?</string>
     <string name="action_enable_room_notification">Enable room notifications</string>
     <string name="action_disable_room_notification">Disable room notifications</string>
     <string name="send_bug_report">Send Bug Report</string>
