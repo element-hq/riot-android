@@ -440,18 +440,40 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (event.isUndeliverable()) {
-                        // delete from the store
-                        mSession.getDataHandler().getStore().deleteEvent(event);
-                        mSession.getDataHandler().getStore().commit();
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.redact) + " ?");
 
-                        // remove from the adapter
-                        mAdapter.removeEventById(event.eventId);
-                        mAdapter.notifyDataSetChanged();
-                        mEventSendingListener.onMessageRedacted(event);
-                    } else {
-                        redactEvent(event.eventId);
-                    }
+                    // set dialog message
+                    alertDialogBuilder
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            if (event.isUndeliverable()) {
+                                                // delete from the store
+                                                mSession.getDataHandler().getStore().deleteEvent(event);
+                                                mSession.getDataHandler().getStore().commit();
+
+                                                // remove from the adapter
+                                                mAdapter.removeEventById(event.eventId);
+                                                mAdapter.notifyDataSetChanged();
+                                                mEventSendingListener.onMessageRedacted(event);
+                                            } else {
+                                                redactEvent(event.eventId);
+                                            }
+                                        }
+                                    })
+                            .setNegativeButton(R.string.cancel,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
                 }
             });
         } else if (action == R.id.ic_action_vector_copy) {
