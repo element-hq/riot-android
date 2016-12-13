@@ -699,13 +699,13 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         super.onPause();
 
         if (null != mCall) {
-            turnScreenOn();
-            if (null != mProximitySensor) {
-                mSensorMgr.unregisterListener(this);
-            }
-
             mCall.onPause();
             mCall.removeListener(mListener);
+        }
+
+        turnScreenOn();
+        if (null != mProximitySensor) {
+            mSensorMgr.unregisterListener(this);
         }
     }
 
@@ -722,11 +722,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         if (null != mCall) {
-            if (null != mProximitySensor) {
-                // proximity sensor only used for voice call (see initBackLightManagement())
-                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }
-
             mCall.onResume();
 
             mCall.addListener(mListener);
@@ -744,6 +739,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
             // speaker phone state
             initSpeakerPhoneState();
+
+            if (null != mProximitySensor) {
+                // proximity sensor only used for voice call (see initBackLightManagement())
+                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
         } else {
             this.finish();
         }
