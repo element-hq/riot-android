@@ -44,19 +44,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -1158,110 +1161,6 @@ public class CommonActivityUtils {
     }
 
     /**
-     * Create a 1:1 direct message room.
-     * @param aSession the session.
-     * @param otherUserId the other user id.
-     * @param fromActivity the caller activity.
-     * @param callback the callback.
-     */
-    public static void createDirectMessagesRoom(final MXSession aSession, final String otherUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
-        // sanity check
-        if (null == otherUserId) {
-            return;
-        }
-
-        // check first if the 1:1 room already exists
-        MXSession session = (aSession == null) ? Matrix.getMXSession(fromActivity, null) : aSession;
-
-        // no session is provided
-        if (null == session) {
-            // get the default one.
-            session = Matrix.getInstance(fromActivity.getApplicationContext()).getDefaultSession();
-        }
-
-        // sanity check
-        if ((null == session) || !session.isAlive()) {
-            return;
-        }
-
-        final MXSession fSession = session;
-        Log.d(LOG_TAG,"## createDirectMessagesRoom(): start createRoom()");
-        session.createRoom(new SimpleApiCallback<String>(fromActivity) {
-            @Override
-            public void onSuccess(String roomId) {
-                final Room room = fSession.getDataHandler().getRoom(roomId);
-                final String fRoomId = roomId;
-
-                final SimpleApiCallback inviteCallback = new SimpleApiCallback<Void>(this) {
-                    @Override
-                    public void onSuccess(Void info) {
-                        // by default, the 1:1 rooms are Direct chat one
-                        setDirectChatRoom(fSession, fRoomId, null, fromActivity, callback);
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onMatrixError Msg="+e.getLocalizedMessage());
-                        if (null != callback) {
-                            callback.onMatrixError(e);
-                        }
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onNetworkError Msg="+e.getLocalizedMessage());
-                        if (null != callback) {
-                            callback.onNetworkError(e);
-                        }
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        Log.d(LOG_TAG, "## goToOneToOneRoom(): invite() onUnexpectedError Msg="+e.getLocalizedMessage());
-                        if (null != callback) {
-                            callback.onUnexpectedError(e);
-                        }
-                    }
-
-                };
-
-                // check if the userId defines an email address.
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(otherUserId).matches()) {
-                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite by mail");
-                    room.inviteByEmail(otherUserId, inviteCallback);
-                } else {
-                    Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onSuccess - start invite");
-                    room.invite(otherUserId, inviteCallback);
-                }
-            }
-
-            @Override
-            public void onMatrixError(MatrixError e) {
-                Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onMatrixError Msg="+e.getLocalizedMessage());
-                if (null != callback) {
-                    callback.onMatrixError(e);
-                }
-            }
-
-            @Override
-            public void onNetworkError(Exception e) {
-                Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onNetworkError Msg="+e.getLocalizedMessage());
-                if (null != callback) {
-                    callback.onNetworkError(e);
-                }
-            }
-
-            @Override
-            public void onUnexpectedError(Exception e) {
-                Log.d(LOG_TAG, "## goToOneToOneRoom(): createRoom() onUnexpectedError Msg="+e.getLocalizedMessage());
-                if (null != callback) {
-                    callback.onUnexpectedError(e);
-                }
-            }
-        });
-    }
-
-    /**
      * Set a room as a direct chat room.<br>
      * In case of success the corresponding room is displayed.
      * @param aSession session
@@ -1270,28 +1169,20 @@ public class CommonActivityUtils {
      * @param fromActivity calling activity
      * @param callback async response handler
      */
-    public static void setDirectChatRoom(final MXSession aSession, final String aRoomId, String aParticipantUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
+    public static void setToggleDirectMessageRoom(final MXSession aSession, final String aRoomId, String aParticipantUserId, final Activity fromActivity, final ApiCallback<Void> callback) {
 
         if((null == aSession) || (null == fromActivity) || TextUtils.isEmpty(aRoomId)) {
-            Log.d(LOG_TAG, "## setDirectChatRoom(): failure - invalid input parameters");
+            Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): failure - invalid input parameters");
         } else {
             aSession.toggleDirectChatRoom(aRoomId, aParticipantUserId, new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, aSession.getMyUserId());
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, aRoomId);
-                    params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
-
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onSuccess - start goToRoomPage");
-                    CommonActivityUtils.goToRoomPage(fromActivity, aSession, params);
-
                     callback.onSuccess(null);
                 }
 
                 @Override
                 public void onNetworkError(Exception e) {
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onNetworkError Msg=" + e.getLocalizedMessage());
+                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onNetworkError Msg=" + e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onNetworkError(e);
                     }
@@ -1299,7 +1190,7 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onMatrixError(MatrixError e) {
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onMatrixError Msg=" + e.getLocalizedMessage());
+                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onMatrixError Msg=" + e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onMatrixError(e);
                     }
@@ -1307,62 +1198,12 @@ public class CommonActivityUtils {
 
                 @Override
                 public void onUnexpectedError(Exception e) {
-                    Log.d(LOG_TAG, "## setDirectChatRoom(): invite() onUnexpectedError Msg=" + e.getLocalizedMessage());
+                    Log.d(LOG_TAG, "## setToggleDirectMessageRoom(): invite() onUnexpectedError Msg=" + e.getLocalizedMessage());
                     if (null != callback) {
                         callback.onUnexpectedError(e);
                     }
                 }
             });
-        }
-    }
-
-
-    /**
-     * Jump to a 1:1 room with a dedicated user.
-     * If there is no room with this user, the room is created.
-     * @param aSession the session.
-     * @param otherUserId the other user id.
-     * @param fromActivity the caller activity.
-     * @param callback the callback.
-     */
-    public static void goToOneToOneRoom(final MXSession aSession, final String otherUserId, Activity fromActivity, final ApiCallback<Void> callback) {
-        // sanity check
-        if (null == otherUserId) {
-            return;
-        }
-
-        // check first if the 1:1 room already exists
-        MXSession session = (aSession == null) ? Matrix.getMXSession(fromActivity, null) : aSession;
-
-        // no session is provided
-        if (null == session) {
-            // get the default one.
-            session = Matrix.getInstance(fromActivity.getApplicationContext()).getDefaultSession();
-        }
-
-        // sanity check
-        if ((null == session) || !session.isAlive()) {
-            return;
-        }
-
-        Room room = findLatestOneToOneRoom(session, otherUserId);
-
-        // the room already exists -> switch to it
-        if (null != room) {
-            Log.d(LOG_TAG,"## goToOneToOneRoom(): room already exists");
-            HashMap<String, Object> params = new HashMap<>();
-
-            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-            params.put(VectorRoomActivity.EXTRA_ROOM_ID, room.getRoomId());
-
-            CommonActivityUtils.goToRoomPage(fromActivity, session, params);
-
-            // everything is ok
-            if (null != callback) {
-                callback.onSuccess(null);
-            }
-        } else {
-            createDirectMessagesRoom(aSession, otherUserId, fromActivity, callback);
         }
     }
 
@@ -1936,5 +1777,55 @@ public class CommonActivityUtils {
         // TODO implement things to reduce memory usage
 
         displayMemoryInformation(activity, "onTrimMemory");
+    }
+
+    /**
+     * Display the device verification warning
+     * @param deviceInfo the device info
+     */
+    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, final ArrayAdapter<T> adapter, Activity activiy) {
+
+        // sanity check
+        if((null == deviceInfo) || (null==sender) || (null==session)) {
+            Log.e(LOG_TAG, "## displayDeviceVerificationDialog(): invalid imput parameters");
+            return;
+        }
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(activiy);
+        LayoutInflater inflater = activiy.getLayoutInflater();
+
+        View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
+
+        TextView textView;
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_name);
+        textView.setText(deviceInfo.displayName());
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_id);
+        textView.setText(deviceInfo.deviceId);
+
+        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
+        textView.setText(deviceInfo.fingerprint());
+
+        builder.setView(layout);
+        builder.setTitle(R.string.encryption_information_verify_device);
+
+        builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender);
+                if(null != adapter) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.create().show();
     }
 }

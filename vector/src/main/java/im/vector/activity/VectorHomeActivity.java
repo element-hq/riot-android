@@ -153,7 +153,12 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // calls
     private VectorPendingCallView mVectorPendingCallView;
 
+    private View mSyncInProgressView;
+
     private boolean mStorePermissionCheck = false;
+
+    // manage the previous first displayed item
+    private static int mScrollToIndex = -1;
 
     private final ApiCallback<Void> mSendReceiptCallback = new ApiCallback<Void>() {
         @Override
@@ -226,6 +231,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mWaitingView = findViewById(R.id.listView_spinner_views);
         mVectorPendingCallView = (VectorPendingCallView) findViewById(R.id.listView_pending_callview);
+        mSyncInProgressView =  findViewById(R.id.home_recents_sync_in_progress);
 
         mVectorPendingCallView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -468,6 +474,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+
+        if (mSession.isAlive()) {
+            mScrollToIndex = mRecentsListFragment.getFirstVisiblePosition();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        mScrollToIndex = -1;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -488,7 +510,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         // Unregister Broadcast receiver
         stopWaitingView();
-        unregisterReceiver(mBrdRcvStopWaitingView);
+        try {
+            unregisterReceiver(mBrdRcvStopWaitingView);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onPause() : unregisterReceiver fails " + e.getMessage());
+        }
 
         if (mSession.isAlive()) {
             mSession.getDataHandler().removeListener(mEventsListener);
@@ -541,6 +567,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             @Override
             public void onAccountInfoUpdate(MyUser myUser) {
                 refreshSlidingMenu();
+            }
+
+            @Override
+            public void onLiveEventsChunkProcessed() {
+                mSyncInProgressView.setVisibility(View.GONE);
             }
         };
 
@@ -603,6 +634,14 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         mToolbar.setBackgroundResource(R.color.vector_actionbar_background);
 
         checkDeviceId();
+
+        if (-1 != mScrollToIndex) {
+            mRecentsListFragment.setFirstVisiblePosition(mScrollToIndex);
+            // reinit in the fragment scrolllistener
+            //mScrollToIndex = -1;
+        }
+
+        mSyncInProgressView.setVisibility(VectorApp.isSessionSyncing(mSession) ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -728,6 +767,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
                 });
             }
+
 
             private void onError(final String message) {
                 mWaitingView.post(new Runnable() {
@@ -953,9 +993,32 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         break;
                     }
 
-                    case R.id.sliding_menu_logout: {
-                        VectorHomeActivity.this.showWaitingView();
-                        CommonActivityUtils.logout(VectorHomeActivity.this);
+                    case R.id.sliding_menu_sign_out: {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
+                        alertDialogBuilder.setMessage(getString(R.string.action_sign_out_confirmation));
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                VectorHomeActivity.this.showWaitingView();
+                                                CommonActivityUtils.logout(VectorHomeActivity.this);
+                                            }
+                                        })
+                                .setNegativeButton(R.string.cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        // show it
+                        alertDialog.show();
+
                         break;
                     }
 
@@ -1046,6 +1109,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
      * Hide the (+) button for 1 second.
      */
     private void hideRoomCreationViewWithDelay() {
+        // the recents list scrolls after restoring
+        if (-1 != mScrollToIndex) {
+            mScrollToIndex = -1;
+            return;
+        }
         synchronized (this) {
             if (null != mRoomCreationViewTimer) {
                 mRoomCreationViewTimer.cancel();

@@ -93,6 +93,11 @@ public class PublicRoomsManager {
     private static void launchPublicRoomsRequest(final ApiCallback<List<PublicRoom>> callback) {
         final String fToken = mRequestKey;
 
+        // GA issue
+        if (null == mSession) {
+            return;
+        }
+
         //final String server, final String pattern, final String since, final ApiCallback<PublicRoomsResponse> callback
         mSession.getEventsApiClient().loadPublicRooms(mRequestServer, mSearchedPattern, mForwardPaginationToken, PUBLIC_ROOMS_LIMIT, new ApiCallback<PublicRoomsResponse>() {
             @Override
@@ -220,6 +225,16 @@ public class PublicRoomsManager {
      */
     public static Integer getPublicRoomsCount() {
         return mPublicRoomsCount;
+    }
+
+    /**
+     * Remove a listener
+     * @param listener the listener to remove
+     */
+    public static void removeListener(PublicRoomsManagerListener listener) {
+        if (null != listener) {
+            mListeners.remove(listener);
+        }
     }
 
     /**

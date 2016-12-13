@@ -253,47 +253,6 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     }
 
     /**
-     * Display the device verification warning
-     * @param deviceInfo the device info
-     */
-    private void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View layout = inflater.inflate(R.layout.encrypted_verify_device, null);
-
-        TextView textView;
-
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_name);
-        textView.setText(deviceInfo.displayName());
-
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_id);
-        textView.setText(deviceInfo.deviceId);
-
-        textView = (TextView)layout.findViewById(R.id.encrypted_device_info_device_key);
-        textView.setText(deviceInfo.fingerprint());
-
-        builder.setView(layout);
-        builder.setTitle(R.string.encryption_information_verify_device);
-
-        builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        builder.create().show();
-    }
-
-    /**
      * the user taps on the e2e icon
      * @param event the event
      * @param deviceInfo the deviceinfo
@@ -388,7 +347,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            displayDeviceVerificationDialog(deviceInfo, event.getSender());
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, mAdapter, getActivity());
                         }
                     });
 
@@ -415,7 +374,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 } else { // BLOCKED
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            displayDeviceVerificationDialog(deviceInfo, event.getSender());
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, mAdapter, getActivity());
                         }
                     });
 
@@ -481,18 +440,40 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (event.isUndeliverable()) {
-                        // delete from the store
-                        mSession.getDataHandler().getStore().deleteEvent(event);
-                        mSession.getDataHandler().getStore().commit();
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setMessage(getString(R.string.redact) + " ?");
 
-                        // remove from the adapter
-                        mAdapter.removeEventById(event.eventId);
-                        mAdapter.notifyDataSetChanged();
-                        mEventSendingListener.onMessageRedacted(event);
-                    } else {
-                        redactEvent(event.eventId);
-                    }
+                    // set dialog message
+                    alertDialogBuilder
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            if (event.isUndeliverable()) {
+                                                // delete from the store
+                                                mSession.getDataHandler().getStore().deleteEvent(event);
+                                                mSession.getDataHandler().getStore().commit();
+
+                                                // remove from the adapter
+                                                mAdapter.removeEventById(event.eventId);
+                                                mAdapter.notifyDataSetChanged();
+                                                mEventSendingListener.onMessageRedacted(event);
+                                            } else {
+                                                redactEvent(event.eventId);
+                                            }
+                                        }
+                                    })
+                            .setNegativeButton(R.string.cancel,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
                 }
             });
         } else if (action == R.id.ic_action_vector_copy) {
@@ -1035,40 +1016,12 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public void onMatrixUserIdClick(final String userId) {
-
-        showInitLoading();
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                CommonActivityUtils.goToOneToOneRoom(mSession, userId, getActivity(), new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        // nothing to do here
-                    }
-
-                    private void onError(String errorMessage) {
-                        hideInitLoading();
-                        CommonActivityUtils.displayToast(getActivity(), errorMessage);
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
-            }
-        });
+        // start member details UI
+        Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+        startActivity(roomDetailsIntent);
     }
 
     @Override

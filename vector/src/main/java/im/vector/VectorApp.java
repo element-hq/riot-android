@@ -24,6 +24,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -191,7 +193,12 @@ public class VectorApp extends Application {
         registerReceiver(new HeadsetConnectionReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
         // create the markdown parser
-        mMarkdownParser = new VectorMarkdownParser(this);
+        try {
+            mMarkdownParser = new VectorMarkdownParser(this);
+        } catch (Exception e) {
+            // reported by GA
+            Log.e(LOG_TAG, "cannot create the mMarkdownParser " + e.getMessage());
+        }
     }
 
     /**
@@ -199,8 +206,18 @@ public class VectorApp extends Application {
      * @param text the text to parse
      * @param listener the result listener
      */
-    public static void markdownToHtml(String text, VectorMarkdownParser.IVectorMarkdownParserListener listener) {
-        getInstance().mMarkdownParser.markdownToHtml(text, listener);
+    public static void markdownToHtml(final String text, final VectorMarkdownParser.IVectorMarkdownParserListener listener) {
+        if (null != getInstance().mMarkdownParser) {
+            getInstance().mMarkdownParser.markdownToHtml(text, listener);
+        } else {
+            (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                @Override
+                public void run() {
+                    // GA issue
+                    listener.onMarkdownParsed(text, null);
+                }
+            });
+        }
     }
 
     /**
@@ -225,6 +242,7 @@ public class VectorApp extends Application {
                 session.setIsOnline(false);
                 session.setSyncDelay(gcmRegistrationManager.getBackgroundSyncDelay());
                 session.setSyncTimeout(gcmRegistrationManager.getBackgroundSyncTimeOut());
+                removeSyncingSession(session);
             }
         }
 
@@ -321,6 +339,7 @@ public class VectorApp extends Application {
                 session.setSyncDelay(0);
                 session.setSyncTimeout(0);
                 hasActiveCall |= session.getDataHandler().getCallsManager().hasActiveCalls();
+                addSyncingSession(session);
             }
 
             // detect if an infinite ringing has been triggered
@@ -449,6 +468,56 @@ public class VectorApp extends Application {
 
             mSavedPickerImagePreview = aSavedCameraImagePreview;
         }
+    }
+
+    //==============================================================================================================
+    // Syncing mxSessions
+    //==============================================================================================================
+
+    /**
+     * syncing sessions
+     */
+    private static ArrayList<MXSession> mSyncingSessions = new ArrayList<>();
+
+    /**
+     * Add a session in the syncing sessions list
+     * @param session the session
+     */
+    public static void addSyncingSession(MXSession session) {
+        synchronized (mSyncingSessions) {
+            if ((null != session) && (mSyncingSessions.indexOf(session) < 0)) {
+                mSyncingSessions.add(session);
+            }
+        }
+    }
+
+    /**
+     * Remove a session in the syncing sessions list
+     * @param session the session
+     */
+    public static void removeSyncingSession(MXSession session) {
+        if (null != session) {
+            synchronized (mSyncingSessions) {
+                mSyncingSessions.remove(session);
+            }
+        }
+    }
+
+    /**
+     * Tell if a session is syncing
+     * @param session the session
+     * @return true if the session is syncing
+     */
+    public static boolean isSessionSyncing(MXSession session) {
+        boolean isSyncing = false;
+
+        if (null != session) {
+            synchronized (mSyncingSessions) {
+                isSyncing = (mSyncingSessions.indexOf(session) >= 0);
+            }
+        }
+
+        return isSyncing;
     }
 }
 

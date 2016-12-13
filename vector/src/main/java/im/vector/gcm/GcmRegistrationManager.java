@@ -239,7 +239,7 @@ public final class GcmRegistrationManager {
      * Register to GCM.
      * @param gcmRegistrationListener the events listener.
      */
-    public void registerToGCM(final GCMRegistrationListener gcmRegistrationListener) {
+    private void registerToGCM(final GCMRegistrationListener gcmRegistrationListener) {
         Log.d(LOG_TAG, "registerToGCM with state " + mRegistrationState);
 
         // do not use GCM
@@ -962,7 +962,7 @@ public final class GcmRegistrationManager {
     }
 
     /**
-     * @aparam syncDelay the delay between two syncs in ms.
+     * @param syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
         getGcmSharedPreferences().edit()

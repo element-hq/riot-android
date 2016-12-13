@@ -401,7 +401,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            if (!TextUtils.equals(temp[0], "room")) {
+            if (!TextUtils.equals(temp[0], "room") && !TextUtils.equals(temp[0], "user") ) {
                 Log.e(LOG_TAG, "## parseUniversalLink : not supported " + temp[0]);
                 return null;
             }

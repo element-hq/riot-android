@@ -60,6 +60,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     private List<AdapterMemberActionItems> mAdminActionsList = new ArrayList<>();
     private List<AdapterMemberActionItems> mCallActionsList = new ArrayList<>();
     private List<AdapterMemberActionItems> mDirectCallsList = new ArrayList<>();
+    private List<AdapterMemberActionItems> mDevicesList = new ArrayList<>();
 
     // list of actions list
     private ArrayList<List<AdapterMemberActionItems>> mActionsList = new ArrayList<>();
@@ -68,6 +69,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     private int mAdminGroupPosition = -1;
     private int mCallGroupPosition = -1;
     private int mDirectCallsGroupPosition = -1;
+    private int mDevicesGroupPosition = -1;
 
     /**
      * Interface proxy to perform actions
@@ -181,6 +183,15 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         mDirectCallsList = directCallActionsList;
     }
 
+    /**
+     * Update the devices actions list.<br>
+     *
+     * @param deviceActionsList the call actions list
+     */
+    public void setDevicesActionsList(List<AdapterMemberActionItems> deviceActionsList) {
+        mDevicesList = deviceActionsList;
+    }
+
     @Override
     public void notifyDataSetChanged() {
         // refresh the list of list
@@ -190,6 +201,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         mAdminGroupPosition = -1;
         mCallGroupPosition = -1;
         mDirectCallsGroupPosition = -1;
+        mDevicesGroupPosition = -1;
 
         if (0 != mAdminActionsList.size()) {
             mActionsList.add(mAdminActionsList);
@@ -200,6 +212,12 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         if (0 != mCallActionsList.size()) {
             mActionsList.add(mCallActionsList);
             mCallGroupPosition = groupPos;
+            groupPos++;
+        }
+
+        if (0 != mDevicesList.size()) {
+            mActionsList.add(mDevicesList);
+            mDevicesGroupPosition = groupPos;
             groupPos++;
         }
 
@@ -240,6 +258,8 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             return mContext.getResources().getString(R.string.room_participants_header_call);
         } else if (groupPosition == mDirectCallsGroupPosition) {
             return mContext.getResources().getString(R.string.room_participants_header_direct_chats);
+        } else if (groupPosition == mDevicesGroupPosition) {
+            return mContext.getResources().getString(R.string.room_participants_header_devices);
         }
 
         return "???";

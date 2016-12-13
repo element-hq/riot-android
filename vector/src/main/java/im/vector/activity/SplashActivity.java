@@ -26,6 +26,7 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -45,10 +46,6 @@ public class SplashActivity extends MXCActionBarActivity {
     public static final String EXTRA_ROOM_ID = "EXTRA_ROOM_ID";
 
     private Collection<MXSession> mSessions;
-    private GcmRegistrationManager mGCMRegistrationManager;
-
-    private boolean mInitialSyncComplete = false;
-    private boolean mPusherRegistrationComplete = false;
 
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
@@ -71,46 +68,43 @@ public class SplashActivity extends MXCActionBarActivity {
     /**
      * Close the splash screen if the stores are fully loaded.
      */
-    private void finishIfReady() {
-        Log.e(LOG_TAG, "finishIfReady " + mInitialSyncComplete + " " + mPusherRegistrationComplete);
+    private void onFinish() {
+        Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
 
-        if (mInitialSyncComplete && mPusherRegistrationComplete) {
-            Log.e(LOG_TAG, "finishIfRead start VectorHomeActivity");
+        if (!hasCorruptedStore()) {
+            // Go to the home page
+            Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
 
-            if (!hasCorruptedStore()) {
-                // Go to the home page
-                Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
+            Bundle receivedBundle = getIntent().getExtras();
 
-                Bundle receivedBundle = getIntent().getExtras();
-
-                if (null != receivedBundle) {
-                    intent.putExtras(receivedBundle);
-                }
-
-                // display a spinner while managing the universal link
-                if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
-                    intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
-                }
-
-                // launch from a shared files menu
-                if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
-                    intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
-                }
-
-                if (getIntent().hasExtra(EXTRA_ROOM_ID) && getIntent().hasExtra(EXTRA_MATRIX_ID)) {
-                    HashMap<String, Object> params = new HashMap<>();
-
-                    params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
-                    params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
-                    intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
-                }
-
-                startActivity(intent);
-                SplashActivity.this.finish();
-            } else {
-                CommonActivityUtils.logout(this);
+            if (null != receivedBundle) {
+                intent.putExtras(receivedBundle);
             }
+
+            // display a spinner while managing the universal link
+            if (intent.hasExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI)) {
+                intent.putExtra(VectorHomeActivity.EXTRA_WAITING_VIEW_STATUS, VectorHomeActivity.WAITING_VIEW_START);
+            }
+
+            // launch from a shared files menu
+            if (getIntent().hasExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS)) {
+                intent.putExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS, getIntent().getParcelableExtra(VectorHomeActivity.EXTRA_SHARED_INTENT_PARAMS));
+            }
+
+            if (getIntent().hasExtra(EXTRA_ROOM_ID) && getIntent().hasExtra(EXTRA_MATRIX_ID)) {
+                HashMap<String, Object> params = new HashMap<>();
+
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, getIntent().getStringExtra(EXTRA_MATRIX_ID));
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, getIntent().getStringExtra(EXTRA_ROOM_ID));
+                intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, params);
+            }
+
+            startActivity(intent);
+            SplashActivity.this.finish();
+        } else {
+            CommonActivityUtils.logout(this);
         }
+
     }
 
     @Override
@@ -134,7 +128,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
         ArrayList<String> matrixIds = new ArrayList<>();
 
-        for(MXSession session : mSessions) {
+        for(final MXSession session : mSessions) {
             final MXSession fSession = session;
             session.getDataHandler().getStore().open();
 
@@ -154,11 +148,12 @@ public class SplashActivity extends MXCActionBarActivity {
                         // remove from the pendings list
 
                         mListeners.remove(fSession);
-                        noMoreListener = mInitialSyncComplete = (mListeners.size() == 0);
+                        noMoreListener = (mListeners.size() == 0);
                     }
 
                     if (noMoreListener) {
-                        finishIfReady();
+                        VectorApp.addSyncingSession(session);
+                        onFinish();
                     }
                 }
             };
@@ -197,47 +192,19 @@ public class SplashActivity extends MXCActionBarActivity {
             EventStreamService.getInstance().startAccounts(matrixIds);
         }
 
-        mGCMRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
-        mPusherRegistrationComplete = mGCMRegistrationManager.isGCMRegistred();
+        // trigger the GCM registration if required
+        GcmRegistrationManager gcmRegistrationManager = Matrix.getInstance(getApplicationContext()).getSharedGCMRegistrationManager();
 
-        if (!mPusherRegistrationComplete) {
-            mGCMRegistrationManager.registerToGCM(new GcmRegistrationManager.GCMRegistrationListener() {
-                /**
-                 * Common behaviour.
-                 */
-                private void onDone() {
-                    SplashActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CommonActivityUtils.onGcmUpdate(SplashActivity.this);
-                        }
-                    });
-
-                    mPusherRegistrationComplete = true;
-                    finishIfReady();
-                }
-
-                @Override
-                public void onGCMRegistered() {
-                    Log.d(LOG_TAG, "The GCM registration is done");
-                    onDone();
-                }
-
-                @Override
-                public void onGCMRegistrationFailed() {
-                    Log.d(LOG_TAG, "The GCM registration failed");
-                    onDone();
-                }
-            });
-        } else if (mGCMRegistrationManager.useGCM()) {
-            mGCMRegistrationManager.forceSessionsRegistration(null);
+        if (!gcmRegistrationManager.isGCMRegistred()) {
+            gcmRegistrationManager.checkRegistrations();
+        } else {
+            gcmRegistrationManager.forceSessionsRegistration(null);
         }
 
         boolean noUpdate;
 
         synchronized(LOG_TAG) {
-            mInitialSyncComplete = (mListeners.size() == 0);
-            noUpdate = mInitialSyncComplete && mPusherRegistrationComplete;
+            noUpdate = (mListeners.size() == 0);
         }
 
         // nothing to do ?
@@ -245,7 +212,7 @@ public class SplashActivity extends MXCActionBarActivity {
         if (noUpdate) {
             // do not launch an activity if there was nothing new.
             Log.e(LOG_TAG, "nothing to do");
-            finishIfReady();
+            onFinish();
         }
     }
 

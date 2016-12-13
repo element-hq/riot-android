@@ -1,0 +1,196 @@
+/*
+ * Copyright 2016 OpenMarket Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.adapters;
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+
+import java.util.ArrayList;
+
+import im.vector.R;
+
+/**
+ * This class displays a list of members to create a room.
+ */
+public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo> {
+
+    private static final String LOG_TAG = "VRoomCreationAdapter";
+
+    // remove participants listener
+    public interface IDevicesAdapterListener {
+        /**
+         * Verify device button handler
+         * @param aDeviceInfo device info
+         */
+        void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo);
+
+        /**
+         * Block device button handler
+         * @param aDeviceInfo device info
+         */
+        void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo);
+    }
+
+    // layout info
+    private final LayoutInflater mLayoutInflater;
+
+    // account info
+    private final MXSession mSession;
+
+    // used layouts
+    private final int mItemLayoutResourceId;
+
+    // the events listener
+    private IDevicesAdapterListener mActivityListener;
+
+    final private String myDeviceId;
+
+    /**
+     * Constructor
+     * @param aContext app context
+     * @param aItemLayoutResourceId layout id to be displayed on each row
+     * @param aSession session
+     */
+    public VectorMemberDetailsDevicesAdapter(Context aContext, int aItemLayoutResourceId, MXSession aSession) {
+        super(aContext, aItemLayoutResourceId);
+
+        mLayoutInflater = LayoutInflater.from(aContext);
+        mItemLayoutResourceId = aItemLayoutResourceId;
+        mSession = aSession;
+
+        if(null != mSession.getCredentials()) {
+            myDeviceId = mSession.getCredentials().deviceId;
+        } else {
+            myDeviceId = null;
+        }
+    }
+
+    /**
+     * Defines a listener.
+     * @param aListener the new listener.
+     */
+    public void setDevicesAdapterListener(IDevicesAdapterListener aListener) {
+        mActivityListener = aListener;
+    }
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        boolean isMyself = false;
+
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(mItemLayoutResourceId, parent, false);
+        }
+
+        final MXDeviceInfo deviceItem = getItem(position);
+
+        // check if the current device is the one i'm using
+        if((null!=myDeviceId) && myDeviceId.equals(deviceItem.deviceId)) {
+            isMyself = true;
+        }
+
+        // retrieve the ui items
+        final Button buttonVerify = (Button) convertView.findViewById(R.id.button_verify);
+        final Button buttonBlock = (Button) convertView.findViewById(R.id.button_block);
+        final TextView deviceNameTextView = (TextView) convertView.findViewById(R.id.device_name);
+        final TextView deviceIdTextView = (TextView) convertView.findViewById(R.id.device_id);
+        final ImageView e2eIconView = (ImageView)convertView.findViewById(R.id.device_e2e_icon);
+
+        buttonVerify.setTransformationMethod(null);
+        buttonBlock.setTransformationMethod(null);
+
+        // set devices text names
+        deviceNameTextView.setText(deviceItem.displayName());
+        deviceIdTextView.setText(deviceItem.deviceId);
+
+        // display e2e icon status
+        switch(deviceItem.mVerified) {
+            case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
+                e2eIconView.setImageResource(R.drawable.e2e_verified);
+                break;
+
+            case MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED:
+                e2eIconView.setImageResource(R.drawable.e2e_blocked);
+                break;
+
+            default:
+                e2eIconView.setImageResource(R.drawable.e2e_warning);
+                break;
+        }
+
+        // display buttons label according to verification status
+        switch(deviceItem.mVerified) {
+            case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
+                buttonVerify.setText(R.string.encryption_information_verify);
+                buttonBlock.setText(R.string.encryption_information_block);
+                break;
+
+            case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
+                buttonVerify.setText(R.string.encryption_information_unverify);
+                buttonBlock.setText(R.string.encryption_information_block);
+                break;
+
+            default: // Blocked
+                buttonVerify.setText(R.string.encryption_information_verify);
+                buttonBlock.setText(R.string.encryption_information_unblock);
+                break;
+        }
+
+        if(isMyself) {
+            // hide verify/block buttons for my current device
+            buttonVerify.setVisibility(View.INVISIBLE);
+            buttonBlock.setVisibility(View.INVISIBLE);
+        } else {
+            buttonVerify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mActivityListener) {
+                        try {
+                            mActivityListener.OnVerifyDeviceClick(deviceItem);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## getView() : OnVerifyDeviceClick fails " + e.getMessage());
+                        }
+                    }
+                    }
+            });
+
+            buttonBlock.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mActivityListener) {
+                        try {
+                            mActivityListener.OnBlockDeviceClick(deviceItem);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "## getView() : OnBlockDeviceClick fails " + e.getMessage());
+                        }
+                    }
+                }
+            });
+        }
+
+        return convertView;
+    }
+}

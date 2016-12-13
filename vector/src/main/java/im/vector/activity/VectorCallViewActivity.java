@@ -29,6 +29,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -49,11 +51,15 @@ import android.widget.Toast;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
 import im.vector.util.VectorCallSoundManager;
@@ -693,11 +699,13 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         super.onPause();
 
         if (null != mCall) {
-            if(null != mProximitySensor) {
-                mSensorMgr.unregisterListener(this);
-            }
             mCall.onPause();
             mCall.removeListener(mListener);
+        }
+
+        turnScreenOn();
+        if (null != mProximitySensor) {
+            mSensorMgr.unregisterListener(this);
         }
     }
 
@@ -714,10 +722,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         if (null != mCall) {
-            if(null != mProximitySensor) {
-                // proximity sensor only used for voice call (see initBackLightManagement())
-                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }
             mCall.onResume();
 
             mCall.addListener(mListener);
@@ -735,6 +739,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
             // speaker phone state
             initSpeakerPhoneState();
+
+            if (null != mProximitySensor) {
+                // proximity sensor only used for voice call (see initBackLightManagement())
+                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
         } else {
             this.finish();
         }
@@ -916,10 +925,17 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         if(null != mCall) {
             String roomId = mCall.getRoom().getRoomId();
 
-            Intent intent = new Intent(getApplicationContext(), VectorRoomActivity.class);
-            intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-            intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
-            startActivity(intent);
+            if (null != VectorApp.getCurrentActivity()) {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                CommonActivityUtils.goToRoomPage(VectorApp.getCurrentActivity(), mSession, params);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), VectorRoomActivity.class);
+                intent.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                intent.putExtra(VectorRoomActivity.EXTRA_MATRIX_ID, mMatrixId);
+                startActivity(intent);
+            }
         }
     }
 
@@ -1170,6 +1186,74 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     }
 
     // ************* SensorEventListener *************
+    private PowerManager.WakeLock mWakeLock;
+    private int mField = 0x00000020;
+
+    /**
+     * Init the screen management to be able to turn the screen on/off
+     */
+    private void initScreenManagement() {
+        try {
+            try {
+                mField = PowerManager.class.getClass().getField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").getInt(null);
+            } catch (Throwable ignored) {
+                Log.e(LOG_TAG, "## initScreenManagement " + ignored.getMessage());
+            }
+
+            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            mWakeLock = powerManager.newWakeLock(mField, getLocalClassName());
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## initScreenManagement() : failed " + e.getMessage());
+        }
+    }
+
+    /**
+     * Turn the screen off
+     */
+    private void turnScreenOff() {
+        if (null == mWakeLock) {
+            initScreenManagement();
+        }
+
+        try {
+            if ((null != mWakeLock) && !mWakeLock.isHeld()) {
+                mWakeLock.acquire();
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## turnScreenOff() failed");
+        }
+
+        // set the back light level to the minimum
+        // fallback if the previous trick does not work
+        if (null != getWindow() && (null != getWindow().getAttributes())) {
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+            layoutParams.screenBrightness = 0;
+            getWindow().setAttributes(layoutParams);
+        }
+    }
+
+    /**
+     * Turn the screen on
+     */
+    private void turnScreenOn() {
+        try {
+            if (null != mWakeLock) {
+                mWakeLock.release();
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## turnScreenOn() failed");
+        }
+
+        mWakeLock = null;
+
+        // restore previous brightness (whatever it was)
+        if (null != getWindow() && (null != getWindow().getAttributes())) {
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+            layoutParams.screenBrightness = -1;
+            getWindow().setAttributes(layoutParams);
+        }
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (null != event) {
@@ -1181,20 +1265,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             if (audioManager.isSpeakerphoneOn()) {
                 Log.d(LOG_TAG, "## onSensorChanged(): Skipped due speaker ON");
             } else {
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-
                 if (distanceCentimeters <= PROXIMITY_THRESHOLD) {
-                    layoutParams.screenBrightness = 0;
-                    getWindow().setAttributes(layoutParams);
-
-                    //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    turnScreenOff();
                     Log.d(LOG_TAG, "## onSensorChanged(): force screen OFF");
                 } else {
-                    // restore previous brightness (whatever it was)
-                    layoutParams.screenBrightness = -1;
-                    getWindow().setAttributes(layoutParams);
-
-                    //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    turnScreenOn();
                     Log.d(LOG_TAG, "## onSensorChanged(): force screen ON");
                 }
             }

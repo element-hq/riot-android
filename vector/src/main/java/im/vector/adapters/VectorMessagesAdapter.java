@@ -251,6 +251,11 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         View senderMargin = view.findViewById(R.id.e2e_sender_margin);
         View senderNameView = view.findViewById(R.id.messagesAdapter_sender);
 
+        // GA issue
+        if (position >= getCount()) {
+            return view;
+        }
+
         MessageRow row = getItem(position);
         final Event event = row.getEvent();
 
@@ -668,7 +673,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } else if (event.mSentState == Event.SentState.SENT) {
 
             // test if the event can be redacted
-            boolean canBeRedacted = !mIsPreviewMode;
+            boolean canBeRedacted = !mIsPreviewMode && !TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTION);
 
             if (canBeRedacted) {
                 // oneself message -> can redact it
@@ -1005,7 +1010,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } else if (seconds < 60) {
             return context.getString(R.string.attachment_remaining_time_seconds, seconds);
         } else if (seconds < 3600) {
-            return context.getString(R.string.attachment_remaining_time_minutes, seconds / 60, seconds % 60);
+            return context.getString(R.string.attachment_remaining_time_minutes, (seconds / 60), (seconds % 60));
         } else {
             return DateUtils.formatElapsedTime(seconds);
         }

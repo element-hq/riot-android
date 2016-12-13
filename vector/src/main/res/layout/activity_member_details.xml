@@ -10,7 +10,7 @@
     android:background="@color/room_background">
 
     <RelativeLayout
-        android:id="@+id/memeber_details_action_bar"
+        android:id="@+id/member_details_action_bar"
         android:layout_width="match_parent"
         android:background="@color/vector_green_color"
         android:layout_height="wrap_content">
@@ -92,11 +92,30 @@
         android:id="@+id/member_details_actions_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/memeber_details_action_bar"
+        android:layout_below="@+id/member_details_action_bar"
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="#00000000"/>
+
+    <include layout="@layout/adapter_item_vector_recent_header"
+        android:id="@+id/devices_header_view"
+        android:layout_below="@+id/member_details_action_bar"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- devices list view: displayed when ExpandableListView is hidden -->
+    <ListView
+        android:id="@+id/member_details_devices_list_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/devices_header_view"
+        android:dividerHeight="0dp"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#00000000" />
 
     <!-- progress bar view, displayed when an action in the list view is pressed -->
     <include layout="@layout/progress_bar_view"
