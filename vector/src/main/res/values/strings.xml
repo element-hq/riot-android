@@ -250,8 +250,8 @@
     <!-- media upload / download messages -->
     <string name="attachment_cancel_download">"Cancel the download?</string>
     <string name="attachment_cancel_upload">Cancel the upload?</string>
-    <string name="attachment_remaining_time_seconds">%s s</string>
-    <string name="attachment_remaining_time_minutes">%1$sm %2$ss</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
     <!-- invitation members list Screen -->
     <string name="members_one_to_one">One to one room members</string>
@@ -530,7 +530,7 @@
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
     <string name="room_new_message_notification">1 new message</string>
-    <string name="room_new_messages_notification">%1$s new messages</string>
+    <string name="room_new_messages_notification">%1$d new messages</string>
 
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Trust</string>

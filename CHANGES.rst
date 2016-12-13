@@ -1,3 +1,31 @@
+Changes in Vector 0.6.4 (2016-12-13)
+===================================================
+
+Features:
+ * #757 : Add devices list member details.
+
+Improvements:
+ * Improve the encryption management.
+ * The application should be ready faster.
+ 
+Bugfixes:
+ * Fix many issues reported by GA.
+ * Fix many memory leaks.
+ * #374 : Check if Event.unsigned.age can be used to detect if the event is still valid.
+ * #657 : It's too easy to accidentally ignore someone
+ * #661 : Turn the screen off during a call when the proximity sensor says phone near head
+ * #675 : Handle user link correctly 
+ * #687 : User adress instead of display name in call event
+ * #723 : Cancelling download of encrypted image does not work
+ * #706 : [Direct Message] Direct chats list from member profile doesn't show all the direct chats 
+ * #708 : vertical offset into recents list is not preserved 
+ * #749 : Layout broken with RTL languages 
+ * #754 : Memory leak when opening a room
+ * #760 : Stacked room pages when going back and forth between Call layout and Room layout
+ * #774 : Bug report / rageshake does not get user consent before sharing potentially personal data 
+ * #776 : Add a dialog to confirm the message redaction
+ 
+ 
 Changes in Vector 0.6.3 (2016-11-24)
 ===================================================
 

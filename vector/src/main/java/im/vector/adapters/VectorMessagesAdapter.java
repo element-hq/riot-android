@@ -1010,7 +1010,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         } else if (seconds < 60) {
             return context.getString(R.string.attachment_remaining_time_seconds, seconds);
         } else if (seconds < 3600) {
-            return context.getString(R.string.attachment_remaining_time_minutes, seconds / 60, seconds % 60);
+            return context.getString(R.string.attachment_remaining_time_minutes, (seconds / 60), (seconds % 60));
         } else {
             return DateUtils.formatElapsedTime(seconds);
         }
