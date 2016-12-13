@@ -359,7 +359,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             return;
         }
 
-        ArrayList<String> idsList = new ArrayList<>();
+        final ArrayList<String> idsList = new ArrayList<>();
 
         switch (aActionType) {
             case ITEM_ACTION_DEVICES:
@@ -452,39 +452,85 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
                 break;
 
-            case ITEM_ACTION_IGNORE:
-                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+            case ITEM_ACTION_IGNORE: {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(getString(R.string.room_participants_action_ignore) + " ?");
 
-                if (null != mRoomMember) {
-                    idsList.add(mRoomMember.getUserId());
-                } else if (null != mMemberId) {
-                    idsList.add(mMemberId);
-                }
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
-                if (0 != idsList.size()) {
-                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mSession.ignoreUsers(idsList, mRoomActionsListener);
-                    Log.d(LOG_TAG, "## performItemAction(): ignoreUsers");
-                }
+                                        if (null != mRoomMember) {
+                                            idsList.add(mRoomMember.getUserId());
+                                        } else if (null != mMemberId) {
+                                            idsList.add(mMemberId);
+                                        }
+
+                                        if (0 != idsList.size()) {
+                                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                            mSession.ignoreUsers(idsList, mRoomActionsListener);
+                                            Log.d(LOG_TAG, "## performItemAction(): ignoreUsers");
+                                        }
+                                    }
+                                })
+                        .setNegativeButton(R.string.cancel,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+
                 break;
+            }
 
-            case ITEM_ACTION_UNIGNORE:
-                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+            case ITEM_ACTION_UNIGNORE: {
 
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage(getString(R.string.room_participants_action_unignore) + " ?");
 
-                if (null != mRoomMember) {
-                    idsList.add(mRoomMember.getUserId());
-                } else if (null != mMemberId) {
-                    idsList.add(mMemberId);
-                }
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
-                if (0 != idsList.size()) {
-                    enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
-                    mSession.unIgnoreUsers(idsList, mRoomActionsListener);
-                    Log.d(LOG_TAG, "## performItemAction(): unIgnoreUsers");
-                }
+                                        if (null != mRoomMember) {
+                                            idsList.add(mRoomMember.getUserId());
+                                        } else if (null != mMemberId) {
+                                            idsList.add(mMemberId);
+                                        }
+
+                                        if (0 != idsList.size()) {
+                                            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
+                                            mSession.unIgnoreUsers(idsList, mRoomActionsListener);
+                                            Log.d(LOG_TAG, "## performItemAction(): unIgnoreUsers");
+                                        }
+                                    }
+                                })
+                        .setNegativeButton(R.string.cancel,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
                 break;
-
+            }
             case ITEM_ACTION_MENTION:
                 String displayName = TextUtils.isEmpty( mRoomMember.displayname) ? mRoomMember.getUserId() : mRoomMember.displayname;
 
