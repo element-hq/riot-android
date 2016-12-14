@@ -696,6 +696,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
         final ImageView actionImageView = (ImageView) convertView.findViewById(R.id.roomSummaryAdapter_action_image);
         TextView unreadCountTxtView = (TextView) convertView.findViewById(R.id.roomSummaryAdapter_unread_count);
         View directChatIcon = convertView.findViewById(R.id.room_avatar_direct_chat_icon);
+        View encryptedIcon = convertView.findViewById(R.id.room_avatar_encrypted_icon);
 
         View invitationView = convertView.findViewById(R.id.recents_groups_invitation_group);
         Button preViewButton = (Button)convertView.findViewById(R.id.recents_invite_preview_button);
@@ -717,6 +718,7 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
             actionClickArea.setVisibility(View.GONE);
             unreadCountTxtView.setVisibility(View.GONE);
             directChatIcon.setVisibility(View.GONE);
+            encryptedIcon.setVisibility(View.GONE);
 
             if (mDirectoryGroupPosition == groupPosition) {
                 roomNameTxtView.setText(mContext.getResources().getString(R.string.directory_search_results_title));
@@ -821,8 +823,10 @@ public class VectorRoomSummaryAdapter extends BaseExpandableListAdapter {
 
         if (null != childRoom) {
             directChatIcon.setVisibility(mDirectChatRoomIdsList.indexOf(childRoom.getRoomId()) < 0 ? View.GONE : View.VISIBLE);
+            encryptedIcon.setVisibility(childRoom.isEncrypted() ? View.VISIBLE : View.GONE);
         } else {
             directChatIcon.setVisibility(View.GONE);
+            encryptedIcon.setVisibility(View.GONE);
         }
         
         bingUnreadMsgView.setVisibility(isInvited ? View.INVISIBLE : View.VISIBLE);

@@ -38,6 +38,17 @@
             android:visibility="gone"
             android:src="@drawable/icon_person" />
 
+
+        <ImageView
+            android:id="@+id/room_avatar_encrypted_icon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="35dp"
+            android:layout_alignBottom="@+id/room_avatar_image_view"
+            android:layout_alignLeft="@+id/room_avatar_image_view"
+            android:visibility="gone"
+            android:src="@drawable/e2e_verified" />
+
         <RelativeLayout
             android:id="@+id/roomSummaryAdapter_show_more_layout"
             android:layout_width="24dp"
