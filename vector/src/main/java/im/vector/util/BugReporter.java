@@ -54,8 +54,13 @@ import im.vector.VectorApp;
 import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.db.VectorContentProvider;
+import im.vector.gcm.GcmRegistrationManager;
+import im.vector.preference.VectorCustomActionEditTextPreference;
 
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.MyUser;
+import org.matrix.androidsdk.data.Pusher;
+import org.matrix.androidsdk.rest.model.DeviceInfo;
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -71,30 +76,52 @@ public class BugReporter {
         String message = "Something went wrong on my Vector client : \n\n\n";
         message += "-----> my comments <-----\n\n\n";
 
-        message += "---------------------------------------------------------------------\n";
-        message += "Application info\n";
+        message += "------------------ Application info ------------------------------\n";
 
         Collection<MXSession> sessions = Matrix.getMXSessions(context);
         int profileIndex = 1;
 
         for(MXSession session : sessions) {
-            message += "Profile " + profileIndex + " :\n";
+            message += "--> Profile " + profileIndex + " :\n\n";
             profileIndex++;
+
+            message += "----> General\n";
 
             MyUser mMyUser = session.getMyUser();
             message += "userId : "+ mMyUser.user_id + "\n";
             message += "displayname : " + mMyUser.displayname + "\n";
             message += "homeServer :" + session.getCredentials().homeServer + "\n";
+
+            if (null != session.getCrypto()) {
+                message += "----> Crypto\n";
+
+                MXDeviceInfo myDevice = session.getCrypto().getMyDevice();
+                message += "Device ID : " + myDevice.deviceId + "\n";
+                message += "Device key : " + myDevice.fingerprint() + "\n";
+            }
+
+            GcmRegistrationManager registrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
+            List<Pusher> pushers = new ArrayList<>(registrationManager.mPushersList);
+
+            message += "----> Notification targets\n";
+
+            if (pushers.size() == 0) {
+                message += "No target\n";
+            } else {
+                for (Pusher pusher : pushers) {
+                    message += " - " + pusher.toString() + "\n";
+                }
+            }
         }
 
         message += "\n";
-        message += "---------------------------------------------------------------------\n";
+        message += "----------------------------------------------------------------------------\n\n";
         message += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
         message += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
         message += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
         message += "\n";
-        message += "---------------------------------------------------------------------\n";
-        message += "Memory statuses \n";
+        message += "----------------------- Memory statuses -------------------------------------\n";
+        message += "\n";
 
         long freeSize = 0L;
         long totalSize = 0L;
