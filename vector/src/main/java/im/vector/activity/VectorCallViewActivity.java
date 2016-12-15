@@ -443,6 +443,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         roomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                VectorCallViewActivity.this.finish();
                 startRoomActivity();
             }
         });
