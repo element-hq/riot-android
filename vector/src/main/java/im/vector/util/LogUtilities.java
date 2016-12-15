@@ -148,7 +148,6 @@ public class LogUtilities {
             "v8:S",
             "PreferenceGroup:S",
             "Preference:S",
-            "CommonSerializeUtils:S", 
             "*:*"
     };
 
