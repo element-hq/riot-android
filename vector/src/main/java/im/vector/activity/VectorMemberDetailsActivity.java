@@ -569,7 +569,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     private void refreshDevicesListView() {
         // sanity check
-        if(null != mSession) {
+        if ((null != mSession) && (null != mSession.getCrypto())) {
 
             // enable progress bar
             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
