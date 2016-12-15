@@ -148,10 +148,11 @@ public class LogUtilities {
             "v8:S",
             "PreferenceGroup:S",
             "Preference:S",
+            "CommonSerializeUtils:S",
             "*:*"
     };
 
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024 * 1024;
 
     /**
      * Retrieves the logs from a dedicated command.
