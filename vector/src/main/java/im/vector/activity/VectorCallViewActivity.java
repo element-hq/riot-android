@@ -529,7 +529,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         setupHeaderPendingCallView();
-        initBackLightManagement();
         Log.d(LOG_TAG,"## onCreate(): OUT");
     }
 
@@ -583,10 +582,18 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 Log.d(LOG_TAG,"## initBackLightManagement(): backlight is ON");
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // same as android:keepScreenOn="true" in layout
             } else {
-                // voice call: use the proximity sensor
-                mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-                if(null == (mProximitySensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY))) {
-                    Log.w(LOG_TAG,"## initBackLightManagement(): Warning - proximity sensor not supported");
+                if ((null == mSensorMgr) && (null != mCall) && TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED)) {
+
+                    // voice call: use the proximity sensor
+                    mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+                    // listener the proximity update
+                    if (null == (mProximitySensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY))) {
+                        Log.w(LOG_TAG, "## initBackLightManagement(): Warning - proximity sensor not supported");
+                    } else {
+                        // define the
+                        mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    }
                 }
             }
         }
@@ -704,8 +711,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         turnScreenOn();
-        if (null != mProximitySensor) {
+
+        if ((null != mProximitySensor) && (null != mSensorMgr)) {
             mSensorMgr.unregisterListener(this);
+            mProximitySensor = null;
+            mSensorMgr = null;
         }
     }
 
@@ -740,10 +750,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             // speaker phone state
             initSpeakerPhoneState();
 
-            if (null != mProximitySensor) {
-                // proximity sensor only used for voice call (see initBackLightManagement())
-                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }
+            // restore the baclkight management
+            initBackLightManagement();
+
         } else {
             this.finish();
         }
@@ -1051,6 +1060,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 mHangUpImageView.setVisibility(View.INVISIBLE);
                 break;
             case IMXCall.CALL_STATE_CONNECTED:
+                initBackLightManagement();
                 mHangUpImageView.setVisibility(View.VISIBLE);
                 break;
             default:
