@@ -700,6 +700,16 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         super.finish();
         VectorCallSoundManager.stopRinging();
         instance = null;
+
+        // do not release the proximity sensor while pausing the activity
+        // when the screen is turned off, the activity is paused.
+        if ((null != mProximitySensor) && (null != mSensorMgr)) {
+            mSensorMgr.unregisterListener(this);
+            mProximitySensor = null;
+            mSensorMgr = null;
+        }
+
+        turnScreenOn();
     }
 
     @Override
@@ -709,14 +719,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         if (null != mCall) {
             mCall.onPause();
             mCall.removeListener(mListener);
-        }
-
-        turnScreenOn();
-
-        if ((null != mProximitySensor) && (null != mSensorMgr)) {
-            mSensorMgr.unregisterListener(this);
-            mProximitySensor = null;
-            mSensorMgr = null;
         }
     }
 
