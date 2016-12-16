@@ -231,6 +231,9 @@
     <string name="universal_link_email_invitation_body_2">Would you like to accept or decline this invitation?</string>
     <string name="universal_link_email_invitation_body_3">This invitation was sent to %s which is not associated with this account.\nYou may wish to login with a different account, or add this email to your this account.</string>
 
+    <!-- crypto warnings -->
+    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off; sorry for the inconvenience.</string>
+
     <!-- members list Screen -->
     <string name="members_list">Members List</string>
 
