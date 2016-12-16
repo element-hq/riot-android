@@ -802,6 +802,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * Start the video fading timer.
      */
     private void startVideoFadingEdgesScreenTimer() {
+        // do not hide the overlay during a voice call
+        if ((null == mCall) || !mCall.isVideo()) {
+            return;
+        }
+
         // stop current timer in progress
         stopVideoFadingEdgesScreenTimer();
 
