@@ -924,17 +924,15 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
         Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
 
-        // the video is displayed:
-        // - X axis: centered horizontally
-        mLocalVideoLayoutConfig.mX = (100 - PERCENT_LOCAL_USER_VIDEO_SIZE) / 2;
-
         // - Y axis: above the video buttons
         topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
         if(topMarginHeightNormalized >= 0) {
-            mLocalVideoLayoutConfig.mY = (int) (topMarginHeightNormalized * 100);
+            mLocalVideoLayoutConfig.mY = (int)(topMarginHeightNormalized * 100);
+            mLocalVideoLayoutConfig.mX = (int)(screenHeight * VIDEO_TO_BUTTONS_VERTICAL_SPACE / screenWidth * 100);
         }
         else { // set the video at the top of the screen
             mLocalVideoLayoutConfig.mY = 0;
+            mLocalVideoLayoutConfig.mX = 0;
         }
 
         msgDebug+= " VideoHeightRadio="+ratioVideoHeightNormalized+" screenHeight="+screenHeight+" containerHeight="+(int)buttonsContainerHeight+" TopMarginRatio="+mLocalVideoLayoutConfig.mY;
