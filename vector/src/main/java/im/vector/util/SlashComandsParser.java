@@ -31,6 +31,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import java.util.Collection;
 import java.util.HashMap;
 
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorRoomActivity;
 
@@ -52,6 +53,7 @@ public class SlashComandsParser {
     private static final String CMD_TOPIC = "/topic";
     private static final String CMD_INVITE = "/invite";
     private static final String CMD_PART = "/part";
+    private static final String CMD_MARKDOWN = "/markdown";
 
     /**
      * check if the text message is an IRC command.
@@ -243,6 +245,19 @@ public class SlashComandsParser {
 
                 if (userID.length() > 0) {
                     room.updateUserPowerLevels(userID, 0, callback);
+                }
+            } else if (message.startsWith(CMD_MARKDOWN)) {
+                isIRCCmd = true;
+
+                String params = message.substring(CMD_MARKDOWN.length()).trim();
+                String[] paramsList = params.split(" ");
+
+                if (paramsList.length > 0) {
+                    if (TextUtils.equals(paramsList[0], "on")) {
+                        VectorApp.getInstance().mMarkdownParser.setEnable(true);
+                    } else if (TextUtils.equals(paramsList[0], "off")) {
+                        VectorApp.getInstance().mMarkdownParser.setEnable(false);
+                    }
                 }
             }
         }
