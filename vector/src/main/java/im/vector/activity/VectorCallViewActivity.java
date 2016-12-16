@@ -140,6 +140,10 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private boolean mSavedSpeakerValue;
     private boolean mIsSpeakerForcedFromLifeCycle;
 
+    // on Samsung devices, the application is suspended when the screen is turned off
+    // so the call must not be suspended
+    private boolean mIsScreenOff = false;
+
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
         private String mLastCallState = null;
 
@@ -716,9 +720,13 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     protected void onPause() {
         super.onPause();
 
-        if (null != mCall) {
-            mCall.onPause();
-            mCall.removeListener(mListener);
+        // on Samsung devices, the application is suspended when the screen is turned off
+        // so the call must not be suspended
+        if (!mIsScreenOff) {
+            if (null != mCall) {
+                mCall.onPause();
+                mCall.removeListener(mListener);
+            }
         }
     }
 
@@ -735,9 +743,12 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         if (null != mCall) {
-            mCall.onResume();
+            if (!mIsScreenOff) {
+                mCall.onResume();
+                mCall.addListener(mListener);
+            }
 
-            mCall.addListener(mListener);
+            mIsScreenOff = false;
 
             final String fState = mCall.getCallState();
 
@@ -753,7 +764,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             // speaker phone state
             initSpeakerPhoneState();
 
-            // restore the baclkight management
+            // restore the backlight management
             initBackLightManagement();
 
         } else {
@@ -1231,6 +1242,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         try {
             if ((null != mWakeLock) && !mWakeLock.isHeld()) {
                 mWakeLock.acquire();
+                mIsScreenOff = true;
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## turnScreenOff() failed");
