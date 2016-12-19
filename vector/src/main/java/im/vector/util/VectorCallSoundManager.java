@@ -26,6 +26,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -325,23 +326,32 @@ public class VectorCallSoundManager {
      */
     public static void releaseAudioFocus() {
         if(mIsFocusGranted) {
-            AudioManager audioMgr;
+            Handler handler = new Handler(Looper.getMainLooper());
 
-            if ((null != (audioMgr = getAudioManager()))) {
-                // release focus
-                int abandonResult = audioMgr.abandonAudioFocus(mFocusListener);
+            // the audio focus is abandoned with delay
+            // to let the call to finish properly
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    AudioManager audioMgr;
 
-                if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == abandonResult) {
-                    mIsFocusGranted = false;
-                    Log.d(LOG_TAG, "## releaseAudioFocus(): abandonAudioFocus = AUDIOFOCUS_REQUEST_GRANTED");
+                    if ((null != (audioMgr = getAudioManager()))) {
+                        // release focus
+                        int abandonResult = audioMgr.abandonAudioFocus(mFocusListener);
+
+                        if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == abandonResult) {
+                            mIsFocusGranted = false;
+                            Log.d(LOG_TAG, "## releaseAudioFocus(): abandonAudioFocus = AUDIOFOCUS_REQUEST_GRANTED");
+                        }
+
+                        if (AudioManager.AUDIOFOCUS_REQUEST_FAILED == abandonResult) {
+                            Log.d(LOG_TAG, "## releaseAudioFocus(): abandonAudioFocus = AUDIOFOCUS_REQUEST_FAILED");
+                        }
+                    } else {
+                        Log.d(LOG_TAG, "## releaseAudioFocus(): failure - invalid AudioManager");
+                    }
                 }
-
-                if (AudioManager.AUDIOFOCUS_REQUEST_FAILED == abandonResult) {
-                    Log.d(LOG_TAG, "## releaseAudioFocus(): abandonAudioFocus = AUDIOFOCUS_REQUEST_FAILED");
-                }
-            } else {
-                Log.d(LOG_TAG, "## releaseAudioFocus(): failure - invalid AudioManager");
-            }
+            }, 300);
         }
     }
 

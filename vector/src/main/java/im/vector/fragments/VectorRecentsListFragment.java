@@ -345,10 +345,13 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     @Override
     public void onDestroy() {
         mScrollEventListener = null;
-        mRecentsListView.setOnChildClickListener(null);
-        mRecentsListView.setOnItemLongClickListener(null);
-        mRecentsListView.setOnScrollListener(null);
-        mRecentsListView.mDragAndDropEventsListener = null;
+
+        if (null != mRecentsListView) {
+            mRecentsListView.setOnChildClickListener(null);
+            mRecentsListView.setOnItemLongClickListener(null);
+            mRecentsListView.setOnScrollListener(null);
+            mRecentsListView.mDragAndDropEventsListener = null;
+        }
 
         super.onDestroy();
     }

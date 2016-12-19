@@ -140,6 +140,10 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private boolean mSavedSpeakerValue;
     private boolean mIsSpeakerForcedFromLifeCycle;
 
+    // on Samsung devices, the application is suspended when the screen is turned off
+    // so the call must not be suspended
+    private boolean mIsScreenOff = false;
+
     private final IMXCall.MXCallListener mListener = new IMXCall.MXCallListener() {
         private String mLastCallState = null;
 
@@ -443,6 +447,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         roomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                VectorCallViewActivity.this.finish();
                 startRoomActivity();
             }
         });
@@ -529,7 +534,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         setupHeaderPendingCallView();
-        initBackLightManagement();
         Log.d(LOG_TAG,"## onCreate(): OUT");
     }
 
@@ -583,10 +587,18 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 Log.d(LOG_TAG,"## initBackLightManagement(): backlight is ON");
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // same as android:keepScreenOn="true" in layout
             } else {
-                // voice call: use the proximity sensor
-                mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-                if(null == (mProximitySensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY))) {
-                    Log.w(LOG_TAG,"## initBackLightManagement(): Warning - proximity sensor not supported");
+                if ((null == mSensorMgr) && (null != mCall) && TextUtils.equals(mCall.getCallState(), IMXCall.CALL_STATE_CONNECTED)) {
+
+                    // voice call: use the proximity sensor
+                    mSensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+                    // listener the proximity update
+                    if (null == (mProximitySensor = mSensorMgr.getDefaultSensor(Sensor.TYPE_PROXIMITY))) {
+                        Log.w(LOG_TAG, "## initBackLightManagement(): Warning - proximity sensor not supported");
+                    } else {
+                        // define the
+                        mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    }
                 }
             }
         }
@@ -692,20 +704,29 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         super.finish();
         VectorCallSoundManager.stopRinging();
         instance = null;
+
+        // do not release the proximity sensor while pausing the activity
+        // when the screen is turned off, the activity is paused.
+        if ((null != mProximitySensor) && (null != mSensorMgr)) {
+            mSensorMgr.unregisterListener(this);
+            mProximitySensor = null;
+            mSensorMgr = null;
+        }
+
+        turnScreenOn();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (null != mCall) {
-            mCall.onPause();
-            mCall.removeListener(mListener);
-        }
-
-        turnScreenOn();
-        if (null != mProximitySensor) {
-            mSensorMgr.unregisterListener(this);
+        // on Samsung devices, the application is suspended when the screen is turned off
+        // so the call must not be suspended
+        if (!mIsScreenOff) {
+            if (null != mCall) {
+                mCall.onPause();
+                mCall.removeListener(mListener);
+            }
         }
     }
 
@@ -722,9 +743,12 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
 
         if (null != mCall) {
-            mCall.onResume();
+            if (!mIsScreenOff) {
+                mCall.onResume();
+                mCall.addListener(mListener);
+            }
 
-            mCall.addListener(mListener);
+            mIsScreenOff = false;
 
             final String fState = mCall.getCallState();
 
@@ -740,10 +764,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             // speaker phone state
             initSpeakerPhoneState();
 
-            if (null != mProximitySensor) {
-                // proximity sensor only used for voice call (see initBackLightManagement())
-                mSensorMgr.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }
+            // restore the backlight management
+            initBackLightManagement();
+
         } else {
             this.finish();
         }
@@ -779,6 +802,11 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * Start the video fading timer.
      */
     private void startVideoFadingEdgesScreenTimer() {
+        // do not hide the overlay during a voice call
+        if ((null == mCall) || !mCall.isVideo()) {
+            return;
+        }
+
         // stop current timer in progress
         stopVideoFadingEdgesScreenTimer();
 
@@ -901,17 +929,15 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         }
         Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
 
-        // the video is displayed:
-        // - X axis: centered horizontally
-        mLocalVideoLayoutConfig.mX = (100 - PERCENT_LOCAL_USER_VIDEO_SIZE) / 2;
-
         // - Y axis: above the video buttons
         topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
         if(topMarginHeightNormalized >= 0) {
-            mLocalVideoLayoutConfig.mY = (int) (topMarginHeightNormalized * 100);
+            mLocalVideoLayoutConfig.mY = (int)(topMarginHeightNormalized * 100);
+            mLocalVideoLayoutConfig.mX = (int)(screenHeight * VIDEO_TO_BUTTONS_VERTICAL_SPACE / screenWidth * 100);
         }
         else { // set the video at the top of the screen
             mLocalVideoLayoutConfig.mY = 0;
+            mLocalVideoLayoutConfig.mX = 0;
         }
 
         msgDebug+= " VideoHeightRadio="+ratioVideoHeightNormalized+" screenHeight="+screenHeight+" containerHeight="+(int)buttonsContainerHeight+" TopMarginRatio="+mLocalVideoLayoutConfig.mY;
@@ -1051,6 +1077,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 mHangUpImageView.setVisibility(View.INVISIBLE);
                 break;
             case IMXCall.CALL_STATE_CONNECTED:
+                initBackLightManagement();
                 mHangUpImageView.setVisibility(View.VISIBLE);
                 break;
             default:
@@ -1218,6 +1245,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         try {
             if ((null != mWakeLock) && !mWakeLock.isHeld()) {
                 mWakeLock.acquire();
+                mIsScreenOff = true;
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## turnScreenOff() failed");

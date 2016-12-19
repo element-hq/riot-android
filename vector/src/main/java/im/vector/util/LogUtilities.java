@@ -16,6 +16,7 @@
 
 package im.vector.util;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -49,6 +50,10 @@ public class LogUtilities {
 
     private static final String[]  LOGCAT_CMD_DEBUG = new String[] {
             "logcat",
+            "-b",
+            "main",
+            "-b",
+            "events",
             "-d",
             "-v",
             "threadtime",
@@ -148,11 +153,17 @@ public class LogUtilities {
             "v8:S",
             "PreferenceGroup:S",
             "Preference:S",
-            "CommonSerializeUtils:S", 
+            "CommonSerializeUtils:S",
+            "am_on_resume_called:S",
+            "am_on_paused_called:S",
+            "art:S",
+            "System.out:S",
+            "Adreno:S",
+            "LibraryLoader:S",
             "*:*"
     };
 
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024 * 1024 * 5;
 
     /**
      * Retrieves the logs from a dedicated command.
@@ -239,26 +250,33 @@ public class LogUtilities {
      * The previous ones are rotated.
      */
     public static void storeLogcat() {
-        LogUtilities.rotateLogs();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                LogUtilities.rotateLogs();
 
-        File cacheDirectory = LogUtilities.ensureLogDirectoryExists();
-        File file = new File(cacheDirectory, "logcat.txt");
-        FileOutputStream stream = null;
-        try {
-            stream = new FileOutputStream(file);
-            stream.write(LogUtilities.getLogCatDebug().getBytes());
-        }
-        catch (Exception e) {
-            Log.e(LOG_TAG, "storeLogcat fails with " + e.getLocalizedMessage());
-        }
-        finally {
-            try {
-                stream.close();
+                File cacheDirectory = LogUtilities.ensureLogDirectoryExists();
+                File file = new File(cacheDirectory, "logcat.txt");
+                FileOutputStream stream = null;
+                try {
+                    stream = new FileOutputStream(file);
+                    stream.write(LogUtilities.getLogCatDebug().getBytes());
+                }
+                catch (Exception e) {
+                    Log.e(LOG_TAG, "storeLogcat fails with " + e.getLocalizedMessage());
+                }
+                finally {
+                    try {
+                        stream.close();
+                    }
+                    catch (Exception e) {
+                        Log.e(LOG_TAG, "storeLogcat fails with " + e.getLocalizedMessage());
+                    }
+                }
+
+                return null;
             }
-            catch (Exception e) {
-                Log.e(LOG_TAG, "storeLogcat fails with " + e.getLocalizedMessage());
-            }
-        }
+        }.execute();
     }
 
     /**

@@ -1,3 +1,22 @@
+Changes in Vector 0.6.5 (2016-12-19)
+===================================================
+
+Improvements:
+ * Reduce the messages encryption time.
+ * Display a lock icon for the encrypted rooms (recents page).
+ * Video call: the local preview is displayed at the bottom left.
+ * Improve the splashscreen (reduce the animated gif time and add a spinner)
+ * Display an alert when the crypto store is corrupted to let the user chooses if he wants to logout.
+ 
+Bugfixes:
+ * Fix several issues reported by GA.
+ * Do not enable the proximity sensor when the voice call is not established
+ * Fix several call issues with the Samsung devices (when the screen is turned off).
+ * #783 : Riot doesn't handle volume settings properly 
+ * #784 : Voip: Problem when call is hung up while callee goes in room view.
+ * #786 : Method to disable markdown is unclear.
+ * #787 : overlay buttons shouldn't self-hide when on voice calls 
+ 
 Changes in Vector 0.6.4 (2016-12-13)
 ===================================================
 

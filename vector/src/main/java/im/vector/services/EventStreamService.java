@@ -500,23 +500,12 @@ public class EventStreamService extends Service {
                 store.addMXStoreListener(new MXStoreListener() {
                     @Override
                     public void onStoreReady(String accountId) {
-                        if (fSession.isCryptoEnabled() && fSession.getCrypto().isCorrupted()) {
-                            Log.e(LOG_TAG, "## start : accountId " + accountId + "'s crypto is corrupted");
-                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
-                        } else {
-                            startEventStream(fSession, store);
-                        }
+                        startEventStream(fSession, store);
                     }
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        if (fSession.isCryptoEnabled() && fSession.getCrypto().isCorrupted()) {
-                            Log.e(LOG_TAG, "## start : accountId " + accountId + "'s crypto is corrupted");
-                            CommonActivityUtils.logout(VectorApp.getCurrentActivity(), true);
-                        } else {
-                            // the sync will start from scratch
-                            startEventStream(fSession, store);
-                        }
+                        startEventStream(fSession, store);
                     }
 
                     @Override
