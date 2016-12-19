@@ -265,6 +265,10 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
                 }
             });
         }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
+        }
     };
 
     /**

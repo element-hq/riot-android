@@ -245,6 +245,10 @@ public class EventStreamService extends Service {
                     Log.d(LOG_TAG, "dispatchOnCallEnd " + call.getCallId());
                     manageHangUpEvent(call.getCallId());
                 }
+
+                @Override
+                public void onPreviewSizeChanged(int width, int height) {
+                }
             };
 
             call.addListener(callListener);

@@ -121,6 +121,10 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
                 }
             });
         }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
+        }
     };
 
     @Override
