@@ -574,7 +574,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             // enable progress bar
             enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR);
 
-            mSession.getCrypto().downloadKeys(Arrays.asList(mMemberId), false, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
+            // force the refresh to ensure that the devices list is up-to-date
+            mSession.getCrypto().downloadKeys(Arrays.asList(mMemberId), true, new ApiCallback<MXUsersDevicesMap<MXDeviceInfo>>() {
                 // common default error handler
                 private void onError(String aErrorMsg) {
                     Toast.makeText(VectorMemberDetailsActivity.this, aErrorMsg, Toast.LENGTH_LONG).show();
