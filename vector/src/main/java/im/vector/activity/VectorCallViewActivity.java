@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -37,12 +38,15 @@ import android.util.Log;
 
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -268,6 +272,8 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         @Override
         public void onPreviewSizeChanged(int width, int height) {
+            Log.d(LOG_TAG, "## onPreviewSizeChanged : " + width + " * " + height);
+
             mSourceVideoWidth = width;
             mSourceVideoHeight = height;
 
@@ -451,6 +457,92 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             public void onClick(View v) {
                 fadeInVideoEdge();
                 startVideoFadingEdgesScreenTimer();
+            }
+        });
+
+        mainContainerLayoutView.setOnTouchListener(new View.OnTouchListener() {
+
+            // fields
+            private Rect mPreviewRect = null;
+            private int mStartX = 0;
+            private int mStartY = 0;
+
+            /**
+             * @return the local preview rect in pixels
+             */
+            private Rect computePreviewRect() {
+                // get the height of the screen
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                int screenHeight = metrics.heightPixels;
+                int screenWidth = metrics.widthPixels;
+
+                int left = mLocalVideoLayoutConfig.mX * screenWidth / 100;
+                int right = (mLocalVideoLayoutConfig.mX + mLocalVideoLayoutConfig.mWidth) * screenWidth / 100;
+                int top = mLocalVideoLayoutConfig.mY * screenHeight / 100;
+                int bottom = (mLocalVideoLayoutConfig.mY + mLocalVideoLayoutConfig.mHeight) * screenHeight / 100;
+
+                return new Rect(left, top, right, bottom);
+            }
+
+            private void updatePreviewFrame(int deltaX, int deltaY) {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                int screenHeight = metrics.heightPixels;
+                int screenWidth = metrics.widthPixels;
+                int width = mPreviewRect.width();
+                int height = mPreviewRect.height();
+
+                // top left
+                mPreviewRect.left = Math.max(0, mPreviewRect.left + deltaX);
+                mPreviewRect.right = mPreviewRect.left + width;
+                mPreviewRect.top = Math.max(0, mPreviewRect.top + deltaY);
+                mPreviewRect.bottom = mPreviewRect.top + height;
+
+                // right margin
+                if (mPreviewRect.right > screenWidth) {
+                    mPreviewRect.right = screenWidth;
+                    mPreviewRect.left = mPreviewRect.right - width;
+                }
+
+                if (mPreviewRect.bottom > screenHeight) {
+                    mPreviewRect.bottom = screenHeight;
+                    mPreviewRect.top = screenHeight - height;
+                }
+
+                mLocalVideoLayoutConfig.mX = mPreviewRect.left * 100 / screenWidth;
+                mLocalVideoLayoutConfig.mY = mPreviewRect.top * 100 / screenHeight;
+
+                mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+            }
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // call management
+                if ((null != mCall) && mCall.isVideo() && (IMXCall.CALL_STATE_CONNECTED == mCall.getCallState())) {
+                    final int action = event.getAction();
+                    final int x = (int) event.getX();
+                    final int y = (int) event.getY();
+
+                    if (action == MotionEvent.ACTION_DOWN) {
+                        Rect rect = computePreviewRect();
+
+                        if (rect.contains(x, y)) {
+                            mPreviewRect = rect;
+                            mStartX = x;
+                            mStartY = y;
+                            return true;
+                        }
+                    } else if ((null != mPreviewRect) && (action == MotionEvent.ACTION_MOVE)) {
+                        updatePreviewFrame(x - mStartX, y - mStartY);
+                        mStartX = x;
+                        mStartY = y;
+                        return true;
+                    } else {
+                        mPreviewRect = null;
+                    }
+                }
+                return false;
             }
         });
 
@@ -896,9 +988,6 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private void computeVideoUiLayout() {
         mLocalVideoLayoutConfig = new IMXCall.VideoLayoutConfiguration();
 
-        // get screen orientation:
-        int screenOrientation = getResources().getConfiguration().orientation;
-
         // get the height of the screen
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -949,11 +1038,14 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
             mLocalVideoLayoutConfig.mHeight = PERCENT_LOCAL_USER_VIDEO_SIZE;
         }
 
-        int buttonsContainerHeight = layout.height * 100 / screenHeight;
+        int buttonsContainerHeight = (mButtonsContainerView.getVisibility() == View.VISIBLE) ? layout.height * 100 / screenHeight : 0;
         int bottomLeftMargin = (int)(VIDEO_TO_BUTTONS_VERTICAL_SPACE * screenHeight * 100 / screenHeight);
 
         mLocalVideoLayoutConfig.mX = bottomLeftMargin * screenHeight / screenWidth;
         mLocalVideoLayoutConfig.mY = 100 - bottomLeftMargin - buttonsContainerHeight - mLocalVideoLayoutConfig.mHeight;
+
+        Log.d(LOG_TAG, "# computeVideoUiLayout() : x " + mLocalVideoLayoutConfig.mX + " y " +  mLocalVideoLayoutConfig.mY);
+        Log.d(LOG_TAG, "# computeVideoUiLayout() : mWidth " + mLocalVideoLayoutConfig.mWidth + " mHeight " +  mLocalVideoLayoutConfig.mHeight);
     }
 
     /**
