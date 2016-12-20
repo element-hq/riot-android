@@ -560,6 +560,14 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         roomLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // simulate a back button press
+                if (!canCallBeResumed()) {
+                    if (null != mCall) {
+                        mCall.hangup(HANGUP_MSG_HEADER_UI_CALL);
+                    }
+                } else {
+                    saveCallView();
+                }
                 VectorCallViewActivity.this.finish();
                 startRoomActivity();
             }
