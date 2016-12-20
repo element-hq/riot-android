@@ -128,9 +128,9 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private static final float VIDEO_TO_BUTTONS_VERTICAL_SPACE = (float) (18.0/585.0);
     /**  local user video height is set as percent of the total screen height **/
     private static final int PERCENT_LOCAL_USER_VIDEO_SIZE = 25;
-    private static final float RATIO_LOCAL_USER_VIDEO_HEIGHT = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
-    //private static final float RATIO_LOCAL_USER_VIDEO_WIDTH = ((float)(PERCENT_LOCAL_USER_VIDEO_SIZE))/100;
-    private static final float RATIO_LOCAL_USER_VIDEO_ASPECT = 0.65f;
+
+    private int mSourceVideoWidth = 0;
+    private int mSourceVideoHeight = 0;
 
     // sensor
     private SensorManager mSensorMgr;
@@ -268,6 +268,13 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         @Override
         public void onPreviewSizeChanged(int width, int height) {
+            mSourceVideoWidth = width;
+            mSourceVideoHeight = height;
+
+            if ((null != mCall) && mCall.isVideo() && mCall.getCallState().equals(IMXCall.CALL_STATE_CONNECTED)) {
+                computeVideoUiLayout();
+                mCall.updateLocalVideoRendererPosition(mLocalVideoLayoutConfig);
+            }
         }
     };
 
@@ -887,11 +894,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      * the height screen.
      */
     private void computeVideoUiLayout() {
-        String msgDebug="## computeVideoUiLayout():";
-
         mLocalVideoLayoutConfig = new IMXCall.VideoLayoutConfiguration();
-        mLocalVideoLayoutConfig.mWidth = PERCENT_LOCAL_USER_VIDEO_SIZE;
-        mLocalVideoLayoutConfig.mHeight = PERCENT_LOCAL_USER_VIDEO_SIZE;
 
         // get screen orientation:
         int screenOrientation = getResources().getConfiguration().orientation;
@@ -899,8 +902,8 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         // get the height of the screen
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        float screenHeight = (float)(metrics.heightPixels);
-        float screenWidth = (float)(metrics.widthPixels);
+        int screenHeight = metrics.heightPixels;
+        int screenWidth = metrics.widthPixels;
 
         // compute action bar size: the video Y component starts below the action bar
         int actionBarHeight;
@@ -912,40 +915,45 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
         View mMenuButtonsContainerView = VectorCallViewActivity.this.findViewById(R.id.hang_up_button);
         ViewGroup.LayoutParams layout = mMenuButtonsContainerView.getLayoutParams();
-        float buttonsContainerHeight = (float)(layout.height);
 
-        // base formula:
-        // screenHeight = actionBarHeight + topMarginHeightLocalUserVideo + localVideoHeight + "height between video bottom & buttons" + buttonsContainerHeight
-        //float topMarginHeightNormalized = 1 - RATIO_LOCAL_USER_VIDEO_HEIGHT - VIDEO_TO_BUTTONS_VERTICAL_SPACE;
+        if (0 == mLocalVideoLayoutConfig.mWidth) {
+            mLocalVideoLayoutConfig.mWidth = PERCENT_LOCAL_USER_VIDEO_SIZE;
+        }
 
-        float topMarginHeightNormalized; // range [0;1]
-        float ratioVideoHeightNormalized; // range [0;1]
-        float localVideoWidth = Math.min(screenHeight,screenWidth/*portrait is ref*/)*RATIO_LOCAL_USER_VIDEO_HEIGHT; // value effectively applied by the SDK
-        float estimatedLocalVideoHeight = ((localVideoWidth)/(RATIO_LOCAL_USER_VIDEO_ASPECT)); // 0.65 => to adapt
+        if (0 == mLocalVideoLayoutConfig.mHeight) {
+            mLocalVideoLayoutConfig.mHeight = PERCENT_LOCAL_USER_VIDEO_SIZE;
+        }
 
-        if(Configuration.ORIENTATION_LANDSCAPE == screenOrientation){
-            // take the video width as height
-            ratioVideoHeightNormalized = (localVideoWidth/screenHeight);
+        if ((0 != mSourceVideoWidth) && (0 != mSourceVideoHeight)) {
+            int previewWidth = screenWidth * mLocalVideoLayoutConfig.mWidth / 100;
+            int previewHeight = screenHeight * mLocalVideoLayoutConfig.mHeight / 100;
+
+            int sourceRatio = mSourceVideoWidth * 100 / mSourceVideoHeight;
+            int previewRatio = previewWidth * 100 / previewHeight;
+
+            // there is an aspect ratio update
+            if (sourceRatio != previewRatio) {
+                int maxPreviewWidth = screenWidth * PERCENT_LOCAL_USER_VIDEO_SIZE / 100;
+                int maxPreviewHeight = screenHeight * PERCENT_LOCAL_USER_VIDEO_SIZE / 100;
+
+                if ((maxPreviewHeight * sourceRatio / 100) > maxPreviewWidth) {
+                    mLocalVideoLayoutConfig.mHeight = maxPreviewWidth * 100 * 100 / sourceRatio / screenHeight;
+                    mLocalVideoLayoutConfig.mWidth = PERCENT_LOCAL_USER_VIDEO_SIZE;
+                } else {
+                    mLocalVideoLayoutConfig.mWidth = maxPreviewHeight * sourceRatio / screenWidth;
+                    mLocalVideoLayoutConfig.mHeight = PERCENT_LOCAL_USER_VIDEO_SIZE;
+                }
+            }
         } else {
-            mLocalVideoLayoutConfig.mIsPortrait = true;
-            // take the video height as height
-            ratioVideoHeightNormalized = estimatedLocalVideoHeight/screenHeight;
-        }
-        Log.d(LOG_TAG,"## computeVideoUiLayout(): orientation = PORTRAIT");
-
-        // - Y axis: above the video buttons
-        topMarginHeightNormalized = 1 - ratioVideoHeightNormalized - VIDEO_TO_BUTTONS_VERTICAL_SPACE - (buttonsContainerHeight/screenHeight);
-        if(topMarginHeightNormalized >= 0) {
-            mLocalVideoLayoutConfig.mY = (int)(topMarginHeightNormalized * 100);
-            mLocalVideoLayoutConfig.mX = (int)(screenHeight * VIDEO_TO_BUTTONS_VERTICAL_SPACE / screenWidth * 100);
-        }
-        else { // set the video at the top of the screen
-            mLocalVideoLayoutConfig.mY = 0;
-            mLocalVideoLayoutConfig.mX = 0;
+            mLocalVideoLayoutConfig.mWidth = PERCENT_LOCAL_USER_VIDEO_SIZE;
+            mLocalVideoLayoutConfig.mHeight = PERCENT_LOCAL_USER_VIDEO_SIZE;
         }
 
-        msgDebug+= " VideoHeightRadio="+ratioVideoHeightNormalized+" screenHeight="+screenHeight+" containerHeight="+(int)buttonsContainerHeight+" TopMarginRatio="+mLocalVideoLayoutConfig.mY;
-        Log.d(LOG_TAG,msgDebug);
+        int buttonsContainerHeight = layout.height * 100 / screenHeight;
+        int bottomLeftMargin = (int)(VIDEO_TO_BUTTONS_VERTICAL_SPACE * screenHeight * 100 / screenHeight);
+
+        mLocalVideoLayoutConfig.mX = bottomLeftMargin * screenHeight / screenWidth;
+        mLocalVideoLayoutConfig.mY = 100 - bottomLeftMargin - buttonsContainerHeight - mLocalVideoLayoutConfig.mHeight;
     }
 
     /**
