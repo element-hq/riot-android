@@ -475,6 +475,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             // and play a lovely sound
             VectorCallSoundManager.startEndCallSound();
         }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
+        }
     };
 
     //================================================================================

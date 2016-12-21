@@ -84,6 +84,10 @@ public class VectorPendingCallView extends RelativeLayout {
         public void onCallEnd(final int aReasonId) {
             onCallTerminated();
         }
+
+        @Override
+        public void onPreviewSizeChanged(int width, int height) {
+        }
     };
 
 
