@@ -30,7 +30,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -38,7 +37,6 @@ import android.util.Log;
 
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -46,7 +44,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -58,8 +55,6 @@ import org.matrix.androidsdk.call.IMXCall;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
-import java.util.concurrent.ExecutionException;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -94,6 +89,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
     private static VectorCallViewActivity instance = null;
 
     private static View mSavedCallView = null;
+    private static IMXCall.VideoLayoutConfiguration mSavedLocalVideoLayoutConfig = null;
     private static IMXCall mCall = null;
 
     private View mCallView;
@@ -351,7 +347,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             // call management
-            if ((null != mCall) && mCall.isVideo() && (IMXCall.CALL_STATE_CONNECTED == mCall.getCallState())) {
+            if ((null != mCall) && mCall.isVideo() && TextUtils.equals(IMXCall.CALL_STATE_CONNECTED, mCall.getCallState())) {
                 final int action = event.getAction();
                 final int x = (int) event.getX();
                 final int y = (int) event.getY();
@@ -659,10 +655,23 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
         if ((null != mSavedCallView) && (null == mSavedCallView.getParent())) {
             mCallView = mSavedCallView;
             insertCallView();
+
+            if (null != mSavedLocalVideoLayoutConfig) {
+                boolean isPortrait = (Configuration.ORIENTATION_LANDSCAPE != getResources().getConfiguration().orientation);
+
+                // do not keep the custom layout if the device orientation has been updated
+                if (mSavedLocalVideoLayoutConfig.mIsPortrait == isPortrait) {
+                    mLocalVideoLayoutConfig = mSavedLocalVideoLayoutConfig;
+                    mIsCustomLocalVideoLayoutConfig = true;
+                }
+
+                mSavedLocalVideoLayoutConfig = null;
+            }
         } else {
             Log.d(LOG_TAG, "## onCreate(): Hide the call notifications");
             EventStreamService.getInstance().hideCallNotifications();
             mSavedCallView = null;
+            mSavedLocalVideoLayoutConfig = null;
 
             // create the callview asap
             this.runOnUiThread(new Runnable() {
@@ -1188,6 +1197,7 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
      */
     private void onHangUp(String hangUpMsg) {
         mSavedCallView = null;
+        mSavedLocalVideoLayoutConfig = null;
         mHangUpReason = hangUpMsg;
 
         if (null != mCall) {
@@ -1309,9 +1319,20 @@ public class VectorCallViewActivity extends Activity implements SensorEventListe
 
     private void saveCallView() {
         if ((null != mCall) && !mCall.getCallState().equals(IMXCall.CALL_STATE_ENDED) && (null != mCallView) && (null != mCallView.getParent())) {
+
+            // warn the call that the activity is going to be paused.
+            // as the rendering is DSA, it saves time to close the activity while removing mCallView
+            mCall.onPause();
+
             ViewGroup parent = (ViewGroup) mCallView.getParent();
             parent.removeView(mCallView);
             mSavedCallView = mCallView;
+
+            mSavedLocalVideoLayoutConfig = mLocalVideoLayoutConfig;
+
+            // remove the call layout to avoid having a black screen
+            RelativeLayout layout = (RelativeLayout)findViewById(R.id.call_layout);
+            layout.setVisibility(View.GONE);
 
             EventStreamService.getInstance().displayCallInProgressNotification(mSession, mCall.getRoom(), mCall.getCallId());
             mCallView = null;
