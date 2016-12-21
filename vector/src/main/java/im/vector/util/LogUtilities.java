@@ -163,7 +163,9 @@ public class LogUtilities {
             "*:*"
     };
 
-    private static final int BUFFER_SIZE = 1024 * 1024 * 5;
+    // by default, the log buffer size is about 256KB
+    // but the user could have increased its size to 16MB (developer mode).
+    private static final int BUFFER_SIZE = 1024 * 1024 * 16;
 
     /**
      * Retrieves the logs from a dedicated command.
