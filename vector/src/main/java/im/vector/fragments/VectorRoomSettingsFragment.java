@@ -885,6 +885,11 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             return;
         }
 
+        if (null == getActivity()) {
+            Log.d(LOG_TAG,"## onSharedPreferenceChanged(): no attached to an activity");
+            return;
+        }
+
         if (aKey.equals(PREF_KEY_ROOM_PHOTO_AVATAR)) {
             // unused flow: onSharedPreferenceChanged not triggered for room avatar photo
             onRoomAvatarPreferenceChanged();
