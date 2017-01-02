@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,6 +80,7 @@ import java.util.Locale;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.util.RingtoneUtils;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
@@ -315,6 +317,19 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        // notification sounds
+        EditTextPreference ringtone = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.notification_sounds_settings_ringtone));
+        if (null != ringtone) {
+            ringtone.setSummary(RingtoneUtils.getCallRingtoneName());
+            ringtone.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    displayRingtonePicker();
+                    return false;
+                }
+            });
+        }
+
         // clear cache
         EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
 
@@ -533,6 +548,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshEmailsList();
         refreshIgnoredUsersList();
         refreshDevicesList();
+    }
+
+    private void displayRingtonePicker() {
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, VectorApp.getInstance().getResources().getString(R.string.notification_sound_select));
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, RingtoneUtils.getCallRingtoneUri());
+        startActivityForResult(intent, RingtoneUtils.CALL_RINGTONE_REQUEST_CODE);
     }
 
     @Override
@@ -1066,6 +1091,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             });
                         }
                     });
+                }
+            }
+
+            if (requestCode == RingtoneUtils.CALL_RINGTONE_REQUEST_CODE) {
+                Uri callRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (null != callRingtoneUri) {
+                    RingtoneUtils.setCallRingtoneUri(callRingtoneUri);
+
+                    EditTextPreference ringtone = (EditTextPreference) getPreferenceManager().findPreference(getActivity().getResources().getString(R.string.notification_sounds_settings_ringtone));
+                    ringtone.setSummary(RingtoneUtils.getCallRingtoneName());
                 }
             }
         }

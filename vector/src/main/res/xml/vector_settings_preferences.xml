@@ -77,6 +77,16 @@
 
     <im.vector.preference.VectorDividerCategory />
 
+    <PreferenceCategory android:title="@string/notification_sounds_settings">
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/notification_sounds_settings_ringtone"
+            android:title="@string/notification_sounds_settings_ringtone"/>
+
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory />
+
     <PreferenceCategory
         android:title="@string/settings_notifications_targets"
         android:key="@string/settings_notifications_targets">
