@@ -226,9 +226,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private final ApiCallback<Void> mRoomActionsListener = new SimpleApiCallback<Void>(this) {
         @Override
         public void onMatrixError(MatrixError e) {
-            if (MatrixError.FORBIDDEN.equals(e.errcode)) {
-                Toast.makeText(VectorMemberDetailsActivity.this, e.error, Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(VectorMemberDetailsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             updateUi();
         }
 
