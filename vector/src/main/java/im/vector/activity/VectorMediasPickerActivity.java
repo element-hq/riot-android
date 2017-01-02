@@ -528,6 +528,7 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
                 mCamera.stopPreview();
             }
             mCamera.release();
+            mCamera = null;
 
             if (mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
@@ -1376,8 +1377,12 @@ public class VectorMediasPickerActivity extends MXCActionBarActivity implements 
 
         } catch (Exception e) {
             if (null != mCamera) {
-                mCamera.stopPreview();
-                mCamera.release();
+                try {
+                    mCamera.stopPreview();
+                    mCamera.release();
+                } catch (Exception e2) {
+                    Log.e(LOG_TAG, "## onSurfaceTextureAvailable() : " + e2.getMessage());
+                }
                 mCamera = null;
             }
         }
