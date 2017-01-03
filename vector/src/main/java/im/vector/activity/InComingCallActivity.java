@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -135,6 +136,8 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         setFinishOnTouchOutside(false);
 
         setContentView(R.layout.vector_incoming_call_dialog);
+
+        switchScreenOnAndShowOverLockScreen();
 
         // retrieve intent extras
         final Intent intent = getIntent();
@@ -315,4 +318,13 @@ public class InComingCallActivity extends Activity { // do NOT extend from UC*Ac
         }
     }
 
+    /**
+     * Shows the call notification on top of the lock sreen.
+     */
+    private void switchScreenOnAndShowOverLockScreen() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+    }
 }
