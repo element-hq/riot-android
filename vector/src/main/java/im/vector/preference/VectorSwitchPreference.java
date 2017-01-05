@@ -20,7 +20,7 @@ import android.content.Context;
 import android.os.Build;
 import android.preference.SwitchPreference;
 import android.util.AttributeSet;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;

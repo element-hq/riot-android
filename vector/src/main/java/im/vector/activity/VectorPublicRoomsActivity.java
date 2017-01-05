@@ -19,14 +19,11 @@ package im.vector.activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.model.PublicRoom;
 import im.vector.R;
 import im.vector.fragments.VectorPublicRoomsListFragment;
-
-import java.util.ArrayList;
 
 /**
  * Displays a list of public rooms

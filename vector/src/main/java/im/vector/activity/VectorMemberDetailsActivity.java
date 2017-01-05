@@ -22,7 +22,7 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;

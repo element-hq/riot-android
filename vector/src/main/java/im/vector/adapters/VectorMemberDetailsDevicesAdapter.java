@@ -16,7 +16,7 @@
 
 package im.vector.adapters;
 import android.content.Context;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +27,6 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-
-import java.util.ArrayList;
 
 import im.vector.R;
 

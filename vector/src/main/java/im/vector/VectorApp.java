@@ -26,7 +26,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 
@@ -38,7 +38,6 @@ import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.HeadsetConnectionReceiver;
 import im.vector.services.EventStreamService;
-import im.vector.util.LogUtilities;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
@@ -111,6 +110,11 @@ public class VectorApp extends Application {
         return instance;
     }
 
+    /**
+     * The directory in which the logs are stored
+     */
+    public static File mLogsDirectoryFile = null;
+
     @Override
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
@@ -137,8 +141,10 @@ public class VectorApp extends Application {
             SDK_VERSION_STRING = "";
         }
 
-        LogUtilities.setLogDirectory(new File(getCacheDir().getAbsolutePath() + "/logs"));
-        LogUtilities.storeLogcat();
+        mLogsDirectoryFile = new File(getCacheDir().getAbsolutePath() + "/logs");
+
+        org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
+        org.matrix.androidsdk.util.Log.init("RiotLog");
 
         GAHelper.initGoogleAnalytics(getApplicationContext());
 

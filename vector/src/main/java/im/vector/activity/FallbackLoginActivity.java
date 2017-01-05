@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;

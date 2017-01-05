@@ -16,7 +16,7 @@
 
 package im.vector.gcm;
 
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
 

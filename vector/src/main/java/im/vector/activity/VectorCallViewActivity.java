@@ -33,7 +33,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import android.util.TypedValue;
 import android.view.Display;

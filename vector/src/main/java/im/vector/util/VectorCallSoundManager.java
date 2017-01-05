@@ -29,7 +29,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.provider.MediaStore;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.call.IMXCall;
 

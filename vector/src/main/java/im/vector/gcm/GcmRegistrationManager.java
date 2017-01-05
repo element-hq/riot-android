@@ -22,7 +22,7 @@ import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Pusher;

@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXDataHandler;

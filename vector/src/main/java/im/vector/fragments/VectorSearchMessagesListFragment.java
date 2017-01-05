@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,7 +38,6 @@ import im.vector.R;
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorRoomActivity;
 
-import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchMessagesListAdapter;
 
 public class VectorSearchMessagesListFragment extends VectorMessageListFragment {

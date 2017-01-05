@@ -27,7 +27,7 @@ import android.webkit.MimeTypeMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import im.vector.util.LogUtilities;
+import im.vector.VectorApp;
 
 public class VectorContentProvider extends ContentProvider {
     public static String AUTHORITIES = "im.vector.VectorApp.provider";
@@ -51,10 +51,8 @@ public class VectorContentProvider extends ContentProvider {
             return Uri.parse("content://" + VectorContentProvider.AUTHORITIES + path.substring(attachmentsBasePath.length()));
         }
 
-        File logDir = LogUtilities.ensureLogDirectoryExists();
-
-        if (null != logDir) {
-            String logBasePath = logDir.getAbsolutePath();
+        if (null != VectorApp.mLogsDirectoryFile) {
+            String logBasePath = VectorApp.mLogsDirectoryFile.getAbsolutePath();
 
             if (path.startsWith(logBasePath)) {
                 return Uri.parse("content://" + VectorContentProvider.AUTHORITIES + "/" + BUG_SEPARATOR + path.substring(logBasePath.length()));
@@ -70,10 +68,8 @@ public class VectorContentProvider extends ContentProvider {
             File privateFile = null;
 
             if (uri.getPath().contains("/" + BUG_SEPARATOR + "/")) {
-                File logDir = LogUtilities.ensureLogDirectoryExists();
-
-                if (null != logDir) {
-                    privateFile = new File(logDir, uri.getLastPathSegment());
+                if (null != VectorApp.mLogsDirectoryFile) {
+                    privateFile = new File(VectorApp.mLogsDirectoryFile, uri.getLastPathSegment());
                 }
             } else {
                 privateFile = new File(getContext().getFilesDir(), uri.getPath());

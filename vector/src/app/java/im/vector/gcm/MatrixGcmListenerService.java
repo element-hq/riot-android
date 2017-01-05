@@ -18,7 +18,7 @@ package im.vector.gcm;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.google.gson.JsonParser;

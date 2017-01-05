@@ -22,7 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -31,7 +31,6 @@ import android.webkit.WebViewClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import im.vector.LoginHandler;
 import im.vector.R;
 
 import java.net.URLDecoder;

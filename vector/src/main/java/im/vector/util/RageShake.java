@@ -26,7 +26,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.R;
 import im.vector.VectorApp;

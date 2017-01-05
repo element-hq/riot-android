@@ -28,7 +28,7 @@ import android.os.HandlerThread;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.Toast;
 

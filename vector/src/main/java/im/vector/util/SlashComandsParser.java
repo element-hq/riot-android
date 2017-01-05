@@ -17,7 +17,7 @@
 package im.vector.util;
 
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;

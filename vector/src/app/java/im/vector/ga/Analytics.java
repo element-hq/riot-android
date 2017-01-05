@@ -26,7 +26,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import android.content.Context;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 
 public class Analytics {
     private static final String LOG_TAG = "Analytics";

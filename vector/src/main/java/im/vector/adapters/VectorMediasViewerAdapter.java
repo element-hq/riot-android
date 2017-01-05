@@ -29,7 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;

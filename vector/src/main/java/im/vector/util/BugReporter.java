@@ -37,10 +37,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.view.View;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -55,12 +52,10 @@ import im.vector.Matrix;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.db.VectorContentProvider;
 import im.vector.gcm.GcmRegistrationManager;
-import im.vector.preference.VectorCustomActionEditTextPreference;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Pusher;
-import org.matrix.androidsdk.rest.model.DeviceInfo;
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -169,7 +164,7 @@ public class BugReporter {
                 ArrayList<File> logFiles = new ArrayList<>();
 
                 if (withScreenshot) {
-                    File screenFile = new File(LogUtilities.ensureLogDirectoryExists(), "screenshot.jpg");
+                    File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
 
                     if (screenFile.exists()) {
                         screenFile.delete();
@@ -182,7 +177,7 @@ public class BugReporter {
                 }
 
                 {
-                    File configLogFile = new File(LogUtilities.ensureLogDirectoryExists(), "config.txt");
+                    File configLogFile = new File(VectorApp.mLogsDirectoryFile, "config.txt");
                     ByteArrayOutputStream configOutputStream = new ByteArrayOutputStream();
                     configOutputStream.write(buildBugReportMessage(context).getBytes());
 
@@ -198,41 +193,12 @@ public class BugReporter {
                     logFiles.add(configLogFile);
                 }
 
-                {
-                    String message = "";
-                    String errorCatLog = LogUtilities.getLogCatError();
-                    String debugCatLog = LogUtilities.getLogCatDebug();
-
-                    message += "\n\n\n\n\n\n\n\n\n\n------------------ Error logs ------------------\n\n\n\n\n\n\n\n";
-                    message += errorCatLog;
-
-                    message += "\n\n\n\n\n\n\n\n\n\n------------------ Debug logs ------------------\n\n\n\n\n\n\n\n";
-                    message += debugCatLog;
-
-
-                    ByteArrayOutputStream logOutputStream = new ByteArrayOutputStream();
-                    logOutputStream.write(message.getBytes());
-
-                    File debugLogFile = new File(LogUtilities.ensureLogDirectoryExists(), "logcat.txt");
-
-                    if (debugLogFile.exists()) {
-                        debugLogFile.delete();
-                    }
-
-                    FileOutputStream fos = new FileOutputStream(debugLogFile);
-                    logOutputStream.writeTo(fos);
-                    logOutputStream.flush();
-                    logOutputStream.close();
-
-                    logFiles.add(debugLogFile);
-                }
-
-                logFiles.addAll(LogUtilities.getLogsFileList());
+                logFiles.addAll(org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>()));
 
                 MXSession session = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 String userName = session.getMyUser().user_id.replace("@", "").replace(":", "_");
 
-                File compressedFile = new File(LogUtilities.ensureLogDirectoryExists(), "VectorBugReport-" + System.currentTimeMillis()  + "-" + userName + ".zip");
+                File compressedFile = new File(VectorApp.mLogsDirectoryFile, "RiotBugReport-" + System.currentTimeMillis()  + "-" + userName + ".zip");
 
                 if (compressedFile.exists()) {
                     compressedFile.delete();

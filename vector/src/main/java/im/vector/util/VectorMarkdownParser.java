@@ -7,7 +7,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
+import org.matrix.androidsdk.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
