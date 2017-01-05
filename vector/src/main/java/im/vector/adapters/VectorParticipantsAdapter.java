@@ -23,7 +23,7 @@ import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,7 +53,7 @@ import im.vector.util.VectorUtils;
  * This class displays the users search results list.
  * The first list row can be customized.
  */
-public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterItem> {
+public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     private static final String LOG_TAG = "VectorAddPartsAdapt";
 
@@ -81,8 +81,9 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     private final MXSession mSession;
     private final String mRoomId;
 
-    // used layout
-    private final int mLayoutResourceId;
+    // used layouts
+    private final int mCellLayoutResourceId;
+    private final int mHeaderLayoutResourceId;
 
     // participants list
     private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
@@ -103,24 +104,31 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
     // define the first entry to set
     private ParticipantAdapterItem mFirstEntry;
 
+    // the participants can be split in sections
+    ArrayList<ArrayList<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
+    private int mFirstEntryPosition = -1;
+    private int mContactBookSectionPosition = -1;
+    private int mRoomContactsSectionPosition = -1;
+
     /**
      * Create a room member adapter.
      * If a room id is defined, the adapter is in edition mode : the user can add / remove dynamically members or leave the room.
      * If there is none, the room is in creation mode : the user can add/remove members to create a new room.
      *
      * @param context          the context.
-     * @param layoutResourceId the layout.
+     * @param cellLayoutResourceId the cell layout.
+     * @param headerLayoutResourceId the header layout
      * @param session          the session.
      * @param roomId           the room id.
      */
-    public VectorParticipantsAdapter(Context context, int layoutResourceId, MXSession session, String roomId) {
-        super(context, layoutResourceId);
-
+    public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId) {
         mContext = context;
-        mLayoutInflater = LayoutInflater.from(context);
-        mLayoutResourceId = layoutResourceId;
-        mSession = session;
 
+        mLayoutInflater = LayoutInflater.from(context);
+        mCellLayoutResourceId = cellLayoutResourceId;
+        mHeaderLayoutResourceId = headerLayoutResourceId;
+
+        mSession = session;
         mRoomId = roomId;
     }
 
@@ -163,7 +171,13 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             mPattern = pattern.trim().toLowerCase();
             refresh(searchMethod, firstEntry, searchListener);
         } else if (null != searchListener) {
-            searchListener.onSearchEnd(getCount());
+            int displayedItemsCount = 0;
+
+            for(ArrayList<ParticipantAdapterItem> list : mParticipantsListsList) {
+                displayedItemsCount += list.size();
+            }
+
+            searchListener.onSearchEnd(displayedItemsCount);
         }
     }
 
@@ -231,7 +245,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         HashMap<String, ParticipantAdapterItem> knownUsersMap = VectorUtils.listKnownParticipants(mSession);
 
         // add contact emails
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(getContext());
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
 
         for(Contact contact : contacts) {
             for(String email : contact.getEmails()) {
@@ -240,7 +254,7 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
                     dummyContact.setDisplayName(contact.getDisplayName());
                     dummyContact.addEmailAdress(email);
 
-                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, getContext());
+                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, mContext);
                     participant.mUserId = email;
 
                     // always use the member description over the contacts book one
@@ -311,14 +325,18 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         if (null != contact) {
             int pos = -1;
 
-            // detect of the contact is used in the adapter
-            for (int index = 0; index <= getCount(); index++) {
-                ParticipantAdapterItem item = getItem(index);
+            if (mContactBookSectionPosition >= 0) {
+                List<ParticipantAdapterItem> list = mParticipantsListsList.get(mContactBookSectionPosition);
 
-                if (item.mContact == contact) {
-                    pos = index;
-                    item.mUserId = matrixId;
-                    break;
+                // detect of the contact is used in the adapter
+                for (int index = 0; index < list.size(); index++) {
+                    ParticipantAdapterItem item = list.get(index);
+
+                    if (item.mContact == contact) {
+                        pos = index;
+                        item.mUserId = matrixId;
+                        break;
+                    }
                 }
             }
 
@@ -340,43 +358,54 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
      * @return true if some duplicated entries have been removed.
      */
     private boolean checkDuplicatedMatrixIds() {
-        // lock the refresh
-        setNotifyOnChange(false);
+        boolean gotDuplicated = false;
 
         // if several entries have the same matrix id.
-        // keep the one which does not come from a contact
+        // keep the dedicated contact book entry over the room participants
         ArrayList<String> matrixUserIds = new ArrayList<>();
 
-        for(int i = 0; i < getCount(); i++) {
-            ParticipantAdapterItem item = getItem(i);
-            String userId = item.mUserId;
+        if (mContactBookSectionPosition >= 0) {
+            List<ParticipantAdapterItem> list = mParticipantsListsList.get(mContactBookSectionPosition);
 
-            if ((null == item.mContact) && !TextUtils.isEmpty(userId)) {
-                matrixUserIds.add(item.mUserId);
+            for (int i = 0; i < list.size(); i++) {
+                String userId = list.get(i).mUserId;
+
+                if (!TextUtils.isEmpty(userId)) {
+                    matrixUserIds.add(userId);
+                }
             }
         }
 
-        ArrayList<ParticipantAdapterItem> itemsToRemove = new ArrayList<>();
+        if ((matrixUserIds.size() > 0) && (mRoomContactsSectionPosition >= 0))  {
+            ArrayList<ParticipantAdapterItem> itemsToRemove = new ArrayList<>();
 
-        for(int i = 0; i < getCount(); i++) {
-            ParticipantAdapterItem item = getItem(i);
+            List<ParticipantAdapterItem> list = mParticipantsListsList.get(mRoomContactsSectionPosition);
 
-            // if the entry is duplicated and comes from a contact
-            if (matrixUserIds.contains(item.mUserId) && (null != item.mContact)) {
-                // remove it from the known users list
-                mUnusedParticipants.remove(item);
-                itemsToRemove.add(item);
+            for (int i = 0; i < list.size(); i++) {
+                ParticipantAdapterItem item = list.get(i);
+
+                // if the entry is duplicated and comes from a contact
+                if (matrixUserIds.contains(item.mUserId)) {
+                    // remove it from the known users list
+                    mUnusedParticipants.remove(item);
+                    itemsToRemove.add(item);
+                }
+            }
+
+            if (itemsToRemove.size() > 0) {
+                list.removeAll(itemsToRemove);
+                gotDuplicated = true;
+
+                if (list.size() == 0) {
+                    mParticipantsListsList.remove(list);
+                    mRoomContactsSectionPosition = -1;
+                    // assume that the participants are displayed after the contacts
+                }
             }
         }
 
-        for(ParticipantAdapterItem itemToRemove : itemsToRemove) {
-            this.remove(itemToRemove);
-        }
 
-        // unlock the refresh
-        setNotifyOnChange(false);
-
-        return 0 != itemsToRemove.size();
+        return gotDuplicated;
     }
 
     /**
@@ -402,8 +431,6 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
         }
         mSearchMethod = searchMethod;
 
-        this.setNotifyOnChange(false);
-        this.clear();
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<>();
 
         if (!TextUtils.isEmpty(mPattern) || (null != mPrepopulationSortMethod)) {
@@ -510,18 +537,162 @@ public class VectorParticipantsAdapter extends ArrayAdapter<ParticipantAdapterIt
             }
         }
 
-        this.setNotifyOnChange(true);
-        this.addAll(nextMembersList);
+        // split the participants in sections
+        ArrayList<ParticipantAdapterItem> firstEntryList = new ArrayList<>();
+        ArrayList<ParticipantAdapterItem> contactBookList = new ArrayList<>();
+        ArrayList<ParticipantAdapterItem> roomContactsList = new ArrayList<>();
+
+        for(ParticipantAdapterItem item : nextMembersList) {
+            if (item == mFirstEntry) {
+                firstEntryList.add(mFirstEntry);
+            } else if (null != item.mContact) {
+                contactBookList.add(item);
+            } else {
+                roomContactsList.add(item);
+            }
+        }
+
+        mFirstEntryPosition = -1;
+        mContactBookSectionPosition = -1;
+        mRoomContactsSectionPosition = -1;
+
+        int posCount = 0;
+
+        mParticipantsListsList.clear();
+
+        if (firstEntryList.size() > 0) {
+            mParticipantsListsList.add(firstEntryList);
+            mFirstEntryPosition = posCount;
+            posCount++;
+        }
+
+        if (contactBookList.size() > 0) {
+            mParticipantsListsList.add(contactBookList);
+            mContactBookSectionPosition = posCount;
+            posCount++;
+        }
+
+        if (roomContactsList.size() > 0) {
+            mParticipantsListsList.add(roomContactsList);
+            mRoomContactsSectionPosition = posCount;
+            posCount++;
+        }
+
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        // Do something here ?
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+        // Do something here ?
     }
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = mLayoutInflater.inflate(mLayoutResourceId, parent, false);
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
+
+    @Override
+    public int getGroupCount() {
+        return mParticipantsListsList.size();
+    }
+
+    private String getGroupTitle(int position) {
+        if (position == mContactBookSectionPosition) {
+            return mContext.getString(R.string.contact_book);
+        } else if (position == mRoomContactsSectionPosition) {
+            return mContext.getString(R.string.room_contact);
+        } else {
+            return "??";
+        }
+    }
+
+    @Override
+    public Object getGroup(int groupPosition) {
+        return getGroupTitle(groupPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return getGroupTitle(groupPosition).hashCode();
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        if (groupPosition >= mParticipantsListsList.size()) {
+            return 0;
         }
 
-        final ParticipantAdapterItem participant = getItem(position);
+        return mParticipantsListsList.get(groupPosition).size();
+    }
+
+    @Override
+    public Object getChild(int groupPosition, int childPosition) {
+        return null;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return 0L;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        if (null == convertView) {
+            convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
+        }
+
+        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+
+        if (null != sectionNameTxtView) {
+            sectionNameTxtView.setText(getGroupTitle(groupPosition));
+        }
+
+        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+
+        if (!isExpanded) {
+            imageView.setImageResource(R.drawable.ic_material_expand_less_black);
+        } else {
+            imageView.setImageResource(R.drawable.ic_material_expand_more_black);
+        }
+
+        View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
+        subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
+
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(mCellLayoutResourceId, parent, false);
+        }
+
+        // bound checks
+        if (groupPosition >= mParticipantsListsList.size()) {
+            return convertView;
+        }
+
+        List<ParticipantAdapterItem> list = mParticipantsListsList.get(groupPosition);
+
+        if (childPosition >= list.size()) {
+            return convertView;
+        }
+
+        final ParticipantAdapterItem participant = list.get(childPosition);
 
         // retrieve the ui items
         final ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);

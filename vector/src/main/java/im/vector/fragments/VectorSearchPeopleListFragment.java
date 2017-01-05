@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -51,7 +52,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
 
     // the session
     private MXSession mSession;
-    private ListView mPeopleListView;
+    private ExpandableListView mPeopleListView;
     private VectorParticipantsAdapter mAdapter;
 
     // pending requests
@@ -96,7 +97,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int firstIndex = mPeopleListView.getFirstVisiblePosition();
+                        /*int firstIndex = mPeopleListView.getFirstVisiblePosition();
                         int lastIndex = mPeopleListView.getLastVisiblePosition();
 
                         for (int index = firstIndex; index <= lastIndex; index++) {
@@ -104,7 +105,10 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                                 mAdapter.notifyDataSetChanged();
                                 break;
                             }
-                        }
+                        }*/
+
+                        // TODO detect update
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -140,19 +144,27 @@ public class  VectorSearchPeopleListFragment extends Fragment {
         }
 
         View v = inflater.inflate(args.getInt(ARG_LAYOUT_ID), container, false);
-        mPeopleListView = (ListView)v.findViewById(R.id.search_people_list);
-        mAdapter = new VectorParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, mSession, null);
+        mPeopleListView = (ExpandableListView) v.findViewById(R.id.search_people_list);
+        // the chevron is managed in the header view
+        mPeopleListView.setGroupIndicator(null);
+        mAdapter = new VectorParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_people_header, mSession, null);
         mPeopleListView.setAdapter(mAdapter);
 
-        mPeopleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPeopleListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ParticipantAdapterItem item = mAdapter.getItem(position);
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Object child = mAdapter.getChild(groupPosition, childPosition);
 
-                Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
-                startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                startActivity(startRoomInfoIntent);
+                if (child instanceof ParticipantAdapterItem) {
+                    ParticipantAdapterItem item = (ParticipantAdapterItem)child;
+
+                    Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
+                    startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    startActivity(startRoomInfoIntent);
+                }
+
+                return true;
             }
         });
 
@@ -195,6 +207,16 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                         public void run() {
                             mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
                             onSearchResultListener.onSearchSucceed(count);
+
+                            mPeopleListView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO manage expand according to the settings
+                                    for(int i = 0 ; i < mAdapter.getGroupCount(); i++) {
+                                        mPeopleListView.expandGroup(i);
+                                    }
+                                }
+                            });
                         }
                     });
                 }

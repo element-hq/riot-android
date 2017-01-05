@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -55,10 +56,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private String mMatrixId;
 
     // main UI items
-    private ListView mListView;
+    private ExpandableListView mListView;
     private View mNoResultView;
     private View mLoadingView;
-    private List<ParticipantAdapterItem> mPartipantItems = new ArrayList<>();
+    private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
 
 
@@ -92,15 +93,20 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    int firstIndex = mListView.getFirstVisiblePosition();
+                   /* int firstIndex = mListView.getFirstVisiblePosition();
                     int lastIndex = mListView.getLastVisiblePosition();
+
+                    ExpandableListView.
 
                     for(int index = firstIndex; index <= lastIndex; index++) {
                         if (TextUtils.equals(user.user_id,  mAdapter.getItem(index).mUserId)) {
                             mAdapter.notifyDataSetChanged();
                             break;
                         }
-                    }
+                    }*/
+
+                    // TODO detect if the information is displayed
+                    mAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -135,7 +141,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         if (intent.hasExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS)) {
-            mPartipantItems = (List<ParticipantAdapterItem>)intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
+            mParticipantItems = (List<ParticipantAdapterItem>)intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -150,9 +156,15 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
-        mListView = (ListView) findViewById(R.id.room_details_members_list);
-        mAdapter = new VectorParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, roomId);
-        mAdapter.setHiddenParticipantItems(mPartipantItems);
+        mListView = (ExpandableListView) findViewById(R.id.room_details_members_list);
+        // the chevron is managed in the header view
+        mListView.setGroupIndicator(null);
+
+        mAdapter = new VectorParticipantsAdapter(this,
+                R.layout.adapter_item_vector_add_participants,
+                R.layout.adapter_item_vector_people_header,
+                mSession, roomId);
+        mAdapter.setHiddenParticipantItems(mParticipantItems);
         mAdapter.setPrepopulate(ParticipantAdapterItem.alphaComparator);
 
         mAdapter.setSortMethod(new Comparator<ParticipantAdapterItem>() {
@@ -229,17 +241,32 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         });
 
         mListView.setAdapter(mAdapter);
+        mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Object item = mAdapter.getChild(groupPosition, childPosition);
+
+                if (item instanceof ParticipantAdapterItem) {
+                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+
+                    // returns the selected user
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
+                    intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
+
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                    return true;
+                }
+                return false;
+            }
+        });
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // returns the selected user
-                Intent intent = new Intent();
-                intent.putExtra(EXTRA_SELECTED_USER_ID, mAdapter.getItem(position).mUserId);
-                intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, mAdapter.getItem(position));
 
-                setResult(RESULT_OK, intent);
-                finish();
             }
         });
     }
@@ -289,6 +316,16 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                         boolean hasPattern = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
                         boolean hasResult = (0 != count);
                         mNoResultView.setVisibility((hasPattern && !hasResult) ? View.VISIBLE : View.GONE);
+
+                        mListView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO manage expand according to the settings
+                                for(int i = 0 ; i < mAdapter.getGroupCount(); i++) {
+                                    mListView.expandGroup(i);
+                                }
+                            }
+                        });
                     }
                 });
             }
