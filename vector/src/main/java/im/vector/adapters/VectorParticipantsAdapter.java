@@ -209,6 +209,18 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     /**
+     * Reset the adapter content
+     */
+    public void reset() {
+        mParticipantsListsList.clear();
+        mFirstEntryPosition = -1;
+        mLocalContactsSectionPosition = -1;
+        mRoomContactsSectionPosition = -1;
+
+        notifyDataSetChanged();
+    }
+
+    /**
      * Search a pattern in the known members list.
      * @param pattern the pattern to search
      * @param firstEntry the entry to display in the results list.
@@ -240,7 +252,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param map the participantItem indexed by their matrix Id
      */
     private void addContacts(HashMap<String, ParticipantAdapterItem> map) {
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
+        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot();
 
         if (null != contacts) {
             for (Contact contact : contacts) {

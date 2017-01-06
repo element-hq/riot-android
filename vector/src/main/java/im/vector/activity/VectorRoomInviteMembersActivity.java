@@ -17,13 +17,14 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -72,7 +73,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.notifyDataSetChanged();
+                    VectorRoomInviteMembersActivity.this.onPatternUpdate(false);
                 }
             });
         }
@@ -221,6 +222,13 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             mLoadingView.setVisibility(View.VISIBLE);
         }
 
+        // wait that the local contacts are populated
+        if (!ContactsManager.didPopulateLocalContacts()) {
+            Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
+            mAdapter.reset();
+            return;
+        }
+
         mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
@@ -247,5 +255,24 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.addListener(mContactsListener);
+
+        // Check permission to access contacts
+        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                onPatternUpdate(false);
+            } else {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+            }
+        }
     }
 }

@@ -465,11 +465,13 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+				// trigger a contacts book refresh
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                searchAccordingToTabHandler();
             } else {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
                 CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }
-            ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
         }
     }
 

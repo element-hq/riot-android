@@ -47,7 +47,7 @@ import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
 
-public class  VectorSearchPeopleListFragment extends Fragment {
+public class VectorSearchPeopleListFragment extends Fragment {
 
     private static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
     private static final String ARG_LAYOUT_ID = "VectorSearchPeopleListFragment.ARG_LAYOUT_ID";
@@ -72,7 +72,9 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.notifyDataSetChanged();
+                        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
+                            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+                        }
                     }
                 });
             }
@@ -183,7 +185,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
      * @return true if the local search is ready to start.
      */
     public boolean isReady() {
-        return mAdapter.isKnownMembersInitialized();
+        return ContactsManager.didPopulateLocalContacts() && mAdapter.isKnownMembersInitialized();
     }
 
     /**
@@ -195,6 +197,12 @@ public class  VectorSearchPeopleListFragment extends Fragment {
         if (null == mPeopleListView) {
             mPendingPattern = pattern;
             mPendingSearchResultListener = onSearchResultListener;
+            return;
+        }
+
+        // wait that the local contacts are populated
+        if (!ContactsManager.didPopulateLocalContacts()) {
+            mAdapter.reset();
             return;
         }
 
