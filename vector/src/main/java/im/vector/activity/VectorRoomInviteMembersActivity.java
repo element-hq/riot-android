@@ -19,22 +19,20 @@ package im.vector.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Map;;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -196,13 +194,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 return false;
             }
         });
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-            }
-        });
     }
 
     /**
@@ -218,19 +209,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             // remove useless spaces
             pattern = pattern.trim();
 
-            // test if the pattern could describe a matrix id.
-            // matrix id syntax @XXX:XXX.XX
-            if (pattern.startsWith("@")) {
-                int pos = pattern.indexOf(":");
-
-                if (pattern.indexOf(".", pos) >= 0) {
-                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
-                }
-            } else {
-                // email
-                if (null != android.util.Patterns.EMAIL_ADDRESS.matcher(pattern)) {
-                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
-                }
+            // test if the pattern is a valid email or matrix id
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
+                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches()) {
+                firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
             }
         }
 
@@ -256,7 +238,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         mSession.getDataHandler().removeListener(mEventsListener);
         ContactsManager.removeListener(mContactsListener);
     }
@@ -264,7 +245,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.addListener(mContactsListener);
     }

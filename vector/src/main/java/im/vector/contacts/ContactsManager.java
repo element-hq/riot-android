@@ -51,7 +51,7 @@ public class ContactsManager {
 
     public interface ContactsManagerListener {
         /**
-         * Called when the contacts list have been
+         * Called when the contacts list have been refreshed
          */
         void onRefresh();
 
@@ -144,6 +144,18 @@ public class ContactsManager {
             }
         }
     };
+
+    /**
+     * Provides an unique identifier of the contacts snapshot
+     * @return an unique identifier
+     */
+    public static int getLocalContactsSnapshotSession() {
+        if (null != mContactsList) {
+            return mContactsList.hashCode();
+        } else {
+            return 0;
+        }
+    }
 
     /**
      * Refresh the local contacts list snapshot.

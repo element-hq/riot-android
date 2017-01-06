@@ -100,6 +100,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     // contacts which have retrieved the linked matrix Id
     private ArrayList<Contact> mCheckedContacts = new ArrayList<>();
 
+    // way to detect that the contacts list has been updated
+    private int mLocalContactsSnapshotSession = -1;
+
     // the participant sort method
     private final Comparator<ParticipantAdapterItem> mSortMethod = new Comparator<ParticipantAdapterItem>() {
         /**
@@ -239,25 +242,27 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private void addContacts(HashMap<String, ParticipantAdapterItem> map) {
         Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot(mContext);
 
-        for(Contact contact : contacts) {
-            for(String email : contact.getEmails()) {
-                if (!TextUtils.isEmpty(email)) {
-                    Contact dummyContact = new Contact(email);
-                    dummyContact.setDisplayName(contact.getDisplayName());
-                    dummyContact.addEmailAdress(email);
-                    dummyContact.setThumbnailUri(contact.getThumbnailUri());
+        if (null != contacts) {
+            for (Contact contact : contacts) {
+                for (String email : contact.getEmails()) {
+                    if (!TextUtils.isEmpty(email)) {
+                        Contact dummyContact = new Contact(email);
+                        dummyContact.setDisplayName(contact.getDisplayName());
+                        dummyContact.addEmailAdress(email);
+                        dummyContact.setThumbnailUri(contact.getThumbnailUri());
 
-                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, mContext);
+                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, mContext);
 
-                    Contact.MXID mxid = PIDsRetriever.getIntance().getMXID(email);
+                        Contact.MXID mxid = PIDsRetriever.getIntance().getMXID(email);
 
-                    if (null != mxid) {
-                        participant.mUserId = mxid.mMatrixId;
-                    } else {
-                        participant.mUserId = email;
+                        if (null != mxid) {
+                            participant.mUserId = mxid.mMatrixId;
+                        } else {
+                            participant.mUserId = email;
+                        }
+
+                        map.put(participant.mUserId, participant);
                     }
-
-                    map.put(participant.mUserId, participant);
                 }
             }
         }
@@ -294,7 +299,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         // other rooms
         HashMap<String, ParticipantAdapterItem> knownUsersMap = VectorUtils.listKnownParticipants(mSession);
 
-        // add contacs
+        // add contacts
         addContacts(knownUsersMap);
 
         // remove the known users
@@ -438,6 +443,16 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (!mSession.isAlive()) {
             Log.e(LOG_TAG, "refresh : the session is not anymore active");
             return;
+        }
+
+        // test if the local contacts list has been cleared (while putting the application in background)
+        if (mLocalContactsSnapshotSession != ContactsManager.getLocalContactsSnapshotSession()) {
+            mUnusedParticipants = null;
+            mContactsParticipants = null;
+            mMemberUserIds = null;
+            mDisplayNamesList = null;
+            mCheckedContacts.clear();
+            mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
         }
 
         ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<>();

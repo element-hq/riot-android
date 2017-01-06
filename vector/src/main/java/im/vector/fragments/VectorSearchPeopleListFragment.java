@@ -23,9 +23,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
@@ -33,7 +31,6 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -218,8 +215,6 @@ public class  VectorSearchPeopleListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        mAdapter.setSearchedPattern(null, null, null);
-
         mSession.getDataHandler().removeListener(mEventsListener);
         ContactsManager.removeListener(mContactsListener);
     }
