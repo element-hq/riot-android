@@ -51,6 +51,7 @@ import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.contacts.PIDsRetriever;
 import im.vector.util.VectorUtils;
 
 /**
@@ -95,6 +96,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private String mPattern = "";
 
     private List<ParticipantAdapterItem> mItemsToHide = new ArrayList<>();
+
+    // contacts which have retrieved the linked matrix Id
+    private ArrayList<Contact> mCheckedContacts = new ArrayList<>();
 
     // the participant sort method
     private final Comparator<ParticipantAdapterItem> mSortMethod = new Comparator<ParticipantAdapterItem>() {
@@ -244,7 +248,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     dummyContact.setThumbnailUri(contact.getThumbnailUri());
 
                     ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, mContext);
-                    participant.mUserId = email;
+
+                    Contact.MXID mxid = PIDsRetriever.getIntance().getMXID(email);
+
+                    if (null != mxid) {
+                        participant.mUserId = mxid.mMatrixId;
+                    } else {
+                        participant.mUserId = email;
+                    }
 
                     map.put(participant.mUserId, participant);
                 }
@@ -739,20 +750,20 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         // set the presence
         String status = "";
 
-        User user = null;
-        MXSession matchedSession = null;
-        // retrieve the linked user
-        ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
+        if (groupPosition == mRoomContactsSectionPosition) {
+            User user = null;
+            MXSession matchedSession = null;
+            // retrieve the linked user
+            ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
 
-        for(MXSession session : sessions) {
-            if (null == user) {
-                matchedSession = session;
-                user = session.getDataHandler().getUser(participant.mUserId);
+            for(MXSession session : sessions) {
+                if (null == user) {
+                    matchedSession = session;
+                    user = session.getDataHandler().getUser(participant.mUserId);
+                }
             }
-        }
 
-        if (null != user) {
-            if (groupPosition == mRoomContactsSectionPosition) {
+            if (null != user) {
                 status = VectorUtils.getUserOnlineStatus(mContext, matchedSession, participant.mUserId, new SimpleApiCallback<Void>() {
                     @Override
                     public void onSuccess(Void info) {
@@ -764,9 +775,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
         if (participant.mContact != null) {
-            statusTextView.setText(participant.mUserId);
             boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
+            statusTextView.setText(participant.mContact.getEmails().get(0));
+
+            if (mCheckedContacts.indexOf(participant.mContact) < 0) {
+                participant.mContact.checkMatridIds(mContext);
+                mCheckedContacts.add(participant.mContact);
+            }
         }
         else {
             statusTextView.setText(status);

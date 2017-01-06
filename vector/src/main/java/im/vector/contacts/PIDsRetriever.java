@@ -16,6 +16,7 @@
 package im.vector.contacts;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -79,6 +80,23 @@ public class PIDsRetriever {
     public void reset() {
         mMatrixIdsByElement.clear();
         mListener = null;
+    }
+
+    /**ce (email, phonenumber...)
+     * @param item the item to retrieve
+     * @return the linked MXID if it exists
+     */
+    public Contact.MXID getMXID(String item) {
+        if (null != item) {
+            Contact.MXID mxId = mMatrixIdsByElement.get(item);
+
+            // test if a valid matrix id has been retrieved
+            if ((null != mxId) && !TextUtils.isEmpty(mxId.mMatrixId)) {
+                return mxId;
+            }
+        }
+
+        return null;
     }
 
     /**
