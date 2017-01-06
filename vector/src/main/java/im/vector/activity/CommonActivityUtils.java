@@ -131,8 +131,8 @@ public class CommonActivityUtils {
     // room details members:
     public static final String KEY_GROUPS_EXPANDED_STATE = "KEY_GROUPS_EXPANDED_STATE";
     public static final String KEY_SEARCH_PATTERN = "KEY_SEARCH_PATTERN";
-    public static final Boolean GROUP_IS_EXPANDED = true;
-    public static final Boolean GROUP_IS_COLLAPSED = false;
+    public static final boolean GROUP_IS_EXPANDED = true;
+    public static final boolean GROUP_IS_COLLAPSED = false;
 
     // power levels
     public static final float UTILS_POWER_LEVEL_ADMIN = 100;

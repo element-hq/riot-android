@@ -209,16 +209,6 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                     public void run() {
                         mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
                         onSearchResultListener.onSearchSucceed(count);
-
-                        mPeopleListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO manage expand according to the settings
-                                for(int i = 0 ; i < mAdapter.getGroupCount(); i++) {
-                                    mPeopleListView.expandGroup(i);
-                                }
-                            }
-                        });
                     }
                 });
             }

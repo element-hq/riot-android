@@ -16,8 +16,10 @@
 
 package im.vector.adapters;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +48,7 @@ import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
@@ -56,6 +60,10 @@ import im.vector.util.VectorUtils;
 public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     private static final String LOG_TAG = "VectorAddPartsAdapt";
+
+    private static final String KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP";
+    private static final String KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP";
+
 
     // search events listener
     public interface OnParticipantsSearchListener {
@@ -168,7 +176,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     // the participants can be split in sections
     ArrayList<ArrayList<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
     private int mFirstEntryPosition = -1;
-    private int mContactBookSectionPosition = -1;
+    private int mLocalContactsSectionPosition = -1;
     private int mRoomContactsSectionPosition = -1;
 
     /**
@@ -324,8 +332,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (null != contact) {
             int pos = -1;
 
-            if (mContactBookSectionPosition >= 0) {
-                List<ParticipantAdapterItem> list = mParticipantsListsList.get(mContactBookSectionPosition);
+            if (mLocalContactsSectionPosition >= 0) {
+                List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
 
                 // detect of the contact is used in the adapter
                 for (int index = 0; index < list.size(); index++) {
@@ -344,7 +352,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 // refresh if a duplicated entry has been removed
                 // or if the contact is displayed
                 if (checkDuplicatedMatrixIds() ||
-                        (visibleChildViews.containsKey(mContactBookSectionPosition) && visibleChildViews.get(mContactBookSectionPosition).contains(pos))) {
+                        (visibleChildViews.containsKey(mLocalContactsSectionPosition) && visibleChildViews.get(mLocalContactsSectionPosition).contains(pos))) {
                     notifyDataSetChanged();
                 }
             }
@@ -359,12 +367,12 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private boolean checkDuplicatedMatrixIds() {
         boolean gotDuplicated = false;
 
-        if ((mRoomContactsSectionPosition >= 0) && (mContactBookSectionPosition >= 0)) {
+        if ((mRoomContactsSectionPosition >= 0) && (mLocalContactsSectionPosition >= 0)) {
             // if several entries have the same matrix id.
             // keep the dedicated contact book entry over the room participants
             ArrayList<String> matrixUserIds = new ArrayList<>();
 
-            List<ParticipantAdapterItem> contactParticipants = mParticipantsListsList.get(mContactBookSectionPosition);
+            List<ParticipantAdapterItem> contactParticipants = mParticipantsListsList.get(mLocalContactsSectionPosition);
 
             for (ParticipantAdapterItem item : contactParticipants) {
                 if (!TextUtils.isEmpty(item.mUserId)) {
@@ -454,6 +462,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             }
         } else {
+            resetGroupExpansionPreferences();
+
             // display only the contacts
             if (null == mContactsParticipants) {
                 Thread t = new Thread(new Runnable() {
@@ -525,7 +535,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         mFirstEntryPosition = -1;
-        mContactBookSectionPosition = -1;
+        mLocalContactsSectionPosition = -1;
         mRoomContactsSectionPosition = -1;
 
         int posCount = 0;
@@ -542,7 +552,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             // the contacts are sorted by alphabetical method
             Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
             mParticipantsListsList.add(contactBookList);
-            mContactBookSectionPosition = posCount;
+            mLocalContactsSectionPosition = posCount;
             posCount++;
         }
 
@@ -573,13 +583,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
-        // Do something here ?
+        setGroupExpandedStatus(groupPosition, false);
     }
 
     @Override
     public void onGroupExpanded(int groupPosition) {
         super.onGroupExpanded(groupPosition);
-        // Do something here ?
+        setGroupExpandedStatus(groupPosition, true);
     }
 
 
@@ -600,10 +610,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     private String getGroupTitle(int position) {
-        if (position == mContactBookSectionPosition) {
-            return mContext.getString(R.string.contact_book);
+        if (position == mLocalContactsSectionPosition) {
+            return mContext.getString(R.string.people_search_contacts);
         } else if (position == mRoomContactsSectionPosition) {
-            return mContext.getString(R.string.room_contact);
+            return mContext.getString(R.string.people_search_known_contacts);
         } else {
             return "??";
         }
@@ -660,7 +670,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
         if (null != sectionNameTxtView) {
-            sectionNameTxtView.setText(getGroupTitle(groupPosition));
+            String title = getGroupTitle(groupPosition);
+
+            if (!TextUtils.isEmpty(mPattern)) {
+                title += " (" + mParticipantsListsList.get(groupPosition).size() + ")";
+            }
+
+            sectionNameTxtView.setText(title);
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
@@ -673,6 +689,19 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
         subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
+
+        if (parent instanceof ExpandableListView) {
+            ExpandableListView expandableListView = (ExpandableListView) parent;
+            boolean shouldBeExpanded = isGroupExpanded(groupPosition);
+
+            if (expandableListView.isGroupExpanded(groupPosition) != shouldBeExpanded) {
+                if (shouldBeExpanded) {
+                    expandableListView.expandGroup(groupPosition);
+                } else {
+                    expandableListView.collapseGroup(groupPosition);
+                }
+            }
+        }
 
         return convertView;
     }
@@ -749,5 +778,53 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         checkBox.setVisibility(View.GONE);
 
         return convertView;
+    }
+
+
+    /**
+     * Reset the expansion preferences
+     */
+    private void resetGroupExpansionPreferences() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP);
+        editor.remove(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP);
+        editor.commit();
+    }
+
+    /**
+     * Tells if a group is expanded
+     * @param groupPosition the group position
+     * @return true to expand the group
+     */
+    private boolean isGroupExpanded(int groupPosition) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+        if (groupPosition == mLocalContactsSectionPosition) {
+            return preferences.getBoolean(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+        } else  if (groupPosition == mRoomContactsSectionPosition) {
+            return preferences.getBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
+        }
+
+        return true;
+    }
+
+    /**
+     * Update the expanded group status
+     * @param groupPosition the group position
+     * @param isExpanded true if the group is expanded
+     * @return true to expand the group
+     */
+    private void setGroupExpandedStatus(int groupPosition, boolean isExpanded) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if (groupPosition == mLocalContactsSectionPosition) {
+            editor.putBoolean(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP, isExpanded);
+        } else  if (groupPosition == mRoomContactsSectionPosition) {
+            editor.putBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, isExpanded);
+        }
+
+        editor.commit();
     }
 }

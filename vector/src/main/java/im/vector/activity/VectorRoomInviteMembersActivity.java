@@ -246,20 +246,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     @Override
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
-
-                        boolean hasPattern = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
-                        boolean hasResult = (0 != count);
-                        mNoResultView.setVisibility((hasPattern && !hasResult) ? View.VISIBLE : View.GONE);
-
-                        mListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO manage expand according to the settings
-                                for(int i = 0 ; i < mAdapter.getGroupCount(); i++) {
-                                    mListView.expandGroup(i);
-                                }
-                            }
-                        });
+                        mNoResultView.setVisibility((0 == count)? View.VISIBLE : View.GONE);
                     }
                 });
             }
