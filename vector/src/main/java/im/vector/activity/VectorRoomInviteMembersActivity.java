@@ -31,7 +31,10 @@ import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -39,6 +42,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.VectorUtils;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -80,7 +84,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.onContactUpdate(contact, matrixId, mListView.getFirstVisiblePosition(), mListView.getLastVisiblePosition());
+                    mAdapter.onContactUpdate(contact, matrixId, VectorUtils.getVisibleChildViews(mListView, mAdapter));
                 }
             });
         }
@@ -93,20 +97,24 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                   /* int firstIndex = mListView.getFirstVisiblePosition();
-                    int lastIndex = mListView.getLastVisiblePosition();
+                    Map<Integer, List<Integer>> visibleChildViews = VectorUtils.getVisibleChildViews(mListView, mAdapter);
 
-                    ExpandableListView.
+                    for(Integer groupPosition : visibleChildViews.keySet()) {
+                        List<Integer> childPositions = visibleChildViews.get(groupPosition);
 
-                    for(int index = firstIndex; index <= lastIndex; index++) {
-                        if (TextUtils.equals(user.user_id,  mAdapter.getItem(index).mUserId)) {
-                            mAdapter.notifyDataSetChanged();
-                            break;
+                        for(Integer childPosition : childPositions) {
+                            Object item =  mAdapter.getChild(groupPosition, childPosition);
+
+                            if (item instanceof ParticipantAdapterItem) {
+                                ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+
+                                if (TextUtils.equals(user.user_id,  participantAdapterItem.mUserId)) {
+                                    mAdapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
                         }
-                    }*/
-
-                    // TODO detect if the information is displayed
-                    mAdapter.notifyDataSetChanged();
+                    }
                 }
             });
         }
@@ -165,82 +173,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 R.layout.adapter_item_vector_people_header,
                 mSession, roomId);
         mAdapter.setHiddenParticipantItems(mParticipantItems);
-        mAdapter.setPrepopulate(ParticipantAdapterItem.alphaComparator);
-
-        mAdapter.setSortMethod(new Comparator<ParticipantAdapterItem>() {
-            /**
-             * Compare 2 string and returns sort order.
-             * @param s1 string 1.
-             * @param s2 string 2.
-             * @return the sort order.
-             */
-            private int alphaComparator(String s1, String s2) {
-                if (s1 == null) {
-                    return -1;
-                } else if (s2 == null) {
-                    return 1;
-                }
-
-                return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
-            }
-
-            @Override
-            public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-                User userA = mSession.getDataHandler().getUser(part1.mUserId);
-                User userB = mSession.getDataHandler().getUser(part2.mUserId);
-
-                String userADisplayName = part1.getComparisonDisplayName();
-                String userBDisplayName = part2.getComparisonDisplayName();
-
-                boolean isUserA_Active = false;
-                boolean isUserB_Active = false;
-
-                if ((null != userA) && (null != userA.currently_active)) {
-                    isUserA_Active = userA.currently_active;
-                }
-
-                if ((null != userB) && (null != userB.currently_active)) {
-                    isUserB_Active = userB.currently_active;
-                }
-
-                if ((null == userA) && (null == userB)) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
-                } else if ((null != userA) && (null == userB)) {
-                    return +1;
-                } else if ((null == userA) && (null != userB)) {
-                    return -1;
-                } else if (isUserA_Active && isUserB_Active) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
-                }
-
-                if (isUserA_Active && !isUserB_Active) {
-                    return -1;
-                } if (!isUserA_Active && isUserB_Active) {
-                    return +1;
-                }
-
-                // Finally, compare the timestamps
-                long lastActiveAgoA = (null != userA) ? userA.getAbsoluteLastActiveAgo() : 0;
-                long lastActiveAgoB = (null != userB) ? userB.getAbsoluteLastActiveAgo() : 0;
-
-                long diff = lastActiveAgoA - lastActiveAgoB;
-
-                if (diff == 0) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
-                }
-
-                // if only one member has a lastActiveAgo, prefer it
-                if (0 == lastActiveAgoA) {
-                    return +1;
-                } else if (0 == lastActiveAgoB) {
-                    return -1;
-                }
-
-                return (diff > 0) ? +1 : -1;
-            }
-        });
-
         mListView.setAdapter(mAdapter);
+
         mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -300,12 +234,12 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             }
         }
 
-        // display a spinner while the other room memebers are listed
+        // display a spinner while the other room members are listed
         if (!mAdapter.isKnownMembersInitialized()) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
 
-        mAdapter.setSearchedPattern(pattern, VectorParticipantsAdapter.SEARCH_METHOD_STARTS_WITH, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+        mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
                 mListView.post(new Runnable() {

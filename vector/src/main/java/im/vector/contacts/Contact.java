@@ -339,7 +339,6 @@ public class Contact implements java.io.Serializable {
      * @return the contact thumbnail bitmap.
      */
     public Bitmap getThumbnail(Context context) {
-
         if ((null == mThumbnail) && (null != mThumbnailUri)) {
             try {
                 mThumbnail = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mThumbnailUri));

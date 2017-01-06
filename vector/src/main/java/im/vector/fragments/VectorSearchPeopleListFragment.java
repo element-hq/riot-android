@@ -33,6 +33,10 @@ import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import im.vector.Matrix;
 import im.vector.R;
 
@@ -43,6 +47,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.VectorUtils;
 
 
 public class  VectorSearchPeopleListFragment extends Fragment {
@@ -82,7 +87,7 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.onContactUpdate(contact, matrixId, mPeopleListView.getFirstVisiblePosition(), mPeopleListView.getLastVisiblePosition());
+                        mAdapter.onContactUpdate(contact, matrixId, VectorUtils.getVisibleChildViews(mPeopleListView, mAdapter));
                     }
                 });
             }
@@ -97,18 +102,24 @@ public class  VectorSearchPeopleListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        /*int firstIndex = mPeopleListView.getFirstVisiblePosition();
-                        int lastIndex = mPeopleListView.getLastVisiblePosition();
+                        Map<Integer, List<Integer>> visibleChildViews = VectorUtils.getVisibleChildViews(mPeopleListView, mAdapter);
 
-                        for (int index = firstIndex; index <= lastIndex; index++) {
-                            if (TextUtils.equals(user.user_id, mAdapter.getItem(index).mUserId)) {
-                                mAdapter.notifyDataSetChanged();
-                                break;
+                        for(Integer groupPosition : visibleChildViews.keySet()) {
+                            List<Integer> childPositions = visibleChildViews.get(groupPosition);
+
+                            for(Integer childPosition : childPositions) {
+                                Object item =  mAdapter.getChild(groupPosition, childPosition);
+
+                                if (item instanceof ParticipantAdapterItem) {
+                                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+
+                                    if (TextUtils.equals(user.user_id,  participantAdapterItem.mUserId)) {
+                                        mAdapter.notifyDataSetChanged();
+                                        break;
+                                    }
+                                }
                             }
-                        }*/
-
-                        // TODO detect update
-                        mAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
             }
@@ -190,38 +201,28 @@ public class  VectorSearchPeopleListFragment extends Fragment {
             return;
         }
 
-        if (TextUtils.isEmpty(pattern)) {
-            mPeopleListView.setVisibility(View.GONE);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    onSearchResultListener.onSearchSucceed(0);
-                }
-            });
-        } else {
-            mAdapter.setSearchedPattern(pattern, VectorParticipantsAdapter.SEARCH_METHOD_CONTAINS, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
-                @Override
-                public void onSearchEnd(final int count) {
-                    mPeopleListView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
-                            onSearchResultListener.onSearchSucceed(count);
+        mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+            @Override
+            public void onSearchEnd(final int count) {
+                mPeopleListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
+                        onSearchResultListener.onSearchSucceed(count);
 
-                            mPeopleListView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // TODO manage expand according to the settings
-                                    for(int i = 0 ; i < mAdapter.getGroupCount(); i++) {
-                                        mPeopleListView.expandGroup(i);
-                                    }
+                        mPeopleListView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO manage expand according to the settings
+                                for(int i = 0 ; i < mAdapter.getGroupCount(); i++) {
+                                    mPeopleListView.expandGroup(i);
                                 }
-                            });
-                        }
-                    });
-                }
-            });
-        }
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Override
