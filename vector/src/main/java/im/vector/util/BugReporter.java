@@ -16,11 +16,13 @@
 
 package im.vector.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -193,12 +195,33 @@ public class BugReporter {
                     logFiles.add(configLogFile);
                 }
 
+                {
+                    String errorCatLog = getLogCatError();
+
+                    ByteArrayOutputStream logOutputStream = new ByteArrayOutputStream();
+                    logOutputStream.write(errorCatLog.getBytes());
+
+                    File debugLogFile = new File(VectorApp.mLogsDirectoryFile, "crashes.txt");
+
+                    if (debugLogFile.exists()) {
+                        debugLogFile.delete();
+                    }
+
+                    FileOutputStream fos = new FileOutputStream(debugLogFile);
+                    logOutputStream.writeTo(fos);
+                    logOutputStream.flush();
+                    logOutputStream.close();
+
+                    logFiles.add(debugLogFile);
+                }
+
+
                 logFiles.addAll(org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>()));
 
                 MXSession session = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 String userName = session.getMyUser().user_id.replace("@", "").replace(":", "_");
 
-                File compressedFile = new File(VectorApp.mLogsDirectoryFile, "RiotBugReport-" + System.currentTimeMillis()  + "-" + userName + ".zip");
+                File compressedFile = new File(VectorApp.mLogsDirectoryFile, "RiotBugReport-" + userName + "-" + System.currentTimeMillis()  + ".zip");
 
                 if (compressedFile.exists()) {
                     compressedFile.delete();
@@ -377,4 +400,68 @@ public class BugReporter {
         }
         return null;
     }
+
+    private static final int BUFFER_SIZE = 1024 * 1024 * 5;
+    private static final String[] LOGCAT_CMD = new String[] {
+            "logcat", ///< Run 'logcat' command
+            "-d",  ///< Dump the log rather than continue outputting it
+            "-v", // formatting
+            "threadtime", // include timestamps
+            "AndroidRuntime:E " + ///< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
+            "libcommunicator:V " + ///< All libcommunicator logging
+            "DEBUG:V " + ///< All DEBUG logging - which includes native land crashes (seg faults, etc)
+            "*:S" ///< Everything else silent, so don't pick it..
+    };
+
+
+    /**
+     * @return the error logcat command line.
+     */
+    public static String getLogCatError() {
+        return getLog(LOGCAT_CMD);
+    }
+
+    /**
+     * Retrieves the logs from a dedicated command.
+     * @param cmd the command to execute.
+     * @return the logs.
+     */
+    private static String getLog(String[] cmd) {
+        Process logcatProc;
+        try {
+            logcatProc = Runtime.getRuntime().exec(cmd);
+        }
+        catch (IOException e1) {
+            return "";
+        }
+
+        BufferedReader reader = null;
+        String response = "";
+        try {
+            String separator = System.getProperty("line.separator");
+            StringBuilder sb = new StringBuilder();
+            reader = new BufferedReader(new InputStreamReader(logcatProc.getInputStream()), BUFFER_SIZE);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append(separator);
+            }
+            response = sb.toString();
+        }
+        catch (IOException e) {
+            Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
+        }
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {
+                    Log.e(LOG_TAG, "getLog fails with " + e.getLocalizedMessage());
+                }
+            }
+        }
+        return response;
+    }
+
 }
