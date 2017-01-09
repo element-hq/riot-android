@@ -116,6 +116,7 @@ public class BugReporter {
         message += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
         message += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
         message += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
+        message += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
         message += "\n";
         message += "----------------------- Memory statuses -------------------------------------\n";
         message += "\n";
