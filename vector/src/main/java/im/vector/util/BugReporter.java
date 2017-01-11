@@ -40,7 +40,19 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import org.matrix.androidsdk.util.Log;
+
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -69,9 +81,9 @@ public class BugReporter {
     /**
      * @return the bug report body message.
      */
-    private static String buildBugReportMessage(Context context) {
-        String message = "Something went wrong on my Vector client : \n\n\n";
-        message += "-----> my comments <-----\n\n\n";
+    private static String buildBugReportMessage(Context context, String bugDescription) {
+        String message = "Something went wrong on my Vector client : \n";
+        message += String.format("%s\n\n\n", bugDescription);
 
         message += "------------------ Application info ------------------------------\n";
 
@@ -159,7 +171,7 @@ public class BugReporter {
      * @param withScreenshot true to include the screenshort
      * @return the zip file
      */
-    private static File buildBugZipFile(Context context, boolean withScreenshot) {
+    private static File buildBugZipFile(Context context, boolean withScreenshot, String bugDescription) {
         Bitmap screenShot = takeScreenshot();
 
         if (null != screenShot) {
@@ -182,7 +194,7 @@ public class BugReporter {
                 {
                     File configLogFile = new File(VectorApp.mLogsDirectoryFile, "config.txt");
                     ByteArrayOutputStream configOutputStream = new ByteArrayOutputStream();
-                    configOutputStream.write(buildBugReportMessage(context).getBytes());
+                    configOutputStream.write(buildBugReportMessage(context, bugDescription).getBytes());
 
                     if (configLogFile.exists()) {
                         configLogFile.delete();
@@ -261,8 +273,8 @@ public class BugReporter {
      * @param context the application context
      * @param withScreenshot tru to include the screenshot
      */
-    private static void sendBugReportWithVector(Context context, boolean withScreenshot) {
-        File file = buildBugZipFile(context, withScreenshot);
+    private static void sendBugReportWithVector(Context context, boolean withScreenshot, String bugDescription) {
+        File file = buildBugZipFile(context, withScreenshot, bugDescription);
 
         if (null != file) {
             try {
@@ -281,13 +293,13 @@ public class BugReporter {
     /**
      * Send the bug report by mail.
      */
-    private static void sendBugReportWithMail(Context context, boolean withScreenshot) {
+    private static void sendBugReportWithMail(Context context, boolean withScreenshot, String bugDescription) {
         Bitmap screenShot = takeScreenshot();
 
         if (null != screenShot) {
             try {
-                String message = buildBugReportMessage(context);
-                File file = buildBugZipFile(context, withScreenshot);
+                String message = buildBugReportMessage(context, bugDescription);
+                File file = buildBugZipFile(context, withScreenshot, bugDescription);
 
                 // list the intent which supports email
                 // it should avoid having lot of unexpected applications (like bluetooth...)
@@ -326,42 +338,144 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReportWithMail(VectorApp.getInstance().getApplicationContext(), false);
+            sendBugReportWithMail(VectorApp.getInstance().getApplicationContext(), false, "");
             return;
         }
 
+        LayoutInflater inflater = currentActivity.getLayoutInflater();
+        View dialoglayout = inflater.inflate(R.layout.dialog_bug_report, null);
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
-        dialog.setTitle(R.string.send_bug_report);
+        dialog.setView(dialoglayout);
 
-        final CharSequence items[] = new CharSequence[] {
-                currentActivity.getString(R.string.with_email_and_screenshot),
-                currentActivity.getString(R.string.with_email_without_screenshot),
-                currentActivity.getString(R.string.with_vector_and_screenshot, Matrix.getApplicationName()),
-                currentActivity.getString(R.string.with_vector_without_screenshot, Matrix.getApplicationName()),
-        };
+        final EditText bugReportText = (EditText)dialoglayout.findViewById(R.id.bug_report_edit_text);
+        final Button onSendButton = (Button)dialoglayout.findViewById(R.id.bug_report_button);
+        final RadioButton emailNoScreenshotButton = (RadioButton)dialoglayout.findViewById(R.id.bug_report_button_email_no_screenshot);
+        final RadioButton emailWithScreenshotButton = (RadioButton)dialoglayout.findViewById(R.id.bug_report_button_email_screenshot);
+        final RadioButton riotWithScreenshotButton = (RadioButton)dialoglayout.findViewById(R.id.bug_report_button_riot_screenshot);
+        final RadioButton riotNoScreenshotButton = (RadioButton)dialoglayout.findViewById(R.id.bug_report_button_riot_no_screenshot);
 
-        dialog.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+        TextView riotWithScreenshotText = (TextView)dialoglayout.findViewById(R.id.bug_report_text_riot_screenshot);
+        TextView riotNoScreenshotText = (TextView)dialoglayout.findViewById(R.id.bug_report_text_riot_no_screenshot);
+
+        riotWithScreenshotText.setText(currentActivity.getString(R.string.with_vector_and_screenshot, Matrix.getApplicationName()));
+        riotNoScreenshotText.setText(currentActivity.getString(R.string.with_vector_without_screenshot, Matrix.getApplicationName()));
+
+        emailNoScreenshotButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(DialogInterface d, int n) {
-                d.cancel();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if ((0 == n) || (1 == n)) {
-                    sendBugReportWithMail(currentActivity, (0 == n));
+                if (!isChecked) {
+                    if (!emailWithScreenshotButton.isChecked() &&
+                            !riotWithScreenshotButton.isChecked() &&
+                            !riotNoScreenshotButton.isChecked()) {
+                        emailNoScreenshotButton.setChecked(true);
+                    }
                 } else {
-                    sendBugReportWithVector(currentActivity, (2 == n));
+                    emailWithScreenshotButton.setChecked(false);
+                    riotNoScreenshotButton.setChecked(false);
+                    riotWithScreenshotButton.setChecked(false);
                 }
             }
         });
 
-        dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        emailWithScreenshotButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sendBugReportWithMail(currentActivity, true);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (!isChecked) {
+                    if (!emailNoScreenshotButton.isChecked() &&
+                            !riotWithScreenshotButton.isChecked() &&
+                            !riotNoScreenshotButton.isChecked()) {
+                        emailWithScreenshotButton.setChecked(true);
+                    }
+                } else {
+                    emailNoScreenshotButton.setChecked(false);
+                    riotNoScreenshotButton.setChecked(false);
+                    riotWithScreenshotButton.setChecked(false);
+                }
             }
         });
 
-        dialog.setNegativeButton(R.string.cancel, null);
-        dialog.show();
+        riotWithScreenshotButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (!isChecked) {
+                    if (!emailNoScreenshotButton.isChecked() &&
+                            !emailWithScreenshotButton.isChecked() &&
+                            !riotNoScreenshotButton.isChecked()) {
+                        riotWithScreenshotButton.setChecked(true);
+                    }
+                } else {
+                    emailNoScreenshotButton.setChecked(false);
+                    riotNoScreenshotButton.setChecked(false);
+                    emailWithScreenshotButton.setChecked(false);
+                }
+            }
+        });
+
+        riotNoScreenshotButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    if (!riotWithScreenshotButton.isChecked() &&
+                            !emailNoScreenshotButton.isChecked() &&
+                            !emailWithScreenshotButton.isChecked()) {
+                        riotNoScreenshotButton.setChecked(true);
+                    }
+                } else {
+                    riotWithScreenshotButton.setChecked(false);
+                    emailWithScreenshotButton.setChecked(false);
+                    emailNoScreenshotButton.setChecked(false);
+                }
+            }
+        });
+
+
+        onSendButton.setEnabled(false);
+        bugReportText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onSendButton.setEnabled(!TextUtils.isEmpty(bugReportText.getText().toString().trim()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        final AlertDialog bugReportDialog = dialog.show();
+
+        onSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bugReportDialog.cancel();
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String bugDescription = bugReportText.getText().toString().trim();
+
+                        if (emailNoScreenshotButton.isChecked()) {
+                            sendBugReportWithMail(currentActivity, false, bugDescription);
+                        } else if (emailWithScreenshotButton.isChecked()) {
+                            sendBugReportWithMail(currentActivity, true, bugDescription);
+                        } else if (riotWithScreenshotButton.isChecked()) {
+                            sendBugReportWithVector(currentActivity, true, bugDescription);
+                        } else {
+                            sendBugReportWithVector(currentActivity, false, bugDescription);
+                        }
+                    }
+                }, 300);
+            }
+        });
     }
 
     /**
