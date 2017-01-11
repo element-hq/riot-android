@@ -442,7 +442,7 @@ public class BugReporter {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                onSendButton.setEnabled(!TextUtils.isEmpty(bugReportText.getText().toString().trim()));
+                onSendButton.setEnabled(bugReportText.getText().toString().length() > 10);
             }
 
             @Override
