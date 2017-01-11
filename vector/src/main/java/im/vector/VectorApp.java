@@ -352,6 +352,10 @@ public class VectorApp extends Application {
             if (VectorCallSoundManager.isRinging() && !hasActiveCall && (null != EventStreamService.getInstance())) {
                 Log.e(LOG_TAG, "## suspendApp() : fix an infinite ringing");
                 EventStreamService.getInstance().hideCallNotifications();
+                
+                if (VectorCallSoundManager.isRinging()) {
+                    VectorCallSoundManager.stopRinging();
+                }
             }
         }
 
