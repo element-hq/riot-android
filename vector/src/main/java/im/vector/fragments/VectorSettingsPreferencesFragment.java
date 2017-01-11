@@ -1607,7 +1607,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final String userId = mSession.getMyUserId();
         final String deviceId = mSession.getCredentials().deviceId;
         VectorCustomActionEditTextPreference cryptoInfoTextPreference;
-        final MXDeviceInfo deviceInfo;
 
         // device name
         if ((null != aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
@@ -1642,21 +1641,42 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // crypto section: device key (fingerprint)
-        if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId) && (null != (deviceInfo = mSession.getCrypto().getDeviceInfo(userId, deviceId)))) {
-            if (!TextUtils.isEmpty(deviceInfo.fingerprint())) {
-                cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_key));
-                if (null != cryptoInfoTextPreference) {
-                    cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
+        if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
+            mSession.getCrypto().getDeviceInfo(userId, deviceId, new ApiCallback<MXDeviceInfo>() {
+                @Override
+                public void onSuccess(final MXDeviceInfo deviceInfo) {
+                    if (!TextUtils.isEmpty(deviceInfo.fingerprint())) {
+                        VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_key));
 
-                    cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
-                        @Override
-                        public boolean onPreferenceLongClick(Preference preference) {
-                            VectorUtils.copyToClipboard(getActivity(), deviceInfo.fingerprint());
-                            return true;
+                        if (null != cryptoInfoTextPreference) {
+                            cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
+
+                            cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                                @Override
+                                public boolean onPreferenceLongClick(Preference preference) {
+                                    VectorUtils.copyToClipboard(getActivity(), deviceInfo.fingerprint());
+                                    return true;
+                                }
+                            });
                         }
-                    });
+                    }
                 }
-            }
+
+                @Override
+                public void onNetworkError(Exception e) {
+
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+
+                }
+            });
         }
     }
 
