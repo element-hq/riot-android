@@ -250,6 +250,28 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         ((VectorMessagesAdapter)mAdapter).cancelSelectionMode();
     }
 
+    private final ApiCallback<Void> mDeviceVerificationCallback = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            mAdapter.notifyDataSetChanged();
+        }
+    };
+
     /**
      * the user taps on the e2e icon
      * @param event the event
@@ -351,22 +373,19 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                     builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
-                            mAdapter.notifyDataSetChanged();
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
                     builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
-                            mAdapter.notifyDataSetChanged();
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
 
                     builder.setPositiveButton(R.string.encryption_information_block, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender());
-                            mAdapter.notifyDataSetChanged();
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 } else { // BLOCKED
@@ -378,8 +397,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
                     builder.setPositiveButton(R.string.encryption_information_unblock, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender());
-                            mAdapter.notifyDataSetChanged();
+                            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
                 }

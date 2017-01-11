@@ -1813,10 +1813,33 @@ public class CommonActivityUtils {
         builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender);
-                if(null != adapter) {
-                    adapter.notifyDataSetChanged();
-                }
+                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, new ApiCallback<Void>() {
+                    private void onDone() {
+                        if(null != adapter) {
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(Void info) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onDone();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onDone();
+                    }
+                });
             }
         });
 

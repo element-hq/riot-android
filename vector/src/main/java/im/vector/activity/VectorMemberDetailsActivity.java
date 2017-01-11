@@ -1428,12 +1428,34 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     }
 
     // ********* IDevicesAdapterListener implementation *********
+
+    final ApiCallback<Void> mDevicesVerificationCallback = new ApiCallback<Void>() {
+        @Override
+        public void onSuccess(Void info) {
+            mDevicesListViewAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onNetworkError(Exception e) {
+            mDevicesListViewAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onMatrixError(MatrixError e) {
+            mDevicesListViewAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onUnexpectedError(Exception e) {
+            mDevicesListViewAdapter.notifyDataSetChanged();
+        }
+    };
+
     @Override
     public void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo) {
         switch(aDeviceInfo.mVerified) {
             case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, mMemberId);
-                mDevicesListViewAdapter.notifyDataSetChanged();
+                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, mMemberId, mDevicesVerificationCallback);
                 break;
 
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
@@ -1448,11 +1470,11 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         switch(aDeviceInfo.mVerified) {
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
             case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, mMemberId);
+                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, mMemberId, mDevicesVerificationCallback);
                 break;
 
             default: // Blocked
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, mMemberId);
+                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, mMemberId, mDevicesVerificationCallback);
                 break;
         }
         mDevicesListViewAdapter.notifyDataSetChanged();
