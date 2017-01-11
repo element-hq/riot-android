@@ -12,7 +12,7 @@
         android:textSize="17sp"
         android:visibility="gone"/>
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/room_details_members_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

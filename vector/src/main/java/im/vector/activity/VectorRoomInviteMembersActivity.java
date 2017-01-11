@@ -17,20 +17,23 @@
 package im.vector.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -38,6 +41,7 @@ import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
+import im.vector.util.VectorUtils;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -55,10 +59,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private String mMatrixId;
 
     // main UI items
-    private ListView mListView;
+    private ExpandableListView mListView;
     private View mNoResultView;
     private View mLoadingView;
-    private List<ParticipantAdapterItem> mPartipantItems = new ArrayList<>();
+    private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
 
 
@@ -69,7 +73,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.notifyDataSetChanged();
+                    VectorRoomInviteMembersActivity.this.onPatternUpdate(false);
                 }
             });
         }
@@ -79,7 +83,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.onContactUpdate(contact, matrixId, mListView.getFirstVisiblePosition(), mListView.getLastVisiblePosition());
+                    mAdapter.onContactUpdate(contact, matrixId, VectorUtils.getVisibleChildViews(mListView, mAdapter));
                 }
             });
         }
@@ -92,13 +96,22 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    int firstIndex = mListView.getFirstVisiblePosition();
-                    int lastIndex = mListView.getLastVisiblePosition();
+                    Map<Integer, List<Integer>> visibleChildViews = VectorUtils.getVisibleChildViews(mListView, mAdapter);
 
-                    for(int index = firstIndex; index <= lastIndex; index++) {
-                        if (TextUtils.equals(user.user_id,  mAdapter.getItem(index).mUserId)) {
-                            mAdapter.notifyDataSetChanged();
-                            break;
+                    for(Integer groupPosition : visibleChildViews.keySet()) {
+                        List<Integer> childPositions = visibleChildViews.get(groupPosition);
+
+                        for(Integer childPosition : childPositions) {
+                            Object item =  mAdapter.getChild(groupPosition, childPosition);
+
+                            if (item instanceof ParticipantAdapterItem) {
+                                ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+
+                                if (TextUtils.equals(user.user_id,  participantAdapterItem.mUserId)) {
+                                    mAdapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -135,7 +148,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         if (intent.hasExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS)) {
-            mPartipantItems = (List<ParticipantAdapterItem>)intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
+            mParticipantItems = (List<ParticipantAdapterItem>)intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -150,96 +163,36 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
-        mListView = (ListView) findViewById(R.id.room_details_members_list);
-        mAdapter = new VectorParticipantsAdapter(this, R.layout.adapter_item_vector_add_participants, mSession, roomId);
-        mAdapter.setHiddenParticipantItems(mPartipantItems);
-        mAdapter.setPrepopulate(ParticipantAdapterItem.alphaComparator);
+        mListView = (ExpandableListView) findViewById(R.id.room_details_members_list);
+        // the chevron is managed in the header view
+        mListView.setGroupIndicator(null);
 
-        mAdapter.setSortMethod(new Comparator<ParticipantAdapterItem>() {
-            /**
-             * Compare 2 string and returns sort order.
-             * @param s1 string 1.
-             * @param s2 string 2.
-             * @return the sort order.
-             */
-            private int alphaComparator(String s1, String s2) {
-                if (s1 == null) {
-                    return -1;
-                } else if (s2 == null) {
-                    return 1;
-                }
-
-                return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
-            }
-
-            @Override
-            public int compare(ParticipantAdapterItem part1, ParticipantAdapterItem part2) {
-                User userA = mSession.getDataHandler().getUser(part1.mUserId);
-                User userB = mSession.getDataHandler().getUser(part2.mUserId);
-
-                String userADisplayName = part1.getComparisonDisplayName();
-                String userBDisplayName = part2.getComparisonDisplayName();
-
-                boolean isUserA_Active = false;
-                boolean isUserB_Active = false;
-
-                if ((null != userA) && (null != userA.currently_active)) {
-                    isUserA_Active = userA.currently_active;
-                }
-
-                if ((null != userB) && (null != userB.currently_active)) {
-                    isUserB_Active = userB.currently_active;
-                }
-
-                if ((null == userA) && (null == userB)) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
-                } else if ((null != userA) && (null == userB)) {
-                    return +1;
-                } else if ((null == userA) && (null != userB)) {
-                    return -1;
-                } else if (isUserA_Active && isUserB_Active) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
-                }
-
-                if (isUserA_Active && !isUserB_Active) {
-                    return -1;
-                } if (!isUserA_Active && isUserB_Active) {
-                    return +1;
-                }
-
-                // Finally, compare the timestamps
-                long lastActiveAgoA = (null != userA) ? userA.getAbsoluteLastActiveAgo() : 0;
-                long lastActiveAgoB = (null != userB) ? userB.getAbsoluteLastActiveAgo() : 0;
-
-                long diff = lastActiveAgoA - lastActiveAgoB;
-
-                if (diff == 0) {
-                    return alphaComparator(userADisplayName, userBDisplayName);
-                }
-
-                // if only one member has a lastActiveAgo, prefer it
-                if (0 == lastActiveAgoA) {
-                    return +1;
-                } else if (0 == lastActiveAgoB) {
-                    return -1;
-                }
-
-                return (diff > 0) ? +1 : -1;
-            }
-        });
-
+        mAdapter = new VectorParticipantsAdapter(this,
+                R.layout.adapter_item_vector_add_participants,
+                R.layout.adapter_item_vector_people_header,
+                mSession, roomId);
+        mAdapter.setHiddenParticipantItems(mParticipantItems);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Object item = mAdapter.getChild(groupPosition, childPosition);
 
-                // returns the selected user
-                Intent intent = new Intent();
-                intent.putExtra(EXTRA_SELECTED_USER_ID, mAdapter.getItem(position).mUserId);
-                intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, mAdapter.getItem(position));
+                if (item instanceof ParticipantAdapterItem) {
+                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
 
-                setResult(RESULT_OK, intent);
-                finish();
+                    // returns the selected user
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
+                    intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
+
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -257,38 +210,33 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             // remove useless spaces
             pattern = pattern.trim();
 
-            // test if the pattern could describe a matrix id.
-            // matrix id syntax @XXX:XXX.XX
-            if (pattern.startsWith("@")) {
-                int pos = pattern.indexOf(":");
-
-                if (pattern.indexOf(".", pos) >= 0) {
-                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
-                }
-            } else {
-                // email
-                if (null != android.util.Patterns.EMAIL_ADDRESS.matcher(pattern)) {
-                    firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
-                }
+            // test if the pattern is a valid email or matrix id
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
+                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches()) {
+                firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
             }
         }
 
-        // display a spinner while the other room memebers are listed
+        // display a spinner while the other room members are listed
         if (!mAdapter.isKnownMembersInitialized()) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
 
-        mAdapter.setSearchedPattern(pattern, VectorParticipantsAdapter.SEARCH_METHOD_STARTS_WITH, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+        // wait that the local contacts are populated
+        if (!ContactsManager.didPopulateLocalContacts()) {
+            Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
+            mAdapter.reset();
+            return;
+        }
+
+        mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
                 mListView.post(new Runnable() {
                     @Override
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
-
-                        boolean hasPattern = !TextUtils.isEmpty(mPatternToSearchEditText.getText());
-                        boolean hasResult = (0 != count);
-                        mNoResultView.setVisibility((hasPattern && !hasResult) ? View.VISIBLE : View.GONE);
+                        mNoResultView.setVisibility((0 == count)? View.VISIBLE : View.GONE);
                     }
                 });
             }
@@ -298,7 +246,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         mSession.getDataHandler().removeListener(mEventsListener);
         ContactsManager.removeListener(mContactsListener);
     }
@@ -306,8 +253,26 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.addListener(mContactsListener);
+
+        // Check permission to access contacts
+        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                onPatternUpdate(false);
+            } else {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+            }
+        }
     }
 }

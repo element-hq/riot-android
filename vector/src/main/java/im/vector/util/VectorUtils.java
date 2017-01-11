@@ -42,6 +42,8 @@ import android.view.View;
 import android.view.ViewParent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -948,7 +950,6 @@ public class VectorUtils {
         return map;
     }
 
-
     //==============================================================================================================
     // URL parser
     //==============================================================================================================
@@ -998,5 +999,46 @@ public class VectorUtils {
         }
 
         return URLs;
+    }
+
+    //==============================================================================================================
+    // ExpandableListView tools
+    //==============================================================================================================
+
+    /**
+     * Provides the visible child views.
+     * The map key is the group position.
+     * The map values are the visible child views.
+     * @param expandableListView the listview
+     * @param adapter the linked adapter
+     * @return visible views map
+     */
+    public static HashMap<Integer, List<Integer>> getVisibleChildViews(ExpandableListView expandableListView, BaseExpandableListAdapter adapter) {
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+
+        long firstPackedPosition = expandableListView.getExpandableListPosition(expandableListView.getFirstVisiblePosition());
+
+        int firstGroupPosition = ExpandableListView.getPackedPositionGroup(firstPackedPosition);
+        int firstChildPosition = ExpandableListView.getPackedPositionChild(firstPackedPosition);
+
+        long lastPackedPosition = expandableListView.getExpandableListPosition(expandableListView.getLastVisiblePosition());
+
+        int lastGroupPosition = ExpandableListView.getPackedPositionGroup(lastPackedPosition);
+        int lastChildPosition = ExpandableListView.getPackedPositionChild(lastPackedPosition);
+
+        for(int groupPos = firstGroupPosition; groupPos <= lastGroupPosition; groupPos++) {
+            ArrayList<Integer> list = new ArrayList<>();
+
+            int startChildPos = (groupPos == firstGroupPosition) ? firstChildPosition : 0;
+            int endChildPos = (groupPos == lastGroupPosition) ? lastChildPosition : adapter.getChildrenCount(groupPos)-1;
+
+            for(int index = startChildPos; index <= endChildPos; index++) {
+                list.add(index);
+            }
+
+            map.put(groupPos, list);
+        }
+
+        return map;
     }
 }

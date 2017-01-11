@@ -107,6 +107,18 @@ public class Contact implements java.io.Serializable {
     public void addEmailAdress(String anEmailAddress) {
         if (mEmails.indexOf(anEmailAddress) < 0) {
             mEmails.add(anEmailAddress);
+
+            // test if the email address also matches to a matrix ID
+            MXID mxid =  PIDsRetriever.getIntance().getMXID(anEmailAddress);
+
+            if (null != mxid) {
+                // the PIDs are not yet retrieved
+                if (null == mMXIDsByElement) {
+                    mMXIDsByElement = new HashMap<>();
+                }
+
+                mMXIDsByElement.put(anEmailAddress, mxid);
+            }
         }
     }
 
@@ -147,7 +159,7 @@ public class Contact implements java.io.Serializable {
      * Check if some matrix IDs are linked to emails
      * @return true if some matrix IDs have been retrieved
      */
-    public boolean hasMatridIds(Context context) {
+    public boolean checkMatridIds(Context context) {
         boolean localUpdateOnly = (null != mMXIDsByElement);
 
         // the PIDs are not yet retrieved
@@ -339,7 +351,6 @@ public class Contact implements java.io.Serializable {
      * @return the contact thumbnail bitmap.
      */
     public Bitmap getThumbnail(Context context) {
-
         if ((null == mThumbnail) && (null != mThumbnailUri)) {
             try {
                 mThumbnail = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mThumbnailUri));

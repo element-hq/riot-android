@@ -334,7 +334,7 @@ public class VectorApp extends Application {
             }
 
             // get the contact update at application launch
-            ContactsManager.refreshLocalContactsSnapshot(this);
+            ContactsManager.refreshLocalContactsSnapshot(VectorApp.this);
 
             boolean hasActiveCall = false;
 

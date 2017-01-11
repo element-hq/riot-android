@@ -304,38 +304,35 @@ public class ParticipantAdapterItem implements java.io.Serializable {
      * @return an unique display name
      */
     public String getUniqueDisplayName(List<String> otherDisplayNames) {
-        boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches();
-
         // set the display name
         String displayname = mDisplayName;
-        String lowerCaseDisplayname = displayname.toLowerCase();
 
-        // detect if the username is used by several users
-        int pos = -1;
+        // for the matrix users, append the matrix id to see the difference
+        if (null == mContact) {
+            String lowerCaseDisplayname = displayname.toLowerCase();
 
-        if (null != otherDisplayNames) {
-            pos = otherDisplayNames.indexOf(lowerCaseDisplayname);
+            // detect if the username is used by several users
+            int pos = -1;
 
-            if (pos >= 0) {
-                if (pos == otherDisplayNames.lastIndexOf(lowerCaseDisplayname)) {
-                    pos = -1;
+            if (null != otherDisplayNames) {
+                pos = otherDisplayNames.indexOf(lowerCaseDisplayname);
+
+                if (pos >= 0) {
+                    if (pos == otherDisplayNames.lastIndexOf(lowerCaseDisplayname)) {
+                        pos = -1;
+                    }
                 }
             }
-        }
 
-        if ((pos >= 0) && isMatrixUserId) {
-            displayname += " (" + mUserId + ")";
-        }
-
-        // if a contact has a matrix id
-        // display the matched email address in the display name
-        if ((null != mContact) && isMatrixUserId) {
-            String firstEmail = mContact.getEmails().get(0);
-
-            if (!TextUtils.equals(displayname, firstEmail)) {
-                displayname += " (" + firstEmail + ")";
+            if (pos >= 0) {
+                displayname += " (" + mUserId + ")";
+            }
+        } else {
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) {
+                displayname += " (" + mUserId + ")";
             }
         }
+
         return displayname;
     }
 }
