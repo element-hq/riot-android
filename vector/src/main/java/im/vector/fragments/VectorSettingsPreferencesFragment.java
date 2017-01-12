@@ -132,6 +132,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private List<String> mDisplayedEmails = new ArrayList<>();
 
     // displayed pushers
+    private PreferenceCategory mPushersSettingsDivider;
     private PreferenceCategory mPushersSettingsCategory;
     private List<Pusher> mDisplayedPushers = new ArrayList<>();
 
@@ -412,6 +413,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
         mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
+        mPushersSettingsDivider = (PreferenceCategory)getPreferenceManager().findPreference("notifications_targets_divider");
         mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
         mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
         mDevicesListSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
@@ -456,7 +458,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final Preference cryptoIsEnabledPref = preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end_is_active));
 
         cryptoIsEnabledPref.setEnabled(false);
-        
+
         if (!mSession.isCryptoEnabled()) {
             useCryptoPref.setChecked(false);
             mLabsCategory.removePreference(cryptoIsEnabledPref);
@@ -1227,12 +1229,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         GcmRegistrationManager registrationManager = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
         List<Pusher> pushersList = new ArrayList<>(registrationManager.mPushersList);
 
+        if (pushersList.isEmpty()) {
+            getPreferenceScreen().removePreference(mPushersSettingsCategory);
+            getPreferenceScreen().removePreference(mPushersSettingsDivider);
+            return;
+        }
+
         // check first if there is an update
         boolean isNewList = true;
         if ((null != mDisplayedPushers) && (pushersList.size() == mDisplayedPushers.size())) {
             isNewList = !mDisplayedPushers.containsAll(pushersList);
         }
-
+        
         if (isNewList) {
             // remove the displayed one
             mPushersSettingsCategory.removeAll();

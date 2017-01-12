@@ -75,7 +75,9 @@
 
     </PreferenceCategory>
 
-    <im.vector.preference.VectorDividerCategory />
+    <im.vector.preference.VectorDividerCategory
+        android:key="notifications_targets_divider"
+        android:title="notifications_targets_divider"/>
 
     <PreferenceCategory
         android:title="@string/settings_notifications_targets"
