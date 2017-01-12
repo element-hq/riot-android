@@ -78,7 +78,7 @@
     <string name="action_enable_room_notification">Enable room notifications</string>
     <string name="action_disable_room_notification">Disable room notifications</string>
     <string name="send_bug_report">Send Bug Report</string>
-    <string name="send_bug_report_placeholder">Type a bug description</string>
+    <string name="send_bug_report_placeholder">Please tell us what went wrong</string>
     <string name="action_create_room">Create...</string>
     <string name="action_room_info">Room info</string>
     <string name="action_voice_call">Voice Call</string>
