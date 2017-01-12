@@ -105,6 +105,12 @@
         <im.vector.preference.VectorSwitchPreference
             android:title="@string/room_settings_labs_end_to_end"
             android:key="@string/room_settings_labs_end_to_end"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/room_settings_labs_end_to_end_is_active"
+            android:focusable="false"
+            android:title="@string/room_settings_labs_end_to_end_is_active" />
+
     </im.vector.preference.VectorPreferenceCategory>
     
     <im.vector.preference.VectorDividerCategory />

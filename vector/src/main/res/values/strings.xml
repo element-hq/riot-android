@@ -768,6 +768,7 @@
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
     <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
+    <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
     <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
 
     <!-- Room settings: advanced addresses -->

@@ -149,6 +149,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
 
+    private PreferenceCategory mLabsCategory;
+
     // events listener
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
@@ -408,9 +410,60 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
+        mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
+        mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
+        mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
+        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
+        mDevicesListSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
+        mDevicesListSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
+        mCryptographyCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_cryptography));
+        mCryptographyCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.cryptography_divider));
+        mLabsCategory = (PreferenceCategory)getPreferenceManager().findPreference("labs");
+
+        // preference to start the App info screen, to facilitate App permissions access
+        Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
+        applicationInfoLInkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+
+                if(null != getActivity()) {
+                    getActivity().getApplicationContext().startActivity(intent);
+                }
+
+                return true;
+            }
+        });
+
+        // permissions management
+        // on Android >= 23, use the system ones
+        if (Build.VERSION.SDK_INT >= 23) {
+            // hide the dedicated section
+            getPreferenceScreen().removePreference(getPreferenceManager().findPreference(getResources().getString(R.string.settings_app_permission)));
+            getPreferenceScreen().removePreference(getPreferenceManager().findPreference("settings_app_permission_divider"));
+        }
+
+        // background sync management
+        mBackgroundSyncCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
+        mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
+        mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
+
         final SwitchPreference useCryptoPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
-        useCryptoPref.setChecked(mSession.isCryptoEnabled());
-        useCryptoPref.setEnabled(!mSession.isCryptoEnabled());
+        final Preference cryptoIsEnabledPref = preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end_is_active));
+
+        cryptoIsEnabledPref.setEnabled(false);
+        
+        if (!mSession.isCryptoEnabled()) {
+            useCryptoPref.setChecked(false);
+            mLabsCategory.removePreference(cryptoIsEnabledPref);
+        } else {
+            mLabsCategory.removePreference(useCryptoPref);
+        }
+
         useCryptoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValueAsVoid) {
@@ -441,7 +494,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         displayLoadingView();
 
                         mSession.enableCrypto(newValue, new ApiCallback<Void>() {
-
                             private void refresh() {
                                 if (null != getActivity()) {
                                     getActivity().runOnUiThread(new Runnable() {
@@ -450,8 +502,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                             hideLoadingView();
                                             useCryptoPref.setChecked(mSession.isCryptoEnabled());
 
-                                            if(mSession.isCryptoEnabled()){
-                                                refreshDevicesList();
+                                            if (mSession.isCryptoEnabled()) {
+                                                mLabsCategory.removePreference(useCryptoPref);
+                                                mLabsCategory.addPreference(cryptoIsEnabledPref);
                                             }
                                         }
                                     });
@@ -485,49 +538,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 return true;
             }
         });
-
-
-        mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
-        mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
-        mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
-        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
-        mDevicesListSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
-        mDevicesListSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
-        mCryptographyCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_cryptography));
-        mCryptographyCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.cryptography_divider));
-
-
-        // preference to start the App info screen, to facilitate App permissions access
-        Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
-        applicationInfoLInkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                intent.setData(uri);
-
-                if(null != getActivity()) {
-                    getActivity().getApplicationContext().startActivity(intent);
-                }
-
-                return true;
-            }
-        });
-
-        // permissions management
-        // on Android >= 23, use the system ones
-        if (Build.VERSION.SDK_INT >= 23) {
-            // hide the dedicated section
-            getPreferenceScreen().removePreference(getPreferenceManager().findPreference(getResources().getString(R.string.settings_app_permission)));
-            getPreferenceScreen().removePreference(getPreferenceManager().findPreference("settings_app_permission_divider"));
-        }
-
-        // background sync management
-        mBackgroundSyncCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
-        mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
-        mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
 
         refreshPushersList();
         refreshEmailsList();
