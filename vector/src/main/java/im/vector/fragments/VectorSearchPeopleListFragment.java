@@ -185,7 +185,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
      * @return true if the local search is ready to start.
      */
     public boolean isReady() {
-        return ContactsManager.didPopulateLocalContacts() && mAdapter.isKnownMembersInitialized();
+        return ContactsManager.didPopulateLocalContacts(getActivity()) && mAdapter.isKnownMembersInitialized();
     }
 
     /**
@@ -201,7 +201,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         }
 
         // wait that the local contacts are populated
-        if (!ContactsManager.didPopulateLocalContacts()) {
+        if (!ContactsManager.didPopulateLocalContacts(getActivity())) {
             mAdapter.reset();
             return;
         }

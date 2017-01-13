@@ -176,13 +176,20 @@ public class ContactsManager {
 
     /**
      * Tell if the contacts snapshot list is ready
+     * @param context the context
      * @return true if the contacts snapshot list is ready
      */
-    public static boolean didPopulateLocalContacts() {
+    public static boolean didPopulateLocalContacts(Context context) {
         boolean res;
+        boolean isPopulating;
 
         synchronized (LOG_TAG) {
             res = (null != mContactsList);
+            isPopulating = mIsPopulating;
+        }
+
+        if (!res && !isPopulating) {
+            refreshLocalContactsSnapshot(context);
         }
 
         return res;
