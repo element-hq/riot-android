@@ -47,7 +47,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
      */
     private Event parseEvent(Bundle bundle) {
         // accept only event with room id.
-        if (!bundle.containsKey("room_id")) {
+        if ((null == bundle) || !bundle.containsKey("room_id")) {
             return null;
         }
 
@@ -83,6 +83,7 @@ public class MatrixGcmListenerService extends GcmListenerService {
             mUIhandler = new android.os.Handler(VectorApp.getInstance().getMainLooper());
         }
 
+
         mUIhandler.post(new Runnable() {
             @Override
             public void run() {
@@ -94,9 +95,11 @@ public class MatrixGcmListenerService extends GcmListenerService {
 
                 int unreadCount = 0;
 
-                Object unreadCounterAsVoid = data.get("unread");
-                if (unreadCounterAsVoid instanceof String) {
-                    unreadCount = Integer.parseInt((String) unreadCounterAsVoid);
+                if (null != data) {
+                    Object unreadCounterAsVoid = data.get("unread");
+                    if (unreadCounterAsVoid instanceof String) {
+                        unreadCount = Integer.parseInt((String) unreadCounterAsVoid);
+                    }
                 }
 
                 // update the badge counter
