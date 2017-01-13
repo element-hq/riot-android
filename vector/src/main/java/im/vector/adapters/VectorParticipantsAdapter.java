@@ -21,7 +21,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +31,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -638,7 +638,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+        ParticipantAdapterItem item = (ParticipantAdapterItem) getChild(groupPosition, childPosition);
+        return groupPosition != 0 || item.mIsValid;
     }
 
 
@@ -815,6 +816,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
         }
+
+        // Add alpha if cannot be invited
+        convertView.setAlpha(participant.mIsValid ? 1f : 0.5f);
 
         // the checkbox is not managed here
         final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);

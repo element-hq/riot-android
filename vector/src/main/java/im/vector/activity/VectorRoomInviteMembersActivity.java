@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
@@ -182,7 +183,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Object item = mAdapter.getChild(groupPosition, childPosition);
 
-                if (item instanceof ParticipantAdapterItem) {
+                if (item instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) item).mIsValid) {
                     ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
 
                     // returns the selected user
@@ -214,10 +215,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             pattern = pattern.trim();
 
             // test if the pattern is a valid email or matrix id
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
-                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches()) {
-                firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
-            }
+            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
+                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches();
+            firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
         }
 
         // display a spinner while the other room members are listed

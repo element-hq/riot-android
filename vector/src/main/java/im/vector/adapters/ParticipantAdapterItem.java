@@ -15,6 +15,7 @@
  */
 
 package im.vector.adapters;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -43,6 +44,9 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     // user id
     public String mUserId;
 
+    // true when valid email or valid matrix id
+    public boolean mIsValid;
+
     // the data is extracted either from a room member or a contact
     public RoomMember mRoomMember;
     public Contact mContact;
@@ -67,6 +71,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         mDisplayName = member.getName();
         mAvatarUrl = member.avatarUrl;
         mUserId = member.getUserId();
+        mIsValid = true;
 
         mRoomMember = member;
         mContact = null;
@@ -82,6 +87,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         mDisplayName = TextUtils.isEmpty(user.displayname) ? user.user_id : user.displayname;
         mUserId = user.user_id;
         mAvatarUrl = user.getAvatarUrl();
+        mIsValid = true;
         initSearchByPatternFields();
     }
 
@@ -99,6 +105,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         mAvatarBitmap = contact.getThumbnail(context);
 
         mUserId = null;
+        mIsValid = true;
         mRoomMember = null;
 
         mContact = contact;
@@ -110,12 +117,14 @@ public class ParticipantAdapterItem implements java.io.Serializable {
      * Constructor from an user information.
      * @param displayName the display name
      * @param avatarUrl the avatar url.
-     * @param userId teh userId
+     * @param userId the userId
+     * @param isValid whether it has a valid email/matrix user id or not
      */
-    public ParticipantAdapterItem(String displayName, String avatarUrl, String userId) {
+    public ParticipantAdapterItem(String displayName, String avatarUrl, String userId, boolean isValid) {
         mDisplayName = displayName;
         mAvatarUrl = avatarUrl;
         mUserId = userId;
+        mIsValid = isValid;
 
         initSearchByPatternFields();
     }
@@ -266,7 +275,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         if (null != mAvatarBitmap) {
             imageView.setImageBitmap(mAvatarBitmap);
         } else {
-            if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches())) {
+            if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) || !mIsValid) {
                 imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mUserId), "@@", true));
             } else {
                 if (TextUtils.isEmpty(mUserId)) {

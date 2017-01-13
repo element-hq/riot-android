@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +39,7 @@ import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.rest.model.RoomThirdPartyInvite;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -333,7 +333,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
                 for (RoomThirdPartyInvite invite : thirdPartyInvites) {
                     // If the home server has converted the 3pid invite into a room member, do not show it
                     if (null == mRoom.getLiveState().memberWithThirdPartyInviteToken(invite.token)) {
-                        ParticipantAdapterItem participant =  new ParticipantAdapterItem(invite.display_name, "", null);
+                        ParticipantAdapterItem participant =  new ParticipantAdapterItem(invite.display_name, "", null, true);
 
                         if ((!isSearchEnabled) || participant.contains(mSearchPattern)) {
                             invitedMembers.add(participant);
