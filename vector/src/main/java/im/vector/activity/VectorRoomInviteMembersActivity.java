@@ -21,19 +21,19 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.User;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;;
+import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -42,6 +42,8 @@ import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
+
+;
 
 /**
  * This class provides a way to search other user to invite them in a dedicated room
@@ -60,6 +62,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     // main UI items
     private ExpandableListView mListView;
+    private ImageView mBackgroundImageView;
     private View mNoResultView;
     private View mLoadingView;
     private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
@@ -160,6 +163,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
+        mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
         mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
@@ -179,7 +183,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Object item = mAdapter.getChild(groupPosition, childPosition);
 
-                if (item instanceof ParticipantAdapterItem) {
+                if (item instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) item).mIsValid) {
                     ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
 
                     // returns the selected user
@@ -211,10 +215,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             pattern = pattern.trim();
 
             // test if the pattern is a valid email or matrix id
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
-                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches()) {
-                firstEntry = new ParticipantAdapterItem(pattern, null, pattern);
-            }
+            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
+                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches();
+            firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
         }
 
         // display a spinner while the other room members are listed
@@ -236,7 +239,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     @Override
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
-                        mNoResultView.setVisibility((0 == count)? View.VISIBLE : View.GONE);
+                        mBackgroundImageView.setVisibility((0 == count) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
+                        mNoResultView.setVisibility((0 == count)  && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
                     }
                 });
             }

@@ -165,7 +165,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Object child = mAdapter.getChild(groupPosition, childPosition);
 
-                if (child instanceof ParticipantAdapterItem) {
+                if (child instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) child).mIsValid) {
                     ParticipantAdapterItem item = (ParticipantAdapterItem)child;
 
                     Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
