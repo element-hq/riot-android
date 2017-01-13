@@ -546,22 +546,34 @@ public class LoginActivity extends MXCActionBarActivity {
      * @return the home server Url according to custom HS checkbox
      */
     private String getHomeServerUrl() {
+        String url = getResources().getString(R.string.default_hs_server_url);;
+
         if (mUseCustomHomeServersCheckbox.isChecked()) {
-            return mHomeServerText.getText().toString().trim();
-        } else {
-            return getResources().getString(R.string.default_hs_server_url);
+            url = mHomeServerText.getText().toString().trim();
+
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
         }
+
+        return url;
     }
 
     /**
      * @return the identity server URL according to custom HS checkbox
      */
     private String getIdentityServerUrl() {
+        String url = getResources().getString(R.string.default_identity_server_url);
+
         if (mUseCustomHomeServersCheckbox.isChecked()) {
-            return mIdentityServerText.getText().toString().trim();
-        } else {
-            return getResources().getString(R.string.default_identity_server_url);
+            url = mIdentityServerText.getText().toString().trim();
+
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
         }
+
+        return url;
     }
 
     /**
