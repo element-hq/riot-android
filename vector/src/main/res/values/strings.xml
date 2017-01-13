@@ -499,7 +499,7 @@
     <string name="room_participants_action_start_video_call">Start video call</string>
     <string name="room_participants_action_ignore">Hide all messages from this user</string>
     <string name="room_participants_action_unignore">Show all messages from this user</string>
-    <string name="room_participants_invite_search_another_user">Search/invite by name, email, id</string>
+    <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
     <string name="room_participants_action_devices_list">Show Devices List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
@@ -584,7 +584,7 @@
 
     <!-- Search -->
     <string name="search_hint">Search</string>
-    <string name="search_members_hint">Search by name or id</string>
+    <string name="search_members_hint">Filter room members</string>
     <string name="search_no_results">No Results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
