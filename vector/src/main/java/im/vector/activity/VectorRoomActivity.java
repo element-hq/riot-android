@@ -1326,13 +1326,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 });
             }
 
-            private void onError() {
+            private void onError(final String errorMessage) {
                 VectorRoomActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         setProgressVisibility(View.GONE);
                         Activity activity = VectorRoomActivity.this;
-                        CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call));
+                        CommonActivityUtils.displayToastOnUiThread(activity, activity.getString(R.string.cannot_start_call) + " (" + errorMessage + ")");
                     }
                 });
             }
@@ -1340,19 +1340,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             @Override
             public void onNetworkError(Exception e) {
                 Log.e(LOG_TAG,"## startIpCall(): onNetworkError Msg="+e.getMessage());
-                onError();
+                onError(e.getLocalizedMessage());
             }
 
             @Override
             public void onMatrixError(MatrixError e) {
                 Log.e(LOG_TAG,"## startIpCall(): onMatrixError Msg="+e.getLocalizedMessage());
-                onError();
+                onError(e.getLocalizedMessage());
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
                 Log.e(LOG_TAG,"## startIpCall(): onUnexpectedError Msg="+e.getLocalizedMessage());
-                onError();
+                onError(e.getLocalizedMessage());
             }
         });
     }
