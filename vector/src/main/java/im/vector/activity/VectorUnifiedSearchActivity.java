@@ -23,26 +23,26 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar.TabListener;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.app.ActionBar.TabListener;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.contacts.ContactsManager;
+import im.vector.fragments.VectorSearchMessagesListFragment;
 import im.vector.fragments.VectorSearchPeopleListFragment;
 import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
-import im.vector.fragments.VectorSearchMessagesListFragment;
 
 
 /**
@@ -203,7 +203,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private void searchAccordingToTabHandler() {
         int currentIndex = mActionBar.getSelectedNavigationIndex();
 
-        String pattern = mPatternToSearchEditText.getText().toString();
+        String pattern = mPatternToSearchEditText.getText().toString().trim();
 
         // the background image view should only be displayed when there is no patter,
         // the rooms searches has a result : the public rooms list.

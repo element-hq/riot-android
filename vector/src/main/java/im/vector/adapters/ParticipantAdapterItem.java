@@ -45,7 +45,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     public String mUserId;
 
     // true when valid email or valid matrix id
-    public boolean mIsValid;
+    public boolean mIsValid = true;
 
     // the data is extracted either from a room member or a contact
     public RoomMember mRoomMember;
@@ -71,7 +71,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         mDisplayName = member.getName();
         mAvatarUrl = member.avatarUrl;
         mUserId = member.getUserId();
-        mIsValid = true;
 
         mRoomMember = member;
         mContact = null;
@@ -87,7 +86,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         mDisplayName = TextUtils.isEmpty(user.displayname) ? user.user_id : user.displayname;
         mUserId = user.user_id;
         mAvatarUrl = user.getAvatarUrl();
-        mIsValid = true;
         initSearchByPatternFields();
     }
 
@@ -105,7 +103,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         mAvatarBitmap = contact.getThumbnail(context);
 
         mUserId = null;
-        mIsValid = true;
         mRoomMember = null;
 
         mContact = contact;
