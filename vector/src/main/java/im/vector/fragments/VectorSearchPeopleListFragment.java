@@ -206,7 +206,15 @@ public class VectorSearchPeopleListFragment extends Fragment {
             return;
         }
 
-        mAdapter.setSearchedPattern(pattern, null, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
+        ParticipantAdapterItem firstEntry = null;
+        if (!TextUtils.isEmpty(pattern)) {
+            // test if the pattern is a valid email or matrix id
+            boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
+                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches();
+            firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
+        }
+
+        mAdapter.setSearchedPattern(pattern, firstEntry, new VectorParticipantsAdapter.OnParticipantsSearchListener() {
             @Override
             public void onSearchEnd(final int count) {
                 mPeopleListView.post(new Runnable() {
