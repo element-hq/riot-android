@@ -68,6 +68,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -956,9 +957,9 @@ public class VectorUtils {
      * @param session the session.
      * @return a map indexed by the matrix id.
      */
-    public static HashMap<String, ParticipantAdapterItem> listKnownParticipants(MXSession session) {
+    public static Map<String, ParticipantAdapterItem> listKnownParticipants(MXSession session) {
         // a hash map is a lot faster than a list search
-        HashMap<String, ParticipantAdapterItem> map = new HashMap<>();
+        Map<String, ParticipantAdapterItem> map = new HashMap<>();
 
         // check known users
         Collection<User> users = session.getDataHandler().getStore().getUsers();
