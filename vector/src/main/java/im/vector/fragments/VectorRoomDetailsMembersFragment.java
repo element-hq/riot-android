@@ -976,16 +976,44 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 mParticipantsListView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        // and the new member is added.
-                        mProgressView.setVisibility(View.VISIBLE);
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
 
-                        if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
-                            mRoom.inviteByEmail(userId, mDefaultCallBack);
-                        } else {
-                            ArrayList<String> userIDs = new ArrayList<>();
-                            userIDs.add(userId);
-                            mRoom.invite(userIDs, mDefaultCallBack);
+                        builder.setTitle(getString(R.string.room_participants_invite_prompt_title));
+
+                        String displayName = userId;
+
+                        if (MXSession.isUserId(userId)) {
+                            User user =  mSession.getDataHandler().getStore().getUser(userId);
+                            if (null != user) {
+                                displayName = user.displayname;
+                            }
                         }
+
+                        builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, displayName));
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // and the new member is added.
+                                mProgressView.setVisibility(View.VISIBLE);
+
+                                if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
+                                    mRoom.inviteByEmail(userId, mDefaultCallBack);
+                                } else {
+                                    ArrayList<String> userIDs = new ArrayList<>();
+                                    userIDs.add(userId);
+                                    mRoom.invite(userIDs, mDefaultCallBack);
+                                }
+                            }
+                        });
+
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // nothing to do
+                            }
+                        });
+
+                        builder.show();
                     }
                 }, 100);
             }
