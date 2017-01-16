@@ -487,6 +487,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                     useCryptoPref.setChecked(false);
                                 }
                             })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    dialog.dismiss();
+                                    useCryptoPref.setChecked(false);
+                                }
+                            })
                             .create()
                             .show();
                 } else {
