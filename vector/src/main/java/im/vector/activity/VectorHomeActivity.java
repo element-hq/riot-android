@@ -339,7 +339,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                 final String roomIdOrAlias = params.get(VectorUniversalLinkReceiver.ULINK_ROOM_ID_OR_ALIAS_KEY);
 
                 // it is a room ID ?
-                if (MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER.matcher(roomIdOrAlias).matches()) {
+                if (MXSession.isRoomId(roomIdOrAlias)) {
                     Log.d(LOG_TAG, "Has a valid universal link to the room ID " + roomIdOrAlias);
                     Room room = mSession.getDataHandler().getRoom(roomIdOrAlias, false);
 
@@ -352,7 +352,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // wait the next sync
                         intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, uri);
                     }
-                } else if (MXSession.PATTERN_CONTAIN_MATRIX_ALIAS.matcher(roomIdOrAlias).matches()){
+                } else if (MXSession.isRoomAlias(roomIdOrAlias)){
                     Log.d(LOG_TAG, "Has a valid universal link of the room Alias " + roomIdOrAlias);
 
                     // it is a room alias

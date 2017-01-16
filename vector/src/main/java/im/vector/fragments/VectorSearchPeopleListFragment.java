@@ -210,7 +210,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         if (!TextUtils.isEmpty(pattern)) {
             // test if the pattern is a valid email or matrix id
             boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(pattern).matches() ||
-                    MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(pattern).matches();
+                    MXSession.isUserId(pattern);
             firstEntry = new ParticipantAdapterItem(pattern, null, pattern, isValid);
         }
 

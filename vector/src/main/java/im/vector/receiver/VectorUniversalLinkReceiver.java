@@ -409,15 +409,14 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
 
             String firstParam = temp[1];
 
-            if (MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(firstParam).matches()) {
+            if (MXSession.isUserId(firstParam)) {
                 if (temp.length > 2) {
                     Log.e(LOG_TAG, "## parseUniversalLink : universal link to member id is too long");
                     return null;
                 }
 
                 map.put(ULINK_MATRIX_USER_ID_KEY, firstParam);
-            } else if (MXSession.PATTERN_CONTAIN_MATRIX_ALIAS.matcher(firstParam).matches() ||
-                    MXSession.PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER.matcher(firstParam).matches()) {
+            } else if (MXSession.isRoomAlias(firstParam) || MXSession.isRoomId(firstParam)) {
                 map.put(ULINK_ROOM_ID_OR_ALIAS_KEY, firstParam);
             }
 
@@ -425,7 +424,7 @@ public class VectorUniversalLinkReceiver extends BroadcastReceiver {
             if (temp.length > 2) {
                 String eventId = temp[2];
 
-                if (MXSession.PATTERN_CONTAIN_MATRIX_MESSAGE_IDENTIFIER.matcher(eventId).matches()) {
+                if (MXSession.isMessageId(eventId)) {
                     map.put(ULINK_EVENT_ID_KEY, temp[2]);
                 } else {
                     uri = Uri.parse(uri.toString().replace("#/room/", "room/"));
