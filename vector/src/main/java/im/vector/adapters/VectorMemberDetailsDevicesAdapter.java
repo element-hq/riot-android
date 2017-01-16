@@ -17,6 +17,8 @@
 package im.vector.adapters;
 import android.content.Context;
 import org.matrix.androidsdk.util.Log;
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +66,7 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
     // the events listener
     private IDevicesAdapterListener mActivityListener;
 
+    // the oneself device Id
     final private String myDeviceId;
 
     /**
@@ -94,21 +97,39 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
         mActivityListener = aListener;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        // always display the oneself device on top
+        if (null != myDeviceId) {
+            setNotifyOnChange(false);
+
+            MXDeviceInfo deviceInfo = null;
+
+            for(int i = 0; i < getCount(); i++) {
+                if (TextUtils.equals(myDeviceId, getItem(i).deviceId)) {
+                    deviceInfo = getItem(i);
+                    break;
+                }
+            }
+
+            if (null != deviceInfo) {
+                this.remove(deviceInfo);
+                this.insert(deviceInfo, 0);
+            }
+
+            setNotifyOnChange(true);
+        }
+
+        super.notifyDataSetChanged();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        boolean isMyself = false;
-
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(mItemLayoutResourceId, parent, false);
         }
 
         final MXDeviceInfo deviceItem = getItem(position);
-
-        // check if the current device is the one i'm using
-        if((null!=myDeviceId) && myDeviceId.equals(deviceItem.deviceId)) {
-            isMyself = true;
-        }
 
         // retrieve the ui items
         final Button buttonVerify = (Button) convertView.findViewById(R.id.button_verify);
@@ -157,37 +178,34 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
                 break;
         }
 
-        if(isMyself) {
-            // hide verify/block buttons for my current device
-            buttonVerify.setVisibility(View.INVISIBLE);
-            buttonBlock.setVisibility(View.INVISIBLE);
-        } else {
-            buttonVerify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mActivityListener) {
-                        try {
-                            mActivityListener.OnVerifyDeviceClick(deviceItem);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## getView() : OnVerifyDeviceClick fails " + e.getMessage());
-                        }
-                    }
-                    }
-            });
+        buttonVerify.setVisibility(TextUtils.equals(myDeviceId, deviceItem.deviceId) ? View.INVISIBLE : View.VISIBLE);
+        buttonBlock.setVisibility(TextUtils.equals(myDeviceId, deviceItem.deviceId) ? View.INVISIBLE : View.VISIBLE);
 
-            buttonBlock.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mActivityListener) {
-                        try {
-                            mActivityListener.OnBlockDeviceClick(deviceItem);
-                        } catch (Exception e) {
-                            Log.e(LOG_TAG, "## getView() : OnBlockDeviceClick fails " + e.getMessage());
-                        }
+        buttonVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mActivityListener) {
+                    try {
+                        mActivityListener.OnVerifyDeviceClick(deviceItem);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## getView() : OnVerifyDeviceClick fails " + e.getMessage());
                     }
                 }
-            });
-        }
+            }
+        });
+
+        buttonBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mActivityListener) {
+                    try {
+                        mActivityListener.OnBlockDeviceClick(deviceItem);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## getView() : OnBlockDeviceClick fails " + e.getMessage());
+                    }
+                }
+            }
+        });
 
         return convertView;
     }
