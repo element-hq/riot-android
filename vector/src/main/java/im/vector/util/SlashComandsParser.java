@@ -17,7 +17,9 @@
 package im.vector.util;
 
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
@@ -41,9 +43,9 @@ public class SlashComandsParser {
 
     // defines the command line operations
     // the user can write theses messages to perform some room events
+    public static final String CMD_EMOTE = "/me";
 
     private static final String CMD_CHANGE_DISPLAY_NAME = "/nick";
-    private static final String CMD_EMOTE = "/me";
     private static final String CMD_JOIN_ROOM = "/join";
     private static final String CMD_KICK_USER = "/kick";
     private static final String CMD_BAN_USER = "/ban";
@@ -58,12 +60,13 @@ public class SlashComandsParser {
     /**
      * check if the text message is an IRC command.
      * If it is an IRC command, it is executed
-     * @param activity the room activity
-     * @param session the session
-     * @param room the room
-     * @param textMessage the text message
+     *
+     * @param activity      the room activity
+     * @param session       the session
+     * @param room          the room
+     * @param textMessage   the text message
      * @param formattedBody the formatted message
-     * @param format the message format
+     * @param format        the message format
      * @return true if it is a splash command
      */
     public static boolean manageSplashCommand(final VectorRoomActivity activity, final MXSession session, final Room room, final String textMessage, final String formattedBody, final String format) {
@@ -144,7 +147,7 @@ public class SlashComandsParser {
                 String roomAlias = textMessage.substring(CMD_JOIN_ROOM.length()).trim();
 
                 if (roomAlias.length() > 0) {
-                    session.joinRoom(roomAlias,new SimpleApiCallback<String>(activity) {
+                    session.joinRoom(roomAlias, new SimpleApiCallback<String>(activity) {
 
                         @Override
                         public void onSuccess(String roomId) {
@@ -171,7 +174,7 @@ public class SlashComandsParser {
                     Room theRoom = null;
                     Collection<Room> rooms = session.getDataHandler().getStore().getRooms();
 
-                    for(Room r : rooms) {
+                    for (Room r : rooms) {
                         RoomState state = r.getLiveState();
 
                         if (null != state) {
@@ -241,7 +244,7 @@ public class SlashComandsParser {
                 if (messageParts.length >= 2) {
                     room.updateUserPowerLevels(messageParts[1], 0, callback);
                 }
-            } else if (TextUtils.equals(firstPart,CMD_MARKDOWN)) {
+            } else if (TextUtils.equals(firstPart, CMD_MARKDOWN)) {
                 isIRCCmd = true;
 
                 if (messageParts.length >= 2) {

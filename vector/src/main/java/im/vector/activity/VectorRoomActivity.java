@@ -902,7 +902,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         ViewedRoomTracker.getInstance().setViewedRoomId(null);
         ViewedRoomTracker.getInstance().setMatrixId(null);
     }
-    
+
     @Override
     protected void onResume() {
         Log.d(LOG_TAG, "++ Resume the activity");
@@ -1778,10 +1778,19 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
      */
     public void insertUserDisplayNameInTextEditor(String text) {
         if (null != text) {
-            if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.append(sanitizeDisplayname(text) + ": ");
+            if (TextUtils.equals(mSession.getMyUser().displayname, text)) {
+                // current user
+                if (TextUtils.isEmpty(mEditText.getText())) {
+                    mEditText.setText(String.format("%s %s", SlashComandsParser.CMD_EMOTE," "));
+                    mEditText.setSelection(mEditText.getText().length());
+                }
             } else {
-                mEditText.getText().insert(mEditText.getSelectionStart(), sanitizeDisplayname(text) + " ");
+                // another user
+                if (TextUtils.isEmpty(mEditText.getText())) {
+                    mEditText.append(sanitizeDisplayname(text) + ": ");
+                } else {
+                    mEditText.getText().insert(mEditText.getSelectionStart(), sanitizeDisplayname(text) + " ");
+                }
             }
         }
     }
