@@ -15,6 +15,7 @@
  */
 
 package im.vector.adapters;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -39,12 +40,14 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -89,16 +92,16 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private final int mHeaderLayoutResourceId;
 
     // participants list
-    private Collection<ParticipantAdapterItem> mUnusedParticipants = null;
-    private Collection<ParticipantAdapterItem> mContactsParticipants = null;
-    private ArrayList<String> mMemberUserIds = null;
-    private ArrayList<String> mDisplayNamesList = null;
+    private List<ParticipantAdapterItem> mUnusedParticipants = null;
+    private List<ParticipantAdapterItem> mContactsParticipants = null;
+    private List<String> mUsedMemberUserIds = null;
+    private List<String> mDisplayNamesList = null;
     private String mPattern = "";
 
     private List<ParticipantAdapterItem> mItemsToHide = new ArrayList<>();
 
     // contacts which have retrieved the linked matrix Id
-    private ArrayList<Contact> mCheckedContacts = new ArrayList<>();
+    private List<Contact> mCheckedContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
     private int mLocalContactsSnapshotSession = -1;
@@ -152,7 +155,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
             if (isUserA_Active && !isUserB_Active) {
                 return -1;
-            } if (!isUserA_Active && isUserB_Active) {
+            }
+            if (!isUserA_Active && isUserB_Active) {
                 return +1;
             }
 
@@ -181,7 +185,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private ParticipantAdapterItem mFirstEntry;
 
     // the participants can be split in sections
-    ArrayList<ArrayList<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
+    List<List<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
     private int mFirstEntryPosition = -1;
     private int mLocalContactsSectionPosition = -1;
     private int mRoomContactsSectionPosition = -1;
@@ -191,11 +195,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * If a room id is defined, the adapter is in edition mode : the user can add / remove dynamically members or leave the room.
      * If there is none, the room is in creation mode : the user can add/remove members to create a new room.
      *
-     * @param context          the context.
-     * @param cellLayoutResourceId the cell layout.
+     * @param context                the context.
+     * @param cellLayoutResourceId   the cell layout.
      * @param headerLayoutResourceId the header layout
-     * @param session          the session.
-     * @param roomId           the room id.
+     * @param session                the session.
+     * @param roomId                 the room id.
      */
     public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId) {
         mContext = context;
@@ -222,8 +226,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Search a pattern in the known members list.
-     * @param pattern the pattern to search
-     * @param firstEntry the entry to display in the results list.
+     *
+     * @param pattern        the pattern to search
+     * @param firstEntry     the entry to display in the results list.
      * @param searchListener the search result listener
      */
     public void setSearchedPattern(String pattern, ParticipantAdapterItem firstEntry, OnParticipantsSearchListener searchListener) {
@@ -239,7 +244,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         } else if (null != searchListener) {
             int displayedItemsCount = 0;
 
-            for(ArrayList<ParticipantAdapterItem> list : mParticipantsListsList) {
+            for (List<ParticipantAdapterItem> list : mParticipantsListsList) {
                 displayedItemsCount += list.size();
             }
 
@@ -247,17 +252,36 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private static final Pattern FACEBOOK_EMAIL_ADDRESS = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@facebook.com");
+    private static final List<Pattern> mBlackedListEmails = Arrays.asList(FACEBOOK_EMAIL_ADDRESS);
+
+    /**
+     * Tells if an email is black-listed
+     * @param email the email address to test.
+     * @return true if the email address is black-listed
+     */
+    private static boolean isBlackedListed(String email) {
+        for(int i = 0; i < mBlackedListEmails.size(); i++) {
+            if (mBlackedListEmails.get(i).matcher(email).matches()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Add the contacts participants
-     * @param map the participantItem indexed by their matrix Id
+     *
+     * @param list the participantItem indexed by their matrix Id
      */
-    private void addContacts(HashMap<String, ParticipantAdapterItem> map) {
+    private void addContacts(List<ParticipantAdapterItem> list) {
         Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot();
 
         if (null != contacts) {
             for (Contact contact : contacts) {
                 for (String email : contact.getEmails()) {
-                    if (!TextUtils.isEmpty(email)) {
+                    if (!TextUtils.isEmpty(email) && !isBlackedListed(email)) {
                         Contact dummyContact = new Contact(email);
                         dummyContact.setDisplayName(contact.getDisplayName());
                         dummyContact.addEmailAdress(email);
@@ -273,23 +297,22 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                             participant.mUserId = email;
                         }
 
-                        map.put(participant.mUserId, participant);
+                        if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
+                            list.add(participant);
+                        }
                     }
                 }
             }
         }
     }
 
-    /**
-     * Refresh the un-invited members
-     */
-    private void listOtherMembers() {
+    private void fillUsedMembersList() {
         IMXStore store = mSession.getDataHandler().getStore();
 
-        // list the used members IDs
-        mMemberUserIds = new ArrayList<>();
+        // Used members (ids) which should be removed from the final list
+        mUsedMemberUserIds = new ArrayList<>();
 
-        // room members
+        // Add members of the given room to the used members list (when inviting to existing room)
         if ((null != mRoomId) && (null != store)) {
             Room fromRoom = store.getRoom(mRoomId);
 
@@ -297,36 +320,40 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 Collection<RoomMember> members = fromRoom.getLiveState().getDisplayableMembers();
                 for (RoomMember member : members) {
                     if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN) || TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_INVITE)) {
-                        mMemberUserIds.add(member.getUserId());
+                        mUsedMemberUserIds.add(member.getUserId());
                     }
                 }
             }
         }
 
-        // remove the participant to hide
-        for(ParticipantAdapterItem item : mItemsToHide) {
-            mMemberUserIds.add(item.mUserId);
+        // Add participants to hide to the used members list (when creating a new room)
+        for (ParticipantAdapterItem item : mItemsToHide) {
+            mUsedMemberUserIds.add(item.mUserId);
         }
+    }
 
-        // other rooms
-        HashMap<String, ParticipantAdapterItem> knownUsersMap = VectorUtils.listKnownParticipants(mSession);
+    /**
+     * Refresh the un-invited members
+     */
+    private void listOtherMembers() {
+        fillUsedMembersList();
 
-        // add contacts
-        addContacts(knownUsersMap);
+        mUnusedParticipants = new ArrayList<>();
+        // Add all known matrix users
+        mUnusedParticipants.addAll(VectorUtils.listKnownParticipants(mSession).values());
+        // Add phone contacts which have an email address
+        addContacts(mUnusedParticipants);
 
-        // remove the known users
-        for(String id : mMemberUserIds) {
-            knownUsersMap.remove(id);
-        }
-
-        // retrieve the list
-        mUnusedParticipants = knownUsersMap.values();
-
-        // list the display names
+        // List of display names
         mDisplayNamesList = new ArrayList<>();
 
-        for(ParticipantAdapterItem item : mUnusedParticipants) {
-            if (!TextUtils.isEmpty(item.mDisplayName)) {
+        for (Iterator<ParticipantAdapterItem> iterator = mUnusedParticipants.iterator(); iterator.hasNext(); ) {
+            ParticipantAdapterItem item = iterator.next();
+            if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
+                // Remove the used members from the final list
+                iterator.remove();
+            } else if (!TextUtils.isEmpty(item.mDisplayName)) {
+                // Add to the display names list
                 mDisplayNamesList.add(item.mDisplayName.toLowerCase());
             }
         }
@@ -341,7 +368,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tells an item fullfill the search method.
-     * @param item the item to test
+     *
+     * @param item    the item to test
      * @param pattern the pattern
      * @return true if match the search method
      */
@@ -352,8 +380,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     /**
      * Test if the contact is used by an entry of this adapter.
      * Refresh if required.
-     * @param contact the updated contact
-     * @param matrixId the linked matrix Id
+     *
+     * @param contact           the updated contact
+     * @param matrixId          the linked matrix Id
      * @param visibleChildViews the visible child views indexed by group position
      */
     public void onContactUpdate(Contact contact, String matrixId, Map<Integer, List<Integer>> visibleChildViews) {
@@ -363,6 +392,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (mLocalContactsSectionPosition >= 0) {
                 List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
 
+                ParticipantAdapterItem updatedItem = null;
                 // detect of the contact is used in the adapter
                 for (int index = 0; index < list.size(); index++) {
                     ParticipantAdapterItem item = list.get(index);
@@ -370,8 +400,20 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     if (item.mContact == contact) {
                         pos = index;
                         item.mUserId = matrixId;
+                        updatedItem = item;
                         break;
                     }
+                }
+
+                if (mUsedMemberUserIds != null && updatedItem != null && mUsedMemberUserIds.contains(updatedItem.mUserId)) {
+                    list.remove(updatedItem);
+                    if (list.isEmpty()) {
+                        mParticipantsListsList.remove(mLocalContactsSectionPosition);
+                        mLocalContactsSectionPosition = -1;
+                        mRoomContactsSectionPosition--;
+                    }
+                    notifyDataSetChanged();
+                    return;
                 }
             }
 
@@ -390,6 +432,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     /**
      * Check if some entries use the same matrix ids.
      * If some use the same, prefer the room member one.
+     *
      * @return true if some duplicated entries have been removed.
      */
     private boolean checkDuplicatedMatrixIds() {
@@ -410,12 +453,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
             ArrayList<ParticipantAdapterItem> itemsToRemove = new ArrayList<>();
             List<ParticipantAdapterItem> roomParticipants = mParticipantsListsList.get(mRoomContactsSectionPosition);
-
             for (ParticipantAdapterItem item : roomParticipants) {
                 // if the entry is duplicated and comes from a contact
                 if (matrixUserIds.contains(item.mUserId)) {
-                    // remove it from the known users list
-                    mUnusedParticipants.remove(item);
+                    // add it to items list that will be removed
                     itemsToRemove.add(item);
                 }
             }
@@ -438,6 +479,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Defines a set of participant items to hide.
+     *
      * @param itemsToHide the set to hide
      */
     public void setHiddenParticipantItems(List<ParticipantAdapterItem> itemsToHide) {
@@ -448,7 +490,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Refresh the display.
-     * @param theFirstEntry the first entry in the result.
+     *
+     * @param theFirstEntry  the first entry in the result.
      * @param searchListener the search result listener
      */
     private void refresh(final ParticipantAdapterItem theFirstEntry, final OnParticipantsSearchListener searchListener) {
@@ -461,13 +504,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (mLocalContactsSnapshotSession != ContactsManager.getLocalContactsSnapshotSession()) {
             mUnusedParticipants = null;
             mContactsParticipants = null;
-            mMemberUserIds = null;
+            mUsedMemberUserIds = null;
             mDisplayNamesList = null;
             mCheckedContacts.clear();
             mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
         }
 
-        ArrayList<ParticipantAdapterItem> nextMembersList = new ArrayList<>();
+        List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
 
         // displays something only if there is a pattern
         if (!TextUtils.isEmpty(mPattern)) {
@@ -475,6 +518,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (null == mUnusedParticipants) {
                 Thread t = new Thread(new Runnable() {
                     public void run() {
+                        // populate full contact list
                         listOtherMembers();
 
                         Handler handler = new Handler(Looper.getMainLooper());
@@ -495,8 +539,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
 
             for (ParticipantAdapterItem item : mUnusedParticipants) {
-                if (match(item,  mPattern)) {
-                    nextMembersList.add(item);
+                if (match(item, mPattern)) {
+                    participantItemList.add(item);
                 }
             }
         } else {
@@ -506,9 +550,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (null == mContactsParticipants) {
                 Thread t = new Thread(new Runnable() {
                     public void run() {
-                        HashMap<String, ParticipantAdapterItem> map = new HashMap<>();
-                        addContacts(map);
-                        mContactsParticipants = map.values();
+                        fillUsedMembersList();
+
+                        List<ParticipantAdapterItem> list = new ArrayList<>();
+                        addContacts(list);
+                        mContactsParticipants = list;
 
                         Handler handler = new Handler(Looper.getMainLooper());
                         handler.post(new Runnable() {
@@ -524,30 +570,38 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 t.start();
 
                 return;
+            } else {
+                for (Iterator<ParticipantAdapterItem> iterator = mContactsParticipants.iterator(); iterator.hasNext(); ) {
+                    ParticipantAdapterItem item = iterator.next();
+                    if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
+                        // Remove the used members from the contact list
+                        iterator.remove();
+                    }
+                }
             }
 
-            nextMembersList.addAll(mContactsParticipants);
+            participantItemList.addAll(mContactsParticipants);
         }
 
         // the caller defines a first entry to display
         ParticipantAdapterItem firstEntry = theFirstEntry;
 
         // detect if the user ID is defined in the known members list
-        if ((null != mMemberUserIds) && (null != firstEntry)) {
-            if (mMemberUserIds.indexOf(theFirstEntry.mUserId) >= 0) {
+        if ((null != mUsedMemberUserIds) && (null != firstEntry)) {
+            if (mUsedMemberUserIds.indexOf(theFirstEntry.mUserId) >= 0) {
                 firstEntry = null;
             }
         }
 
         if (null != firstEntry) {
-            nextMembersList.add(0, firstEntry);
+            participantItemList.add(0, firstEntry);
 
             // avoid multiple definitions of the written email
-            for(int pos = 1; pos < nextMembersList.size(); pos++) {
-                ParticipantAdapterItem item = nextMembersList.get(pos);
+            for (int pos = 1; pos < participantItemList.size(); pos++) {
+                ParticipantAdapterItem item = participantItemList.get(pos);
 
                 if (TextUtils.equals(item.mUserId, firstEntry.mUserId)) {
-                    nextMembersList.remove(pos);
+                    participantItemList.remove(pos);
                     break;
                 }
             }
@@ -558,11 +612,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         // split the participants in sections
-        ArrayList<ParticipantAdapterItem> firstEntryList = new ArrayList<>();
-        ArrayList<ParticipantAdapterItem> contactBookList = new ArrayList<>();
-        ArrayList<ParticipantAdapterItem> roomContactsList = new ArrayList<>();
+        List<ParticipantAdapterItem> firstEntryList = new ArrayList<>();
+        List<ParticipantAdapterItem> contactBookList = new ArrayList<>();
+        List<ParticipantAdapterItem> roomContactsList = new ArrayList<>();
 
-        for(ParticipantAdapterItem item : nextMembersList) {
+        for (ParticipantAdapterItem item : participantItemList) {
             if (item == mFirstEntry) {
                 firstEntryList.add(mFirstEntry);
             } else if (null != item.mContact) {
@@ -608,7 +662,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (null != searchListener) {
             int length = 0;
 
-            for(List<ParticipantAdapterItem> list : mParticipantsListsList) {
+            for (List<ParticipantAdapterItem> list : mParticipantsListsList) {
                 length += list.size();
             }
 
@@ -706,7 +760,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
         if (null != sectionNameTxtView) {
             String title = getGroupTitle(groupPosition);
@@ -768,7 +822,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         final ImageView thumbView = (ImageView) convertView.findViewById(R.id.filtered_list_avatar);
         final TextView nameTextView = (TextView) convertView.findViewById(R.id.filtered_list_name);
         final TextView statusTextView = (TextView) convertView.findViewById(R.id.filtered_list_status);
-        final ImageView matrixUserBadge =  (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
+        final ImageView matrixUserBadge = (ImageView) convertView.findViewById(R.id.filtered_list_matrix_user);
 
         // display the avatar
         participant.displayAvatar(mSession, thumbView);
@@ -784,7 +838,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             // retrieve the linked user
             ArrayList<MXSession> sessions = Matrix.getMXSessions(mContext);
 
-            for(MXSession session : sessions) {
+            for (MXSession session : sessions) {
                 if (null == user) {
                     matchedSession = session;
                     user = session.getDataHandler().getUser(participant.mUserId);
@@ -811,8 +865,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 participant.mContact.checkMatridIds(mContext);
                 mCheckedContacts.add(participant.mContact);
             }
-        }
-        else {
+        } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
         }
@@ -821,7 +874,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         convertView.setAlpha(participant.mIsValid ? 1f : 0.5f);
 
         // the checkbox is not managed here
-        final CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.filtered_list_checkbox);
+        final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
 
         return convertView;
@@ -841,6 +894,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tells if a group is expanded
+     *
      * @param groupPosition the group position
      * @return true to expand the group
      */
@@ -849,7 +903,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         if (groupPosition == mLocalContactsSectionPosition) {
             return preferences.getBoolean(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
-        } else  if (groupPosition == mRoomContactsSectionPosition) {
+        } else if (groupPosition == mRoomContactsSectionPosition) {
             return preferences.getBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, CommonActivityUtils.GROUP_IS_EXPANDED);
         }
 
@@ -858,8 +912,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the expanded group status
+     *
      * @param groupPosition the group position
-     * @param isExpanded true if the group is expanded
+     * @param isExpanded    true if the group is expanded
      * @return true to expand the group
      */
     private void setGroupExpandedStatus(int groupPosition, boolean isExpanded) {
@@ -868,7 +923,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         if (groupPosition == mLocalContactsSectionPosition) {
             editor.putBoolean(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP, isExpanded);
-        } else  if (groupPosition == mRoomContactsSectionPosition) {
+        } else if (groupPosition == mRoomContactsSectionPosition) {
             editor.putBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, isExpanded);
         }
 
