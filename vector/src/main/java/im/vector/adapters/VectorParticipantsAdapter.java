@@ -277,17 +277,16 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                             participant.mUserId = email;
                         }
 
-                        list.add(participant);
+                        if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
+                            list.add(participant);
+                        }
                     }
                 }
             }
         }
     }
 
-    /**
-     * Refresh the un-invited members
-     */
-    private void listOtherMembers() {
+    private void fillUsedMembersList(){
         IMXStore store = mSession.getDataHandler().getStore();
 
         // Used members (ids) which should be removed from the final list
@@ -311,6 +310,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         for (ParticipantAdapterItem item : mItemsToHide) {
             mUsedMemberUserIds.add(item.mUserId);
         }
+    }
+
+    /**
+     * Refresh the un-invited members
+     */
+    private void listOtherMembers() {
+        fillUsedMembersList();
 
         mUnusedParticipants = new ArrayList<>();
         // Add all known matrix users
@@ -366,6 +372,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (mLocalContactsSectionPosition >= 0) {
                 List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
 
+                ParticipantAdapterItem updatedItem = null;
                 // detect of the contact is used in the adapter
                 for (int index = 0; index < list.size(); index++) {
                     ParticipantAdapterItem item = list.get(index);
@@ -373,8 +380,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     if (item.mContact == contact) {
                         pos = index;
                         item.mUserId = matrixId;
+                        updatedItem = item;
                         break;
                     }
+                }
+
+                if (mUsedMemberUserIds != null && updatedItem != null && mUsedMemberUserIds.contains(updatedItem.mUserId)) {
+                    list.remove(updatedItem);
+                    notifyDataSetChanged();
+                    return;
                 }
             }
 
@@ -511,6 +525,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (null == mContactsParticipants) {
                 Thread t = new Thread(new Runnable() {
                     public void run() {
+                        fillUsedMembersList();
+
                         List<ParticipantAdapterItem> list = new ArrayList<>();
                         addContacts(list);
                         mContactsParticipants = list;
@@ -529,6 +545,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 t.start();
 
                 return;
+            } else {
+                for (Iterator<ParticipantAdapterItem> iterator = mContactsParticipants.iterator(); iterator.hasNext(); ) {
+                    ParticipantAdapterItem item = iterator.next();
+                    if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
+                        // Remove the used members from the contact list
+                        iterator.remove();
+                    }
+                }
             }
 
             participantItemList.addAll(mContactsParticipants);
