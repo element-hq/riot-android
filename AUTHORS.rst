@@ -7,6 +7,12 @@ Kegan Dougal <kegan at matrix.org>
 Yannick Le Collen <yannick at matrix.org>
   * Developer.
 
+Pedro Contreiras <pedro at matrix.org>
+  * Developer. 
+  
+Sabrina Jeanne <sabrina at matrix.org>
+   * Developer.
+
 Leon Handreke <leonh at matrix.org>
   * First implementation of GCM (Google Cloud Messaging).
 
