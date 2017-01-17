@@ -55,8 +55,6 @@
         android:logo="@drawable/logo"
         android:label="@string/app_name"
         android:largeHeap="true"
-        tools:replace="android:supportsRtl"
-        android:supportsRtl="false"
         android:theme="@style/AppTheme" >
 
         <!-- activities list starts here -->

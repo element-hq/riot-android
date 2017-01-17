@@ -1,3 +1,22 @@
+Changes in Vector 0.6.6 (2016-01-17)
+===================================================
+ 
+Improvements:
+ * Improve the camera activity management.
+ * Improve the e2e management.
+ * Improve the people invitation activity. 
+  
+Bugfixes:
+ * Fix several issues reported by Google Analytics.
+ * #791 : [UI bug] Room encryption slider remains on after rejecting the popup window by clicking outside of it.
+ * #806 : Please remove End-to-End Encryption toggle from user settings.
+ * #807 : /mefoo is turned into /me foo.
+ * #816 : Custom server URL bug.
+ * #821 : Room creation with a matrix user from the contacts list creates several empty rooms.
+ * #841 : Infinite call ringing.
+ * #842 : rageshake should prompt you to enter an explicit problem report before trying to send a report.
+ * #851 : fix_device_verify_not_displayed 
+
 Changes in Vector 0.6.5 (2016-12-19)
 ===================================================
 
