@@ -40,12 +40,14 @@ import org.matrix.androidsdk.rest.model.User;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -250,6 +252,24 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private static final Pattern FACEBOOK_EMAIL_ADDRESS = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@facebook.com");
+    private static final List<Pattern> mBlackedListEmails = Arrays.asList(FACEBOOK_EMAIL_ADDRESS);
+
+    /**
+     * Tells if an email is black-listed
+     * @param email the email address to test.
+     * @return true if the email address is black-listed
+     */
+    private static boolean isBlackedListed(String email) {
+        for(int i = 0; i < mBlackedListEmails.size(); i++) {
+            if (mBlackedListEmails.get(i).matcher(email).matches()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Add the contacts participants
      *
@@ -261,7 +281,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (null != contacts) {
             for (Contact contact : contacts) {
                 for (String email : contact.getEmails()) {
-                    if (!TextUtils.isEmpty(email)) {
+                    if (!TextUtils.isEmpty(email) && !isBlackedListed(email)) {
                         Contact dummyContact = new Contact(email);
                         dummyContact.setDisplayName(contact.getDisplayName());
                         dummyContact.addEmailAdress(email);
@@ -389,6 +409,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     list.remove(updatedItem);
                     if (list.isEmpty()) {
                         mParticipantsListsList.remove(mLocalContactsSectionPosition);
+                        mLocalContactsSectionPosition = -1;
+                        mRoomContactsSectionPosition--;
                     }
                     notifyDataSetChanged();
                     return;
