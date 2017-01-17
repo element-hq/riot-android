@@ -286,7 +286,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private void fillUsedMembersList(){
+    private void fillUsedMembersList() {
         IMXStore store = mSession.getDataHandler().getStore();
 
         // Used members (ids) which should be removed from the final list
@@ -387,6 +387,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                 if (mUsedMemberUserIds != null && updatedItem != null && mUsedMemberUserIds.contains(updatedItem.mUserId)) {
                     list.remove(updatedItem);
+                    if (list.isEmpty()) {
+                        mParticipantsListsList.remove(mLocalContactsSectionPosition);
+                    }
                     notifyDataSetChanged();
                     return;
                 }
