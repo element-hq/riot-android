@@ -26,6 +26,7 @@ import im.vector.Matrix;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * retrieve the contact matrix IDs
@@ -139,9 +140,9 @@ public class PIDsRetriever {
             for (MXSession session : sessions) {
                 final String accountId = session.getCredentials().userId;
 
-                session.lookup3Pids(fRequestedAddresses, medias, new ApiCallback<ArrayList<String>>() {
+                session.lookup3Pids(fRequestedAddresses, medias, new ApiCallback<List<String>>() {
                     @Override
-                    public void onSuccess(ArrayList<String> pids) {
+                    public void onSuccess(List<String> pids) {
                         boolean foundPIDs = false;
 
                         // update the global dict
