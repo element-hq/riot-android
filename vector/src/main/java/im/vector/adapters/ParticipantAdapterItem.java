@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import im.vector.VectorApp;
 import im.vector.contacts.Contact;
 import im.vector.util.VectorUtils;
 
@@ -39,7 +40,6 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     // displayed info
     public String mDisplayName;
     public String mAvatarUrl;
-    public Bitmap mAvatarBitmap;
 
     // user id
     public String mUserId;
@@ -92,21 +92,17 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     /**
      * Constructor from a contact.
      * @param contact the contact.
-     * @param context the context.
      */
-    public ParticipantAdapterItem(Contact contact, Context context) {
+    public ParticipantAdapterItem(Contact contact) {
         mDisplayName = contact.getDisplayName();
 
         if (TextUtils.isEmpty(mDisplayName)) {
             mDisplayName = contact.getContactId();
         }
-        mAvatarBitmap = contact.getThumbnail(context);
 
         mUserId = null;
         mRoomMember = null;
-
         mContact = contact;
-
         initSearchByPatternFields();
     }
 
@@ -263,14 +259,26 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     }
 
     /**
+     * Provides the avatar bitmap
+     * @return the avatar bitmap.
+     */
+    public Bitmap getAvatarBitmap() {
+        if (null != mContact) {
+            return mContact.getThumbnail(VectorApp.getInstance());
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Init an imageView with the avatar.
      * @param session the session
      * @param imageView the imageView
      */
     public void displayAvatar(MXSession session, ImageView imageView) {
         // set the
-        if (null != mAvatarBitmap) {
-            imageView.setImageBitmap(mAvatarBitmap);
+        if (null != getAvatarBitmap()) {
+            imageView.setImageBitmap(getAvatarBitmap());
         } else {
             if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) || !mIsValid) {
                 imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mUserId), "@@", true));
