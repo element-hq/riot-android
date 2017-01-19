@@ -18,11 +18,9 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
+import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -51,7 +49,7 @@ import im.vector.util.VectorUtils;
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
-public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity implements ActionBar.TabListener {
+public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity implements TabLayout.OnTabSelectedListener {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
     // search in the room
@@ -69,6 +67,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
     private String mMatrixId;
 
     // main UI items
+    private TabLayout mTabs;
     private ExpandableListView mListView;
     private ImageView mBackgroundImageView;
     private View mNoResultView;
@@ -181,7 +180,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
         mAdapter = new VectorParticipantsAdapter(this,
                 R.layout.adapter_item_vector_add_participants,
                 R.layout.adapter_item_vector_people_header,
-                mSession, roomId);
+                mSession, roomId, true);
         mAdapter.setHiddenParticipantItems(mParticipantItems);
         mListView.setAdapter(mAdapter);
 
@@ -208,8 +207,19 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
         });
 
         // Tabs
-        mActionBar = getSupportActionBar();
-        createNavigationTabs(savedInstanceState);
+        mTabs = (TabLayout) findViewById(R.id.filter_tabs);
+        if (mTabs != null) {
+            mTabs.setOnTabSelectedListener(this);
+            int tabIndexToDisplay;
+            tabIndexToDisplay = (null != savedInstanceState)
+                    ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, ALL_PEOPLES_TAB_INDEX)
+                    : ALL_PEOPLES_TAB_INDEX;
+
+            TabLayout.Tab tab = mTabs.getTabAt(tabIndexToDisplay);
+            if (tab != null) {
+                tab.select();
+            }
+        }
     }
 
     /**
@@ -298,84 +308,29 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
 
         // save current tab
         if (null != mActionBar) {
-            int currentIndex = mActionBar.getSelectedNavigationIndex();
+            int currentIndex = mTabs.getSelectedTabPosition();
             outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
         }
     }
 
     /*
      * *********************************************************************************************
-     * Tabs TODO use toolbar
+     * Tabs
      * *********************************************************************************************
      */
 
-    private void createNavigationTabs(Bundle aSavedInstanceState) {
-        int tabIndexToDisplay;
-
-        // Set the tabs navigation mode
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // ALll contacts tab creation: display the members of the this room
-        ActionBar.Tab tabToBeAdded = mActionBar.newTab();
-        String tabTitle = getResources().getString(R.string.people_search_all_contacts);
-        tabToBeAdded.setText(tabTitle.toUpperCase());
-        tabToBeAdded.setTabListener(this);
-        mActionBar.addTab(tabToBeAdded);
-
-        // Matrix contacts tab creation: display the file list in the room history
-        tabToBeAdded = mActionBar.newTab();
-        tabTitle = getResources().getString(R.string.people_search_matrix_contacts);
-        tabToBeAdded.setText(tabTitle.toUpperCase());
-        tabToBeAdded.setTabListener(this);
-        mActionBar.addTab(tabToBeAdded);
-
-        // set the default tab to be displayed
-        tabIndexToDisplay = (null != aSavedInstanceState)
-                ? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, ALL_PEOPLES_TAB_INDEX)
-                : ALL_PEOPLES_TAB_INDEX;
-
-        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
-
-        // set the tab to display & set current tab index
-        mActionBar.setSelectedNavigationItem(tabIndexToDisplay);
-    }
-
-    /**
-     * Called when a tab enters the selected state.
-     *
-     * @param tab The tab that was selected
-     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
-     *            during a tab switch. The previous tab's unselected and this tab's select will be
-     *            executed in a single transaction. This FragmentTransaction does not support
-     */
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(TabLayout.Tab tab) {
         mAdapter.displayOnlyMatrixUsers(tab.getPosition() == MATRIX_USERS_ONLY_TAB_INDEX);
     }
 
-    /**
-     * Called when a tab exits the selected state.
-     *
-     * @param tab The tab that was unselected
-     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
-     *            during a tab switch. This tab's unselected and the newly selected tab's select
-     *            will be executed in a single transaction. This FragmentTransaction does not
-     */
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(TabLayout.Tab tab) {
 
     }
 
-    /**
-     * Called when a tab that is already selected is chosen again by the user.
-     * Some applications may use this action to return to the top level of a category.
-     *
-     * @param tab The tab that was reselected.
-     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
-     *            once this method returns. This FragmentTransaction does not support
-     */
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 }

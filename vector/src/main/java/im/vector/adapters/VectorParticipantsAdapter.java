@@ -193,6 +193,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     // flag specifying if we show all peoples or only ones having a matrix user id
     private boolean mShowMatrixUserOnly = false;
 
+    // Set to true when we need to display the "+" icon
+    private boolean mWithAddIcon;
+
     /**
      * Create a room member adapter.
      * If a room id is defined, the adapter is in edition mode : the user can add / remove dynamically members or leave the room.
@@ -203,8 +206,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param headerLayoutResourceId the header layout
      * @param session                the session.
      * @param roomId                 the room id.
+     * @param withAddIcon            whether we need to display the "+" icon
      */
-    public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId) {
+    public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId, boolean withAddIcon) {
         mContext = context;
 
         mLayoutInflater = LayoutInflater.from(context);
@@ -213,6 +217,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         mSession = session;
         mRoomId = roomId;
+        mWithAddIcon = withAddIcon;
     }
 
     /**
@@ -624,7 +629,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (item == mFirstEntry) {
                 firstEntryList.add(mFirstEntry);
             } else if (null != item.mContact) {
-                contactBookList.add(item);
+                if (!mShowMatrixUserOnly || !item.mContact.getMatrixIdMedias().isEmpty()) {
+                    contactBookList.add(item);
+                }
             } else {
                 roomContactsList.add(item);
             }
@@ -732,18 +739,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             return 0;
         }
 
-        final List<ParticipantAdapterItem> items = mParticipantsListsList.get(groupPosition);
-        int nbItems = items.size();
-        if (mShowMatrixUserOnly) {
-            // Do not count items that won't be displayed
-            for (ParticipantAdapterItem item : items) {
-                if (item.mContact != null && item.mContact.getMatrixIdMedias().isEmpty()) {
-                    --nbItems;
-                }
-            }
-        }
-
-        return nbItems;
+        return mParticipantsListsList.get(groupPosition).size();
     }
 
     @Override
@@ -777,16 +773,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
-        boolean mustBeHidden = false;
         if (null != sectionNameTxtView) {
             String title = getGroupTitle(groupPosition);
 
             if (!TextUtils.isEmpty(mPattern)) {
-                int nbItems = getChildrenCount(groupPosition);
-                if (mShowMatrixUserOnly) {
-                    mustBeHidden = nbItems == 0;
-                }
-                title += " (" + nbItems + ")";
+                title += " (" + mParticipantsListsList.get(groupPosition).size() + ")";
             }
 
             sectionNameTxtView.setText(title);
@@ -801,14 +792,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
-        if (groupPosition == mFirstEntryPosition || mustBeHidden) {
-            subLayout.setVisibility(View.GONE);
-            // Make sure it is not expanded
-            setGroupExpandedStatus(groupPosition, false);
-        } else {
-            subLayout.setVisibility(View.VISIBLE);
-            setGroupExpandedStatus(groupPosition, true);
-        }
+        subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
 
         if (parent instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) parent;
@@ -892,17 +876,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 participant.mContact.checkMatridIds(mContext);
                 mCheckedContacts.add(participant.mContact);
             }
-
-            if (mShowMatrixUserOnly && participant.mContact.getMatrixIdMedias().isEmpty()) {
-                // no matrix user id is linked to that contact so we hide it when filter is on
-                convertView.setVisibility(View.GONE);
-            } else {
-                convertView.setVisibility(View.VISIBLE);
-            }
         } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
-            convertView.setVisibility(View.VISIBLE);
         }
 
         // Add alpha if cannot be invited
@@ -911,6 +887,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         // the checkbox is not managed here
         final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
+
+        final View addParticipantImageView = convertView.findViewById(R.id.filtered_list_add_button);
+        addParticipantImageView.setVisibility(mWithAddIcon ? View.VISIBLE : View.GONE);
 
         return convertView;
     }
@@ -971,6 +950,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      */
     public void displayOnlyMatrixUsers(final boolean matrixUserOnly) {
         mShowMatrixUserOnly = matrixUserOnly;
-        notifyDataSetInvalidated();
+        refresh(mFirstEntry, null);
     }
 }
