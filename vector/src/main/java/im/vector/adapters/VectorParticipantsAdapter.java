@@ -287,7 +287,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         dummyContact.addEmailAdress(email);
                         dummyContact.setThumbnailUri(contact.getThumbnailUri());
 
-                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, mContext);
+                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
 
                         Contact.MXID mxid = PIDsRetriever.getIntance().getMXID(email);
 
