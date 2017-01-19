@@ -224,7 +224,7 @@
             android:label="Vector searches"
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
-            android:theme="@style/SearchesAppTheme"
+            android:theme="@style/UnifiedSearchAppTheme"
             android:windowSoftInputMode="adjustResize">
 
             <meta-data

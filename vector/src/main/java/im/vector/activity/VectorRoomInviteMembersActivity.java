@@ -18,8 +18,11 @@ package im.vector.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -48,14 +51,19 @@ import im.vector.util.VectorUtils;
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
-public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
+public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity implements ActionBar.TabListener {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
     // search in the room
     public static final String EXTRA_ROOM_ID = "VectorInviteMembersActivity.EXTRA_ROOM_ID";
     public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
-    public static final String EXTRA_SELECTED_USER_ID =  "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
-    public static final String EXTRA_SELECTED_PARTICIPANT_ITEM =  "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
+    public static final String EXTRA_SELECTED_USER_ID = "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
+    public static final String EXTRA_SELECTED_PARTICIPANT_ITEM = "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
+
+    // tabs
+    private static final int ALL_PEOPLES_TAB_INDEX = 0;
+    private static final int MATRIX_USERS_ONLY_TAB_INDEX = 1;
+    private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
 
     // account data
     private String mMatrixId;
@@ -67,7 +75,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private View mLoadingView;
     private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
-
 
     // retrieve a matrix Id from an email
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
@@ -101,16 +108,16 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 public void run() {
                     Map<Integer, List<Integer>> visibleChildViews = VectorUtils.getVisibleChildViews(mListView, mAdapter);
 
-                    for(Integer groupPosition : visibleChildViews.keySet()) {
+                    for (Integer groupPosition : visibleChildViews.keySet()) {
                         List<Integer> childPositions = visibleChildViews.get(groupPosition);
 
-                        for(Integer childPosition : childPositions) {
-                            Object item =  mAdapter.getChild(groupPosition, childPosition);
+                        for (Integer childPosition : childPositions) {
+                            Object item = mAdapter.getChild(groupPosition, childPosition);
 
                             if (item instanceof ParticipantAdapterItem) {
-                                ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+                                ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
 
-                                if (TextUtils.equals(user.user_id,  participantAdapterItem.mUserId)) {
+                                if (TextUtils.equals(user.user_id, participantAdapterItem.mUserId)) {
                                     mAdapter.notifyDataSetChanged();
                                     break;
                                 }
@@ -151,7 +158,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         if (intent.hasExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS)) {
-            mParticipantItems = (List<ParticipantAdapterItem>)intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
+            mParticipantItems = (List<ParticipantAdapterItem>) intent.getSerializableExtra(EXTRA_HIDDEN_PARTICIPANT_ITEMS);
         }
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
@@ -163,7 +170,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
-        mBackgroundImageView = (ImageView)findViewById(R.id.search_background_imageview);
+        mBackgroundImageView = (ImageView) findViewById(R.id.search_background_imageview);
         mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
@@ -184,7 +191,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 Object item = mAdapter.getChild(groupPosition, childPosition);
 
                 if (item instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) item).mIsValid) {
-                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
 
                     // returns the selected user
                     Intent intent = new Intent();
@@ -199,6 +206,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 return false;
             }
         });
+
+        // Tabs
+        mActionBar = getSupportActionBar();
+        createNavigationTabs(savedInstanceState);
     }
 
     /**
@@ -240,7 +251,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
                         mBackgroundImageView.setVisibility((0 == count) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
-                        mNoResultView.setVisibility((0 == count)  && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
+                        mNoResultView.setVisibility((0 == count) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
                     }
                 });
             }
@@ -278,5 +289,93 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                 CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
+
+        // save current tab
+        if (null != mActionBar) {
+            int currentIndex = mActionBar.getSelectedNavigationIndex();
+            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
+        }
+    }
+
+    /*
+     * *********************************************************************************************
+     * Tabs TODO use toolbar
+     * *********************************************************************************************
+     */
+
+    private void createNavigationTabs(Bundle aSavedInstanceState) {
+        int tabIndexToDisplay;
+
+        // Set the tabs navigation mode
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // ALll contacts tab creation: display the members of the this room
+        ActionBar.Tab tabToBeAdded = mActionBar.newTab();
+        String tabTitle = getResources().getString(R.string.people_search_all_contacts);
+        tabToBeAdded.setText(tabTitle.toUpperCase());
+        tabToBeAdded.setTabListener(this);
+        mActionBar.addTab(tabToBeAdded);
+
+        // Matrix contacts tab creation: display the file list in the room history
+        tabToBeAdded = mActionBar.newTab();
+        tabTitle = getResources().getString(R.string.people_search_matrix_contacts);
+        tabToBeAdded.setText(tabTitle.toUpperCase());
+        tabToBeAdded.setTabListener(this);
+        mActionBar.addTab(tabToBeAdded);
+
+        // set the default tab to be displayed
+        tabIndexToDisplay = (null != aSavedInstanceState)
+                ? aSavedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, ALL_PEOPLES_TAB_INDEX)
+                : ALL_PEOPLES_TAB_INDEX;
+
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vector_tabbar_background_color)));
+
+        // set the tab to display & set current tab index
+        mActionBar.setSelectedNavigationItem(tabIndexToDisplay);
+    }
+
+    /**
+     * Called when a tab enters the selected state.
+     *
+     * @param tab The tab that was selected
+     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+     *            during a tab switch. The previous tab's unselected and this tab's select will be
+     *            executed in a single transaction. This FragmentTransaction does not support
+     */
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        mAdapter.displayOnlyMatrixUsers(tab.getPosition() == MATRIX_USERS_ONLY_TAB_INDEX);
+    }
+
+    /**
+     * Called when a tab exits the selected state.
+     *
+     * @param tab The tab that was unselected
+     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+     *            during a tab switch. This tab's unselected and the newly selected tab's select
+     *            will be executed in a single transaction. This FragmentTransaction does not
+     */
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    /**
+     * Called when a tab that is already selected is chosen again by the user.
+     * Some applications may use this action to return to the top level of a category.
+     *
+     * @param tab The tab that was reselected.
+     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+     *            once this method returns. This FragmentTransaction does not support
+     */
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
     }
 }

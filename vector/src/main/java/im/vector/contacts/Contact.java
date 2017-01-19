@@ -26,6 +26,7 @@ import org.matrix.androidsdk.util.Log;
 import org.matrix.androidsdk.rest.model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -277,7 +278,7 @@ public class Contact implements java.io.Serializable {
      * @return the medias set which could match to a matrix Id.
      */
     public Set<String> getMatrixIdMedias() {
-        return mMXIDsByElement.keySet();
+        return mMXIDsByElement != null ? mMXIDsByElement.keySet() : Collections.<String>emptySet();
     }
 
     /**
