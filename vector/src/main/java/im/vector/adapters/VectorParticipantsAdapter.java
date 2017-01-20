@@ -224,7 +224,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         mFirstEntryPosition = -1;
         mLocalContactsSectionPosition = -1;
         mRoomContactsSectionPosition = -1;
-
+        mPattern = null;
+        
         notifyDataSetChanged();
     }
 

@@ -254,6 +254,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
         if (!ContactsManager.didPopulateLocalContacts(this)) {
             Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
             mAdapter.reset();
+            mLoadingView.setVisibility(View.VISIBLE);
             return;
         }
 
