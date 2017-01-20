@@ -355,7 +355,7 @@ public class CommonActivityUtils {
         Matrix.getInstance(context).clearTmpStoresList();
 
         // reset the contacts
-        PIDsRetriever.getIntance().reset();
+        PIDsRetriever.getInstance().reset();
         ContactsManager.reset();
 
         MXMediasCache.clearThumbnailsCache(context);

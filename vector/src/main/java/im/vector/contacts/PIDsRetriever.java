@@ -16,7 +16,10 @@
 package im.vector.contacts;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -32,12 +35,18 @@ import java.util.List;
  * retrieve the contact matrix IDs
  */
 public class PIDsRetriever {
+    private static final String LOG_TAG = "PIDsRetriever";
 
     public interface PIDsRetrieverListener {
         /**
-         * Called when the contact PIDs are retrieved
+         * Called when the contacts PIDs are retrieved.
          */
-        void onPIDsRetrieved(String accountId, Contact contact, boolean has3PIDs);
+        void onSuccess(String accountId);
+
+        /**
+         * Called the PIDs retrieval fails.
+         */
+        void onFailure(String accountId);
     }
 
     // current instance
@@ -46,7 +55,7 @@ public class PIDsRetriever {
     /**
      * @return the PIDsRetriever instance.
      */
-    public static PIDsRetriever getIntance() {
+    public static PIDsRetriever getInstance() {
         if (null == mPIDsRetriever) {
             mPIDsRetriever = new PIDsRetriever();
         }
@@ -101,40 +110,70 @@ public class PIDsRetriever {
     }
 
     /**
+     * Retrieve the matrix ids for a list of contacts with the local cache.
+     * @param contacts the contacts list
+     * @return the email addresses which are not cached.
+     */
+    private List<String> retrieveMatrixIds(List<Contact> contacts) {
+        ArrayList<String> requestedAddresses = new ArrayList<>();
+
+        for (Contact contact : contacts) {
+            // check if the emails have only been checked
+            // i.e. requested their match PID to the identity server.
+            for (String email : contact.getEmails()) {
+                if (mMatrixIdsByElement.containsKey(email)) {
+                    Contact.MXID mxid = mMatrixIdsByElement.get(email);
+
+                    if (null != mxid) {
+                        contact.put(email, mxid);
+                    }
+                } else {
+                    if (!requestedAddresses.contains(email)) {
+                        requestedAddresses.add(email);
+                    }
+                }
+            }
+        }
+
+        return requestedAddresses;
+    }
+
+    /**
      * Retrieve the matrix IDs from the contact fields (only emails are supported by now).
      * Update the contact fields with the found Matrix Ids.
      * The update could require some remote requests : they are done only localUpdateOnly is false.
      * @param context the context.
-     * @param contact The contact to update.
+     * @param contacts the contacts list.
      * @param localUpdateOnly true to only support refresh from local information.
      * @return true if the matrix Ids have been retrieved
      */
-    public boolean retrieveMatrixIds(Context context, final Contact contact, boolean localUpdateOnly) {
-        ArrayList<String> requestedAddresses = new ArrayList<>();
+    public void retrieveMatrixIds(final Context context, final List<Contact> contacts, final boolean localUpdateOnly) {
+        // sanity checks
+        if ((null == contacts) || (0 == contacts.size())) {
+            if (null != mListener) {
+                Handler handler = new Handler(Looper.getMainLooper());
 
-        // check if the emails have only been checked
-        // i.e. requested their match PID to the identity server.
-        for(String email : contact.getEmails()) {
-            if (mMatrixIdsByElement.containsKey(email)) {
-               Contact.MXID mxid = mMatrixIdsByElement.get(email);
-
-                if (null != mxid) {
-                    contact.put(email, mxid);
-                }
-            } else {
-                requestedAddresses.add(email);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListener.onSuccess(Matrix.getInstance(context.getApplicationContext()).getDefaultSession().getMyUserId());
+                    }
+                });
             }
+
+            return;
         }
 
-        // the lookup has not been done on some emails
-        if ((requestedAddresses.size() > 0) && (!localUpdateOnly)) {
+        List<String> missingEmails = retrieveMatrixIds(contacts);
+
+        if (!localUpdateOnly && !missingEmails.isEmpty()) {
             ArrayList<String> medias = new ArrayList<>();
 
-            for (int index = 0; index < requestedAddresses.size(); index++) {
+            for (int index = 0; index < missingEmails.size(); index++) {
                 medias.add("email");
             }
 
-            final ArrayList<String> fRequestedAddresses = requestedAddresses;
+            final List<String> fRequestedAddresses = missingEmails;
             Collection<MXSession> sessions = Matrix.getInstance(context.getApplicationContext()).getSessions();
 
             for (MXSession session : sessions) {
@@ -142,26 +181,34 @@ public class PIDsRetriever {
 
                 session.lookup3Pids(fRequestedAddresses, medias, new ApiCallback<List<String>>() {
                     @Override
-                    public void onSuccess(List<String> pids) {
-                        boolean foundPIDs = false;
+                    public void onSuccess(final List<String> pids) {
+                        // update the local cache
+                        for(int index = 0; index < fRequestedAddresses.size(); index++) {
+                            String email = fRequestedAddresses.get(index);
+                            String mxId = pids.get(index);
 
-                        // update the global dict
-                        // and the contact dict
-                        for (int i = 0; i < fRequestedAddresses.size(); i++) {
-                            String address = fRequestedAddresses.get(i);
-                            String pid = pids.get(i);
-
-                            mMatrixIdsByElement.put(address, new Contact.MXID(pid, accountId));
-
-                            if (pid.length() != 0) {
-                                foundPIDs = true;
-                                contact.put(address, new Contact.MXID(pid, accountId));
+                            if (!TextUtils.isEmpty(mxId)) {
+                                mMatrixIdsByElement.put(email, new Contact.MXID(mxId, accountId));
                             }
                         }
 
+                        retrieveMatrixIds(contacts);
+
                         // warn the listener of the update
                         if (null != mListener) {
-                            mListener.onPIDsRetrieved(accountId, contact, foundPIDs);
+                            mListener.onSuccess(accountId);
+                        }
+                    }
+
+                    /**
+                     * Common error routine
+                     * @param errorMessage the error message
+                     */
+                    private void onError(String errorMessage) {
+                        Log.e(LOG_TAG, "## retrieveMatrixIds() : failed " + errorMessage);
+
+                        if (null != mListener) {
+                            mListener.onFailure(accountId);
                         }
                     }
 
@@ -169,24 +216,21 @@ public class PIDsRetriever {
                     // will be checked again later
                     @Override
                     public void onNetworkError(Exception e) {
-
+                        onError(e.getMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-
+                        onError(e.getMessage());
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-
+                        onError(e.getMessage());
                     }
                 });
             }
         }
-
-        // detect if the matrix Ids have been cached.
-        return (0 == requestedAddresses.size());
     }
 }
 
