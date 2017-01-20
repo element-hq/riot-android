@@ -70,7 +70,7 @@ public class Contact implements java.io.Serializable {
     // the thumbnail uri
     private String mThumbnailUri;
     // the thumbnail image
-    private Bitmap mThumbnail;
+    private transient Bitmap mThumbnail;
 
     // phone numbers list
     private final ArrayList<String> mPhoneNumbers = new ArrayList<>();
