@@ -225,7 +225,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         mLocalContactsSectionPosition = -1;
         mRoomContactsSectionPosition = -1;
         mPattern = null;
-        
+
         notifyDataSetChanged();
     }
 
@@ -398,6 +398,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (null != mContactsParticipants) {
             for (ParticipantAdapterItem item : mContactsParticipants) {
                 gotUpdates |= item.retrievePids();
+            }
+
+            // Check whether we need to remove the contact section
+            if (mContactsParticipants.isEmpty() && mLocalContactsSectionPosition != -1) {
+                mParticipantsListsList.remove(mLocalContactsSectionPosition);
+                mLocalContactsSectionPosition = -1;
+                mRoomContactsSectionPosition--;
+                notifyDataSetChanged();
             }
         }
 
@@ -628,7 +636,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
             posCount++;
-        } else if(!ContactsManager.arePIDsRetrieved()){
+        } else if (!ContactsManager.arePIDsRetrieved()) {
             // Contact lookup in progress, still display it with a loader
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
