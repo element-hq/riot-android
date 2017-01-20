@@ -100,7 +100,7 @@ public class ContactsManager {
          * @param contact the contact
          * @param mxid the mxid
          */
-        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid ) {
+        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid) {
             if (null != mListeners) {
                 for (ContactsManagerListener listener : mListeners) {
                     try {
@@ -131,14 +131,18 @@ public class ContactsManager {
         public void onFailure(String accountId) {
             mIsRetrievingPids = false;
             mArePidsRetrieved = false;
+            Log.d(LOG_TAG, "## fail to retrieve the PIDs");
         }
 
         @Override
         public void onSuccess(final String accountId) {
             // ignore the current response because the request has been cancelled
             if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
                 return;
             }
+
+            Log.d(LOG_TAG, "## Retrieve IPDs successfully");
 
             mIsRetrievingPids = false;
             mArePidsRetrieved = true;
@@ -152,7 +156,7 @@ public class ContactsManager {
             MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
             if ((null != session) && (null != mContactsList)) {
-                for(final Contact contact : mContactsList) {
+                for (final Contact contact : mContactsList) {
                     Set<String> medias = contact.getMatrixIdMedias();
 
                     for (String media : medias) {
@@ -197,6 +201,7 @@ public class ContactsManager {
 
     /**
      * Provides an unique identifier of the contacts snapshot
+     *
      * @return an unique identifier
      */
     public static int getLocalContactsSnapshotSession() {
@@ -209,6 +214,7 @@ public class ContactsManager {
 
     /**
      * Refresh the local contacts list snapshot.
+     *
      * @return a local contacts list snapshot.
      */
     public static Collection<Contact> getLocalContactsSnapshot() {
@@ -217,6 +223,7 @@ public class ContactsManager {
 
     /**
      * Tell if the contacts snapshot list is ready
+     *
      * @param context the context
      * @return true if the contacts snapshot list is ready
      */
@@ -252,9 +259,6 @@ public class ContactsManager {
             mContactsList = null;
         }
 
-        mIsRetrievingPids = false;
-        mArePidsRetrieved = false;
-
         MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
 
         if (null != defaultSession) {
@@ -264,6 +268,7 @@ public class ContactsManager {
 
     /**
      * Add a listener.
+     *
      * @param listener the listener to add.
      */
     public static void addListener(ContactsManagerListener listener) {
@@ -276,6 +281,7 @@ public class ContactsManager {
 
     /**
      * Remove a listener.
+     *
      * @param listener the listener to remove.
      */
     public static void removeListener(ContactsManagerListener listener) {
@@ -286,6 +292,7 @@ public class ContactsManager {
 
     /**
      * Tells if the contacts PIDs have been retrieved
+     *
      * @return true if the PIDs have been retrieved.
      */
     public static boolean arePIDsRetrieved() {
@@ -316,6 +323,7 @@ public class ContactsManager {
 
     /**
      * List the local contacts.
+     *
      * @param context the context.
      */
     public static void refreshLocalContactsSnapshot(final Context context) {
@@ -478,8 +486,13 @@ public class ContactsManager {
                 MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 if (null != defaultSession) {
                     defaultSession.getNetworkConnectivityReceiver().addEventListener(mNetworkConnectivityReceiver);
+
+                    // reset the PIDs retriever statuses
+                    mIsRetrievingPids = false;
+                    mArePidsRetrieved = false;
+
+                    retrievePids();
                 }
-                retrievePids();
 
                 if (null != mListeners) {
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -487,7 +500,7 @@ public class ContactsManager {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            for(ContactsManagerListener listener : mListeners) {
+                            for (ContactsManagerListener listener : mListeners) {
                                 try {
                                     listener.onRefresh();
                                 } catch (Exception e) {
@@ -512,6 +525,7 @@ public class ContactsManager {
     /**
      * Tells if the contacts book access has been requested.
      * For android > M devices, it only tells if the permission has been granted.
+     *
      * @param activity the calling activity
      * @return true it was requested once
      */
@@ -526,7 +540,8 @@ public class ContactsManager {
 
     /**
      * Update the contacts book access.
-     * @param activity the calling activity.
+     *
+     * @param activity  the calling activity.
      * @param isAllowed true to allowed the contacts book access.
      */
     public static void setIsContactBookAccessAllowed(Activity activity, boolean isAllowed) {
@@ -536,10 +551,13 @@ public class ContactsManager {
             editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
             editor.commit();
         }
+        mIsRetrievingPids = false;
+        mArePidsRetrieved = false;
     }
 
     /**
      * Tells if the contacts book access has been granted
+     *
      * @param context the context
      * @return true if it was granted.
      */

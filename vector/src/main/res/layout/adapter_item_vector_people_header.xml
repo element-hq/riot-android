@@ -9,23 +9,34 @@
         android:id="@+id/people_header_sub_layout"
         android:layout_width="match_parent"
         android:layout_height="42dp">
+
         <TextView
             android:id="@+id/heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text = "Header"
+            android:layout_marginLeft="16dp"
             android:fontFamily="sans-serif-medium"
-            android:layout_marginLeft="18dp"
-            android:textSize="14sp"
-            android:textColor="@color/vector_text_black_color"/>
+            android:text="Header"
+            android:textColor="@color/vector_text_black_color"
+            android:textSize="14sp" />
+
+        <ProgressBar
+            android:id="@+id/heading_loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/heading"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/heading_image"
-            android:layout_centerVertical="true"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp" />
     </RelativeLayout>
 </RelativeLayout>
