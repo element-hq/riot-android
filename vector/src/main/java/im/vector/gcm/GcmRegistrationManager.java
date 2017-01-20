@@ -951,14 +951,19 @@ public final class GcmRegistrationManager {
      * @return the delay between two syncs in ms.
      */
     public int getBackgroundSyncDelay() {
-        int currentValue = 0;
+        // on fdroid version, the default sync delay is about 10 seconds
+        if ((null == mRegistrationToken) && !getGcmSharedPreferences().contains(PREFS_SYNC_DELAY)) {
+            return 10000;
+        } else {
+            int currentValue = 0;
+            MXSession session = Matrix.getInstance(mContext).getDefaultSession();
 
-        MXSession session = Matrix.getInstance(mContext).getDefaultSession();
+            if (null != session) {
+                currentValue = session.getSyncDelay();
+            }
 
-        if (null != session) {
-            currentValue = session.getSyncDelay();
+            return getGcmSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
         }
-        return getGcmSharedPreferences().getInt(PREFS_SYNC_DELAY, currentValue);
     }
 
     /**
