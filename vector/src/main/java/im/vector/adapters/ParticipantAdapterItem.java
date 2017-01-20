@@ -32,6 +32,7 @@ import java.util.List;
 
 import im.vector.VectorApp;
 import im.vector.contacts.Contact;
+import im.vector.contacts.PIDsRetriever;
 import im.vector.util.VectorUtils;
 
 // Class representing a room participant.
@@ -65,6 +66,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from a room member.
+     *
      * @param member the member
      */
     public ParticipantAdapterItem(RoomMember member) {
@@ -80,6 +82,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from a matrix user.
+     *
      * @param user the matrix user.
      */
     public ParticipantAdapterItem(User user) {
@@ -91,6 +94,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from a contact.
+     *
      * @param contact the contact.
      */
     public ParticipantAdapterItem(Contact contact) {
@@ -108,10 +112,11 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Constructor from an user information.
+     *
      * @param displayName the display name
-     * @param avatarUrl the avatar url.
-     * @param userId the userId
-     * @param isValid whether it has a valid email/matrix user id or not
+     * @param avatarUrl   the avatar url.
+     * @param userId      the userId
+     * @param isValid     whether it has a valid email/matrix user id or not
      */
     public ParticipantAdapterItem(String displayName, String avatarUrl, String userId, boolean isValid) {
         mDisplayName = displayName;
@@ -169,8 +174,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
             if (lhs == null) {
                 return -1;
-            }
-            else if (rhs == null) {
+            } else if (rhs == null) {
                 return 1;
             }
 
@@ -181,6 +185,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
     /**
      * Test if a room member fields contains a dedicated pattern.
      * The check is done with the displayname and the userId.
+     *
      * @param aPattern the pattern to search.
      * @return true if it matches.
      */
@@ -214,6 +219,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Tell whether a component of the displayName, or one of his matrix id/email has the provided prefix.
+     *
      * @param prefix the prefix
      * @return true if one item matched
      */
@@ -243,7 +249,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
             }
 
             // test components
-            for(String comp : mDisplayNameComponents) {
+            for (String comp : mDisplayNameComponents) {
                 if (comp.startsWith(prefix)) {
                     return true;
                 }
@@ -260,6 +266,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Provides the avatar bitmap
+     *
      * @return the avatar bitmap.
      */
     public Bitmap getAvatarBitmap() {
@@ -272,7 +279,8 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Init an imageView with the avatar.
-     * @param session the session
+     *
+     * @param session   the session
      * @param imageView the imageView
      */
     public void displayAvatar(MXSession session, ImageView imageView) {
@@ -314,6 +322,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
 
     /**
      * Compute an unique display name.
+     *
      * @param otherDisplayNames the other display names.
      * @return an unique display name
      */
@@ -348,5 +357,27 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         }
 
         return displayname;
+    }
+
+    /**
+     * Tries to retrieve the PIDs.
+     * @return true if they are retrieved.
+     */
+    public boolean retrievePids() {
+        boolean isUpdated = false;
+
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) {
+            if (null != mContact) {
+                mContact.refreshMatridIds();
+            }
+            Contact.MXID mxId = PIDsRetriever.getInstance().getMXID(mUserId);
+
+            if (null != mxId) {
+                mUserId = mxId.mMatrixId;
+                isUpdated = true;
+            }
+        }
+
+        return isUpdated;
     }
 }
