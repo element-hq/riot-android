@@ -148,6 +148,7 @@ public class PIDsRetriever {
      * @return true if the matrix Ids have been retrieved
      */
     public void retrieveMatrixIds(final Context context, final List<Contact> contacts, final boolean localUpdateOnly) {
+        Log.e(LOG_TAG, String.format("retrieveMatrixIds starts for %d contacts", contacts == null ? 0 : contacts.size()));
         // sanity checks
         if ((null == contacts) || (0 == contacts.size())) {
             if (null != mListener) {
@@ -186,6 +187,7 @@ public class PIDsRetriever {
                 session.lookup3Pids(fRequestedAddresses, medias, new ApiCallback<List<String>>() {
                     @Override
                     public void onSuccess(final List<String> pids) {
+                        Log.e(LOG_TAG, "lookup3Pids success " + pids.size());
                         // update the local cache
                         for(int index = 0; index < fRequestedAddresses.size(); index++) {
                             String email = fRequestedAddresses.get(index);
