@@ -272,7 +272,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        return false;
+        return !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     /**
