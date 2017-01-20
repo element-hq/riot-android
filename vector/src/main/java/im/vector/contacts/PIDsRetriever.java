@@ -156,7 +156,11 @@ public class PIDsRetriever {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mListener.onSuccess(Matrix.getInstance(context.getApplicationContext()).getDefaultSession().getMyUserId());
+                        MXSession session = Matrix.getInstance(context.getApplicationContext()).getDefaultSession();
+
+                        if (null != session) {
+                            mListener.onSuccess(session.getMyUserId());
+                        }
                     }
                 });
             }
