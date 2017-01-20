@@ -252,7 +252,7 @@ public class VectorApp extends Application {
             }
         }
 
-        PIDsRetriever.getIntance().onAppBackgrounded();
+        PIDsRetriever.getInstance().onAppBackgrounded();
 
         MyPresenceManager.advertiseAllUnavailable();
     }
@@ -334,6 +334,7 @@ public class VectorApp extends Application {
             }
 
             // get the contact update at application launch
+            ContactsManager.clearSnapshot();
             ContactsManager.refreshLocalContactsSnapshot(VectorApp.this);
 
             boolean hasActiveCall = false;

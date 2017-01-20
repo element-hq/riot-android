@@ -46,7 +46,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import im.vector.Matrix;
@@ -99,9 +98,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private String mPattern = "";
 
     private List<ParticipantAdapterItem> mItemsToHide = new ArrayList<>();
-
-    // contacts which have retrieved the linked matrix Id
-    private List<Contact> mCheckedContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
     private int mLocalContactsSnapshotSession = -1;
@@ -185,7 +181,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private ParticipantAdapterItem mFirstEntry;
 
     // the participants can be split in sections
-    List<List<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
+    private final List<List<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
     private int mFirstEntryPosition = -1;
     private int mLocalContactsSectionPosition = -1;
     private int mRoomContactsSectionPosition = -1;
@@ -298,7 +294,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                         ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
 
-                        Contact.MXID mxid = PIDsRetriever.getIntance().getMXID(email);
+                        Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(email);
 
                         if (null != mxid) {
                             participant.mUserId = mxid.mMatrixId;
@@ -387,53 +383,35 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Test if the contact is used by an entry of this adapter.
-     * Refresh if required.
-     *
-     * @param contact           the updated contact
-     * @param matrixId          the linked matrix Id
-     * @param visibleChildViews the visible child views indexed by group position
+     * Some contacts pids have been updated.
      */
-    public void onContactUpdate(Contact contact, String matrixId, Map<Integer, List<Integer>> visibleChildViews) {
-        if (null != contact) {
-            int pos = -1;
+    public void onPIdsUpdate() {
+        if (mLocalContactsSectionPosition >= 0) {
+            boolean isUpdated = false;
 
-            if (mLocalContactsSectionPosition >= 0) {
-                List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
+            PIDsRetriever retriever = PIDsRetriever.getInstance();
+            List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
 
-                ParticipantAdapterItem updatedItem = null;
-                // detect of the contact is used in the adapter
-                for (int index = 0; index < list.size(); index++) {
-                    ParticipantAdapterItem item = list.get(index);
+            // detect if some contact items can match to matrix id
+            for (int index = 0; index < list.size(); index++) {
+                ParticipantAdapterItem item = list.get(index);
 
-                    if (item.mContact == contact) {
-                        pos = index;
-                        item.mUserId = matrixId;
-                        updatedItem = item;
-                        break;
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(item.mUserId).matches()) {
+                    if (null != item.mContact) {
+                        item.mContact.refreshMatridIds();
                     }
-                }
+                    Contact.MXID mxId = retriever.getMXID(item.mUserId);
 
-                if (mUsedMemberUserIds != null && updatedItem != null && mUsedMemberUserIds.contains(updatedItem.mUserId)) {
-                    list.remove(updatedItem);
-                    if (list.isEmpty()) {
-                        mParticipantsListsList.remove(mLocalContactsSectionPosition);
-                        mLocalContactsSectionPosition = -1;
-                        mRoomContactsSectionPosition--;
+                    if (null != mxId) {
+                        item.mUserId = mxId.mMatrixId;
+                        isUpdated = true;
                     }
-                    notifyDataSetChanged();
-                    return;
                 }
             }
 
-            // the item has been found
-            if (pos >= 0) {
-                // refresh if a duplicated entry has been removed
-                // or if the contact is displayed
-                if (checkDuplicatedMatrixIds() ||
-                        (visibleChildViews.containsKey(mLocalContactsSectionPosition) && visibleChildViews.get(mLocalContactsSectionPosition).contains(pos))) {
-                    notifyDataSetChanged();
-                }
+            if (isUpdated) {
+                checkDuplicatedMatrixIds();
+                notifyDataSetChanged();
             }
         }
     }
@@ -515,7 +493,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mContactsParticipants = null;
             mUsedMemberUserIds = null;
             mDisplayNamesList = null;
-            mCheckedContacts.clear();
             mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
         }
 
@@ -591,6 +568,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
             participantItemList.addAll(mContactsParticipants);
         }
+
+        // ensure that the PIDs have been retrieved
+        // it might have failed
+        ContactsManager.retrievePids();
 
         // the caller defines a first entry to display
         ParticipantAdapterItem firstEntry = theFirstEntry;
@@ -871,11 +852,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
             statusTextView.setText(participant.mContact.getEmails().get(0));
-
-            if (mCheckedContacts.indexOf(participant.mContact) < 0) {
-                participant.mContact.checkMatridIds(mContext);
-                mCheckedContacts.add(participant.mContact);
-            }
         } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
@@ -928,7 +904,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      *
      * @param groupPosition the group position
      * @param isExpanded    true if the group is expanded
-     * @return true to expand the group
      */
     private void setGroupExpandedStatus(int groupPosition, boolean isExpanded) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);

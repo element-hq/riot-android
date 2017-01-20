@@ -82,11 +82,15 @@ public class VectorSearchPeopleListFragment extends Fragment {
 
         @Override
         public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+        }
+
+        @Override
+        public void onPIDsUpdate() {
             if (null != getActivity()) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.onContactUpdate(contact, matrixId, VectorUtils.getVisibleChildViews(mPeopleListView, mAdapter));
+                        mAdapter.onPIdsUpdate();
                     }
                 });
             }
