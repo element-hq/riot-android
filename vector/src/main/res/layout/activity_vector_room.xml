@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -153,14 +154,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_alignParentBottom="true">
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="0dp"
+                android:paddingTop="0dp">
 
                 <RelativeLayout
                     android:id="@+id/room_self_avatar_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
 
                     <include layout="@layout/vector_room_round_avatar"
                         android:layout_width="40dp"
@@ -173,10 +178,11 @@
                     android:id="@+id/room_sending_message_layout"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@id/room_self_avatar_container"
-                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:minHeight="24dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    tools:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
 
                     <RelativeLayout
                         android:layout_width="20dp"
@@ -203,7 +209,11 @@
                         android:theme="@style/SearchesAppTheme"
                         android:background="@android:color/transparent"
                         android:textCursorDrawable="@drawable/searches_cursor_background"
-                        android:textColorHint="@color/vector_0_54_black_color"/>
+                        android:textColorHint="@color/vector_0_54_black_color"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginTop="0dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp" />
 
                     <View
                         android:id="@+id/room_button_margin_left"
