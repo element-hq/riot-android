@@ -76,17 +76,21 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    VectorRoomInviteMembersActivity.this.onPatternUpdate(false);
+                    onPatternUpdate(false);
                 }
             });
         }
 
         @Override
         public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+        }
+
+        @Override
+        public void onPIDsUpdate() {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.onContactUpdate(contact, matrixId, VectorUtils.getVisibleChildViews(mListView, mAdapter));
+                    mAdapter.onPIdsUpdate();
                 }
             });
         }
