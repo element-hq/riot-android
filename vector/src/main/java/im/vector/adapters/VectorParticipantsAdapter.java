@@ -224,7 +224,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         mFirstEntryPosition = -1;
         mLocalContactsSectionPosition = -1;
         mRoomContactsSectionPosition = -1;
-
+        mPattern = null;
+        
         notifyDataSetChanged();
     }
 
@@ -386,33 +387,22 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * Some contacts pids have been updated.
      */
     public void onPIdsUpdate() {
-        if (mLocalContactsSectionPosition >= 0) {
-            boolean isUpdated = false;
+        boolean gotUpdates = false;
 
-            PIDsRetriever retriever = PIDsRetriever.getInstance();
-            List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
-
-            // detect if some contact items can match to matrix id
-            for (int index = 0; index < list.size(); index++) {
-                ParticipantAdapterItem item = list.get(index);
-
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(item.mUserId).matches()) {
-                    if (null != item.mContact) {
-                        item.mContact.refreshMatridIds();
-                    }
-                    Contact.MXID mxId = retriever.getMXID(item.mUserId);
-
-                    if (null != mxId) {
-                        item.mUserId = mxId.mMatrixId;
-                        isUpdated = true;
-                    }
-                }
+        if (null != mUnusedParticipants) {
+            for (ParticipantAdapterItem item : mUnusedParticipants) {
+                gotUpdates |= item.retrievePids();
             }
+        }
 
-            if (isUpdated) {
-                checkDuplicatedMatrixIds();
-                notifyDataSetChanged();
+        if (null != mContactsParticipants) {
+            for (ParticipantAdapterItem item : mContactsParticipants) {
+                gotUpdates |= item.retrievePids();
             }
+        }
+
+        if (gotUpdates) {
+            refresh(mFirstEntry, null);
         }
     }
 
