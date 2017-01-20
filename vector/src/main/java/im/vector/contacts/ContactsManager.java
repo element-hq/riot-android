@@ -131,14 +131,18 @@ public class ContactsManager {
         public void onFailure(String accountId) {
             mIsRetrievingPids = false;
             mArePidsRetrieved = false;
+            Log.d(LOG_TAG, "## fail to retrieve the PIDs");
         }
 
         @Override
         public void onSuccess(final String accountId) {
             // ignore the current response because the request has been cancelled
             if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
                 return;
             }
+
+            Log.d(LOG_TAG, "## Retrieve IPDs successfully");
 
             mIsRetrievingPids = false;
             mArePidsRetrieved = true;
@@ -251,9 +255,6 @@ public class ContactsManager {
         synchronized (LOG_TAG) {
             mContactsList = null;
         }
-
-        mIsRetrievingPids = false;
-        mArePidsRetrieved = false;
 
         MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
 
@@ -478,8 +479,13 @@ public class ContactsManager {
                 MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
                 if (null != defaultSession) {
                     defaultSession.getNetworkConnectivityReceiver().addEventListener(mNetworkConnectivityReceiver);
+
+                    // reset the PIDs retriever statuses
+                    mIsRetrievingPids = false;
+                    mArePidsRetrieved = false;
+
+                    retrievePids();
                 }
-                retrievePids();
 
                 if (null != mListeners) {
                     Handler handler = new Handler(Looper.getMainLooper());
