@@ -638,6 +638,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
             posCount++;
+        } else if(!ContactsManager.arePIDsRetrieved()){
+            // Contact lookup in progress, still display it with a loader
+            mParticipantsListsList.add(contactBookList);
+            mLocalContactsSectionPosition = posCount;
+            posCount++;
         }
 
         if (roomContactsList.size() > 0) {
@@ -774,6 +779,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
         subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
+        View loadingView = subLayout.findViewById(R.id.heading_loading_view);
+        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
         if (parent instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) parent;

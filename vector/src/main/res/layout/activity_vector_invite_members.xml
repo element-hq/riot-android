@@ -61,7 +61,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/filter_tabs"
         android:background="@color/chat_encoding_background"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:layout_width="40dp"
