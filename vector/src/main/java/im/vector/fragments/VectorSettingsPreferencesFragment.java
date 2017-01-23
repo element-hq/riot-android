@@ -26,13 +26,13 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -343,7 +343,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // push rules
         for(String resourceText : mPushesRuleByResourceId.keySet()) {
-            final SwitchPreference switchPreference = (SwitchPreference)preferenceManager.findPreference(resourceText);
+            final CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
                 switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -359,7 +359,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         }
 
-        final SwitchPreference useBackgroundSyncPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
+        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
 
         if (null != useBackgroundSyncPref) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
@@ -380,7 +380,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
         
-        final SwitchPreference useGaPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
+        final CheckBoxPreference useGaPref = (CheckBoxPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
 
         if (!GAHelper.isGAUseUpdatable()) {
             PreferenceCategory otherCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
@@ -454,7 +454,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
         mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
 
-        final SwitchPreference useCryptoPref = (SwitchPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
+        final CheckBoxPreference useCryptoPref = (CheckBoxPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
         final Preference cryptoIsEnabledPref = preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end_is_active));
 
         cryptoIsEnabledPref.setEnabled(false);
@@ -703,7 +703,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
 
         for(String resourceText : mPushesRuleByResourceId.keySet()) {
-            SwitchPreference switchPreference = (SwitchPreference) preferenceManager.findPreference(resourceText);
+            CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
                 if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
