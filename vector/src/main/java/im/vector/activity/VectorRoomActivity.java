@@ -327,8 +327,6 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             });
         }
 
-
-
         @Override
         public void onLiveEvent(final Event event, RoomState roomState) {
             VectorRoomActivity.this.runOnUiThread(new Runnable() {
@@ -1169,37 +1167,53 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         } else if (id == R.id.ic_action_room_leave) {
             if (null != mRoom) {
                 Log.d(LOG_TAG, "Leave the room " + mRoom.getRoomId());
+                new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                        .setTitle(R.string.room_participants_leave_prompt_title)
+                        .setMessage(R.string.room_participants_leave_prompt_msg)
+                        .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                setProgressVisibility(View.VISIBLE);
 
-                setProgressVisibility(View.VISIBLE);
+                                mRoom.leave(new ApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                        Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
+                                        // close the activity
+                                        finish();
+                                    }
 
-                mRoom.leave(new ApiCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void info) {
-                        Log.d(LOG_TAG, "The room " + mRoom.getRoomId() + " is left");
-                        // close the activity
-                        finish();
-                    }
+                                    private void onError(String errorMessage) {
+                                        setProgressVisibility(View.GONE);
+                                        Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
+                                    }
 
-                    private void onError(String errorMessage) {
-                        setProgressVisibility(View.GONE);
-                        Log.e(LOG_TAG, "Cannot leave the room " + mRoom.getRoomId() + " : " + errorMessage);
-                    }
+                                    @Override
+                                    public void onNetworkError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
 
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
+                                    @Override
+                                    public void onMatrixError(MatrixError e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
 
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onError(e.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onError(e.getLocalizedMessage());
-                    }
-                });
+                                    @Override
+                                    public void onUnexpectedError(Exception e) {
+                                        onError(e.getLocalizedMessage());
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
             }
         }
 

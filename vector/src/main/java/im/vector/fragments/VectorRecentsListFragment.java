@@ -16,7 +16,9 @@
 
 package im.vector.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -738,8 +740,25 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
     }
 
     @Override
-    public void onLeaveRoom(MXSession session, String roomId) {
-        onRejectInvitation(session, roomId);
+    public void onLeaveRoom(final MXSession session, final String roomId) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.room_participants_leave_prompt_title)
+                .setMessage(R.string.room_participants_leave_prompt_msg)
+                .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        onRejectInvitation(session, roomId);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
 
     @Override
