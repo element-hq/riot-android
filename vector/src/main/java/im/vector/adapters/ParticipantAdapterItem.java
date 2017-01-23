@@ -289,7 +289,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
             imageView.setImageBitmap(getAvatarBitmap());
         } else {
             if ((null != mUserId) && (android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) || !mIsValid) {
-                imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mUserId), "@@", true));
+                imageView.setImageBitmap(VectorUtils.getAvatar(imageView.getContext(), VectorUtils.getAvatarColor(mIsValid ? mUserId : ""), "@@", true));
             } else {
                 if (TextUtils.isEmpty(mUserId)) {
                     VectorUtils.loadUserAvatar(imageView.getContext(), session, imageView, mAvatarUrl, mDisplayName, mDisplayName);
