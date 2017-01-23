@@ -687,8 +687,8 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         }
 
         // 1 - display member avatar
-        if (null != participant.mAvatarBitmap) {
-            viewHolder.mMemberAvatarImageView.setImageBitmap(participant.mAvatarBitmap);
+        if (null != participant.getAvatarBitmap()) {
+            viewHolder.mMemberAvatarImageView.setImageBitmap(participant.getAvatarBitmap());
         } else {
             if (TextUtils.isEmpty(participant.mUserId)) {
                 VectorUtils.loadUserAvatar(mContext, mSession, viewHolder.mMemberAvatarImageView, participant.mAvatarUrl, participant.mDisplayName, participant.mDisplayName);

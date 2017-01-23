@@ -1,3 +1,15 @@
+Changes in Vector 0.6.7 (2016-01-23)
+===================================================
+ 
+Improvements:
+ * The room invitation activity design has been improved.
+  
+Bugfixes:
+ * Fix a crash when a contact with a thumbnail was invited.
+ * The users were not saved after a login.
+ * Fix several issues reported by Google Analytics.
+ * #868 : Add Leave Room Confirmation.	
+ 
 Changes in Vector 0.6.6 (2016-01-17)
 ===================================================
  

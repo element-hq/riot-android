@@ -82,11 +82,15 @@ public class VectorSearchPeopleListFragment extends Fragment {
 
         @Override
         public void onContactPresenceUpdate(final Contact contact, final String matrixId) {
+        }
+
+        @Override
+        public void onPIDsUpdate() {
             if (null != getActivity()) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.onContactUpdate(contact, matrixId, VectorUtils.getVisibleChildViews(mPeopleListView, mAdapter));
+                        mAdapter.onPIdsUpdate();
                     }
                 });
             }
@@ -157,7 +161,10 @@ public class VectorSearchPeopleListFragment extends Fragment {
         mPeopleListView = (ExpandableListView) v.findViewById(R.id.search_people_list);
         // the chevron is managed in the header view
         mPeopleListView.setGroupIndicator(null);
-        mAdapter = new VectorParticipantsAdapter(getActivity(), R.layout.adapter_item_vector_add_participants, R.layout.adapter_item_vector_people_header, mSession, null);
+        mAdapter = new VectorParticipantsAdapter(getActivity(),
+                R.layout.adapter_item_vector_add_participants,
+                R.layout.adapter_item_vector_people_header,
+                mSession, null, false);
         mPeopleListView.setAdapter(mAdapter);
 
         mPeopleListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {

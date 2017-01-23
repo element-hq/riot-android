@@ -890,53 +890,61 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public void onRowClick(int position) {
-        MessageRow row = mAdapter.getItem(position);
-        Event event = row.getEvent();
+        try {
+            MessageRow row = mAdapter.getItem(position);
+            Event event = row.getEvent();
 
-        // switch in section mode
-        ((VectorMessagesAdapter)mAdapter).onEventTap(event.eventId);
+            // switch in section mode
+            ((VectorMessagesAdapter) mAdapter).onEventTap(event.eventId);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onRowClick() failed " + e.getMessage());
+        }
     }
 
     @Override
     public void onContentClick(int position) {
-        MessageRow row = mAdapter.getItem(position);
-        Event event = row.getEvent();
+        try {
+            MessageRow row = mAdapter.getItem(position);
+            Event event = row.getEvent();
 
-        VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter)mAdapter;
+            VectorMessagesAdapter vectorMessagesAdapter = (VectorMessagesAdapter) mAdapter;
 
-        if (vectorMessagesAdapter.isInSelectionMode()) {
-            // cancel the selection mode.
-            vectorMessagesAdapter.onEventTap(null);
-            return;
-        }
-
-        Message message = JsonUtils.toMessage(event.getContent());
-
-        // video and images are displayed inside a medias slider.
-        if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
-            ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
-            int listPosition = getMediaMessagePosition(mediaMessagesList, message);
-
-            if (listPosition >= 0) {
-                Intent viewImageIntent = new Intent(getActivity(), VectorMediasViewerActivity.class);
-
-                viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWith());
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
-                viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
-
-                getActivity().startActivity(viewImageIntent);
+            if (vectorMessagesAdapter.isInSelectionMode()) {
+                // cancel the selection mode.
+                vectorMessagesAdapter.onEventTap(null);
+                return;
             }
-        } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
-            FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
-            if (null != fileMessage.getUrl()) {
-                onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+            Message message = JsonUtils.toMessage(event.getContent());
+
+            // video and images are displayed inside a medias slider.
+            if (Message.MSGTYPE_IMAGE.equals(message.msgtype) || (Message.MSGTYPE_VIDEO.equals(message.msgtype))) {
+                ArrayList<SlidableMediaInfo> mediaMessagesList = listSlidableMessages();
+                int listPosition = getMediaMessagePosition(mediaMessagesList, message);
+
+                if (listPosition >= 0) {
+                    Intent viewImageIntent = new Intent(getActivity(), VectorMediasViewerActivity.class);
+
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_WIDTH, mAdapter.getMaxThumbnailWith());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_THUMBNAIL_HEIGHT, mAdapter.getMaxThumbnailHeight());
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST, mediaMessagesList);
+                    viewImageIntent.putExtra(VectorMediasViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
+
+                    getActivity().startActivity(viewImageIntent);
+                }
+            } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
+                FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
+
+                if (null != fileMessage.getUrl()) {
+                    onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+                }
+            } else {
+                // switch in section mode
+                vectorMessagesAdapter.onEventTap(event.eventId);
             }
-        } else {
-            // switch in section mode
-            vectorMessagesAdapter.onEventTap(event.eventId);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onContentClick() failed " + e.getMessage());
         }
     }
 
@@ -947,30 +955,38 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public void onAvatarClick(String userId) {
-        Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-        // in preview mode
-        // the room is stored in a temporary store
-        // so provide an handle to retrieve it
-        if (null != getRoomPreviewData()) {
-            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
-        }
+        try {
+            Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+            // in preview mode
+            // the room is stored in a temporary store
+            // so provide an handle to retrieve it
+            if (null != getRoomPreviewData()) {
+                roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_STORE_ID, new Integer(Matrix.getInstance(getActivity()).addTmpStore(mEventTimeLine.getStore())));
+            }
 
-        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-        getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onAvatarClick() failed " + e.getMessage());
+        }
     }
 
     @Override
     public boolean onAvatarLongClick(String userId) {
         if (getActivity() instanceof VectorRoomActivity) {
-            RoomState state = mRoom.getLiveState();
+            try {
+                RoomState state = mRoom.getLiveState();
 
-            if (null != state) {
-                String displayName = state.getMemberName(userId);
-                if (!TextUtils.isEmpty(displayName)) {
-                    ((VectorRoomActivity)getActivity()).insertUserDisplayNameInTextEditor(displayName);
+                if (null != state) {
+                    String displayName = state.getMemberName(userId);
+                    if (!TextUtils.isEmpty(displayName)) {
+                        ((VectorRoomActivity) getActivity()).insertUserDisplayNameInTextEditor(displayName);
+                    }
                 }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onAvatarLongClick() failed " + e.getMessage());
             }
         }
         return true;
@@ -979,7 +995,11 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
     @Override
     public void onSenderNameClick(String userId, String displayName) {
         if (getActivity() instanceof VectorRoomActivity) {
-            ((VectorRoomActivity)getActivity()).insertUserDisplayNameInTextEditor(displayName);
+            try {
+                ((VectorRoomActivity) getActivity()).insertUserDisplayNameInTextEditor(displayName);
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## onSenderNameClick() failed " + e.getMessage());
+            }
         }
     }
 
@@ -989,55 +1009,63 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
     @Override
     public void onMoreReadReceiptClick(String eventId) {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
+        try {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
 
-        VectorReadReceiptsDialogFragment fragment = (VectorReadReceiptsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_RECEIPTS_DIALOG);
-        if (fragment != null) {
-            fragment.dismissAllowingStateLoss();
+            VectorReadReceiptsDialogFragment fragment = (VectorReadReceiptsDialogFragment) fm.findFragmentByTag(TAG_FRAGMENT_RECEIPTS_DIALOG);
+            if (fragment != null) {
+                fragment.dismissAllowingStateLoss();
+            }
+            fragment = VectorReadReceiptsDialogFragment.newInstance(mSession, mRoom.getRoomId(), eventId);
+            fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onMoreReadReceiptClick() failed " + e.getMessage());
         }
-        fragment = VectorReadReceiptsDialogFragment.newInstance(mSession, mRoom.getRoomId(), eventId);
-        fragment.show(fm, TAG_FRAGMENT_RECEIPTS_DIALOG);
     }
 
     @Override
     public void onURLClick(Uri uri) {
-        if (null != uri) {
-            HashMap<String, String> universalParams = VectorUniversalLinkReceiver.parseUniversalLink(uri);
+        try {
+            if (null != uri) {
+                HashMap<String, String> universalParams = VectorUniversalLinkReceiver.parseUniversalLink(uri);
 
-            if (null != universalParams) {
-                // open the member sheet from the current activity
-                if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
-                    Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-                    roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
-                    roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-                    getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+                if (null != universalParams) {
+                    // open the member sheet from the current activity
+                    if (universalParams.containsKey(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY)) {
+                        Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+                        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, universalParams.get(VectorUniversalLinkReceiver.ULINK_MATRIX_USER_ID_KEY));
+                        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+                        getActivity().startActivityForResult(roomDetailsIntent, VectorRoomActivity.GET_MENTION_REQUEST_CODE);
+                    } else {
+                        // pop to the home activity
+                        Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
+                        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
+                        getActivity().startActivity(intent);
+                    }
                 } else {
-                    // pop to the home activity
-                    Intent intent = new Intent(getActivity(), VectorHomeActivity.class);
-                    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_UNIVERSAL_LINK, uri);
-                    getActivity().startActivity(intent);
-                }
-            } else {
-                try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     intent.putExtra(Browser.EXTRA_APPLICATION_ID, getActivity().getPackageName());
                     getActivity().startActivity(intent);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "## onURLClick() : has to viewser to open " + uri +" with error" + e.getMessage());
                 }
             }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onURLClick() failed " + e.getMessage());
         }
     }
 
     @Override
     public void onMatrixUserIdClick(final String userId) {
-        // start member details UI
-        Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
-        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
-        roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
-        startActivity(roomDetailsIntent);
+        try {
+            // start member details UI
+            Intent roomDetailsIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, userId);
+            roomDetailsIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MATRIX_ID, mSession.getCredentials().userId);
+            startActivity(roomDetailsIntent);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## onMatrixUserIdClick() failed " + e.getMessage());
+        }
     }
 
     @Override

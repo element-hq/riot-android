@@ -26,11 +26,12 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.MXSession;
@@ -44,6 +45,7 @@ import im.vector.VectorApp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -59,19 +61,37 @@ public class ContactsManager {
         void onRefresh();
 
         /**
+         * Call when some contact PIDs have been retrieved
+         */
+        void onPIDsUpdate();
+
+        /**
          * Called when an user presence has been updated
          */
         void onContactPresenceUpdate(Contact contact, String matrixId);
     }
 
     // the contacts list snapshot
-    private static Collection<Contact> mContactsList = null;
+    private static List<Contact> mContactsList = null;
 
     // the listeners
     private static ArrayList<ContactsManagerListener> mListeners = null;
 
     // a contacts population is in progress
     private static boolean mIsPopulating = false;
+
+    // set to true when there is a pending
+    private static boolean mIsRetrievingPids = false;
+    private static boolean mArePidsRetrieved = false;
+
+    private static final IMXNetworkEventListener mNetworkConnectivityReceiver = new IMXNetworkEventListener() {
+        @Override
+        public void onNetworkConnectionUpdate(boolean isConnected) {
+            if (isConnected) {
+                retrievePids();
+            }
+        }
+    };
 
     // retriever listener
     private static final PIDsRetriever.PIDsRetrieverListener mPIDsRetrieverListener = new PIDsRetriever.PIDsRetrieverListener() {
@@ -80,37 +100,67 @@ public class ContactsManager {
          * @param contact the contact
          * @param mxid the mxid
          */
-        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid ) {
+        private void onContactPresenceUpdate(Contact contact, Contact.MXID mxid) {
             if (null != mListeners) {
                 for (ContactsManagerListener listener : mListeners) {
                     try {
                         listener.onContactPresenceUpdate(contact, mxid.mMatrixId);
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getLocalizedMessage());
+                        Log.e(LOG_TAG, "onContactPresenceUpdate failed " + e.getMessage());
+                    }
+                }
+            }
+        }
+
+        /**
+         * Warn that some PIDs have been retrieved from the contacts data.
+         */
+        private void onPIDsUpdate() {
+            if (null != mListeners) {
+                for (ContactsManagerListener listener : mListeners) {
+                    try {
+                        listener.onPIDsUpdate();
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "onPIDsUpdate failed " + e.getMessage());
                     }
                 }
             }
         }
 
         @Override
-        public void onPIDsRetrieved(final String accountId, final Contact contact, final boolean has3PIDs) {
+        public void onFailure(String accountId) {
+            mIsRetrievingPids = false;
+            mArePidsRetrieved = false;
+            Log.d(LOG_TAG, "## fail to retrieve the PIDs");
+        }
+
+        @Override
+        public void onSuccess(final String accountId) {
+            // ignore the current response because the request has been cancelled
+            if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
+                return;
+            }
+
+            Log.d(LOG_TAG, "## Retrieve IPDs successfully");
+
+            mIsRetrievingPids = false;
+            mArePidsRetrieved = true;
+
+            // warn that the contacts list have been updated
+            onPIDsUpdate();
+
             // privacy
             // Log.d(LOG_TAG, "onPIDsRetrieved : the contact " + contact + " retrieves its 3PIds.");
 
-            if (has3PIDs) {
-                MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
+            MXSession session = Matrix.getInstance(VectorApp.getInstance().getApplicationContext()).getSession(accountId);
 
-                if (null != session) {
+            if ((null != session) && (null != mContactsList)) {
+                for (final Contact contact : mContactsList) {
                     Set<String> medias = contact.getMatrixIdMedias();
 
-                    // privacy
-                    //Log.d(LOG_TAG, "medias " + medias);
-
-                    for(String media : medias) {
+                    for (String media : medias) {
                         final Contact.MXID mxid = contact.getMXID(media);
-
-                        onContactPresenceUpdate(contact, mxid);
-
                         mxid.mUser = session.getDataHandler().getUser(mxid.mMatrixId);
 
                         // if the user is not known, get its presence
@@ -118,33 +168,28 @@ public class ContactsManager {
                             session.getPresenceApiClient().getPresence(mxid.mMatrixId, new ApiCallback<User>() {
                                 @Override
                                 public void onSuccess(User user) {
-                                    Log.d(LOG_TAG, "retrieve the presence of " + mxid.mMatrixId + " :"  + user);
+                                    Log.d(LOG_TAG, "retrieve the presence of " + mxid.mMatrixId + " :" + user);
                                     mxid.mUser = user;
                                     onContactPresenceUpdate(contact, mxid);
                                 }
 
-                                /**
-                                 * Error method
-                                 * @param errorMessage the error description
-                                 */
                                 private void onError(String errorMessage) {
-                                    Log.e(LOG_TAG, "cannot retrieve the presence of " + mxid.mMatrixId + " :"  + errorMessage);
-                                    onContactPresenceUpdate(contact, mxid);
+                                    Log.e(LOG_TAG, "cannot retrieve the presence of " + mxid.mMatrixId + " :" + errorMessage);
                                 }
 
                                 @Override
                                 public void onNetworkError(Exception e) {
-                                    onError(e.getLocalizedMessage());
+                                    onError(e.getMessage());
                                 }
 
                                 @Override
                                 public void onMatrixError(MatrixError e) {
-                                    onError(e.getLocalizedMessage());
+                                    onError(e.getMessage());
                                 }
 
                                 @Override
                                 public void onUnexpectedError(Exception e) {
-                                    onError(e.getLocalizedMessage());
+                                    onError(e.getMessage());
                                 }
                             });
                         }
@@ -156,6 +201,7 @@ public class ContactsManager {
 
     /**
      * Provides an unique identifier of the contacts snapshot
+     *
      * @return an unique identifier
      */
     public static int getLocalContactsSnapshotSession() {
@@ -168,6 +214,7 @@ public class ContactsManager {
 
     /**
      * Refresh the local contacts list snapshot.
+     *
      * @return a local contacts list snapshot.
      */
     public static Collection<Contact> getLocalContactsSnapshot() {
@@ -176,6 +223,7 @@ public class ContactsManager {
 
     /**
      * Tell if the contacts snapshot list is ready
+     *
      * @param context the context
      * @return true if the contacts snapshot list is ready
      */
@@ -200,9 +248,7 @@ public class ContactsManager {
      */
     public static void reset() {
         mListeners = null;
-        synchronized (LOG_TAG) {
-            mContactsList = null;
-        }
+        clearSnapshot();
     }
 
     /**
@@ -212,10 +258,17 @@ public class ContactsManager {
         synchronized (LOG_TAG) {
             mContactsList = null;
         }
+
+        MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
+
+        if (null != defaultSession) {
+            defaultSession.getNetworkConnectivityReceiver().removeEventListener(mNetworkConnectivityReceiver);
+        }
     }
 
     /**
      * Add a listener.
+     *
      * @param listener the listener to add.
      */
     public static void addListener(ContactsManagerListener listener) {
@@ -228,6 +281,7 @@ public class ContactsManager {
 
     /**
      * Remove a listener.
+     *
      * @param listener the listener to remove.
      */
     public static void removeListener(ContactsManagerListener listener) {
@@ -237,10 +291,42 @@ public class ContactsManager {
     }
 
     /**
+     * Tells if the contacts PIDs have been retrieved
+     *
+     * @return true if the PIDs have been retrieved.
+     */
+    public static boolean arePIDsRetrieved() {
+        return mArePidsRetrieved;
+    }
+
+    /**
+     * Retrieve the contacts PIDs
+     */
+    public static void retrievePids() {
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mIsRetrievingPids) {
+                    Log.d(LOG_TAG, "## retrievePids() : already in progress");
+                } else if (mArePidsRetrieved) {
+                    Log.d(LOG_TAG, "## retrievePids() : already done");
+                } else {
+                    Log.d(LOG_TAG, "## retrievePids() : Start search");
+                    mIsRetrievingPids = true;
+                    PIDsRetriever.getInstance().retrieveMatrixIds(VectorApp.getInstance(), mContactsList, false);
+                }
+            }
+        });
+    }
+
+    /**
      * List the local contacts.
+     *
      * @param context the context.
      */
-    public static void refreshLocalContactsSnapshot (final Context context) {
+    public static void refreshLocalContactsSnapshot(final Context context) {
         boolean isPopulating;
 
         synchronized (LOG_TAG) {
@@ -387,11 +473,25 @@ public class ContactsManager {
                     }
                 }
 
-                PIDsRetriever.getIntance().setPIDsRetrieverListener(mPIDsRetrieverListener);
-
                 synchronized (LOG_TAG) {
-                    mContactsList = dict.values();
+                    mContactsList = new ArrayList<>(dict.values());
                     mIsPopulating = false;
+                }
+
+                // define the PIDs listener
+                PIDsRetriever.getInstance().setPIDsRetrieverListener(mPIDsRetrieverListener);
+
+                // trigger a PIDs retrieval
+                // add a network listener to ensure that the PIDS will be retreived asap a valid network will be found.
+                MXSession defaultSession = Matrix.getInstance(VectorApp.getInstance()).getDefaultSession();
+                if (null != defaultSession) {
+                    defaultSession.getNetworkConnectivityReceiver().addEventListener(mNetworkConnectivityReceiver);
+
+                    // reset the PIDs retriever statuses
+                    mIsRetrievingPids = false;
+                    mArePidsRetrieved = false;
+
+                    retrievePids();
                 }
 
                 if (null != mListeners) {
@@ -400,7 +500,7 @@ public class ContactsManager {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            for(ContactsManagerListener listener : mListeners) {
+                            for (ContactsManagerListener listener : mListeners) {
                                 try {
                                     listener.onRefresh();
                                 } catch (Exception e) {
@@ -425,6 +525,7 @@ public class ContactsManager {
     /**
      * Tells if the contacts book access has been requested.
      * For android > M devices, it only tells if the permission has been granted.
+     *
      * @param activity the calling activity
      * @return true it was requested once
      */
@@ -439,7 +540,8 @@ public class ContactsManager {
 
     /**
      * Update the contacts book access.
-     * @param activity the calling activity.
+     *
+     * @param activity  the calling activity.
      * @param isAllowed true to allowed the contacts book access.
      */
     public static void setIsContactBookAccessAllowed(Activity activity, boolean isAllowed) {
@@ -449,10 +551,13 @@ public class ContactsManager {
             editor.putBoolean(CONTACTS_BOOK_ACCESS_KEY, isAllowed);
             editor.commit();
         }
+        mIsRetrievingPids = false;
+        mArePidsRetrieved = false;
     }
 
     /**
      * Tells if the contacts book access has been granted
+     *
      * @param context the context
      * @return true if it was granted.
      */

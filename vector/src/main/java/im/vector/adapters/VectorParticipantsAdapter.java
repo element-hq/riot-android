@@ -46,7 +46,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import im.vector.Matrix;
@@ -99,9 +98,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private String mPattern = "";
 
     private List<ParticipantAdapterItem> mItemsToHide = new ArrayList<>();
-
-    // contacts which have retrieved the linked matrix Id
-    private List<Contact> mCheckedContacts = new ArrayList<>();
 
     // way to detect that the contacts list has been updated
     private int mLocalContactsSnapshotSession = -1;
@@ -185,10 +181,16 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private ParticipantAdapterItem mFirstEntry;
 
     // the participants can be split in sections
-    List<List<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
+    private final List<List<ParticipantAdapterItem>> mParticipantsListsList = new ArrayList<>();
     private int mFirstEntryPosition = -1;
     private int mLocalContactsSectionPosition = -1;
     private int mRoomContactsSectionPosition = -1;
+
+    // flag specifying if we show all peoples or only ones having a matrix user id
+    private boolean mShowMatrixUserOnly = false;
+
+    // Set to true when we need to display the "+" icon
+    private boolean mWithAddIcon;
 
     /**
      * Create a room member adapter.
@@ -200,8 +202,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param headerLayoutResourceId the header layout
      * @param session                the session.
      * @param roomId                 the room id.
+     * @param withAddIcon            whether we need to display the "+" icon
      */
-    public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId) {
+    public VectorParticipantsAdapter(Context context, int cellLayoutResourceId, int headerLayoutResourceId, MXSession session, String roomId, boolean withAddIcon) {
         mContext = context;
 
         mLayoutInflater = LayoutInflater.from(context);
@@ -210,6 +213,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         mSession = session;
         mRoomId = roomId;
+        mWithAddIcon = withAddIcon;
     }
 
     /**
@@ -220,6 +224,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         mFirstEntryPosition = -1;
         mLocalContactsSectionPosition = -1;
         mRoomContactsSectionPosition = -1;
+        mPattern = null;
 
         notifyDataSetChanged();
     }
@@ -257,17 +262,18 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Tells if an email is black-listed
+     *
      * @param email the email address to test.
      * @return true if the email address is black-listed
      */
     private static boolean isBlackedListed(String email) {
-        for(int i = 0; i < mBlackedListEmails.size(); i++) {
+        for (int i = 0; i < mBlackedListEmails.size(); i++) {
             if (mBlackedListEmails.get(i).matcher(email).matches()) {
                 return true;
             }
         }
 
-        return false;
+        return !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     /**
@@ -287,9 +293,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         dummyContact.addEmailAdress(email);
                         dummyContact.setThumbnailUri(contact.getThumbnailUri());
 
-                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact, mContext);
+                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
 
-                        Contact.MXID mxid = PIDsRetriever.getIntance().getMXID(email);
+                        Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(email);
 
                         if (null != mxid) {
                             participant.mUserId = mxid.mMatrixId;
@@ -378,54 +384,33 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Test if the contact is used by an entry of this adapter.
-     * Refresh if required.
-     *
-     * @param contact           the updated contact
-     * @param matrixId          the linked matrix Id
-     * @param visibleChildViews the visible child views indexed by group position
+     * Some contacts pids have been updated.
      */
-    public void onContactUpdate(Contact contact, String matrixId, Map<Integer, List<Integer>> visibleChildViews) {
-        if (null != contact) {
-            int pos = -1;
+    public void onPIdsUpdate() {
+        boolean gotUpdates = false;
 
-            if (mLocalContactsSectionPosition >= 0) {
-                List<ParticipantAdapterItem> list = mParticipantsListsList.get(mLocalContactsSectionPosition);
+        if (null != mUnusedParticipants) {
+            for (ParticipantAdapterItem item : mUnusedParticipants) {
+                gotUpdates |= item.retrievePids();
+            }
+        }
 
-                ParticipantAdapterItem updatedItem = null;
-                // detect of the contact is used in the adapter
-                for (int index = 0; index < list.size(); index++) {
-                    ParticipantAdapterItem item = list.get(index);
-
-                    if (item.mContact == contact) {
-                        pos = index;
-                        item.mUserId = matrixId;
-                        updatedItem = item;
-                        break;
-                    }
-                }
-
-                if (mUsedMemberUserIds != null && updatedItem != null && mUsedMemberUserIds.contains(updatedItem.mUserId)) {
-                    list.remove(updatedItem);
-                    if (list.isEmpty()) {
-                        mParticipantsListsList.remove(mLocalContactsSectionPosition);
-                        mLocalContactsSectionPosition = -1;
-                        mRoomContactsSectionPosition--;
-                    }
-                    notifyDataSetChanged();
-                    return;
-                }
+        if (null != mContactsParticipants) {
+            for (ParticipantAdapterItem item : mContactsParticipants) {
+                gotUpdates |= item.retrievePids();
             }
 
-            // the item has been found
-            if (pos >= 0) {
-                // refresh if a duplicated entry has been removed
-                // or if the contact is displayed
-                if (checkDuplicatedMatrixIds() ||
-                        (visibleChildViews.containsKey(mLocalContactsSectionPosition) && visibleChildViews.get(mLocalContactsSectionPosition).contains(pos))) {
-                    notifyDataSetChanged();
-                }
+            // Check whether we need to remove the contact section
+            if (mContactsParticipants.isEmpty() && mLocalContactsSectionPosition != -1) {
+                mParticipantsListsList.remove(mLocalContactsSectionPosition);
+                mLocalContactsSectionPosition = -1;
+                mRoomContactsSectionPosition--;
+                notifyDataSetChanged();
             }
+        }
+
+        if (gotUpdates) {
+            refresh(mFirstEntry, null);
         }
     }
 
@@ -506,7 +491,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mContactsParticipants = null;
             mUsedMemberUserIds = null;
             mDisplayNamesList = null;
-            mCheckedContacts.clear();
             mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
         }
 
@@ -583,6 +567,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             participantItemList.addAll(mContactsParticipants);
         }
 
+        // ensure that the PIDs have been retrieved
+        // it might have failed
+        ContactsManager.retrievePids();
+
         // the caller defines a first entry to display
         ParticipantAdapterItem firstEntry = theFirstEntry;
 
@@ -620,7 +608,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (item == mFirstEntry) {
                 firstEntryList.add(mFirstEntry);
             } else if (null != item.mContact) {
-                contactBookList.add(item);
+                if (!mShowMatrixUserOnly || !item.mContact.getMatrixIdMedias().isEmpty()) {
+                    contactBookList.add(item);
+                }
             } else {
                 roomContactsList.add(item);
             }
@@ -643,6 +633,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         if (contactBookList.size() > 0) {
             // the contacts are sorted by alphabetical method
             Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
+            mParticipantsListsList.add(contactBookList);
+            mLocalContactsSectionPosition = posCount;
+            posCount++;
+        } else if (!ContactsManager.arePIDsRetrieved()) {
+            // Contact lookup in progress, still display it with a loader
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
             posCount++;
@@ -782,6 +777,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
         subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
+        View loadingView = subLayout.findViewById(R.id.heading_loading_view);
+        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
         if (parent instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) parent;
@@ -860,11 +857,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
             statusTextView.setText(participant.mContact.getEmails().get(0));
-
-            if (mCheckedContacts.indexOf(participant.mContact) < 0) {
-                participant.mContact.checkMatridIds(mContext);
-                mCheckedContacts.add(participant.mContact);
-            }
         } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
@@ -877,9 +869,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.filtered_list_checkbox);
         checkBox.setVisibility(View.GONE);
 
+        final View addParticipantImageView = convertView.findViewById(R.id.filtered_list_add_button);
+        addParticipantImageView.setVisibility(mWithAddIcon ? View.VISIBLE : View.GONE);
+
         return convertView;
     }
-
 
     /**
      * Reset the expansion preferences
@@ -915,7 +909,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      *
      * @param groupPosition the group position
      * @param isExpanded    true if the group is expanded
-     * @return true to expand the group
      */
     private void setGroupExpandedStatus(int groupPosition, boolean isExpanded) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -928,5 +921,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         editor.commit();
+    }
+
+    /**
+     * Specify whether we show all contacts or only ones having a matrix user id
+     *
+     * @param matrixUserOnly
+     */
+    public void displayOnlyMatrixUsers(final boolean matrixUserOnly) {
+        mShowMatrixUserOnly = matrixUserOnly;
+        refresh(mFirstEntry, null);
     }
 }

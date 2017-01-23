@@ -728,7 +728,12 @@ public class VectorMessagesAdapter extends MessagesAdapter {
             }
         });
 
-        popup.show();
+        // fix an issue reported by GA
+        try {
+            popup.show();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, " popup.show failed " + e.getMessage());
+        }
     }
 
     /**
