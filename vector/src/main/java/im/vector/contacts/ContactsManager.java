@@ -84,11 +84,13 @@ public class ContactsManager {
     // set to true when there is a pending
     private static boolean mIsRetrievingPids = false;
     private static boolean mArePidsRetrieved = false;
+    // Trigger another PIDs retrieval when there is a valid data connection.
+    private static boolean mRetryPIDsRetrievalOnConnect = false;
 
     private static final IMXNetworkEventListener mNetworkConnectivityReceiver = new IMXNetworkEventListener() {
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
-            if (isConnected) {
+            if (isConnected && mRetryPIDsRetrievalOnConnect) {
                 retrievePids();
             }
         }
@@ -132,6 +134,7 @@ public class ContactsManager {
         public void onFailure(String accountId) {
             mIsRetrievingPids = false;
             mArePidsRetrieved = false;
+            mRetryPIDsRetrievalOnConnect = true;
             Log.d(LOG_TAG, "## fail to retrieve the PIDs");
         }
 
@@ -145,6 +148,7 @@ public class ContactsManager {
 
             Log.d(LOG_TAG, "## Retrieve IPDs successfully");
 
+            mRetryPIDsRetrievalOnConnect = false;
             mIsRetrievingPids = false;
             mArePidsRetrieved = true;
 
@@ -504,7 +508,7 @@ public class ContactsManager {
                     mIsRetrievingPids = false;
                     mArePidsRetrieved = false;
 
-                    retrievePids();
+                    // the PIDs retrieval is done on demand.
                 }
 
                 if (null != mListeners) {
