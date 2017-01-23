@@ -76,6 +76,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private VectorUnifiedSearchFragmentPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
 
+    private int mPosition;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,8 +145,9 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.search_filter_tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        
-        mViewPager.setCurrentItem((null != savedInstanceState)? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0);
+
+        mPosition = (null != savedInstanceState)? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        mViewPager.setCurrentItem(mPosition);
 
         // restore the searched pattern
         mPatternToSearchEditText.setText((null != savedInstanceState) ? savedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
@@ -161,6 +164,12 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
     private void searchAccordingToSelectedTab() {
         final String pattern = mPatternToSearchEditText.getText().toString().trim();
         final int position = mViewPager.getCurrentItem();
+
+        if (mPosition != position) {
+            mPagerAdapter.cancelSearch(mPosition);
+        }
+
+        mPosition = position;
 
         // the background image view should only be displayed when there is no pattern,
         // the rooms searches has a result : the public rooms list.

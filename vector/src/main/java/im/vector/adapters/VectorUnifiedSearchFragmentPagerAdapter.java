@@ -125,6 +125,25 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
     }
 
     /**
+     * Cancel any pending search
+     */
+    public void cancelSearch(int position) {
+        Fragment fragment = mFragments[position];
+
+        if (null == fragment) {
+            return;
+        }
+
+        int titleId = mTabTitles.get(position);
+
+        if (titleId ==  R.string.tab_title_search_messages) {
+            ((VectorSearchMessagesListFragment)fragment).cancelCatchingRequests();
+        } else if (titleId ==  R.string.tab_title_search_files) {
+            ((VectorSearchRoomsFilesListFragment)fragment).cancelCatchingRequests();
+        }
+    }
+
+    /**
      * Triggers a search in the currently displayed fragments
      * @param position the fragment position
      * @param pattern the pattern to search
@@ -132,7 +151,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if a remote search is triggered
      */
     public boolean search(int position, String pattern,  MatrixMessageListFragment.OnSearchResultListener listener) {
-        boolean res = true;
+        boolean res = false;
         Fragment fragment = mFragments[position];
 
         if (null == fragment) {
@@ -149,6 +168,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
                 break;
             }
             case R.string.tab_title_search_messages: {
+                res = !TextUtils.isEmpty(pattern);
                 ((VectorSearchMessagesListFragment)fragment).searchPattern(pattern, listener);
                break;
             }
@@ -158,6 +178,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
                 break;
             }
             case R.string.tab_title_search_files: {
+                res = !TextUtils.isEmpty(pattern);
                 ((VectorSearchRoomsFilesListFragment)fragment).searchPattern(pattern, listener);
                 break;
             }
