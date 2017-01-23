@@ -115,6 +115,19 @@ public class VectorApp extends Application {
      */
     public static File mLogsDirectoryFile = null;
 
+    /**
+     * GA tags
+     */
+    public static final String GOOGLE_ANALYTICS_STATS_CATEGORY = "stats";
+
+    public static final String GOOGLE_ANALYTICS_STATS_ROOMS_ACTION = "rooms";
+    public static final String GOOGLE_ANALYTICS_STARTUP_INITIAL_SYNC_ACTION = "initialSync";
+    public static final String GOOGLE_ANALYTICS_STARTUP_INCREMENTAL_SYNC_ACTION = "incrementalSync";
+    public static final String GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION = "storePreload";
+    public static final String GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION = "mountData";
+    public static final String GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION = "launchScreen";
+    public static final String GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION = "Contacts";
+
     @Override
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");

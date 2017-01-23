@@ -41,6 +41,7 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.VectorApp;
+import im.vector.ga.GAHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -345,6 +346,7 @@ public class ContactsManager {
         // refresh the contacts list in background
         Thread t = new Thread(new Runnable() {
             public void run() {
+                long t0 = System.currentTimeMillis();
                 ContentResolver cr = context.getContentResolver();
                 HashMap<String, Contact> dict = new HashMap<>();
 
@@ -476,6 +478,17 @@ public class ContactsManager {
                 synchronized (LOG_TAG) {
                     mContactsList = new ArrayList<>(dict.values());
                     mIsPopulating = false;
+                }
+
+                if (0 != mContactsList.size()) {
+                    long delta = System.currentTimeMillis() - t0;
+
+                    GAHelper.sendGAStats(VectorApp.getInstance(),
+                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                            VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
+                            mContactsList.size() + " contacts in " + delta + " ms",
+                            delta
+                    );
                 }
 
                 // define the PIDs listener

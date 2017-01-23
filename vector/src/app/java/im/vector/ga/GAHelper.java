@@ -162,4 +162,31 @@ public class GAHelper {
         }
     }
 
+    /**
+     * Send a GA stats
+     * @param context the context
+     * @param category the category
+     * @param action the action
+     * @param label the label
+     * @param value the value
+     */
+    public static void sendGAStats(Context context, String category, String action, String label, long value) {
+        Boolean useGA = useGA(context);
+
+        if (null == useGA) {
+            Log.e(LOG_TAG, "Google Analytics use is not yet initialized");
+            return;
+        }
+
+        if (!useGA) {
+            Log.e(LOG_TAG, "The user decides to do not use Google Analytics");
+            return;
+        }
+
+        try {
+            Analytics.sendEvent(category, action, label, value);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## sendGAStats failed " + e.getMessage());
+        }
+    }
 }

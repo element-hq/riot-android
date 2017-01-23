@@ -26,6 +26,7 @@ import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -49,6 +50,8 @@ public class SplashActivity extends MXCActionBarActivity {
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
 
+    private final long mLaunchTime = System.currentTimeMillis();
+
     /**
      * @return true if a store is corrupted.
      */
@@ -71,6 +74,13 @@ public class SplashActivity extends MXCActionBarActivity {
         Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
 
         if (!hasCorruptedStore()) {
+            GAHelper.sendGAStats(getApplicationContext(),
+                    VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                    VectorApp.GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION,
+                    null,
+                    System.currentTimeMillis() - mLaunchTime
+            );
+
             // Go to the home page
             Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
 
@@ -144,11 +154,41 @@ public class SplashActivity extends MXCActionBarActivity {
                         // do not remove the listeners here
                         // it crashes the application because of the upper loop
                         //fSession.getDataHandler().removeListener(mListeners.get(fSession));
-                        // remove from the pendings list
+                        // remove from the pending list
 
                         mListeners.remove(fSession);
                         noMoreListener = (mListeners.size() == 0);
                     }
+
+                    int nbrRooms = fSession.getDataHandler().getStore().getRooms().size();
+
+                    GAHelper.sendGAStats(getApplicationContext(),
+                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                            VectorApp.GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION,
+                            "Mount Data : " +  nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
+                            System.currentTimeMillis() - mLaunchTime
+                    );
+
+                    GAHelper.sendGAStats(getApplicationContext(),
+                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                            VectorApp.GOOGLE_ANALYTICS_STATS_ROOMS_ACTION,
+                            null,
+                            nbrRooms
+                    );
+
+                    long preloadTime = fSession.getDataHandler().getStore().getPreloadTime();
+                    String label = "Store Preload : " +  nbrRooms + " rooms in " + preloadTime  + " ms";
+
+                    if (0 != nbrRooms) {
+                        label +=  "(" + preloadTime / nbrRooms + " ms per room)";
+                    }
+
+                    GAHelper.sendGAStats(getApplicationContext(),
+                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                            VectorApp.GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION,
+                            label,
+                            fSession.getDataHandler().getStore().getPreloadTime()
+                    );
 
                     if (noMoreListener) {
                         VectorApp.addSyncingSession(session);

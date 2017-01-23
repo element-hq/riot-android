@@ -17,6 +17,8 @@ package im.vector.ga;
 ;
 import android.content.Context;
 
+import org.matrix.androidsdk.util.Log;
+
 public class GAHelper {
 
     //==============================================================================================================
@@ -52,5 +54,16 @@ public class GAHelper {
      * Initialize the google analytics
      */
     public static void initGoogleAnalytics(Context context) {
+    }
+
+    /**
+     * Send a GA stats
+     * @param context the context
+     * @param category the category
+     * @param action the action
+     * @param label the label
+     * @param value the value
+     */
+    public static void sendGAStats(Context context, String category, String action, String label, long value) {
     }
 }
