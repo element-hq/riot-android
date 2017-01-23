@@ -27,12 +27,25 @@
 
         <!-- fragment container -->
         <LinearLayout
-            android:id="@+id/search_fragment_container"
+            android:id="@+id/search_main_page"
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:orientation="vertical"/>
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/search_filter_tabs"
+                style="@style/VectorSearches.TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/search_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/search_in_progress_view"
