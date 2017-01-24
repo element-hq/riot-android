@@ -85,52 +85,15 @@ public class BugReporter {
         String message = "Something went wrong on my Vector client : \n";
         message += String.format("%s\n\n\n", bugDescription);
 
-        message += "------------------ Application info ------------------------------\n";
-
-        Collection<MXSession> sessions = Matrix.getMXSessions(context);
-        int profileIndex = 1;
-
-        for(MXSession session : sessions) {
-            message += "--> Profile " + profileIndex + " :\n\n";
-            profileIndex++;
-
-            message += "----> General\n";
-
-            MyUser mMyUser = session.getMyUser();
-            message += "userId : "+ mMyUser.user_id + "\n";
-            message += "displayname : " + mMyUser.displayname + "\n";
-            message += "homeServer :" + session.getCredentials().homeServer + "\n";
-
-            if (null != session.getCrypto()) {
-                message += "----> Crypto\n";
-
-                MXDeviceInfo myDevice = session.getCrypto().getMyDevice();
-                message += "Device ID : " + myDevice.deviceId + "\n";
-                message += "Device key : " + myDevice.fingerprint() + "\n";
-            }
-
-            GcmRegistrationManager registrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
-            List<Pusher> pushers = new ArrayList<>(registrationManager.mPushersList);
-
-            message += "----> Notification targets\n";
-
-            if (pushers.size() == 0) {
-                message += "No target\n";
-            } else {
-                for (Pusher pusher : pushers) {
-                    message += " - " + pusher.toString() + "\n";
-                }
-            }
-        }
 
         message += "\n";
-        message += "----------------------------------------------------------------------------\n\n";
+        message += "----------------------- Device information -------------------------------------\n\n";
         message += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
         message += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
         message += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
         message += "Olm version:  " + Matrix.getInstance(context).getDefaultSession().getCryptoVersion(context, true) + "\n";
         message += "\n";
-        message += "----------------------- Memory statuses -------------------------------------\n";
+        message += "------------------------- Memory statuses -------------------------------------\n";
         message += "\n";
 
         long freeSize = 0L;
@@ -145,11 +108,9 @@ public class BugReporter {
             e.printStackTrace();
         }
 
-        message += "---------------------------------------------------------------------\n";
         message += "usedSize   " + (usedSize / 1048576L) + " MB\n";
         message += "freeSize   " + (freeSize / 1048576L) + " MB\n";
         message += "totalSize   " + (totalSize / 1048576L) + " MB\n";
-        message += "---------------------------------------------------------------------\n";
 
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) VectorApp.getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
@@ -160,7 +121,53 @@ public class BugReporter {
         message += "threshold  " + (mi.threshold / 1048576L) + " MB\n";
         message += "lowMemory  " + mi.lowMemory + "\n";
 
-        message += "---------------------------------------------------------------------\n";
+        message += "\n";
+        message += "---------------------- Application stats -------------------------------------\n";
+        message += "\n";
+        message += VectorApp.getGAStats();
+        message += "\n";
+        message += "---------------------- Sessions information ----------------------------------\n";
+
+
+        Collection<MXSession> sessions = Matrix.getMXSessions(context);
+        int profileIndex = 1;
+
+        for(MXSession session : sessions) {
+            message += "\n";
+
+            message += "--> Profile " + profileIndex + " :\n\n";
+            profileIndex++;
+
+            message += "----> General\n\n";
+
+            MyUser mMyUser = session.getMyUser();
+            message += "userId : "+ mMyUser.user_id + "\n";
+            message += "displayname : " + mMyUser.displayname + "\n";
+            message += "homeServer :" + session.getCredentials().homeServer + "\n";
+
+            if (null != session.getCrypto()) {
+                message += "\n----> Crypto\n\n";
+
+                MXDeviceInfo myDevice = session.getCrypto().getMyDevice();
+                message += "Device ID : " + myDevice.deviceId + "\n";
+                message += "Device key : " + myDevice.fingerprint() + "\n";
+            }
+
+            GcmRegistrationManager registrationManager = Matrix.getInstance(context).getSharedGCMRegistrationManager();
+            List<Pusher> pushers = new ArrayList<>(registrationManager.mPushersList);
+
+            message += "\n----> Notification targets\n\n";
+
+            if (pushers.size() == 0) {
+                message += "No target\n";
+            } else {
+                for (Pusher pusher : pushers) {
+                    message += " - " + pusher.toString() + "\n";
+                }
+            }
+        }
+
+        message += "\n---------------------------------------------------------------------\n";
 
         return message;
     }

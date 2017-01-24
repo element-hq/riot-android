@@ -26,7 +26,6 @@ import im.vector.ErrorListener;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
@@ -74,7 +73,7 @@ public class SplashActivity extends MXCActionBarActivity {
         Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
 
         if (!hasCorruptedStore()) {
-            GAHelper.sendGAStats(getApplicationContext(),
+            VectorApp.sendGAStats(getApplicationContext(),
                     VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
                     VectorApp.GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION,
                     null,
@@ -162,14 +161,14 @@ public class SplashActivity extends MXCActionBarActivity {
 
                     int nbrRooms = fSession.getDataHandler().getStore().getRooms().size();
 
-                    GAHelper.sendGAStats(getApplicationContext(),
+                    VectorApp.sendGAStats(getApplicationContext(),
                             VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
                             VectorApp.GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION,
-                            "Mount Data : " +  nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
+                            nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
                             System.currentTimeMillis() - mLaunchTime
                     );
 
-                    GAHelper.sendGAStats(getApplicationContext(),
+                    VectorApp.sendGAStats(getApplicationContext(),
                             VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
                             VectorApp.GOOGLE_ANALYTICS_STATS_ROOMS_ACTION,
                             null,
@@ -177,13 +176,13 @@ public class SplashActivity extends MXCActionBarActivity {
                     );
 
                     long preloadTime = fSession.getDataHandler().getStore().getPreloadTime();
-                    String label = "Store Preload : " +  nbrRooms + " rooms in " + preloadTime  + " ms";
+                    String label = nbrRooms + " rooms in " + preloadTime  + " ms";
 
                     if (0 != nbrRooms) {
                         label +=  "(" + preloadTime / nbrRooms + " ms per room)";
                     }
 
-                    GAHelper.sendGAStats(getApplicationContext(),
+                    VectorApp.sendGAStats(getApplicationContext(),
                             VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
                             VectorApp.GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION,
                             label,

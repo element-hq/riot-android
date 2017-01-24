@@ -41,7 +41,6 @@ import org.matrix.androidsdk.rest.model.User;
 
 import im.vector.Matrix;
 import im.vector.VectorApp;
-import im.vector.ga.GAHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -487,7 +486,7 @@ public class ContactsManager {
                 if (0 != mContactsList.size()) {
                     long delta = System.currentTimeMillis() - t0;
 
-                    GAHelper.sendGAStats(VectorApp.getInstance(),
+                    VectorApp.sendGAStats(VectorApp.getInstance(),
                             VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
                             VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
                             mContactsList.size() + " contacts in " + delta + " ms",

@@ -24,6 +24,8 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 
 import com.google.android.gms.analytics.ExceptionParser;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import im.vector.Matrix;
 import im.vector.R;
@@ -114,6 +116,7 @@ public class GAHelper {
 
         String trackerId = context.getString(trackerResId);
         Log.d(LOG_TAG, "Tracker ID: "+trackerId);
+
         // init google analytics with this tracker ID
         if (!TextUtils.isEmpty(trackerId)) {
             Analytics.initialiseGoogleAnalytics(context, trackerId, new ExceptionParser() {
@@ -184,7 +187,30 @@ public class GAHelper {
         }
 
         try {
-            Analytics.sendEvent(category, action, label, value);
+            // send by default a timing event
+            // check if a value is set
+            if ((null != Analytics.mTracker) && (value != Long.MAX_VALUE)) {
+                HitBuilders.TimingBuilder timingEvent = new HitBuilders.TimingBuilder();
+
+                timingEvent.setValue(value);
+
+                if (!TextUtils.isEmpty(category)) {
+                    timingEvent.setCategory(category);
+                }
+
+                if (!TextUtils.isEmpty(action)) {
+                    timingEvent.setVariable(action);
+                }
+
+                if (!TextUtils.isEmpty(label)) {
+                    timingEvent.setLabel(label);
+                }
+
+                Analytics.mTracker.send(timingEvent.build());
+            } else {
+                // default management
+                Analytics.sendEvent(category, action, label, value);
+            }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## sendGAStats failed " + e.getMessage());
         }
