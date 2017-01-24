@@ -71,8 +71,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         return frag;
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();

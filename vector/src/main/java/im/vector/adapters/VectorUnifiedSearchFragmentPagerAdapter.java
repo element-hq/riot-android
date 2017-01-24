@@ -45,6 +45,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
     private String mRoomId;
 
     private final Fragment[] mFragments;
+    private final Long[] mFragmentIds;
     private final ArrayList<Integer> mTabTitles;
 
     /**
@@ -75,11 +76,16 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
         mTabTitles.add(R.string.tab_title_search_files);
 
         mFragments = new Fragment[mTabTitles.size()];
+        mFragmentIds = new Long[mTabTitles.size()];
     }
 
     @Override
     public int getCount() {
-        return mTabTitles.size();
+        if (null != mTabTitles) {
+            return mTabTitles.size();
+        }
+
+        return 0;
     }
 
     @Override
@@ -121,26 +127,33 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(mTabTitles.get(position));
+        if (null != mTabTitles) {
+            return mContext.getResources().getString(mTabTitles.get(position));
+        }
+
+        return "??";
     }
 
-    /**
-     * Cancel any pending search
-     */
-    public void cancelSearch(int position) {
-        Fragment fragment = mFragments[position];
-
-        if (null == fragment) {
-            return;
+    @Override
+    public long getItemId(int position) {
+        // sanity checks
+        if (null == mFragmentIds) {
+            return position;
         }
 
-        int titleId = mTabTitles.get(position);
+        // fix the screen rotation issues
+        // The fragments are not properly restored after a screen rotation.
+        // Ensure that the fragments are recreated.
+        Long id = mFragmentIds[position];
 
-        if (titleId ==  R.string.tab_title_search_messages) {
-            ((VectorSearchMessagesListFragment)fragment).cancelCatchingRequests();
-        } else if (titleId ==  R.string.tab_title_search_files) {
-            ((VectorSearchRoomsFilesListFragment)fragment).cancelCatchingRequests();
+        if (null == id) {
+            // the identifier must be unique.
+            // we cannot use the fragment
+            id = System.currentTimeMillis();
+            mFragmentIds[position] = id;
         }
+
+        return id;
     }
 
     /**
@@ -151,14 +164,21 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if a remote search is triggered
      */
     public boolean search(int position, String pattern,  MatrixMessageListFragment.OnSearchResultListener listener) {
-        boolean res = false;
+        // sanity checks
+        if (null == mFragments) {
+            listener.onSearchSucceed(0);
+            return false;
+        }
+
         Fragment fragment = mFragments[position];
 
+        // sanity checks
         if (null == fragment) {
             listener.onSearchSucceed(0);
             return false;
         }
 
+        boolean res = false;
         int titleId = mTabTitles.get(position);
 
         switch (titleId) {
@@ -193,10 +213,12 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return the required permission or 0 if none are required
      */
     public int getPermissionsRequest(int position) {
-        int titleId = mTabTitles.get(position);
+        if (null != mTabTitles) {
+            int titleId = mTabTitles.get(position);
 
-        if (titleId == R.string.tab_title_search_people) {
-            return CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+            if (titleId == R.string.tab_title_search_people) {
+                return CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH;
+            }
         }
 
         return 0;
@@ -208,7 +230,11 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if it is the expected one.
      */
     public boolean isSearchInRoomNameFragment(int position) {
-        return R.string.tab_title_search_rooms == mTabTitles.get(position);
+        if (null != mTabTitles) {
+            return R.string.tab_title_search_rooms == mTabTitles.get(position);
+        }
+
+        return false;
     }
 
     /**
@@ -217,7 +243,11 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if it is the expected one.
      */
     public boolean isSearchInMessagesFragment(int position) {
-        return R.string.tab_title_search_messages == mTabTitles.get(position);
+        if (null != mTabTitles) {
+            return R.string.tab_title_search_messages == mTabTitles.get(position);
+        }
+
+        return false;
     }
 
     /**
@@ -226,6 +256,10 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if it is the expected one.
      */
     public boolean isSearchInFilesFragment(int position) {
-        return R.string.tab_title_search_files == mTabTitles.get(position);
+        if (null != mTabTitles) {
+            return R.string.tab_title_search_files == mTabTitles.get(position);
+        }
+
+        return false;
     }
 }

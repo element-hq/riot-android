@@ -18,42 +18,30 @@ package im.vector.activity;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar.TabListener;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
-import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.adapters.VectorUnifiedSearchFragmentPagerAdapter;
 import im.vector.contacts.ContactsManager;
-import im.vector.fragments.VectorSearchMessagesListFragment;
-import im.vector.fragments.VectorSearchPeopleListFragment;
-import im.vector.fragments.VectorSearchRoomsFilesListFragment;
-import im.vector.fragments.VectorSearchRoomsListFragment;
-
 
 /**
  * Displays a generic activity search method
  */
 public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implements VectorBaseSearchActivity.IVectorSearchActivity  {
     private static final String LOG_TAG = "VectorUniSrchActivity";
-    private static final CharSequence NOT_IMPLEMENTED = "Not yet implemented";
 
     public static final String EXTRA_ROOM_ID = "VectorUnifiedSearchActivity.EXTRA_ROOM_ID";
 
@@ -75,8 +63,6 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
 
     private VectorUnifiedSearchFragmentPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-
-    private int mPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,8 +132,8 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         TabLayout tabLayout = (TabLayout) findViewById(R.id.search_filter_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        mPosition = (null != savedInstanceState)? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
-        mViewPager.setCurrentItem(mPosition);
+        int position = (null != savedInstanceState)? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, 0) : 0;
+        mViewPager.setCurrentItem(position);
 
         // restore the searched pattern
         mPatternToSearchEditText.setText((null != savedInstanceState) ? savedInstanceState.getString(KEY_STATE_SEARCH_PATTERN, null) : null);
@@ -165,17 +151,11 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
         final String pattern = mPatternToSearchEditText.getText().toString().trim();
         final int position = mViewPager.getCurrentItem();
 
-        if (mPosition != position) {
-            mPagerAdapter.cancelSearch(mPosition);
-        }
-
-        mPosition = position;
-
         // the background image view should only be displayed when there is no pattern,
         // the rooms searches has a result : the public rooms list.
         resetUi(TextUtils.isEmpty(pattern) && !mPagerAdapter.isSearchInRoomNameFragment(position));
 
-        boolean isRemoteSearching = mPagerAdapter.search(position, pattern,new MatrixMessageListFragment.OnSearchResultListener() {
+        boolean isRemoteSearching = mPagerAdapter.search(position, pattern, new MatrixMessageListFragment.OnSearchResultListener() {
             @Override
             public void onSearchSucceed(int nbrMessages) {
                 onSearchEnd(position, nbrMessages);
