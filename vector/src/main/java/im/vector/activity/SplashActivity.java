@@ -33,6 +33,8 @@ import im.vector.services.EventStreamService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * SplashActivity displays a splash while loading and inittializing the client.
@@ -159,35 +161,52 @@ public class SplashActivity extends MXCActionBarActivity {
                         noMoreListener = (mListeners.size() == 0);
                     }
 
-                    int nbrRooms = fSession.getDataHandler().getStore().getRooms().size();
+                    try {
+                        int nbrRooms = fSession.getDataHandler().getStore().getRooms().size();
 
-                    VectorApp.sendGAStats(getApplicationContext(),
-                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
-                            VectorApp.GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION,
-                            nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
-                            System.currentTimeMillis() - mLaunchTime
-                    );
+                        VectorApp.sendGAStats(getApplicationContext(),
+                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                VectorApp.GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION,
+                                nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
+                                System.currentTimeMillis() - mLaunchTime
+                        );
 
-                    VectorApp.sendGAStats(getApplicationContext(),
-                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
-                            VectorApp.GOOGLE_ANALYTICS_STATS_ROOMS_ACTION,
-                            null,
-                            nbrRooms
-                    );
+                        VectorApp.sendGAStats(getApplicationContext(),
+                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                VectorApp.GOOGLE_ANALYTICS_STATS_ROOMS_ACTION,
+                                null,
+                                nbrRooms
+                        );
 
-                    long preloadTime = fSession.getDataHandler().getStore().getPreloadTime();
-                    String label = nbrRooms + " rooms in " + preloadTime  + " ms";
+                        long preloadTime = fSession.getDataHandler().getStore().getPreloadTime();
+                        String label = nbrRooms + " rooms in " + preloadTime + " ms";
 
-                    if (0 != nbrRooms) {
-                        label +=  "(" + preloadTime / nbrRooms + " ms per room)";
+                        if (0 != nbrRooms) {
+                            label += "(" + preloadTime / nbrRooms + " ms per room)";
+                        }
+
+                        VectorApp.sendGAStats(getApplicationContext(),
+                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                VectorApp.GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION,
+                                label,
+                                fSession.getDataHandler().getStore().getPreloadTime()
+                        );
+
+                        Map<String, Long> storeStats = session.getDataHandler().getStore().getStats();
+
+                        if (null != storeStats) {
+                            for (String key : storeStats.keySet()) {
+                                VectorApp.sendGAStats(getApplicationContext(),
+                                        VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                        key,
+                                        null,
+                                        storeStats.get(key)
+                                );
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Fail to send stats " + e.getMessage());
                     }
-
-                    VectorApp.sendGAStats(getApplicationContext(),
-                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
-                            VectorApp.GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION,
-                            label,
-                            fSession.getDataHandler().getStore().getPreloadTime()
-                    );
 
                     if (noMoreListener) {
                         VectorApp.addSyncingSession(session);
