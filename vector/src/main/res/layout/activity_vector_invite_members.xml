@@ -5,7 +5,7 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/filter_tabs"
-        style="@style/VectorSearches.TabLayout"
+        style="@style/VectorPeopleSearches.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

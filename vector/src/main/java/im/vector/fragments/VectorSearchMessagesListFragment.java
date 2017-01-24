@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorRoomActivity;
 
 import im.vector.adapters.VectorSearchMessagesListAdapter;
@@ -100,17 +99,6 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                 mSession.cancelSearchMessagesByText();
             }
             mSearchingPattern = null;
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mSession.isAlive()) {
-            if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-                ((VectorBaseSearchActivity.IVectorSearchActivity) getActivity()).refreshSearch();
-            }
         }
     }
 

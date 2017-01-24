@@ -280,20 +280,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
         });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        }
-    }
-
     protected boolean isDragAndDropSupported() {
         return false;
     }

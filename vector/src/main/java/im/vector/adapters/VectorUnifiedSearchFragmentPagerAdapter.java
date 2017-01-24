@@ -40,9 +40,9 @@ import java.util.ArrayList;
  */
 public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private Context mContext;
-    private MXSession mSession;
-    private String mRoomId;
+    private final Context mContext;
+    private final MXSession mSession;
+    private final String mRoomId;
 
     private final Fragment[] mFragments;
     private final Long[] mFragmentIds;
@@ -157,6 +157,25 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
     }
 
     /**
+     * Cancel any pending search
+     */
+    public void cancelSearch(int position) {
+        Fragment fragment = mFragments[position];
+
+        if (null == fragment) {
+            return;
+        }
+
+        int titleId = mTabTitles.get(position);
+
+        if (titleId ==  R.string.tab_title_search_messages) {
+            ((VectorSearchMessagesListFragment)fragment).cancelCatchingRequests();
+        } else if (titleId ==  R.string.tab_title_search_files) {
+            ((VectorSearchRoomsFilesListFragment)fragment).cancelCatchingRequests();
+        }
+    }
+
+    /**
      * Triggers a search in the currently displayed fragments
      * @param position the fragment position
      * @param pattern the pattern to search
@@ -230,11 +249,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if it is the expected one.
      */
     public boolean isSearchInRoomNameFragment(int position) {
-        if (null != mTabTitles) {
-            return R.string.tab_title_search_rooms == mTabTitles.get(position);
-        }
-
-        return false;
+        return (null != mTabTitles) && (R.string.tab_title_search_rooms == mTabTitles.get(position));
     }
 
     /**
@@ -243,11 +258,7 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if it is the expected one.
      */
     public boolean isSearchInMessagesFragment(int position) {
-        if (null != mTabTitles) {
-            return R.string.tab_title_search_messages == mTabTitles.get(position);
-        }
-
-        return false;
+        return (null != mTabTitles) && (R.string.tab_title_search_messages == mTabTitles.get(position));
     }
 
     /**
@@ -256,10 +267,6 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if it is the expected one.
      */
     public boolean isSearchInFilesFragment(int position) {
-        if (null != mTabTitles) {
-            return R.string.tab_title_search_files == mTabTitles.get(position);
-        }
-
-        return false;
+        return (null != mTabTitles) && (R.string.tab_title_search_files == mTabTitles.get(position));
     }
 }
