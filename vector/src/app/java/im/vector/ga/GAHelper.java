@@ -202,15 +202,15 @@ public class GAHelper {
                     timingEvent.setVariable(action);
                 }
 
-                if (!TextUtils.isEmpty(label)) {
+                /*if (!TextUtils.isEmpty(label)) {
                     timingEvent.setLabel(label);
-                }
+                }*/
 
                 Analytics.mTracker.send(timingEvent.build());
-            } else {
-                // default management
-                Analytics.sendEvent(category, action, label, value);
             }
+
+            // default management
+            Analytics.sendEvent(category, action, label, value);
         } catch (Exception e) {
             Log.e(LOG_TAG, "## sendGAStats failed " + e.getMessage());
         }
