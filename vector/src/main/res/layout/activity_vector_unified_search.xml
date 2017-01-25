@@ -1,66 +1,77 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:background="#FFFFFF"
+    <ImageView
+        android:id="@+id/search_background_imageview"
+        android:background="@android:color/white"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_centerInParent="true"
+        android:src="@drawable/vector_search_bg"
+        android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/search_background_imageview"
-            android:background="#FFFFFFFF"
-            android:layout_height="match_parent"
+    <!-- fragment container -->
+    <LinearLayout
+        android:id="@+id/search_main_page"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/search_filter_tabs"
+            style="@style/VectorUnifiedSearches.TabLayout"
             android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@drawable/vector_search_bg"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/search_no_result_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search_no_results"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:visibility="gone"/>
-
-        <!-- fragment container -->
-        <LinearLayout
-            android:id="@+id/search_fragment_container"
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical"/>
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
-            android:id="@+id/search_in_progress_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-            <View
-                android:layout_height="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/search_view_pager"
                 android:layout_width="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:background="@color/chat_encoding_background" />
+                android:layout_height="match_parent" />
 
             <ProgressBar
+                android:id="@+id/search_load_oldest_progress"
                 android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:indeterminate="true"/>
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/search_no_result_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_no_results"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:visibility="gone"/>
         </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/search_in_progress_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <View
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/chat_encoding_background" />
 
         <ProgressBar
-            android:id="@+id/search_load_oldest_progress"
             android:layout_height="40dp"
-            android:layout_width="match_parent"
-            android:layout_alignParentLeft="true"
-            android:visibility="gone"
-            android:indeterminate="true" />
-
+            android:layout_width="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true"/>
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>
