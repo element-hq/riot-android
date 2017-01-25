@@ -351,7 +351,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
                 displayname += " (" + mUserId + ")";
             }
         } else {
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) {
+            if (MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mUserId).matches()) {
                 displayname += " (" + mUserId + ")";
             }
         }

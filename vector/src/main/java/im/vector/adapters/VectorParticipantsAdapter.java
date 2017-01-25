@@ -50,6 +50,7 @@ import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
+import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
@@ -301,6 +302,29 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                             participant.mUserId = mxid.mMatrixId;
                         } else {
                             participant.mUserId = email;
+                        }
+
+                        if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
+                            list.add(participant);
+                        }
+                    }
+                }
+
+                if (VectorApp.usePnSearch) {
+                    for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
+                        Contact dummyContact = new Contact(pn.mE164PhoneNumber);
+                        dummyContact.setDisplayName(contact.getDisplayName());
+                        dummyContact.addPhoneNumber(pn.mUnformattedPhoneNumber);
+                        dummyContact.setThumbnailUri(contact.getThumbnailUri());
+
+                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
+
+                        Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mE164PhoneNumber);
+
+                        if (null != mxid) {
+                            participant.mUserId = mxid.mMatrixId;
+                        } else {
+                            participant.mUserId = pn.mE164PhoneNumber;
                         }
 
                         if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
@@ -608,7 +632,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (item == mFirstEntry) {
                 firstEntryList.add(mFirstEntry);
             } else if (null != item.mContact) {
-                if (!mShowMatrixUserOnly || !item.mContact.getMatrixIdMedias().isEmpty()) {
+                if (!mShowMatrixUserOnly || !item.mContact.getMatrixIdMediums().isEmpty()) {
                     contactBookList.add(item);
                 }
             } else {
@@ -854,9 +878,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
         if (participant.mContact != null) {
-            boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
+            boolean isMatrixUserId = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
-            statusTextView.setText(participant.mContact.getEmails().get(0));
+
+            if (participant.mContact.getEmails().size() > 0) {
+                statusTextView.setText(participant.mContact.getEmails().get(0));
+            } else {
+                statusTextView.setText(participant.mContact.getPhonenumbers().get(0).mUnformattedPhoneNumber);
+            }
         } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);

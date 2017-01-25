@@ -149,12 +149,26 @@ public class PhoneNumberUtils {
     static HashMap<String, String> mE164PhoneNumberByText = new HashMap<>();
 
     /**
-     * Convert an unformatted phone number.
+     * Convert an unformatted phone number to a E164 format one.
+     * @param context the coontext
+     * @param phoneNumber the unformatted phone number
+     * @return the E164 phone number
+     */
+    public static String getE164format(Context context, String phoneNumber) {
+        return getE164format(phoneNumber, getCountryCode(context));
+    }
+
+    /**
+     * Convert an unformatted phone number to a E164 format one.
      * @param phoneNumber the unformatted phone number
      * @param countryCode teh country code
      * @return the E164 phone number
      */
     public static String getE164format(String phoneNumber, String countryCode) {
+        if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(countryCode)) {
+            return null;
+        }
+
         String key = getMapKey(phoneNumber, countryCode);
         String e164Pn = mE164PhoneNumberByText.get(key);
 

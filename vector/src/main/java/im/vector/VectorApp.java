@@ -119,6 +119,9 @@ public class VectorApp extends Application {
      */
     public static File mLogsDirectoryFile = null;
 
+    // PNs search are disabled by default
+    public static final boolean usePnSearch = false;
+
     @Override
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
