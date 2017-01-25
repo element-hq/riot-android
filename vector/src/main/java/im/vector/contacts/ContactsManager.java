@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -439,6 +440,43 @@ public class ContactsManager {
 
                         phonesCur.close();
                     }
+
+                    // retrieve the SIM phone numbers
+                    try
+                    {
+                        Uri simUri = Uri.parse("content://icc/adn");
+                        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
+                        int contactIndex = 0;
+
+                        while (cursorSim.moveToNext()) {
+                            try {
+                                String contactName = cursorSim.getString(cursorSim.getColumnIndex("name"));
+                                String pn = cursorSim.getString(cursorSim.getColumnIndex("number"));
+
+                                if (!TextUtils.isEmpty(contactName)) {
+                                    contactName = contactName.replaceAll("|", "");
+                                }
+
+                                if (!TextUtils.isEmpty(pn) && !TextUtils.isEmpty(contactName)) {
+                                    pn = pn.replaceAll("\\D", "").replaceAll("&", "");
+
+                                    String contactId = "SIM_CONTACT_" + contactIndex;
+
+                                    Contact contact = new Contact(contactId);
+                                    dict.put(contactId, contact);
+                                    contact.addPhonenumber(pn);
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - while retrieving a sim contact  Msg=" + e.getMessage());
+                            }
+
+                            contactIndex++;
+                        }
+                        cursorSim.close();
+                    } catch(Exception e) {
+                        Log.e(LOG_TAG, "## refreshLocalContactsSnapshot(): Exception - SIM query Msg=" + e.getMessage());
+                    }
+
 
                     // get the emails
                     Cursor emailsCur = null;
