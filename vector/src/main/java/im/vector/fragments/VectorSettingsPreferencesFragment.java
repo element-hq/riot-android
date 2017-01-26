@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -88,6 +89,7 @@ import im.vector.gcm.GcmRegistrationManager;
 import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
+import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
@@ -552,6 +554,44 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshEmailsList();
         refreshIgnoredUsersList();
         refreshDevicesList();
+        manageCountryPreference();
+    }
+
+    /**
+     * Manage the country preference list.
+     */
+    private void manageCountryPreference() {
+        final ListPreference listPreference = (ListPreference) findPreference(getString(R.string.settings_country));
+
+        // the country preference list is only displayed if the contact lookup is supported
+        if (!VectorApp.SUPPORT_PHONE_NUMBERS_LOOKUP) {
+            mUserSettingsCategory.removePreference(listPreference);
+        } else {
+            listPreference.setEntries(PhoneNumberUtils.getHumanCountryCodes());
+            listPreference.setEntryValues(PhoneNumberUtils.getCountryCodes());
+            listPreference.setDefaultValue("EN");
+            listPreference.setValue(PhoneNumberUtils.getCountryCode(getActivity()));
+            listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
+
+            listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String cc = (String) newValue;
+
+                    if (!TextUtils.equals(cc, PhoneNumberUtils.getCountryCode(getActivity()))) {
+                        PhoneNumberUtils.setCountryCode(getActivity(), (String) newValue);
+                        listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ContactsManager.onCountryCodeUpdate();
+                            }
+                        });
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     @Override

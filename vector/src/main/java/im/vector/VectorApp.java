@@ -120,7 +120,7 @@ public class VectorApp extends Application {
     public static File mLogsDirectoryFile = null;
 
     // PNs search are disabled by default
-    public static final boolean usePnSearch = false;
+    public static final boolean SUPPORT_PHONE_NUMBERS_LOOKUP = true;
 
     @Override
     public void onCreate() {

@@ -143,16 +143,18 @@ public class PIDsRetriever {
                 }
             }
 
-            for(Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                if (mMatrixIdsByMedium.containsKey(pn.mE164PhoneNumber)) {
-                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mE164PhoneNumber);
+            if (VectorApp.SUPPORT_PHONE_NUMBERS_LOOKUP) {
+                for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
+                    if (mMatrixIdsByMedium.containsKey(pn.mE164PhoneNumber)) {
+                        Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mE164PhoneNumber);
 
-                    if (null != mxid) {
-                        contact.put(pn.mE164PhoneNumber, mxid);
-                    }
-                } else {
-                    if (!requestedMediums.contains(pn.mE164PhoneNumber)) {
-                        requestedMediums.add(pn.mE164PhoneNumber);
+                        if (null != mxid) {
+                            contact.put(pn.mE164PhoneNumber, mxid);
+                        }
+                    } else {
+                        if (!requestedMediums.contains(pn.mE164PhoneNumber)) {
+                            requestedMediums.add(pn.mE164PhoneNumber);
+                        }
                     }
                 }
             }

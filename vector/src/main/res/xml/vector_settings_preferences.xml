@@ -23,6 +23,11 @@
             android:summary="********"
             android:key="@string/settings_change_password"/>
 
+        <ListPreference
+            android:key="@string/settings_country"
+            android:title="@string/settings_country"
+            android:dialogTitle="@string/settings_select_country"/>
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />

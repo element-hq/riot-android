@@ -717,6 +717,9 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
 
+    <string name="settings_country">Country</string>
+    <string name="settings_select_country">Select your country</string>
+
     <string name="settings_app_permission_contacts">Contacts</string>
 
     <!-- Room Settings -->

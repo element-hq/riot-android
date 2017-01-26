@@ -310,7 +310,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                if (VectorApp.usePnSearch) {
+                if (VectorApp.SUPPORT_PHONE_NUMBERS_LOOKUP) {
                     for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
                         Contact dummyContact = new Contact(pn.mE164PhoneNumber);
                         dummyContact.setDisplayName(contact.getDisplayName());

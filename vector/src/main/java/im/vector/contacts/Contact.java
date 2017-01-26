@@ -73,20 +73,30 @@ public class Contact implements java.io.Serializable {
         public final String mUnformattedPhoneNumber;
 
         // E164 phone number
-        public final String mE164PhoneNumber;
+        public String mE164PhoneNumber;
 
         // without space, parenthesis
-        public final String mSanitizedPhoneNumber;
+        public final String mCleanedPhoneNumber;
 
         /**
          * Constructor
          * @param unformatPn the genuine phone number
-         * @param e164Pn the E164 formatted phone number.
          */
-        public PhoneNumber(String unformatPn, String e164Pn) {
+        public PhoneNumber(String unformatPn) {
             mUnformattedPhoneNumber = unformatPn;
-            mE164PhoneNumber = e164Pn;
-            mSanitizedPhoneNumber = mUnformattedPhoneNumber.replaceAll("[\\D]", "");
+            mCleanedPhoneNumber = mUnformattedPhoneNumber.replaceAll("[\\D]", "");
+            refreshE164PhoneNumber();
+        }
+
+        /**
+         * Refresh the e164 phone number.
+         */
+        public void refreshE164PhoneNumber() {
+            mE164PhoneNumber = PhoneNumberUtils.getE164format(VectorApp.getInstance(), mUnformattedPhoneNumber);
+
+            if (TextUtils.isEmpty(mE164PhoneNumber)) {
+                mE164PhoneNumber = mCleanedPhoneNumber;
+            }
         }
     }
 
@@ -160,10 +170,17 @@ public class Contact implements java.io.Serializable {
     public void addPhoneNumber(String aPn) {
         // sanity check
         if (!TextUtils.isEmpty(aPn)) {
-            String e164pn = PhoneNumberUtils.getE164format(VectorApp.getInstance(), aPn);
+            mPhoneNumbers.add(new PhoneNumber(aPn));
+        }
+    }
 
-            if (!TextUtils.isEmpty(e164pn) && mPhoneNumbers.indexOf(aPn) < 0) {
-                mPhoneNumbers.add(new PhoneNumber(aPn, e164pn));
+    /**
+     * Update the contacts with the new country code.
+     */
+    public void onCountryCodeUpdate() {
+        if (null != mPhoneNumbers) {
+            for (PhoneNumber pn : mPhoneNumbers) {
+                pn.refreshE164PhoneNumber();
             }
         }
     }

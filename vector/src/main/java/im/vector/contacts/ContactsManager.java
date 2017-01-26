@@ -273,6 +273,22 @@ public class ContactsManager {
     }
 
     /**
+     * Update the contacts with the new country codes.
+     */
+    public static void onCountryCodeUpdate() {
+        synchronized (LOG_TAG) {
+            if (null != mContactsList) {
+                for(Contact contact : mContactsList) {
+                    contact.onCountryCodeUpdate();
+                }
+            }
+        }
+
+        mIsRetrievingPids = false;
+        mArePidsRetrieved = false;
+    }
+
+    /**
      * Add a listener.
      *
      * @param listener the listener to add.
