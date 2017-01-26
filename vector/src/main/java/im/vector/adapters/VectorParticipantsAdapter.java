@@ -67,7 +67,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     private static final String KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP";
     private static final String KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP";
-
+    private static final String KEY_FILTER_MATRIX_USERS_ONLY = "KEY_FILTER_MATRIX_USERS_ONLY";
 
     // search events listener
     public interface OnParticipantsSearchListener {
@@ -191,7 +191,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private boolean mShowMatrixUserOnly = false;
 
     // Set to true when we need to display the "+" icon
-    private boolean mWithAddIcon;
+    private final boolean mWithAddIcon;
 
     /**
      * Create a room member adapter.
@@ -418,11 +418,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     /**
      * Check if some entries use the same matrix ids.
      * If some use the same, prefer the room member one.
-     *
-     * @return true if some duplicated entries have been removed.
      */
-    private boolean checkDuplicatedMatrixIds() {
-        boolean gotDuplicated = false;
+    private void checkDuplicatedMatrixIds() {
 
         if ((mRoomContactsSectionPosition >= 0) && (mLocalContactsSectionPosition >= 0)) {
             // if several entries have the same matrix id.
@@ -449,7 +446,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
             if (itemsToRemove.size() > 0) {
                 roomParticipants.removeAll(itemsToRemove);
-                gotDuplicated = true;
 
                 if (roomParticipants.size() == 0) {
                     mParticipantsListsList.remove(roomParticipants);
@@ -457,10 +453,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     // assume that the participants are displayed after the contacts
                 }
             }
-
         }
-
-        return gotDuplicated;
     }
 
     /**
@@ -770,7 +763,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
 
-        if (!isExpanded) {
+        if (isExpanded) {
             imageView.setImageResource(R.drawable.ic_material_expand_less_black);
         } else {
             imageView.setImageResource(R.drawable.ic_material_expand_more_black);
@@ -781,12 +774,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         View loadingView = subLayout.findViewById(R.id.heading_loading_view);
         loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
+        boolean groupShouldBeExpanded = isGroupExpanded(groupPosition);
+
         if (parent instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) parent;
-            boolean shouldBeExpanded = isGroupExpanded(groupPosition);
 
-            if (expandableListView.isGroupExpanded(groupPosition) != shouldBeExpanded) {
-                if (shouldBeExpanded) {
+            if (expandableListView.isGroupExpanded(groupPosition) != groupShouldBeExpanded) {
+                if (groupShouldBeExpanded) {
                     expandableListView.expandGroup(groupPosition);
                 } else {
                     expandableListView.collapseGroup(groupPosition);
@@ -795,11 +789,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         // display a search toggle for the local contacts
-        convertView.findViewById(R.id.people_header_matrix_contacts_layout).setVisibility(((groupPosition == mLocalContactsSectionPosition) && isExpanded) ? View.VISIBLE : View.GONE );
+        convertView.findViewById(R.id.people_header_matrix_contacts_layout).setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
 
         // as there might be a clickable object in the extra layout,
         // it seems required to have a click listener
-        View headerView = convertView.findViewById(R.id.people_header_sub_layout);
+        View headerView = convertView.findViewById(R.id.people_header_layout);
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -815,11 +809,18 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // matrix user checkbox
         CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.contacts_filter_checkbox);
+        checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
+
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mShowMatrixUserOnly = isChecked;
                 refresh(mFirstEntry, null);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(KEY_FILTER_MATRIX_USERS_ONLY, isChecked);
+                editor.apply();
             }
         });
 
@@ -913,7 +914,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP);
         editor.remove(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP);
-        editor.commit();
+        editor.remove(KEY_FILTER_MATRIX_USERS_ONLY);
+        editor.apply();
     }
 
     /**
@@ -950,16 +952,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             editor.putBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, isExpanded);
         }
 
-        editor.commit();
-    }
-
-    /**
-     * Specify whether we show all contacts or only ones having a matrix user id
-     *
-     * @param matrixUserOnly
-     */
-    public void displayOnlyMatrixUsers(final boolean matrixUserOnly) {
-        mShowMatrixUserOnly = matrixUserOnly;
-        refresh(mFirstEntry, null);
+        editor.apply();
     }
 }
