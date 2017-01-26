@@ -345,32 +345,46 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private void listOtherMembers() {
         fillUsedMembersList();
 
-        mUnusedParticipants = new ArrayList<>();
+        ArrayList<ParticipantAdapterItem> participants = new ArrayList<>();
+
+        participants = new ArrayList<>();
         // Add all known matrix users
-        mUnusedParticipants.addAll(VectorUtils.listKnownParticipants(mSession).values());
+        participants.addAll(VectorUtils.listKnownParticipants(mSession).values());
         // Add phone contacts which have an email address
-        addContacts(mUnusedParticipants);
+        addContacts(participants);
 
         // List of display names
-        mDisplayNamesList = new ArrayList<>();
+        ArrayList<String> displayNamesList = new ArrayList<>();
 
-        for (Iterator<ParticipantAdapterItem> iterator = mUnusedParticipants.iterator(); iterator.hasNext(); ) {
+        for (Iterator<ParticipantAdapterItem> iterator = participants.iterator(); iterator.hasNext(); ) {
             ParticipantAdapterItem item = iterator.next();
             if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
                 // Remove the used members from the final list
                 iterator.remove();
             } else if (!TextUtils.isEmpty(item.mDisplayName)) {
                 // Add to the display names list
-                mDisplayNamesList.add(item.mDisplayName.toLowerCase());
+                displayNamesList.add(item.mDisplayName.toLowerCase());
             }
         }
+
+        synchronized (LOG_TAG) {
+            mDisplayNamesList = displayNamesList;
+            mUnusedParticipants = participants;
+        }
+
     }
 
     /**
      * @return true if the known members list has been initialized.
      */
     public boolean isKnownMembersInitialized() {
-        return null != mDisplayNamesList;
+        boolean res;
+
+        synchronized (LOG_TAG) {
+            res = null != mDisplayNamesList;
+        }
+
+        return res;
     }
 
     /**
@@ -390,9 +404,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     public void onPIdsUpdate() {
         boolean gotUpdates = false;
 
-        if (null != mUnusedParticipants) {
-            for (ParticipantAdapterItem item : mUnusedParticipants) {
-                gotUpdates |= item.retrievePids();
+        synchronized (LOG_TAG) {
+            if (null != mUnusedParticipants) {
+                for (ParticipantAdapterItem item : mUnusedParticipants) {
+                    gotUpdates |= item.retrievePids();
+                }
             }
         }
 
@@ -516,9 +532,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 return;
             }
 
-            for (ParticipantAdapterItem item : mUnusedParticipants) {
-                if (match(item, mPattern)) {
-                    participantItemList.add(item);
+            synchronized (LOG_TAG) {
+                for (ParticipantAdapterItem item : mUnusedParticipants) {
+                    if (match(item, mPattern)) {
+                        participantItemList.add(item);
+                    }
                 }
             }
         } else {
@@ -855,7 +873,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         // display the avatar
         participant.displayAvatar(mSession, thumbView);
 
-        nameTextView.setText(participant.getUniqueDisplayName(mDisplayNamesList));
+        synchronized (LOG_TAG) {
+            nameTextView.setText(participant.getUniqueDisplayName(mDisplayNamesList));
+        }
 
         // set the presence
         String status = "";
