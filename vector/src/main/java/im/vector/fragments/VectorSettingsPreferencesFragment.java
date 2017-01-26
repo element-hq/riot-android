@@ -93,7 +93,7 @@ import im.vector.util.PhoneNumberUtils;
 import im.vector.util.ResourceUtils;
 import im.vector.util.VectorUtils;
 
-public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = "VPreferenceFragment";
 
     // arguments indexes
@@ -581,12 +581,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     if (!TextUtils.equals(cc, PhoneNumberUtils.getCountryCode(getActivity()))) {
                         PhoneNumberUtils.setCountryCode(getActivity(), (String) newValue);
                         listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ContactsManager.onCountryCodeUpdate();
-                            }
-                        });
                     }
                     return true;
                 }
@@ -612,7 +606,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // if the user toggles the contacts book permission
         if (TextUtils.equals(key, ContactsManager.CONTACTS_BOOK_ACCESS_KEY)) {
             // reset the current snapshot
-            ContactsManager.clearSnapshot();
+            ContactsManager.getInstance().clearSnapshot();
         }
     }
 

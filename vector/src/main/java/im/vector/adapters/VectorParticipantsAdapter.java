@@ -283,7 +283,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param list the participantItem indexed by their matrix Id
      */
     private void addContacts(List<ParticipantAdapterItem> list) {
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot();
+        Collection<Contact> contacts = ContactsManager.getInstance().getLocalContactsSnapshot();
 
         if (null != contacts) {
             for (Contact contact : contacts) {
@@ -510,12 +510,12 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         // test if the local contacts list has been cleared (while putting the application in background)
-        if (mLocalContactsSnapshotSession != ContactsManager.getLocalContactsSnapshotSession()) {
+        if (mLocalContactsSnapshotSession != ContactsManager.getInstance().getLocalContactsSnapshotSession()) {
             mUnusedParticipants = null;
             mContactsParticipants = null;
             mUsedMemberUserIds = null;
             mDisplayNamesList = null;
-            mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
+            mLocalContactsSnapshotSession = ContactsManager.getInstance().getLocalContactsSnapshotSession();
         }
 
         List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
@@ -593,7 +593,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // ensure that the PIDs have been retrieved
         // it might have failed
-        ContactsManager.retrievePids();
+        ContactsManager.getInstance().retrievePids();
 
         // the caller defines a first entry to display
         ParticipantAdapterItem firstEntry = theFirstEntry;
@@ -660,7 +660,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
             posCount++;
-        } else if (!ContactsManager.arePIDsRetrieved()) {
+        } else if (!ContactsManager.getInstance().arePIDsRetrieved()) {
             // Contact lookup in progress, still display it with a loader
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
@@ -802,7 +802,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
         subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
         View loadingView = subLayout.findViewById(R.id.heading_loading_view);
-        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.arePIDsRetrieved() ? View.VISIBLE : View.GONE);
+        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
         if (parent instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) parent;

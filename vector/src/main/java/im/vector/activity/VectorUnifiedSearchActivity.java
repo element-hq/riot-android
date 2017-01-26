@@ -258,7 +258,7 @@ public class VectorUnifiedSearchActivity extends VectorBaseSearchActivity implem
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
 				// trigger a contacts book refresh
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
                 searchAccordingToSelectedTab();
             } else {

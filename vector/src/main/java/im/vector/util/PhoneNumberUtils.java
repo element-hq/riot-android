@@ -29,13 +29,10 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * This class contains the phone number toolbox
@@ -45,7 +42,7 @@ public class PhoneNumberUtils {
     private static final String LOG_TAG = "PhoneNumberUtils";
 
     // preference keys
-    private static final String COUNTRY_CODE_PREF_KEY = "COUNTRY_CODE_PREF_KEY";
+    public static final String COUNTRY_CODE_PREF_KEY = "COUNTRY_CODE_PREF_KEY";
 
     private static String[] mCountryCodes = null;
     private static String[] mHumanCountryCodes = null;

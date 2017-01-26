@@ -356,7 +356,7 @@ public class CommonActivityUtils {
 
         // reset the contacts
         PIDsRetriever.getInstance().reset();
-        ContactsManager.reset();
+        ContactsManager.getInstance().reset();
 
         MXMediasCache.clearThumbnailsCache(context);
 
@@ -612,7 +612,7 @@ public class CommonActivityUtils {
                 if (Build.VERSION.SDK_INT >= 23) {
                     isRequestPermissionRequired |= updatePermissionsToBeGranted(aCallingActivity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType);
                 } else {
-                    if (!ContactsManager.isContactBookAccessRequested(aCallingActivity)) {
+                    if (!ContactsManager.getInstance().isContactBookAccessRequested()) {
                         isRequestPermissionRequired = true;
                         permissionsListToBeGranted.add(permissionType);
                     }
@@ -691,7 +691,7 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, true);
+                                ContactsManager.getInstance().setIsContactBookAccessAllowed(true);
                                 ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
                             }
                         });
@@ -700,7 +700,7 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setNegativeButton(aCallingActivity.getString(R.string.no), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ContactsManager.setIsContactBookAccessAllowed(aCallingActivity, false);
+                                ContactsManager.getInstance().setIsContactBookAccessAllowed(false);
                                 ActivityCompat.requestPermissions(aCallingActivity, fPermissionsArrayToBeGranted, aPermissionsToBeGrantedBitMap);
                             }
                         });

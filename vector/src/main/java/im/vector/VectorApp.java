@@ -120,7 +120,7 @@ public class VectorApp extends Application {
     public static File mLogsDirectoryFile = null;
 
     // PNs search are disabled by default
-    public static final boolean SUPPORT_PHONE_NUMBERS_LOOKUP = true;
+    public static final boolean SUPPORT_PHONE_NUMBERS_LOOKUP = false;
 
     @Override
     public void onCreate() {
@@ -341,8 +341,8 @@ public class VectorApp extends Application {
             }
 
             // get the contact update at application launch
-            ContactsManager.clearSnapshot();
-            ContactsManager.refreshLocalContactsSnapshot(VectorApp.this);
+            ContactsManager.getInstance().clearSnapshot();
+            ContactsManager.getInstance().refreshLocalContactsSnapshot();
 
             boolean hasActiveCall = false;
 
