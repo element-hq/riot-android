@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -699,7 +700,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     private String getGroupTitle(int position) {
         if (position == mLocalContactsSectionPosition) {
-            return mContext.getString(R.string.people_search_contacts);
+            return mContext.getString(R.string.people_search_local_contacts);
         } else if (position == mRoomContactsSectionPosition) {
             return mContext.getString(R.string.people_search_known_contacts);
         } else {
@@ -750,12 +751,12 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, final ViewGroup parent) {
         if (null == convertView) {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView) convertView.findViewById(R.id.people_header_text_view);
 
         if (null != sectionNameTxtView) {
             String title = getGroupTitle(groupPosition);
@@ -792,6 +793,35 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             }
         }
+
+        // display a search toggle for the local contacts
+        convertView.findViewById(R.id.people_header_matrix_contacts_layout).setVisibility(((groupPosition == mLocalContactsSectionPosition) && isExpanded) ? View.VISIBLE : View.GONE );
+
+        // as there might be a clickable object in the extra layout,
+        // it seems required to have a click listener
+        View headerView = convertView.findViewById(R.id.people_header_sub_layout);
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (parent instanceof ExpandableListView) {
+                    if (isExpanded) {
+                        ((ExpandableListView) parent).collapseGroup(groupPosition);
+                    } else {
+                        ((ExpandableListView) parent).expandGroup(groupPosition);
+                    }
+                }
+            }
+        });
+
+        // matrix user checkbox
+        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.contacts_filter_checkbox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mShowMatrixUserOnly = isChecked;
+                refresh(mFirstEntry, null);
+            }
+        });
 
         return convertView;
     }

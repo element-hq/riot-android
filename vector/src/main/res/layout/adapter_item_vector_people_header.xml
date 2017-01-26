@@ -1,42 +1,75 @@
 <!-- menu header is always wrap to content
      so it is required to define a sublayout with the right height -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@color/vector_recents_header_background_color">
 
     <RelativeLayout
+        android:layout_marginTop="11dp"
         android:id="@+id/people_header_sub_layout"
         android:layout_width="match_parent"
-        android:layout_height="42dp">
+        android:layout_height="20dp">
 
-        <TextView
-            android:id="@+id/heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Header"
-            android:textColor="@color/vector_text_black_color"
-            android:textSize="14sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/people_header_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Header"
+                android:textColor="@color/vector_text_black_color"
+                android:textSize="14sp" />
 
-        <ProgressBar
-            android:id="@+id/heading_loading_view"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/heading"
-            android:indeterminate="true"
-            android:visibility="gone" />
+            <ProgressBar
+                android:id="@+id/heading_loading_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/people_header_text_view"
+                android:indeterminate="true"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/heading_image"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp" />
     </RelativeLayout>
-</RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/people_header_matrix_contacts_layout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_marginTop="5dp"
+        android:layout_height="20dp">
+
+        <CheckBox
+            android:layout_marginLeft="19dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/contacts_filter_checkbox" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/vector_text_black_color"
+            android:textSize="14sp"
+            android:text="@string/people_search_filter_text" />
+    </LinearLayout>
+
+    <!-- bottom margin -->
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="11dp" />
+</LinearLayout>
