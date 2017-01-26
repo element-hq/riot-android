@@ -224,6 +224,51 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
                 tab.select();
             }
         }
+
+        // Check permission to access contacts
+        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
+
+        // save current tab
+        if (null != mActionBar) {
+            int currentIndex = mTabs.getSelectedTabPosition();
+            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSession.getDataHandler().addListener(mEventsListener);
+        ContactsManager.addListener(mContactsListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSession.getDataHandler().removeListener(mEventsListener);
+        ContactsManager.removeListener(mContactsListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                onPatternUpdate(false);
+            } else {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+            }
+        }
     }
 
     /**
@@ -271,51 +316,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
                 });
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.removeListener(mContactsListener);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.addListener(mContactsListener);
-
-        // Check permission to access contacts
-        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
-            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
-                onPatternUpdate(false);
-            } else {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
-            }
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
-
-        // save current tab
-        if (null != mActionBar) {
-            int currentIndex = mTabs.getSelectedTabPosition();
-            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
-        }
     }
 
     /*
