@@ -984,7 +984,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
                         if (MXSession.isUserId(userId)) {
                             User user =  mSession.getDataHandler().getStore().getUser(userId);
-                            if (null != user) {
+                            if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
                                 displayName = user.displayname;
                             }
                         }
