@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -44,12 +43,10 @@ import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
-;
-
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
-public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity implements TabLayout.OnTabSelectedListener {
+public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
     // search in the room
@@ -57,17 +54,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
     public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
     public static final String EXTRA_SELECTED_USER_ID = "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
     public static final String EXTRA_SELECTED_PARTICIPANT_ITEM = "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
-
-    // tabs
-    private static final int ALL_PEOPLES_TAB_INDEX = 0;
-    private static final int MATRIX_USERS_ONLY_TAB_INDEX = 1;
-    private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
-
     // account data
     private String mMatrixId;
 
     // main UI items
-    private TabLayout mTabs;
     private ExpandableListView mListView;
     private ImageView mBackgroundImageView;
     private View mNoResultView;
@@ -210,35 +200,8 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
             }
         });
 
-        // Tabs
-        mTabs = (TabLayout) findViewById(R.id.filter_tabs);
-        if (mTabs != null) {
-            mTabs.setOnTabSelectedListener(this);
-            int tabIndexToDisplay;
-            tabIndexToDisplay = (null != savedInstanceState)
-                    ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, ALL_PEOPLES_TAB_INDEX)
-                    : ALL_PEOPLES_TAB_INDEX;
-
-            TabLayout.Tab tab = mTabs.getTabAt(tabIndexToDisplay);
-            if (tab != null) {
-                tab.select();
-            }
-        }
-
         // Check permission to access contacts
         CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
-
-        // save current tab
-        if (null != mActionBar) {
-            int currentIndex = mTabs.getSelectedTabPosition();
-            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
-        }
     }
 
     @Override
@@ -316,26 +279,5 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
                 });
             }
         });
-    }
-
-    /*
-     * *********************************************************************************************
-     * Tabs
-     * *********************************************************************************************
-     */
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        mAdapter.displayOnlyMatrixUsers(tab.getPosition() == MATRIX_USERS_ONLY_TAB_INDEX);
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
     }
 }
