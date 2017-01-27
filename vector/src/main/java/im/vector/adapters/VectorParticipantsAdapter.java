@@ -404,26 +404,33 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     public void onPIdsUpdate() {
         boolean gotUpdates = false;
 
+        List<ParticipantAdapterItem> unusedParticipants = new ArrayList<>();
+        List<ParticipantAdapterItem> contactsParticipants = new ArrayList<>();
+
         synchronized (LOG_TAG) {
             if (null != mUnusedParticipants) {
-                for (ParticipantAdapterItem item : mUnusedParticipants) {
-                    gotUpdates |= item.retrievePids();
-                }
+                unusedParticipants = new ArrayList<>(mUnusedParticipants);
+            }
+
+            if (null != mContactsParticipants) {
+                contactsParticipants = new ArrayList<>(mContactsParticipants);
             }
         }
 
-        if (null != mContactsParticipants) {
-            for (ParticipantAdapterItem item : mContactsParticipants) {
-                gotUpdates |= item.retrievePids();
-            }
+        for (ParticipantAdapterItem item : unusedParticipants) {
+            gotUpdates |= item.retrievePids();
+        }
 
-            // Check whether we need to remove the contact section
-            if (mContactsParticipants.isEmpty() && mLocalContactsSectionPosition != -1) {
-                mParticipantsListsList.remove(mLocalContactsSectionPosition);
-                mLocalContactsSectionPosition = -1;
-                mRoomContactsSectionPosition--;
-                notifyDataSetChanged();
-            }
+        for (ParticipantAdapterItem item : contactsParticipants) {
+            gotUpdates |= item.retrievePids();
+        }
+
+        // Check whether we need to remove the contact section
+        if (contactsParticipants.isEmpty() && mLocalContactsSectionPosition != -1) {
+            mParticipantsListsList.remove(mLocalContactsSectionPosition);
+            mLocalContactsSectionPosition = -1;
+            mRoomContactsSectionPosition--;
+            notifyDataSetChanged();
         }
 
         if (gotUpdates) {
@@ -497,10 +504,12 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // test if the local contacts list has been cleared (while putting the application in background)
         if (mLocalContactsSnapshotSession != ContactsManager.getLocalContactsSnapshotSession()) {
-            mUnusedParticipants = null;
-            mContactsParticipants = null;
-            mUsedMemberUserIds = null;
-            mDisplayNamesList = null;
+            synchronized (LOG_TAG) {
+                mUnusedParticipants = null;
+                mContactsParticipants = null;
+                mUsedMemberUserIds = null;
+                mDisplayNamesList = null;
+            }
             mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
         }
 
@@ -532,11 +541,17 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 return;
             }
 
+            List<ParticipantAdapterItem> unusedParticipants = new ArrayList<>();
+
             synchronized (LOG_TAG) {
-                for (ParticipantAdapterItem item : mUnusedParticipants) {
-                    if (match(item, mPattern)) {
-                        participantItemList.add(item);
-                    }
+                if (null != mUnusedParticipants) {
+                    unusedParticipants = new ArrayList<>(mUnusedParticipants);
+                }
+            }
+
+            for (ParticipantAdapterItem item : unusedParticipants) {
+                if (match(item, mPattern)) {
+                    participantItemList.add(item);
                 }
             }
         } else {
@@ -550,7 +565,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                         List<ParticipantAdapterItem> list = new ArrayList<>();
                         addContacts(list);
-                        mContactsParticipants = list;
+
+                        synchronized (LOG_TAG) {
+                            mContactsParticipants = list;
+                        }
 
                         Handler handler = new Handler(Looper.getMainLooper());
                         handler.post(new Runnable() {
@@ -567,7 +585,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                 return;
             } else {
-                for (Iterator<ParticipantAdapterItem> iterator = mContactsParticipants.iterator(); iterator.hasNext(); ) {
+                List<ParticipantAdapterItem> contactsParticipants = new ArrayList<>();
+
+                synchronized (LOG_TAG) {
+                    if (null != mContactsParticipants) {
+                        contactsParticipants = new ArrayList<>(mContactsParticipants);
+                    }
+                }
+
+                for (Iterator<ParticipantAdapterItem> iterator = contactsParticipants.iterator(); iterator.hasNext(); ) {
                     ParticipantAdapterItem item = iterator.next();
                     if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
                         // Remove the used members from the contact list
@@ -576,7 +602,11 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             }
 
-            participantItemList.addAll(mContactsParticipants);
+            synchronized (LOG_TAG) {
+                if (null != mContactsParticipants) {
+                    participantItemList.addAll(mContactsParticipants);
+                }
+            }
         }
 
         // ensure that the PIDs have been retrieved
