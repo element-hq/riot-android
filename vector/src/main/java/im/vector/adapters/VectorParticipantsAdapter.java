@@ -672,14 +672,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             posCount++;
         }
 
-        if (contactBookList.size() > 0) {
+        // display the local contacts
+        // -> if there are some
+        // -> the PIDS retrieval is in progress
+        // -> the user displays only the matrix id (if there is no contact with matrix Id, it could impossible to deselect the toggle
+        // -> always displays when there is something to search to let the user toggles the matrix id checkbox.
+        if ((contactBookList.size() > 0) || !ContactsManager.arePIDsRetrieved() || mShowMatrixUserOnly || !TextUtils.isEmpty(mPattern)) {
             // the contacts are sorted by alphabetical method
             Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
-            mParticipantsListsList.add(contactBookList);
-            mLocalContactsSectionPosition = posCount;
-            posCount++;
-        } else if (!ContactsManager.arePIDsRetrieved()) {
-            // Contact lookup in progress, still display it with a loader
             mParticipantsListsList.add(contactBookList);
             mLocalContactsSectionPosition = posCount;
             posCount++;
@@ -841,7 +841,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // as there might be a clickable object in the extra layout,
         // it seems required to have a click listener
-        View headerView = convertView.findViewById(R.id.people_header_layout);
+        View headerView = convertView.findViewById(R.id.people_header_sub_layout);
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
