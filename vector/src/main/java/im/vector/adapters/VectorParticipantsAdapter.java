@@ -346,8 +346,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         fillUsedMembersList();
 
         ArrayList<ParticipantAdapterItem> participants = new ArrayList<>();
-
-        participants = new ArrayList<>();
         // Add all known matrix users
         participants.addAll(VectorUtils.listKnownParticipants(mSession).values());
         // Add phone contacts which have an email address
@@ -371,7 +369,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             mDisplayNamesList = displayNamesList;
             mUnusedParticipants = participants;
         }
-
     }
 
     /**
