@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -44,12 +43,10 @@ import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
-;
-
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
-public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity implements TabLayout.OnTabSelectedListener {
+public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
     // search in the room
@@ -57,17 +54,10 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
     public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
     public static final String EXTRA_SELECTED_USER_ID = "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
     public static final String EXTRA_SELECTED_PARTICIPANT_ITEM = "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
-
-    // tabs
-    private static final int ALL_PEOPLES_TAB_INDEX = 0;
-    private static final int MATRIX_USERS_ONLY_TAB_INDEX = 1;
-    private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
-
     // account data
     private String mMatrixId;
 
     // main UI items
-    private TabLayout mTabs;
     private ExpandableListView mListView;
     private ImageView mBackgroundImageView;
     private View mNoResultView;
@@ -210,18 +200,36 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
             }
         });
 
-        // Tabs
-        mTabs = (TabLayout) findViewById(R.id.filter_tabs);
-        if (mTabs != null) {
-            mTabs.setOnTabSelectedListener(this);
-            int tabIndexToDisplay;
-            tabIndexToDisplay = (null != savedInstanceState)
-                    ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, ALL_PEOPLES_TAB_INDEX)
-                    : ALL_PEOPLES_TAB_INDEX;
+        // Check permission to access contacts
+        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+    }
 
-            TabLayout.Tab tab = mTabs.getTabAt(tabIndexToDisplay);
-            if (tab != null) {
-                tab.select();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSession.getDataHandler().addListener(mEventsListener);
+        ContactsManager.addListener(mContactsListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSession.getDataHandler().removeListener(mEventsListener);
+        ContactsManager.removeListener(mContactsListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                onPatternUpdate(false);
+            } else {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }
         }
     }
@@ -271,71 +279,5 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
                 });
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.removeListener(mContactsListener);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.addListener(mContactsListener);
-
-        // Check permission to access contacts
-        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
-            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
-                onPatternUpdate(false);
-            } else {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
-            }
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
-
-        // save current tab
-        if (null != mActionBar) {
-            int currentIndex = mTabs.getSelectedTabPosition();
-            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
-        }
-    }
-
-    /*
-     * *********************************************************************************************
-     * Tabs
-     * *********************************************************************************************
-     */
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        mAdapter.displayOnlyMatrixUsers(tab.getPosition() == MATRIX_USERS_ONLY_TAB_INDEX);
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
     }
 }

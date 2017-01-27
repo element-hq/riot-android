@@ -83,11 +83,13 @@ public class ContactsManager {
     // set to true when there is a pending
     private static boolean mIsRetrievingPids = false;
     private static boolean mArePidsRetrieved = false;
+    // Trigger another PIDs retrieval when there is a valid data connection.
+    private static boolean mRetryPIDsRetrievalOnConnect = false;
 
     private static final IMXNetworkEventListener mNetworkConnectivityReceiver = new IMXNetworkEventListener() {
         @Override
         public void onNetworkConnectionUpdate(boolean isConnected) {
-            if (isConnected) {
+            if (isConnected && mRetryPIDsRetrievalOnConnect) {
                 retrievePids();
             }
         }
@@ -131,6 +133,7 @@ public class ContactsManager {
         public void onFailure(String accountId) {
             mIsRetrievingPids = false;
             mArePidsRetrieved = false;
+            mRetryPIDsRetrievalOnConnect = true;
             Log.d(LOG_TAG, "## fail to retrieve the PIDs");
         }
 
@@ -144,6 +147,7 @@ public class ContactsManager {
 
             Log.d(LOG_TAG, "## Retrieve IPDs successfully");
 
+            mRetryPIDsRetrievalOnConnect = false;
             mIsRetrievingPids = false;
             mArePidsRetrieved = true;
 
@@ -345,6 +349,7 @@ public class ContactsManager {
         // refresh the contacts list in background
         Thread t = new Thread(new Runnable() {
             public void run() {
+                long t0 = System.currentTimeMillis();
                 ContentResolver cr = context.getContentResolver();
                 HashMap<String, Contact> dict = new HashMap<>();
 
@@ -478,6 +483,17 @@ public class ContactsManager {
                     mIsPopulating = false;
                 }
 
+                if (0 != mContactsList.size()) {
+                    long delta = System.currentTimeMillis() - t0;
+
+                    VectorApp.sendGAStats(VectorApp.getInstance(),
+                            VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                            VectorApp.GOOGLE_ANALYTICS_STARTUP_CONTACTS_ACTION,
+                            mContactsList.size() + " contacts in " + delta + " ms",
+                            delta
+                    );
+                }
+
                 // define the PIDs listener
                 PIDsRetriever.getInstance().setPIDsRetrieverListener(mPIDsRetrieverListener);
 
@@ -491,7 +507,7 @@ public class ContactsManager {
                     mIsRetrievingPids = false;
                     mArePidsRetrieved = false;
 
-                    retrievePids();
+                    // the PIDs retrieval is done on demand.
                 }
 
                 if (null != mListeners) {

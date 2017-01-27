@@ -46,7 +46,6 @@ import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
-
 public class VectorSearchPeopleListFragment extends Fragment {
 
     private static final String ARG_MATRIX_ID = "VectorSearchPeopleListFragment.ARG_MATRIX_ID";
@@ -245,17 +244,6 @@ public class VectorSearchPeopleListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        } else {
-            if (null != mPendingPattern) {
-                searchPattern(mPendingPattern, mPendingSearchResultListener);
-                mPendingPattern = null;
-                mPendingSearchResultListener = null;
-            }
-        }
-
         mSession.getDataHandler().addListener(mEventsListener);
         ContactsManager.addListener(mContactsListener);
     }

@@ -33,6 +33,8 @@ import im.vector.services.EventStreamService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * SplashActivity displays a splash while loading and inittializing the client.
@@ -48,6 +50,8 @@ public class SplashActivity extends MXCActionBarActivity {
 
     private HashMap<MXSession, IMXEventListener> mListeners;
     private HashMap<MXSession, IMXEventListener> mDoneListeners;
+
+    private final long mLaunchTime = System.currentTimeMillis();
 
     /**
      * @return true if a store is corrupted.
@@ -71,6 +75,13 @@ public class SplashActivity extends MXCActionBarActivity {
         Log.e(LOG_TAG, "##onFinish() : start VectorHomeActivity");
 
         if (!hasCorruptedStore()) {
+            VectorApp.sendGAStats(getApplicationContext(),
+                    VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                    VectorApp.GOOGLE_ANALYTICS_STARTUP_LAUNCH_SCREEN_ACTION,
+                    null,
+                    System.currentTimeMillis() - mLaunchTime
+            );
+
             // Go to the home page
             Intent intent = new Intent(SplashActivity.this, VectorHomeActivity.class);
 
@@ -144,10 +155,57 @@ public class SplashActivity extends MXCActionBarActivity {
                         // do not remove the listeners here
                         // it crashes the application because of the upper loop
                         //fSession.getDataHandler().removeListener(mListeners.get(fSession));
-                        // remove from the pendings list
+                        // remove from the pending list
 
                         mListeners.remove(fSession);
                         noMoreListener = (mListeners.size() == 0);
+                    }
+
+                    try {
+                        int nbrRooms = fSession.getDataHandler().getStore().getRooms().size();
+
+                        VectorApp.sendGAStats(getApplicationContext(),
+                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                VectorApp.GOOGLE_ANALYTICS_STARTUP_MOUNT_DATA_ACTION,
+                                nbrRooms + " rooms in " + (System.currentTimeMillis() - mLaunchTime) + " ms",
+                                System.currentTimeMillis() - mLaunchTime
+                        );
+
+                        VectorApp.sendGAStats(getApplicationContext(),
+                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                VectorApp.GOOGLE_ANALYTICS_STATS_ROOMS_ACTION,
+                                null,
+                                nbrRooms
+                        );
+
+                        long preloadTime = fSession.getDataHandler().getStore().getPreloadTime();
+                        String label = nbrRooms + " rooms in " + preloadTime + " ms";
+
+                        if (0 != nbrRooms) {
+                            label += "(" + preloadTime / nbrRooms + " ms per room)";
+                        }
+
+                        VectorApp.sendGAStats(getApplicationContext(),
+                                VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                VectorApp.GOOGLE_ANALYTICS_STARTUP_STORE_PRELOAD_ACTION,
+                                label,
+                                fSession.getDataHandler().getStore().getPreloadTime()
+                        );
+
+                        Map<String, Long> storeStats = session.getDataHandler().getStore().getStats();
+
+                        if (null != storeStats) {
+                            for (String key : storeStats.keySet()) {
+                                VectorApp.sendGAStats(getApplicationContext(),
+                                        VectorApp.GOOGLE_ANALYTICS_STATS_CATEGORY,
+                                        key,
+                                        null,
+                                        storeStats.get(key)
+                                );
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Fail to send stats " + e.getMessage());
                     }
 
                     if (noMoreListener) {
