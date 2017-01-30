@@ -1888,15 +1888,21 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             final DeviceInfo fDeviceInfo = aDeviceInfo;
 
+            builder.setPositiveButton(R.string.rename, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    displayDeviceRenameDialog(fDeviceInfo);
+                }
+            });
 
-            builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     displayDeviceDeletionDialog(fDeviceInfo);
                 }
             });
 
-            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -1920,6 +1926,67 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             if(null != getActivity())
                 CommonActivityUtils.displayToast(getActivity().getApplicationContext(),"DeviceDetailsDialog cannot be displayed.\nBad input parameters.");
         }
+    }
+
+    /**
+     * Display an alert dialog to rename a device
+     * @param aDeviceInfoToRename device info
+     */
+    private void displayDeviceRenameDialog(final DeviceInfo aDeviceInfoToRename) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.devices_details_device_name);
+
+        final EditText input = new EditText(getActivity());
+        input.setText(aDeviceInfoToRename.display_name);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                displayLoadingView();
+
+                mSession.setDeviceName(aDeviceInfoToRename.device_id, input.getText().toString(), new ApiCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void info) {
+                        // search which preference is updated
+                        int count = mDevicesListSettingsCategory.getPreferenceCount();
+
+                        for(int i = 0; i < count; i++) {
+                            VectorCustomActionEditTextPreference pref = (VectorCustomActionEditTextPreference)mDevicesListSettingsCategory.getPreference(i);
+
+                            if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.getTitle())) {
+                                pref.setSummary(input.getText());
+                            }
+                        }
+
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onCommonDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onCommonDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onCommonDone(e.getLocalizedMessage());
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     /**
