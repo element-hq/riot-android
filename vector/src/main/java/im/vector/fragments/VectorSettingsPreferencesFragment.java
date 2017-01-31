@@ -42,12 +42,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.gson.JsonElement;
 
 import org.matrix.androidsdk.MXSession;
@@ -67,6 +69,10 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1663,7 +1669,30 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                 });
             }
+
+            VectorCustomActionEditTextPreference exportPref = (VectorCustomActionEditTextPreference)findPreference(getActivity().getResources().getString(R.string.encryption_export_e2e_room_keys));
+
+            exportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    exportkeys();
+                    return true;
+                }
+            });
+
+            VectorCustomActionEditTextPreference importPref = (VectorCustomActionEditTextPreference)findPreference(getActivity().getResources().getString(R.string.encryption_import_e2e_room_keys));
+
+            importPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    importkeys();
+                    return true;
+                }
+            });
+
         }
+
+
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
@@ -2000,5 +2029,109 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
     }
 
+    /**
+     * Manage the e2e keys export.
+     */
+    private void exportkeys() {
 
+        View dialoglayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setView(dialoglayout);
+
+        final EditText passPhrase1EditText = (EditText)dialoglayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final EditText passPhrase2EditText = (EditText)dialoglayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = (Button)dialoglayout.findViewById(R.id.dialog_e2e_keys_export_button);
+
+        passPhrase1EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        passPhrase2EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        exportButton.setEnabled(false);
+
+        final AlertDialog exportDialog = dialog.show();
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String password = passPhrase1EditText.getText().toString();
+
+                displayLoadingView();
+
+                mSession.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytesArray) {
+                        try {
+                            ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
+                            String url = mSession.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt",  "text/plain");
+                            stream.close();
+
+                            String path = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), new File(Uri.parse(url).getPath()), "riot.keys",  "text/plain");
+                            Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
+                        } catch(Exception e) {
+                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
+                    }
+                });
+
+                exportDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * Manage the e2e keys import.
+     */
+    private void importkeys() {
+
+    }
 }
