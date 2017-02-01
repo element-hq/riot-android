@@ -27,7 +27,7 @@ Bugfixes:
  * Fix several issues reported by Google Analytics.
  * #868 : Add Leave Room Confirmation.	
  
-Changes in Vector 0.6.6 (2016-01-17)
+Changes in Vector 0.6.6 (2017-01-17)
 ===================================================
  
 Improvements:
