@@ -35,6 +35,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -2037,10 +2038,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private void exportKeys() {
         View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle(R.string.encryption_export_room_keys);
         dialog.setView(dialogLayout);
 
-        final EditText passPhrase1EditText = (EditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
-        final EditText passPhrase2EditText = (EditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final TextInputEditText passPhrase1EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final TextInputEditText passPhrase2EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
         final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -2144,9 +2146,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             final SharedDataItem sharedDataItem = sharedDataItems.get(0);
             View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_import_e2e_keys, null);
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.encryption_import_room_keys);
             dialog.setView(dialogLayout);
 
-            final EditText passPhraseEditText = (EditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+            final TextInputEditText passPhraseEditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
             final Button importButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_import_button);
 
             passPhraseEditText.addTextChangedListener(new TextWatcher() {
