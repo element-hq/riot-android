@@ -840,6 +840,7 @@
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
+    <string name="encryption_import_import">Import</string>
 
     <string name="encryption_information_not_verified">NOT Verified</string>
     <string name="encryption_information_verified">Verified</string>
