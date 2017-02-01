@@ -2035,15 +2035,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Manage the e2e keys export.
      */
     private void exportKeys() {
-        View dialoglayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
+        View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setView(dialoglayout);
+        dialog.setView(dialogLayout);
 
-        final EditText passPhrase1EditText = (EditText) dialoglayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
-        final EditText passPhrase2EditText = (EditText) dialoglayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
-        final Button exportButton = (Button) dialoglayout.findViewById(R.id.dialog_e2e_keys_export_button);
-
-        passPhrase1EditText.addTextChangedListener(new TextWatcher() {
+        final EditText passPhrase1EditText = (EditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final EditText passPhrase2EditText = (EditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
+        final TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -2058,24 +2057,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        };
 
-        passPhrase2EditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        passPhrase1EditText.addTextChangedListener(textWatcher);
+        passPhrase2EditText.addTextChangedListener(textWatcher);
 
         exportButton.setEnabled(false);
 
