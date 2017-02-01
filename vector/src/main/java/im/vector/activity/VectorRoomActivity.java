@@ -1911,8 +1911,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 int resendAllPos = message.indexOf(resendAll);
 
                 text = new SpannableString(message);
-                text.setSpan(new cancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length(), 0);
-                text.setSpan(new resendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length(), 0);
+
+                // cancelAllPos should always be > 0 but a GA crash reported here
+                if (cancelAllPos >= 0) {
+                    text.setSpan(new cancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length(), 0);
+                }
+
+                // resendAllPos should always be > 0 but a GA crash reported here
+                if (resendAllPos >= 0) {
+                    text.setSpan(new resendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length(), 0);
+                }
+                
                 mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
                 textColor = R.color.vector_fuchsia_color;
 
