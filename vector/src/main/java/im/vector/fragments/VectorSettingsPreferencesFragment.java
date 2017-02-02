@@ -1648,6 +1648,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
 
+                cryptoInfoTextPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        displayDeviceRenameDialog(aMyDeviceInfo);
+                        return true;
+                    }
+                });
+
                 cryptoInfoTextPreference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
@@ -1988,6 +1996,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.getTitle())) {
                                 pref.setSummary(input.getText());
                             }
+                        }
+
+                        // detect if the updated device is the current account one
+                        Preference pref = findPreference(getActivity().getResources().getString(R.string.encryption_information_device_id));
+                        if (TextUtils.equals(pref.getSummary(), aDeviceInfoToRename.device_id)) {
+                            (findPreference(getActivity().getResources().getString(R.string.encryption_information_device_name))).setSummary(input.getText());
                         }
 
                         hideLoadingView();
