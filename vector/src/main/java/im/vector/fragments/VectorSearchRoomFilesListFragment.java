@@ -249,6 +249,17 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                         }
                                     }
                                     mSearchListeners.clear();
+
+                                    mMessageListView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // fill the screen
+                                            if (mMessageListView.getFirstVisiblePosition() < 2) {
+                                                backPaginate(true);
+                                            }
+                                        }
+                                    });
+
                                 }
                             });
                         } else {

@@ -264,10 +264,10 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             mIsInitialSyncing = false;
                             mMessageListView.setOnScrollListener(mScrollListener);
                             mMessageListView.setAdapter(mAdapter);
+                            mMessageListView.setVisibility(View.VISIBLE);
 
                             // scroll to the bottom
                             scrollToBottom();
-                            mMessageListView.setVisibility(View.VISIBLE);
 
                             for (OnSearchResultListener listener : mSearchListeners) {
                                 try {
@@ -278,6 +278,10 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             }
                             mSearchListeners.clear();
                             mSearchingPattern = null;
+
+                            // trigger a back pagination to fill the screen
+                            // the request could contain only a few items.
+                            backPaginate(true);
                         }
                     }
 
