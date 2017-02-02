@@ -19,6 +19,8 @@ package im.vector.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
@@ -173,6 +175,17 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         return !TextUtils.isEmpty(pattern);
     }
 
+    @Override
+    public void onInitialMessagesLoaded() {
+        // ensure that the list don't try to fill itself
+        // if the search is not allowed with the provided pattern.
+        if (!allowSearch(mPattern)) {
+            android.util.Log.e(LOG_TAG, "## onInitialMessagesLoaded() : history filling is cancelled");
+        } else {
+            super.onInitialMessagesLoaded();
+        }
+    }
+
     /**
      * Update the searched pattern.
      * @param pattern the pattern to find out. null to disable the search mode
@@ -217,14 +230,19 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         } else {
             // the search on this pattern is just ended
             if (TextUtils.equals(mPattern, pattern)) {
-                for (OnSearchResultListener listener : mSearchListeners) {
-                    try {
-                        listener.onSearchSucceed(mAdapter.getCount());
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (OnSearchResultListener listener : mSearchListeners) {
+                            try {
+                                listener.onSearchSucceed(mAdapter.getCount());
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                            }
+                        }
+                        mSearchListeners.clear();
                     }
-                }
-                mSearchListeners.clear();
+                });
             } else {
                 // start a new search
                 mAdapter.clear();

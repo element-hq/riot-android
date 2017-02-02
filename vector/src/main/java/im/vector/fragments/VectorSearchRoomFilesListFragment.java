@@ -63,6 +63,15 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
     }
 
     /**
+     * Tell if the search is allowed for a dedicated pattern
+     * @param pattern the searched pattern.
+     * @return true if the search is allowed.
+     */
+    protected boolean allowSearch(String pattern) {
+        return true;
+    }
+
+    /**
      * Cancel the catching requests.
      */
     public void cancelCatchingRequests() {
@@ -189,7 +198,11 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         final int firstPos = mMessageListView.getFirstVisiblePosition();
         final int countBeforeUpdate = mAdapter.getCount();
 
-        showLoadingBackProgress();
+        // if there is no item in the adapter
+        // don't display the back pagination spinner
+        if (0 != mAdapter.getCount()) {
+            showLoadingBackProgress();
+        }
 
         remoteRoomHistoryRequest(new ArrayList<Event>(), new ApiCallback<ArrayList<Event>>() {
             @Override
@@ -218,7 +231,24 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                     // do not use count because some messages are not displayed
                                     // so we compute the new pos
                                     mMessageListView.setSelection(firstPos + (mAdapter.getCount() - countBeforeUpdate));
+
                                     mIsBackPaginating = false;
+                                    
+                                    // plug the scroll events listener to detect the back pagination
+                                    // when scrolling over the list top.
+                                    setMessageListViewScrollListener();
+
+                                    // warn any listener of the search result.
+                                    // the listview might be uninitialized when startFilesSearch is called.
+                                    // wait that the backpagination fills the screen
+                                    for(OnSearchResultListener listener : mSearchListeners) {
+                                        try {
+                                            listener.onSearchSucceed(eventChunks.size());
+                                        } catch (Exception e) {
+                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage());
+                                        }
+                                    }
+                                    mSearchListeners.clear();
                                 }
                             });
                         } else {
