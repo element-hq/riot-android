@@ -16,6 +16,7 @@
 
 package im.vector.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,10 +35,13 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +71,8 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,9 +95,10 @@ import im.vector.preference.ProgressBarPreference;
 import im.vector.preference.UserAvatarPreference;
 import im.vector.preference.VectorCustomActionEditTextPreference;
 import im.vector.util.ResourceUtils;
+import im.vector.util.SharedDataItem;
 import im.vector.util.VectorUtils;
 
-public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class VectorSettingsPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = "VPreferenceFragment";
 
     // arguments indexes
@@ -107,18 +114,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final String DUMMY_RULE = "DUMMY_RULE";
     private static final String LABEL_UNAVAILABLE_DATA = "none";
 
-    // members
-    private MXSession mSession;
-    private View mLoadingView;
-
-    // cryptography
-    private DeviceInfo mMyDeviceInfo;
-    private PreferenceCategory mCryptographyCategory;
-    private PreferenceCategory mCryptographyCategoryDivider;
-
+    private static final int REQUEST_E2E_FILE_REQUEST_CODE = 123;
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
-
+    // members
+    private MXSession mSession;
     // disable some updates if there is
     private final IMXNetworkEventListener mNetworkListener = new IMXNetworkEventListener() {
         @Override
@@ -126,32 +126,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             refreshDisplay();
         }
     };
-
-    // displayed emails
-    private PreferenceCategory mUserSettingsCategory;
-    private List<String> mDisplayedEmails = new ArrayList<>();
-
-    // displayed pushers
-    private PreferenceCategory mPushersSettingsDivider;
-    private PreferenceCategory mPushersSettingsCategory;
-    private List<Pusher> mDisplayedPushers = new ArrayList<>();
-
-    // devices: device IDs and device names
-    private PreferenceCategory mDevicesListSettingsCategory;
-    private PreferenceCategory mDevicesListSettingsCategoryDivider;
-    private List<DeviceInfo> mDevicesNameList = new ArrayList<>();
-
-    // displayed the ignored users list
-    private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
-    private PreferenceCategory mIgnoredUserSettingsCategory;
-
-    // background sync category
-    private PreferenceCategory mBackgroundSyncCategory;
-    private EditTextPreference mSyncRequestTimeoutPreference;
-    private EditTextPreference mSyncRequestDelayPreference;
-
-    private PreferenceCategory mLabsCategory;
-
     // events listener
     private final MXEventListener mEventsListener = new MXEventListener() {
         @Override
@@ -171,6 +145,30 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             refreshDisplay();
         }
     };
+    private View mLoadingView;
+    // cryptography
+    private DeviceInfo mMyDeviceInfo;
+    private PreferenceCategory mCryptographyCategory;
+    private PreferenceCategory mCryptographyCategoryDivider;
+    // displayed emails
+    private PreferenceCategory mUserSettingsCategory;
+    private List<String> mDisplayedEmails = new ArrayList<>();
+    // displayed pushers
+    private PreferenceCategory mPushersSettingsDivider;
+    private PreferenceCategory mPushersSettingsCategory;
+    private List<Pusher> mDisplayedPushers = new ArrayList<>();
+    // devices: device IDs and device names
+    private PreferenceCategory mDevicesListSettingsCategory;
+    private PreferenceCategory mDevicesListSettingsCategoryDivider;
+    private List<DeviceInfo> mDevicesNameList = new ArrayList<>();
+    // displayed the ignored users list
+    private PreferenceCategory mIgnoredUserSettingsCategoryDivider;
+    private PreferenceCategory mIgnoredUserSettingsCategory;
+    // background sync category
+    private PreferenceCategory mBackgroundSyncCategory;
+    private EditTextPreference mSyncRequestTimeoutPreference;
+    private EditTextPreference mSyncRequestDelayPreference;
+    private PreferenceCategory mLabsCategory;
 
     // static constructor
     public static VectorSettingsPreferencesFragment newInstance(String matrixId) {
@@ -217,7 +215,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         final PreferenceManager preferenceManager = getPreferenceManager();
 
-        UserAvatarPreference avatarPreference = (UserAvatarPreference)preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference) preferenceManager.findPreference("matrixId");
         avatarPreference.setSession(mSession);
         avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -227,7 +225,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        EditTextPreference passwordPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
+        EditTextPreference passwordPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
         passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -237,37 +235,37 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
 
         // application version
-        EditTextPreference versionTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
+        EditTextPreference versionTextPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_version));
         if (null != versionTextPreference) {
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(getActivity()));
         }
 
         // olm version
-        EditTextPreference olmTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_olm_version));
+        EditTextPreference olmTextPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_olm_version));
         if (null != olmTextPreference) {
             olmTextPreference.setSummary(Matrix.getInstance(getActivity()).getDefaultSession().getCryptoVersion(getActivity(), false));
         }
 
         // user account
-        EditTextPreference accountIdTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_logged_in));
+        EditTextPreference accountIdTextPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_logged_in));
         if (null != accountIdTextPreference) {
             accountIdTextPreference.setSummary(mSession.getMyUserId());
         }
 
         // home server
-        EditTextPreference homeServerTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_home_server));
+        EditTextPreference homeServerTextPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_home_server));
         if (null != homeServerTextPreference) {
             homeServerTextPreference.setSummary(mSession.getHomeserverConfig().getHomeserverUri().toString());
         }
 
         // identity server
-        EditTextPreference identityServerTextPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_identity_server));
+        EditTextPreference identityServerTextPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_identity_server));
         if (null != identityServerTextPreference) {
             identityServerTextPreference.setSummary(mSession.getHomeserverConfig().getIdentityServerUri().toString());
         }
 
         // terms & conditions
-        EditTextPreference termConditionsPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_app_term_conditions));
+        EditTextPreference termConditionsPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_app_term_conditions));
 
         if (null != termConditionsPreference) {
             termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -280,7 +278,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // privacy policy
-        EditTextPreference privacyPreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_privacy_policy));
+        EditTextPreference privacyPreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_privacy_policy));
 
         if (null != termConditionsPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -293,7 +291,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // third party notice
-        EditTextPreference thirdPartyNotices = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_third_party_notices));
+        EditTextPreference thirdPartyNotices = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_third_party_notices));
 
         if (null != termConditionsPreference) {
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -306,7 +304,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // copyright
-        EditTextPreference copyrightNotices = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_copyright));
+        EditTextPreference copyrightNotices = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_copyright));
 
         if (null != termConditionsPreference) {
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -319,7 +317,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // clear cache
-        EditTextPreference clearCachePreference = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
+        EditTextPreference clearCachePreference = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_clear_cache));
 
         if (null != clearCachePreference) {
             clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -331,18 +329,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
+        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                onDisplayNameClick((null == newValue) ? null : ((String)newValue).trim());
+                onDisplayNameClick((null == newValue) ? null : ((String) newValue).trim());
                 return false;
             }
         });
 
         // push rules
-        for(String resourceText : mPushesRuleByResourceId.keySet()) {
+        for (String resourceText : mPushesRuleByResourceId.keySet()) {
             final CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
@@ -352,14 +350,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         // on some old android APIs,
                         // the callback is called even if there is no user interaction
                         // so the value will be checked to ensure there is really no update.
-                        onPushRuleClick(preference.getKey(), (boolean)newValueAsVoid);
+                        onPushRuleClick(preference.getKey(), (boolean) newValueAsVoid);
                         return true;
                     }
                 });
             }
         }
 
-        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
+        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_enable_background_sync));
 
         if (null != useBackgroundSyncPref) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
@@ -369,7 +367,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             useBackgroundSyncPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object aNewValue) {
-                    boolean newValue = (boolean)aNewValue;
+                    boolean newValue = (boolean) aNewValue;
 
                     if (newValue != gcmMgr.isBackgroundSyncAllowed()) {
                         gcmMgr.setBackgroundSyncAllowed(newValue);
@@ -379,11 +377,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
         }
-        
-        final CheckBoxPreference useGaPref = (CheckBoxPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
+
+        final CheckBoxPreference useGaPref = (CheckBoxPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.ga_use_settings));
 
         if (!GAHelper.isGAUseUpdatable()) {
-            PreferenceCategory otherCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
+            PreferenceCategory otherCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
             otherCategory.removePreference(useGaPref);
         } else {
             useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -411,16 +409,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        mUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
-        mPushersSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
-        mPushersSettingsDivider = (PreferenceCategory)getPreferenceManager().findPreference("notifications_targets_divider");
-        mIgnoredUserSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
-        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference("ignore_users_divider");
-        mDevicesListSettingsCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
-        mDevicesListSettingsCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
-        mCryptographyCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_cryptography));
-        mCryptographyCategoryDivider = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.cryptography_divider));
-        mLabsCategory = (PreferenceCategory)getPreferenceManager().findPreference("labs");
+        mUserSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
+        mPushersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
+        mPushersSettingsDivider = (PreferenceCategory) getPreferenceManager().findPreference("notifications_targets_divider");
+        mIgnoredUserSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
+        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference("ignore_users_divider");
+        mDevicesListSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
+        mDevicesListSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
+        mCryptographyCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_cryptography));
+        mCryptographyCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.cryptography_divider));
+        mLabsCategory = (PreferenceCategory) getPreferenceManager().findPreference("labs");
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -433,7 +431,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
                 intent.setData(uri);
 
-                if(null != getActivity()) {
+                if (null != getActivity()) {
                     getActivity().getApplicationContext().startActivity(intent);
                 }
 
@@ -450,11 +448,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // background sync management
-        mBackgroundSyncCategory = (PreferenceCategory)getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
-        mSyncRequestTimeoutPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
-        mSyncRequestDelayPreference = (EditTextPreference)getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
+        mBackgroundSyncCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
+        mSyncRequestTimeoutPreference = (EditTextPreference) getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
+        mSyncRequestDelayPreference = (EditTextPreference) getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
 
-        final CheckBoxPreference useCryptoPref = (CheckBoxPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
+        final CheckBoxPreference useCryptoPref = (CheckBoxPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end));
         final Preference cryptoIsEnabledPref = preferenceManager.findPreference(getActivity().getResources().getString(R.string.room_settings_labs_end_to_end_is_active));
 
         cryptoIsEnabledPref.setEnabled(false);
@@ -555,13 +553,15 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        View listView = view.findViewById(android.R.id.list);
 
-        if (null != listView) {
-            listView.setPadding(0, 0, 0, 0);
+        if (null != view) {
+            View listView = view.findViewById(android.R.id.list);
+
+            if (null != listView) {
+                listView.setPadding(0, 0, 0, 0);
+            }
         }
 
         return view;
@@ -663,6 +663,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Hide the loading view and refresh the preferences.
+     *
      * @param refresh true to refresh the display
      */
     private void hideLoadingView(boolean refresh) {
@@ -681,18 +682,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         PreferenceManager preferenceManager = getPreferenceManager();
 
         // refresh the avatar
-        UserAvatarPreference avatarPreference = (UserAvatarPreference)preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference) preferenceManager.findPreference("matrixId");
         avatarPreference.refreshAvatar();
         avatarPreference.setEnabled(isConnected);
 
         // refresh the display name
-        final EditTextPreference displaynamePref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
+        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setText(mSession.getMyUser().displayname);
         displaynamePref.setEnabled(isConnected);
 
         // change password
-        final EditTextPreference changePasswordPref = (EditTextPreference)preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
+        final EditTextPreference changePasswordPref = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_change_password));
         changePasswordPref.setEnabled(isConnected);
 
         // update the push rules
@@ -702,7 +703,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         GcmRegistrationManager gcmMgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
 
-        for(String resourceText : mPushesRuleByResourceId.keySet()) {
+        for (String resourceText : mPushesRuleByResourceId.keySet()) {
             CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
@@ -734,9 +735,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 alertDialog.setView(view);
                 alertDialog.setTitle(getString(R.string.settings_change_password));
 
-                final EditText oldPasswordText = (EditText)view.findViewById(R.id.change_password_old_pwd_text);
-                final EditText newPasswordText = (EditText)view.findViewById(R.id.change_password_new_pwd_text);
-                final EditText confirmNewPasswordText = (EditText)view.findViewById(R.id.change_password_confirm_new_pwd_text);
+                final EditText oldPasswordText = (EditText) view.findViewById(R.id.change_password_old_pwd_text);
+                final EditText newPasswordText = (EditText) view.findViewById(R.id.change_password_new_pwd_text);
+                final EditText confirmNewPasswordText = (EditText) view.findViewById(R.id.change_password_confirm_new_pwd_text);
 
                 // Setting Positive "Yes" Button
                 alertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -813,7 +814,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                 });
 
-                final Button saveButton =  dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                final Button saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 saveButton.setEnabled(false);
 
                 confirmNewPasswordText.addTextChangedListener(new TextWatcher() {
@@ -1034,61 +1035,64 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
+            if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
+                importKeys(data);
+            } else if (requestCode == VectorUtils.TAKE_IMAGE) {
+                Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
 
-            if (null != thumbnailUri) {
-                displayLoadingView();
+                if (null != thumbnailUri) {
+                    displayLoadingView();
 
-                ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
+                    ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
-                if (null != resource) {
-                    mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+                    if (null != resource) {
+                        mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
-                        @Override
-                        public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideLoadingView(false);
-                                }
-                            });
-                        }
+                            @Override
+                            public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideLoadingView(false);
+                                    }
+                                });
+                            }
 
-                        @Override
-                        public void onUploadComplete(final String uploadId, final String contentUri) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
-                                        @Override
-                                        public void onSuccess(Void info) {
-                                            onCommonDone(null);
-                                            refreshDisplay();
-                                        }
+                            @Override
+                            public void onUploadComplete(final String uploadId, final String contentUri) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
+                                            @Override
+                                            public void onSuccess(Void info) {
+                                                onCommonDone(null);
+                                                refreshDisplay();
+                                            }
 
-                                        @Override
-                                        public void onNetworkError(Exception e) {
-                                            onCommonDone(e.getLocalizedMessage());
-                                        }
+                                            @Override
+                                            public void onNetworkError(Exception e) {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
 
-                                        @Override
-                                        public void onMatrixError(MatrixError e) {
-                                            onCommonDone(e.getLocalizedMessage());
-                                        }
+                                            @Override
+                                            public void onMatrixError(MatrixError e) {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
 
-                                        @Override
-                                        public void onUnexpectedError(Exception e) {
-                                            onCommonDone(e.getLocalizedMessage());
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                                            @Override
+                                            public void onUnexpectedError(Exception e) {
+                                                onCommonDone(e.getLocalizedMessage());
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             }
         }
-
     }
 
 
@@ -1247,7 +1251,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if ((null != mDisplayedPushers) && (pushersList.size() == mDisplayedPushers.size())) {
             isNewList = !mDisplayedPushers.containsAll(pushersList);
         }
-        
+
         if (isNewList) {
             // remove the displayed one
             mPushersSettingsCategory.removeAll();
@@ -1263,7 +1267,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 // fix https://github.com/vector-im/vector-android/issues/192
                 // It appears that the server sends some invalid pushers where the device and the app are
                 // invalid. In all these cases the language is set to null.
-                if(null != pusher.lang) {
+                if (null != pusher.lang) {
                     preference.setTitle(pusher.deviceDisplayName);
                     preference.setSummary(pusher.appDisplayName);
                     preference.setKey(PUSHER_PREFERENCE_KEY_BASE + index);
@@ -1349,7 +1353,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            final String email = (null == newValue) ? null  : ((String) newValue).trim();
+                            final String email = (null == newValue) ? null : ((String) newValue).trim();
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -1369,6 +1373,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     /**
      * A request has been processed.
      * Display a toast if there is a an error message
+     *
      * @param errorMessage the error message
      */
     private void onCommonDone(final String errorMessage) {
@@ -1387,6 +1392,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Attempt to add a new email to the account
+     *
      * @param email the email to add.
      */
     private void addEmail(String email) {
@@ -1438,6 +1444,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Show an email validation dialog to warn the user tho valid his email link.
+     *
      * @param pid the used pid.
      */
     private void showEmailValidationDialog(final ThreePid pid) {
@@ -1511,6 +1518,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Convert a delay in seconds to string
+     *
      * @param seconds the delay in seconds
      * @return the text
      */
@@ -1553,7 +1561,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                     try {
                         newTimeOut = Integer.parseInt((String) newValue);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.getMessage());
                     }
 
@@ -1585,7 +1593,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
                     try {
                         newDelay = Integer.parseInt((String) newValue);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         Log.e(LOG_TAG, "## refreshBackgroundSyncPrefs : parseInt failed " + e.getMessage());
                     }
 
@@ -1618,7 +1626,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private void removeCryptographyPreference() {
         PreferenceScreen preferenceScreen;
-        if(null != (preferenceScreen = getPreferenceScreen())) {
+        if (null != (preferenceScreen = getPreferenceScreen())) {
             preferenceScreen.removePreference(mCryptographyCategory);
             preferenceScreen.removePreference(mCryptographyCategoryDivider);
         }
@@ -1626,6 +1634,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Build the cryptography preference section.
+     *
      * @param aMyDeviceInfo the device info
      */
     private void refreshCryptographyPreference(final DeviceInfo aMyDeviceInfo) {
@@ -1663,6 +1672,26 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                 });
             }
+
+            VectorCustomActionEditTextPreference exportPref = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_export_e2e_room_keys));
+
+            exportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    exportKeys();
+                    return true;
+                }
+            });
+
+            VectorCustomActionEditTextPreference importPref = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_import_e2e_room_keys));
+
+            importPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    importKeys();
+                    return true;
+                }
+            });
         }
 
         // crypto section: device key (fingerprint)
@@ -1711,7 +1740,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private void removeDevicesPreference() {
         PreferenceScreen preferenceScreen;
-        if(null != (preferenceScreen = getPreferenceScreen())) {
+        if (null != (preferenceScreen = getPreferenceScreen())) {
             preferenceScreen.removePreference(mDevicesListSettingsCategory);
             preferenceScreen.removePreference(mDevicesListSettingsCategoryDivider);
         }
@@ -1723,17 +1752,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * It can be any mobile device, as any browser.
      */
     private void refreshDevicesList() {
-        if((null != mSession) && (mSession.isCryptoEnabled()) && (!TextUtils.isEmpty(mSession.getCredentials().deviceId))) {
+        if ((null != mSession) && (mSession.isCryptoEnabled()) && (!TextUtils.isEmpty(mSession.getCredentials().deviceId))) {
             // display a spinner while loading the devices list
             if (0 == mDevicesListSettingsCategory.getPreferenceCount()) {
                 ProgressBarPreference preference = new ProgressBarPreference(getActivity());
                 mDevicesListSettingsCategory.addPreference(preference);
             }
-            
+
             mSession.getDevicesList(new ApiCallback<DevicesListResponse>() {
                 @Override
                 public void onSuccess(DevicesListResponse info) {
-                    if(0 == info.devices.size()) {
+                    if (0 == info.devices.size()) {
                         removeDevicesPreference();
                     } else {
                         buildDevicesSettings(info.devices);
@@ -1768,6 +1797,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Build the devices portion of the settings.<br>
      * Each row correspond to a device ID and its corresponding device name. Clicking on the row
      * display a dialog containing: the device ID, the device name and the "last seen" information.
+     *
      * @param aDeviceInfoList the list of the devices
      */
     private void buildDevicesSettings(List<DeviceInfo> aDeviceInfoList) {
@@ -1780,8 +1810,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             isNewList = !mDevicesNameList.containsAll(aDeviceInfoList);
         }
 
-        if(isNewList) {
-            int prefIndex=0;
+        if (isNewList) {
+            int prefIndex = 0;
             mDevicesNameList = aDeviceInfoList;
 
             // sort before display: most recent first
@@ -1797,7 +1827,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             for (DeviceInfo deviceInfo : mDevicesNameList) {
                 // set bold to distinguish current device ID
-                if((null!=myDeviceId) && myDeviceId.equals(deviceInfo.device_id)) {
+                if ((null != myDeviceId) && myDeviceId.equals(deviceInfo.device_id)) {
                     mMyDeviceInfo = deviceInfo;
                     typeFaceHighlight = Typeface.BOLD;
                 } else {
@@ -1807,7 +1837,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 // add the edit text preference
                 preference = new VectorCustomActionEditTextPreference(getActivity(), typeFaceHighlight);
 
-                if((null==deviceInfo.device_id) && (null==deviceInfo.display_name)) {
+                if ((null == deviceInfo.device_id) && (null == deviceInfo.display_name)) {
                     continue;
                 } else {
                     if (null != deviceInfo.device_id) {
@@ -1820,7 +1850,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     }
                 }
 
-                preference.setKey(DEVICES_PREFERENCE_KEY_BASE+prefIndex);
+                preference.setKey(DEVICES_PREFERENCE_KEY_BASE + prefIndex);
                 prefIndex++;
 
                 // onClick handler: display device details dialog
@@ -1843,6 +1873,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     /**
      * Display a dialog containing the device ID, the device name and the "last seen" information.<>
      * This dialog allow to delete the corresponding device (see {@link #displayDeviceDeletionDialog(DeviceInfo)})
+     *
      * @param aDeviceInfo the device information
      */
     private void displayDeviceDetailsDialog(DeviceInfo aDeviceInfo) {
@@ -1850,28 +1881,28 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View layout = inflater.inflate(R.layout.devices_details_settings, null);
 
-        if ((null!=aDeviceInfo) && (null!=builder)) {
+        if (null != aDeviceInfo) {
             //device ID
             TextView textView = (TextView) layout.findViewById(R.id.device_id);
             textView.setText(aDeviceInfo.device_id);
 
             // device name
             textView = (TextView) layout.findViewById(R.id.device_name);
-            String displayName = (TextUtils.isEmpty(aDeviceInfo.display_name))?LABEL_UNAVAILABLE_DATA:aDeviceInfo.display_name;
+            String displayName = (TextUtils.isEmpty(aDeviceInfo.display_name)) ? LABEL_UNAVAILABLE_DATA : aDeviceInfo.display_name;
             textView.setText(displayName);
 
             // last seen info
             textView = (TextView) layout.findViewById(R.id.device_last_seen);
-            if(!TextUtils.isEmpty(aDeviceInfo.last_seen_ip)) {
+            if (!TextUtils.isEmpty(aDeviceInfo.last_seen_ip)) {
                 String lastSeenIp = aDeviceInfo.last_seen_ip;
                 String lastSeenTime = LABEL_UNAVAILABLE_DATA;
 
-                if(null != getActivity()) {
-                    SimpleDateFormat dateFormatTime =  new SimpleDateFormat(getString(R.string.devices_details_time_format));
+                if (null != getActivity()) {
+                    SimpleDateFormat dateFormatTime = new SimpleDateFormat(getString(R.string.devices_details_time_format));
                     String time = dateFormatTime.format(new Date(aDeviceInfo.last_seen_ts));
 
-                    DateFormat dateFormat =  DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-                    lastSeenTime = dateFormat.format(new Date(aDeviceInfo.last_seen_ts)) +", "+time;
+                    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                    lastSeenTime = dateFormat.format(new Date(aDeviceInfo.last_seen_ts)) + ", " + time;
                 }
                 String lastSeenInfo = this.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime);
                 textView.setText(lastSeenInfo);
@@ -1923,8 +1954,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             builder.create().show();
         } else {
             Log.e(LOG_TAG, "## displayDeviceDetailsDialog(): sanity check failure");
-            if(null != getActivity())
-                CommonActivityUtils.displayToast(getActivity().getApplicationContext(),"DeviceDetailsDialog cannot be displayed.\nBad input parameters.");
+            if (null != getActivity())
+                CommonActivityUtils.displayToast(getActivity().getApplicationContext(), "DeviceDetailsDialog cannot be displayed.\nBad input parameters.");
         }
     }
 
@@ -1992,6 +2023,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     /**
      * Display a delete confirmation dialog to remove a device.<br>
      * The user is invited to enter his password to confirm the deletion.
+     *
      * @param aDeviceInfoToDelete device info
      */
     private void displayDeviceDeletionDialog(final DeviceInfo aDeviceInfoToDelete) {
@@ -1999,7 +2031,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View layout = inflater.inflate(R.layout.devices_settings_delete, null);
 
-        if ((null!=aDeviceInfoToDelete) && (null!=builder)) {
+        if (null != aDeviceInfoToDelete) {
             final EditText passwordEditText = (EditText) layout.findViewById(R.id.delete_password);
             builder.setIcon(android.R.drawable.ic_dialog_alert);
             builder.setTitle(R.string.devices_delete_dialog_title);
@@ -2008,8 +2040,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             builder.setPositiveButton(R.string.devices_delete_submit_button_label, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(null != mSession) {
-                        if(TextUtils.isEmpty(passwordEditText.toString())) {
+                    if (null != mSession) {
+                        if (TextUtils.isEmpty(passwordEditText.toString())) {
                             CommonActivityUtils.displayToast(VectorSettingsPreferencesFragment.this.getActivity().getApplicationContext(), "Password missing..");
                             return;
                         }
@@ -2067,5 +2099,199 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
     }
 
+    /**
+     * Manage the e2e keys export.
+     */
+    private void exportKeys() {
+        View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle(R.string.encryption_export_room_keys);
+        dialog.setView(dialogLayout);
 
+        final TextInputEditText passPhrase1EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final TextInputEditText passPhrase2EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
+        final TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        passPhrase1EditText.addTextChangedListener(textWatcher);
+        passPhrase2EditText.addTextChangedListener(textWatcher);
+
+        exportButton.setEnabled(false);
+
+        final AlertDialog exportDialog = dialog.show();
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String password = passPhrase1EditText.getText().toString();
+
+                displayLoadingView();
+
+                mSession.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytesArray) {
+                        try {
+                            ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
+                            String url = mSession.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
+                            stream.close();
+
+                            String path = CommonActivityUtils.saveMediaIntoDownloads(getActivity(), new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain");
+                            Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        hideLoadingView();
+                    }
+                });
+
+                exportDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * Manage the e2e keys import.
+     */
+    @SuppressLint("NewApi")
+    private void importKeys() {
+        Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        }
+        fileIntent.setType("*/*");
+        startActivityForResult(fileIntent, REQUEST_E2E_FILE_REQUEST_CODE);
+    }
+
+    /**
+     * Manage the e2e keys import.
+     *
+     * @param intent the intent result
+     */
+    private void importKeys(Intent intent) {
+        // sanity check
+        if (null == intent) {
+            return;
+        }
+
+        ArrayList<SharedDataItem> sharedDataItems = new ArrayList<>(SharedDataItem.listSharedDataItems(intent));
+
+        if (sharedDataItems.size() > 0) {
+            final SharedDataItem sharedDataItem = sharedDataItems.get(0);
+            View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.dialog_import_e2e_keys, null);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.encryption_import_room_keys);
+            dialog.setView(dialogLayout);
+
+            final TextInputEditText passPhraseEditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+            final Button importButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_import_button);
+
+            passPhraseEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    importButton.setEnabled(!TextUtils.isEmpty(passPhraseEditText.getText()));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            importButton.setEnabled(false);
+
+            final AlertDialog importDialog = dialog.show();
+
+            importButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String password = passPhraseEditText.getText().toString();
+                    final ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), sharedDataItem.getUri(), sharedDataItem.getMimeType(getActivity()));
+
+                    byte[] data;
+
+                    try {
+                        data = new byte[resource.mContentStream.available()];
+                        resource.mContentStream.read(data);
+                        resource.mContentStream.close();
+                    } catch (Exception e) {
+                        try {
+                            resource.mContentStream.close();
+                        } catch (Exception e2) {
+                            Log.e(LOG_TAG, "## importKeys() : " + e2.getMessage());
+                        }
+                        Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    displayLoadingView();
+
+                    mSession.getCrypto().importRoomKeys(data, password, new ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void info) {
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            hideLoadingView();
+                        }
+
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            hideLoadingView();
+                        }
+                    });
+
+                    importDialog.dismiss();
+                }
+            });
+        }
+    }
 }
