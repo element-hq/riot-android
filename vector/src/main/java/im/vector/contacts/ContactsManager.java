@@ -131,10 +131,20 @@ public class ContactsManager {
 
         @Override
         public void onFailure(String accountId) {
+            // ignore the current response because the request has been cancelled
+            if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
+                return;
+            }
+
             mIsRetrievingPids = false;
             mArePidsRetrieved = false;
             mRetryPIDsRetrievalOnConnect = true;
             Log.d(LOG_TAG, "## fail to retrieve the PIDs");
+
+            // warn that the current request failed.
+            // Thus, if the listeners display a spinner (or so), it should be hidden.
+            onPIDsUpdate();
         }
 
         @Override
