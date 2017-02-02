@@ -436,47 +436,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Check if some entries use the same matrix ids.
-     * If some use the same, prefer the room member one.
-     */
-    private void checkDuplicatedMatrixIds() {
-
-        if ((mRoomContactsSectionPosition >= 0) && (mLocalContactsSectionPosition >= 0)) {
-            // if several entries have the same matrix id.
-            // keep the dedicated contact book entry over the room participants
-            ArrayList<String> matrixUserIds = new ArrayList<>();
-
-            List<ParticipantAdapterItem> contactParticipants = mParticipantsListsList.get(mLocalContactsSectionPosition);
-
-            for (ParticipantAdapterItem item : contactParticipants) {
-                if (!TextUtils.isEmpty(item.mUserId)) {
-                    matrixUserIds.add(item.mUserId);
-                }
-            }
-
-            ArrayList<ParticipantAdapterItem> itemsToRemove = new ArrayList<>();
-            List<ParticipantAdapterItem> roomParticipants = mParticipantsListsList.get(mRoomContactsSectionPosition);
-            for (ParticipantAdapterItem item : roomParticipants) {
-                // if the entry is duplicated and comes from a contact
-                if (matrixUserIds.contains(item.mUserId)) {
-                    // add it to items list that will be removed
-                    itemsToRemove.add(item);
-                }
-            }
-
-            if (itemsToRemove.size() > 0) {
-                roomParticipants.removeAll(itemsToRemove);
-
-                if (roomParticipants.size() == 0) {
-                    mParticipantsListsList.remove(roomParticipants);
-                    mRoomContactsSectionPosition = -1;
-                    // assume that the participants are displayed after the contacts
-                }
-            }
-        }
-    }
-
-    /**
      * Defines a set of participant items to hide.
      *
      * @param itemsToHide the set to hide
@@ -690,9 +649,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             posCount++;
         }
 
-        // keep contacts over the room participants
-        checkDuplicatedMatrixIds();
-
         if (null != searchListener) {
             int length = 0;
 
@@ -853,7 +809,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         });
 
         // matrix user checkbox
-        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.contacts_filter_checkbox);
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contacts_filter_checkbox);
         checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
