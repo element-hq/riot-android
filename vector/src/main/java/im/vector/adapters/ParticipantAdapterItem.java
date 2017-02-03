@@ -257,7 +257,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         }
 
         // test user id
-        if (!TextUtils.isEmpty(mUserId) && mUserId.startsWith("@" + prefix)) {
+        if (!TextUtils.isEmpty(mUserId) && mUserId.startsWith((prefix.startsWith("@") ? "" : "@") + prefix)) {
             return true;
         }
 
