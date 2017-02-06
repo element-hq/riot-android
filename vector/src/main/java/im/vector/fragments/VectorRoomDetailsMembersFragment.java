@@ -71,7 +71,9 @@ import im.vector.adapters.VectorRoomDetailsMembersAdapter;
 import im.vector.util.VectorUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -108,7 +110,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
     private TimerTask mRefreshTimerTask;
 
     // list the up to date presence to avoid refreshing it twice
-    private final ArrayList<String> mUpdatedPresenceUserIds = new ArrayList<>();
+    private final List<String> mUpdatedPresenceUserIds = new ArrayList<>();
 
     // global events listener
     private final MXEventListener mEventListener = new MXEventListener() {
@@ -657,7 +659,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
      * @param userIds the user ids list
      * @param index   the start index
      */
-    private void kickUsers(final ArrayList<String> userIds, final int index) {
+    private void kickUsers(final List<String> userIds, final int index) {
         if (index >= userIds.size()) {
             // the kick requests are performed in a dedicated thread
             // so switch to the UI thread at the end.
@@ -844,10 +846,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ArrayList<String> userIds = new ArrayList<>();
-                                        userIds.add(participantItem.mUserId);
-
-                                        kickUsers(userIds, 0);
+                                        kickUsers(Arrays.asList(participantItem.mUserId), 0);
                                     }
                                 });
                             }
@@ -986,9 +985,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(userId).matches()) {
                     mRoom.inviteByEmail(userId, mDefaultCallBack);
                 } else {
-                    ArrayList<String> userIDs = new ArrayList<>();
-                    userIDs.add(userId);
-                    mRoom.invite(userIDs, mDefaultCallBack);
+                    mRoom.invite(Arrays.asList(userId), mDefaultCallBack);
                 }
             }
         } else if ((requestCode == GET_MENTION_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
