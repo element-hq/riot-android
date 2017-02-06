@@ -2029,7 +2029,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void onRoomTypings() {
         mLatestTypingMessage = null;
 
-        ArrayList<String> typingUsers = mRoom.getTypingUsers();
+        List<String> typingUsers = mRoom.getTypingUsers();
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             String myUserId = mSession.getMyUserId();
