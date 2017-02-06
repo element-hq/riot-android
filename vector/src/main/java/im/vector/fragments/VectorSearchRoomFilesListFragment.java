@@ -43,6 +43,9 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
     // set to false when there is no more available message in the room history
     private boolean mCanPaginateBack = true;
 
+    // crypto management
+    private final String mTimeLineId = System.currentTimeMillis() + "";
+
     /**
      * static constructor
      * @param matrixId the session Id.
@@ -80,6 +83,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
         mCanPaginateBack = true;
         mRoom.cancelRemoteHistoryRequest();
         mNextBatch = mRoom.getLiveState().getToken();
+        mSession.getDataHandler().resetReplayAttackCheckInTimeline(mTimeLineId);
     }
 
     @Override
@@ -337,6 +341,13 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                         mCanPaginateBack = false;
                         callback.onSuccess(events);
                     } else {
+                        // decrypt the encrypted events
+                        if (mRoom.isEncrypted()) {
+                            for (Event event : eventsChunk.chunk) {
+                                mSession.getCrypto().decryptEvent(event, mTimeLineId);
+                            }
+                        }
+
                         // append the retrieved one
                         appendEvents(events, eventsChunk.chunk);
                         mNextBatch = eventsChunk.end;
