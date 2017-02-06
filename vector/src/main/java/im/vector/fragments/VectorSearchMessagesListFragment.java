@@ -180,7 +180,7 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         // ensure that the list don't try to fill itself
         // if the search is not allowed with the provided pattern.
         if (!allowSearch(mPattern)) {
-            android.util.Log.e(LOG_TAG, "## onInitialMessagesLoaded() : history filling is cancelled");
+            Log.e(LOG_TAG, "## onInitialMessagesLoaded() : history filling is cancelled");
         } else {
             super.onInitialMessagesLoaded();
         }
