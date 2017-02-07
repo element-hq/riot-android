@@ -657,11 +657,11 @@ public class VectorUtils {
     /**
      * Provide the application version
      *
-     * @param activity the activity
+     * @param context the application context
      * @return the version. an empty string is not found.
      */
-    public static String getApplicationVersion(final Activity activity) {
-        return im.vector.Matrix.getInstance(activity).getVersion(false);
+    public static String getApplicationVersion(final Context context) {
+        return im.vector.Matrix.getInstance(context).getVersion(false);
     }
 
     /**
@@ -716,13 +716,13 @@ public class VectorUtils {
     /**
      * Open a webview above the current activity.
      *
-     * @param activity the activity
-     * @param url      the url to open
+     * @param context the application context
+     * @param url     the url to open
      */
-    private static void displayInWebview(final Activity activity, String url) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+    private static void displayInWebview(final Context context, String url) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-        WebView wv = new WebView(activity);
+        WebView wv = new WebView(context);
         wv.loadUrl(url);
         wv.setWebViewClient(new WebViewClient() {
             @Override
@@ -741,28 +741,28 @@ public class VectorUtils {
     /**
      * Display the term and conditions.
      *
-     * @param activity the activity
+     * @param context the application context
      */
-    public static void displayAppTac(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/tac");
+    public static void displayAppTac(final Context context) {
+        displayInWebview(context, "https://riot.im/tac");
     }
 
     /**
      * Display the copyright.
      *
-     * @param activity the activity
+     * @param context the application context
      */
-    public static void displayAppCopyright(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/copyright");
+    public static void displayAppCopyright(final Context context) {
+        displayInWebview(context, "https://riot.im/copyright");
     }
 
     /**
      * Display the privacy policy.
      *
-     * @param activity the activity
+     * @param context the application context
      */
-    public static void displayAppPrivacyPolicy(final Activity activity) {
-        displayInWebview(activity, "https://riot.im/privacy");
+    public static void displayAppPrivacyPolicy(final Context context) {
+        displayInWebview(context, "https://riot.im/privacy");
     }
 
     //==============================================================================================================
