@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,14 +34,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.ParcelableSpan;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
 import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -203,6 +202,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
+    private MenuItem mSearchInRoomMenuItem;
 
     // medias sending helper
     private VectorRoomMediasSender mVectorRoomMediasSender;
@@ -1137,6 +1137,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+            mSearchInRoomMenuItem =  menu.findItem(R.id.ic_action_search_in_room);
 
             // hide / show the unsent / resend all entries.
             refreshNotificationsArea();
@@ -1994,6 +1995,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
         if (null != mResendDeleteMenuItem) {
             mResendDeleteMenuItem.setVisible(hasUnsentEvent);
+        }
+
+        if (null != mSearchInRoomMenuItem) {
+            // the server search does not work on encrypted rooms.
+            mSearchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
         }
     }
 

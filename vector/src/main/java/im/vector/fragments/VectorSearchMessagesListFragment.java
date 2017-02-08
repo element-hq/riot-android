@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,8 @@ package im.vector.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
@@ -173,6 +176,17 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         return !TextUtils.isEmpty(pattern);
     }
 
+    @Override
+    public void onInitialMessagesLoaded() {
+        // ensure that the list don't try to fill itself
+        // if the search is not allowed with the provided pattern.
+        if (!allowSearch(mPattern)) {
+            Log.e(LOG_TAG, "## onInitialMessagesLoaded() : history filling is cancelled");
+        } else {
+            super.onInitialMessagesLoaded();
+        }
+    }
+
     /**
      * Update the searched pattern.
      * @param pattern the pattern to find out. null to disable the search mode
@@ -217,14 +231,19 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
         } else {
             // the search on this pattern is just ended
             if (TextUtils.equals(mPattern, pattern)) {
-                for (OnSearchResultListener listener : mSearchListeners) {
-                    try {
-                        listener.onSearchSucceed(mAdapter.getCount());
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (OnSearchResultListener listener : mSearchListeners) {
+                            try {
+                                listener.onSearchSucceed(mAdapter.getCount());
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## searchPattern() : failed " + e.getMessage());
+                            }
+                        }
+                        mSearchListeners.clear();
                     }
-                }
-                mSearchListeners.clear();
+                });
             } else {
                 // start a new search
                 mAdapter.clear();
@@ -246,10 +265,10 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             mIsInitialSyncing = false;
                             mMessageListView.setOnScrollListener(mScrollListener);
                             mMessageListView.setAdapter(mAdapter);
+                            mMessageListView.setVisibility(View.VISIBLE);
 
                             // scroll to the bottom
                             scrollToBottom();
-                            mMessageListView.setVisibility(View.VISIBLE);
 
                             for (OnSearchResultListener listener : mSearchListeners) {
                                 try {
@@ -260,6 +279,10 @@ public class VectorSearchMessagesListFragment extends VectorMessageListFragment 
                             }
                             mSearchListeners.clear();
                             mSearchingPattern = null;
+
+                            // trigger a back pagination to fill the screen
+                            // the request could contain only a few items.
+                            backPaginate(true);
                         }
                     }
 
