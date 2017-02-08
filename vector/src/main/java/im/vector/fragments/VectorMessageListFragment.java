@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -465,10 +466,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             .setPositiveButton(R.string.ok,
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            if (event.isUndeliverable()) {
+                                            if (event.isUndeliverable() || event.isUnkownDevice()) {
                                                 // delete from the store
-                                                mSession.getDataHandler().getStore().deleteEvent(event);
-                                                mSession.getDataHandler().getStore().commit();
+                                                mSession.getDataHandler().deleteRoomEvent(event);
 
                                                 // remove from the adapter
                                                 mAdapter.removeEventById(event.eventId);

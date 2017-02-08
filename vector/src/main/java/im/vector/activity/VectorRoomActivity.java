@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +42,8 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
+
+import org.matrix.androidsdk.crypto.MXCryptoError;
 import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -1068,6 +1071,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         refreshNotificationsArea();
     }
 
+    @Override
+    public void onUnknownDevices(Event event, MXCryptoError error) {
+        refreshNotificationsArea();
+    }
+
     //================================================================================
     // IOnScrollListener
     //================================================================================
@@ -1897,15 +1905,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             textColor = R.color.vector_fuchsia_color;
             text = new SpannableString(getResources().getString(R.string.room_offline_notification));
         } else {
-            Collection<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
-            if ((null != undeliveredEvents) && (undeliveredEvents.size() > 0)) {
+            List<Event> undeliveredEvents = mSession.getDataHandler().getStore().getUndeliverableEvents(mRoom.getRoomId());
+            List<Event> unknownDeviceEvents = mSession.getDataHandler().getStore().getUnknownDeviceEvents(mRoom.getRoomId());
+
+            boolean hasUndeliverableEvents = (null != undeliveredEvents) && (undeliveredEvents.size() > 0);
+            boolean hasUnknownDeviceEvents = (null != unknownDeviceEvents) && (unknownDeviceEvents.size() > 0);
+
+            if (hasUndeliverableEvents || hasUnknownDeviceEvents) {
                 hasUnsentEvent = true;
                 isAreaVisible = true;
                 iconId = R.drawable.error;
 
                 String cancelAll = getResources().getString(R.string.room_prompt_cancel);
                 String resendAll = getResources().getString(R.string.room_prompt_resend);
-                String message = getResources().getString(R.string.room_unsent_messages_notification, resendAll, cancelAll);
+                String message = getResources().getString(hasUnknownDeviceEvents ? R.string.room_unknown_devices_messages_notification : R.string.room_unsent_messages_notification, resendAll, cancelAll);
 
                 int cancelAllPos = message.indexOf(cancelAll);
                 int resendAllPos = message.indexOf(resendAll);
