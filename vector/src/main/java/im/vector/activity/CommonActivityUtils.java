@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1783,7 +1784,7 @@ public class CommonActivityUtils {
      * Display the device verification warning
      * @param deviceInfo the device info
      */
-    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, final ArrayAdapter<T> adapter, Activity activiy) {
+    static public <T> void displayDeviceVerificationDialog(final MXDeviceInfo deviceInfo, final String sender, final MXSession session, Activity activiy, final ApiCallback<Void> callback) {
 
         // sanity check
         if((null == deviceInfo) || (null==sender) || (null==session)) {
@@ -1813,33 +1814,7 @@ public class CommonActivityUtils {
         builder.setPositiveButton(R.string.encryption_information_verify_key_match, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, new ApiCallback<Void>() {
-                    private void onDone() {
-                        if(null != adapter) {
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(Void info) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onNetworkError(Exception e) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onMatrixError(MatrixError e) {
-                        onDone();
-                    }
-
-                    @Override
-                    public void onUnexpectedError(Exception e) {
-                        onDone();
-                    }
-                });
+                session.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, deviceInfo.deviceId, sender, callback);
             }
         });
 

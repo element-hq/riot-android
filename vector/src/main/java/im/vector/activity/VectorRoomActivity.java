@@ -21,6 +21,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,8 +32,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.ParcelableSpan;
 import android.text.SpannableString;
@@ -44,6 +47,8 @@ import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
 
 import org.matrix.androidsdk.crypto.MXCryptoError;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -90,7 +95,9 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.ViewedRoomTracker;
+import im.vector.fragments.AccountsSelectionDialogFragment;
 import im.vector.fragments.VectorMessageListFragment;
+import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.services.EventStreamService;
 import im.vector.util.NotificationUtils;
 import im.vector.util.ResourceUtils;
@@ -1071,9 +1078,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         refreshNotificationsArea();
     }
 
+    private static final String TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG =  "ActionBarActivity.TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG";
+
     @Override
     public void onUnknownDevices(Event event, MXCryptoError error) {
         refreshNotificationsArea();
+
+        FragmentManager fm = this.getSupportFragmentManager();
+
+        VectorUnknownDevicesFragment fragment = (VectorUnknownDevicesFragment) fm.findFragmentByTag(TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
+        if (fragment != null) {
+            fragment.dismissAllowingStateLoss();
+        }
+
+        fragment = VectorUnknownDevicesFragment.newInstance(mSession.getMyUserId(), (MXUsersDevicesMap<MXDeviceInfo>)error.mExceptionData);
+        fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
     }
 
     //================================================================================

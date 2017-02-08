@@ -368,7 +368,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, mAdapter, getActivity());
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
                         }
                     });
 
@@ -392,7 +392,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                 } else { // BLOCKED
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, mAdapter, getActivity());
+                            CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
                         }
                     });
 
