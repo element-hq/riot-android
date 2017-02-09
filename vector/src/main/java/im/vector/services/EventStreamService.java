@@ -1038,7 +1038,11 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "clearNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId);
 
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancelAll();
+        try {
+            nm.cancelAll();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## clearNotification() failed " + e.getMessage());
+        }
 
         // reset the identifiers
         mNotificationSessionId = null;
