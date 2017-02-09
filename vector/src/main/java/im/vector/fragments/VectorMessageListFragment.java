@@ -338,9 +338,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
 
             textView = (TextView)layout.findViewById(R.id.encrypted_info_verification);
 
-            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
+            if (deviceInfo.isUnknown() || deviceInfo.isUnverified()) {
                 textView.setText(getActivity().getString(R.string.encryption_information_not_verified));
-            } else  if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+            } else  if (deviceInfo.isVerified()) {
                 textView.setText(getActivity().getString(R.string.encryption_information_verified));
             } else {
                 textView.setText(getActivity().getString(R.string.encryption_information_blocked));
@@ -365,7 +365,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
         // the current id cannot be blocked, verified...
         if (!TextUtils.equals(encryptedEventContent.device_id, mSession.getCredentials().deviceId)) {
             if ((null == event.getCryptoError()) && (null != deviceInfo)) {
-                if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED) {
+                if (deviceInfo.isUnverified() || deviceInfo.isUnknown()) {
                     builder.setNegativeButton(R.string.encryption_information_verify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             CommonActivityUtils.displayDeviceVerificationDialog(deviceInfo, event.getSender(), mSession, getActivity(), mDeviceVerificationCallback);
@@ -377,7 +377,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment impleme
                             mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);
                         }
                     });
-                } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                } else if (deviceInfo.isVerified()) {
                     builder.setNegativeButton(R.string.encryption_information_unverify, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceInfo.deviceId, event.getSender(), mDeviceVerificationCallback);

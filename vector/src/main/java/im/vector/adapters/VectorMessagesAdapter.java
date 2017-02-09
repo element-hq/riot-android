@@ -383,9 +383,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
                         if (null != deviceInfo) {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
-                            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                            if (deviceInfo.isVerified()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
-                            } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
+                            } else if (deviceInfo.isBlocked()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
                             } else {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_warning);
