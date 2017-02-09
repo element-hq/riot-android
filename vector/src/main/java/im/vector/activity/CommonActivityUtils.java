@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +44,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -54,27 +54,17 @@ import org.matrix.androidsdk.MXDataHandler;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
-import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomPreviewData;
 import org.matrix.androidsdk.data.RoomSummary;
+import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
-import im.vector.VectorApp;
-import im.vector.Matrix;
-import im.vector.MyPresenceManager;
-import im.vector.R;
-import im.vector.adapters.VectorRoomsSelectionAdapter;
-import im.vector.contacts.ContactsManager;
-import im.vector.contacts.PIDsRetriever;
-import im.vector.fragments.AccountsSelectionDialogFragment;
-import im.vector.ga.GAHelper;
-import im.vector.gcm.GcmRegistrationManager;
-import im.vector.services.EventStreamService;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,6 +78,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import im.vector.Matrix;
+import im.vector.MyPresenceManager;
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.adapters.VectorRoomsSelectionAdapter;
+import im.vector.contacts.ContactsManager;
+import im.vector.contacts.PIDsRetriever;
+import im.vector.fragments.AccountsSelectionDialogFragment;
+import im.vector.ga.GAHelper;
+import im.vector.gcm.GcmRegistrationManager;
+import im.vector.services.EventStreamService;
 import im.vector.util.VectorUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -584,7 +585,7 @@ public class CommonActivityUtils {
             final List<String> finalPermissionsListToBeGranted;
             boolean isRequestPermissionRequired = false;
             Resources resource = aCallingActivity.getResources();
-            String explanationMessage;
+            String explanationMessage = "";
             String permissionType;
 
             // retrieve the permissions to be granted according to the request code bit map
@@ -624,22 +625,24 @@ public class CommonActivityUtils {
             // if some permissions were already denied: display a dialog to the user before asking again..
             if(!permissionListAlreadyDenied.isEmpty()) {
                 if(null != resource) {
-                    explanationMessage = resource.getString(R.string.permissions_rationale_msg_title);
-
                     // add the user info text to be displayed to explain why the permission is required by the App
-                    for(String permissionAlreadyDenied : permissionListAlreadyDenied) {
-                        if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
-                            explanationMessage += "\n\n" + resource.getString(R.string.permissions_rationale_msg_camera, Matrix.getApplicationName());
-                        } else if(Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_record_audio, Matrix.getApplicationName());
-                        } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_storage, Matrix.getApplicationName());
-                        } else if(Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)){
-                            explanationMessage += "\n\n"+resource.getString(R.string.permissions_rationale_msg_contacts);
-                        } else {
-                            Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
+                    if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
+                            && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                        explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_and_audio);
+                    } else {
+                        for (String permissionAlreadyDenied : permissionListAlreadyDenied) {
+                            if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
+                            } else if (Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)) {
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
+                            } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)) {
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_storage);
+                            } else if (Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)) {
+                                explanationMessage += resource.getString(R.string.permissions_rationale_msg_contacts);
+                            } else {
+                                Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
+                            }
                         }
-
                     }
                 } else { // fall back if resource is null.. very unlikely
                     explanationMessage = "You are about to be asked to grant permissions..\n\n";
@@ -648,12 +651,11 @@ public class CommonActivityUtils {
                 // display the dialog with the info text
                 AlertDialog.Builder permissionsInfoDialog = new AlertDialog.Builder(aCallingActivity);
                 if(null != resource) {
-                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
+                    permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
                 }
 
                 permissionsInfoDialog.setMessage(explanationMessage);
-                permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
-                permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!finalPermissionsListToBeGranted.isEmpty()) {
@@ -682,10 +684,10 @@ public class CommonActivityUtils {
                         permissionsInfoDialog.setIcon(android.R.drawable.ic_dialog_info);
 
                         if (null != resource) {
-                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title, Matrix.getApplicationName()));
+                            permissionsInfoDialog.setTitle(resource.getString(R.string.permissions_rationale_popup_title));
                         }
 
-                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids, Matrix.getApplicationName()));
+                        permissionsInfoDialog.setMessage(resource.getString(R.string.permissions_msg_contacts_warning_other_androids));
 
                         // gives the contacts book access
                         permissionsInfoDialog.setPositiveButton(aCallingActivity.getString(R.string.yes), new DialogInterface.OnClickListener() {
