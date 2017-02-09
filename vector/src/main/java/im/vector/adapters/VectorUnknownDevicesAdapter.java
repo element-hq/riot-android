@@ -15,7 +15,9 @@
  */
 
 package im.vector.adapters;
+
 import android.content.Context;
+
 import org.matrix.androidsdk.util.Log;
 
 import android.util.Pair;
@@ -44,12 +46,14 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
     public interface IVerificationAdapterListener {
         /**
          * Verify device button handler
+         *
          * @param aDeviceInfo device info
          */
         void OnVerifyDeviceClick(MXDeviceInfo aDeviceInfo);
 
         /**
          * Block device button handler
+         *
          * @param aDeviceInfo device info
          */
         void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo);
@@ -66,7 +70,8 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
 
     /**
      * Constructor
-     * @param aContext the context
+     *
+     * @param aContext       the context
      * @param unknownDevices the unknown devices list
      */
     public VectorUnknownDevicesAdapter(Context aContext, List<Pair<String, List<MXDeviceInfo>>> unknownDevices) {
@@ -78,14 +83,16 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the listener
+     *
      * @param listener the listener
      */
-    public void setListener(IVerificationAdapterListener listener)  {
+    public void setListener(IVerificationAdapterListener listener) {
         mListener = listener;
     }
 
     /**
      * Compute the name of the group according to its position.
+     *
      * @param groupPosition index of the section
      * @return group title corresponding to the index
      */
@@ -97,6 +104,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
 
         return mUnknownDevicesList.get(groupPosition).first;
     }
+
     @Override
     public boolean hasStableIds() {
         return false;
@@ -143,7 +151,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(R.layout.adapter_item_vector_unknown_devices_header, null);
         }
 
-        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
         if (null != sectionNameTxtView) {
             sectionNameTxtView.setText(getGroupTitle(groupPosition));
@@ -177,7 +185,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
         final Button buttonBlock = (Button) convertView.findViewById(R.id.button_block);
         final TextView deviceNameTextView = (TextView) convertView.findViewById(R.id.device_name);
         final TextView deviceIdTextView = (TextView) convertView.findViewById(R.id.device_id);
-        final ImageView e2eIconView = (ImageView)convertView.findViewById(R.id.device_e2e_icon);
+        final ImageView e2eIconView = (ImageView) convertView.findViewById(R.id.device_e2e_icon);
 
         buttonVerify.setTransformationMethod(null);
         buttonBlock.setTransformationMethod(null);
@@ -187,7 +195,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
         deviceIdTextView.setText(deviceItem.deviceId);
 
         // display e2e icon status
-        switch(deviceItem.mVerified) {
+        switch (deviceItem.mVerified) {
             case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
                 e2eIconView.setImageResource(R.drawable.e2e_verified);
                 break;
@@ -202,7 +210,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
         }
 
         // display buttons label according to verification status
-        switch(deviceItem.mVerified) {
+        switch (deviceItem.mVerified) {
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
                 buttonVerify.setText(R.string.encryption_information_verify);
                 buttonBlock.setText(R.string.encryption_information_block);

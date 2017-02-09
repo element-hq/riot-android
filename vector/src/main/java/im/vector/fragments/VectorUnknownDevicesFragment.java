@@ -78,6 +78,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
     /**
      * Convert a MXUsersDevicesMap to a list of List
+     *
      * @return the list of list
      */
     private static List<Pair<String, List<MXDeviceInfo>>> getDevicesList() {
@@ -85,11 +86,11 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
         List<String> userIds = mUnknownDevicesMap.getUserIds();
 
-        for(String userId : userIds) {
+        for (String userId : userIds) {
             List<MXDeviceInfo> deviceInfos = new ArrayList<>();
             List<String> deviceIds = mUnknownDevicesMap.getUserDeviceIds(userId);
 
-            for(String deviceId : deviceIds) {
+            for (String deviceId : deviceIds) {
                 deviceInfos.add(mUnknownDevicesMap.getObject(deviceId, userId));
             }
             res.add(new Pair<>(userId, deviceInfos));
@@ -105,7 +106,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View v = inflater.inflate(R.layout.dialog_unknown_devices, null);
-        mExpandableListView = (ExpandableListView)v.findViewById(R.id.unknown_devices_list_view);
+        mExpandableListView = (ExpandableListView) v.findViewById(R.id.unknown_devices_list_view);
 
         final List<Pair<String, List<MXDeviceInfo>>> devicesList = getDevicesList();
         final VectorUnknownDevicesAdapter adapter = new VectorUnknownDevicesAdapter(getContext(), devicesList);
@@ -118,6 +119,9 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 adapter.notifyDataSetChanged();
             }
 
+            /**
+             * Common callback
+             */
             final ApiCallback<Void> mCallback = new ApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
@@ -172,19 +176,18 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
 
         mExpandableListView.setGroupIndicator(null);
         mExpandableListView.setAdapter(adapter);
+        // expand each group by default
         mExpandableListView.post(new Runnable() {
             @Override
             public void run() {
                 int count = adapter.getGroupCount();
 
-                for(int i = 0; i < count; i++) {
+                for (int i = 0; i < count; i++) {
                     mExpandableListView.expandGroup(i);
                 }
             }
         });
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
         builder.setView(v)
                 .setTitle(R.string.unknown_devices_alert_title)
                 // Add action buttons
@@ -193,15 +196,17 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         List<MXDeviceInfo> dis = new ArrayList<>();
 
-                        for(Pair<String, List<MXDeviceInfo>> item :  devicesList) {
+                        for (Pair<String, List<MXDeviceInfo>> item : devicesList) {
                             dis.addAll(item.second);
                         }
 
                         mSession.getCrypto().setDevicesKnown(dis, null);
+                        mUnknownDevicesMap = null;
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        mUnknownDevicesMap = null;
                     }
                 });
         return builder.create();
