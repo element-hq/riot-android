@@ -25,6 +25,8 @@ import android.text.TextUtils;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 
+import java.util.ArrayList;
+
 import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.activity.CommonActivityUtils;
@@ -32,8 +34,6 @@ import im.vector.fragments.VectorSearchMessagesListFragment;
 import im.vector.fragments.VectorSearchPeopleListFragment;
 import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.VectorSearchRoomsListFragment;
-
-import java.util.ArrayList;
 
 /**
  * Unified search pager adapter
@@ -268,5 +268,14 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      */
     public boolean isSearchInFilesFragment(int position) {
         return (null != mTabTitles) && (R.string.tab_title_search_files == mTabTitles.get(position));
+    }
+
+    /**
+     * Tells if the current fragment at the provided position is the people search one.
+     * @param position the position
+     * @return true if it is the expected one.
+     */
+    public boolean isSearchInPeoplesFragment(int position) {
+        return (null != mTabTitles) && (R.string.tab_title_search_people == mTabTitles.get(position));
     }
 }

@@ -31,22 +31,21 @@ import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
-import org.matrix.androidsdk.util.Log;
-
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
-
-import im.vector.Matrix;
-import im.vector.VectorApp;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
+import im.vector.Matrix;
+import im.vector.VectorApp;
 
 /**
  * Manage the local contacts
@@ -587,7 +586,7 @@ public class ContactsManager {
      * @param context the context
      * @return true if it was granted.
      */
-    private static boolean isContactBookAccessAllowed(Context context) {
+    public static boolean isContactBookAccessAllowed(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS));
         } else {

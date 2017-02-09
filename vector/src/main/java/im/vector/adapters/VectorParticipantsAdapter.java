@@ -246,6 +246,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         if (!pattern.equals(mPattern) || TextUtils.isEmpty(mPattern)) {
             mPattern = pattern;
+            if (TextUtils.isEmpty(mPattern)) {
+                mShowMatrixUserOnly = false;
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(KEY_FILTER_MATRIX_USERS_ONLY, mShowMatrixUserOnly);
+                editor.apply();
+            }
             refresh(firstEntry, searchListener);
         } else if (null != searchListener) {
             int displayedItemsCount = 0;
@@ -420,14 +427,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         for (ParticipantAdapterItem item : contactsParticipants) {
             gotUpdates |= item.retrievePids();
-        }
-
-        // Check whether we need to remove the contact section
-        if (contactsParticipants.isEmpty() && mLocalContactsSectionPosition != -1) {
-            mParticipantsListsList.remove(mLocalContactsSectionPosition);
-            mLocalContactsSectionPosition = -1;
-            mRoomContactsSectionPosition--;
-            notifyDataSetChanged();
         }
 
         if (gotUpdates) {
@@ -615,39 +614,32 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         mFirstEntryPosition = -1;
-        mLocalContactsSectionPosition = -1;
-        mRoomContactsSectionPosition = -1;
-
-        int posCount = 0;
-
         mParticipantsListsList.clear();
-
         if (firstEntryList.size() > 0) {
             mParticipantsListsList.add(firstEntryList);
-            mFirstEntryPosition = posCount;
-            posCount++;
+            mFirstEntryPosition = 0;
         }
-
-        // display the local contacts
-        // -> if there are some
-        // -> the PIDS retrieval is in progress
-        // -> the user displays only the matrix id (if there is no contact with matrix Id, it could impossible to deselect the toggle
-        // -> always displays when there is something to search to let the user toggles the matrix id checkbox.
-        if ((contactBookList.size() > 0) || !ContactsManager.arePIDsRetrieved() || mShowMatrixUserOnly || !TextUtils.isEmpty(mPattern)) {
-            // the contacts are sorted by alphabetical method
-            Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
+        if (ContactsManager.isContactBookAccessAllowed(mContext)) {
+            mLocalContactsSectionPosition = mFirstEntryPosition + 1;
+            mRoomContactsSectionPosition = mLocalContactsSectionPosition + 1;
+            // display the local contacts
+            // -> if there are some
+            // -> the PIDS retrieval is in progress
+            // -> the user displays only the matrix id (if there is no contact with matrix Id, it could impossible to deselect the toggle
+            // -> always displays when there is something to search to let the user toggles the matrix id checkbox.
+            if ((contactBookList.size() > 0) || !ContactsManager.arePIDsRetrieved() || mShowMatrixUserOnly || !TextUtils.isEmpty(mPattern)) {
+                // the contacts are sorted by alphabetical method
+                Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
+            }
             mParticipantsListsList.add(contactBookList);
-            mLocalContactsSectionPosition = posCount;
-            posCount++;
+        } else {
+            mRoomContactsSectionPosition = mFirstEntryPosition + 1;
         }
 
         if (roomContactsList.size() > 0) {
-            // use th
             Collections.sort(roomContactsList, mSortMethod);
-            mParticipantsListsList.add(roomContactsList);
-            mRoomContactsSectionPosition = posCount;
-            posCount++;
         }
+        mParticipantsListsList.add(roomContactsList);
 
         if (null != searchListener) {
             int length = 0;
@@ -692,11 +684,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         return mParticipantsListsList.size();
     }
 
-    private String getGroupTitle(int position) {
+    private String getGroupTitle(final int position) {
+        final int groupSize = mParticipantsListsList.get(position).size();
         if (position == mLocalContactsSectionPosition) {
-            return mContext.getString(R.string.people_search_local_contacts);
+            return mContext.getString(R.string.people_search_local_contacts, groupSize);
         } else if (position == mRoomContactsSectionPosition) {
-            return mContext.getString(R.string.people_search_known_contacts);
+            final String titleExtra = TextUtils.isEmpty(mPattern) ? "-" : String.valueOf(groupSize);
+            return mContext.getString(R.string.people_search_known_contacts, titleExtra);
         } else {
             return "??";
         }
@@ -753,21 +747,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         TextView sectionNameTxtView = (TextView) convertView.findViewById(R.id.people_header_text_view);
 
         if (null != sectionNameTxtView) {
-            String title = getGroupTitle(groupPosition);
-
-            if (!TextUtils.isEmpty(mPattern)) {
-                title += " (" + mParticipantsListsList.get(groupPosition).size() + ")";
-            }
-
+            final String title = getGroupTitle(groupPosition);
             sectionNameTxtView.setText(title);
-        }
-
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
-
-        if (isExpanded) {
-            imageView.setImageResource(R.drawable.ic_material_expand_less_black);
-        } else {
-            imageView.setImageResource(R.drawable.ic_material_expand_more_black);
         }
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
@@ -775,55 +756,73 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         View loadingView = subLayout.findViewById(R.id.heading_loading_view);
         loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
-        boolean groupShouldBeExpanded = isGroupExpanded(groupPosition);
+        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
+        View knownContactsView = convertView.findViewById(R.id.people_header_known_contacts_layout);
 
-        if (parent instanceof ExpandableListView) {
-            ExpandableListView expandableListView = (ExpandableListView) parent;
-
-            if (expandableListView.isGroupExpanded(groupPosition) != groupShouldBeExpanded) {
-                if (groupShouldBeExpanded) {
-                    expandableListView.expandGroup(groupPosition);
-                } else {
-                    expandableListView.collapseGroup(groupPosition);
-                }
+        if (groupPosition != mRoomContactsSectionPosition || mParticipantsListsList.get(groupPosition).size() > 0) {
+            if (isExpanded) {
+                imageView.setImageResource(R.drawable.ic_material_expand_less_black);
+            } else {
+                imageView.setImageResource(R.drawable.ic_material_expand_more_black);
             }
-        }
 
-        // display a search toggle for the local contacts
-        convertView.findViewById(R.id.people_header_matrix_contacts_layout).setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
+            boolean groupShouldBeExpanded = isGroupExpanded(groupPosition);
 
-        // as there might be a clickable object in the extra layout,
-        // it seems required to have a click listener
-        View headerView = convertView.findViewById(R.id.people_header_sub_layout);
-        headerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (parent instanceof ExpandableListView) {
-                    if (isExpanded) {
-                        ((ExpandableListView) parent).collapseGroup(groupPosition);
+            if (parent instanceof ExpandableListView) {
+                ExpandableListView expandableListView = (ExpandableListView) parent;
+
+                if (expandableListView.isGroupExpanded(groupPosition) != groupShouldBeExpanded) {
+                    if (groupShouldBeExpanded) {
+                        expandableListView.expandGroup(groupPosition);
                     } else {
-                        ((ExpandableListView) parent).expandGroup(groupPosition);
+                        expandableListView.collapseGroup(groupPosition);
                     }
                 }
             }
-        });
+            // display a search toggle for the local contacts
+            matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
+            knownContactsView.setVisibility(View.GONE);
 
-        // matrix user checkbox
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contacts_filter_checkbox);
-        checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
+            // matrix user checkbox
+            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contacts_filter_checkbox);
+            checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mShowMatrixUserOnly = isChecked;
-                refresh(mFirstEntry, null);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mShowMatrixUserOnly = isChecked;
+                    refresh(mFirstEntry, null);
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(KEY_FILTER_MATRIX_USERS_ONLY, isChecked);
-                editor.apply();
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(KEY_FILTER_MATRIX_USERS_ONLY, isChecked);
+                    editor.apply();
+                }
+            });
+
+            // as there might be a clickable object in the extra layout,
+            // it seems required to have a click listener
+            subLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (parent instanceof ExpandableListView) {
+                        if (isExpanded) {
+                            ((ExpandableListView) parent).collapseGroup(groupPosition);
+                        } else {
+                            ((ExpandableListView) parent).expandGroup(groupPosition);
+                        }
+                    }
+                }
+            });
+        } else {
+            imageView.setImageDrawable(null);
+            matrixView.setVisibility(View.GONE);
+            if (TextUtils.isEmpty(mPattern)) {
+                // display info message when search is empty
+                knownContactsView.setVisibility(View.VISIBLE);
             }
-        });
+        }
 
         return convertView;
     }

@@ -509,9 +509,10 @@
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
 
     <!-- invitation -->
-    <string name="people_search_local_contacts">LOCAL CONTACTS</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS</string>
+    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
+    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
+    <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
 
     <string name="people_search_all_contacts">All contacts</string>
     <string name="people_search_matrix_contacts">Matrix contacts</string>
