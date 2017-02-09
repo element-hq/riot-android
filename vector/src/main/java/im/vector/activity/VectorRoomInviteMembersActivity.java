@@ -286,8 +286,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
                     @Override
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
-                        mBackgroundImageView.setVisibility((0 == count) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
-                        mNoResultView.setVisibility((0 == count) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
                     }
                 });
             }
