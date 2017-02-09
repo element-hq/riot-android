@@ -24,7 +24,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -64,8 +63,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
 
     // main UI items
     private ExpandableListView mListView;
-    private ImageView mBackgroundImageView;
-    private View mNoResultView;
     private View mLoadingView;
     private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
@@ -172,8 +169,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
-        mBackgroundImageView = (ImageView) findViewById(R.id.search_background_imageview);
-        mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
         mListView = (ExpandableListView) findViewById(R.id.room_details_members_list);
