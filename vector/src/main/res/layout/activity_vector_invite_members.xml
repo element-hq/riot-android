@@ -1,50 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/filter_tabs"
-        style="@style/VectorPeopleSearches.TabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/people_search_all_contacts" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/people_search_matrix_contacts" />
-
-    </android.support.design.widget.TabLayout>
-
-    <ImageView
-        android:id="@+id/search_background_imageview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/filter_tabs"
-        android:background="#FFFFFFFF"
-        android:src="@drawable/vector_search_bg"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/search_no_result_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/filter_tabs"
-        android:text="@string/search_no_results"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
 
     <ExpandableListView
         android:id="@+id/room_details_members_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/filter_tabs"
         android:layout_marginTop="1dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="1px" />
@@ -52,14 +14,12 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/filter_tabs"
         android:background="@color/vector_dc_gray" />
 
     <RelativeLayout
         android:id="@+id/search_in_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/filter_tabs"
         android:background="@color/chat_encoding_background"
         android:visibility="visible">
 
@@ -71,4 +31,4 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
-</RelativeLayout>
+</FrameLayout>

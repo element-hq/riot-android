@@ -30,23 +30,22 @@ import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
-import org.matrix.androidsdk.util.Log;
-
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.User;
-
-import im.vector.Matrix;
-import im.vector.VectorApp;
-import im.vector.util.PhoneNumberUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
+import im.vector.Matrix;
+import im.vector.VectorApp;
+import im.vector.util.PhoneNumberUtils;
 
 /**
  * Manage the local contacts
@@ -144,10 +143,20 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
         @Override
         public void onFailure(String accountId) {
+            // ignore the current response because the request has been cancelled
+            if (!mIsRetrievingPids) {
+                Log.d(LOG_TAG, "## Retrieve a PIDS success whereas it is not expected");
+                return;
+            }
+
             mIsRetrievingPids = false;
             mArePidsRetrieved = false;
             mRetryPIDsRetrievalOnConnect = true;
             Log.d(LOG_TAG, "## fail to retrieve the PIDs");
+
+            // warn that the current request failed.
+            // Thus, if the listeners display a spinner (or so), it should be hidden.
+            onPIDsUpdate();
         }
 
         @Override
@@ -630,7 +639,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
      * Tells if the contacts book access has been granted
      * @return true if it was granted.
      */
-    private boolean isContactBookAccessAllowed() {
+    public boolean isContactBookAccessAllowed() {
         if (Build.VERSION.SDK_INT >= 23) {
             return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_CONTACTS));
         } else {

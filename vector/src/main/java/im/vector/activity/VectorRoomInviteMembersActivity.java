@@ -16,15 +16,14 @@
 
 package im.vector.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.listeners.MXEventListener;
@@ -44,12 +43,10 @@ import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
 
-;
-
 /**
  * This class provides a way to search other user to invite them in a dedicated room
  */
-public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity implements TabLayout.OnTabSelectedListener {
+public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     private static final String LOG_TAG = "VectorInviteMembersAct";
 
     // search in the room
@@ -57,23 +54,19 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
     public static final String EXTRA_HIDDEN_PARTICIPANT_ITEMS = "VectorInviteMembersActivity.EXTRA_HIDDEN_PARTICIPANT_ITEMS";
     public static final String EXTRA_SELECTED_USER_ID = "VectorInviteMembersActivity.EXTRA_SELECTED_USER_ID";
     public static final String EXTRA_SELECTED_PARTICIPANT_ITEM = "VectorInviteMembersActivity.EXTRA_SELECTED_PARTICIPANT_ITEM";
+    // boolean : true displays a dialog to confirm the member selection
+    public static final String EXTRA_ADD_CONFIRMATION_DIALOG = "VectorInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG";
 
-    // tabs
-    private static final int ALL_PEOPLES_TAB_INDEX = 0;
-    private static final int MATRIX_USERS_ONLY_TAB_INDEX = 1;
-    private static final String KEY_STATE_CURRENT_TAB_INDEX = "CURRENT_SELECTED_TAB";
 
     // account data
     private String mMatrixId;
 
     // main UI items
-    private TabLayout mTabs;
     private ExpandableListView mListView;
-    private ImageView mBackgroundImageView;
-    private View mNoResultView;
     private View mLoadingView;
     private List<ParticipantAdapterItem> mParticipantItems = new ArrayList<>();
     private VectorParticipantsAdapter mAdapter;
+    private boolean mAddConfirmationDialog;
 
     // retrieve a matrix Id from an email
     private final ContactsManager.ContactsManagerListener mContactsListener = new ContactsManager.ContactsManagerListener() {
@@ -166,6 +159,9 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
 
         String roomId = intent.getStringExtra(EXTRA_ROOM_ID);
 
+        // tell if a confirmation dialog must be displayed.
+        mAddConfirmationDialog = intent.getBooleanExtra(EXTRA_ADD_CONFIRMATION_DIALOG, false);
+
         setContentView(R.layout.activity_vector_invite_members);
 
         // the user defines a
@@ -173,8 +169,6 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
             mPatternToSearchEditText.setHint(R.string.room_participants_invite_search_another_user);
         }
 
-        mBackgroundImageView = (ImageView) findViewById(R.id.search_background_imageview);
-        mNoResultView = findViewById(R.id.search_no_result_textview);
         mLoadingView = findViewById(R.id.search_in_progress_view);
 
         mListView = (ExpandableListView) findViewById(R.id.room_details_members_list);
@@ -196,13 +190,17 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
                 if (item instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) item).mIsValid) {
                     ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
 
-                    // returns the selected user
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
-                    intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
+                    if (mAddConfirmationDialog) {
+                        displaySelectionConfirmationDialog(participantAdapterItem);
+                    } else {
+                        // returns the selected user
+                        Intent intent = new Intent();
+                        intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
+                        intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
 
-                    setResult(RESULT_OK, intent);
-                    finish();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
 
                     return true;
                 }
@@ -210,18 +208,36 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
             }
         });
 
-        // Tabs
-        mTabs = (TabLayout) findViewById(R.id.filter_tabs);
-        if (mTabs != null) {
-            mTabs.setOnTabSelectedListener(this);
-            int tabIndexToDisplay;
-            tabIndexToDisplay = (null != savedInstanceState)
-                    ? savedInstanceState.getInt(KEY_STATE_CURRENT_TAB_INDEX, ALL_PEOPLES_TAB_INDEX)
-                    : ALL_PEOPLES_TAB_INDEX;
+        // Check permission to access contacts
+        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
+    }
 
-            TabLayout.Tab tab = mTabs.getTabAt(tabIndexToDisplay);
-            if (tab != null) {
-                tab.select();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSession.getDataHandler().addListener(mEventsListener);
+        ContactsManager.getInstance().addListener(mContactsListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSession.getDataHandler().removeListener(mEventsListener);
+        ContactsManager.getInstance().removeListener(mContactsListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (0 == aPermissions.length) {
+            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
+        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
+            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
+                onPatternUpdate(false);
+            } else {
+                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
+                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
             }
         }
     }
@@ -265,77 +281,53 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity im
                     @Override
                     public void run() {
                         mLoadingView.setVisibility(View.GONE);
-                        mBackgroundImageView.setVisibility((0 == count) && TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
-                        mNoResultView.setVisibility((0 == count) && !TextUtils.isEmpty(mPatternToSearchEditText.getText().toString()) ? View.VISIBLE : View.GONE);
                     }
                 });
             }
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.getInstance().removeListener(mContactsListener);
-    }
+    /**
+     * Display a selection confirmation dialog.
+     *
+     * @param participantAdapterItem the selected participant
+     */
+    private void displaySelectionConfirmationDialog(final ParticipantAdapterItem participantAdapterItem) {
+        final String userId = participantAdapterItem.mUserId;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.getInstance().addListener(mContactsListener);
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomInviteMembersActivity.this);
+        builder.setTitle(getString(R.string.room_participants_invite_prompt_title));
 
-        // Check permission to access contacts
-        CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH, this);
-    }
+        String displayName = userId;
 
-    @Override
-    public void onRequestPermissionsResult(int aRequestCode, @NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
-        if (0 == aPermissions.length) {
-            Log.e(LOG_TAG, "## onRequestPermissionsResult(): cancelled " + aRequestCode);
-        } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
-            if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                ContactsManager.getInstance().refreshLocalContactsSnapshot();
-                onPatternUpdate(false);
-            } else {
-                Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
-                CommonActivityUtils.displayToast(this, getString(R.string.missing_permissions_warning));
+        if (MXSession.isUserId(userId)) {
+            User user = mSession.getDataHandler().getStore().getUser(userId);
+            if ((null != user) && !TextUtils.isEmpty(user.displayname)) {
+                displayName = user.displayname;
             }
         }
-    }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "## onSaveInstanceState(): ");
+        builder.setMessage(getString(R.string.room_participants_invite_prompt_msg, displayName));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // returns the selected user
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_SELECTED_USER_ID, participantAdapterItem.mUserId);
+                intent.putExtra(EXTRA_SELECTED_PARTICIPANT_ITEM, participantAdapterItem);
 
-        // save current tab
-        if (null != mActionBar) {
-            int currentIndex = mTabs.getSelectedTabPosition();
-            outState.putInt(KEY_STATE_CURRENT_TAB_INDEX, currentIndex);
-        }
-    }
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
-    /*
-     * *********************************************************************************************
-     * Tabs
-     * *********************************************************************************************
-     */
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // nothing to do
+            }
+        });
 
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        mAdapter.displayOnlyMatrixUsers(tab.getPosition() == MATRIX_USERS_ONLY_TAB_INDEX);
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
+        builder.show();
     }
 }

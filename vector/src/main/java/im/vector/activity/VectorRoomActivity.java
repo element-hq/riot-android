@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +35,11 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.UnderlineSpan;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import org.matrix.androidsdk.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -199,6 +202,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
     private MenuItem mResendUnsentMenuItem;
     private MenuItem mResendDeleteMenuItem;
+    private MenuItem mSearchInRoomMenuItem;
 
     // medias sending helper
     private VectorRoomMediasSender mVectorRoomMediasSender;
@@ -1133,6 +1137,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             mResendUnsentMenuItem = menu.findItem(R.id.ic_action_room_resend_unsent);
             mResendDeleteMenuItem = menu.findItem(R.id.ic_action_room_delete_unsent);
+            mSearchInRoomMenuItem =  menu.findItem(R.id.ic_action_search_in_room);
 
             // hide / show the unsent / resend all entries.
             refreshNotificationsArea();
@@ -1829,6 +1834,44 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     //================================================================================
 
     /**
+     * Track the cancel all click.
+     */
+    private class cancelAllClickableSpan extends ClickableSpan {
+        @Override
+        public void onClick(View widget) {
+            mVectorMessageListFragment.deleteUnsentMessages();
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.setColor(getResources().getColor(R.color.vector_fuchsia_color));
+            ds.bgColor = 0;
+            ds.setUnderlineText(true);
+        }
+    }
+
+    /**
+     * Track the resend all click.
+     */
+    private class resendAllClickableSpan extends ClickableSpan {
+        @Override
+        public void onClick(View widget) {
+            mVectorMessageListFragment.resendUnsentMessages();
+            refreshNotificationsArea();
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.setColor(getResources().getColor(R.color.vector_fuchsia_color));
+            ds.bgColor = 0;
+            ds.setUnderlineText(true);
+        }
+    }
+
+    /**
      * Refresh the notifications area.
      */
     private void refreshNotificationsArea() {
@@ -1861,20 +1904,28 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                 isAreaVisible = true;
                 iconId = R.drawable.error;
 
-                String part1 = getResources().getString(R.string.room_unsent_messages_notification);
-                String part2 = getResources().getString(R.string.room_prompt_resent);
+                String cancelAll = getResources().getString(R.string.room_prompt_cancel);
+                String resendAll = getResources().getString(R.string.room_prompt_resend);
+                String message = getResources().getString(R.string.room_unsent_messages_notification, resendAll, cancelAll);
 
-                text = new SpannableString(part1 + " " + part2);
-                text.setSpan(new UnderlineSpan(), part1.length() + 1, part1.length() + part2.length() + 1, 0);
+                int cancelAllPos = message.indexOf(cancelAll);
+                int resendAllPos = message.indexOf(resendAll);
+
+                text = new SpannableString(message);
+
+                // cancelAllPos should always be > 0 but a GA crash reported here
+                if (cancelAllPos >= 0) {
+                    text.setSpan(new cancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length(), 0);
+                }
+
+                // resendAllPos should always be > 0 but a GA crash reported here
+                if (resendAllPos >= 0) {
+                    text.setSpan(new resendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length(), 0);
+                }
+                
+                mNotificationTextView.setMovementMethod(LinkMovementMethod.getInstance());
                 textColor = R.color.vector_fuchsia_color;
 
-                mNotificationTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mVectorMessageListFragment.resendUnsentMessages();
-                        refreshNotificationsArea();
-                    }
-                });
             } else if ((null != mIsScrolledToTheBottom) && (!mIsScrolledToTheBottom)) {
                 isAreaVisible = true;
 
@@ -1945,6 +1996,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         if (null != mResendDeleteMenuItem) {
             mResendDeleteMenuItem.setVisible(hasUnsentEvent);
         }
+
+        if (null != mSearchInRoomMenuItem) {
+            // the server search does not work on encrypted rooms.
+            mSearchInRoomMenuItem.setVisible(!mRoom.isEncrypted());
+        }
     }
 
     /**
@@ -1979,7 +2035,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     private void onRoomTypings() {
         mLatestTypingMessage = null;
 
-        ArrayList<String> typingUsers = mRoom.getTypingUsers();
+        List<String> typingUsers = mRoom.getTypingUsers();
 
         if ((null != typingUsers) && (typingUsers.size() > 0)) {
             String myUserId = mSession.getMyUserId();

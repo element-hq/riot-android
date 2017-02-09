@@ -145,7 +145,18 @@
         <im.vector.preference.VectorCustomActionEditTextPreference
             android:key="@string/encryption_information_device_key"
             android:title="@string/encryption_information_device_key"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/encryption_export_e2e_room_keys"
+            android:title="@string/encryption_export_e2e_room_keys"
+            android:summary="@string/encryption_export_room_keys_summary" />
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/encryption_import_e2e_room_keys"
+            android:title="@string/encryption_import_e2e_room_keys"
+            android:summary="@string/encryption_import_room_keys_summary" />
     </PreferenceCategory>
+
     <im.vector.preference.VectorDividerCategory android:key="@string/cryptography_divider" />
     <!-- ************************************************ -->
 

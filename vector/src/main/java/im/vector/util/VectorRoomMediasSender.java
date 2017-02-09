@@ -210,7 +210,7 @@ public class VectorRoomMediasSender {
                         mSharedDataItems.remove(0);
                     }
                     sendMedias();
-                } else if (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType)) {
+                } else if ((null == sharedDataItem.getUri()) &&  (TextUtils.equals(ClipDescription.MIMETYPE_TEXT_PLAIN, mimeType) || TextUtils.equals(ClipDescription.MIMETYPE_TEXT_HTML, mimeType))) {
                     sendTextMessage(sharedDataItem);
                 } else {
                     // check if it is an uri

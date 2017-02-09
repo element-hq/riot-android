@@ -153,6 +153,16 @@ public class VectorApp extends Application {
         org.matrix.androidsdk.util.Log.setLogDirectory(mLogsDirectoryFile);
         org.matrix.androidsdk.util.Log.init("RiotLog");
 
+        // log the application version to trace update
+        // useful to track backward compatibility issues
+
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, " Application version: " + VECTOR_VERSION_STRING);
+        Log.d(LOG_TAG, " SDK version: " + SDK_VERSION_STRING);
+        Log.d(LOG_TAG, "----------------------------------------------------------------");
+        Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
+
         GAHelper.initGoogleAnalytics(getApplicationContext());
 
         mRageShake.start(this);
