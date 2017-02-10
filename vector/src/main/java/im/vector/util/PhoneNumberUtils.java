@@ -32,7 +32,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * This class contains the phone number toolbox
@@ -46,16 +48,16 @@ public class PhoneNumberUtils {
 
     private static String[] mCountryCodes = null;
     private static String[] mHumanCountryCodes = null;
-    private static HashMap<String, String> mHumanCountryCodeByCC = null;
+    private static Map<String, String> mHumanCountryCodeByCC = null;
 
     /**
      * Build the country codes list
      */
-    private static void buildContryCodesList() {
+    private static void buildCountryCodesList() {
         if (null == mCountryCodes) {
             // retrieve the ISO country code
             String[] isoCountryCodes = Locale.getISOCountries();
-            ArrayList<Pair<String, String>> countryCodes = new ArrayList<>();
+            List<Pair<String, String>> countryCodes = new ArrayList<>();
 
             // retrieve the human display name
             for (String countryCode : isoCountryCodes) {
@@ -89,14 +91,14 @@ public class PhoneNumberUtils {
      * @return the country codes.
      */
     public static String[] getCountryCodes() {
-        buildContryCodesList();
+        buildCountryCodesList();
         return mCountryCodes;
     }
     /**
      * @return the human readable country codes.
      */
     public static String[] getHumanCountryCodes() {
-        buildContryCodesList();
+        buildCountryCodesList();
         return mHumanCountryCodes;
     }
 
@@ -153,7 +155,7 @@ public class PhoneNumberUtils {
     }
 
     /**
-     * Compute an unique key from a text and a contry code
+     * Compute an unique key from a text and a country code
      * @param text the text
      * @param countryCode the country code
      * @return the unique key

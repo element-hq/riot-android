@@ -22,19 +22,17 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.matrix.androidsdk.MXSession;
-import org.matrix.androidsdk.rest.api.ThirdPidApi;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
-
-import im.vector.Matrix;
-import im.vector.VectorApp;
-import im.vector.util.PhoneNumberUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import im.vector.Matrix;
+import im.vector.VectorApp;
 
 /**
  * retrieve the contact matrix IDs
@@ -122,7 +120,7 @@ public class PIDsRetriever {
      * @return the medium addresses which are not cached.
      */
     private List<String> retrieveMatrixIds(List<Contact> contacts) {
-        ArrayList<String> requestedMediums = new ArrayList<>();
+        List<String> requestedMediums = new ArrayList<>();
 
         for (Contact contact : contacts) {
             // check if the medium have only been checked
@@ -197,7 +195,7 @@ public class PIDsRetriever {
         List<String> missingMediums = retrieveMatrixIds(contacts);
 
         if (!localUpdateOnly && !missingMediums.isEmpty()) {
-            ArrayList<String> medias = new ArrayList<>();
+            List<String> medias = new ArrayList<>();
 
             for (int index = 0; index < missingMediums.size(); index++) {
                 String medium = missingMediums.get(index);
