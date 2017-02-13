@@ -117,15 +117,6 @@
     
     <im.vector.preference.VectorDividerCategory />
 
-    <!-- devices list: device ids + device names -->
-    <PreferenceCategory
-        android:title="@string/settings_devices_list"
-        android:key="@string/settings_devices_list">
-    </PreferenceCategory>
-
-    <im.vector.preference.VectorDividerCategory
-        android:key="@string/devices_divider"/>
-
     <!-- ************ Cryptography section ************ -->
     <PreferenceCategory android:title="@string/settings_cryptography"
         android:key="@string/settings_cryptography">
@@ -154,6 +145,15 @@
 
     <im.vector.preference.VectorDividerCategory android:key="@string/cryptography_divider" />
     <!-- ************************************************ -->
+
+    <!-- devices list: device ids + device names -->
+    <PreferenceCategory
+        android:title="@string/settings_devices_list"
+        android:key="@string/settings_devices_list">
+    </PreferenceCategory>
+
+    <im.vector.preference.VectorDividerCategory
+        android:key="@string/devices_divider"/>
 
 
     <PreferenceCategory android:title="@string/settings_advanced" >
