@@ -60,6 +60,7 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -77,6 +78,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.Mac;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -305,9 +308,9 @@ public class CommonActivityUtils {
      * @param activity the caller activity
      * @param goToLoginPage true to jump to the login page
      */
-    public static void logout(Activity activity, boolean goToLoginPage) {
+    public static void logout(final Activity activity, boolean goToLoginPage) {
         // if no activity is provided, use the application context instead.
-        Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
+        final Context context = (null == activity) ? VectorApp.getInstance().getApplicationContext() : activity;
 
         EventStreamService.removeNotification();
         stopEventStream(context);
@@ -344,7 +347,7 @@ public class CommonActivityUtils {
         }
 
         // reset the GCM
-        Matrix.getInstance(context).getSharedGCMRegistrationManager().reset();
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration(false);
 
         // clear credentials
         Matrix.getInstance(context).clearSessions(context, true);
