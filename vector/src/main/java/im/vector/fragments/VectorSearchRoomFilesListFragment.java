@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,9 @@ package im.vector.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -48,7 +51,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
     /**
      * static constructor
-     * @param matrixId the session Id.
+     *
+     * @param matrixId    the session Id.
      * @param layoutResId the used layout.
      */
     public static VectorSearchRoomFilesListFragment newInstance(String matrixId, String roomId, int layoutResId) {
@@ -67,6 +71,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
     /**
      * Tell if the search is allowed for a dedicated pattern
+     *
      * @param pattern the searched pattern.
      * @return true if the search is allowed.
      */
@@ -137,7 +142,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                 scrollToBottom();
                 mMessageListView.setVisibility(View.VISIBLE);
 
-                for(OnSearchResultListener listener : mSearchListeners) {
+                for (OnSearchResultListener listener : mSearchListeners) {
                     try {
                         listener.onSearchSucceed(messageRows.size());
                     } catch (Exception e) {
@@ -155,7 +160,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                 // clear the results list if teh search fails
                 mAdapter.clear();
 
-                for(OnSearchResultListener listener : mSearchListeners) {
+                for (OnSearchResultListener listener : mSearchListeners) {
                     try {
                         listener.onSearchFailed();
                     } catch (Exception e) {
@@ -237,7 +242,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                     mMessageListView.setSelection(firstPos + (mAdapter.getCount() - countBeforeUpdate));
 
                                     mIsBackPaginating = false;
-                                    
+
                                     // plug the scroll events listener to detect the back pagination
                                     // when scrolling over the list top.
                                     setMessageListViewScrollListener();
@@ -245,7 +250,7 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                                     // warn any listener of the search result.
                                     // the listview might be uninitialized when startFilesSearch is called.
                                     // wait that the backpagination fills the screen
-                                    for(OnSearchResultListener listener : mSearchListeners) {
+                                    for (OnSearchResultListener listener : mSearchListeners) {
                                         try {
                                             listener.onSearchSucceed(eventChunks.size());
                                         } catch (Exception e) {
@@ -268,9 +273,20 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
                             });
                         } else {
                             mIsBackPaginating = false;
+                            mUiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (OnSearchResultListener listener : mSearchListeners) {
+                                        try {
+                                            listener.onSearchSucceed(0);
+                                        } catch (Exception e) {
+                                            Log.e(LOG_TAG, "## backPaginate() : onSearchSucceed failed " + e.getMessage());
+                                        }
+                                    }
+                                }
+                            });
                         }
                         VectorSearchRoomFilesListFragment.this.hideLoadingBackProgress();
-
                     }
                 });
 
@@ -304,13 +320,14 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
     /**
      * Filter and append the found events
-     * @param events the matched events list
+     *
+     * @param events         the matched events list
      * @param eventsToAppend the retrieved events list.
      */
     private void appendEvents(ArrayList<Event> events, List<Event> eventsToAppend) {
         // filter
         ArrayList<Event> filteredEvents = new ArrayList<>(eventsToAppend.size());
-        for(Event event : eventsToAppend) {
+        for (Event event : eventsToAppend) {
             if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
                 Message message = JsonUtils.toMessage(event.getContent());
 
@@ -327,7 +344,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
 
     /**
      * Search some files until find out at least 10 matching messages.
-     * @param events the result events lists
+     *
+     * @param events   the result events lists
      * @param callback the result callback
      */
     private void remoteRoomHistoryRequest(final ArrayList<Event> events, final ApiCallback<ArrayList<Event>> callback) {
@@ -335,9 +353,8 @@ public class VectorSearchRoomFilesListFragment extends VectorSearchRoomsFilesLis
             @Override
             public void onSuccess(TokensChunkResponse<Event> eventsChunk) {
                 if ((null == mNextBatch) || TextUtils.equals(eventsChunk.start, mNextBatch)) {
-
                     // no more message in the history
-                    if (0 == eventsChunk.chunk.size()) {
+                    if (TextUtils.equals(eventsChunk.start, eventsChunk.end)) {
                         mCanPaginateBack = false;
                         callback.onSuccess(events);
                     } else {
