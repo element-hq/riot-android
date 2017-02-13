@@ -88,6 +88,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
+import im.vector.activity.VectorRoomActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
@@ -1028,9 +1029,11 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
-                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
-                startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
+                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, getActivity())){
+                    Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
+                    intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                    startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
+                }
             }
         });
     }
