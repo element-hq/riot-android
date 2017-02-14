@@ -543,6 +543,7 @@
     <string name="room_message_placeholder">Type a message...</string>
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
     <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
+    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
     <string name="room_prompt_resend">Resend all</string>
     <string name="room_prompt_cancel">cancel all</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
@@ -865,4 +866,8 @@
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
+
+    <!-- unknown devices management -->
+    <string name="unknown_devices_alert_title">Room contains unknown devices</string>
+    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
 </resources>
