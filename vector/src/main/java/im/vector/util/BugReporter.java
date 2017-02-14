@@ -178,7 +178,7 @@ public class BugReporter {
                     }
 
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("crashes", getLogCatError());
+                    map.put("lines", getLogCatError());
                     params.logs.add(map);
                 }
 
@@ -200,13 +200,12 @@ public class BugReporter {
                 // File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
                 ByteArrayInputStream inputStream = null;
                 String serverError = null;
-
+                HttpURLConnection conn = null;
                 try {
                     inputStream = new ByteArrayInputStream(gson.toJsonTree(params).toString().getBytes("UTF-8"));
 
-                    URL url = new URL("https://riot.im/bugreports/submit");
-
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    URL url = new URL(context.getResources().getString(R.string.bug_report_url));
+                    conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
                     conn.setUseCaches(false);
@@ -268,11 +267,17 @@ public class BugReporter {
                             if (null == serverError) {
                                 serverError = "Failed with error " + mResponseCode;
                             }
+
+                            is.close();
                         }
                     }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
                     serverError = e.getLocalizedMessage();
+                } finally {
+                    if (null != conn) {
+                        conn.disconnect();
+                    }
                 }
 
                 if (null != inputStream) {
@@ -327,12 +332,16 @@ public class BugReporter {
                 sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
                     @Override
                     public void onUploadFailed(String reason) {
-                        Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
+                        if (null != VectorApp.getInstance()) {
+                            Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
                     public void onUploadSucceed() {
-                        Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
+                        if (null != VectorApp.getInstance()) {
+                            Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
                 dialog.dismiss();
