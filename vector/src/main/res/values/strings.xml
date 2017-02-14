@@ -396,8 +396,10 @@
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="permissions_rationale_msg_storage">Riot needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
-    <string name="permissions_rationale_msg_camera">Riot needs permission to access your camera to take pictures and video calls.\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.\n\nPlease allow access on the next pop-up to be able to make the call.</string>
+    <string name="permissions_rationale_msg_camera">Riot needs permission to access your camera to take pictures and video calls.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
     <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
