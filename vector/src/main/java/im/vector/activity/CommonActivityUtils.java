@@ -624,20 +624,44 @@ public class CommonActivityUtils {
 
             // if some permissions were already denied: display a dialog to the user before asking again..
             if(!permissionListAlreadyDenied.isEmpty()) {
-                if(null != resource) {
+                if (null != resource) {
                     // add the user info text to be displayed to explain why the permission is required by the App
-                    if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
-                            && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
-                        explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_and_audio);
+                    if (aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_VIDEO_IP_CALL || aPermissionsToBeGrantedBitMap == REQUEST_CODE_PERMISSION_AUDIO_IP_CALL){
+                        // Permission request for VOIP call
+                        if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
+                                && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                            // Both missing
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_and_audio);
+                        } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                            // Audio missing
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio_explanation);
+                        } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
+                            // Camera missing
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
+                            explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera_explanation);
+                        }
                     } else {
                         for (String permissionAlreadyDenied : permissionListAlreadyDenied) {
                             if (Manifest.permission.CAMERA.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
                                 explanationMessage += resource.getString(R.string.permissions_rationale_msg_camera);
                             } else if (Manifest.permission.RECORD_AUDIO.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
                                 explanationMessage += resource.getString(R.string.permissions_rationale_msg_record_audio);
                             } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
                                 explanationMessage += resource.getString(R.string.permissions_rationale_msg_storage);
                             } else if (Manifest.permission.READ_CONTACTS.equals(permissionAlreadyDenied)) {
+                                if (!TextUtils.isEmpty(explanationMessage)) {
+                                    explanationMessage += "\n\n";
+                                }
                                 explanationMessage += resource.getString(R.string.permissions_rationale_msg_contacts);
                             } else {
                                 Log.d(LOG_TAG, "## checkPermissions(): already denied permission not supported");
