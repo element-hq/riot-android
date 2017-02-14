@@ -225,6 +225,7 @@
             android:parentActivityName="im.vector.activity.VectorHomeActivity"
             android:launchMode="singleTop"
             android:theme="@style/SearchesAppTheme"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
 
             <meta-data
