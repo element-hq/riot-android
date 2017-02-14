@@ -78,8 +78,6 @@
     <string name="action_sign_out_confirmation">Sign out ?</string>
     <string name="action_enable_room_notification">Enable room notifications</string>
     <string name="action_disable_room_notification">Disable room notifications</string>
-    <string name="send_bug_report">Send Bug Report</string>
-    <string name="send_bug_report_placeholder">Please tell us what went wrong</string>
     <string name="action_create_room">Create...</string>
     <string name="action_room_info">Room info</string>
     <string name="action_voice_call">Voice Call</string>
@@ -97,13 +95,16 @@
     <string name="action_resume_call">Resume call</string>
     <string name="about">About</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="with_email_and_screenshot">With email (with screenshot)</string>
-    <string name="with_email_without_screenshot">With email (without screenshot)</string>
-    <string name="with_vector_and_screenshot">With %s (with screenshot)</string>
-    <string name="with_vector_without_screenshot">With %s (without screenshot)</string>
-    <string name="bug_report_password">Set a password to your bug report</string>
     <string name="disable">Disable</string>
+
+    <string name="send_bug_report_include_logs">Send logs</string>
+    <string name="send_bug_report">Report Bug Report</string>
+    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
+    <string name="send_bug_report_placeholder">Describe your problem here</string>
+    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
+    <string name="send_bug_report_sent">The bug report has been successfully sent</string>
+    <string name="send_bug_report_failed">The bug report failed to be sent (%s)</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
