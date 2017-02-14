@@ -17,6 +17,9 @@ android {
         // use the version code
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
+
+        // custom values
+        resValue "string", "bug_report_url",  "https://riot.im/bugreports/submit"
     }
 
     signingConfigs {
