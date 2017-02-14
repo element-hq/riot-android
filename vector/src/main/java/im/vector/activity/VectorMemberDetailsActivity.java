@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1468,7 +1469,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
             default: // Blocked
-                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, mDevicesListViewAdapter, this);
+                CommonActivityUtils.displayDeviceVerificationDialog(aDeviceInfo, mMemberId, mSession, this, mDevicesVerificationCallback);
                 break;
         }
     }
