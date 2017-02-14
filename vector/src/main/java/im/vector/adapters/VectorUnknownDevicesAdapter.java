@@ -31,16 +31,17 @@ import android.widget.TextView;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
 
 /**
- * This class displays a list of members to create a room.
+ * This class displays a list of unknowns e2e devices.
  */
 public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
 
-    private static final String LOG_TAG = "VRoomSummaryAdapter";
+    private static final String LOG_TAG = "VUnknownDevicesAdapter";
 
     // devices verification listener
     public interface IVerificationAdapterListener {
@@ -78,7 +79,7 @@ public class VectorUnknownDevicesAdapter extends BaseExpandableListAdapter {
         // init internal fields
         mContext = aContext;
         mLayoutInflater = LayoutInflater.from(mContext);
-        mUnknownDevicesList = unknownDevices;
+        mUnknownDevicesList = (null == unknownDevices) ? new ArrayList<Pair<String, List<MXDeviceInfo>>>() : unknownDevices;
     }
 
     /**

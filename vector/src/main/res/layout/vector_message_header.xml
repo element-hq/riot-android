@@ -17,7 +17,7 @@
         android:background="@color/vector_light_gray_color">
         <TextView
             android:id="@+id/messagesAdapter_message_header_text"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
