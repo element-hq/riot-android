@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +28,6 @@ import android.view.ViewGroup;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
-import org.matrix.androidsdk.util.Log;
 
 import im.vector.PublicRoomsManager;
 import im.vector.R;
@@ -171,8 +171,6 @@ public class VectorUnifiedSearchFragmentPagerAdapter extends FragmentPagerAdapte
      * @return true if a remote search is triggered
      */
     public boolean search(int position, String pattern, MatrixMessageListFragment.OnSearchResultListener listener) {
-        Log.e(LOG_TAG, "search pos " + position + " pattern " + pattern);
-
         // sanity checks
         if (null == mFragmentsData) {
             listener.onSearchSucceed(0);
