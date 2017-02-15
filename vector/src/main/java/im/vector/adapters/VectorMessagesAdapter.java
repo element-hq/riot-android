@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +63,9 @@ import java.lang.reflect.Method;
 import java.security.acl.LastOwnerException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -379,9 +383,9 @@ public class VectorMessagesAdapter extends MessagesAdapter {
 
                         if (null != deviceInfo) {
                             e2eDeviceInfoByEventId.put(event.eventId, deviceInfo);
-                            if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED) {
+                            if (deviceInfo.isVerified()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_verified);
-                            } else if (deviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
+                            } else if (deviceInfo.isBlocked()) {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_blocked);
                             } else {
                                 e2eIconByEventId.put(event.eventId, R.drawable.e2e_warning);
@@ -402,22 +406,32 @@ public class VectorMessagesAdapter extends MessagesAdapter {
     public void notifyDataSetChanged() {
         // the event with invalid timestamp must be pushed at the end of the history
         this.setNotifyOnChange(false);
-        ArrayList<MessageRow> undeliverableEvents = null;
+        List<MessageRow> undeliverableEvents = new ArrayList<>();
 
         for(int i = 0; i < getCount(); i++) {
             MessageRow row = getItem(i);
+            Event event = row.getEvent();
 
-            if ((null != row.getEvent()) && !row.getEvent().isValidOriginServerTs()) {
-                if (null == undeliverableEvents) {
-                    undeliverableEvents = new ArrayList<>();
-                }
+            if ((null != event) && (!event.isValidOriginServerTs() || event.isUnkownDevice())) {
                 undeliverableEvents.add(row);
                 removeRow(row);
                 i--;
             }
         }
 
-        if (null != undeliverableEvents) {
+        if (undeliverableEvents.size() > 0) {
+            try {
+                Collections.sort(undeliverableEvents, new Comparator<MessageRow>() {
+                    @Override
+                    public int compare(MessageRow m1, MessageRow m2) {
+                        long diff = m1.getEvent().getOriginServerTs() - m2.getEvent().getOriginServerTs();
+                        return (diff > 0) ? +1 : ((diff < 0) ? -1 : 0);
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## notifyDataSetChanged () : failed to sort undeliverableEvents " + e.getMessage());
+            }
+
             this.addAll(undeliverableEvents);
         }
 
@@ -665,7 +679,7 @@ public class VectorMessagesAdapter extends MessagesAdapter {
         if (event.canBeResent()) {
             menu.findItem(R.id.ic_action_vector_resend_message).setVisible(true);
 
-            if (event.isUndeliverable()) {
+            if (event.isUndeliverable() || event.isUnkownDevice()) {
                 menu.findItem(R.id.ic_action_vector_redact_message).setVisible(true);
             }
         } else if (event.mSentState == Event.SentState.SENT) {

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,8 +96,8 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         final TextView mActionDescTextView;
         final View mRoomAvatarLayout;
 
-        MemberDetailsViewHolder(View aParentView){
-            mActionImageView = (ImageView)aParentView.findViewById(R.id.adapter_member_details_icon);
+        MemberDetailsViewHolder(View aParentView) {
+            mActionImageView = (ImageView) aParentView.findViewById(R.id.adapter_member_details_icon);
             mActionDescTextView = (TextView) aParentView.findViewById(R.id.adapter_member_details_action_text);
             mVectorCircularImageView = (VectorCircularImageView) aParentView.findViewById(R.id.room_avatar_image_view);
             mRoomAvatarLayout = aParentView.findViewById(R.id.room_avatar_layout);
@@ -118,9 +119,10 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
         /**
          * Constructor for a dedicated action
+         *
          * @param aIconResourceId the icon
-         * @param aText the text to display
-         * @param aActionType the action type
+         * @param aText           the text to display
+         * @param aActionType     the action type
          */
         public AdapterMemberActionItems(int aIconResourceId, String aText, int aActionType) {
             mIconResourceId = aIconResourceId;
@@ -140,10 +142,10 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     /**
      * Construct an adapter where the items layout and the data model collection is provided
      *
-     * @param aContext Android App context
+     * @param aContext                 Android App context
      * @param aRowItemLayoutResourceId the layout of the list view item (row)
      */
-    public VectorMemberDetailsAdapter(Context aContext, MXSession session,  int aRowItemLayoutResourceId, int headerLayoutResourceId) {
+    public VectorMemberDetailsAdapter(Context aContext, MXSession session, int aRowItemLayoutResourceId, int headerLayoutResourceId) {
         mContext = aContext;
         mSession = session;
         mRowItemLayoutResourceId = aRowItemLayoutResourceId;
@@ -153,14 +155,16 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Set the action listener
+     *
      * @param aActionListener the action listenet
      */
-    public void setActionListener(IEnablingActions aActionListener){
+    public void setActionListener(IEnablingActions aActionListener) {
         mActionListener = aActionListener;
     }
 
     /**
      * Update the admin actions list
+     *
      * @param adminActionsList the admin actions list
      */
     public void setAdminActionsList(List<AdapterMemberActionItems> adminActionsList) {
@@ -169,6 +173,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the call actions list
+     *
      * @param callActionsList the call actions list
      */
     public void setCallActionsList(List<AdapterMemberActionItems> callActionsList) {
@@ -177,6 +182,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Update the call actions list
+     *
      * @param directCallActionsList the call actions list
      */
     public void setDirectCallsActionsList(List<AdapterMemberActionItems> directCallActionsList) {
@@ -248,6 +254,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
 
     /**
      * Provides the group title for a dedicated group position
+     *
      * @param groupPosition the group position
      * @return the group title.
      */
@@ -282,7 +289,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView)convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
 
         if (null != sectionNameTxtView) {
             sectionNameTxtView.setText(getGroupTitle(groupPosition));
@@ -308,7 +315,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         // sanity check
-        if (groupPosition <mActionsList.size()) {
+        if (groupPosition < mActionsList.size()) {
             return mActionsList.get(groupPosition).size();
         }
 
@@ -323,10 +330,9 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
             convertView = mLayoutInflater.inflate(mRowItemLayoutResourceId, parent, false);
             viewHolder = new MemberDetailsViewHolder(convertView);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             // recycle previous view..
-            viewHolder = (MemberDetailsViewHolder)convertView.getTag();
+            viewHolder = (MemberDetailsViewHolder) convertView.getTag();
         }
 
         // sanity checks
@@ -341,7 +347,7 @@ public class VectorMemberDetailsAdapter extends BaseExpandableListAdapter {
         if (null != currentItem.mRoom) {
             // room name
             viewHolder.mActionDescTextView.setTextColor(mContext.getResources().getColor(R.color.material_grey_900));
-            viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession,  currentItem.mRoom));
+            viewHolder.mActionDescTextView.setText(VectorUtils.getRoomDisplayName(mContext, mSession, currentItem.mRoom));
 
             // room avatar
             viewHolder.mActionImageView.setVisibility(View.GONE);

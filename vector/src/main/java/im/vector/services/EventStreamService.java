@@ -509,7 +509,13 @@ public class EventStreamService extends Service {
 
                     @Override
                     public void onStoreCorrupted(String accountId, String description) {
-                        startEventStream(fSession, store);
+                        // start a new initial sync
+                        if (null == store.getEventStreamToken()) {
+                            startEventStream(fSession, store);
+                        } else {
+                            // the data are out of sync
+                            Matrix.getInstance(getApplicationContext()).reloadSessions(getApplicationContext());
+                        }
                     }
 
                     @Override
@@ -1038,7 +1044,11 @@ public class EventStreamService extends Service {
         Log.d(LOG_TAG, "clearNotification " + mNotificationSessionId + " - " + mNotificationRoomId + " - " + mNotificationEventId);
 
         NotificationManager nm = (NotificationManager) EventStreamService.this.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancelAll();
+        try {
+            nm.cancelAll();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "## clearNotification() failed " + e.getMessage());
+        }
 
         // reset the identifiers
         mNotificationSessionId = null;
