@@ -514,7 +514,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             private boolean mInitialSyncComplete = false;
 
             @Override
-            public void onInitialSyncComplete() {
+            public void onInitialSyncComplete(String toToken) {
                 Log.d(LOG_TAG, "## onInitialSyncComplete()");
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -526,7 +526,7 @@ public class VectorRecentsListFragment extends Fragment implements VectorRoomSum
             }
 
             @Override
-            public void onLiveEventsChunkProcessed() {
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

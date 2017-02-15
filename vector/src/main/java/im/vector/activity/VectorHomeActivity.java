@@ -430,7 +430,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         // + other actions which require a background listener
         mLiveEventListener = new MXEventListener() {
             @Override
-            public void onLiveEventsChunkProcessed() {
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
                 // treat any pending URL link workflow, that was started previously
                 processIntentUniversalLink();
 
@@ -570,7 +570,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             }
 
             @Override
-            public void onLiveEventsChunkProcessed() {
+            public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
                 mSyncInProgressView.setVisibility(View.GONE);
             }
         };

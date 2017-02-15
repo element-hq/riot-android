@@ -102,7 +102,7 @@ public class Matrix {
         }
 
         @Override
-        public void onLiveEventsChunkProcessed() {
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             // when the client does not use GCM (ie. FDroid),
             // we need to compute the application badge values
 

@@ -284,7 +284,7 @@ public class EventStreamService extends Service {
         }
 
         @Override
-        public void onLiveEventsChunkProcessed() {
+        public void onLiveEventsChunkProcessed(String fromToken, String toToken) {
             triggerPreparedNotification(true);
             mPendingNotifications.clear();
 
