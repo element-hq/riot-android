@@ -32,24 +32,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.model.ThreePid;
+
+import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
 
 public class PhoneNumberActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
     private static final String LOG_TAG = PhoneNumberActivity.class.getSimpleName();
+
+    private static final String EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";
     private static final int REQUEST_COUNTRY = 1245;
 
     private TextInputEditText mCountry;
     private TextInputLayout mCountryLayout;
-
     private TextInputEditText mPhoneNumber;
     private TextInputLayout mPhoneNumberLayout;
+    private View mLoadingView;
+
+    private MXSession mSession;
 
     // Ex "FR"
     private String mCurrentRegionCode;
@@ -63,9 +72,10 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
      * *********************************************************************************************
      */
 
-    public static void start(final Context context) {
+    public static Intent getIntent(final Context context, final String sessionId) {
         final Intent intent = new Intent(context, PhoneNumberActivity.class);
-        context.startActivity(intent);
+        intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
+        return intent;
     }
 
     /*
@@ -89,6 +99,10 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
         mCountryLayout = (TextInputLayout) findViewById(R.id.phone_number_country);
         mPhoneNumber = (TextInputEditText) findViewById(R.id.phone_number_value);
         mPhoneNumberLayout = (TextInputLayout) findViewById(R.id.phone_number);
+        mLoadingView = findViewById(R.id.loading_view);
+
+        final Intent intent = getIntent();
+        mSession = Matrix.getInstance(this).getSession(intent.getStringExtra(EXTRA_MATRIX_ID));
 
         initViews();
     }
@@ -204,12 +218,51 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
                 mPhoneNumberLayout.setErrorEnabled(true);
                 mPhoneNumberLayout.setError(getString(R.string.settings_phone_number_error));
             } else {
-                //TODO phone is valid
+                addPhoneNumber(mCurrentPhoneNumber);
+            }
+        }
+    }
+
+    /**
+     * Link phone number to account
+     * @param phoneNumber
+     */
+    private void addPhoneNumber(final Phonenumber.PhoneNumber phoneNumber) {
+        mLoadingView.setVisibility(View.VISIBLE);
+
+        final String formattedPhone = phoneNumber.toString();
+        final ThreePid pid = new ThreePid(formattedPhone, ThreePid.MEDIUM_MSISDN);
+
+        //TODO
+        /*mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                mLoadingView.setVisibility(View.GONE);
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
             }
-        }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onSubmitPhoneError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                onSubmitPhoneError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onSubmitPhoneError(e.getLocalizedMessage());
+            }
+        });*/
+    }
+
+    private void onSubmitPhoneError(final String errorMessage){
+        mLoadingView.setVisibility(View.GONE);
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     /*

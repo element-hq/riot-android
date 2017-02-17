@@ -1609,8 +1609,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             addPhoneNumberPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent(getActivity(), PhoneNumberActivity.class);
-                    startActivityForResult(i, REQUEST_NEW_PHONE_NUMBER);
+                    Intent intent = PhoneNumberActivity.getIntent(getActivity(), mSession.getCredentials().userId);
+                    startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER);
                     return false;
                 }
             });
