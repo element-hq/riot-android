@@ -165,7 +165,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
     */
 
     private void initViews() {
-        setCountryCode(null);
+        setCountryCode(PhoneNumberUtils.getCountryCode(this));
 
         initPhoneWithPrefix();
 
@@ -225,12 +225,13 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
 
     /**
      * Link phone number to account
+     *
      * @param phoneNumber
      */
     private void addPhoneNumber(final Phonenumber.PhoneNumber phoneNumber) {
         mLoadingView.setVisibility(View.VISIBLE);
 
-        final String formattedPhone = phoneNumber.toString();
+        final String formattedPhone = PhoneNumberUtils.getE164format(phoneNumber);
         final ThreePid pid = new ThreePid(formattedPhone, ThreePid.MEDIUM_MSISDN);
 
         //TODO
@@ -260,7 +261,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
         });*/
     }
 
-    private void onSubmitPhoneError(final String errorMessage){
+    private void onSubmitPhoneError(final String errorMessage) {
         mLoadingView.setVisibility(View.GONE);
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
