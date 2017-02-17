@@ -65,6 +65,7 @@ import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.DeviceInfo;
 import org.matrix.androidsdk.rest.model.DevicesListResponse;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.ThirdPartyIdentifier;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
@@ -107,6 +108,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final String ARG_MATRIX_ID = "VectorSettingsPreferencesFragment.ARG_MATRIX_ID";
 
     private static final String EMAIL_PREFERENCE_KEY_BASE = "EMAIL_PREFERENCE_KEY_BASE";
+    private static final String PHONE_NUMBER_PREFERENCE_KEY_BASE = "PHONE_NUMBER_PREFERENCE_KEY_BASE";
     private static final String PUSHER_PREFERENCE_KEY_BASE = "PUSHER_PREFERENCE_KEY_BASE";
     private static final String DEVICES_PREFERENCE_KEY_BASE = "DEVICES_PREFERENCE_KEY_BASE";
     private static final String IGNORED_USER_KEY_BASE = "IGNORED_USER_KEY_BASE";
@@ -157,6 +159,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     // displayed emails
     private PreferenceCategory mUserSettingsCategory;
     private List<String> mDisplayedEmails = new ArrayList<>();
+    private List<String> mDisplayedPhoneNumber = new ArrayList<>();
     // displayed pushers
     private PreferenceCategory mPushersSettingsDivider;
     private PreferenceCategory mPushersSettingsCategory;
@@ -606,7 +609,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             Matrix.getInstance(context).addNetworkEventListener(mNetworkListener);
 
-            mSession.getMyUser().refreshLinkedEmails(new SimpleApiCallback<Void>() {
+            mSession.getMyUser().refreshThirdPartyIdentifier(new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     // ensure that the activity still exists
@@ -616,6 +619,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                             @Override
                             public void run() {
                                 refreshEmailsList();
+                                refreshPhoneNumbersList();
                             }
                         });
                     }
@@ -1304,7 +1308,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh the emails list
      */
     private void refreshEmailsList() {
-        List<String> newEmailsList = mSession.getMyUser().getlinkedEmails();
+        List<String> newEmailsList = new ArrayList<>();
+        for (ThirdPartyIdentifier identifier : mSession.getMyUser().getlinkedEmails()) {
+            newEmailsList.add(identifier.address);
+        }
 
         // check first if there is an update
         boolean isNewList = true;
@@ -1538,8 +1545,59 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh phone number list
      */
     private void refreshPhoneNumbersList() {
-        Log.e(LOG_TAG, "refreshPhoneNumbersList");
-        //TODO display phone number list
+        List<String> phoneNumberList = new ArrayList<>();
+        for (ThirdPartyIdentifier identifier : mSession.getMyUser().getlinkedPhoneNumbers()) {
+            phoneNumberList.add(identifier.address);
+        }
+
+        // check first if there is an update
+        boolean isNewList = true;
+        if ((null != mDisplayedPhoneNumber) && (phoneNumberList.size() == mDisplayedPhoneNumber.size())) {
+            isNewList = !mDisplayedPhoneNumber.containsAll(phoneNumberList);
+        }
+
+        if (isNewList) {
+            // remove the displayed one
+            for (int index = 0; ; index++) {
+                Preference preference = mUserSettingsCategory.findPreference(PHONE_NUMBER_PREFERENCE_KEY_BASE + index);
+
+                if (null != preference) {
+                    mUserSettingsCategory.removePreference(preference);
+                } else {
+                    break;
+                }
+            }
+
+            // remove the add email
+            Preference curAddPhoneNUmberPreference = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
+            if (null != curAddPhoneNUmberPreference) {
+                mUserSettingsCategory.removePreference(curAddPhoneNUmberPreference);
+            }
+
+            // add new phone number list
+            mDisplayedPhoneNumber = phoneNumberList;
+
+            int index = 0;
+
+            for (final String phoneNUmber : mDisplayedPhoneNumber) {
+                VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
+
+                preference.setTitle(getResources().getString(R.string.settings_email_address));
+                preference.setSummary(phoneNUmber);
+                preference.setKey(PHONE_NUMBER_PREFERENCE_KEY_BASE + index);
+
+                preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
+                    @Override
+                    public boolean onPreferenceLongClick(Preference preference) {
+                        VectorUtils.copyToClipboard(getActivity(), phoneNUmber);
+                        return true;
+                    }
+                });
+
+                index++;
+                mUserSettingsCategory.addPreference(preference);
+            }
+        }
 
         // display the "add phone number" entry if necessary
         Preference curAddPhoneNumberPreference = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
@@ -1556,16 +1614,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     return false;
                 }
             });
-
-            addPhoneNumberPreference.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            Log.e(LOG_TAG, "Phone number onPreferenceChange " + newValue);
-
-                            return false;
-                        }
-                    });
 
             mUserSettingsCategory.addPreference(addPhoneNumberPreference);
         }
