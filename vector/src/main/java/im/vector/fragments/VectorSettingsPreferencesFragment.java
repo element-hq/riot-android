@@ -29,7 +29,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -37,7 +36,6 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -88,6 +86,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.CountryPickerActivity;
 import im.vector.activity.PhoneNumberActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
@@ -121,6 +120,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     private static final int REQUEST_E2E_FILE_REQUEST_CODE = 123;
     private static final int REQUEST_NEW_PHONE_NUMBER = 456;
+    private static final int REQUEST_PHONEBOOK_COUNTRY = 789;
+
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
     // members
@@ -145,7 +146,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             // refresh the settings value
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(VectorApp.getInstance().getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(getResources().getString(R.string.settings_display_name), myUser.displayname);
+            editor.putString(getString(R.string.settings_display_name), myUser.displayname);
             editor.commit();
 
             refreshDisplay();
@@ -160,6 +161,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mUserSettingsCategory;
     private List<String> mDisplayedEmails = new ArrayList<>();
     private List<String> mDisplayedPhoneNumber = new ArrayList<>();
+    // contacts
+    private PreferenceCategory mContactSettingsCategory;
+    private VectorCustomActionEditTextPreference mContactPhonebookCountryPreference;
     // displayed pushers
     private PreferenceCategory mPushersSettingsDivider;
     private PreferenceCategory mPushersSettingsCategory;
@@ -209,20 +213,18 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if (null == mPushesRuleByResourceId) {
             mPushesRuleByResourceId = new HashMap<>();
 
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_enable_this_device), DUMMY_RULE);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_turn_screen_on), DUMMY_RULE);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_invited_to_room), BingRule.RULE_ID_INVITE_ME);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_call_invitations), BingRule.RULE_ID_CALL);
-            mPushesRuleByResourceId.put(getResources().getString(R.string.settings_messages_sent_by_bot), BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS);
+            mPushesRuleByResourceId.put(getString(R.string.settings_enable_all_notif), BingRule.RULE_ID_DISABLE_ALL);
+            mPushesRuleByResourceId.put(getString(R.string.settings_enable_this_device), DUMMY_RULE);
+            mPushesRuleByResourceId.put(getString(R.string.settings_turn_screen_on), DUMMY_RULE);
+            mPushesRuleByResourceId.put(getString(R.string.settings_containing_my_name), BingRule.RULE_ID_CONTAIN_DISPLAY_NAME);
+            mPushesRuleByResourceId.put(getString(R.string.settings_messages_in_one_to_one), BingRule.RULE_ID_ONE_TO_ONE_ROOM);
+            mPushesRuleByResourceId.put(getString(R.string.settings_messages_in_group_chat), BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS);
+            mPushesRuleByResourceId.put(getString(R.string.settings_invited_to_room), BingRule.RULE_ID_INVITE_ME);
+            mPushesRuleByResourceId.put(getString(R.string.settings_call_invitations), BingRule.RULE_ID_CALL);
+            mPushesRuleByResourceId.put(getString(R.string.settings_messages_sent_by_bot), BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS);
         }
 
-        final PreferenceManager preferenceManager = getPreferenceManager();
-
-        UserAvatarPreference avatarPreference = (UserAvatarPreference) preferenceManager.findPreference("matrixId");
+        UserAvatarPreference avatarPreference = (UserAvatarPreference) findPreference("matrixId");
         avatarPreference.setSession(mSession);
         avatarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -232,7 +234,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        EditTextPreference passwordPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_change_password));
+        EditTextPreference passwordPreference = (EditTextPreference) findPreference(getString(R.string.settings_change_password));
         passwordPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -242,37 +244,37 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         });
 
         // application version
-        EditTextPreference versionTextPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_version));
+        EditTextPreference versionTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_version));
         if (null != versionTextPreference) {
             versionTextPreference.setSummary(VectorUtils.getApplicationVersion(appContext));
         }
 
         // olm version
-        EditTextPreference olmTextPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_olm_version));
+        EditTextPreference olmTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_olm_version));
         if (null != olmTextPreference) {
             olmTextPreference.setSummary(Matrix.getInstance(appContext).getDefaultSession().getCryptoVersion(appContext, false));
         }
 
         // user account
-        EditTextPreference accountIdTextPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_logged_in));
+        EditTextPreference accountIdTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_logged_in));
         if (null != accountIdTextPreference) {
             accountIdTextPreference.setSummary(mSession.getMyUserId());
         }
 
         // home server
-        EditTextPreference homeServerTextPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_home_server));
+        EditTextPreference homeServerTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_home_server));
         if (null != homeServerTextPreference) {
             homeServerTextPreference.setSummary(mSession.getHomeserverConfig().getHomeserverUri().toString());
         }
 
         // identity server
-        EditTextPreference identityServerTextPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_identity_server));
+        EditTextPreference identityServerTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_identity_server));
         if (null != identityServerTextPreference) {
             identityServerTextPreference.setSummary(mSession.getHomeserverConfig().getIdentityServerUri().toString());
         }
 
         // terms & conditions
-        EditTextPreference termConditionsPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_app_term_conditions));
+        EditTextPreference termConditionsPreference = (EditTextPreference) findPreference(getString(R.string.settings_app_term_conditions));
 
         if (null != termConditionsPreference) {
             termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -285,7 +287,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // privacy policy
-        EditTextPreference privacyPreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_privacy_policy));
+        EditTextPreference privacyPreference = (EditTextPreference) findPreference(getString(R.string.settings_privacy_policy));
 
         if (null != termConditionsPreference) {
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -298,7 +300,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // third party notice
-        EditTextPreference thirdPartyNotices = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_third_party_notices));
+        EditTextPreference thirdPartyNotices = (EditTextPreference) findPreference(getString(R.string.settings_third_party_notices));
 
         if (null != termConditionsPreference) {
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -311,7 +313,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // copyright
-        EditTextPreference copyrightNotices = (EditTextPreference) preferenceManager.findPreference(getActivity().getResources().getString(R.string.settings_copyright));
+        EditTextPreference copyrightNotices = (EditTextPreference) findPreference(getString(R.string.settings_copyright));
 
         if (null != termConditionsPreference) {
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -324,7 +326,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // clear cache
-        EditTextPreference clearCachePreference = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_clear_cache));
+        EditTextPreference clearCachePreference = (EditTextPreference) findPreference(getString(R.string.settings_clear_cache));
 
         if (null != clearCachePreference) {
             clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -336,7 +338,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_display_name));
+        final EditTextPreference displaynamePref = (EditTextPreference) findPreference(appContext.getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -348,7 +350,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // push rules
         for (String resourceText : mPushesRuleByResourceId.keySet()) {
-            final CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
+            final CheckBoxPreference switchPreference = (CheckBoxPreference) findPreference(resourceText);
 
             if (null != switchPreference) {
                 switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -364,7 +366,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         }
 
-        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_enable_background_sync));
+        final CheckBoxPreference useBackgroundSyncPref = (CheckBoxPreference) findPreference(appContext.getString(R.string.settings_enable_background_sync));
 
         if (null != useBackgroundSyncPref) {
             final GcmRegistrationManager gcmMgr = Matrix.getInstance(appContext).getSharedGCMRegistrationManager();
@@ -385,10 +387,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        final CheckBoxPreference useGaPref = (CheckBoxPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.ga_use_settings));
+        final CheckBoxPreference useGaPref = (CheckBoxPreference) findPreference(appContext.getString(R.string.ga_use_settings));
 
         if (!GAHelper.isGAUseUpdatable()) {
-            PreferenceCategory otherCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_other));
+            PreferenceCategory otherCategory = (PreferenceCategory) findPreference(getString(R.string.settings_other));
             otherCategory.removePreference(useGaPref);
         } else {
             useGaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -416,16 +418,17 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        mUserSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_user_settings));
-        mPushersSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_notifications_targets));
-        mPushersSettingsDivider = (PreferenceCategory) getPreferenceManager().findPreference("notifications_targets_divider");
-        mIgnoredUserSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_ignored_users));
-        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference("ignore_users_divider");
-        mDevicesListSettingsCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_devices_list));
-        mDevicesListSettingsCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.devices_divider));
-        mCryptographyCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_cryptography));
-        mCryptographyCategoryDivider = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.cryptography_divider));
-        mLabsCategory = (PreferenceCategory) getPreferenceManager().findPreference("labs");
+        mUserSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_user_settings));
+        mContactSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_contact));
+        mPushersSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_notifications_targets));
+        mPushersSettingsDivider = (PreferenceCategory) findPreference("notifications_targets_divider");
+        mIgnoredUserSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_ignored_users));
+        mIgnoredUserSettingsCategoryDivider = (PreferenceCategory) findPreference("ignore_users_divider");
+        mDevicesListSettingsCategory = (PreferenceCategory) findPreference(getString(R.string.settings_devices_list));
+        mDevicesListSettingsCategoryDivider = (PreferenceCategory) findPreference(getString(R.string.devices_divider));
+        mCryptographyCategory = (PreferenceCategory) findPreference(getString(R.string.settings_cryptography));
+        mCryptographyCategoryDivider = (PreferenceCategory) findPreference(getString(R.string.cryptography_divider));
+        mLabsCategory = (PreferenceCategory) findPreference("labs");
 
         // preference to start the App info screen, to facilitate App permissions access
         Preference applicationInfoLInkPref = findPreference(APP_INFO_LINK_PREFERENCE_KEY);
@@ -445,21 +448,16 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
-        // permissions management
-        // on Android >= 23, use the system ones
-        if (Build.VERSION.SDK_INT >= 23) {
-            // hide the dedicated section
-            getPreferenceScreen().removePreference(getPreferenceManager().findPreference(getResources().getString(R.string.settings_app_permission)));
-            getPreferenceScreen().removePreference(getPreferenceManager().findPreference("settings_app_permission_divider"));
-        }
+        // Contacts
+        setContactsPreferences();
 
         // background sync management
-        mBackgroundSyncCategory = (PreferenceCategory) getPreferenceManager().findPreference(getResources().getString(R.string.settings_background_sync));
-        mSyncRequestTimeoutPreference = (EditTextPreference) getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_timeout));
-        mSyncRequestDelayPreference = (EditTextPreference) getPreferenceManager().findPreference(getResources().getString(R.string.settings_set_sync_delay));
+        mBackgroundSyncCategory = (PreferenceCategory) findPreference(getString(R.string.settings_background_sync));
+        mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(getString(R.string.settings_set_sync_timeout));
+        mSyncRequestDelayPreference = (EditTextPreference) findPreference(getString(R.string.settings_set_sync_delay));
 
-        final CheckBoxPreference useCryptoPref = (CheckBoxPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.room_settings_labs_end_to_end));
-        final Preference cryptoIsEnabledPref = preferenceManager.findPreference(appContext.getResources().getString(R.string.room_settings_labs_end_to_end_is_active));
+        final CheckBoxPreference useCryptoPref = (CheckBoxPreference) findPreference(appContext.getString(R.string.room_settings_labs_end_to_end));
+        final Preference cryptoIsEnabledPref = findPreference(appContext.getString(R.string.room_settings_labs_end_to_end_is_active));
 
         cryptoIsEnabledPref.setEnabled(false);
 
@@ -557,7 +555,6 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         refreshPhoneNumbersList();
         refreshIgnoredUsersList();
         refreshDevicesList();
-        manageCountryPreference();
     }
 
     @Override
@@ -702,13 +699,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         avatarPreference.setEnabled(isConnected);
 
         // refresh the display name
-        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_display_name));
+        final EditTextPreference displaynamePref = (EditTextPreference) preferenceManager.findPreference(appContext.getString(R.string.settings_display_name));
         displaynamePref.setSummary(mSession.getMyUser().displayname);
         displaynamePref.setText(mSession.getMyUser().displayname);
         displaynamePref.setEnabled(isConnected);
 
         // change password
-        final EditTextPreference changePasswordPref = (EditTextPreference) preferenceManager.findPreference(appContext.getResources().getString(R.string.settings_change_password));
+        final EditTextPreference changePasswordPref = (EditTextPreference) preferenceManager.findPreference(appContext.getString(R.string.settings_change_password));
         changePasswordPref.setEnabled(isConnected);
 
         // update the push rules
@@ -722,9 +719,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             CheckBoxPreference switchPreference = (CheckBoxPreference) preferenceManager.findPreference(resourceText);
 
             if (null != switchPreference) {
-                if (resourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
+                if (resourceText.equals(getString(R.string.settings_enable_this_device))) {
                     switchPreference.setChecked(gcmMgr.areDeviceNotificationsAllowed());
-                } else if (resourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
+                } else if (resourceText.equals(getString(R.string.settings_turn_screen_on))) {
                     switchPreference.setChecked(gcmMgr.isScreenTurnedOn());
                 } else {
                     switchPreference.setEnabled((null != rules) && isConnected);
@@ -777,7 +774,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                         public void run() {
                                             hideLoadingView();
                                             Toast.makeText(getActivity(),
-                                                    getActivity().getResources().getString(textId),
+                                                    getActivity().getString(textId),
                                                     Toast.LENGTH_LONG).show();
                                         }
                                     });
@@ -863,14 +860,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         Log.d(LOG_TAG, "onPushRuleClick " + fResourceText + " : set to " + newValue);
 
-        if (fResourceText.equals(getResources().getString(R.string.settings_turn_screen_on))) {
+        if (fResourceText.equals(getString(R.string.settings_turn_screen_on))) {
             if (gcmMgr.isScreenTurnedOn() != newValue) {
                 gcmMgr.setScreenTurnedOn(newValue);
             }
             return;
         }
 
-        if (fResourceText.equals(getResources().getString(R.string.settings_enable_this_device))) {
+        if (fResourceText.equals(getString(R.string.settings_enable_this_device))) {
             boolean isConnected = Matrix.getInstance(getActivity()).isConnected();
             final boolean isAllowed = gcmMgr.areDeviceNotificationsAllowed();
 
@@ -1005,7 +1002,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     // refresh the settings value
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(getResources().getString(R.string.settings_display_name), value);
+                    editor.putString(getString(R.string.settings_display_name), value);
                     editor.commit();
 
                     onCommonDone(null);
@@ -1058,6 +1055,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     break;
                 case REQUEST_NEW_PHONE_NUMBER:
                     refreshPhoneNumbersList();
+                    break;
+                case REQUEST_PHONEBOOK_COUNTRY:
+                    onPhonebookCountryUpdate(data);
                     break;
                 case VectorUtils.TAKE_IMAGE:
                     Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
@@ -1124,8 +1124,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private void refreshPreferences() {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(this.getResources().getString(R.string.settings_display_name), mSession.getMyUser().displayname);
-        editor.putString(this.getResources().getString(R.string.settings_version), VectorUtils.getApplicationVersion(getActivity()));
+        editor.putString(getString(R.string.settings_display_name), mSession.getMyUser().displayname);
+        editor.putString(getString(R.string.settings_version), VectorUtils.getApplicationVersion(getActivity()));
 
         BingRuleSet mBingRuleSet = mSession.getDataHandler().pushRules();
 
@@ -1345,7 +1345,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             for (String email : mDisplayedEmails) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
-                preference.setTitle(getResources().getString(R.string.settings_email_address));
+                preference.setTitle(getString(R.string.settings_email_address));
                 preference.setSummary(email);
                 preference.setKey(EMAIL_PREFERENCE_KEY_BASE + index);
 
@@ -1372,7 +1372,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             addEmailPreference.setTitle(R.string.settings_add_email_address);
             addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
             addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-            addEmailPreference.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_material_add_circle));
+            addEmailPreference.setIcon(R.drawable.ic_add_black);
 
             addEmailPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -1582,7 +1582,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             for (final String phoneNUmber : mDisplayedPhoneNumber) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
-                preference.setTitle(getResources().getString(R.string.settings_email_address));
+                preference.setTitle(getString(R.string.settings_email_address));
                 preference.setSummary(phoneNUmber);
                 preference.setKey(PHONE_NUMBER_PREFERENCE_KEY_BASE + index);
 
@@ -1604,14 +1604,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         if (null == curAddPhoneNumberPreference) {
             Preference addPhoneNumberPreference = new Preference(getActivity());
             addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-            addPhoneNumberPreference.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_material_add_circle));
+            addPhoneNumberPreference.setIcon(R.drawable.ic_add_black);
             addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
             addPhoneNumberPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = PhoneNumberActivity.getIntent(getActivity(), mSession.getCredentials().userId);
                     startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER);
-                    return false;
+                    return true;
                 }
             });
 
@@ -1619,29 +1619,39 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
     }
 
-    /**
-     * Manage the country preference list.
-     */
-    private void manageCountryPreference() {
-        final ListPreference listPreference = (ListPreference) findPreference(getString(R.string.settings_country));
-        listPreference.setEntries(PhoneNumberUtils.getHumanCountryCodes());
-        listPreference.setEntryValues(PhoneNumberUtils.getCountryCodes());
-        listPreference.setDefaultValue("EN");
-        listPreference.setValue(PhoneNumberUtils.getCountryCode(getActivity()));
-        listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
+    //==============================================================================================================
+    // contacts management
+    //==============================================================================================================
 
-        listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+    private void setContactsPreferences() {
+        // Permission
+        if (Build.VERSION.SDK_INT >= 23) {
+            // on Android >= 23, use the system one
+            mContactSettingsCategory.removePreference(findPreference(getString(R.string.settings_contacts_app_permission)));
+        }
+        // Phonebook country
+        mContactPhonebookCountryPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.settings_contacts_phonebook_country));
+        mContactPhonebookCountryPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
+
+        mContactPhonebookCountryPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String cc = (String) newValue;
-
-                if (!TextUtils.equals(cc, PhoneNumberUtils.getCountryCode(getActivity()))) {
-                    PhoneNumberUtils.setCountryCode(getActivity(), (String) newValue);
-                    listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
-                }
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = CountryPickerActivity.getIntent(getActivity(), true);
+                startActivityForResult(intent, REQUEST_PHONEBOOK_COUNTRY);
                 return true;
             }
         });
+    }
+
+    private void onPhonebookCountryUpdate(final Intent data) {
+        if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
+                && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)) {
+            final String countryCode = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE);
+            if (!TextUtils.equals(countryCode, PhoneNumberUtils.getCountryCode(getActivity()))) {
+                PhoneNumberUtils.setCountryCode(getActivity(), countryCode);
+                mContactPhonebookCountryPreference.setSummary(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME));
+            }
+        }
     }
 
     //==============================================================================================================
@@ -1679,8 +1689,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // update the settings
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(this.getResources().getString(R.string.settings_set_sync_timeout), timeout + "");
-        editor.putString(this.getResources().getString(R.string.settings_set_sync_delay), delay + "");
+        editor.putString(getString(R.string.settings_set_sync_timeout), timeout + "");
+        editor.putString(getString(R.string.settings_set_sync_delay), delay + "");
         editor.commit();
 
         if (null != mSyncRequestTimeoutPreference) {
@@ -1776,7 +1786,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // device name
         if ((null != aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
-            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_name));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getString(R.string.encryption_information_device_name));
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
 
@@ -1800,7 +1810,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // crypto section: device ID
         if (!TextUtils.isEmpty(deviceId)) {
-            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_id));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_id));
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(deviceId);
 
@@ -1813,7 +1823,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 });
             }
 
-            VectorCustomActionEditTextPreference exportPref = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_export_e2e_room_keys));
+            VectorCustomActionEditTextPreference exportPref = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_export_e2e_room_keys));
 
             exportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -1823,7 +1833,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             });
 
-            VectorCustomActionEditTextPreference importPref = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_import_e2e_room_keys));
+            VectorCustomActionEditTextPreference importPref = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_import_e2e_room_keys));
 
             importPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -1840,7 +1850,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 @Override
                 public void onSuccess(final MXDeviceInfo deviceInfo) {
                     if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
-                        VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getResources().getString(R.string.encryption_information_device_key));
+                        VectorCustomActionEditTextPreference cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_key));
 
                         if (null != cryptoInfoTextPreference) {
                             cryptoInfoTextPreference.setSummary(deviceInfo.fingerprint());
@@ -2132,9 +2142,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
 
                         // detect if the updated device is the current account one
-                        Preference pref = findPreference(getActivity().getResources().getString(R.string.encryption_information_device_id));
+                        Preference pref = findPreference(getString(R.string.encryption_information_device_id));
                         if (TextUtils.equals(pref.getSummary(), aDeviceInfoToRename.device_id)) {
-                            (findPreference(getActivity().getResources().getString(R.string.encryption_information_device_name))).setSummary(input.getText());
+                            (findPreference(getString(R.string.encryption_information_device_name))).setSummary(input.getText());
                         }
 
                         hideLoadingView();

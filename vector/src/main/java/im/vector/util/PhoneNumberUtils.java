@@ -141,6 +141,7 @@ public class PhoneNumberUtils {
      * @return the human readable name
      */
     public static String getHumanCountryCode(final String countryCode) {
+        buildCountryCodesList();
         String name = null;
 
         if (!TextUtils.isEmpty(countryCode)) {
@@ -157,23 +158,19 @@ public class PhoneNumberUtils {
      * @return the ISO country code or "" if it does not exist
      */
     public static String getCountryCode(final Context context) {
-        String countryCode = "";
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (!preferences.contains(COUNTRY_CODE_PREF_KEY)) {
+        if (!preferences.contains(COUNTRY_CODE_PREF_KEY) || TextUtils.isEmpty(preferences.getString(COUNTRY_CODE_PREF_KEY, ""))) {
             try {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                countryCode = tm.getNetworkCountryIso().toUpperCase();
+                String countryCode = tm.getNetworkCountryIso().toUpperCase();
                 setCountryCode(context, countryCode);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## getCountryCode failed " + e.getMessage());
             }
-        } else {
-            countryCode = preferences.getString(COUNTRY_CODE_PREF_KEY, "");
         }
 
-        return countryCode;
+        return preferences.getString(COUNTRY_CODE_PREF_KEY, "");
     }
 
     /**

@@ -23,11 +23,24 @@
             android:summary="********"
             android:key="@string/settings_change_password"/>
 
-        <ListPreference
-            android:key="@string/settings_country"
-            android:title="@string/settings_country"
-            android:dialogTitle="@string/settings_select_country"/>
+    </PreferenceCategory>
 
+    <im.vector.preference.VectorDividerCategory
+        android:key="settings_contact_divider"
+        android:title="settings_contact_divider"/>
+
+    <PreferenceCategory
+        android:key="@string/settings_contact"
+        android:title="@string/settings_contact" >
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_contacts_app_permission"
+            android:key="@string/settings_contacts_app_permission"/>
+
+        <im.vector.preference.VectorCustomActionEditTextPreference
+            android:key="@string/settings_contacts_phonebook_country"
+            android:title="@string/settings_contacts_phonebook_country"
+            android:dialogTitle="@string/settings_select_country"/>
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory />
@@ -201,19 +214,6 @@
             android:title="@string/settings_set_sync_delay"
             android:key="@string/settings_set_sync_delay"/>
 
-    </PreferenceCategory>
-
-    <im.vector.preference.VectorDividerCategory
-        android:key="settings_app_permission_divider"
-        android:title="settings_app_permission_divider"/>
-
-    <PreferenceCategory
-        android:key="@string/settings_app_permission"
-        android:title="@string/settings_app_permission" >
-
-        <im.vector.preference.VectorSwitchPreference
-            android:title="@string/settings_app_permission_contacts"
-            android:key="CONTACT_BOOK_ACCESS_KEY"/>
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory/>

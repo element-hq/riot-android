@@ -36,6 +36,10 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
     private final List<CountryPhoneData> mHumanCountryCodeByIndicator;
     private final List<CountryPhoneData> mFilteredList;
+
+    // Set whether we display indicators (ex: +33) or not
+    private final boolean mWithIndicator;
+
     private final OnSelectCountryListener mListener;
 
     /*
@@ -44,10 +48,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
      * *********************************************************************************************
      */
 
-    public CountryAdapter(final List<CountryPhoneData> countries, final OnSelectCountryListener listener) {
+    public CountryAdapter(final List<CountryPhoneData> countries, final boolean withIndicator, final OnSelectCountryListener listener) {
         mHumanCountryCodeByIndicator = countries;
         // Init filtered list with a copy of countries list
         mFilteredList = new ArrayList<>(countries);
+        mWithIndicator = withIndicator;
         mListener = listener;
     }
 
@@ -127,7 +132,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         private void populateViews(final CountryPhoneData country) {
             vCountryName.setText(country.getCountryName());
-            vCountryIndicator.setText(country.getFormattedIndicator());
+            if (mWithIndicator) {
+                vCountryIndicator.setText(country.getFormattedIndicator());
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

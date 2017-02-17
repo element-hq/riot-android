@@ -38,14 +38,30 @@ import im.vector.util.PhoneNumberUtils;
 
 public class CountryPickerActivity extends AppCompatActivity implements CountryAdapter.OnSelectCountryListener, SearchView.OnQueryTextListener {
 
-    public static final String SELECTED_COUNTRY_NAME = "SELECTED_COUNTRY_NAME";
-    public static final String SELECTED_COUNTRY_CODE = "SELECTED_COUNTRY_CODE";
-    public static final String SELECTED_COUNTRY_INDICATOR = "SELECTED_COUNTRY_INDICATOR";
+    public static final String EXTRA_IN_WITH_INDICATOR = "EXTRA_IN_WITH_INDICATOR";
+
+    public static final String EXTRA_OUT_COUNTRY_NAME = "EXTRA_OUT_COUNTRY_NAME";
+    public static final String EXTRA_OUT_COUNTRY_CODE = "EXTRA_OUT_COUNTRY_CODE";
+    public static final String EXTRA_OUT_COUNTRY_INDICATOR = "EXTRA_OUT_COUNTRY_INDICATOR";
 
     private RecyclerView mCountryRecyclerView;
     private View mCountryEmptyView;
     private CountryAdapter mCountryAdapter;
     private SearchView mSearchView;
+
+    private boolean mWithIndicator;
+
+     /*
+     * *********************************************************************************************
+     * Static methods
+     * *********************************************************************************************
+     */
+
+    public static Intent getIntent(final Context context, final boolean withIndicator) {
+        final Intent intent = new Intent(context, CountryPickerActivity.class);
+        intent.putExtra(EXTRA_IN_WITH_INDICATOR, withIndicator);
+        return intent;
+    }
 
     /*
     * *********************************************************************************************
@@ -66,6 +82,9 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         }
+
+        final Intent intent = getIntent();
+        mWithIndicator = intent.getBooleanExtra(EXTRA_IN_WITH_INDICATOR, false);
 
         initViews();
     }
@@ -118,7 +137,7 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mCountryRecyclerView.setLayoutManager(layoutManager);
-        mCountryAdapter = new CountryAdapter(PhoneNumberUtils.getCountriesWithIndicator(), this);
+        mCountryAdapter = new CountryAdapter(PhoneNumberUtils.getCountriesWithIndicator(), mWithIndicator, this);
         mCountryRecyclerView.setAdapter(mCountryAdapter);
     }
 
@@ -140,9 +159,9 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
     @Override
     public void onSelectCountry(CountryPhoneData country) {
         Intent intent = new Intent();
-        intent.putExtra(SELECTED_COUNTRY_NAME, country.getCountryName());
-        intent.putExtra(SELECTED_COUNTRY_CODE, country.getCountryCode());
-        intent.putExtra(SELECTED_COUNTRY_INDICATOR, country.getIndicator());
+        intent.putExtra(EXTRA_OUT_COUNTRY_NAME, country.getCountryName());
+        intent.putExtra(EXTRA_OUT_COUNTRY_CODE, country.getCountryCode());
+        intent.putExtra(EXTRA_OUT_COUNTRY_INDICATOR, country.getIndicator());
         setResult(RESULT_OK, intent);
         finish();
     }

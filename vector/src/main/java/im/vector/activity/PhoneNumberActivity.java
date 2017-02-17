@@ -39,6 +39,8 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
 
 import im.vector.Matrix;
@@ -132,13 +134,13 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_COUNTRY && resultCode == RESULT_OK) {
-            if (data != null && data.hasExtra(CountryPickerActivity.SELECTED_COUNTRY_NAME)
-                    && data.hasExtra(CountryPickerActivity.SELECTED_COUNTRY_INDICATOR)) {
+            if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
+                    && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_INDICATOR)) {
                 mCountryLayout.setError(null);
                 mCountryLayout.setErrorEnabled(false);
 
                 if (TextUtils.isEmpty(mPhoneNumber.getText())) {
-                    setCountryCode(data.getStringExtra(CountryPickerActivity.SELECTED_COUNTRY_CODE));
+                    setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
                     initPhoneWithPrefix();
                 } else {
                     // Clear old prefix from phone before assigning new one
@@ -146,7 +148,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
                     if (mCurrentPhonePrefix != null && updatedPhone.startsWith(mCurrentPhonePrefix)) {
                         updatedPhone = updatedPhone.substring(mCurrentPhonePrefix.length());
                     }
-                    setCountryCode(data.getStringExtra(CountryPickerActivity.SELECTED_COUNTRY_CODE));
+                    setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
 
                     if (TextUtils.isEmpty(updatedPhone)) {
                         initPhoneWithPrefix();
@@ -234,8 +236,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
         final String formattedPhone = PhoneNumberUtils.getE164format(phoneNumber);
         final ThreePid pid = new ThreePid(formattedPhone, ThreePid.MEDIUM_MSISDN);
 
-        //TODO
-        /*mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
+        mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 mLoadingView.setVisibility(View.GONE);
@@ -258,7 +259,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
             public void onUnexpectedError(Exception e) {
                 onSubmitPhoneError(e.getLocalizedMessage());
             }
-        });*/
+        });
     }
 
     private void onSubmitPhoneError(final String errorMessage) {
@@ -274,8 +275,8 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
 
     @Override
     public void onClick(View v) {
-        Intent i = new Intent(PhoneNumberActivity.this, CountryPickerActivity.class);
-        startActivityForResult(i, REQUEST_COUNTRY);
+        Intent intent = CountryPickerActivity.getIntent(this, true);
+        startActivityForResult(intent, REQUEST_COUNTRY);
     }
 
     @Override

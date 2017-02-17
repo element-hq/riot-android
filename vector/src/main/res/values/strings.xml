@@ -694,7 +694,9 @@
     <string name="settings_advanced">Advanced</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_notifications_targets">Notification Targets</string>
-    <string name="settings_app_permission">App permissions</string>
+    <string name="settings_contact">Local contacts</string>
+    <string name="settings_contacts_app_permission">Contacts permission</string>
+    <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_devices_list">Devices</string>
     <string name="devices_divider">devices_devider</string>
     <string name="cryptography_divider">cryptography_divider</string>
@@ -727,15 +729,13 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
 
-    <string name="settings_country">Country</string>
+    <string name="settings_phonebook_country">Country</string>
     <string name="settings_select_country">Choose a country</string>
 
     <string name="settings_phone_number_country_label">Country</string>
     <string name="settings_phone_number_country_error">Please choose a country</string>
     <string name="settings_phone_number_label">Phone number</string>
     <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
-
-    <string name="settings_app_permission_contacts">Contacts</string>
 
     <!-- Room Settings -->
 
