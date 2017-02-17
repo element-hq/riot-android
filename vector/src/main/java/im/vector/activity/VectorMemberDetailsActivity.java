@@ -1476,16 +1476,12 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
     @Override
     public void OnBlockDeviceClick(MXDeviceInfo aDeviceInfo) {
-        switch (aDeviceInfo.mVerified) {
-            case MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED:
-            case MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED:
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, mMemberId, mDevicesVerificationCallback);
-                break;
-
-            default: // Blocked
-                mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, mMemberId, mDevicesVerificationCallback);
-                break;
+        if (aDeviceInfo.mVerified == MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED) {
+            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, aDeviceInfo.deviceId, aDeviceInfo.userId, mDevicesVerificationCallback);
+        } else {
+            mSession.getCrypto().setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED, aDeviceInfo.deviceId, aDeviceInfo.userId, mDevicesVerificationCallback);
         }
+
         mDevicesListViewAdapter.notifyDataSetChanged();
     }
     // ***********************************************************
