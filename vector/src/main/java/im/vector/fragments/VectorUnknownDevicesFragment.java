@@ -29,6 +29,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import org.matrix.androidsdk.MXSession;
@@ -187,6 +188,13 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 }
             }
         });
+
+        // put the text in the header to make it scrollable
+        final View headerView = v.findViewById(R.id.unknown_devices_header_view);
+        if (headerView.getParent() instanceof ViewGroup) {
+            ((ViewGroup)headerView.getParent()).removeView(headerView);
+            mExpandableListView.addHeaderView(headerView);
+        }
 
         builder.setView(v)
                 .setTitle(R.string.unknown_devices_alert_title)

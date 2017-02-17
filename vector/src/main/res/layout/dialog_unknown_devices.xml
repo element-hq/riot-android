@@ -5,14 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <TextView
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+    <!-- This relative will become the list view header
+         to make it scrollable.
+         Use a relative layout to do not loose the margins
+          -->
+    <RelativeLayout
+        android:id="@+id/unknown_devices_header_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/unknown_devices_alert_message" />
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/unknown_devices_alert_message" />
+    </RelativeLayout>
 
     <ExpandableListView
         android:id="@+id/unknown_devices_list_view"
