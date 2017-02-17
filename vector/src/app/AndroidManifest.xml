@@ -12,7 +12,6 @@
         android:name="${applicationId}.permission.C2D_MESSAGE" />
 
     <application
-        android:allowBackup="true"
         android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
         android:logo="@drawable/logo"
