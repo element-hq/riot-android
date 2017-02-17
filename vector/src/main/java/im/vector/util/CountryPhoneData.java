@@ -16,10 +16,6 @@
 
 package im.vector.util;
 
-/**
- * Created by sabrinaj on 16-Feb-17.
- */
-
 public class CountryPhoneData {
     private String mCountryCode;
     private String mCountryName;
