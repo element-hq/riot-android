@@ -298,12 +298,7 @@ public class PhoneNumberUtils {
     public static String getE164format(final Phonenumber.PhoneNumber phoneNumber) {
         String phoneNumberFormatted = null;
         if (phoneNumber != null) {
-            try {
-                phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "## getE164format() failed " + e.getMessage());
-            }
-
+            phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
             if (phoneNumberFormatted.startsWith("+")) {
                 phoneNumberFormatted = phoneNumberFormatted.substring(1);
             }
