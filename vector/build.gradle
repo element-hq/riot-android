@@ -17,6 +17,9 @@ android {
         // use the version code
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
+
+        // custom values
+        resValue "string", "bug_report_url",  "https://riot.im/bugreports/submit"
     }
 
     signingConfigs {
@@ -121,9 +124,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'io.pristine:libjingle:9690@aar'
-
-    // bug report encryption
-    compile 'net.lingala.zip4j:zip4j:1.3.1'
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
 
