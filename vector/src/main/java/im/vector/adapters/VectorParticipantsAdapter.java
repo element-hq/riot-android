@@ -51,7 +51,6 @@ import java.util.regex.Pattern;
 
 import im.vector.Matrix;
 import im.vector.R;
-import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
@@ -318,26 +317,24 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                if (VectorApp.SUPPORT_PHONE_NUMBERS_LOOKUP) {
-                    for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                        Contact dummyContact = new Contact(pn.mE164PhoneNumber);
-                        dummyContact.setDisplayName(contact.getDisplayName());
-                        dummyContact.addPhoneNumber(pn.mUnformattedPhoneNumber);
-                        dummyContact.setThumbnailUri(contact.getThumbnailUri());
+                for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
+                    Contact dummyContact = new Contact(pn.mE164PhoneNumber);
+                    dummyContact.setDisplayName(contact.getDisplayName());
+                    dummyContact.addPhoneNumber(pn.mUnformattedPhoneNumber);
+                    dummyContact.setThumbnailUri(contact.getThumbnailUri());
 
-                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
+                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
 
-                        Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mE164PhoneNumber);
+                    Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mE164PhoneNumber);
 
-                        if (null != mxid) {
-                            participant.mUserId = mxid.mMatrixId;
-                        } else {
-                            participant.mUserId = pn.mE164PhoneNumber;
-                        }
+                    if (null != mxid) {
+                        participant.mUserId = mxid.mMatrixId;
+                    } else {
+                        participant.mUserId = pn.mE164PhoneNumber;
+                    }
 
-                        if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
-                            list.add(participant);
-                        }
+                    if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
+                        list.add(participant);
                     }
                 }
             }

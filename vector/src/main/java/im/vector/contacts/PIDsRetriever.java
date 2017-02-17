@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import im.vector.Matrix;
-import im.vector.VectorApp;
 
 /**
  * retrieve the contact matrix IDs
@@ -141,18 +140,16 @@ public class PIDsRetriever {
                 }
             }
 
-            if (VectorApp.SUPPORT_PHONE_NUMBERS_LOOKUP) {
-                for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                    if (mMatrixIdsByMedium.containsKey(pn.mE164PhoneNumber)) {
-                        Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mE164PhoneNumber);
+            for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
+                if (mMatrixIdsByMedium.containsKey(pn.mE164PhoneNumber)) {
+                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mE164PhoneNumber);
 
-                        if (null != mxid) {
-                            contact.put(pn.mE164PhoneNumber, mxid);
-                        }
-                    } else {
-                        if (!requestedMediums.contains(pn.mE164PhoneNumber)) {
-                            requestedMediums.add(pn.mE164PhoneNumber);
-                        }
+                    if (null != mxid) {
+                        contact.put(pn.mE164PhoneNumber, mxid);
+                    }
+                } else {
+                    if (!requestedMediums.contains(pn.mE164PhoneNumber)) {
+                        requestedMediums.add(pn.mE164PhoneNumber);
                     }
                 }
             }

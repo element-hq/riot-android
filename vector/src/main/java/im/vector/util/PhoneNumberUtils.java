@@ -19,9 +19,9 @@ package im.vector.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.util.Pair;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Pair;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -46,9 +46,12 @@ public class PhoneNumberUtils {
     // preference keys
     public static final String COUNTRY_CODE_PREF_KEY = "COUNTRY_CODE_PREF_KEY";
 
-    private static String[] mCountryCodes = null;
-    private static String[] mHumanCountryCodes = null;
-    private static Map<String, String> mHumanCountryCodeByCC = null;
+    private static String[] mCountryCodes;
+    private static String[] mCountryNames;
+    // ex FR -> France
+    private static Map<String, String> mCountryNameByCC;
+    // ex FR -> 33
+    private static List<CountryPhoneData> mCountryIndicatorList;
 
     /**
      * Build the country codes list
@@ -73,18 +76,46 @@ public class PhoneNumberUtils {
                 }
             });
 
-            mHumanCountryCodeByCC = new HashMap<>(isoCountryCodes.length);
+            mCountryNameByCC = new HashMap<>(isoCountryCodes.length);
             mCountryCodes = new String[isoCountryCodes.length];
-            mHumanCountryCodes = new String[isoCountryCodes.length];
+            mCountryNames = new String[isoCountryCodes.length];
 
-            for(int index = 0; index < isoCountryCodes.length; index++) {
+            for (int index = 0; index < isoCountryCodes.length; index++) {
                 Pair<String, String> pair = countryCodes.get(index);
 
                 mCountryCodes[index] = pair.first;
-                mHumanCountryCodes[index] = pair.second;
-                mHumanCountryCodeByCC.put(pair.first, pair.second);
+                mCountryNames[index] = pair.second;
+                mCountryNameByCC.put(pair.first, pair.second);
             }
         }
+    }
+
+    /**
+     * Get the list of all country names with their phone number indicator
+     *
+     * @return list of pair name - indicator
+     */
+    public static List<CountryPhoneData> getCountriesWithIndicator() {
+        if (mCountryIndicatorList == null) {
+            mCountryIndicatorList = new ArrayList<>();
+
+            buildCountryCodesList();
+            for (Map.Entry<String, String> entry : mCountryNameByCC.entrySet()) {
+                final int indicator = PhoneNumberUtil.getInstance().getCountryCodeForRegion(entry.getKey());
+                if (indicator > 0) {
+                    mCountryIndicatorList.add(new CountryPhoneData(entry.getKey(), entry.getValue(), indicator));
+                }
+            }
+            // sort by human display names
+            Collections.sort(mCountryIndicatorList, new Comparator<CountryPhoneData>() {
+                @Override
+                public int compare(CountryPhoneData lhs, CountryPhoneData rhs) {
+                    return lhs.getCountryName().compareTo(rhs.getCountryName());
+                }
+            });
+        }
+
+        return mCountryIndicatorList;
     }
 
     /**
@@ -94,24 +125,26 @@ public class PhoneNumberUtils {
         buildCountryCodesList();
         return mCountryCodes;
     }
+
     /**
      * @return the human readable country codes.
      */
     public static String[] getHumanCountryCodes() {
         buildCountryCodesList();
-        return mHumanCountryCodes;
+        return mCountryNames;
     }
 
     /**
      * Provide a human readable name for a a country code.
+     *
      * @param countryCode the country code
      * @return the human readable name
      */
-    public static String getHumanCountryCode(String countryCode) {
+    public static String getHumanCountryCode(final String countryCode) {
         String name = null;
 
         if (!TextUtils.isEmpty(countryCode)) {
-            name = mHumanCountryCodeByCC.get(countryCode);
+            name = mCountryNameByCC.get(countryCode);
         }
 
         return name;
@@ -119,10 +152,11 @@ public class PhoneNumberUtils {
 
     /**
      * Provide the selected country code
+     *
      * @param context the application context
      * @return the ISO country code or "" if it does not exist
      */
-    public static String getCountryCode(Context context) {
+    public static String getCountryCode(final Context context) {
         String countryCode = "";
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -144,10 +178,11 @@ public class PhoneNumberUtils {
 
     /**
      * Update the selected country code.
-     * @param context the context
+     *
+     * @param context     the context
      * @param countryCode the country code
      */
-    public static void setCountryCode(Context context, String countryCode) {
+    public static void setCountryCode(final Context context, final String countryCode) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(COUNTRY_CODE_PREF_KEY, countryCode);
@@ -156,12 +191,13 @@ public class PhoneNumberUtils {
 
     /**
      * Compute an unique key from a text and a country code
-     * @param text the text
+     *
+     * @param text        the text
      * @param countryCode the country code
      * @return the unique key
      */
-    private static String getMapKey(String text, String countryCode) {
-        return "μ" +  countryCode + "μ" + text;
+    private static String getMapKey(final String text, final String countryCode) {
+        return "μ" + countryCode + "μ" + text;
     }
 
     /**
@@ -171,11 +207,12 @@ public class PhoneNumberUtils {
 
     /**
      * Provide libphonenumber phonenumber from an unformatted one.
-     * @param text the unformatted phone number
+     *
+     * @param text        the unformatted phone number
      * @param countryCode the cuntry code
      * @return the phone number
      */
-    public static Phonenumber.PhoneNumber getPhoneNumber(String text, String countryCode) {
+    public static Phonenumber.PhoneNumber getPhoneNumber(final String text, final String countryCode) {
         String key = getMapKey(text, countryCode);
         Phonenumber.PhoneNumber phoneNumber = null;
 
@@ -183,7 +220,7 @@ public class PhoneNumberUtils {
             Object value = mPhoneNumberByText.get(key);
 
             if (value instanceof Phonenumber.PhoneNumber) {
-                phoneNumber = (Phonenumber.PhoneNumber)value;
+                phoneNumber = (Phonenumber.PhoneNumber) value;
             }
         } else {
             try {
@@ -210,21 +247,23 @@ public class PhoneNumberUtils {
 
     /**
      * Convert an unformatted phone number to a E164 format one.
-     * @param context the coontext
+     *
+     * @param context     the coontext
      * @param phoneNumber the unformatted phone number
      * @return the E164 phone number
      */
-    public static String getE164format(Context context, String phoneNumber) {
+    public static String getE164format(final Context context, final String phoneNumber) {
         return getE164format(phoneNumber, getCountryCode(context));
     }
 
     /**
      * Convert an unformatted phone number to a E164 format one.
+     *
      * @param phoneNumber the unformatted phone number
      * @param countryCode teh country code
      * @return the E164 phone number
      */
-    public static String getE164format(String phoneNumber, String countryCode) {
+    public static String getE164format(final String phoneNumber, final String countryCode) {
         if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(countryCode)) {
             return null;
         }

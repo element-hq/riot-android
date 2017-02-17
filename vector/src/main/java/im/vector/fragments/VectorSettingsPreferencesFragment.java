@@ -37,12 +37,10 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +69,7 @@ import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
+import org.matrix.androidsdk.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -88,8 +87,8 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.PhoneNumberActivity;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
@@ -112,12 +111,14 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private static final String DEVICES_PREFERENCE_KEY_BASE = "DEVICES_PREFERENCE_KEY_BASE";
     private static final String IGNORED_USER_KEY_BASE = "IGNORED_USER_KEY_BASE";
     private static final String ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY";
+    private static final String ADD_PHONE_NUMBER_PREFERENCE_KEY = "ADD_PHONE_NUMBER_PREFERENCE_KEY";
     private static final String APP_INFO_LINK_PREFERENCE_KEY = "application_info_link";
 
     private static final String DUMMY_RULE = "DUMMY_RULE";
     private static final String LABEL_UNAVAILABLE_DATA = "none";
 
     private static final int REQUEST_E2E_FILE_REQUEST_CODE = 123;
+    private static final int REQUEST_NEW_PHONE_NUMBER = 456;
     // rule Id <-> preference name
     private static HashMap<String, String> mPushesRuleByResourceId = null;
     // members
@@ -550,40 +551,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         refreshPushersList();
         refreshEmailsList();
+        refreshPhoneNumbersList();
         refreshIgnoredUsersList();
         refreshDevicesList();
         manageCountryPreference();
-    }
-
-    /**
-     * Manage the country preference list.
-     */
-    private void manageCountryPreference() {
-        final ListPreference listPreference = (ListPreference) findPreference(getString(R.string.settings_country));
-
-        // the country preference list is only displayed if the contact lookup is supported
-        if (!VectorApp.SUPPORT_PHONE_NUMBERS_LOOKUP) {
-            mUserSettingsCategory.removePreference(listPreference);
-        } else {
-            listPreference.setEntries(PhoneNumberUtils.getHumanCountryCodes());
-            listPreference.setEntryValues(PhoneNumberUtils.getCountryCodes());
-            listPreference.setDefaultValue("EN");
-            listPreference.setValue(PhoneNumberUtils.getCountryCode(getActivity()));
-            listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
-
-            listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    String cc = (String) newValue;
-
-                    if (!TextUtils.equals(cc, PhoneNumberUtils.getCountryCode(getActivity()))) {
-                        PhoneNumberUtils.setCountryCode(getActivity(), (String) newValue);
-                        listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
-                    }
-                    return true;
-                }
-            });
-        }
     }
 
     @Override
@@ -1063,7 +1034,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, getActivity())){
+                if (CommonActivityUtils.checkPermissions(CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO, getActivity())) {
                     Intent intent = new Intent(getActivity(), VectorMediasPickerActivity.class);
                     intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
                     startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
@@ -1077,66 +1048,71 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_E2E_FILE_REQUEST_CODE) {
-                importKeys(data);
-            } else if (requestCode == VectorUtils.TAKE_IMAGE) {
-                Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
+            switch (requestCode) {
+                case REQUEST_E2E_FILE_REQUEST_CODE:
+                    importKeys(data);
+                    break;
+                case REQUEST_NEW_PHONE_NUMBER:
+                    refreshPhoneNumbersList();
+                    break;
+                case VectorUtils.TAKE_IMAGE:
+                    Uri thumbnailUri = VectorUtils.getThumbnailUriFromIntent(getActivity(), data, mSession.getMediasCache());
 
-                if (null != thumbnailUri) {
-                    displayLoadingView();
+                    if (null != thumbnailUri) {
+                        displayLoadingView();
 
-                    ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
+                        ResourceUtils.Resource resource = ResourceUtils.openResource(getActivity(), thumbnailUri, null);
 
-                    if (null != resource) {
-                        mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
+                        if (null != resource) {
+                            mSession.getMediasCache().uploadContent(resource.mContentStream, null, resource.mMimeType, null, new MXMediaUploadListener() {
 
-                            @Override
-                            public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hideLoadingView(false);
-                                    }
-                                });
-                            }
+                                @Override
+                                public void onUploadError(String uploadId, int serverResponseCode, String serverErrorMessage) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hideLoadingView(false);
+                                        }
+                                    });
+                                }
 
-                            @Override
-                            public void onUploadComplete(final String uploadId, final String contentUri) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
-                                            @Override
-                                            public void onSuccess(Void info) {
-                                                onCommonDone(null);
-                                                refreshDisplay();
-                                            }
+                                @Override
+                                public void onUploadComplete(final String uploadId, final String contentUri) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mSession.getMyUser().updateAvatarUrl(contentUri, new ApiCallback<Void>() {
+                                                @Override
+                                                public void onSuccess(Void info) {
+                                                    onCommonDone(null);
+                                                    refreshDisplay();
+                                                }
 
-                                            @Override
-                                            public void onNetworkError(Exception e) {
-                                                onCommonDone(e.getLocalizedMessage());
-                                            }
+                                                @Override
+                                                public void onNetworkError(Exception e) {
+                                                    onCommonDone(e.getLocalizedMessage());
+                                                }
 
-                                            @Override
-                                            public void onMatrixError(MatrixError e) {
-                                                onCommonDone(e.getLocalizedMessage());
-                                            }
+                                                @Override
+                                                public void onMatrixError(MatrixError e) {
+                                                    onCommonDone(e.getLocalizedMessage());
+                                                }
 
-                                            @Override
-                                            public void onUnexpectedError(Exception e) {
-                                                onCommonDone(e.getLocalizedMessage());
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                                                @Override
+                                                public void onUnexpectedError(Exception e) {
+                                                    onCommonDone(e.getLocalizedMessage());
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
-                }
+                    break;
             }
         }
     }
-
 
     /**
      * Refresh the known information about the account
@@ -1389,7 +1365,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             addEmailPreference.setTitle(R.string.settings_add_email_address);
             addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
             addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-            addEmailPreference.setIcon(getResources().getDrawable(R.drawable.ic_material_add_circle));
+            addEmailPreference.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_material_add_circle));
 
             addEmailPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -1552,6 +1528,72 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    //==============================================================================================================
+    // Phone number management
+    //==============================================================================================================
+
+    /**
+     * Refresh phone number list
+     */
+    private void refreshPhoneNumbersList() {
+        Log.e(LOG_TAG, "refreshPhoneNumbersList");
+        //TODO display phone number list
+
+        // display the "add phone number" entry if necessary
+        Preference curAddPhoneNumberPreference = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
+        if (null == curAddPhoneNumberPreference) {
+            Preference addPhoneNumberPreference = new Preference(getActivity());
+            addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
+            addPhoneNumberPreference.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_material_add_circle));
+            addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
+            addPhoneNumberPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(getActivity(), PhoneNumberActivity.class);
+                    startActivityForResult(i, REQUEST_NEW_PHONE_NUMBER);
+                    return false;
+                }
+            });
+
+            addPhoneNumberPreference.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            Log.e(LOG_TAG, "Phone number onPreferenceChange " + newValue);
+
+                            return false;
+                        }
+                    });
+
+            mUserSettingsCategory.addPreference(addPhoneNumberPreference);
+        }
+    }
+
+    /**
+     * Manage the country preference list.
+     */
+    private void manageCountryPreference() {
+        final ListPreference listPreference = (ListPreference) findPreference(getString(R.string.settings_country));
+        listPreference.setEntries(PhoneNumberUtils.getHumanCountryCodes());
+        listPreference.setEntryValues(PhoneNumberUtils.getCountryCodes());
+        listPreference.setDefaultValue("EN");
+        listPreference.setValue(PhoneNumberUtils.getCountryCode(getActivity()));
+        listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
+
+        listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String cc = (String) newValue;
+
+                if (!TextUtils.equals(cc, PhoneNumberUtils.getCountryCode(getActivity()))) {
+                    PhoneNumberUtils.setCountryCode(getActivity(), (String) newValue);
+                    listPreference.setSummary(PhoneNumberUtils.getHumanCountryCode(PhoneNumberUtils.getCountryCode(getActivity())));
+                }
+                return true;
+            }
+        });
     }
 
     //==============================================================================================================
@@ -2011,6 +2053,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
     /**
      * Display an alert dialog to rename a device
+     *
      * @param aDeviceInfoToRename device info
      */
     private void displayDeviceRenameDialog(final DeviceInfo aDeviceInfoToRename) {
@@ -2032,8 +2075,8 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         // search which preference is updated
                         int count = mDevicesListSettingsCategory.getPreferenceCount();
 
-                        for(int i = 0; i < count; i++) {
-                            VectorCustomActionEditTextPreference pref = (VectorCustomActionEditTextPreference)mDevicesListSettingsCategory.getPreference(i);
+                        for (int i = 0; i < count; i++) {
+                            VectorCustomActionEditTextPreference pref = (VectorCustomActionEditTextPreference) mDevicesListSettingsCategory.getPreference(i);
 
                             if (TextUtils.equals(aDeviceInfoToRename.device_id, pref.getTitle())) {
                                 pref.setSummary(input.getText());

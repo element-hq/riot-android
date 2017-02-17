@@ -297,6 +297,18 @@
             android:theme="@android:style/Theme.NoDisplay">
         </activity>
 
+        <activity
+            android:name="im.vector.activity.PhoneNumberActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_add_phone_number"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="im.vector.activity.CountryPickerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_select_country"
+            android:theme="@style/CountryPickerTheme" />
+
         <!-- broadcast receiver -->
         <receiver
             android:name=".receiver.VectorUniversalLinkReceiver"

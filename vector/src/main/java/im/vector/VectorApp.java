@@ -29,12 +29,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.util.Log;
 
-import org.matrix.androidsdk.MXSession;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import im.vector.activity.VectorCallViewActivity;
 import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.VectorCallViewActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.contacts.PIDsRetriever;
 import im.vector.ga.GAHelper;
@@ -44,12 +49,6 @@ import im.vector.services.EventStreamService;
 import im.vector.util.RageShake;
 import im.vector.util.VectorCallSoundManager;
 import im.vector.util.VectorMarkdownParser;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * The main application injection point
@@ -118,9 +117,6 @@ public class VectorApp extends Application {
      * The directory in which the logs are stored
      */
     public static File mLogsDirectoryFile = null;
-
-    // PNs search are disabled by default
-    public static final boolean SUPPORT_PHONE_NUMBERS_LOOKUP = false;
 
     @Override
     public void onCreate() {
