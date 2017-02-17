@@ -49,6 +49,7 @@
     <uses-sdk tools:overrideLibrary="io.pristine.libjingle"/>
 
     <application
+        tools:replace="android:allowBackup"
         android:allowBackup="false"
         android:name="im.vector.VectorApp"
         android:icon="@drawable/logo"
