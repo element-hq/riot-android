@@ -1064,22 +1064,22 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                     }
 
                     case R.id.sliding_copyright_terms: {
-                        VectorUtils.displayAppCopyright(VectorHomeActivity.this);
+                        VectorUtils.displayAppCopyright();
                         break;
                     }
 
                     case R.id.sliding_menu_app_tac: {
-                        VectorUtils.displayAppTac(VectorHomeActivity.this);
+                        VectorUtils.displayAppTac();
                         break;
                     }
 
                     case R.id.sliding_menu_privacy_policy: {
-                        VectorUtils.displayAppPrivacyPolicy(VectorHomeActivity.this);
+                        VectorUtils.displayAppPrivacyPolicy();
                         break;
                     }
 
                     case R.id.sliding_menu_third_party_notices: {
-                        VectorUtils.displayThirdPartyLicenses(VectorHomeActivity.this);
+                        VectorUtils.displayThirdPartyLicenses();
                         break;
                     }
                 }

@@ -272,7 +272,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             termConditionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayAppTac(appContext);
+                    VectorUtils.displayAppTac();
                     return false;
                 }
             });
@@ -285,7 +285,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             privacyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayAppPrivacyPolicy(appContext);
+                    VectorUtils.displayAppPrivacyPolicy();
                     return false;
                 }
             });
@@ -298,7 +298,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             thirdPartyNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayThirdPartyLicenses(getActivity());
+                    VectorUtils.displayThirdPartyLicenses();
                     return false;
                 }
             });
@@ -311,7 +311,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             copyrightNotices.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    VectorUtils.displayAppCopyright(appContext);
+                    VectorUtils.displayAppCopyright();
                     return false;
                 }
             });
