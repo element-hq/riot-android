@@ -17,6 +17,11 @@ android {
         // use the version code
         versionCode rootProject.ext.versionCodeProp
         versionName rootProject.ext.versionNameProp
+        
+        jackOptions {
+            enabled true
+            jackInProcess false
+        }
     }
 
     signingConfigs {
