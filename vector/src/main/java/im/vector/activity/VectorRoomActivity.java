@@ -1404,6 +1404,17 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             @Override
             public void onMatrixError(MatrixError e) {
                 Log.e(LOG_TAG, "## startIpCall(): onMatrixError Msg=" + e.getLocalizedMessage());
+
+                if (e instanceof MXCryptoError) {
+                    MXCryptoError cryptoError = (MXCryptoError)e;
+
+                    if (MXCryptoError.UNKNOWN_DEVICES_CODE.equals(cryptoError.errcode)) {
+                        setProgressVisibility(View.GONE);
+                        onUnknownDevices(null, cryptoError);
+                        return;
+                    }
+                }
+
                 onError(e.getLocalizedMessage());
             }
 
