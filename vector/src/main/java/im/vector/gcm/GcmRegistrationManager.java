@@ -870,9 +870,11 @@ public final class GcmRegistrationManager {
      * @param areAllowed true to enable the device notifications.
      */
     public void setDeviceNotificationsAllowed(boolean areAllowed) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_NOTIFICATIONS, areAllowed)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setDeviceNotificationsAllowed () : commit failed");
+        }
 
         if (!useGCM()) {
             // when GCM is disabled, enable / disable the "Listen for events" notifications
@@ -892,9 +894,11 @@ public final class GcmRegistrationManager {
      * @param flag true to enable the device notifications.
      */
     public void setScreenTurnedOn(boolean flag) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_TURN_SCREEN_ON, flag)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setScreenTurnedOn() : commit failed");
+        }
     }
 
     /**
@@ -909,9 +913,11 @@ public final class GcmRegistrationManager {
      * @param isAllowed true to allow the background sync.
      */
     public void setBackgroundSyncAllowed(boolean isAllowed) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putBoolean(PREFS_ALLOW_BACKGROUND_SYNC, isAllowed)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setBackgroundSyncAllowed() : commit failed");
+        }
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
@@ -935,9 +941,11 @@ public final class GcmRegistrationManager {
      * @param syncDelay the new sync delay in ms.
      */
     public void setBackgroundSyncTimeOut(int syncDelay) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putInt(PREFS_SYNC_TIMEOUT, syncDelay)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setBackgroundSyncTimeOut() : commit failed");
+        }
     }
 
     /**
@@ -963,9 +971,11 @@ public final class GcmRegistrationManager {
      * @param syncDelay the delay between two syncs in ms.
      */
     public void setBackgroundSyncDelay(int syncDelay) {
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putInt(PREFS_SYNC_DELAY, syncDelay)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setBackgroundSyncDelay() : commit failed");
+        }
     }
 
     //================================================================================
@@ -993,9 +1003,11 @@ public final class GcmRegistrationManager {
     private void setStoredRegistrationToken(String registrationToken) {
         Log.d(LOG_TAG, "Saving registration token");
 
-        getGcmSharedPreferences().edit()
+        if (!getGcmSharedPreferences().edit()
                 .putString(PREFS_PUSHER_REGISTRATION_TOKEN_KEY, registrationToken)
-                .apply();
+                .commit()) {
+            Log.e(LOG_TAG, "## setStoredRegistrationToken() : commit failed");
+        }
     }
 
     /**
@@ -1005,7 +1017,9 @@ public final class GcmRegistrationManager {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                getGcmSharedPreferences().edit().clear().apply();
+                if (!getGcmSharedPreferences().edit().clear().commit()) {
+                    Log.e(LOG_TAG, "## clearGCMData() : commit failed");
+                }
                 mRegistrationToken = null;
                 mRegistrationState = RegistrationState.UNREGISTRATED;
                 GCMHelper.clearRegistrationToken(mContext);

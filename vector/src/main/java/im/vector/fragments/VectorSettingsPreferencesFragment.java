@@ -1552,15 +1552,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final int timeout = gcmmgr.getBackgroundSyncTimeOut() / 1000;
         final int delay = gcmmgr.getBackgroundSyncDelay() / 1000;
 
-        // update the settings
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(this.getResources().getString(R.string.settings_set_sync_timeout), timeout + "");
-        editor.putString(this.getResources().getString(R.string.settings_set_sync_delay), delay + "");
-        editor.commit();
-
         if (null != mSyncRequestTimeoutPreference) {
             mSyncRequestTimeoutPreference.setSummary(secondsToText(timeout));
+            mSyncRequestTimeoutPreference.setText(timeout + "");
 
             mSyncRequestTimeoutPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -1592,6 +1586,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         if (null != mSyncRequestDelayPreference) {
             mSyncRequestDelayPreference.setSummary(secondsToText(delay));
+            mSyncRequestDelayPreference.setText(delay + "" );
 
             mSyncRequestDelayPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
