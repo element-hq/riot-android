@@ -843,7 +843,7 @@
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_enter_passphrase">Enter passphrase</string>
     <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
-    <string name="encryption_export_saved_as">The E2E room keys are saved into %s</string>
+    <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>
