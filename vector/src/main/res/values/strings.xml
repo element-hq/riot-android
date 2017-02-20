@@ -98,7 +98,7 @@
     <string name="disable">Disable</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
-    <string name="send_bug_report">Report Bug Report</string>
+    <string name="send_bug_report">Bug Report</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
     <string name="send_bug_report_placeholder">Describe your problem here</string>
     <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
