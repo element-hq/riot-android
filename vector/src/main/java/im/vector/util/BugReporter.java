@@ -58,6 +58,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.FieldNamingPolicy;
@@ -102,6 +104,12 @@ public class BugReporter {
          * @param reason the failure reason
          */
         void onUploadFailed(String reason);
+
+        /**
+         * The upload progress (in percent)
+         * @param progress the upload progress
+         */
+        void onProgress(int progress);
 
         /**
          * The bug report upload succeeded.
@@ -161,7 +169,7 @@ public class BugReporter {
      * @param withDevicesLogs true to include the device logs
      */
     private static void sendBugReport(final Context context, final boolean withDevicesLogs, final String bugDescription, final IMXBugReportListener listener) {
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
                 BugReportParams params = new BugReportParams();
@@ -191,6 +199,7 @@ public class BugReporter {
                 if (null != Matrix.getInstance(context).getDefaultSession()) {
                     params.version += "User : " + Matrix.getInstance(context).getDefaultSession().getMyUserId() + "\n";
                 }
+
                 params.version += "Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n";
                 params.version += "Vector version: " + Matrix.getInstance(context).getVersion(true) + "\n";
                 params.version += "SDK version:  " + Matrix.getInstance(context).getDefaultSession().getVersion(true) + "\n";
@@ -204,6 +213,8 @@ public class BugReporter {
                 try {
                     inputStream = new ByteArrayInputStream(gson.toJsonTree(params).toString().getBytes("UTF-8"));
 
+                    final int dataLen = inputStream.available();
+
                     URL url = new URL(context.getResources().getString(R.string.bug_report_url));
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);
@@ -211,7 +222,7 @@ public class BugReporter {
                     conn.setUseCaches(false);
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setRequestProperty("Content-Length", Integer.toString(inputStream.available()));
+                    conn.setRequestProperty("Content-Length", Integer.toString(dataLen));
                     // avoid caching data before really sending them.
                     conn.setFixedLengthStreamingMode(inputStream.available());
 
@@ -222,11 +233,13 @@ public class BugReporter {
                     byte[] buffer = new byte[2048];
 
                     // read file and write it into form...
-                    int bytesRead = inputStream.read(buffer, 0, buffer.length);
+                    int bytesRead;
+                    int totalWritten = 0;
 
-                    while (bytesRead > 0) {
+                    while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
                         dos.write(buffer, 0, bytesRead);
-                        bytesRead = inputStream.read(buffer, 0, buffer.length);
+                        totalWritten += bytesRead;
+                        publishProgress(totalWritten * 100 / dataLen);
                     }
 
                     dos.flush();
@@ -292,6 +305,15 @@ public class BugReporter {
             }
 
             @Override
+            protected void onProgressUpdate(Integer ... progress) {
+                super.onProgressUpdate(progress);
+
+                if (null != listener) {
+                    listener.onProgress((null == progress) ? 0 : progress[0]);
+                }
+            }
+
+            @Override
             protected void onPostExecute(String reason) {
                 if (null != listener) {
                     if (null == reason) {
@@ -316,35 +338,24 @@ public class BugReporter {
             return;
         }
 
+        final Context appContext = currentActivity.getApplicationContext();
         LayoutInflater inflater = currentActivity.getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.dialog_bug_report, null);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(currentActivity);
         dialog.setTitle(R.string.send_bug_report);
         dialog.setView(dialogLayout);
 
         final EditText bugReportText = (EditText) dialogLayout.findViewById(R.id.bug_report_edit_text);
         final CheckBox includeLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_logs);
 
+        final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
+        final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
+
         dialog.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
-                    @Override
-                    public void onUploadFailed(String reason) {
-                        if (null != VectorApp.getInstance()) {
-                            Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onUploadSucceed() {
-                        if (null != VectorApp.getInstance()) {
-                            Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                dialog.dismiss();
+                // will be overridden to avoid dismissing the dialog while displaying the progress
             }
         });
 
@@ -357,10 +368,66 @@ public class BugReporter {
 
         //
         final AlertDialog bugReportDialog = dialog.show();
+        final Button cancelButton = bugReportDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
         final Button sendButton = bugReportDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         if (null != sendButton) {
             sendButton.setEnabled(false);
+
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // disable the active area while uploading the bug report
+                    bugReportText.setEnabled(false);
+                    sendButton.setEnabled(false);
+                    includeLogsButton.setEnabled(false);
+
+                    if (null != cancelButton) {
+                        cancelButton.setEnabled(false);
+                    }
+
+                    progressTextView.setVisibility(View.VISIBLE);
+                    progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, 0 + ""));
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(0);
+
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
+                        @Override
+                        public void onUploadFailed(String reason) {
+                            if (null != VectorApp.getInstance()) {
+                                Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
+                            }
+                            // restore the dialog if the upload failed
+                            bugReportText.setEnabled(true);
+                            sendButton.setEnabled(true);
+                            includeLogsButton.setEnabled(true);
+
+                            if (null != cancelButton) {
+                                cancelButton.setEnabled(true);
+                            }
+
+                            progressTextView.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onProgress(int progress) {
+                            progressBar.setProgress(progress);
+                            progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, progress + ""));
+                        }
+
+                        @Override
+                        public void onUploadSucceed() {
+                            if (null != VectorApp.getInstance()) {
+                                Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
+                            }
+
+                            bugReportDialog.dismiss();
+                        }
+                    });
+                }
+            });
         }
 
         bugReportText.addTextChangedListener(new TextWatcher() {

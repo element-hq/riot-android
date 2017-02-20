@@ -105,6 +105,7 @@
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
     <string name="send_bug_report_sent">The bug report has been successfully sent</string>
     <string name="send_bug_report_failed">The bug report failed to be sent (%s)</string>
+    <string name="send_bug_report_progress">Progress (%s%%)</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
