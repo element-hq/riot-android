@@ -46,7 +46,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,13 +59,13 @@ import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.db.MXMediasCache;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
-import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.Log;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -78,8 +77,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.crypto.Mac;
 
 import im.vector.Matrix;
 import im.vector.MyPresenceManager;
@@ -1725,22 +1722,19 @@ public class CommonActivityUtils {
             int unreadRoomsCount = 0;
 
             // compute the number of rooms with unread notifications
-            if (null != roomCompleteList) {
+            // "invite to join a room" counts as a notification
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
+            boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
 
-                // "invite to join a room" counts as a notification
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(aContext);
-                boolean isInvitedNotifEnabled = preferences.getBoolean(aContext.getResources().getString(R.string.settings_invited_to_room), false);
-
-                for (Room room : roomCompleteList) {
-                    if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
-                        unreadRoomsCount++;
-                    }
+            for (Room room : roomCompleteList) {
+                if ((room.getNotificationCount() > 0) || (isInvitedNotifEnabled && room.isInvited())) {
+                    unreadRoomsCount++;
                 }
-
-                // update the badge counter
-                Log.d(LOG_TAG, "## updateBadgeCount(): badge update count=" + unreadRoomsCount);
-                CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
             }
+
+            // update the badge counter
+            Log.d(LOG_TAG, "## updateBadgeCount(): badge update count=" + unreadRoomsCount);
+            CommonActivityUtils.updateBadgeCount(aContext, unreadRoomsCount);
         }
     }
 
@@ -1884,5 +1878,57 @@ public class CommonActivityUtils {
         });
 
         builder.create().show();
+    }
+
+    /**
+     * Export the e2e keys for a dedicated session.
+     * @param session the session
+     * @param password the password
+     * @param callback the asynchronous callback.
+     */
+    public static void exportKeys(final MXSession session, final String password, final ApiCallback<String>callback) {
+        final Context appContext = VectorApp.getInstance();
+
+        session.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytesArray) {
+                try {
+                    ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
+                    String url = session.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
+                    stream.close();
+
+                    String path = CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain");
+
+                    if (null != callback) {
+                        callback.onSuccess(path);
+                    }
+                } catch (Exception e) {
+                    if (null != callback) {
+                        callback.onMatrixError(new MatrixError(null, e.getLocalizedMessage()));
+                    }
+                }
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                if (null != callback) {
+                    callback.onNetworkError(e);
+                }
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (null != callback) {
+                    callback.onMatrixError(e);
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                if (null != callback) {
+                    callback.onUnexpectedError(e);
+                }
+            }
+        });
     }
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,8 +72,6 @@ import org.matrix.androidsdk.rest.model.bingrules.BingRule;
 import org.matrix.androidsdk.rest.model.bingrules.BingRuleSet;
 import org.matrix.androidsdk.util.BingRulesManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,7 +87,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorMediasPickerActivity;
-import im.vector.activity.VectorRoomActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
 import im.vector.gcm.GcmRegistrationManager;
@@ -2160,45 +2158,32 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = passPhrase1EditText.getText().toString();
-
                 displayLoadingView();
 
-                final Context appContext = getActivity().getApplicationContext();
-
-                mSession.getCrypto().exportRoomKeys(password, new ApiCallback<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytesArray) {
-                        try {
-                            ByteArrayInputStream stream = new ByteArrayInputStream(bytesArray);
-                            String url = mSession.getMediasCache().saveMedia(stream, "riot-" + System.currentTimeMillis() + ".txt", "text/plain");
-                            stream.close();
-
-                            String path = CommonActivityUtils.saveMediaIntoDownloads(appContext, new File(Uri.parse(url).getPath()), "riot-keys.txt", "text/plain");
-                            Toast.makeText(appContext, path, Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Toast.makeText(appContext, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-
+                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
+                    private void onDone(String message) {
                         hideLoadingView();
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(String filename) {
+                        onDone(filename);
                     }
 
                     @Override
                     public void onNetworkError(Exception e) {
-                        Toast.makeText(appContext, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        hideLoadingView();
+                        onDone(e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onMatrixError(MatrixError e) {
-                        Toast.makeText(appContext, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        hideLoadingView();
+                        onDone(e.getLocalizedMessage());
                     }
 
                     @Override
                     public void onUnexpectedError(Exception e) {
-                        Toast.makeText(appContext, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        hideLoadingView();
+                        onDone(e.getLocalizedMessage());
                     }
                 });
 
