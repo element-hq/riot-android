@@ -296,9 +296,6 @@ public class PhoneNumberUtils {
         String phoneNumberFormatted = null;
         if (phoneNumber != null) {
             phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-            if (phoneNumberFormatted.startsWith("+")) {
-                phoneNumberFormatted = phoneNumberFormatted.substring(1);
-            }
         }
         return phoneNumberFormatted;
     }

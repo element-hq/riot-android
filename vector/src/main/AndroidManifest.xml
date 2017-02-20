@@ -298,7 +298,7 @@
         </activity>
 
         <activity
-            android:name="im.vector.activity.PhoneNumberActivity"
+            android:name="im.vector.activity.PhoneNumberAdditionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_add_phone_number"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -308,6 +308,12 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_select_country"
             android:theme="@style/CountryPickerTheme" />
+
+        <activity
+            android:name="im.vector.activity.PhoneNumberVerificationActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings_phone_number_verification"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- broadcast receiver -->
         <receiver

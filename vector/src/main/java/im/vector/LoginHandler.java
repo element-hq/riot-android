@@ -275,7 +275,7 @@ public class LoginHandler {
         nextLink += "&is_url=" + hsConfig.getIdentityServerUri().toString();
         nextLink += "&session_id=" + session;
 
-        pid.requestValidationToken(client, nextLink, new ApiCallback<Void>() {
+        pid.requestEmailValidationToken(client, nextLink, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 callback.onSuccess(pid);
@@ -333,7 +333,7 @@ public class LoginHandler {
         final ThreePid pid = new ThreePid(null,  ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        pid.submitEmailValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Map<String,Object>>() {
+        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Map<String,Object>>() {
             @Override
             public void onSuccess(Map<String,Object> info) {
                 aRespCallback.onSuccess(info);

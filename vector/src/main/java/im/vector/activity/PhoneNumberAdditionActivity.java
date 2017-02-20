@@ -41,18 +41,21 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
+import org.matrix.androidsdk.rest.model.RequestPhoneNumberValidationResponse;
 import org.matrix.androidsdk.rest.model.ThreePid;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.util.PhoneNumberUtils;
 
-public class PhoneNumberActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
+public class PhoneNumberAdditionActivity extends AppCompatActivity implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
-    private static final String LOG_TAG = PhoneNumberActivity.class.getSimpleName();
+    private static final String LOG_TAG = PhoneNumberAdditionActivity.class.getSimpleName();
 
     private static final String EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID";
+
     private static final int REQUEST_COUNTRY = 1245;
+    private static final int REQUEST_VERIFICATION = 6789;
 
     private TextInputEditText mCountry;
     private TextInputLayout mCountryLayout;
@@ -75,8 +78,8 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
      */
 
     public static Intent getIntent(final Context context, final String sessionId) {
-        final Intent intent = new Intent(context, PhoneNumberActivity.class);
-        intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
+        final Intent intent = new Intent(context, PhoneNumberAdditionActivity.class);
+        intent.putExtra(EXTRA_MATRIX_ID, sessionId);
         return intent;
     }
 
@@ -88,7 +91,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_phone_number);
+        setContentView(R.layout.activity_phone_number_addition);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,7 +114,7 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_phone_number, menu);
+        getMenuInflater().inflate(R.menu.menu_phone_number_addition, menu);
         return true;
     }
 
@@ -133,29 +136,38 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_COUNTRY && resultCode == RESULT_OK) {
-            if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-                    && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_INDICATOR)) {
-                mCountryLayout.setError(null);
-                mCountryLayout.setErrorEnabled(false);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_COUNTRY:
+                    if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
+                            && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_INDICATOR)) {
+                        mCountryLayout.setError(null);
+                        mCountryLayout.setErrorEnabled(false);
 
-                if (TextUtils.isEmpty(mPhoneNumber.getText())) {
-                    setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
-                    initPhoneWithPrefix();
-                } else {
-                    // Clear old prefix from phone before assigning new one
-                    String updatedPhone = mPhoneNumber.getText().toString();
-                    if (mCurrentPhonePrefix != null && updatedPhone.startsWith(mCurrentPhonePrefix)) {
-                        updatedPhone = updatedPhone.substring(mCurrentPhonePrefix.length());
-                    }
-                    setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
+                        if (TextUtils.isEmpty(mPhoneNumber.getText())) {
+                            setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
+                            initPhoneWithPrefix();
+                        } else {
+                            // Clear old prefix from phone before assigning new one
+                            String updatedPhone = mPhoneNumber.getText().toString();
+                            if (mCurrentPhonePrefix != null && updatedPhone.startsWith(mCurrentPhonePrefix)) {
+                                updatedPhone = updatedPhone.substring(mCurrentPhonePrefix.length());
+                            }
+                            setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
 
-                    if (TextUtils.isEmpty(updatedPhone)) {
-                        initPhoneWithPrefix();
-                    } else {
-                        formatPhoneNumber(updatedPhone);
+                            if (TextUtils.isEmpty(updatedPhone)) {
+                                initPhoneWithPrefix();
+                            } else {
+                                formatPhoneNumber(updatedPhone);
+                            }
+                        }
                     }
-                }
+                    break;
+                case REQUEST_VERIFICATION:
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
             }
         }
     }
@@ -233,16 +245,18 @@ public class PhoneNumberActivity extends AppCompatActivity implements TextView.O
     private void addPhoneNumber(final Phonenumber.PhoneNumber phoneNumber) {
         mLoadingView.setVisibility(View.VISIBLE);
 
-        final String formattedPhone = PhoneNumberUtils.getE164format(phoneNumber);
-        final ThreePid pid = new ThreePid(formattedPhone, ThreePid.MEDIUM_MSISDN);
+        final String e168Phone = PhoneNumberUtils.getE164format(phoneNumber);
+        // Extract from phone number object instead of using mCurrentRegionCode just in case
+        final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
+        final ThreePid pid = new ThreePid(e168Phone, countryCode, ThreePid.MEDIUM_MSISDN);
 
-        mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
+        mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<RequestPhoneNumberValidationResponse>() {
             @Override
-            public void onSuccess(Void info) {
+            public void onSuccess(RequestPhoneNumberValidationResponse response) {
                 mLoadingView.setVisibility(View.GONE);
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
+                Intent intent = PhoneNumberVerificationActivity.getIntent(PhoneNumberAdditionActivity.this,
+                        mSession.getCredentials().userId, pid);
+                startActivityForResult(intent, REQUEST_VERIFICATION);
             }
 
             @Override

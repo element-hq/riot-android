@@ -50,6 +50,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
@@ -87,7 +90,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.CountryPickerActivity;
-import im.vector.activity.PhoneNumberActivity;
+import im.vector.activity.PhoneNumberAdditionActivity;
 import im.vector.activity.VectorMediasPickerActivity;
 import im.vector.contacts.ContactsManager;
 import im.vector.ga.GAHelper;
@@ -550,6 +553,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             }
         });
 
+        addButtons();
         refreshPushersList();
         refreshEmailsList();
         refreshPhoneNumbersList();
@@ -729,6 +733,53 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             }
         }
+    }
+
+    private void addButtons() {
+        // display the "add email" entry
+        EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
+        addEmailPreference.setTitle(R.string.settings_add_email_address);
+        addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
+        addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
+        addEmailPreference.setIcon(R.drawable.ic_add_black);
+        addEmailPreference.setOrder(100);
+
+        addEmailPreference.setOnPreferenceChangeListener(
+                new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        final String email = (null == newValue) ? null : ((String) newValue).trim();
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                addEmail(email);
+                            }
+                        });
+
+                        return false;
+                    }
+                });
+
+        mUserSettingsCategory.addPreference(addEmailPreference);
+
+        // display the "add phone number" entry
+        Preference addPhoneNumberPreference = new Preference(getActivity());
+        addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
+        addPhoneNumberPreference.setIcon(R.drawable.ic_add_black);
+        addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
+        addPhoneNumberPreference.setOrder(200);
+
+        addPhoneNumberPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = PhoneNumberAdditionActivity.getIntent(getActivity(), mSession.getCredentials().userId);
+                startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER);
+                return true;
+            }
+        });
+
+        mUserSettingsCategory.addPreference(addPhoneNumberPreference);
     }
 
     //==============================================================================================================
@@ -1331,16 +1382,12 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             }
 
-            // remove the add email
-            Preference curAddEmailPreference = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
-            if (null != curAddEmailPreference) {
-                mUserSettingsCategory.removePreference(curAddEmailPreference);
-            }
-
             // add new emails list
             mDisplayedEmails = newEmailsList;
 
             int index = 0;
+            final Preference addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
+            int order = addEmailBtn.getOrder();
 
             for (String email : mDisplayedEmails) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
@@ -1348,6 +1395,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 preference.setTitle(getString(R.string.settings_email_address));
                 preference.setSummary(email);
                 preference.setKey(EMAIL_PREFERENCE_KEY_BASE + index);
+                preference.setOrder(order);
 
                 final String fEmailAddress = email;
 
@@ -1358,40 +1406,13 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         return true;
                     }
                 });
+                mUserSettingsCategory.addPreference(preference);
 
                 index++;
-                mUserSettingsCategory.addPreference(preference);
+                order++;
             }
-        }
 
-        Preference curAddEmailPreference = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
-
-        if (null == curAddEmailPreference) {
-            // display the "add email" entry
-            EditTextPreference addEmailPreference = new EditTextPreference(getActivity());
-            addEmailPreference.setTitle(R.string.settings_add_email_address);
-            addEmailPreference.setDialogTitle(R.string.settings_add_email_address);
-            addEmailPreference.setKey(ADD_EMAIL_PREFERENCE_KEY);
-            addEmailPreference.setIcon(R.drawable.ic_add_black);
-
-            addEmailPreference.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            final String email = (null == newValue) ? null : ((String) newValue).trim();
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addEmail(email);
-                                }
-                            });
-
-                            return false;
-                        }
-                    });
-
-            mUserSettingsCategory.addPreference(addEmailPreference);
+            addEmailBtn.setOrder(order);
         }
     }
 
@@ -1437,7 +1458,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         displayLoadingView();
 
-        mSession.getMyUser().requestValidationToken(pid, new ApiCallback<Void>() {
+        mSession.getMyUser().requestEmailValidationToken(pid, new ApiCallback<Void>() {
             @Override
             public void onSuccess(Void info) {
                 if (null != getActivity()) {
@@ -1568,55 +1589,43 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                 }
             }
 
-            // remove the add email
-            Preference curAddPhoneNUmberPreference = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-            if (null != curAddPhoneNUmberPreference) {
-                mUserSettingsCategory.removePreference(curAddPhoneNUmberPreference);
-            }
-
             // add new phone number list
             mDisplayedPhoneNumber = phoneNumberList;
 
             int index = 0;
+            final Preference addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
+            int order = addPhoneBtn.getOrder();
 
-            for (final String phoneNUmber : mDisplayedPhoneNumber) {
+            for (final String rawPhoneNumber : mDisplayedPhoneNumber) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
-                preference.setTitle(getString(R.string.settings_email_address));
-                preference.setSummary(phoneNUmber);
+                preference.setTitle(getString(R.string.settings_phone_number));
+                try {
+                    // Attempt to format phone number
+                    final Phonenumber.PhoneNumber phoneNumber = PhoneNumberUtil.getInstance().parse("+" + rawPhoneNumber, null);
+                    preference.setSummary(PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+                } catch (NumberParseException e) {
+                    preference.setSummary(rawPhoneNumber);
+                }
                 preference.setKey(PHONE_NUMBER_PREFERENCE_KEY_BASE + index);
+                preference.setOrder(order);
 
                 preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
-                        VectorUtils.copyToClipboard(getActivity(), phoneNUmber);
+                        VectorUtils.copyToClipboard(getActivity(), rawPhoneNumber);
                         return true;
                     }
                 });
 
                 index++;
+                order++;
                 mUserSettingsCategory.addPreference(preference);
             }
+
+            addPhoneBtn.setOrder(order);
         }
 
-        // display the "add phone number" entry if necessary
-        Preference curAddPhoneNumberPreference = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-        if (null == curAddPhoneNumberPreference) {
-            Preference addPhoneNumberPreference = new Preference(getActivity());
-            addPhoneNumberPreference.setKey(ADD_PHONE_NUMBER_PREFERENCE_KEY);
-            addPhoneNumberPreference.setIcon(R.drawable.ic_add_black);
-            addPhoneNumberPreference.setTitle(R.string.settings_add_phone_number);
-            addPhoneNumberPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = PhoneNumberActivity.getIntent(getActivity(), mSession.getCredentials().userId);
-                    startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER);
-                    return true;
-                }
-            });
-
-            mUserSettingsCategory.addPreference(addPhoneNumberPreference);
-        }
     }
 
     //==============================================================================================================
