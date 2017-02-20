@@ -1627,7 +1627,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         // Permission
         if (Build.VERSION.SDK_INT >= 23) {
             // on Android >= 23, use the system one
-            mContactSettingsCategory.removePreference(findPreference(getString(R.string.settings_contacts_app_permission)));
+            mContactSettingsCategory.removePreference(findPreference(ContactsManager.CONTACTS_BOOK_ACCESS_KEY));
         }
         // Phonebook country
         mContactPhonebookCountryPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.settings_contacts_phonebook_country));
