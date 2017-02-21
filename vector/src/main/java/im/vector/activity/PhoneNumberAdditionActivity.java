@@ -244,10 +244,10 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
     private void addPhoneNumber(final Phonenumber.PhoneNumber phoneNumber) {
         mLoadingView.setVisibility(View.VISIBLE);
 
-        final String e164format = PhoneNumberUtils.getE164format(phoneNumber);
+        final String e164phone = PhoneNumberUtils.getE164format(phoneNumber);
         // Extract from phone number object instead of using mCurrentRegionCode just in case
         final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
-        final ThreePid pid = new ThreePid(e164format, countryCode, ThreePid.MEDIUM_MSISDN);
+        final ThreePid pid = new ThreePid(e164phone, countryCode, ThreePid.MEDIUM_MSISDN);
 
         mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<RequestPhoneNumberValidationResponse>() {
             @Override
