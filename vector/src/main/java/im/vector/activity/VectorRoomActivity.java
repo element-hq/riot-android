@@ -732,8 +732,20 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
         mNotificationTextView = (TextView) mNotificationsArea.findViewById(R.id.room_notification_message);
 
         mCanNotPostTextView = findViewById(R.id.room_cannot_post_textview);
-        mStartCallLayout = findViewById(R.id.room_start_call_layout);
 
+        // increase the clickable area to open the keyboard.
+        // when there is no text, it is quite small and some user thought the edition was disabled.
+        findViewById(R.id.room_sending_message_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEditText.requestFocus()) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mEditText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        });
+
+        mStartCallLayout = findViewById(R.id.room_start_call_layout);
         mStartCallLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
