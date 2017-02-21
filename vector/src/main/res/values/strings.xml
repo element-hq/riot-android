@@ -75,7 +75,7 @@
     <string name="action_invite">Invite</string>
     <string name="action_disconnect">Disconnect</string>
     <string name="action_sign_out">Sign out</string>
-    <string name="action_sign_out_confirmation">Sign out ?</string>
+    <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_enable_room_notification">Enable room notifications</string>
     <string name="action_disable_room_notification">Disable room notifications</string>
     <string name="action_create_room">Create...</string>
@@ -843,6 +843,7 @@
     <string name="encryption_export_export">Export</string>
     <string name="encryption_export_enter_passphrase">Enter passphrase</string>
     <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
+    <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'</string>
 
     <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
     <string name="encryption_import_room_keys">Import room keys</string>

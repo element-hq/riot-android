@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +30,20 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1004,6 +1010,102 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // Sliding menu management
     //==============================================================================================================
 
+    /**
+     * Manage the e2e keys export.
+     */
+    private void exportKeysAndSignOut() {
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_export_e2e_keys, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.encryption_export_room_keys);
+        dialog.setView(dialogLayout);
+
+        final TextInputEditText passPhrase1EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_passphrase_edit_text);
+        final TextInputEditText passPhrase2EditText = (TextInputEditText) dialogLayout.findViewById(R.id.dialog_e2e_keys_confirm_passphrase_edit_text);
+        final Button exportButton = (Button) dialogLayout.findViewById(R.id.dialog_e2e_keys_export_button);
+        final TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                exportButton.setEnabled(!TextUtils.isEmpty(passPhrase1EditText.getText()) && TextUtils.equals(passPhrase1EditText.getText(), passPhrase2EditText.getText()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        passPhrase1EditText.addTextChangedListener(textWatcher);
+        passPhrase2EditText.addTextChangedListener(textWatcher);
+
+        exportButton.setEnabled(false);
+
+        final AlertDialog exportDialog = dialog.show();
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showWaitingView();
+
+                CommonActivityUtils.exportKeys(mSession, passPhrase1EditText.getText().toString(), new ApiCallback<String>() {
+                    private void onDone(String message) {
+                        stopWaitingView();
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(VectorHomeActivity.this);
+                        alertDialogBuilder.setMessage(message);
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.action_sign_out,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                VectorHomeActivity.this.showWaitingView();
+                                                CommonActivityUtils.logout(VectorHomeActivity.this);
+                                            }
+                                        })
+                                .setNegativeButton(R.string.cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        // show it
+                        alertDialog.show();
+                    }
+
+                    @Override
+                    public void onSuccess(String filename) {
+                        onDone(VectorHomeActivity.this.getString(R.string.encryption_export_saved_as, filename));
+                    }
+
+                    @Override
+                    public void onNetworkError(Exception e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onMatrixError(MatrixError e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onUnexpectedError(Exception e) {
+                        onDone(e.getLocalizedMessage());
+                    }
+                });
+
+                exportDialog.dismiss();
+            }
+        });
+    }
+
     private void refreshSlidingMenu() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -1041,13 +1143,26 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
                         // set dialog message
                         alertDialogBuilder
                                 .setCancelable(false)
-                                .setPositiveButton(R.string.ok,
+                                .setPositiveButton(R.string.action_sign_out,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 VectorHomeActivity.this.showWaitingView();
                                                 CommonActivityUtils.logout(VectorHomeActivity.this);
                                             }
                                         })
+                                .setNeutralButton(R.string.encryption_export_export, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+
+                                        VectorHomeActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                exportKeysAndSignOut();
+                                            }
+                                        });
+                                    }
+                                })
                                 .setNegativeButton(R.string.cancel,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
