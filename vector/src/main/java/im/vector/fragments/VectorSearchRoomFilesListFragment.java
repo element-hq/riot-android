@@ -20,8 +20,6 @@ package im.vector.fragments;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import org.matrix.androidsdk.util.Log;
-
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,6 +31,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.Message;
 import org.matrix.androidsdk.rest.model.TokensChunkResponse;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;

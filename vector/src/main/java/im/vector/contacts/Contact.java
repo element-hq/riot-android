@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import im.vector.VectorApp;
+import im.vector.util.PhoneNumberUtils;
+
 /**
  * A simple contact class
  */
@@ -62,6 +65,41 @@ public class Contact implements java.io.Serializable {
         }
     }
 
+    /**
+     * Defines a contact phone number.
+     */
+    public static class PhoneNumber implements java.io.Serializable {
+        // genuine phone number
+        public final String mUnformattedPhoneNumber;
+
+        // E164 phone number
+        public String mE164PhoneNumber;
+
+        // without space, parenthesis
+        public final String mCleanedPhoneNumber;
+
+        /**
+         * Constructor
+         * @param unformatPn the genuine phone number
+         */
+        public PhoneNumber(String unformatPn) {
+            mUnformattedPhoneNumber = unformatPn;
+            mCleanedPhoneNumber = mUnformattedPhoneNumber.replaceAll("[\\D]", "");
+            refreshE164PhoneNumber();
+        }
+
+        /**
+         * Refresh the e164 phone number.
+         */
+        public void refreshE164PhoneNumber() {
+            mE164PhoneNumber = PhoneNumberUtils.getE164format(VectorApp.getInstance(), mUnformattedPhoneNumber);
+
+            if (TextUtils.isEmpty(mE164PhoneNumber)) {
+                mE164PhoneNumber = mCleanedPhoneNumber;
+            }
+        }
+    }
+
     // the contact ID
     private String mContactId = "";
 
@@ -73,12 +111,12 @@ public class Contact implements java.io.Serializable {
     private transient Bitmap mThumbnail;
 
     // phone numbers list
-    private final ArrayList<String> mPhoneNumbers = new ArrayList<>();
+    private final ArrayList<PhoneNumber> mPhoneNumbers = new ArrayList<>();
 
     // emails list
     private final ArrayList<String> mEmails = new ArrayList<>();
 
-    // MXID by email address
+    // MXID by medium (email or phone number)
     private HashMap<String, MXID> mMXIDsByElement = new HashMap<>();
 
     /**
@@ -121,17 +159,29 @@ public class Contact implements java.io.Serializable {
     /**
      * @return the phone numbers list.
      */
-    public List<String> getPhonenumbers() {
+    public List<PhoneNumber> getPhonenumbers() {
         return mPhoneNumbers;
     }
 
     /**
      * Add a phone number address to the list.
-     * @param aPhonenumber the phone number to add
+     * @param aPn the phone number to add
      */
-    public void addPhonenumber(String aPhonenumber) {
-        if (mPhoneNumbers.indexOf(aPhonenumber) < 0) {
-            mPhoneNumbers.add(aPhonenumber);
+    public void addPhoneNumber(String aPn) {
+        // sanity check
+        if (!TextUtils.isEmpty(aPn)) {
+            mPhoneNumbers.add(new PhoneNumber(aPn));
+        }
+    }
+
+    /**
+     * Update the contacts with the new country code.
+     */
+    public void onCountryCodeUpdate() {
+        if (null != mPhoneNumbers) {
+            for (PhoneNumber pn : mPhoneNumbers) {
+                pn.refreshE164PhoneNumber();
+            }
         }
     }
 
@@ -152,7 +202,7 @@ public class Contact implements java.io.Serializable {
     }
 
     /**
-     * Refresh the matched matrix from each emails
+     * Refresh the matched matrix from each emails / phonenumber
      */
     public void refreshMatridIds() {
         mMXIDsByElement.clear();
@@ -166,16 +216,24 @@ public class Contact implements java.io.Serializable {
                 put(email, mxid);
             }
         }
+
+        for(PhoneNumber pn : getPhonenumbers()) {
+            Contact.MXID mxid = pidRetriever.getMXID(pn.mE164PhoneNumber);
+
+            if (null != mxid) {
+                put(pn.mE164PhoneNumber, mxid);
+            }
+        }
     }
 
     /**
-     * Defines a matrix identifier for a dedicated pattern
-     * @param email the pattern
+     * Defines a matrix identifier for a dedicated medim
+     * @param medium the medium
      * @param mxid the matrixId
      */
-    public void put(String email, MXID mxid) {
-        if ((null != email) && (null != mxid) && !TextUtils.isEmpty(mxid.mMatrixId)) {
-            mMXIDsByElement.put(email, mxid);
+    public void put(String medium, MXID mxid) {
+        if ((null != medium) && (null != mxid) && !TextUtils.isEmpty(mxid.mMatrixId)) {
+            mMXIDsByElement.put(medium, mxid);
         }
     }
 
@@ -184,7 +242,7 @@ public class Contact implements java.io.Serializable {
      * @return true if the contact could contain some matrix IDs
      */
     private boolean couldContainMatridIds() {
-        return (0 != mEmails.size());
+        return (0 != (mEmails.size() + mPhoneNumbers.size()));
     }
 
     /**
@@ -210,11 +268,17 @@ public class Contact implements java.io.Serializable {
             }
         }
 
+        if (!matched) {
+            for(PhoneNumber pn : mPhoneNumbers) {
+                matched |= pn.mE164PhoneNumber.toLowerCase().contains(pattern) || pn.mUnformattedPhoneNumber.toLowerCase().contains(pattern);
+            }
+        }
+
         return matched;
     }
 
     /**
-     * Tell whether a matrix id/email has the provided prefix.
+     * Tell whether a matrix id or an email / phonenumber has the provided prefix.
      * @param prefix the prefix
      * @return true if one item matched
      */
@@ -224,17 +288,31 @@ public class Contact implements java.io.Serializable {
             return false;
         }
 
+        ArrayList<MXID> matchedMatrixIds = new ArrayList<>();
+
         for(String email : mEmails) {
             if (email.startsWith(prefix)) {
                 return true;
             }
 
             if ((null != mMXIDsByElement) && mMXIDsByElement.containsKey(email)) {
-                MXID mxid = mMXIDsByElement.get(email);
+                matchedMatrixIds.add(mMXIDsByElement.get(email));
+            }
+        }
 
-                if ((null != mxid.mMatrixId) && mxid.mMatrixId.startsWith("@" + prefix)) {
-                    return true;
-                }
+        for(PhoneNumber pn : mPhoneNumbers) {
+            if (pn.mE164PhoneNumber.startsWith(prefix) || pn.mUnformattedPhoneNumber.startsWith(prefix)) {
+                return true;
+            }
+
+            if ((null != mMXIDsByElement) && mMXIDsByElement.containsKey(pn.mE164PhoneNumber)) {
+                matchedMatrixIds.add(mMXIDsByElement.get(pn.mE164PhoneNumber));
+            }
+        }
+
+        for(MXID mxid : matchedMatrixIds) {
+            if ((null != mxid.mMatrixId) && mxid.mMatrixId.startsWith("@" + prefix)) {
+                return true;
             }
         }
 
@@ -242,35 +320,9 @@ public class Contact implements java.io.Serializable {
     }
 
     /**
-     * test if some fields match with the reg ex.
-     * @param aRegEx the reg ex.
-     * @return true if it matches
-     */
-    public boolean matchWithRegEx(String aRegEx) {
-        // empty pattern -> cannot match
-        if (TextUtils.isEmpty(aRegEx)) {
-            return false;
-        }
-
-        boolean matched = false;
-
-        if (!TextUtils.isEmpty(mDisplayName)) {
-            matched = mDisplayName.matches(aRegEx);
-        }
-
-        if (!matched) {
-            for(String email : mEmails) {
-                matched |= email.matches(aRegEx);
-            }
-        }
-
-        return matched;
-    }
-
-    /**
      * @return the medias set which could match to a matrix Id.
      */
-    public Set<String> getMatrixIdMedias() {
+    public Set<String> getMatrixIdMediums() {
         return mMXIDsByElement != null ? mMXIDsByElement.keySet() : Collections.<String>emptySet();
     }
 
@@ -285,18 +337,6 @@ public class Contact implements java.io.Serializable {
         }
 
         return null;
-    }
-
-    /**
-     * Returns the first retrieved matrix ID.
-     * @return the first retrieved matrix ID.
-     */
-    public MXID getFirstMatrixId() {
-        if (mMXIDsByElement.size() != 0) {
-            return mMXIDsByElement.values().iterator().next();
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -322,10 +362,8 @@ public class Contact implements java.io.Serializable {
         }
 
         if (TextUtils.isEmpty(res)) {
-            for(String pn : mPhoneNumbers) {
-                if (!TextUtils.isEmpty(pn)) {
-                    return pn;
-                }
+            for(PhoneNumber pn : mPhoneNumbers) {
+                return pn.mUnformattedPhoneNumber;
             }
         }
 

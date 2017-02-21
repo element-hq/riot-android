@@ -34,9 +34,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -64,6 +61,14 @@ import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
 import org.matrix.androidsdk.util.JsonUtils;
+import org.matrix.androidsdk.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
@@ -72,13 +77,6 @@ import im.vector.UnrecognizedCertHandler;
 import im.vector.receiver.VectorRegistrationReceiver;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Displays the login screen.
@@ -134,7 +132,6 @@ public class LoginActivity extends MXCActionBarActivity {
     // mail validation
     private static final String BROADCAST_ACTION_MAIL_VALIDATION = "im.vector.activity.BROADCAST_ACTION_MAIL_VALIDATION";
     private static final String EXTRA_IS_STOP_REQUIRED = "EXTRA_IS_STOP_REQUIRED";
-    private static final String KEY_SUBMIT_TOKEN_SUCCESS = "success";
 
     // activity mode
     private int mMode = MODE_LOGIN;
@@ -1135,7 +1132,7 @@ public class LoginActivity extends MXCActionBarActivity {
 
         if (mMode == MODE_ACCOUNT_CREATION) {
             Log.d(LOG_TAG, "## submitEmailToken(): calling submitEmailTokenValidation()..");
-            mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Map<String, Object>>() {
+            mLoginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, aToken, aClientSecret, aSid, new ApiCallback<Boolean>() {
                 private void errorHandler(String errorMessage) {
                     Log.d(LOG_TAG, "## submitEmailToken(): errorHandler().");
                     enableLoadingScreen(false);
@@ -1145,24 +1142,15 @@ public class LoginActivity extends MXCActionBarActivity {
                 }
 
                 @Override
-                public void onSuccess(Map<String, Object> mapResp) {
-                    if (null != mapResp) {
-                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - respObject=" + mapResp.toString());
-
-                        Boolean status = (Boolean) mapResp.get(KEY_SUBMIT_TOKEN_SUCCESS);
-                        if (null != status) {
-                            if (status) {
-                                // the validation of mail ownership succeed, just resume the registration flow
-                                // next step: just register
-                                Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
-                                registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
-                            } else {
-                                Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
-                                errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
-                            }
-                        } else {
-                            Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failded (parameter missing)");
-                        }
+                public void onSuccess(Boolean isSuccess) {
+                    if (isSuccess) {
+                        // the validation of mail ownership succeed, just resume the registration flow
+                        // next step: just register
+                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - registerAfterEmailValidations() started");
+                        registerAfterEmailValidation(aClientSecret, aSid, aIdentityServer, aSessionId);
+                    } else {
+                        Log.d(LoginActivity.LOG_TAG, "## submitEmailToken(): onSuccess() - failed (success=false)");
+                        errorHandler(getString(R.string.login_error_unable_register_mail_ownership));
                     }
                 }
 

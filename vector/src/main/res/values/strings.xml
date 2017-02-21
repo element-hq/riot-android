@@ -600,7 +600,7 @@
     <!-- Search -->
     <string name="search_hint">Search</string>
     <string name="search_members_hint">Filter room members</string>
-    <string name="search_no_results">No Results</string>
+    <string name="search_no_results">No results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PEOPLE</string>
@@ -653,9 +653,10 @@
     <string name="settings_display_name">Display Name</string>
     <string name="settings_first_name">First Name</string>
     <string name="settings_surname">Surname</string>
-    <string name="settings_email_address">Email Address</string>
+    <string name="settings_email_address">Email</string>
     <string name="settings_add_email_address">Add email address</string>
-    <string name="settings_phone_number">Phone Number</string>
+    <string name="settings_phone_number">Phone</string>
+    <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_night_mode">Night Mode</string>
     <string name="settings_summary_app_info_link">Application system info screen</string>
     <string name="settings_title_app_info_link">Application info</string>
@@ -695,7 +696,9 @@
     <string name="settings_advanced">Advanced</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_notifications_targets">Notification Targets</string>
-    <string name="settings_app_permission">App permissions</string>
+    <string name="settings_contact">Local contacts</string>
+    <string name="settings_contacts_app_permission">Contacts permission</string>
+    <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_devices_list">Devices</string>
     <string name="devices_divider">devices_devider</string>
     <string name="cryptography_divider">cryptography_divider</string>
@@ -728,7 +731,18 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
 
-    <string name="settings_app_permission_contacts">Contacts</string>
+    <string name="settings_phonebook_country">Country</string>
+    <string name="settings_select_country">Choose a country</string>
+
+    <string name="settings_phone_number_country_label">Country</string>
+    <string name="settings_phone_number_country_error">Please choose a country</string>
+    <string name="settings_phone_number_label">Phone number</string>
+    <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
+    <string name="settings_phone_number_verification">Phone verification</string>
+    <string name="settings_phone_number_verification_instruction">"We've sent an SMS with an activation code. Please enter this code below."</string>
+    <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
+    <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
+    <string name="settings_phone_number_code">Code</string>
 
     <!-- Room Settings -->
 

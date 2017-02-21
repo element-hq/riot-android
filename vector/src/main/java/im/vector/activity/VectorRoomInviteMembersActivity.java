@@ -216,14 +216,14 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
     protected void onResume() {
         super.onResume();
         mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.addListener(mContactsListener);
+        ContactsManager.getInstance().addListener(mContactsListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.removeListener(mContactsListener);
+        ContactsManager.getInstance().removeListener(mContactsListener);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         } else if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_MEMBERS_SEARCH) {
             if (PackageManager.PERMISSION_GRANTED == aGrantResults[0]) {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission granted");
-                ContactsManager.refreshLocalContactsSnapshot(this.getApplicationContext());
+                ContactsManager.getInstance().refreshLocalContactsSnapshot();
                 onPatternUpdate(false);
             } else {
                 Log.d(LOG_TAG, "## onRequestPermissionsResult(): READ_CONTACTS permission not granted");
@@ -267,7 +267,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         }
 
         // wait that the local contacts are populated
-        if (!ContactsManager.didPopulateLocalContacts(this)) {
+        if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
             Log.d(LOG_TAG, "## onPatternUpdate() : The local contacts are not yet populated");
             mAdapter.reset();
             mLoadingView.setVisibility(View.VISIBLE);
