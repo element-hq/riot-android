@@ -1223,8 +1223,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         final String dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary);
 
         new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(dialogMessage)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -1262,7 +1263,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         });
                     }
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

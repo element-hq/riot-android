@@ -296,7 +296,7 @@ public class VectorRoomInviteMembersActivity extends VectorBaseSearchActivity {
         final String userId = participantAdapterItem.mUserId;
 
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VectorRoomInviteMembersActivity.this);
-        builder.setTitle(getString(R.string.room_participants_invite_prompt_title));
+        builder.setTitle(R.string.dialog_title_confirmation);
 
         String displayName = userId;
 
