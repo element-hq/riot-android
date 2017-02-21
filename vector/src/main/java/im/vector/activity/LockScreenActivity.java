@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +21,20 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+
 import org.matrix.androidsdk.util.Log;
+
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.matrix.androidsdk.MXSession;
@@ -58,6 +64,8 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         return (null != mLockScreenActivity);
     }
 
+    private LinearLayout mMainLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +87,7 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         setContentView(R.layout.activity_lock_screen);
 
         // remove any pending notifications
-        NotificationManager notificationsManager= (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationsManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationsManager.cancelAll();
 
         Intent intent = getIntent();
@@ -107,10 +115,10 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
         // display the room name as title
         setTitle(room.getName(session.getCredentials().userId));
 
-        ((TextView)findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
-        ((TextView)findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
-        ((TextView)findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
-        final ImageButton sendButton = (ImageButton)findViewById(R.id.lock_screen_sendbutton);
+        ((TextView) findViewById(R.id.lock_screen_sender)).setText(intent.getStringExtra(EXTRA_SENDER_NAME) + " : ");
+        ((TextView) findViewById(R.id.lock_screen_body)).setText(intent.getStringExtra(EXTRA_MESSAGE_BODY));
+        ((TextView) findViewById(R.id.lock_screen_room_name)).setText(room.getName(session.getCredentials().userId));
+        final ImageButton sendButton = (ImageButton) findViewById(R.id.lock_screen_sendbutton);
         final EditText editText = (EditText) findViewById(R.id.lock_screen_edittext);
 
         // disable send button
@@ -183,6 +191,29 @@ public class LockScreenActivity extends Activity { // do NOT extend from UC*Acti
                 });
             }
         });
+
+        mMainLayout = (LinearLayout) findViewById(R.id.lock_main_layout);
+    }
+
+    private void refreshMainLayout() {
+        if (null != mMainLayout) {
+            // adjust the width to match to 80 % of the screen width
+            ViewGroup.LayoutParams params = mMainLayout.getLayoutParams();
+            params.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.8f);
+            mMainLayout.setLayoutParams(params);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshMainLayout();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        refreshMainLayout();
     }
 
     @Override
