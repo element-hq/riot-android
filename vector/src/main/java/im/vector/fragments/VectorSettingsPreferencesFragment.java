@@ -1212,6 +1212,66 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         editor.commit();
     }
 
+    /**
+     * Display a dialog which asks confirmation for the deletion of a 3pid
+     *
+     * @param pid the 3pid to delete
+     * @param preferenceSummary the displayed 3pid
+     */
+    private void displayDelete3PIDConfirmationDialog(final ThirdPartyIdentifier pid, final CharSequence preferenceSummary) {
+        final String mediumFriendlyName = ThreePid.getMediumFriendlyName(pid.medium, getActivity()).toLowerCase();
+        final String dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary);
+
+        new AlertDialog.Builder(VectorApp.getCurrentActivity())
+                .setMessage(dialogMessage)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                        displayLoadingView();
+
+                        mSession.getMyUser().delete3Pid(pid, new ApiCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void info) {
+                                switch (pid.medium) {
+                                    case ThreePid.MEDIUM_EMAIL:
+                                        refreshEmailsList();
+                                        break;
+                                    case ThreePid.MEDIUM_MSISDN:
+                                        refreshPhoneNumbersList();
+                                        break;
+                                }
+                                onCommonDone(null);
+                            }
+
+                            @Override
+                            public void onNetworkError(Exception e) {
+                                onCommonDone(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onMatrixError(MatrixError e) {
+                                onCommonDone(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onUnexpectedError(Exception e) {
+                                onCommonDone(e.getLocalizedMessage());
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+    }
+
     //==============================================================================================================
     // ignored users list management
     //==============================================================================================================
@@ -1358,8 +1418,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh the emails list
      */
     private void refreshEmailsList() {
+        final List<ThirdPartyIdentifier> currentEmail3PID = mSession.getMyUser().getlinkedEmails();
+
         List<String> newEmailsList = new ArrayList<>();
-        for (ThirdPartyIdentifier identifier : mSession.getMyUser().getlinkedEmails()) {
+        for (ThirdPartyIdentifier identifier : currentEmail3PID) {
             newEmailsList.add(identifier.address);
         }
 
@@ -1388,23 +1450,30 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             final Preference addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY);
             int order = addEmailBtn.getOrder();
 
-            for (String email : mDisplayedEmails) {
+            for (final ThirdPartyIdentifier email3PID : currentEmail3PID) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
                 preference.setTitle(getString(R.string.settings_email_address));
-                preference.setSummary(email);
+                preference.setSummary(email3PID.address);
                 preference.setKey(EMAIL_PREFERENCE_KEY_BASE + index);
                 preference.setOrder(order);
 
-                final String fEmailAddress = email;
+                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        displayDelete3PIDConfirmationDialog(email3PID, preference.getSummary());
+                        return true;
+                    }
+                });
 
                 preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
-                        VectorUtils.copyToClipboard(getActivity(), fEmailAddress);
+                        VectorUtils.copyToClipboard(getActivity(), email3PID.address);
                         return true;
                     }
                 });
+
                 mUserSettingsCategory.addPreference(preference);
 
                 index++;
@@ -1565,8 +1634,10 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh phone number list
      */
     private void refreshPhoneNumbersList() {
+        final List<ThirdPartyIdentifier> currentPhoneNumber3PID = mSession.getMyUser().getlinkedPhoneNumbers();
+
         List<String> phoneNumberList = new ArrayList<>();
-        for (ThirdPartyIdentifier identifier : mSession.getMyUser().getlinkedPhoneNumbers()) {
+        for (ThirdPartyIdentifier identifier : currentPhoneNumber3PID) {
             phoneNumberList.add(identifier.address);
         }
 
@@ -1595,24 +1666,34 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             final Preference addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY);
             int order = addPhoneBtn.getOrder();
 
-            for (final String rawPhoneNumber : mDisplayedPhoneNumber) {
+            for (final ThirdPartyIdentifier phoneNumber3PID : currentPhoneNumber3PID) {
                 VectorCustomActionEditTextPreference preference = new VectorCustomActionEditTextPreference(getActivity());
 
                 preference.setTitle(getString(R.string.settings_phone_number));
+                String phoneNumberFormatted = phoneNumber3PID.address;
                 try {
                     // Attempt to format phone number
-                    final Phonenumber.PhoneNumber phoneNumber = PhoneNumberUtil.getInstance().parse("+" + rawPhoneNumber, null);
-                    preference.setSummary(PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+                    final Phonenumber.PhoneNumber phoneNumber = PhoneNumberUtil.getInstance().parse("+" + phoneNumberFormatted, null);
+                    phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
                 } catch (NumberParseException e) {
-                    preference.setSummary(rawPhoneNumber);
+                    // Do nothing, we will display raw version
                 }
+                preference.setSummary(phoneNumberFormatted);
                 preference.setKey(PHONE_NUMBER_PREFERENCE_KEY_BASE + index);
                 preference.setOrder(order);
+
+                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.getSummary());
+                        return true;
+                    }
+                });
 
                 preference.setOnPreferenceLongClickListener(new VectorCustomActionEditTextPreference.OnPreferenceLongClickListener() {
                     @Override
                     public boolean onPreferenceLongClick(Preference preference) {
-                        VectorUtils.copyToClipboard(getActivity(), rawPhoneNumber);
+                        VectorUtils.copyToClipboard(getActivity(), phoneNumber3PID.address);
                         return true;
                     }
                 });

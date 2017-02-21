@@ -37,6 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/settings_phone_number_code"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
                 tools:text="123456" />
 
         </android.support.design.widget.TextInputLayout>

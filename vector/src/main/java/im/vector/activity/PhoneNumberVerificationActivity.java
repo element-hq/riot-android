@@ -98,6 +98,7 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
         mThreePid = (ThreePid) intent.getSerializableExtra(EXTRA_PID);
 
         mPhoneNumberCode.addTextChangedListener(this);
+        mPhoneNumberCode.setOnEditorActionListener(this);
     }
 
     @Override
