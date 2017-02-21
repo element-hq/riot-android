@@ -139,8 +139,7 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_COUNTRY:
-                    if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-                            && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_INDICATOR)) {
+                    if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)) {
                         mCountryLayout.setError(null);
                         mCountryLayout.setErrorEnabled(false);
 
@@ -245,10 +244,10 @@ public class PhoneNumberAdditionActivity extends AppCompatActivity implements Te
     private void addPhoneNumber(final Phonenumber.PhoneNumber phoneNumber) {
         mLoadingView.setVisibility(View.VISIBLE);
 
-        final String e168Phone = PhoneNumberUtils.getE164format(phoneNumber);
+        final String e164format = PhoneNumberUtils.getE164format(phoneNumber);
         // Extract from phone number object instead of using mCurrentRegionCode just in case
         final String countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
-        final ThreePid pid = new ThreePid(e168Phone, countryCode, ThreePid.MEDIUM_MSISDN);
+        final ThreePid pid = new ThreePid(e164format, countryCode, ThreePid.MEDIUM_MSISDN);
 
         mSession.getMyUser().requestPhoneNumberValidationToken(pid, new ApiCallback<RequestPhoneNumberValidationResponse>() {
             @Override

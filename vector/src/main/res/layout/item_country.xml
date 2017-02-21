@@ -13,14 +13,14 @@
         android:id="@+id/country_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/country_indicator"
+        android:layout_toLeftOf="@+id/country_calling_code"
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="16sp"
         tools:text="France" />
 
     <TextView
-        android:id="@+id/country_indicator"
+        android:id="@+id/country_calling_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

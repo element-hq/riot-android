@@ -18,7 +18,6 @@ package im.vector;
 
 import android.content.Context;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
@@ -34,10 +33,10 @@ import org.matrix.androidsdk.rest.model.login.RegistrationParams;
 import org.matrix.androidsdk.ssl.CertUtil;
 import org.matrix.androidsdk.ssl.Fingerprint;
 import org.matrix.androidsdk.ssl.UnrecognizedCertificateException;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 
 public class LoginHandler {
@@ -329,14 +328,16 @@ public class LoginHandler {
      * @param aSid the server identity session id
      * @param aRespCallback asynchronous callback response
      */
-    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig, final String aToken, final String aClientSecret, final String aSid, final ApiCallback<Map<String,Object>> aRespCallback) {
+    public void submitEmailTokenValidation(final Context aCtx, final HomeserverConnectionConfig aHomeServerConfig,
+                                           final String aToken, final String aClientSecret, final String aSid,
+                                           final ApiCallback<Boolean> aRespCallback) {
         final ThreePid pid = new ThreePid(null,  ThreePid.MEDIUM_EMAIL);
         ThirdPidRestClient restClient = new ThirdPidRestClient(aHomeServerConfig);
 
-        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Map<String,Object>>() {
+        pid.submitValidationToken(restClient, aToken, aClientSecret, aSid, new ApiCallback<Boolean>() {
             @Override
-            public void onSuccess(Map<String,Object> info) {
-                aRespCallback.onSuccess(info);
+            public void onSuccess(Boolean isSuccess) {
+                aRespCallback.onSuccess(isSuccess);
             }
 
             @Override

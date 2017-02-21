@@ -42,7 +42,7 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
 
     public static final String EXTRA_OUT_COUNTRY_NAME = "EXTRA_OUT_COUNTRY_NAME";
     public static final String EXTRA_OUT_COUNTRY_CODE = "EXTRA_OUT_COUNTRY_CODE";
-    public static final String EXTRA_OUT_COUNTRY_INDICATOR = "EXTRA_OUT_COUNTRY_INDICATOR";
+    public static final String EXTRA_OUT_CALLING_CODE = "EXTRA_OUT_CALLING_CODE";
 
     private RecyclerView mCountryRecyclerView;
     private View mCountryEmptyView;
@@ -161,7 +161,7 @@ public class CountryPickerActivity extends AppCompatActivity implements CountryA
         Intent intent = new Intent();
         intent.putExtra(EXTRA_OUT_COUNTRY_NAME, country.getCountryName());
         intent.putExtra(EXTRA_OUT_COUNTRY_CODE, country.getCountryCode());
-        intent.putExtra(EXTRA_OUT_COUNTRY_INDICATOR, country.getIndicator());
+        intent.putExtra(EXTRA_OUT_CALLING_CODE, country.getCallingCode());
         setResult(RESULT_OK, intent);
         finish();
     }

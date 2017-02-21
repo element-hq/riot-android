@@ -610,7 +610,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
             Matrix.getInstance(context).addNetworkEventListener(mNetworkListener);
 
-            mSession.getMyUser().refreshThirdPartyIdentifier(new SimpleApiCallback<Void>() {
+            mSession.getMyUser().refreshThirdPartyIdentifiers(new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     // ensure that the activity still exists

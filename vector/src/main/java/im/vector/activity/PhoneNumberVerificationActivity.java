@@ -40,8 +40,6 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.ThreePid;
 import org.matrix.androidsdk.util.Log;
 
-import java.util.Map;
-
 import im.vector.Matrix;
 import im.vector.R;
 
@@ -138,13 +136,10 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
         } else {
             mLoadingView.setVisibility(View.VISIBLE);
             mSession.getThirdPidRestClient()
-                    .submitPhoneNumberValidationToken(mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Map<String, Object>>() {
-                @Override
-                public void onSuccess(Map<String, Object> map) {
-                    if (null != map) {
-                        Boolean status = (Boolean) map.get(KEY_SUBMIT_TOKEN_SUCCESS);
-                        if (null != status) {
-                            if (status) {
+                    .submitValidationToken(mThreePid.medium, mPhoneNumberCode.getText().toString(), mThreePid.clientSecret, mThreePid.sid, new ApiCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean isSuccess) {
+                            if (isSuccess) {
                                 // the validation of mail ownership succeed, just resume the registration flow
                                 // next step: just register
                                 Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - registerAfterEmailValidations() started");
@@ -153,27 +148,23 @@ public class PhoneNumberVerificationActivity extends AppCompatActivity implement
                                 Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - failed (success=false)");
                                 onSubmitCodeError(getString(R.string.settings_phone_number_verification_error));
                             }
-                        } else {
-                            Log.e(LOG_TAG, "## submitPhoneNumberValidationToken(): onSuccess() - failded (parameter missing)");
                         }
-                    }
-                }
 
-                @Override
-                public void onNetworkError(Exception e) {
-                    onSubmitCodeError(e.getLocalizedMessage());
-                }
+                        @Override
+                        public void onNetworkError(Exception e) {
+                            onSubmitCodeError(e.getLocalizedMessage());
+                        }
 
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    onSubmitCodeError(e.getLocalizedMessage());
-                }
+                        @Override
+                        public void onMatrixError(MatrixError e) {
+                            onSubmitCodeError(e.getLocalizedMessage());
+                        }
 
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    onSubmitCodeError(e.getLocalizedMessage());
-                }
-            });
+                        @Override
+                        public void onUnexpectedError(Exception e) {
+                            onSubmitCodeError(e.getLocalizedMessage());
+                        }
+                    });
         }
     }
 

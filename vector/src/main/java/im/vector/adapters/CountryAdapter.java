@@ -34,7 +34,7 @@ import im.vector.util.CountryPhoneData;
 
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> implements Filterable {
 
-    private final List<CountryPhoneData> mHumanCountryCodeByIndicator;
+    private final List<CountryPhoneData> mHumanCountryData;
     private final List<CountryPhoneData> mFilteredList;
 
     // Set whether we display indicators (ex: +33) or not
@@ -49,7 +49,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
      */
 
     public CountryAdapter(final List<CountryPhoneData> countries, final boolean withIndicator, final OnSelectCountryListener listener) {
-        mHumanCountryCodeByIndicator = countries;
+        mHumanCountryData = countries;
         // Init filtered list with a copy of countries list
         mFilteredList = new ArrayList<>(countries);
         mWithIndicator = withIndicator;
@@ -88,13 +88,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
                 final FilterResults results = new FilterResults();
 
                 if (TextUtils.isEmpty(constraint)) {
-                    mFilteredList.addAll(mHumanCountryCodeByIndicator);
+                    mFilteredList.addAll(mHumanCountryData);
                 } else {
                     final String filterPattern = constraint.toString().trim();
 
-                    for (final CountryPhoneData country : mHumanCountryCodeByIndicator) {
+                    for (final CountryPhoneData country : mHumanCountryData) {
                         if (Pattern.compile(Pattern.quote(filterPattern), Pattern.CASE_INSENSITIVE)
-                                .matcher(country.getCountryName() + country.getIndicator())
+                                .matcher(country.getCountryName() + country.getCallingCode())
                                 .find()) {
                             mFilteredList.add(country);
                         }
@@ -122,18 +122,18 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     class CountryViewHolder extends RecyclerView.ViewHolder {
 
         TextView vCountryName;
-        TextView vCountryIndicator;
+        TextView vCallingCode;
 
         private CountryViewHolder(final View itemView) {
             super(itemView);
             vCountryName = (TextView) itemView.findViewById(R.id.country_name);
-            vCountryIndicator = (TextView) itemView.findViewById(R.id.country_indicator);
+            vCallingCode = (TextView) itemView.findViewById(R.id.country_calling_code);
         }
 
         private void populateViews(final CountryPhoneData country) {
             vCountryName.setText(country.getCountryName());
             if (mWithIndicator) {
-                vCountryIndicator.setText(country.getFormattedIndicator());
+                vCallingCode.setText(country.getFormattedCallingCode());
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -17,14 +17,20 @@
 package im.vector.util;
 
 public class CountryPhoneData {
-    private String mCountryCode;
-    private String mCountryName;
-    private int mIndicator;
 
-    CountryPhoneData(String countryCode, String countryName, int indicator) {
+    // The ISO country code (ex: FR)
+    private String mCountryCode;
+
+    // The country name
+    private String mCountryName;
+
+    // The country calling code (ex: 33 for France)
+    private int mCallingCode;
+
+    CountryPhoneData(String countryCode, String countryName, int callingCode) {
         mCountryCode = countryCode;
         mCountryName = countryName;
-        mIndicator = indicator;
+        mCallingCode = callingCode;
     }
 
     public String getCountryCode() {
@@ -35,11 +41,11 @@ public class CountryPhoneData {
         return mCountryName;
     }
 
-    public int getIndicator() {
-        return mIndicator;
+    public int getCallingCode() {
+        return mCallingCode;
     }
 
-    public String getFormattedIndicator() {
-        return "+" + mIndicator;
+    public String getFormattedCallingCode() {
+        return "+" + mCallingCode;
     }
 }
