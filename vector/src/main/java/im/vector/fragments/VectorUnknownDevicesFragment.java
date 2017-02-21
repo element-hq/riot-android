@@ -170,6 +170,7 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             }
         });
 
+        mExpandableListView.addHeaderView(inflater.inflate(R.layout.dialog_unknown_devices_header, null));
         mExpandableListView.setGroupIndicator(null);
         mExpandableListView.setAdapter(adapter);
         // expand each group by default
@@ -183,8 +184,6 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 }
             }
         });
-
-        mExpandableListView.addHeaderView(inflater.inflate(R.layout.dialog_unknown_devices_header, null));
 
         builder.setView(v)
                 .setTitle(R.string.unknown_devices_alert_title)
