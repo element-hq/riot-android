@@ -36,16 +36,13 @@ import java.util.Map;
 
 import im.vector.Matrix;
 import im.vector.R;
-
 import im.vector.activity.VectorBaseSearchActivity;
 import im.vector.activity.VectorMemberDetailsActivity;
-
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorParticipantsAdapter;
 import im.vector.contacts.Contact;
 import im.vector.contacts.ContactsManager;
 import im.vector.util.VectorUtils;
-
 
 public class VectorSearchPeopleListFragment extends Fragment {
 
@@ -73,7 +70,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
                     @Override
                     public void run() {
                         if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-                            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
+                            ((VectorBaseSearchActivity.IVectorSearchActivity) getActivity()).refreshSearch();
                         }
                     }
                 });
@@ -107,16 +104,16 @@ public class VectorSearchPeopleListFragment extends Fragment {
                     public void run() {
                         Map<Integer, List<Integer>> visibleChildViews = VectorUtils.getVisibleChildViews(mPeopleListView, mAdapter);
 
-                        for(Integer groupPosition : visibleChildViews.keySet()) {
+                        for (Integer groupPosition : visibleChildViews.keySet()) {
                             List<Integer> childPositions = visibleChildViews.get(groupPosition);
 
-                            for(Integer childPosition : childPositions) {
-                                Object item =  mAdapter.getChild(groupPosition, childPosition);
+                            for (Integer childPosition : childPositions) {
+                                Object item = mAdapter.getChild(groupPosition, childPosition);
 
                                 if (item instanceof ParticipantAdapterItem) {
-                                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem)item;
+                                    ParticipantAdapterItem participantAdapterItem = (ParticipantAdapterItem) item;
 
-                                    if (TextUtils.equals(user.user_id,  participantAdapterItem.mUserId)) {
+                                    if (TextUtils.equals(user.user_id, participantAdapterItem.mUserId)) {
                                         mAdapter.notifyDataSetChanged();
                                         break;
                                     }
@@ -132,6 +129,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
 
     /**
      * Static constructor
+     *
      * @param matrixId the matrix id
      * @return a VectorSearchPeopleListFragment instance
      */
@@ -173,7 +171,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
                 Object child = mAdapter.getChild(groupPosition, childPosition);
 
                 if (child instanceof ParticipantAdapterItem && ((ParticipantAdapterItem) child).mIsValid) {
-                    ParticipantAdapterItem item = (ParticipantAdapterItem)child;
+                    ParticipantAdapterItem item = (ParticipantAdapterItem) child;
 
                     Intent startRoomInfoIntent = new Intent(getActivity(), VectorMemberDetailsActivity.class);
                     startRoomInfoIntent.putExtra(VectorMemberDetailsActivity.EXTRA_MEMBER_ID, item.mUserId);
@@ -192,12 +190,13 @@ public class VectorSearchPeopleListFragment extends Fragment {
      * @return true if the local search is ready to start.
      */
     public boolean isReady() {
-        return ContactsManager.didPopulateLocalContacts(getActivity()) && mAdapter.isKnownMembersInitialized();
+        return ContactsManager.getInstance().didPopulateLocalContacts() && mAdapter.isKnownMembersInitialized();
     }
 
     /**
      * Search a pattern in the room
-     * @param pattern the pattern to search
+     *
+     * @param pattern                the pattern to search
      * @param onSearchResultListener the result listener
      */
     public void searchPattern(final String pattern, final MatrixMessageListFragment.OnSearchResultListener onSearchResultListener) {
@@ -208,7 +207,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
         }
 
         // wait that the local contacts are populated
-        if (!ContactsManager.didPopulateLocalContacts(getActivity())) {
+        if (!ContactsManager.getInstance().didPopulateLocalContacts()) {
             mAdapter.reset();
             return;
         }
@@ -227,7 +226,7 @@ public class VectorSearchPeopleListFragment extends Fragment {
                 mPeopleListView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mPeopleListView.setVisibility((count == 0) ? View.INVISIBLE : View.VISIBLE);
+                        mPeopleListView.setVisibility((count == 0 && !TextUtils.isEmpty(pattern)) ? View.INVISIBLE : View.VISIBLE);
                         onSearchResultListener.onSearchSucceed(count);
                     }
                 });
@@ -239,24 +238,13 @@ public class VectorSearchPeopleListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mSession.getDataHandler().removeListener(mEventsListener);
-        ContactsManager.removeListener(mContactsListener);
+        ContactsManager.getInstance().removeListener(mContactsListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        } else {
-            if (null != mPendingPattern) {
-                searchPattern(mPendingPattern, mPendingSearchResultListener);
-                mPendingPattern = null;
-                mPendingSearchResultListener = null;
-            }
-        }
-
         mSession.getDataHandler().addListener(mEventsListener);
-        ContactsManager.addListener(mContactsListener);
+        ContactsManager.getInstance().addListener(mContactsListener);
     }
 }

@@ -42,6 +42,7 @@
     <string name="more">More</string>
     <string name="chat_with">Chat with </string>
     <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
     <string name="report_content">Report content</string>
     <string name="decline">Decline</string>
     <string name="active_call">Active call</string>
@@ -74,11 +75,9 @@
     <string name="action_invite">Invite</string>
     <string name="action_disconnect">Disconnect</string>
     <string name="action_sign_out">Sign out</string>
-    <string name="action_sign_out_confirmation">Sign out ?</string>
+    <string name="action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
     <string name="action_enable_room_notification">Enable room notifications</string>
     <string name="action_disable_room_notification">Disable room notifications</string>
-    <string name="send_bug_report">Send Bug Report</string>
-    <string name="send_bug_report_placeholder">Please tell us what went wrong</string>
     <string name="action_create_room">Create...</string>
     <string name="action_room_info">Room info</string>
     <string name="action_voice_call">Voice Call</string>
@@ -96,13 +95,17 @@
     <string name="action_resume_call">Resume call</string>
     <string name="about">About</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="with_email_and_screenshot">With email (with screenshot)</string>
-    <string name="with_email_without_screenshot">With email (without screenshot)</string>
-    <string name="with_vector_and_screenshot">With %s (with screenshot)</string>
-    <string name="with_vector_without_screenshot">With %s (without screenshot)</string>
-    <string name="bug_report_password">Set a password to your bug report</string>
     <string name="disable">Disable</string>
+
+    <string name="send_bug_report_include_logs">Send logs</string>
+    <string name="send_bug_report">Bug Report</string>
+    <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
+    <string name="send_bug_report_placeholder">Describe your problem here</string>
+    <string name="send_bug_report_logs_description">In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:</string>
     <string name="send_bug_report_alert_message">You seem to be shaking the phone in frustration. Would you like to submit a bug report?</string>
+    <string name="send_bug_report_sent">The bug report has been successfully sent</string>
+    <string name="send_bug_report_failed">The bug report failed to be sent (%s)</string>
+    <string name="send_bug_report_progress">Progress (%s%%)</string>
 
     <string name="send_files_in">Send into</string>
     <string name="save_files_in">Save into</string>
@@ -393,13 +396,15 @@
     <string name="media_picker_cannot_record_video">Cannot record video"</string>
 
     <!-- permissions Android M -->
-    <string name="permissions_rationale_popup_title">%s permissions</string>
-    <string name="permissions_rationale_msg_title">You are about to be asked to grant permissions..</string>
-    <string name="permissions_rationale_msg_storage">%s needs access to media files to display photos in the media picker or to store your medias.\n\n</string>
-    <string name="permissions_rationale_msg_camera">%s needs access to the camera to take pictures, video calls..</string>
-    <string name="permissions_rationale_msg_record_audio">%s needs access to the microphone to perform audio calls</string>
-    <string name="permissions_rationale_msg_contacts">Your address book emails are uploaded for discovering matrix IDs.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Your address book emails are uploaded for discovering matrix IDs.\nAllow %s to access your contacts ?</string>
+    <string name="permissions_rationale_popup_title">Information</string>
+    <string name="permissions_rationale_msg_storage">Riot needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
+    <string name="permissions_rationale_msg_camera">Riot needs permission to access your camera to take pictures and video calls.</string>
+    <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
+    <string name="permissions_rationale_msg_record_audio">Riot needs permission to access your microphone to perform audio calls.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="permissions_rationale_msg_contacts">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Riot.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nAllow Riot to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry.. Action not performed, due to missing permissions</string>
 
@@ -501,15 +506,18 @@
     <string name="room_participants_action_unignore">Show all messages from this user</string>
     <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
-    <string name="room_participants_action_devices_list">Show Devices List</string>
+    <string name="room_participants_action_devices_list">Show Device List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <string name="room_participants_invite_prompt_title">"Invite?"</string>
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
 
     <!-- invitation -->
-    <string name="people_search_contacts">CONTACTS</string>
-    <string name="people_search_known_contacts">KNOWN CONTACTS</string>
+    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
+    <string name="people_search_known_contacts">KNOWN CONTACTS (%s)</string>
+    <string name="people_search_filter_text">Matrix users only</string>
+    <string name="people_search_too_many_contacts">Too many contacts, please use the search field</string>
+
     <string name="people_search_all_contacts">All contacts</string>
     <string name="people_search_matrix_contacts">Matrix contacts</string>
 
@@ -536,8 +544,10 @@
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing...</string>
     <string name="room_message_placeholder">Type a message...</string>
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
-    <string name="room_unsent_messages_notification">Messages not sent.</string>
-    <string name="room_prompt_resent">Resend now?</string>
+    <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
+    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
+    <string name="room_prompt_resend">Resend all</string>
+    <string name="room_prompt_cancel">cancel all</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
@@ -590,7 +600,7 @@
     <!-- Search -->
     <string name="search_hint">Search</string>
     <string name="search_members_hint">Filter room members</string>
-    <string name="search_no_results">No Results</string>
+    <string name="search_no_results">No results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PEOPLE</string>
@@ -643,9 +653,10 @@
     <string name="settings_display_name">Display Name</string>
     <string name="settings_first_name">First Name</string>
     <string name="settings_surname">Surname</string>
-    <string name="settings_email_address">Email Address</string>
+    <string name="settings_email_address">Email</string>
     <string name="settings_add_email_address">Add email address</string>
-    <string name="settings_phone_number">Phone Number</string>
+    <string name="settings_phone_number">Phone</string>
+    <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_night_mode">Night Mode</string>
     <string name="settings_summary_app_info_link">Application system info screen</string>
     <string name="settings_title_app_info_link">Application info</string>
@@ -685,13 +696,16 @@
     <string name="settings_advanced">Advanced</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_notifications_targets">Notification Targets</string>
-    <string name="settings_app_permission">App permissions</string>
+    <string name="settings_contact">Local contacts</string>
+    <string name="settings_contacts_app_permission">Contacts permission</string>
+    <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_devices_list">Devices</string>
     <string name="devices_divider">devices_devider</string>
     <string name="cryptography_divider">cryptography_divider</string>
     <string name="devices_details_dialog_title">Device details</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Name</string>
+    <string name="devices_details_device_name">Device Name</string>
     <string name="devices_details_last_seen_title">Last seen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_date_time_format">yyyy/MM/dd, HH:mm:ss</string>
@@ -717,7 +731,18 @@
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
 
-    <string name="settings_app_permission_contacts">Contacts</string>
+    <string name="settings_phonebook_country">Country</string>
+    <string name="settings_select_country">Choose a country</string>
+
+    <string name="settings_phone_number_country_label">Country</string>
+    <string name="settings_phone_number_country_error">Please choose a country</string>
+    <string name="settings_phone_number_label">Phone number</string>
+    <string name="settings_phone_number_error">Invalid phone number for the selected country</string>
+    <string name="settings_phone_number_verification">Phone verification</string>
+    <string name="settings_phone_number_verification_instruction">"We've sent an SMS with an activation code. Please enter this code below."</string>
+    <string name="settings_phone_number_verification_error_empty_code">Enter an activation code</string>
+    <string name="settings_phone_number_verification_error">Error while validating your phone number</string>
+    <string name="settings_phone_number_code">Code</string>
 
     <!-- Room Settings -->
 
@@ -827,6 +852,19 @@
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
 
+    <string name="encryption_export_e2e_room_keys">Export E2E room keys</string>
+    <string name="encryption_export_room_keys">Export room keys</string>
+    <string name="encryption_export_room_keys_summary">Export the keys to a local file</string>
+    <string name="encryption_export_export">Export</string>
+    <string name="encryption_export_enter_passphrase">Enter passphrase</string>
+    <string name="encryption_export_confirm_passphrase">Confirm passphrase</string>
+    <string name="encryption_export_saved_as">The E2E room keys have been saved to \'%s\'</string>
+
+    <string name="encryption_import_e2e_room_keys">Import E2E room keys</string>
+    <string name="encryption_import_room_keys">Import room keys</string>
+    <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
+    <string name="encryption_import_import">Import</string>
+
     <string name="encryption_information_not_verified">NOT Verified</string>
     <string name="encryption_information_verified">Verified</string>
     <string name="encryption_information_blocked">Blacklisted</string>
@@ -845,4 +883,8 @@
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
+
+    <!-- unknown devices management -->
+    <string name="unknown_devices_alert_title">Room contains unknown devices</string>
+    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
 </resources>

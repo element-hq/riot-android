@@ -180,7 +180,12 @@
         <item name="android:buttonStyle">@style/LoginButtonStyle</item>
 
         <item name="colorAccent">?attr/editTextColor</item>
+    </style>
 
+    <style name="CountryPickerTheme" parent="AppTheme.NoActionBar">
+        <item name="editTextColor">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/vector_white_alpha_50</item>
     </style>
 
     <style name="LoginEditTextStyle" parent="@android:style/Widget.EditText">
@@ -243,7 +248,7 @@
         <item name="colorControlNormal">@color/vector_green_color</item>
     </style>
 
-    <style name="VectorSearches.TabLayout" parent="Widget.Design.TabLayout">
+    <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabGravity">fill</item>
         <item name="tabMode">fixed</item>
         <item name="tabPaddingStart">0dp</item>
@@ -253,6 +258,28 @@
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabIndicatorColor">@android:color/white</item>
         <item name="tabMaxWidth">0dp</item>
+    </style>
+
+    <style name="VectorUnifiedSearches.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="tabBackground">@color/vector_tabbar_background_color</item>
+        <item name="tabTextColor">@color/vector_green_color</item>
+        <item name="tabSelectedTextColor">@color/vector_green_color</item>
+        <item name="tabIndicatorColor">@color/vector_green_color</item>
+        <item name="tabMaxWidth">0dp</item>
+    </style>
+
+    <style name="TextAppearance.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/vector_74_gray</item>
+    </style>
+
+    <style name="TextInputLayoutTheme" parent="AppTheme.NoActionBar">
+        <item name="colorControlNormal">@color/vector_74_gray</item>
+        <item name="colorControlActivated">@color/vector_74_gray</item>
+        <item name="android:textColorHint">@color/vector_74_gray</item>
     </style>
 
 </resources>

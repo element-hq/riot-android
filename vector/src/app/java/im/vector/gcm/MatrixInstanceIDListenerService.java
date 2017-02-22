@@ -1,5 +1,6 @@
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +35,6 @@ public class MatrixInstanceIDListenerService extends InstanceIDListenerService {
     @Override
     public void onTokenRefresh() {
         Log.d(LOG_TAG, "onTokenRefresh");
-        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration();
+        Matrix.getInstance(this).getSharedGCMRegistrationManager().resetGCMRegistration(true);
     }
 }

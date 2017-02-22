@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
     private static final String KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP";
     private static final String KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP = "KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP";
-
+    private static final String KEY_FILTER_MATRIX_USERS_ONLY = "KEY_FILTER_MATRIX_USERS_ONLY";
 
     // search events listener
     public interface OnParticipantsSearchListener {
@@ -190,7 +191,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private boolean mShowMatrixUserOnly = false;
 
     // Set to true when we need to display the "+" icon
-    private boolean mWithAddIcon;
+    private final boolean mWithAddIcon;
 
     /**
      * Create a room member adapter.
@@ -245,6 +246,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         if (!pattern.equals(mPattern) || TextUtils.isEmpty(mPattern)) {
             mPattern = pattern;
+            if (TextUtils.isEmpty(mPattern)) {
+                mShowMatrixUserOnly = false;
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(KEY_FILTER_MATRIX_USERS_ONLY, mShowMatrixUserOnly);
+                editor.apply();
+            }
             refresh(firstEntry, searchListener);
         } else if (null != searchListener) {
             int displayedItemsCount = 0;
@@ -282,7 +290,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @param list the participantItem indexed by their matrix Id
      */
     private void addContacts(List<ParticipantAdapterItem> list) {
-        Collection<Contact> contacts = ContactsManager.getLocalContactsSnapshot();
+        Collection<Contact> contacts = ContactsManager.getInstance().getLocalContactsSnapshot();
 
         if (null != contacts) {
             for (Contact contact : contacts) {
@@ -306,6 +314,27 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                         if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
                             list.add(participant);
                         }
+                    }
+                }
+
+                for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
+                    Contact dummyContact = new Contact(pn.mE164PhoneNumber);
+                    dummyContact.setDisplayName(contact.getDisplayName());
+                    dummyContact.addPhoneNumber(pn.mUnformattedPhoneNumber);
+                    dummyContact.setThumbnailUri(contact.getThumbnailUri());
+
+                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
+
+                    Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mE164PhoneNumber);
+
+                    if (null != mxid) {
+                        participant.mUserId = mxid.mMatrixId;
+                    } else {
+                        participant.mUserId = pn.mE164PhoneNumber;
+                    }
+
+                    if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
+                        list.add(participant);
                     }
                 }
             }
@@ -344,24 +373,29 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     private void listOtherMembers() {
         fillUsedMembersList();
 
-        mUnusedParticipants = new ArrayList<>();
+        List<ParticipantAdapterItem> participants = new ArrayList<>();
         // Add all known matrix users
-        mUnusedParticipants.addAll(VectorUtils.listKnownParticipants(mSession).values());
+        participants.addAll(VectorUtils.listKnownParticipants(mSession).values());
         // Add phone contacts which have an email address
-        addContacts(mUnusedParticipants);
+        addContacts(participants);
 
         // List of display names
-        mDisplayNamesList = new ArrayList<>();
+        List<String> displayNamesList = new ArrayList<>();
 
-        for (Iterator<ParticipantAdapterItem> iterator = mUnusedParticipants.iterator(); iterator.hasNext(); ) {
+        for (Iterator<ParticipantAdapterItem> iterator = participants.iterator(); iterator.hasNext(); ) {
             ParticipantAdapterItem item = iterator.next();
             if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
                 // Remove the used members from the final list
                 iterator.remove();
             } else if (!TextUtils.isEmpty(item.mDisplayName)) {
                 // Add to the display names list
-                mDisplayNamesList.add(item.mDisplayName.toLowerCase());
+                displayNamesList.add(item.mDisplayName.toLowerCase());
             }
+        }
+
+        synchronized (LOG_TAG) {
+            mDisplayNamesList = displayNamesList;
+            mUnusedParticipants = participants;
         }
     }
 
@@ -369,7 +403,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
      * @return true if the known members list has been initialized.
      */
     public boolean isKnownMembersInitialized() {
-        return null != mDisplayNamesList;
+        boolean res;
+
+        synchronized (LOG_TAG) {
+            res = null != mDisplayNamesList;
+        }
+
+        return res;
     }
 
     /**
@@ -389,77 +429,30 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     public void onPIdsUpdate() {
         boolean gotUpdates = false;
 
-        if (null != mUnusedParticipants) {
-            for (ParticipantAdapterItem item : mUnusedParticipants) {
-                gotUpdates |= item.retrievePids();
+        List<ParticipantAdapterItem> unusedParticipants = new ArrayList<>();
+        List<ParticipantAdapterItem> contactsParticipants = new ArrayList<>();
+
+        synchronized (LOG_TAG) {
+            if (null != mUnusedParticipants) {
+                unusedParticipants = new ArrayList<>(mUnusedParticipants);
+            }
+
+            if (null != mContactsParticipants) {
+                contactsParticipants = new ArrayList<>(mContactsParticipants);
             }
         }
 
-        if (null != mContactsParticipants) {
-            for (ParticipantAdapterItem item : mContactsParticipants) {
-                gotUpdates |= item.retrievePids();
-            }
+        for (ParticipantAdapterItem item : unusedParticipants) {
+            gotUpdates |= item.retrievePids();
+        }
 
-            // Check whether we need to remove the contact section
-            if (mContactsParticipants.isEmpty() && mLocalContactsSectionPosition != -1) {
-                mParticipantsListsList.remove(mLocalContactsSectionPosition);
-                mLocalContactsSectionPosition = -1;
-                mRoomContactsSectionPosition--;
-                notifyDataSetChanged();
-            }
+        for (ParticipantAdapterItem item : contactsParticipants) {
+            gotUpdates |= item.retrievePids();
         }
 
         if (gotUpdates) {
             refresh(mFirstEntry, null);
         }
-    }
-
-    /**
-     * Check if some entries use the same matrix ids.
-     * If some use the same, prefer the room member one.
-     *
-     * @return true if some duplicated entries have been removed.
-     */
-    private boolean checkDuplicatedMatrixIds() {
-        boolean gotDuplicated = false;
-
-        if ((mRoomContactsSectionPosition >= 0) && (mLocalContactsSectionPosition >= 0)) {
-            // if several entries have the same matrix id.
-            // keep the dedicated contact book entry over the room participants
-            ArrayList<String> matrixUserIds = new ArrayList<>();
-
-            List<ParticipantAdapterItem> contactParticipants = mParticipantsListsList.get(mLocalContactsSectionPosition);
-
-            for (ParticipantAdapterItem item : contactParticipants) {
-                if (!TextUtils.isEmpty(item.mUserId)) {
-                    matrixUserIds.add(item.mUserId);
-                }
-            }
-
-            ArrayList<ParticipantAdapterItem> itemsToRemove = new ArrayList<>();
-            List<ParticipantAdapterItem> roomParticipants = mParticipantsListsList.get(mRoomContactsSectionPosition);
-            for (ParticipantAdapterItem item : roomParticipants) {
-                // if the entry is duplicated and comes from a contact
-                if (matrixUserIds.contains(item.mUserId)) {
-                    // add it to items list that will be removed
-                    itemsToRemove.add(item);
-                }
-            }
-
-            if (itemsToRemove.size() > 0) {
-                roomParticipants.removeAll(itemsToRemove);
-                gotDuplicated = true;
-
-                if (roomParticipants.size() == 0) {
-                    mParticipantsListsList.remove(roomParticipants);
-                    mRoomContactsSectionPosition = -1;
-                    // assume that the participants are displayed after the contacts
-                }
-            }
-
-        }
-
-        return gotDuplicated;
     }
 
     /**
@@ -486,12 +479,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         // test if the local contacts list has been cleared (while putting the application in background)
-        if (mLocalContactsSnapshotSession != ContactsManager.getLocalContactsSnapshotSession()) {
-            mUnusedParticipants = null;
-            mContactsParticipants = null;
-            mUsedMemberUserIds = null;
-            mDisplayNamesList = null;
-            mLocalContactsSnapshotSession = ContactsManager.getLocalContactsSnapshotSession();
+        if (mLocalContactsSnapshotSession != ContactsManager.getInstance().getLocalContactsSnapshotSession()) {
+            synchronized (LOG_TAG) {
+                mUnusedParticipants = null;
+                mContactsParticipants = null;
+                mUsedMemberUserIds = null;
+                mDisplayNamesList = null;
+            }
+            mLocalContactsSnapshotSession = ContactsManager.getInstance().getLocalContactsSnapshotSession();
         }
 
         List<ParticipantAdapterItem> participantItemList = new ArrayList<>();
@@ -522,7 +517,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 return;
             }
 
-            for (ParticipantAdapterItem item : mUnusedParticipants) {
+            List<ParticipantAdapterItem> unusedParticipants = new ArrayList<>();
+
+            synchronized (LOG_TAG) {
+                if (null != mUnusedParticipants) {
+                    unusedParticipants = new ArrayList<>(mUnusedParticipants);
+                }
+            }
+
+            for (ParticipantAdapterItem item : unusedParticipants) {
                 if (match(item, mPattern)) {
                     participantItemList.add(item);
                 }
@@ -538,7 +541,10 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                         List<ParticipantAdapterItem> list = new ArrayList<>();
                         addContacts(list);
-                        mContactsParticipants = list;
+
+                        synchronized (LOG_TAG) {
+                            mContactsParticipants = list;
+                        }
 
                         Handler handler = new Handler(Looper.getMainLooper());
                         handler.post(new Runnable() {
@@ -555,7 +561,15 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
                 return;
             } else {
-                for (Iterator<ParticipantAdapterItem> iterator = mContactsParticipants.iterator(); iterator.hasNext(); ) {
+                List<ParticipantAdapterItem> contactsParticipants = new ArrayList<>();
+
+                synchronized (LOG_TAG) {
+                    if (null != mContactsParticipants) {
+                        contactsParticipants = new ArrayList<>(mContactsParticipants);
+                    }
+                }
+
+                for (Iterator<ParticipantAdapterItem> iterator = contactsParticipants.iterator(); iterator.hasNext(); ) {
                     ParticipantAdapterItem item = iterator.next();
                     if (!mUsedMemberUserIds.isEmpty() && mUsedMemberUserIds.contains(item.mUserId)) {
                         // Remove the used members from the contact list
@@ -564,12 +578,16 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
             }
 
-            participantItemList.addAll(mContactsParticipants);
+            synchronized (LOG_TAG) {
+                if (null != mContactsParticipants) {
+                    participantItemList.addAll(mContactsParticipants);
+                }
+            }
         }
 
         // ensure that the PIDs have been retrieved
         // it might have failed
-        ContactsManager.retrievePids();
+        ContactsManager.getInstance().retrievePids();
 
         // the caller defines a first entry to display
         ParticipantAdapterItem firstEntry = theFirstEntry;
@@ -608,7 +626,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (item == mFirstEntry) {
                 firstEntryList.add(mFirstEntry);
             } else if (null != item.mContact) {
-                if (!mShowMatrixUserOnly || !item.mContact.getMatrixIdMedias().isEmpty()) {
+                if (!mShowMatrixUserOnly || !item.mContact.getMatrixIdMediums().isEmpty()) {
                     contactBookList.add(item);
                 }
             } else {
@@ -617,42 +635,32 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         }
 
         mFirstEntryPosition = -1;
-        mLocalContactsSectionPosition = -1;
-        mRoomContactsSectionPosition = -1;
-
-        int posCount = 0;
-
         mParticipantsListsList.clear();
-
         if (firstEntryList.size() > 0) {
             mParticipantsListsList.add(firstEntryList);
-            mFirstEntryPosition = posCount;
-            posCount++;
+            mFirstEntryPosition = 0;
         }
-
-        if (contactBookList.size() > 0) {
-            // the contacts are sorted by alphabetical method
-            Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
+        if (ContactsManager.getInstance().isContactBookAccessAllowed()) {
+            mLocalContactsSectionPosition = mFirstEntryPosition + 1;
+            mRoomContactsSectionPosition = mLocalContactsSectionPosition + 1;
+            // display the local contacts
+            // -> if there are some
+            // -> the PIDS retrieval is in progress
+            // -> the user displays only the matrix id (if there is no contact with matrix Id, it could impossible to deselect the toggle
+            // -> always displays when there is something to search to let the user toggles the matrix id checkbox.
+            if ((contactBookList.size() > 0) || !ContactsManager.getInstance().arePIDsRetrieved() || mShowMatrixUserOnly || !TextUtils.isEmpty(mPattern)) {
+                // the contacts are sorted by alphabetical method
+                Collections.sort(contactBookList, ParticipantAdapterItem.alphaComparator);
+            }
             mParticipantsListsList.add(contactBookList);
-            mLocalContactsSectionPosition = posCount;
-            posCount++;
-        } else if (!ContactsManager.arePIDsRetrieved()) {
-            // Contact lookup in progress, still display it with a loader
-            mParticipantsListsList.add(contactBookList);
-            mLocalContactsSectionPosition = posCount;
-            posCount++;
+        } else {
+            mRoomContactsSectionPosition = mFirstEntryPosition + 1;
         }
 
         if (roomContactsList.size() > 0) {
-            // use th
             Collections.sort(roomContactsList, mSortMethod);
-            mParticipantsListsList.add(roomContactsList);
-            mRoomContactsSectionPosition = posCount;
-            posCount++;
         }
-
-        // keep contacts over the room participants
-        checkDuplicatedMatrixIds();
+        mParticipantsListsList.add(roomContactsList);
 
         if (null != searchListener) {
             int length = 0;
@@ -697,11 +705,13 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         return mParticipantsListsList.size();
     }
 
-    private String getGroupTitle(int position) {
+    private String getGroupTitle(final int position) {
+        final int groupSize = mParticipantsListsList.get(position).size();
         if (position == mLocalContactsSectionPosition) {
-            return mContext.getString(R.string.people_search_contacts);
+            return mContext.getString(R.string.people_search_local_contacts, groupSize);
         } else if (position == mRoomContactsSectionPosition) {
-            return mContext.getString(R.string.people_search_known_contacts);
+            final String titleExtra = TextUtils.isEmpty(mPattern) ? "-" : String.valueOf(groupSize);
+            return mContext.getString(R.string.people_search_known_contacts, titleExtra);
         } else {
             return "??";
         }
@@ -750,46 +760,88 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, final ViewGroup parent) {
         if (null == convertView) {
             convertView = this.mLayoutInflater.inflate(this.mHeaderLayoutResourceId, null);
         }
 
-        TextView sectionNameTxtView = (TextView) convertView.findViewById(org.matrix.androidsdk.R.id.heading);
+        TextView sectionNameTxtView = (TextView) convertView.findViewById(R.id.people_header_text_view);
 
         if (null != sectionNameTxtView) {
-            String title = getGroupTitle(groupPosition);
-
-            if (!TextUtils.isEmpty(mPattern)) {
-                title += " (" + mParticipantsListsList.get(groupPosition).size() + ")";
-            }
-
+            final String title = getGroupTitle(groupPosition);
             sectionNameTxtView.setText(title);
-        }
-
-        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
-
-        if (!isExpanded) {
-            imageView.setImageResource(R.drawable.ic_material_expand_less_black);
-        } else {
-            imageView.setImageResource(R.drawable.ic_material_expand_more_black);
         }
 
         View subLayout = convertView.findViewById(R.id.people_header_sub_layout);
         subLayout.setVisibility((groupPosition == mFirstEntryPosition) ? View.GONE : View.VISIBLE);
         View loadingView = subLayout.findViewById(R.id.heading_loading_view);
-        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.arePIDsRetrieved() ? View.VISIBLE : View.GONE);
+        loadingView.setVisibility(groupPosition == mLocalContactsSectionPosition && !ContactsManager.getInstance().arePIDsRetrieved() ? View.VISIBLE : View.GONE);
 
-        if (parent instanceof ExpandableListView) {
-            ExpandableListView expandableListView = (ExpandableListView) parent;
-            boolean shouldBeExpanded = isGroupExpanded(groupPosition);
+        ImageView imageView = (ImageView) convertView.findViewById(org.matrix.androidsdk.R.id.heading_image);
+        View matrixView = convertView.findViewById(R.id.people_header_matrix_contacts_layout);
+        View knownContactsView = convertView.findViewById(R.id.people_header_known_contacts_layout);
 
-            if (expandableListView.isGroupExpanded(groupPosition) != shouldBeExpanded) {
-                if (shouldBeExpanded) {
-                    expandableListView.expandGroup(groupPosition);
-                } else {
-                    expandableListView.collapseGroup(groupPosition);
+        if (groupPosition != mRoomContactsSectionPosition || mParticipantsListsList.get(groupPosition).size() > 0) {
+            if (isExpanded) {
+                imageView.setImageResource(R.drawable.ic_material_expand_less_black);
+            } else {
+                imageView.setImageResource(R.drawable.ic_material_expand_more_black);
+            }
+
+            boolean groupShouldBeExpanded = isGroupExpanded(groupPosition);
+
+            if (parent instanceof ExpandableListView) {
+                ExpandableListView expandableListView = (ExpandableListView) parent;
+
+                if (expandableListView.isGroupExpanded(groupPosition) != groupShouldBeExpanded) {
+                    if (groupShouldBeExpanded) {
+                        expandableListView.expandGroup(groupPosition);
+                    } else {
+                        expandableListView.collapseGroup(groupPosition);
+                    }
                 }
+            }
+            // display a search toggle for the local contacts
+            matrixView.setVisibility(((groupPosition == mLocalContactsSectionPosition) && groupShouldBeExpanded) ? View.VISIBLE : View.GONE);
+            knownContactsView.setVisibility(View.GONE);
+
+            // matrix user checkbox
+            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contacts_filter_checkbox);
+            checkBox.setChecked(PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FILTER_MATRIX_USERS_ONLY, false));
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mShowMatrixUserOnly = isChecked;
+                    refresh(mFirstEntry, null);
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(KEY_FILTER_MATRIX_USERS_ONLY, isChecked);
+                    editor.apply();
+                }
+            });
+
+            // as there might be a clickable object in the extra layout,
+            // it seems required to have a click listener
+            subLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (parent instanceof ExpandableListView) {
+                        if (isExpanded) {
+                            ((ExpandableListView) parent).collapseGroup(groupPosition);
+                        } else {
+                            ((ExpandableListView) parent).expandGroup(groupPosition);
+                        }
+                    }
+                }
+            });
+        } else {
+            imageView.setImageDrawable(null);
+            matrixView.setVisibility(View.GONE);
+            if (TextUtils.isEmpty(mPattern)) {
+                // display info message when search is empty
+                knownContactsView.setVisibility(View.VISIBLE);
             }
         }
 
@@ -824,7 +876,9 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         // display the avatar
         participant.displayAvatar(mSession, thumbView);
 
-        nameTextView.setText(participant.getUniqueDisplayName(mDisplayNamesList));
+        synchronized (LOG_TAG) {
+            nameTextView.setText(participant.getUniqueDisplayName(mDisplayNamesList));
+        }
 
         // set the presence
         String status = "";
@@ -854,9 +908,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
 
         // the contact defines a matrix user but there is no way to get more information (presence, avatar)
         if (participant.mContact != null) {
-            boolean isMatrixUserId = !android.util.Patterns.EMAIL_ADDRESS.matcher(participant.mUserId).matches();
+            boolean isMatrixUserId = MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(participant.mUserId).matches();
             matrixUserBadge.setVisibility(isMatrixUserId ? View.VISIBLE : View.GONE);
-            statusTextView.setText(participant.mContact.getEmails().get(0));
+
+            if (participant.mContact.getEmails().size() > 0) {
+                statusTextView.setText(participant.mContact.getEmails().get(0));
+            } else {
+                statusTextView.setText(participant.mContact.getPhonenumbers().get(0).mUnformattedPhoneNumber);
+            }
         } else {
             statusTextView.setText(status);
             matrixUserBadge.setVisibility(View.GONE);
@@ -883,7 +942,8 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(KEY_EXPAND_STATE_SEARCH_LOCAL_CONTACTS_GROUP);
         editor.remove(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP);
-        editor.commit();
+        editor.remove(KEY_FILTER_MATRIX_USERS_ONLY);
+        editor.apply();
     }
 
     /**
@@ -920,16 +980,6 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             editor.putBoolean(KEY_EXPAND_STATE_SEARCH_MATRIX_CONTACTS_GROUP, isExpanded);
         }
 
-        editor.commit();
-    }
-
-    /**
-     * Specify whether we show all contacts or only ones having a matrix user id
-     *
-     * @param matrixUserOnly
-     */
-    public void displayOnlyMatrixUsers(final boolean matrixUserOnly) {
-        mShowMatrixUserOnly = matrixUserOnly;
-        refresh(mFirstEntry, null);
+        editor.apply();
     }
 }

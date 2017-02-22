@@ -172,6 +172,11 @@ public class VectorMemberDetailsDevicesAdapter extends ArrayAdapter<MXDeviceInfo
                 buttonBlock.setText(R.string.encryption_information_block);
                 break;
 
+            case MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN:
+                buttonVerify.setText(R.string.encryption_information_verify);
+                buttonBlock.setText(R.string.encryption_information_block);
+                break;
+
             default: // Blocked
                 buttonVerify.setText(R.string.encryption_information_verify);
                 buttonBlock.setText(R.string.encryption_information_unblock);

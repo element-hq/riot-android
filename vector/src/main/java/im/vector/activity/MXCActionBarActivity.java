@@ -23,8 +23,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
-import org.matrix.androidsdk.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -32,17 +31,17 @@ import android.view.inputmethod.InputMethodManager;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.data.Room;
 
-import im.vector.MyPresenceManager;
-import im.vector.VectorApp;
-import im.vector.Matrix;
-import im.vector.R;
-
 import java.util.ArrayList;
+
+import im.vector.Matrix;
+import im.vector.MyPresenceManager;
+import im.vector.R;
+import im.vector.VectorApp;
 
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public class MXCActionBarActivity extends ActionBarActivity {
+public class MXCActionBarActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MXCActBarActivity";
 
     public static final String TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG = "ActionBarActivity.TAG_FRAGMENT_ACCOUNT_SELECTION_DIALOG";

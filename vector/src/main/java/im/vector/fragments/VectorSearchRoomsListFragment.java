@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -278,20 +279,6 @@ public class VectorSearchRoomsListFragment extends VectorRecentsListFragment {
                 onSearchResultListener.onSearchSucceed(1);
             }
         });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (getActivity() instanceof VectorBaseSearchActivity.IVectorSearchActivity) {
-            ((VectorBaseSearchActivity.IVectorSearchActivity)getActivity()).refreshSearch();
-        }
     }
 
     protected boolean isDragAndDropSupported() {

@@ -23,18 +23,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import org.matrix.androidsdk.util.Log;
 import android.widget.Toast;
 
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.ssl.Fingerprint;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import im.vector.LoginHandler;
 import im.vector.Matrix;
@@ -107,7 +106,7 @@ public class VectorUniversalLinkActivity extends Activity {
 
         final LoginHandler loginHandler = new LoginHandler();
 
-        loginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, token, clientSecret, identityServerSessId, new ApiCallback<Map<String,Object>>() {
+        loginHandler.submitEmailTokenValidation(getApplicationContext(), homeServerConfig, token, clientSecret, identityServerSessId, new ApiCallback<Boolean>() {
 
             private void bringAppToForeground() {
                 final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -138,7 +137,7 @@ public class VectorUniversalLinkActivity extends Activity {
             }
 
             @Override
-            public void onSuccess(Map<String,Object> mapResp) {
+            public void onSuccess(Boolean isSuccess) {
                 VectorUniversalLinkActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

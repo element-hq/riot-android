@@ -15,14 +15,19 @@
  */
 package im.vector.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import org.matrix.androidsdk.MXSession;
+import org.matrix.androidsdk.util.Log;
 
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.fragments.VectorSettingsPreferencesFragment;
+import im.vector.util.VectorUtils;
 
 /**
  * Displays the client settings.
@@ -62,5 +67,22 @@ public class VectorSettingsActivity extends MXCActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // pass the result to the fragment
         mFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int aRequestCode,@NonNull String[] aPermissions, @NonNull int[] aGrantResults) {
+        if (aRequestCode == CommonActivityUtils.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
+            boolean granted = false;
+
+            for(int i = 0; i < aGrantResults.length; i++) {
+                granted |= (PackageManager.PERMISSION_GRANTED == aGrantResults[i]);
+            }
+
+            if (granted) {
+                Intent intent = new Intent(this, VectorMediasPickerActivity.class);
+                intent.putExtra(VectorMediasPickerActivity.EXTRA_AVATAR_MODE, true);
+                startActivityForResult(intent, VectorUtils.TAKE_IMAGE);
+            }
+        }
     }
 }

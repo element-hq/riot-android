@@ -18,13 +18,16 @@ package im.vector.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-//
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -32,13 +35,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
-import org.matrix.androidsdk.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -63,6 +61,7 @@ import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.RoomMember;
 import org.matrix.androidsdk.util.BingRulesManager;
+import org.matrix.androidsdk.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -149,8 +148,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
     private RoomAvatarPreference mRoomPhotoAvatar;
     private EditTextPreference mRoomNameEditTxt;
     private EditTextPreference mRoomTopicEditTxt;
-    private SwitchPreference mRoomDirectoryVisibilitySwitch;
-    private SwitchPreference mRoomMuteNotificationsSwitch;
+    private CheckBoxPreference mRoomDirectoryVisibilitySwitch;
+    private CheckBoxPreference mRoomMuteNotificationsSwitch;
     private ListPreference mRoomTagListPreference;
     private VectorListPreference mRoomAccessRulesListPreference;
     private ListPreference mRoomHistoryReadabilityRulesListPreference;
@@ -324,8 +323,8 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
         mRoomPhotoAvatar = (RoomAvatarPreference)findPreference(PREF_KEY_ROOM_PHOTO_AVATAR);
         mRoomNameEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_NAME);
         mRoomTopicEditTxt = (EditTextPreference)findPreference(PREF_KEY_ROOM_TOPIC);
-        mRoomDirectoryVisibilitySwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
-        mRoomMuteNotificationsSwitch = (SwitchPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
+        mRoomDirectoryVisibilitySwitch = (CheckBoxPreference)findPreference(PREF_KEY_ROOM_DIRECTORY_VISIBILITY_SWITCH);
+        mRoomMuteNotificationsSwitch = (CheckBoxPreference)findPreference(PREF_KEY_ROOM_MUTE_NOTIFICATIONS_SWITCH);
         mRoomTagListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_TAG_LIST);
         mRoomAccessRulesListPreference = (VectorListPreference)findPreference(PREF_KEY_ROOM_ACCESS_RULES_LIST);
         mRoomHistoryReadabilityRulesListPreference = (ListPreference)findPreference(PREF_KEY_ROOM_HISTORY_READABILITY_LIST);
@@ -1564,7 +1563,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             addAddressPreference.setTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setDialogTitle(R.string.room_settings_addresses_add_new_address);
             addAddressPreference.setKey(ADD_ADDRESSES_PREFERENCE_KEY);
-            addAddressPreference.setIcon(getResources().getDrawable(R.drawable.ic_material_add_circle));
+            addAddressPreference.setIcon(R.drawable.ic_add_black);
 
             addAddressPreference.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {

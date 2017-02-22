@@ -257,7 +257,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
         }
 
         // test user id
-        if (!TextUtils.isEmpty(mUserId) && mUserId.startsWith("@" + prefix)) {
+        if (!TextUtils.isEmpty(mUserId) && mUserId.startsWith((prefix.startsWith("@") ? "" : "@") + prefix)) {
             return true;
         }
 
@@ -284,7 +284,12 @@ public class ParticipantAdapterItem implements java.io.Serializable {
      * @param imageView the imageView
      */
     public void displayAvatar(MXSession session, ImageView imageView) {
-        // set the
+        // sanity check
+        // it should never happen but it was reported by a Google analytics Issue
+        if (null == imageView) {
+            return;
+        }
+        // set the predefined bitmap
         if (null != getAvatarBitmap()) {
             imageView.setImageBitmap(getAvatarBitmap());
         } else {
@@ -351,7 +356,7 @@ public class ParticipantAdapterItem implements java.io.Serializable {
                 displayname += " (" + mUserId + ")";
             }
         } else {
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mUserId).matches()) {
+            if (MXSession.PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER.matcher(mUserId).matches()) {
                 displayname += " (" + mUserId + ")";
             }
         }

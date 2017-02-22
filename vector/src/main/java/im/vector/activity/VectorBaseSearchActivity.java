@@ -147,7 +147,13 @@ public class VectorBaseSearchActivity extends MXCActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        onPatternUpdate(false);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                onPatternUpdate(false);
+            }
+        });
     }
 
     /**

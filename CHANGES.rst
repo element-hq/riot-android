@@ -1,3 +1,20 @@
+Changes in Riot 0.6.8 (2017-01-27)
+===================================================
+ 
+Improvements:
+ * The members list activity design has been improved.
+ * Add some google analytics stats.
+ * Trigger the email lookup on demand to save data connection use.
+ * Improve the settings screens to have the material design for the device with API < 21.
+  
+Bugfixes:
+ * Fix crypto backward compatibility issue (< 0.6.4).
+ * Fix an invite contacts permission request loop if it was not granted (room members invitation screen).
+ * #878 : Room activity : the very long member name overlaps the time 
+ * #636 : Log in button is not enabled when internet connection comes back.
+ * #891 : Infinite contacts permission request dialog if it is rejected
+ * #894 : matrix user id regex does not allow underscore in the name.
+
 Changes in Vector 0.6.7 (2017-01-23)
 ===================================================
  
