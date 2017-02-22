@@ -172,7 +172,7 @@
     <string name="auth_register">Register</string>
     <string name="auth_send_reset_email">Send Reset Email</string>
     <string name="auth_return_to_login">Return to login screen</string>
-    <string name="auth_user_id_placeholder">Email or user name</string>
+    <string name="auth_user_id_placeholder">Email, user name or phone number</string>
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">User name</string>

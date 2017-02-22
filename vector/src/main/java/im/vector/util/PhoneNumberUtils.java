@@ -23,6 +23,7 @@ import android.support.v4.util.Pair;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
@@ -298,5 +299,36 @@ public class PhoneNumberUtils {
             phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
         }
         return phoneNumberFormatted;
+    }
+
+    /**
+     * Try to extract a phone number from the given String
+     *
+     * @param context context
+     * @param potentialPhoneNumber the potential phone number
+     * @return PhoneNumber object if valid phone number
+     */
+    public static Phonenumber.PhoneNumber extractPhoneNumber(final Context context, final String potentialPhoneNumber) {
+        Phonenumber.PhoneNumber phoneNumber = null;
+
+        try {
+            if (potentialPhoneNumber.startsWith("+")) {
+                phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, null);
+            } else {
+                // Try with a "+" prefix
+                phoneNumber = PhoneNumberUtil.getInstance().parse("+" + potentialPhoneNumber, null);
+            }
+        } catch (NumberParseException e) {
+            // Try with specifying the calling code
+            try {
+                phoneNumber = PhoneNumberUtil.getInstance().parse(potentialPhoneNumber, PhoneNumberUtils.getCountryCode(context));
+            } catch (NumberParseException e1) {
+                // Do nothing
+            }
+        } catch (Exception e) {
+            // Do nothing
+        }
+
+        return phoneNumber;
     }
 }

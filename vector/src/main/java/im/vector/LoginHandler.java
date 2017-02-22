@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,9 @@ package im.vector;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+
 import org.matrix.androidsdk.HomeserverConnectionConfig;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
@@ -37,6 +41,8 @@ import org.matrix.androidsdk.util.Log;
 
 import java.util.Collection;
 import java.util.List;
+
+import im.vector.util.PhoneNumberUtils;
 
 
 public class LoginHandler {
@@ -85,9 +91,8 @@ public class LoginHandler {
     public void login(Context ctx, final HomeserverConnectionConfig hsConfig, final String username, final String password,
                               final SimpleApiCallback<HomeserverConnectionConfig> callback) {
         final Context appCtx = ctx.getApplicationContext();
-        LoginRestClient client = new LoginRestClient(hsConfig);
 
-        client.loginWithPassword(username, password, new SimpleApiCallback<Credentials>() {
+        final SimpleApiCallback<Credentials> loginCallback = new SimpleApiCallback<Credentials>() {
             @Override
             public void onSuccess(Credentials credentials) {
                 onRegistrationDone(appCtx, hsConfig, credentials, callback);
@@ -128,7 +133,39 @@ public class LoginHandler {
             public void onMatrixError(MatrixError e) {
                 callback.onMatrixError(e);
             }
-        });
+        };
+
+        callLogin(ctx, hsConfig, username, password, loginCallback);
+    }
+
+    /**
+     * Log the user using the given login/password after identifying if the login is a 3pid or a username
+     *
+     * @param context
+     * @param hsConfig the homeserver config
+     * @param login the login
+     * @param password
+     * @param callback
+     */
+    private void callLogin(final Context context, final HomeserverConnectionConfig hsConfig,
+                             final String login, final String password, final SimpleApiCallback<Credentials> callback) {
+        if (!TextUtils.isEmpty(login)) {
+            LoginRestClient client = new LoginRestClient(hsConfig);
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
+                // Login with 3pid
+                client.loginWith3Pid(ThreePid.MEDIUM_EMAIL, login.toLowerCase(), password, callback);
+            } else {
+                final Phonenumber.PhoneNumber phoneNumber = PhoneNumberUtils.extractPhoneNumber(context, login.trim());
+                if (phoneNumber != null) {
+                    // Login with 3pid
+                    final String phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164).substring(1);
+                    client.loginWith3Pid(ThreePid.MEDIUM_MSISDN, phoneNumberFormatted, password, callback);
+                } else {
+                    // Login with user
+                    client.loginWithUser(login, password, callback);
+                }
+            }
+        }
     }
 
     /**
