@@ -1419,7 +1419,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh the emails list
      */
     private void refreshEmailsList() {
-        final List<ThirdPartyIdentifier> currentEmail3PID = mSession.getMyUser().getlinkedEmails();
+        final List<ThirdPartyIdentifier> currentEmail3PID = new ArrayList<>(mSession.getMyUser().getlinkedEmails());
 
         List<String> newEmailsList = new ArrayList<>();
         for (ThirdPartyIdentifier identifier : currentEmail3PID) {
@@ -1635,7 +1635,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      * Refresh phone number list
      */
     private void refreshPhoneNumbersList() {
-        final List<ThirdPartyIdentifier> currentPhoneNumber3PID = mSession.getMyUser().getlinkedPhoneNumbers();
+        final List<ThirdPartyIdentifier> currentPhoneNumber3PID = new ArrayList<>(mSession.getMyUser().getlinkedPhoneNumbers());
 
         List<String> phoneNumberList = new ArrayList<>();
         for (ThirdPartyIdentifier identifier : currentPhoneNumber3PID) {
