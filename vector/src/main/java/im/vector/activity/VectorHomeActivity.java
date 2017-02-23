@@ -50,6 +50,8 @@ import android.widget.Toast;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.call.IMXCall;
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.data.MyUser;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomSummary;
@@ -109,6 +111,7 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     // the home activity is launched to start a call.
     public static final String EXTRA_CALL_SESSION_ID = "VectorHomeActivity.EXTRA_CALL_SESSION_ID";
     public static final String EXTRA_CALL_ID = "VectorHomeActivity.EXTRA_CALL_ID";
+    public static final String EXTRA_CALL_UNKNOWN_DEVICES = "VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES";
 
     // the home activity is launched in shared files mode
     // i.e the user tries to send several files with VECTOR
@@ -306,9 +309,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
         final Intent intent = getIntent();
 
         if (intent.hasExtra(EXTRA_CALL_SESSION_ID) && intent.hasExtra(EXTRA_CALL_ID)) {
-            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID));
+            startCall(intent.getStringExtra(EXTRA_CALL_SESSION_ID), intent.getStringExtra(EXTRA_CALL_ID), (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(EXTRA_CALL_UNKNOWN_DEVICES));
             intent.removeExtra(EXTRA_CALL_SESSION_ID);
             intent.removeExtra(EXTRA_CALL_ID);
+            intent.removeExtra(EXTRA_CALL_UNKNOWN_DEVICES);
         }
 
         // the activity could be started with a spinner
@@ -1348,9 +1352,10 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
     /**
      * Start a call with a session Id and a call Id
      * @param sessionId the session Id
-     * @param callId teh call Id
+     * @param callId the call Id
+     * @param unknownDevices the unknown e2e devices
      */
-    public void startCall(String sessionId, String callId) {
+    public void startCall(String sessionId, String callId, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
         // sanity checks
         if ((null != sessionId) && (null != callId)) {
             final Intent intent = new Intent(VectorHomeActivity.this, InComingCallActivity.class);
@@ -1358,7 +1363,11 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
             intent.putExtra(VectorCallViewActivity.EXTRA_MATRIX_ID, sessionId);
             intent.putExtra(VectorCallViewActivity.EXTRA_CALL_ID, callId);
 
-            VectorHomeActivity.this.runOnUiThread(new Runnable() {
+            if (null != unknownDevices) {
+                intent.putExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES, unknownDevices);
+            }
+
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     VectorHomeActivity.this.startActivity(intent);
