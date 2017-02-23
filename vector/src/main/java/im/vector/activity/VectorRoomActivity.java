@@ -958,6 +958,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
 
             // listen for room name or topic changes
             mRoom.addEventListener(mRoomEventListener);
+
+            mEditText.setHint(mRoom.isEncrypted() ? R.string.room_message_placeholder_encrypted : R.string.room_message_placeholder_not_encrypted);
         }
 
         mSession.getDataHandler().addListener(mGlobalEventListener);

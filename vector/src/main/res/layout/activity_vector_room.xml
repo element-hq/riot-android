@@ -198,7 +198,7 @@
                         android:layout_gravity="center_vertical"
                         android:inputType="textCapSentences|textMultiLine"
                         android:textSize="14sp"
-                        android:hint="@string/room_message_placeholder"
+                        android:hint="@string/room_message_placeholder_not_encrypted"
                         android:id="@+id/editText_messageBox"
                         android:layout_centerVertical="true"
                         android:theme="@style/SearchesAppTheme"
