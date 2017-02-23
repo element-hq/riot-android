@@ -20,18 +20,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-
-import org.matrix.androidsdk.util.Log;
-
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,16 +56,7 @@ import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 import org.matrix.androidsdk.rest.model.User;
-
-import im.vector.VectorApp;
-import im.vector.R;
-import im.vector.activity.CommonActivityUtils;
-import im.vector.activity.MXCActionBarActivity;
-import im.vector.activity.VectorMemberDetailsActivity;
-import im.vector.activity.VectorRoomInviteMembersActivity;
-import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.adapters.VectorRoomDetailsMembersAdapter;
-import im.vector.util.VectorUtils;
+import org.matrix.androidsdk.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +64,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import im.vector.R;
+import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
+import im.vector.activity.MXCActionBarActivity;
+import im.vector.activity.VectorMemberDetailsActivity;
+import im.vector.activity.VectorRoomInviteMembersActivity;
+import im.vector.adapters.ParticipantAdapterItem;
+import im.vector.adapters.VectorRoomDetailsMembersAdapter;
+import im.vector.util.VectorUtils;
 
 public class VectorRoomDetailsMembersFragment extends Fragment {
     private static final String LOG_TAG = "VectorRoomDetailsMembers";
@@ -836,7 +834,7 @@ public class VectorRoomDetailsMembersFragment extends Fragment {
 
                 // The user is trying to leave with unsaved changes. Warn about that
                 new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                        .setTitle(R.string.room_participants_remove_prompt_title)
+                        .setTitle(R.string.dialog_title_confirmation)
                         .setMessage(text)
                         .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
                             @Override

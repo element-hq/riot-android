@@ -97,6 +97,9 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
+    <!-- dialog titles -->
+    <string name="dialog_title_confirmation">Confirmation</string>
+
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report">Bug Report</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
@@ -467,7 +470,6 @@
     <string name="room_participants_multi_participants">%s participants</string>
     <string name="room_participants_leave_prompt_title">Leave room</string>
     <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
-    <string name="room_participants_remove_prompt_title">Remove?</string>
     <string name="room_participants_remove_prompt_msg">Are you sure you want to remove %s from this chat?</string>
     <string name="room_participants_admin_name">%s (admin)</string>
     <string name="room_participants_create">Create</string>
@@ -509,7 +511,6 @@
     <string name="room_participants_action_devices_list">Show Device List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
-    <string name="room_participants_invite_prompt_title">"Invite?"</string>
     <string name="room_participants_invite_prompt_msg">"Are you sure you want to invite %s to this chat?"</string>
 
     <!-- invitation -->
@@ -730,6 +731,8 @@
     <string name="settings_fail_to_update_password">Fail to update password</string>
     <string name="settings_password_updated">Your password has been updated</string>
     <string name="settings_unignore_user">Show all messages from %s?</string>
+
+    <string name="settings_delete_threepid_confirmation">Are you sure you want to remove the %1$s %2$s?</string>
 
     <string name="settings_phonebook_country">Country</string>
     <string name="settings_select_country">Choose a country</string>
