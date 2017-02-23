@@ -302,6 +302,20 @@ public class VectorHomeActivity extends AppCompatActivity implements VectorRecen
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 
+        // track if the application update
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int version = preferences.getInt("VERSION_BUILD", 0);
+
+        if (version != VectorApp.VERSION_BUILD) {
+            Log.d(LOG_TAG, "The application has been updated from version " + version + " to version " + VectorApp.VERSION_BUILD);
+
+            // TODO add some dedicated actions here
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("VERSION_BUILD", VectorApp.VERSION_BUILD);
+            editor.commit();
+        }
+
         // process intent parameters
         final Intent intent = getIntent();
 
