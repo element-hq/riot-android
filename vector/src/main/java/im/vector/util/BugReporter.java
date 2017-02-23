@@ -215,6 +215,11 @@ public class BugReporter {
 
                     final int dataLen = inputStream.available();
 
+                    // should never happen
+                    if (0 == dataLen) {
+                        return "No data";
+                    }
+
                     URL url = new URL(context.getResources().getString(R.string.bug_report_url));
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);
@@ -288,8 +293,12 @@ public class BugReporter {
                     Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
                     serverError = e.getLocalizedMessage();
                 } finally {
-                    if (null != conn) {
-                        conn.disconnect();
+                    try {
+                        if (null != conn) {
+                            conn.disconnect();
+                        }
+                    } catch (Exception e2) {
+                        Log.e(LOG_TAG, "doInBackground : conn.disconnect() failed " + e2.getMessage());
                     }
                 }
 
@@ -309,17 +318,25 @@ public class BugReporter {
                 super.onProgressUpdate(progress);
 
                 if (null != listener) {
-                    listener.onProgress((null == progress) ? 0 : progress[0]);
+                    try {
+                        listener.onProgress((null == progress) ? 0 : progress[0]);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onProgress() : failed " + e.getMessage());
+                    }
                 }
             }
 
             @Override
             protected void onPostExecute(String reason) {
                 if (null != listener) {
-                    if (null == reason) {
-                        listener.onUploadSucceed();
-                    } else {
-                        listener.onUploadFailed(reason);
+                    try {
+                        if (null == reason) {
+                            listener.onUploadSucceed();
+                        } else {
+                            listener.onUploadFailed(reason);
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "## onPostExecute() : failed " + e.getMessage());
                     }
                 }
             }
@@ -395,35 +412,66 @@ public class BugReporter {
                     sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
                         @Override
                         public void onUploadFailed(String reason) {
-                            if (null != VectorApp.getInstance()) {
-                                Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
-                            }
-                            // restore the dialog if the upload failed
-                            bugReportText.setEnabled(true);
-                            sendButton.setEnabled(true);
-                            includeLogsButton.setEnabled(true);
-
-                            if (null != cancelButton) {
-                                cancelButton.setEnabled(true);
+                            try {
+                                if (null != VectorApp.getInstance()) {
+                                    Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadFailed() : failed to display the toast " + e.getMessage());
                             }
 
-                            progressTextView.setVisibility(View.GONE);
-                            progressBar.setVisibility(View.GONE);
+                            try {
+                                // restore the dialog if the upload failed
+                                bugReportText.setEnabled(true);
+                                sendButton.setEnabled(true);
+                                includeLogsButton.setEnabled(true);
+
+                                if (null != cancelButton) {
+                                    cancelButton.setEnabled(true);
+                                }
+
+                                progressTextView.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadFailed() : failed to restore the dialog button " + e.getMessage());
+
+                                try {
+                                    bugReportDialog.dismiss();
+                                } catch (Exception e2) {
+                                    Log.e(LOG_TAG, "## onUploadFailed() : failed to dismiss the dialog " + e2.getMessage());
+                                }
+                            }
                         }
 
                         @Override
                         public void onProgress(int progress) {
+                            if (progress > 100) {
+                                Log.e(LOG_TAG, "## onProgress() : progress > 100");
+                                progress = 100;
+                            } else if (progress < 0) {
+                                Log.e(LOG_TAG, "## onProgress() : progress < 0");
+                                progress = 0;
+                            }
+
                             progressBar.setProgress(progress);
                             progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, progress + ""));
                         }
 
                         @Override
                         public void onUploadSucceed() {
-                            if (null != VectorApp.getInstance()) {
-                                Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
+                            try {
+                                if (null != VectorApp.getInstance()) {
+                                    Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_sent), Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the toast " + e.getMessage());
                             }
 
-                            bugReportDialog.dismiss();
+                            try {
+                                bugReportDialog.dismiss();
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "## onUploadSucceed() : failed to dismiss the dialog " + e.getMessage());
+                            }
                         }
                     });
                 }
