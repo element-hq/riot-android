@@ -133,23 +133,24 @@ public class BugReporter {
      * @return the file content as String
      */
     private static String convertStreamToString(File fin) {
-        InputStream inputStream;
+        Reader reader = null;
 
         try {
-            inputStream = new FileInputStream(fin);
             Writer writer = new StringWriter();
-            char[] buffer = new char[2048];
-
+            InputStream inputStream = new FileInputStream(fin);
             try {
-                Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
                 int n;
 
+                char[] buffer = new char[2048];
                 while ((n = reader.read(buffer)) != -1) {
                     writer.write(buffer, 0, n);
                 }
             } finally {
                 try {
-                    inputStream.close();
+                    if (null != reader) {
+                        reader.close();
+                    }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
                 }
@@ -157,6 +158,16 @@ public class BugReporter {
             return writer.toString();
         } catch (Exception e) {
             Log.e(LOG_TAG, "## convertStreamToString() failed " + e.getMessage());
+        } catch (OutOfMemoryError oom) {
+            Log.e(LOG_TAG, "## convertStreamToString() failed " + oom.getMessage());
+        } finally {
+            try {
+                if (null != reader) {
+                    reader.close();
+                }
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "## convertStreamToString() failed to close inputStream " + e.getMessage());
+            }
         }
 
         return "";
