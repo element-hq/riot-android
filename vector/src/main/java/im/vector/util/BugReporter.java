@@ -167,29 +167,47 @@ public class BugReporter {
      *
      * @param context         the application context
      * @param withDevicesLogs true to include the device logs
+     * @param withCrashLogs   true to include the crash logs
      */
-    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final String bugDescription, final IMXBugReportListener listener) {
+    private static void sendBugReport(final Context context, final boolean withDevicesLogs, final boolean withCrashLogs, final String bugDescription, final IMXBugReportListener listener) {
         new AsyncTask<Void, Integer, String>() {
             @Override
             protected String doInBackground(Void... voids) {
                 BugReportParams params = new BugReportParams();
 
+                params.logs = new ArrayList<>();
+
                 // the logs are optional
                 if (withDevicesLogs) {
-                    params.logs = new ArrayList<>();
-
-                    List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
-                    for (File f : files) {
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("lines", convertStreamToString(f));
-                        params.logs.add(map);
+                    try {
+                        List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
+                        for (File f : files) {
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("lines", convertStreamToString(f));
+                            params.logs.add(map);
+                        }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + e.getMessage());
+                        return e.getLocalizedMessage();
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + oom.getMessage());
+                        return oom.getLocalizedMessage();
                     }
-
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("lines", getLogCatError());
-                    params.logs.add(map);
                 }
 
+                if (withCrashLogs || withDevicesLogs) {
+                    try {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("lines", getLogCatError());
+                        params.logs.add(map);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + e.getMessage());
+                        return e.getLocalizedMessage();
+                    } catch (OutOfMemoryError oom) {
+                        Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + oom.getMessage());
+                        return oom.getLocalizedMessage();
+                    }
+                }
 
                 params.text = bugDescription;
 
@@ -292,6 +310,9 @@ public class BugReporter {
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
                     serverError = e.getLocalizedMessage();
+                } catch (OutOfMemoryError oom) {
+                    Log.e(LOG_TAG, "doInBackground ; failed to send the bug report " + oom.getMessage());
+                    serverError = oom.getLocalizedMessage();
                 } finally {
                     try {
                         if (null != conn) {
@@ -351,7 +372,7 @@ public class BugReporter {
 
         // no current activity so cannot display an alert
         if (null == currentActivity) {
-            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, "", null);
+            sendBugReport(VectorApp.getInstance().getApplicationContext(), true, true,  "", null);
             return;
         }
 
@@ -365,6 +386,7 @@ public class BugReporter {
 
         final EditText bugReportText = (EditText) dialogLayout.findViewById(R.id.bug_report_edit_text);
         final CheckBox includeLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_logs);
+        final CheckBox includeCrashLogsButton = (CheckBox) dialogLayout.findViewById(R.id.bug_report_button_include_crash_logs);
 
         final ProgressBar progressBar = (ProgressBar) dialogLayout.findViewById(R.id.bug_report_progress_view);
         final TextView progressTextView = (TextView) dialogLayout.findViewById(R.id.bug_report_progress_text_view);
@@ -398,6 +420,7 @@ public class BugReporter {
                     bugReportText.setEnabled(false);
                     sendButton.setEnabled(false);
                     includeLogsButton.setEnabled(false);
+                    includeCrashLogsButton.setEnabled(false);
 
                     if (null != cancelButton) {
                         cancelButton.setEnabled(false);
@@ -409,7 +432,7 @@ public class BugReporter {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(0);
 
-                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(), bugReportText.getText().toString(), new IMXBugReportListener() {
+                    sendBugReport(VectorApp.getInstance(), includeLogsButton.isChecked(),includeCrashLogsButton.isChecked(),  bugReportText.getText().toString(), new IMXBugReportListener() {
                         @Override
                         public void onUploadFailed(String reason) {
                             try {
@@ -425,6 +448,7 @@ public class BugReporter {
                                 bugReportText.setEnabled(true);
                                 sendButton.setEnabled(true);
                                 includeLogsButton.setEnabled(true);
+                                includeCrashLogsButton.setEnabled(true);
 
                                 if (null != cancelButton) {
                                     cancelButton.setEnabled(true);
