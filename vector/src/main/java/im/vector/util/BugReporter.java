@@ -52,6 +52,7 @@ import org.matrix.androidsdk.rest.model.bingrules.Condition;
 import org.matrix.androidsdk.util.Log;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -199,9 +200,19 @@ public class BugReporter {
                         }
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + e.getMessage());
+
+                        if (TextUtils.isEmpty(e.getLocalizedMessage())) {
+                            return "Failed to upload";
+                        }
+
                         return e.getLocalizedMessage();
                     } catch (OutOfMemoryError oom) {
                         Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + oom.getMessage());
+
+                        if (TextUtils.isEmpty(oom.getLocalizedMessage())) {
+                            return"Out ouf memory";
+                        }
+
                         return oom.getLocalizedMessage();
                     }
                 }
@@ -213,9 +224,19 @@ public class BugReporter {
                         params.logs.add(map);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + e.getMessage());
+
+                        if (TextUtils.isEmpty(e.getLocalizedMessage())) {
+                            return "Failed to upload";
+                        }
+
                         return e.getLocalizedMessage();
                     } catch (OutOfMemoryError oom) {
                         Log.e(LOG_TAG, "doInBackground ; failed to build bug report " + oom.getMessage());
+
+                        if (TextUtils.isEmpty(oom.getLocalizedMessage())) {
+                            return"Out ouf memory";
+                        }
+
                         return oom.getLocalizedMessage();
                     }
                 }
@@ -321,9 +342,18 @@ public class BugReporter {
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "doInBackground ; failed with error " + e.getClass() + " - " + e.getMessage());
                     serverError = e.getLocalizedMessage();
+
+                    if (TextUtils.isEmpty(serverError)) {
+                        serverError = "Failed to upload";
+                    }
                 } catch (OutOfMemoryError oom) {
                     Log.e(LOG_TAG, "doInBackground ; failed to send the bug report " + oom.getMessage());
                     serverError = oom.getLocalizedMessage();
+
+                    if (TextUtils.isEmpty(serverError)) {
+                        serverError = "Out ouf memory";
+                    }
+
                 } finally {
                     try {
                         if (null != conn) {
