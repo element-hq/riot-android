@@ -347,6 +347,7 @@ public class CommonActivityUtils {
 
         // reset the GCM
         Matrix.getInstance(context).getSharedGCMRegistrationManager().resetGCMRegistration(false);
+        Matrix.getInstance(context).getSharedGCMRegistrationManager().clearPreferences();
 
         // clear credentials
         Matrix.getInstance(context).clearSessions(context, true);
