@@ -87,6 +87,11 @@ public class BugReporter {
      */
     private interface IMXBugReportListener {
         /**
+         * The bug report has been cancelled
+         */
+        void onUploadCancelled();
+
+        /**
          * The bug report upload failed.
          *
          * @param reason the failure reason
@@ -161,6 +166,9 @@ public class BugReporter {
         return "";
     }
 
+    // boolean to cancel the bug report
+    private static boolean mIsCancelled = false;
+
     /**
      * Send a bug report.
      *
@@ -197,14 +205,16 @@ public class BugReporter {
                     if (withDevicesLogs) {
                         List<File> files = org.matrix.androidsdk.util.Log.addLogFiles(new ArrayList<File>());
                         for (File f : files) {
-                            jsonWriter.beginObject();
-                            jsonWriter.name("lines").value(convertStreamToString(f));
-                            jsonWriter.endObject();
-                            jsonWriter.flush();
+                            if (!mIsCancelled) {
+                                jsonWriter.beginObject();
+                                jsonWriter.name("lines").value(convertStreamToString(f));
+                                jsonWriter.endObject();
+                                jsonWriter.flush();
+                            }
                         }
                     }
 
-                    if (withCrashLogs || withDevicesLogs) {
+                    if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
                         jsonWriter.beginObject();
                         jsonWriter.name("lines").value(getLogCatError());
                         jsonWriter.endObject();
@@ -251,7 +261,7 @@ public class BugReporter {
                     Log.e(LOG_TAG, "doInBackground ; failed to close fileWriter " + e.getMessage());
                 }
 
-                if (TextUtils.isEmpty(serverError)) {
+                if (TextUtils.isEmpty(serverError) && !mIsCancelled) {
 
                     // the screenshot is defined here
                     // File screenFile = new File(VectorApp.mLogsDirectoryFile, "screenshot.jpg");
@@ -281,13 +291,13 @@ public class BugReporter {
 
                         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 
-                        byte[] buffer = new byte[2048];
+                        byte[] buffer = new byte[8192];
 
                         // read file and write it into form...
                         int bytesRead;
                         int totalWritten = 0;
 
-                        while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                        while (!mIsCancelled && (bytesRead = inputStream.read(buffer, 0, buffer.length)) > 0) {
                             dos.write(buffer, 0, bytesRead);
                             totalWritten += bytesRead;
                             publishProgress(totalWritten * 100 / dataLen);
@@ -388,7 +398,9 @@ public class BugReporter {
             protected void onPostExecute(String reason) {
                 if (null != listener) {
                     try {
-                        if (null == reason) {
+                        if (mIsCancelled) {
+                            listener.onUploadCancelled();
+                        } else if (null == reason) {
                             listener.onUploadSucceed();
                         } else {
                             listener.onUploadFailed(reason);
@@ -438,7 +450,7 @@ public class BugReporter {
         dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                // will be overridden to avoid dismissing the dialog while displaying the progress
             }
         });
 
@@ -446,6 +458,21 @@ public class BugReporter {
         final AlertDialog bugReportDialog = dialog.show();
         final Button cancelButton = bugReportDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
         final Button sendButton = bugReportDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        if (null != cancelButton) {
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // check if there is no upload in progress
+                    if (includeLogsButton.isEnabled()) {
+                        bugReportDialog.dismiss();
+                    } else {
+                        mIsCancelled = true;
+                        cancelButton.setEnabled(false);
+                    }
+                }
+            });
+        }
 
         if (null != sendButton) {
             sendButton.setEnabled(false);
@@ -459,10 +486,6 @@ public class BugReporter {
                     includeLogsButton.setEnabled(false);
                     includeCrashLogsButton.setEnabled(false);
 
-                    if (null != cancelButton) {
-                        cancelButton.setEnabled(false);
-                    }
-
                     progressTextView.setVisibility(View.VISIBLE);
                     progressTextView.setText(appContext.getString(R.string.send_bug_report_progress, 0 + ""));
 
@@ -473,7 +496,7 @@ public class BugReporter {
                         @Override
                         public void onUploadFailed(String reason) {
                             try {
-                                if (null != VectorApp.getInstance()) {
+                                if (null != VectorApp.getInstance() && !TextUtils.isEmpty(reason)) {
                                     Toast.makeText(VectorApp.getInstance(), VectorApp.getInstance().getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e) {
@@ -486,10 +509,7 @@ public class BugReporter {
                                 sendButton.setEnabled(true);
                                 includeLogsButton.setEnabled(true);
                                 includeCrashLogsButton.setEnabled(true);
-
-                                if (null != cancelButton) {
-                                    cancelButton.setEnabled(true);
-                                }
+                                cancelButton.setEnabled(true);
 
                                 progressTextView.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
@@ -502,6 +522,13 @@ public class BugReporter {
                                     Log.e(LOG_TAG, "## onUploadFailed() : failed to dismiss the dialog " + e2.getMessage());
                                 }
                             }
+
+                            mIsCancelled = false;
+                        }
+
+                        @Override
+                        public void onUploadCancelled() {
+                            onUploadFailed(null);
                         }
 
                         @Override
