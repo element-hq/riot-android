@@ -1938,7 +1938,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // crypto section: device key (fingerprint)
         if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
-            mSession.getCrypto().getDeviceInfo(userId, deviceId, new ApiCallback<MXDeviceInfo>() {
+            mSession.getCrypto().getDeviceInfo(userId, deviceId, new SimpleApiCallback<MXDeviceInfo>() {
                 @Override
                 public void onSuccess(final MXDeviceInfo deviceInfo) {
                     if ((null != deviceInfo) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
@@ -1957,23 +1957,40 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                         }
                     }
                 }
-
-                @Override
-                public void onNetworkError(Exception e) {
-
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-
-                }
             });
         }
+
+        // encrypt to unverified devices
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getActivity().getString(R.string.encryption_never_send_to_unverified_devices_title));
+        sendToUnverifiedDevicesPref.setChecked(false);
+
+        mSession.getCrypto().getGlobalBlacklistUnverifiedDevices(new SimpleApiCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean status) {
+                sendToUnverifiedDevicesPref.setChecked(status);
+            }
+        });
+
+        sendToUnverifiedDevicesPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                mSession.getCrypto().getGlobalBlacklistUnverifiedDevices(new SimpleApiCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean status) {
+                        if (sendToUnverifiedDevicesPref.isChecked() != status) {
+                            mSession.getCrypto().setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked(), new SimpleApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+                return true;
+            }
+        });
     }
 
     //==============================================================================================================

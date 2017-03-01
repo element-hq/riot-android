@@ -805,6 +805,8 @@
     <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
     <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
     <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices in this room from this device.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
@@ -869,6 +871,8 @@
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device</string>
 
     <string name="encryption_information_not_verified">NOT Verified</string>
     <string name="encryption_information_verified">Verified</string>
