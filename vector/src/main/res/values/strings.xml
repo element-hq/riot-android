@@ -173,13 +173,19 @@
     <!-- Authentication -->
     <string name="auth_login">Log in</string>
     <string name="auth_register">Register</string>
+    <string name="auth_submit">Submit</string>
+    <string name="auth_skip">Skip</string>
     <string name="auth_send_reset_email">Send Reset Email</string>
     <string name="auth_return_to_login">Return to login screen</string>
     <string name="auth_user_id_placeholder">Email, user name or phone number</string>
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">User name</string>
+    <string name="auth_threepid_instructions">TODO find an awesome wording</string>
     <string name="auth_email_placeholder">Email address</string>
+    <string name="auth_opt_email_placeholder">Email address (optional)</string>
+    <string name="auth_phone_number_placeholder">Phone number</string>
+    <string name="auth_opt_phone_number_placeholder">Phone number (optional)</string>
     <string name="auth_repeat_password_placeholder">Repeat password</string>
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
     <string name="auth_invalid_login_param">Incorrect username and/or password</string>
@@ -187,6 +193,7 @@
     <string name="auth_invalid_password">Password too short (min 6)</string>
     <string name="auth_missing_password">Missing password</string>
     <string name="auth_invalid_email">Invalid email address</string>
+    <string name="auth_invalid_phone_number">Invalid phone number</string>
     <string name="auth_email_already_defined">This email address is already defined.</string>
     <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
     <string name="auth_missing_email">Missing email address</string>

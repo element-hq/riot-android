@@ -1,7 +1,7 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:id="@+id/login_actions_bar"
@@ -66,6 +66,32 @@
             android:background="@color/vector_green_color"
             android:textColor="@android:color/white"
             android:text="@string/auth_send_reset_email"/>
+
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:background="@color/vector_green_color"
+            android:minWidth="94dp"
+            android:text="@string/auth_submit"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@id/button_submit"
+            android:background="@color/vector_green_color"
+            android:minWidth="94dp"
+            android:text="@string/auth_skip"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -171,15 +197,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/creation_email_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:inputType="textEmailAddress"
-                        android:hint="@string/auth_email_placeholder" />
+                    android:orientation="vertical"
+                    tools:visibility="visible">
 
                     <EditText
                         android:id="@+id/creation_your_name"
@@ -209,58 +228,115 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/display_server_url_layout"
+                    android:id="@+id/three_pid_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-                    
-                    <CheckBox
-                        android:id="@+id/display_server_url_expand_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/instructions"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/auth_use_server_options"/>
+                        android:layout_marginTop="24dp"
+                        android:text="@string/auth_threepid_instructions" />
 
+                    <EditText
+                        android:id="@+id/registration_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="@string/auth_email_placeholder"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1" />
+
+                    <LinearLayout
+                        android:id="@+id/registration_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/registration_phone_number_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="6dp"
+                            android:clickable="false"
+                            android:drawableRight="@drawable/ic_material_expand_more_black"
+                            android:focusable="false"
+                            android:singleLine="true"
+                            tools:text="FR" />
+
+                        <EditText
+                            android:id="@+id/registration_phone_number_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/auth_phone_number_placeholder"
+                            android:inputType="phone"
+                            android:singleLine="true"
+                            tools:text="0600000000" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/login_matrix_server_options_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/homeserver_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/auth_home_server"/>
-
-                    <EditText
-                        android:id="@+id/login_matrix_server_url"
+                    <LinearLayout
+                        android:id="@+id/display_server_url_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:hint="@string/hs_url"/>
-
-                    <TextView
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/auth_identity_server"/>
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/login_identity_url"
+                        <CheckBox
+                            android:id="@+id/display_server_url_expand_checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/auth_use_server_options" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/login_matrix_server_options_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:hint="@string/identity_url"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/auth_home_server" />
+
+                        <EditText
+                            android:id="@+id/login_matrix_server_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hs_url"
+                            android:singleLine="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/auth_identity_server" />
+
+                        <EditText
+                            android:id="@+id/login_identity_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/identity_url"
+                            android:singleLine="true" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
