@@ -95,8 +95,6 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     private final static int REGISTER_POLLING_PERIOD = 10 * 1000;
 
-    private static final int REQUEST_COUNTRY = 1245;
-
     // activity modes
     // either the user logs in
     // or creates a new account
@@ -294,6 +292,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mCurrentDialog.dismiss();
             mCurrentDialog = null;
         }
+
+        cancelEmailPolling();
+        RegistrationManager.getInstance().resetSingleton();
         super.onDestroy();
         Log.i(LOG_TAG, "## onDestroy(): IN");
         // ignore any server response when the acitity is destroyed
@@ -543,7 +544,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             }
         });
 
-        mPhoneNumberHandler = new PhoneNumberHandler(mPhoneNumber, mPhoneNumberCountryCode, PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE);
+        mPhoneNumberHandler = new PhoneNumberHandler(this, mPhoneNumber, mPhoneNumberCountryCode,
+                PhoneNumberHandler.DISPLAY_COUNTRY_ISO_CODE);
 
         refreshDisplay();
 
@@ -765,6 +767,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 return true;
             } else if ((MODE_ACCOUNT_CREATION_THREE_PID == mMode)) {
                 Log.d(LOG_TAG, "## cancel the three pid mode");
+                cancelEmailPolling();
+                RegistrationManager.getInstance().clearThreePid();
+                mEmailAddress.setText("");
+                mPhoneNumberHandler.reset();
                 fallbackToRegistrationMode();
                 return true;
             }
@@ -1240,8 +1246,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
         setActionButtonsEnabled(true);
 
-        RegistrationManager.getInstance().setRegistrationFlowResponse(registrationFlowResponse);
-        mRegistrationResponse = RegistrationManager.getInstance().getRegistrationFlowResponse();
+        mRegistrationResponse = registrationFlowResponse;
 
         // Check whether all listed flows in this authentication session are supported
         // We suggest using the fallback page (if any), when at least one flow is not supported.
@@ -1281,12 +1286,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mIsMailValidationPending = false;
 
             // remove the pending polling register if any
-            if (null != mRegisterPollingRunnable) {
-                mHandler.removeCallbacks(mRegisterPollingRunnable);
-                Log.d(LOG_TAG, "## checkIfMailValidationPending(): pending register() removed from handler");
-            } else {
-                Log.d(LOG_TAG, "## checkIfMailValidationPending(): no registering polling on M_UNAUTHORIZED");
-            }
+            cancelEmailPolling();
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -1923,7 +1923,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LOG_TAG, "## onActivityResult(): IN - requestCode=" + requestCode + " resultCode=" + resultCode);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_COUNTRY) {
+        if (resultCode == RESULT_OK && requestCode == PhoneNumberHandler.REQUEST_COUNTRY) {
             if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE) && mPhoneNumberHandler != null) {
                 mPhoneNumberHandler.setCountryCode(data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE));
             }
@@ -1984,11 +1984,21 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     * *********************************************************************************************
     */
 
+    /**
+     * Init the view asking for email and/or phone number depending on supported registration flows
+     */
     private void initThreePidView() {
+        // Make sure to start with a clear state
+        RegistrationManager.getInstance().clearThreePid();
+        mEmailAddress.setText("");
+        mPhoneNumberHandler.reset();
+
         if (RegistrationManager.getInstance().supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             mEmailAddress.setVisibility(View.VISIBLE);
             if (RegistrationManager.getInstance().isOptional(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
                 mEmailAddress.setHint(R.string.auth_opt_email_placeholder);
+            } else {
+                mEmailAddress.setHint(R.string.auth_email_placeholder);
             }
         } else {
             mEmailAddress.setVisibility(View.GONE);
@@ -1997,16 +2007,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (RegistrationManager.getInstance().supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
             mPhoneNumberHandler.setCountryCode(PhoneNumberUtils.getCountryCode(this));
             mPhoneNumberLayout.setVisibility(View.VISIBLE);
-            mPhoneNumberCountryCode.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Intent intent = CountryPickerActivity.getIntent(LoginActivity.this, true);
-                    startActivityForResult(intent, REQUEST_COUNTRY);
-                }
-            });
-
             if (RegistrationManager.getInstance().isOptional(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
                 mPhoneNumber.setHint(R.string.auth_opt_phone_number_placeholder);
+            } else {
+                mPhoneNumber.setHint(R.string.auth_phone_number_placeholder);
             }
         } else {
             mPhoneNumberLayout.setVisibility(View.GONE);
@@ -2017,9 +2021,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mSkipThreePidButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Make sure no three pid is attached to the process
                     RegistrationManager.getInstance().clearThreePid();
                     createAccount();
-                    fallbackToRegistrationMode();
+                    mPhoneNumberHandler.reset();
+                    mEmailAddress.setText("");
                 }
             });
         } else {
@@ -2034,41 +2040,52 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         });
     }
 
+    /**
+     * Submit the three pids
+     */
     private void submitThreePids() {
-        // Check data format
+        dismissKeyboard(this);
+
+        // Make sure to start with a clear state in case user already submitted before but canceled
+        RegistrationManager.getInstance().clearThreePid();
+
+        // Check that email format is valid and not empty if field is required
         final String email = mEmailAddress.getText().toString();
         if (!TextUtils.isEmpty(email)) {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(this, "Email is invalid", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.auth_invalid_email, Toast.LENGTH_SHORT).show();
                 return;
             }
         } else if (RegistrationManager.getInstance().isEmailRequired()) {
-            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.auth_missing_email, Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Check that phone number format is valid and not empty if field is required
         if (mPhoneNumberHandler.getPhoneNumber() != null) {
             if (!mPhoneNumberHandler.isPhoneNumberValidForCountry()) {
-                Toast.makeText(this, "Phone number is invalid", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.auth_invalid_phone, Toast.LENGTH_SHORT).show();
                 return;
             }
         } else if (RegistrationManager.getInstance().isPhoneNumberRequired()) {
-            Toast.makeText(this, "Phone number is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.auth_missing_phone, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!RegistrationManager.getInstance().canSkip() && mPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "You must enter and email or a phone number", Toast.LENGTH_SHORT).show();
+            // Both are required and empty
+            Toast.makeText(this, R.string.auth_missing_email_and_phone, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!TextUtils.isEmpty(email)) {
+            // Communicate email to singleton (will be validated later on)
             RegistrationManager.getInstance().addEmailThreePid(email);
         }
 
         if (mPhoneNumberHandler.getPhoneNumber() != null) {
-            // Validate phone number
-            RegistrationManager.getInstance().addPhoneNumberThreePid(mPhoneNumberHandler.gete164PhoneNumber(), mPhoneNumberHandler.getCountryCode(),
+            // Communicate phone number to singleton + start validation process (always phone first)
+            RegistrationManager.getInstance().addPhoneNumberThreePid(mPhoneNumberHandler.getE164PhoneNumber(), mPhoneNumberHandler.getCountryCode(),
                     new RegistrationManager.ThreePidRequestListener() {
                         @Override
                         public void onThreePidRequested(ThreePid pid) {
@@ -2082,61 +2099,91 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     }
 
+    /**
+     * Ask user the token received by SMS after phone number validation
+     *
+     * @param pid phone number pid
+     */
     private void onPhoneNumberSidReceived(final ThreePid pid) {
-        if (mCurrentDialog == null) {
-            final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_phone_number_verification, null);
-            mCurrentDialog = new AlertDialog.Builder(LoginActivity.this)
-                    .setView(dialogLayout)
-                    .setMessage(R.string.settings_phone_number_verification_instruction)
-                    .setPositiveButton(R.string.auth_submit, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Do nothing here
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .show();
+        final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_phone_number_verification, null);
+        mCurrentDialog = new AlertDialog.Builder(LoginActivity.this)
+                .setView(dialogLayout)
+                .setMessage(R.string.settings_phone_number_verification_instruction)
+                .setPositiveButton(R.string.auth_submit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing here
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
 
-            mCurrentDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                    button.setOnClickListener(new View.OnClickListener() {
+        // Trick to prevent dialog being closed automatically when positive button is used
+        mCurrentDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final TextInputEditText tokenView = (TextInputEditText) dialogLayout.findViewById(R.id.phone_number_code_value);
+                        submitPhoneNumber(tokenView.getText().toString(), pid);
+                    }
+                });
+            }
+        });
+
+        mCurrentDialog.show();
+    }
+
+    /**
+     * Submit the phone number token entered by the user
+     *
+     * @param token code entered by the user
+     * @param pid phone number pid
+     */
+    private void submitPhoneNumber(String token, ThreePid pid) {
+        if (TextUtils.isEmpty(token)) {
+            Toast.makeText(LoginActivity.this, "onThreePidValidated ERROR must enter token", Toast.LENGTH_SHORT).show();
+        } else {
+            RegistrationManager.getInstance().submitValidationToken(token, pid,
+                    new RegistrationManager.ThreePidValidationListener() {
                         @Override
-                        public void onClick(View view) {
-                            final TextInputEditText tokenView = (TextInputEditText) dialogLayout.findViewById(R.id.phone_number_code_value);
-                            submitPhoneNumber(tokenView.getText().toString(), pid);
+                        public void onThreePidValidated(boolean isSuccess) {
+                            if (isSuccess) {
+                                createAccount();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "onThreePidValidated ERROR", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
-                }
-            });
-        } else {
-            mCurrentDialog.show();
         }
     }
 
-    private void submitPhoneNumber(String token, ThreePid pid) {
-        RegistrationManager.getInstance().submitValidationToken(token, pid,
-                new RegistrationManager.ThreePidValidationListener() {
-                    @Override
-                    public void onThreePidValidated(boolean isSuccess) {
-                        if (isSuccess) {
-                            mCurrentDialog.dismiss();
-                            createAccount();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "onThreePidValidated ERROR", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+    /**
+     * Start registration process
+     */
+    private void createAccount() {
+        if (mCurrentDialog != null) {
+            mCurrentDialog.dismiss();
+        }
+        enableLoadingScreen(true);
+        hideMainLayoutAndToast("");
+        RegistrationManager.getInstance().attemptRegistration(this, this);
     }
 
-    private void createAccount() {
-        RegistrationManager.getInstance().attemptRegistration(this, this);
+    /**
+     * Cancel the polling for email validation
+     */
+    private void cancelEmailPolling() {
+        if (mHandler != null && mRegisterPollingRunnable != null) {
+            mHandler.removeCallbacks(mRegisterPollingRunnable);
+        }
     }
 
     /*
@@ -2146,9 +2193,25 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     */
 
     @Override
-    public void onRegistrationSuccess() {
+    public void onRegistrationSuccess(String warningMessage) {
+        cancelEmailPolling();
         enableLoadingScreen(false);
-        goToSplash();
+        if (!TextUtils.isEmpty(warningMessage)) {
+            mCurrentDialog = new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle(R.string.dialog_title_warning)
+                    .setMessage(warningMessage)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            goToSplash();
+                            finish();
+                        }
+                    })
+                    .show();
+        } else {
+            goToSplash();
+            finish();
+        }
     }
 
     @Override
@@ -2160,13 +2223,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @Override
     public void onWaitingEmailValidation() {
+        Log.d(LOG_TAG, "## onWaitingEmailValidation");
         hideMainLayoutAndToast(getResources().getString(R.string.auth_email_validation_message));
         enableLoadingScreen(true);
 
         mRegisterPollingRunnable = new Runnable() {
             @Override
             public void run() {
+                Log.d(LOG_TAG, "## onWaitingEmailValidation attempt registration");
                 RegistrationManager.getInstance().attemptRegistration(LoginActivity.this, LoginActivity.this);
+                mHandler.postDelayed(mRegisterPollingRunnable, REGISTER_POLLING_PERIOD);
             }
         };
         mHandler.postDelayed(mRegisterPollingRunnable, REGISTER_POLLING_PERIOD);
@@ -2174,15 +2240,16 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @Override
     public void onWaitingCaptcha() {
+        cancelEmailPolling();
         final String publicKey = RegistrationManager.getInstance().getCaptchaPublicKey();
         if (!TextUtils.isEmpty(publicKey)) {
+            Log.d(LOG_TAG, "## onWaitingCaptcha");
             Intent intent = new Intent(LoginActivity.this, AccountCreationCaptchaActivity.class);
             intent.putExtra(AccountCreationCaptchaActivity.EXTRA_HOME_SERVER_URL, mHomeServerUrl);
             intent.putExtra(AccountCreationCaptchaActivity.EXTRA_SITE_KEY, publicKey);
             startActivityForResult(intent, CAPTCHA_CREATION_ACTIVITY_REQUEST_CODE);
-            Log.d(LOG_TAG, "## onRegisterClick(): captcha flow started AccountCreationCaptchaActivity");
         } else {
-            Log.d(LOG_TAG, "## onRegisterClick(): captcha flow cannot be done");
+            Log.d(LOG_TAG, "## onWaitingCaptcha(): captcha flow cannot be done");
             Toast.makeText(this, getString(R.string.login_error_unable_register), Toast.LENGTH_SHORT).show();
         }
     }
@@ -2192,7 +2259,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
         if (!isAvailable) {
             showMainLayout();
-            Toast.makeText(this, R.string.login_error_user_in_use, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.auth_username_already_taken, Toast.LENGTH_LONG).show();
         } else {
             if (RegistrationManager.getInstance().canAddThreePid()) {
                 // Show next screen with email/phone number

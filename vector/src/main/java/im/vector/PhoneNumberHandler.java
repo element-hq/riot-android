@@ -16,10 +16,14 @@
 
 package im.vector;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -29,17 +33,21 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import im.vector.activity.CountryPickerActivity;
 import im.vector.util.PhoneNumberUtils;
 
 /**
  * Helper class to handle phone number formatting and validation
  */
-public class PhoneNumberHandler implements TextWatcher {
-    private static final String LOG_TAG = PhoneNumberHandler.class.getSimpleName();
+public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListener {
+
+    public static final int REQUEST_COUNTRY = 1245;
 
     @IntDef({DISPLAY_COUNTRY_FULL_NAME, DISPLAY_COUNTRY_ISO_CODE})
     @Retention(RetentionPolicy.SOURCE)
-    @interface DisplayMode {}
+    @interface DisplayMode {
+    }
+
     public static final int DISPLAY_COUNTRY_FULL_NAME = 0;
     public static final int DISPLAY_COUNTRY_ISO_CODE = 1;
 
@@ -60,14 +68,27 @@ public class PhoneNumberHandler implements TextWatcher {
      * *********************************************************************************************
      */
 
-    public PhoneNumberHandler(EditText phoneNumberInput, EditText countryCodeInput, @DisplayMode int displayMode) {
+    public PhoneNumberHandler(@NonNull final Activity activity, @NonNull final EditText phoneNumberInput,
+                              @NonNull final EditText countryCodeInput, @DisplayMode final int displayMode) {
         mPhoneNumberInput = phoneNumberInput;
         mCountryCodeInput = countryCodeInput;
         mDisplayMode = displayMode;
 
-        if (mPhoneNumberInput != null) {
-            mPhoneNumberInput.addTextChangedListener(this);
-        }
+        mPhoneNumberInput.addTextChangedListener(this);
+        mPhoneNumberInput.setOnFocusChangeListener(this);
+
+        // Hide picker by default so placeholder is visible
+        mCountryCodeInput.setVisibility(View.GONE);
+
+        mCountryCodeInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!activity.isFinishing()) {
+                    final Intent intent = CountryPickerActivity.getIntent(activity, true);
+                    activity.startActivityForResult(intent, REQUEST_COUNTRY);
+                }
+            }
+        });
     }
 
     /*
@@ -79,16 +100,29 @@ public class PhoneNumberHandler implements TextWatcher {
     /**
      * Remove references to View components to avoid memory leak
      */
-    public void release(){
+    public void release() {
         mPhoneNumberInput.removeTextChangedListener(this);
         mPhoneNumberInput = null;
         mCountryCodeInput = null;
     }
 
+    /**
+     * Clear phone number data
+     */
+    public void reset() {
+        mCurrentPhoneNumber = null;
+        mPhoneNumberInput.setText("");
+        mCountryCodeInput.setVisibility(View.GONE);
+    }
+
+    /**
+     * Reformat current phone number according to the new country code + set new country code
+     *
+     * @param newCountryCode
+     */
     public void setCountryCode(final String newCountryCode) {
         if (TextUtils.isEmpty(mPhoneNumberInput.getText())) {
             updateCountryCode(newCountryCode);
-            initPhoneWithPrefix();
         } else {
             // Clear old prefix from phone before assigning new one
             String updatedPhone = mPhoneNumberInput.getText().toString();
@@ -97,39 +131,56 @@ public class PhoneNumberHandler implements TextWatcher {
             }
             updateCountryCode(newCountryCode);
 
-            if (TextUtils.isEmpty(updatedPhone)) {
-                initPhoneWithPrefix();
-            } else {
+            if (!TextUtils.isEmpty(updatedPhone)) {
                 formatPhoneNumber(updatedPhone);
+            } else if (mCountryCodeInput.getVisibility() == View.VISIBLE) {
+                initPhoneWithPrefix();
             }
         }
     }
 
-    public boolean isValidPhoneNumber(){
+    /**
+     * Check whether the current phone number is a potential phone number
+     *
+     * @return true if potential phone number
+     */
+    public boolean isValidPhoneNumber() {
         return mCurrentPhoneNumber != null && PhoneNumberUtil.getInstance().isPossibleNumber(mCurrentPhoneNumber);
     }
 
-    public boolean isPhoneNumberValidForCountry(){
+    /**
+     * Check whether the current phone number is a valid for the current country code
+     *
+     * @return true if valid
+     */
+    public boolean isPhoneNumberValidForCountry() {
         return mCurrentPhoneNumber != null && PhoneNumberUtil.getInstance().isValidNumberForRegion(mCurrentPhoneNumber, mCountryCode);
     }
 
-    public Phonenumber.PhoneNumber getPhoneNumber(){
+    /**
+     * Get the current phone number
+     *
+     * @return phone number object
+     */
+    public Phonenumber.PhoneNumber getPhoneNumber() {
         return mCurrentPhoneNumber;
     }
 
-    public String gete164PhoneNumber(){
+    /**
+     * Get the phone number in E164 format
+     *
+     * @return formatted phone number
+     */
+    public String getE164PhoneNumber() {
         return mCurrentPhoneNumber == null ? null : PhoneNumberUtils.getE164format(mCurrentPhoneNumber);
     }
 
-    public String getMsisdnPhoneNumber(){
-        String msisdn = gete164PhoneNumber();
-        if (msisdn != null && msisdn.startsWith("+")) {
-            msisdn.substring(1);
-        }
-        return msisdn;
-    }
-
-    public String getCountryCode(){
+    /**
+     * Get the country code of the current phone number
+     *
+     * @return country code (ie. FR, US, etc.)
+     */
+    public String getCountryCode() {
         // Always extract from phone number object instead of using mCurrentRegionCode just in case
         return mCurrentPhoneNumber == null ? null : PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(mCurrentPhoneNumber.getCountryCode());
     }
@@ -140,6 +191,11 @@ public class PhoneNumberHandler implements TextWatcher {
      * *********************************************************************************************
      */
 
+    /**
+     * Set the current country code and updaet the country code field and the prefix
+     *
+     * @param newCountryCode
+     */
     private void updateCountryCode(final String newCountryCode) {
         if (!TextUtils.isEmpty(newCountryCode) && !newCountryCode.equals(mCountryCode)) {
             mCountryCode = newCountryCode;
@@ -159,6 +215,9 @@ public class PhoneNumberHandler implements TextWatcher {
         }
     }
 
+    /**
+     * Init the phone number field with the country prefix (ie. "+33" for country code "FR")
+     */
     private void initPhoneWithPrefix() {
         if (!TextUtils.isEmpty(mCurrentPhonePrefix)) {
             mPhoneNumberInput.setText(mCurrentPhonePrefix);
@@ -166,6 +225,11 @@ public class PhoneNumberHandler implements TextWatcher {
         }
     }
 
+    /**
+     * Format the given string according to the expected format for the current country code
+     *
+     * @param rawPhoneNumber raw phone number to format
+     */
     private void formatPhoneNumber(final String rawPhoneNumber) {
         if (!TextUtils.isEmpty(mCountryCode)) {
             try {
@@ -201,6 +265,22 @@ public class PhoneNumberHandler implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         formatPhoneNumber(s.toString());
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            mCountryCodeInput.setVisibility(View.VISIBLE);
+            if (TextUtils.isEmpty(mPhoneNumberInput.getText()) && !TextUtils.isEmpty(mCurrentPhonePrefix)) {
+                //
+                initPhoneWithPrefix();
+            }
+        } else {
+            // Lost focus, display back the placeholder if field only has the prefix
+            if (TextUtils.isEmpty(mPhoneNumberInput.getText()) || TextUtils.equals(mPhoneNumberInput.getText(), mCurrentPhonePrefix)) {
+                reset();
+            }
+        }
     }
 
 }

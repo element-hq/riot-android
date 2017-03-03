@@ -99,6 +99,7 @@
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
+    <string name="dialog_title_warning">Warning</string>
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report">Bug Report</string>
@@ -192,19 +193,22 @@
     <string name="auth_invalid_user_name">User names may only contain letters, numbers, dots, hyphens and underscores</string>
     <string name="auth_invalid_password">Password too short (min 6)</string>
     <string name="auth_missing_password">Missing password</string>
-    <string name="auth_invalid_email">Invalid email address</string>
-    <string name="auth_invalid_phone_number">Invalid phone number</string>
+    <string name="auth_invalid_email">"This doesn't look like a valid email address"</string>
+    <string name="auth_invalid_phone">"This doesn't look like a valid phone number"</string>
     <string name="auth_email_already_defined">This email address is already defined.</string>
     <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
     <string name="auth_missing_email">Missing email address</string>
+    <string name="auth_missing_phone">Missing phone number</string>
+    <string name="auth_missing_email_and_phone">Missing email address and phone number</string>
     <string name="auth_password_dont_match">Passwords don\'t match</string>
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
+    <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
     <string name="auth_email_check_name_in_use_message">"Checking if user name is available..</string>
     <string name="auth_email_registration_resumes_message">"Wait while registration resumes..</string>
     <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
-    <string name="auth_username_in_use">Username in use</string>
+    <string name="auth_username_already_taken">User ID already taken</string>
     <string name="auth_home_server">Home Server:</string>
     <string name="auth_identity_server">Identity Server:</string>
     <string name="auth_reset_password_next_step_button">I have verified my email address</string>
