@@ -220,7 +220,7 @@ public class InComingCallActivity extends AppCompatActivity {
                 this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, InComingCallActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES));
+                        CommonActivityUtils.displayUnknownDevicesDialog(mSession, InComingCallActivity.this, (MXUsersDevicesMap<MXDeviceInfo>)intent.getSerializableExtra(VectorCallViewActivity.EXTRA_UNKNOWN_DEVICES), null);
                     }
                 });
             }

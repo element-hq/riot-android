@@ -56,6 +56,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
     <string name="device_information">Device information</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
+    <string name="send_anyway">Send Anyway</string>
 
     <!-- server urls -->
     <string name="vector_im_server_url">https://vector.im</string>

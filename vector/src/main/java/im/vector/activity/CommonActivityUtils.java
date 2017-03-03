@@ -1945,8 +1945,9 @@ public class CommonActivityUtils {
      * @param session the session
      * @param activity the calling activity
      * @param unknownDevices the unknown devices list
+     * @param listener optional listener to add an optional "Send anyway" button
      */
-    public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
+    public static void displayUnknownDevicesDialog(MXSession session, FragmentActivity activity, MXUsersDevicesMap<MXDeviceInfo> unknownDevices, VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener listener) {
         // sanity checks
         if ((null == unknownDevices) || (0 == unknownDevices.getMap().size())) {
             return;
@@ -1959,7 +1960,7 @@ public class CommonActivityUtils {
             fragment.dismissAllowingStateLoss();
         }
 
-        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices);
+        fragment = VectorUnknownDevicesFragment.newInstance(session.getMyUserId(), unknownDevices, listener);
         fragment.show(fm, TAG_FRAGMENT_UNKNOWN_DEVICES_DIALOG_DIALOG);
     }
 }

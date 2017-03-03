@@ -1102,7 +1102,13 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
     @Override
     public void onUnknownDevices(Event event, MXCryptoError error) {
         refreshNotificationsArea();
-        CommonActivityUtils.displayUnknownDevicesDialog(mSession, this, (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData);
+        CommonActivityUtils.displayUnknownDevicesDialog(mSession, this, (MXUsersDevicesMap<MXDeviceInfo>) error.mExceptionData, new VectorUnknownDevicesFragment.IUnknownDevicesSendAnywayListener() {
+            @Override
+            public void onSendAnyway() {
+                mVectorMessageListFragment.resendUnsentMessages();
+                refreshNotificationsArea();
+            }
+        });
     }
 
     //================================================================================

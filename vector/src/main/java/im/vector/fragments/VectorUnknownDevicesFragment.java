@@ -52,9 +52,19 @@ import im.vector.adapters.VectorUnknownDevicesAdapter;
 public class VectorUnknownDevicesFragment extends DialogFragment {
     private static final String ARG_SESSION_ID = "VectorUnknownDevicesFragment.ARG_SESSION_ID";
 
-    private static MXUsersDevicesMap<MXDeviceInfo> mUnknownDevicesMap;
+    /**
+     * Define the SendAnyway button listener
+     */
+    public interface IUnknownDevicesSendAnywayListener {
+        // the "Send Anyway" button has been tapped
+        void onSendAnyway();
+    }
 
-    public static VectorUnknownDevicesFragment newInstance(String sessionId, MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap) {
+    private static MXUsersDevicesMap<MXDeviceInfo> mUnknownDevicesMap = null;
+
+    private static IUnknownDevicesSendAnywayListener mListener = null;
+
+    public static VectorUnknownDevicesFragment newInstance(String sessionId, MXUsersDevicesMap<MXDeviceInfo> unknownDevicesMap, IUnknownDevicesSendAnywayListener listener) {
         VectorUnknownDevicesFragment f = new VectorUnknownDevicesFragment();
 
         // Supply num input as an argument.
@@ -62,6 +72,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
         args.putString(ARG_SESSION_ID, sessionId);
         // cannot serialize unknownDevicesMap if it is too large
         mUnknownDevicesMap = unknownDevicesMap;
+        // idem for the listener
+        mListener = listener;
         f.setArguments(args);
         return f;
     }
@@ -78,6 +90,8 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
     private ExpandableListView mExpandableListView;
     // Devices list
     private List<Pair<String, List<MXDeviceInfo>>> mDevicesList;
+    // Tells if the dialog has been closed by tapping on the "Send anyway" button
+    private boolean mIsSendAnywayTapped = false;
 
     /**
      * Convert a MXUsersDevicesMap to a list of List
@@ -187,15 +201,32 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
             }
         });
 
-        builder.setView(v)
-                .setTitle(R.string.unknown_devices_alert_title)
-                // Add action buttons
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // nothing : everything will be done on onDismiss()
-                    }
-                });
+        builder.setView(v).setTitle(R.string.unknown_devices_alert_title);
+
+        if (null != mListener) {
+            // Add action buttons
+            builder.setPositiveButton(R.string.send_anyway, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    mIsSendAnywayTapped = true;
+                }
+            });
+            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    // nothing : everything will be done on onDismiss()
+                }
+            });
+
+        } else {
+            // Add action buttons
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    // nothing : everything will be done on onDismiss()
+                }
+            });
+        }
 
         return builder.create();
     }
@@ -220,8 +251,36 @@ public class VectorUnknownDevicesFragment extends DialogFragment {
                 dis.addAll(item.second);
             }
 
-            mSession.getCrypto().setDevicesKnown(dis, null);
-            mUnknownDevicesMap = null;
+            mSession.getCrypto().setDevicesKnown(dis, new ApiCallback<Void>() {
+                // common method
+                private void onDone() {
+                    if (mIsSendAnywayTapped && (null != mListener)) {
+                        mListener.onSendAnyway();
+                    }
+                    mUnknownDevicesMap = null;
+                    mListener = null;
+                }
+
+                @Override
+                public void onSuccess(Void info) {
+                    onDone();
+                }
+
+                @Override
+                public void onNetworkError(Exception e) {
+                    onDone();
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    onDone();
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    onDone();
+                }
+            });
         }
     }
 }
