@@ -158,7 +158,7 @@ public class CommonActivityUtils {
     public static final int REQUEST_CODE_PERMISSION_HOME_ACTIVITY = PERMISSION_WRITE_EXTERNAL_STORAGE;
     public static final int REQUEST_CODE_PERMISSION_BY_PASS = PERMISSION_BYPASSED;
 
-    public static void logout(Context context, MXSession session, Boolean clearCredentials) {
+    public static void logout(Context context, MXSession session, boolean clearCredentials) {
         if (session.isAlive()) {
             // stop the service
             EventStreamService eventStreamService = EventStreamService.getInstance();
@@ -178,6 +178,10 @@ public class CommonActivityUtils {
 
             // clear credentials
             Matrix.getInstance(context).clearSession(context, session, clearCredentials);
+
+            if (clearCredentials) {
+                clearE2EWarningsPreferences(context);
+            }
         }
     }
 
@@ -1930,5 +1934,75 @@ public class CommonActivityUtils {
                 }
             }
         });
+    }
+
+    private static final String E2E_WARNINGS_PREFERENCES = "E2E_WARNINGS_PREFERENCES";
+
+    /**
+     * Clear the E2E warning preferences
+     * @param context the context
+     */
+    private static void clearE2EWarningsPreferences(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(E2E_WARNINGS_PREFERENCES, Context.MODE_PRIVATE);
+        prefs.edit().clear().commit();
+    }
+
+    /**
+     * Tells that the e2e warning has been displayed for a dedicated room.
+     * @param context the context.
+     * @param roomId the room id.
+     */
+    public static void setE2eWarningDisplayed(Context context, String roomId) {
+        if (null != roomId) {
+            SharedPreferences prefs = context.getSharedPreferences(E2E_WARNINGS_PREFERENCES, Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(roomId, true);
+            editor.commit();
+        }
+    }
+
+    /**
+     * Tells if the E2E warning dialog has been displayed for a room.
+     * @param context the context
+     * @param roomId the room id
+     * @return true if the dialog has been displayed once
+     */
+    private static boolean isE2eWarningDisplayed(Context context, String roomId) {
+        boolean res = false;
+
+        if (null != roomId) {
+            SharedPreferences prefs = context.getSharedPreferences(E2E_WARNINGS_PREFERENCES, Context.MODE_PRIVATE);
+
+            if (prefs.contains(roomId)) {
+                res = prefs.getBoolean(roomId, false);
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Display an alert when the user opens an e2e room for the first time.
+     * @param activity the calling activity
+     * @param room the room
+     */
+    public static void displayE2eRoomAlert(Activity activity, Room room) {
+        // don't display the e2e warning message
+        // even if the room switches to e2e mode.
+        setE2eWarningDisplayed(activity, room.getRoomId());
+
+        if ((null != room) && room.isEncrypted() && !isE2eWarningDisplayed(activity, room.getRoomId())) {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(activity);
+            builder.setTitle(R.string.room_e2e_alert_title);
+            builder.setMessage(R.string.room_e2e_alert_message);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // NOP
+                }
+            });
+            builder.create().show();
+        }
     }
 }

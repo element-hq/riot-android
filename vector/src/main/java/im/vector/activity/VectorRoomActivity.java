@@ -25,6 +25,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -1063,6 +1064,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
             mVectorPendingCallView.checkPendingCall();
             mVectorOngoingConferenceCallView.onActivityResume();
         }
+
+        CommonActivityUtils.displayE2eRoomAlert(this, mRoom);
 
         Log.d(LOG_TAG, "-- Resume the activity");
     }

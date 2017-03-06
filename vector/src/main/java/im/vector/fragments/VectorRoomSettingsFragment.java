@@ -1679,7 +1679,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                                         displayLoadingView();
                                         mRoom.enableEncryptionWithAlgorithm(MXCryptoAlgorithms.MXCRYPTO_ALGORITHM_MEGOLM, new ApiCallback<Void>() {
-
                                             private void onDone() {
                                                 hideLoadingView(false);
                                                 refreshEndToEnd();
@@ -1687,6 +1686,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                                             @Override
                                             public void onSuccess(Void info) {
+                                                CommonActivityUtils.setE2eWarningDisplayed(getActivity(), mRoom.getRoomId());
                                                 onDone();
                                             }
 
