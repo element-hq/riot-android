@@ -272,7 +272,6 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
         if (hasFocus) {
             mCountryCodeInput.setVisibility(View.VISIBLE);
             if (TextUtils.isEmpty(mPhoneNumberInput.getText()) && !TextUtils.isEmpty(mCurrentPhonePrefix)) {
-                //
                 initPhoneWithPrefix();
             }
         } else {
