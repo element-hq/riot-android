@@ -1992,6 +1992,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         RegistrationManager.getInstance().clearThreePid();
         mEmailAddress.setText("");
         mPhoneNumberHandler.reset();
+        mEmailAddress.requestFocus();
 
         if (RegistrationManager.getInstance().supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             mEmailAddress.setVisibility(View.VISIBLE);
