@@ -2074,7 +2074,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         if (!RegistrationManager.getInstance().canSkip() && mPhoneNumberHandler.getPhoneNumber() == null && TextUtils.isEmpty(email)) {
             // Both are required and empty
-            Toast.makeText(this, R.string.auth_missing_email_and_phone, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.auth_missing_email_or_phone, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -2259,7 +2259,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         enableLoadingScreen(false);
         if (!isAvailable) {
             showMainLayout();
-            Toast.makeText(this, R.string.auth_username_already_taken, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.auth_username_in_use, Toast.LENGTH_LONG).show();
         } else {
             if (RegistrationManager.getInstance().canAddThreePid()) {
                 // Show next screen with email/phone number

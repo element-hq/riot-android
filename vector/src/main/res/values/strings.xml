@@ -199,7 +199,7 @@
     <string name="auth_missing_optional_email">If you don\'t specify an email address, you won\'t be able to reset your password. Are you sure?</string>
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_missing_phone">Missing phone number</string>
-    <string name="auth_missing_email_and_phone">Missing email address and phone number</string>
+    <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
     <string name="auth_password_dont_match">Passwords don\'t match</string>
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
@@ -208,7 +208,7 @@
     <string name="auth_email_check_name_in_use_message">"Checking if user name is available..</string>
     <string name="auth_email_registration_resumes_message">"Wait while registration resumes..</string>
     <string name="auth_recaptcha_message">This Home Server would like to make sure you are not a robot</string>
-    <string name="auth_username_already_taken">User ID already taken</string>
+    <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">Home Server:</string>
     <string name="auth_identity_server">Identity Server:</string>
     <string name="auth_reset_password_next_step_button">I have verified my email address</string>
