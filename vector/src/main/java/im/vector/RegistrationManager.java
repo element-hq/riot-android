@@ -625,6 +625,34 @@ public class RegistrationManager {
         mPhoneNumber = null;
     }
 
+    /**
+     * Return the three pid instructions
+     *
+     * @return instructions
+     */
+    public String getThreePidInstructions(final Context context) {
+        int instructionRes = -1;
+        if (mRegistrationResponse != null) {
+            if (isRequired(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)
+                    && isRequired(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+                // Both required
+                instructionRes = R.string.auth_add_email_and_phone_message;
+            } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
+                if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+                    // Both supported but not both required
+                    instructionRes = R.string.auth_add_email_phone_message;
+                } else {
+                    // Only email
+                    instructionRes = R.string.auth_add_email_message;
+                }
+            } else if (supportStage(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN)) {
+                // Only phone number
+                instructionRes = R.string.auth_add_phone_message;
+            }
+        }
+        return instructionRes != -1 ? context.getString(instructionRes) : "";
+    }
+
     /*
     * *********************************************************************************************
     * Private methods

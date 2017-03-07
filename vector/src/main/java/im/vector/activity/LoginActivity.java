@@ -216,6 +216,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private String mIdentityServerUrl = null;
 
     // Account creation - Three pid
+    private TextView mThreePidInstructions;
     private EditText mEmailAddress;
     private View mPhoneNumberLayout;
     private EditText mPhoneNumber;
@@ -396,6 +397,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mCreationPassword2TextView = (EditText) findViewById(R.id.creation_password2);
 
         // account creation - three pid
+        mThreePidInstructions = (TextView) findViewById(R.id.instructions);
         mEmailAddress = (EditText) findViewById(R.id.registration_email);
         mPhoneNumberLayout = findViewById(R.id.registration_phone_number);
         mPhoneNumber = (EditText) findViewById(R.id.registration_phone_number_value);
@@ -1993,6 +1995,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mEmailAddress.setText("");
         mPhoneNumberHandler.reset();
         mEmailAddress.requestFocus();
+
+        mThreePidInstructions.setText(RegistrationManager.getInstance().getThreePidInstructions(this));
 
         if (RegistrationManager.getInstance().supportStage(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY)) {
             mEmailAddress.setVisibility(View.VISIBLE);

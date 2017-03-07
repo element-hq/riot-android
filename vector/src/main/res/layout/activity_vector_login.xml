@@ -237,8 +237,9 @@
                         android:id="@+id/instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="16sp"
                         android:layout_marginTop="24dp"
-                        android:text="@string/auth_threepid_instructions" />
+                        android:text="@string/auth_add_email_phone_message" />
 
                     <EditText
                         android:id="@+id/registration_email"

@@ -182,7 +182,10 @@
     <string name="auth_password_placeholder">Password</string>
     <string name="auth_new_password_placeholder">New password</string>
     <string name="auth_user_name_placeholder">User name</string>
-    <string name="auth_threepid_instructions">TODO find an awesome wording</string>
+    <string name="auth_add_email_message">"Add an email address to your account to let users discover you, and let you reset password."</string>
+    <string name="auth_add_phone_message">"Add a phone number to your account to let users discover you."</string>
+    <string name="auth_add_email_phone_message">"Add an email address and/or a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
+    <string name="auth_add_email_and_phone_message">"Add an email address and a phone number to your account to let users discover you.\n\nEmail address will also let you reset your password."</string>
     <string name="auth_email_placeholder">Email address</string>
     <string name="auth_opt_email_placeholder">Email address (optional)</string>
     <string name="auth_phone_number_placeholder">Phone number</string>
