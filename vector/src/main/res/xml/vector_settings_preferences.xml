@@ -159,6 +159,12 @@
             android:key="@string/encryption_import_e2e_room_keys"
             android:title="@string/encryption_import_e2e_room_keys"
             android:summary="@string/encryption_import_room_keys_summary" />
+
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/encryption_never_send_to_unverified_devices_title"
+            android:summary="@string/encryption_never_send_to_unverified_devices_summary"
+            android:key="@string/encryption_never_send_to_unverified_devices_title"/>
+
     </PreferenceCategory>
 
     <im.vector.preference.VectorDividerCategory android:key="@string/cryptography_divider" />

@@ -57,6 +57,7 @@ import org.matrix.androidsdk.listeners.IMXNetworkEventListener;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.listeners.MXMediaUploadListener;
 import org.matrix.androidsdk.rest.callback.ApiCallback;
+import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.MatrixError;
 import org.matrix.androidsdk.rest.model.PowerLevels;
@@ -365,7 +366,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     // leave room
                     new AlertDialog.Builder(VectorApp.getCurrentActivity())
                             .setTitle(R.string.room_participants_leave_prompt_title)
-                            .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                            .setMessage(getString(R.string.room_participants_leave_prompt_msg))
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -1635,6 +1636,49 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      * Refresh the addresses section
      */
     private void refreshEndToEnd() {
+        // encrypt to unverified devices
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
+
+        if (mRoom.isEncrypted()) {
+            sendToUnverifiedDevicesPref.setChecked(false);
+
+            mSession.getCrypto().isRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), new SimpleApiCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean status) {
+                    sendToUnverifiedDevicesPref.setChecked(status);
+                }
+            });
+        }  else {
+            mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
+        }
+
+        sendToUnverifiedDevicesPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                mSession.getCrypto().isRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), new SimpleApiCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean status) {
+                        if (sendToUnverifiedDevicesPref.isChecked() != status) {
+                            SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void info) {
+                                }
+                            };
+
+                            if (sendToUnverifiedDevicesPref.isChecked()) {
+                                mSession.getCrypto().setRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), callback);
+                            } else {
+                                mSession.getCrypto().setRoomUnblacklistUnverifiedDevices(mRoom.getRoomId(), callback);
+                            }
+                        }
+                    }
+                });
+
+                return true;
+            }
+        });
+
+
         final String key = PREF_KEY_ENCRYPTION + mRoom.getRoomId();
 
         // remove the displayed preferences
