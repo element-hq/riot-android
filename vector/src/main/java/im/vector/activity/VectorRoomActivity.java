@@ -779,6 +779,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements MatrixMe
                                            }
         );
 
+        findViewById(R.id.room_button_margin_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // extend the right side of right button
+                // to avoid clicking in the void
+                if (mStopCallLayout.getVisibility() == View.VISIBLE) {
+                    mStopCallLayout.performClick();
+                } else if (mStartCallLayout.getVisibility() == View.VISIBLE) {
+                    mStartCallLayout.performClick();
+                } else if (mSendButtonLayout.getVisibility() == View.VISIBLE) {
+                    mSendButtonLayout.performClick();
+                }
+            }
+        });
+
         mMyUserId = mSession.getCredentials().userId;
 
         CommonActivityUtils.resumeEventStream(this);
