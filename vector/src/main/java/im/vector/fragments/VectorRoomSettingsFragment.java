@@ -365,7 +365,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     // leave room
                     new AlertDialog.Builder(VectorApp.getCurrentActivity())
                             .setTitle(R.string.room_participants_leave_prompt_title)
-                            .setMessage(getActivity().getString(R.string.room_participants_leave_prompt_msg))
+                            .setMessage(getString(R.string.room_participants_leave_prompt_msg))
                             .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -1636,7 +1636,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
      */
     private void refreshEndToEnd() {
         // encrypt to unverified devices
-        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getActivity().getString(R.string.room_settings_never_send_to_unverified_devices_title));
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.room_settings_never_send_to_unverified_devices_title));
 
         if (mRoom.isEncrypted()) {
             sendToUnverifiedDevicesPref.setChecked(false);

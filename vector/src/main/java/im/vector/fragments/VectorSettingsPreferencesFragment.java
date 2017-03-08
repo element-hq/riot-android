@@ -824,7 +824,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                                         public void run() {
                                             hideLoadingView();
                                             Toast.makeText(getActivity(),
-                                                    getActivity().getString(textId),
+                                                    getString(textId),
                                                     Toast.LENGTH_LONG).show();
                                         }
                                     });
@@ -1310,7 +1310,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         new AlertDialog.Builder(VectorApp.getCurrentActivity())
-                                .setMessage(getActivity().getString(R.string.settings_unignore_user, userId))
+                                .setMessage(getString(R.string.settings_unignore_user, userId))
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1756,9 +1756,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
      */
     private String secondsToText(int seconds) {
         if (seconds > 1) {
-            return seconds + " " + getActivity().getString(R.string.settings_seconds);
+            return seconds + " " + getString(R.string.settings_seconds);
         } else {
-            return seconds + " " + getActivity().getString(R.string.settings_second);
+            return seconds + " " + getString(R.string.settings_second);
         }
     }
 
@@ -1878,7 +1878,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // device name
         if ((null != aMyDeviceInfo) && !TextUtils.isEmpty(aMyDeviceInfo.display_name)) {
-            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getActivity().getString(R.string.encryption_information_device_name));
+            cryptoInfoTextPreference = (VectorCustomActionEditTextPreference) findPreference(getString(R.string.encryption_information_device_name));
             if (null != cryptoInfoTextPreference) {
                 cryptoInfoTextPreference.setSummary(aMyDeviceInfo.display_name);
 
@@ -1961,7 +1961,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
         }
 
         // encrypt to unverified devices
-        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getActivity().getString(R.string.encryption_never_send_to_unverified_devices_title));
+        final CheckBoxPreference sendToUnverifiedDevicesPref = (CheckBoxPreference)findPreference(getString(R.string.encryption_never_send_to_unverified_devices_title));
         sendToUnverifiedDevicesPref.setChecked(false);
 
         mSession.getCrypto().getGlobalBlacklistUnverifiedDevices(new SimpleApiCallback<Boolean>() {
