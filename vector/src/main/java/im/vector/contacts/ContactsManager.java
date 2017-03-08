@@ -474,7 +474,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
 
                     try {
                         phonesCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                new String[]{ContactsContract.CommonDataKinds.Phone.DATA, // actual number
+                                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,
+                                        ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
                                         ContactsContract.CommonDataKinds.Phone.CONTACT_ID
                                 },
                                 null, null, null);
@@ -485,7 +486,8 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                     if (null != phonesCur) {
                         try {
                             while (phonesCur.moveToNext()) {
-                                String pn = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+                                final String pn = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                final String pnE164 = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
 
                                 if (!TextUtils.isEmpty(pn)) {
                                     String contactId = phonesCur.getString(phonesCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
@@ -497,7 +499,7 @@ public class ContactsManager implements SharedPreferences.OnSharedPreferenceChan
                                             dict.put(contactId, contact);
                                         }
 
-                                        contact.addPhoneNumber(pn);
+                                        contact.addPhoneNumber(pn, pnE164);
                                     }
                                 }
                             }
