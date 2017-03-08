@@ -842,6 +842,13 @@ public final class GcmRegistrationManager {
     //================================================================================
 
     /**
+     * Clear the GCM preferences
+     */
+    public void clearPreferences() {
+        getGcmSharedPreferences().edit().clear().commit();
+    }
+
+    /**
      * Tells if the client prefers GCM over events polling thread.
      * @return true to use GCM before using the events polling thread, false otherwise
      */
@@ -1017,9 +1024,7 @@ public final class GcmRegistrationManager {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                if (!getGcmSharedPreferences().edit().clear().commit()) {
-                    Log.e(LOG_TAG, "## clearGCMData() : commit failed");
-                }
+                setStoredRegistrationToken(null);
                 mRegistrationToken = null;
                 mRegistrationState = RegistrationState.UNREGISTRATED;
                 GCMHelper.clearRegistrationToken(mContext);
