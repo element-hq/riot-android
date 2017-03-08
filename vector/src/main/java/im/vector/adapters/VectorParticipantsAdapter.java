@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -318,19 +319,19 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
 
                 for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                    Contact dummyContact = new Contact(pn.mE164PhoneNumber);
+                    Contact dummyContact = new Contact(pn.mMsisdnPhoneNumber);
                     dummyContact.setDisplayName(contact.getDisplayName());
-                    dummyContact.addPhoneNumber(pn.mUnformattedPhoneNumber);
+                    dummyContact.addPhoneNumber(pn.mRawPhoneNumber, pn.mE164PhoneNumber);
                     dummyContact.setThumbnailUri(contact.getThumbnailUri());
 
                     ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
 
-                    Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mE164PhoneNumber);
+                    Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mMsisdnPhoneNumber);
 
                     if (null != mxid) {
                         participant.mUserId = mxid.mMatrixId;
                     } else {
-                        participant.mUserId = pn.mE164PhoneNumber;
+                        participant.mUserId = pn.mMsisdnPhoneNumber;
                     }
 
                     if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
@@ -914,7 +915,7 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
             if (participant.mContact.getEmails().size() > 0) {
                 statusTextView.setText(participant.mContact.getEmails().get(0));
             } else {
-                statusTextView.setText(participant.mContact.getPhonenumbers().get(0).mUnformattedPhoneNumber);
+                statusTextView.setText(participant.mContact.getPhonenumbers().get(0).mRawPhoneNumber);
             }
         } else {
             statusTextView.setText(status);

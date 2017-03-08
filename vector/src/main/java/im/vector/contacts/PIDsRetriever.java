@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 OpenMarket Ltd
+ * Copyright 2017 Vector Creations Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,15 +142,15 @@ public class PIDsRetriever {
             }
 
             for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                if (mMatrixIdsByMedium.containsKey(pn.mE164PhoneNumber)) {
-                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mE164PhoneNumber);
+                if (mMatrixIdsByMedium.containsKey(pn.mMsisdnPhoneNumber)) {
+                    Contact.MXID mxid = mMatrixIdsByMedium.get(pn.mMsisdnPhoneNumber);
 
                     if (null != mxid) {
-                        contact.put(pn.mE164PhoneNumber, mxid);
+                        contact.put(pn.mMsisdnPhoneNumber, mxid);
                     }
                 } else {
-                    if (!requestedMediums.contains(pn.mE164PhoneNumber)) {
-                        requestedMediums.add(pn.mE164PhoneNumber);
+                    if (!requestedMediums.contains(pn.mMsisdnPhoneNumber)) {
+                        requestedMediums.add(pn.mMsisdnPhoneNumber);
                     }
                 }
             }
