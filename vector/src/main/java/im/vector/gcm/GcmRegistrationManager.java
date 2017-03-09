@@ -63,6 +63,7 @@ public final class GcmRegistrationManager {
     private static final String PREFS_ALLOW_BACKGROUND_SYNC = "GcmRegistrationManager.PREFS_ALLOW_BACKGROUND_SYNC";
     private static final String PREFS_PUSHER_REGISTRATION_TOKEN_KEY = "PREFS_PUSHER_REGISTRATION_TOKEN_KEY";
 
+    private static final String PREFS_START_BACKGROUND_SYNC_ON_BOOT = "GcmRegistrationManager.PREFS_START_BACKGROUND_SYNC_ON_BOOT";
     private static final String PREFS_SYNC_TIMEOUT = "GcmRegistrationManager.PREFS_SYNC_TIMEOUT";
     private static final String PREFS_SYNC_DELAY = "GcmRegistrationManager.PREFS_SYNC_DELAY";
 
@@ -921,6 +922,25 @@ public final class GcmRegistrationManager {
 
         // when GCM is disabled, enable / disable the "Listen for events" notifications
         CommonActivityUtils.onGcmUpdate(mContext);
+    }
+
+    /**
+     * @return true if the background sync should start on boot
+     */
+    public boolean isStartBackgroundSyncOnBoot() {
+        return getGcmSharedPreferences().getBoolean(PREFS_START_BACKGROUND_SYNC_ON_BOOT, true);
+    }
+
+    /**
+     * Start the background sync on boot
+     * @param isStart true to start the background sync on boot.
+     */
+    public void setStartBackgroundSyncOnBoot(boolean isStart) {
+        if (!getGcmSharedPreferences().edit()
+                .putBoolean(PREFS_START_BACKGROUND_SYNC_ON_BOOT, isStart)
+                .commit()) {
+            Log.e(LOG_TAG, "## setStartBackgroundSyncOnBoot() : commit failed");
+        }
     }
 
     /**

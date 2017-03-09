@@ -202,6 +202,10 @@
             android:title="@string/settings_enable_background_sync"
             android:key="@string/settings_enable_background_sync"/>
 
+        <im.vector.preference.VectorSwitchPreference
+            android:title="@string/settings_start_background_sync_on_boot"
+            android:key="@string/settings_start_background_sync_on_boot"/>
+
         <EditTextPreference
             android:focusable="true"
             android:numeric="integer"

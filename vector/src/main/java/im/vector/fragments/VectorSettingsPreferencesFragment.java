@@ -179,6 +179,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
     private PreferenceCategory mIgnoredUserSettingsCategory;
     // background sync category
     private PreferenceCategory mBackgroundSyncCategory;
+    private CheckBoxPreference mStartBackgroundSyncOnBoot;
     private EditTextPreference mSyncRequestTimeoutPreference;
     private EditTextPreference mSyncRequestDelayPreference;
     private PreferenceCategory mLabsCategory;
@@ -455,6 +456,7 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         // background sync management
         mBackgroundSyncCategory = (PreferenceCategory) findPreference(getString(R.string.settings_background_sync));
+        mStartBackgroundSyncOnBoot = (CheckBoxPreference) findPreference(getString(R.string.settings_start_background_sync_on_boot));
         mSyncRequestTimeoutPreference = (EditTextPreference) findPreference(getString(R.string.settings_set_sync_timeout));
         mSyncRequestDelayPreference = (EditTextPreference) findPreference(getString(R.string.settings_set_sync_delay));
 
@@ -1773,15 +1775,41 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
 
         final GcmRegistrationManager gcmmgr = Matrix.getInstance(getActivity()).getSharedGCMRegistrationManager();
 
+        final boolean startOnBoot = gcmmgr.isStartBackgroundSyncOnBoot();
         final int timeout = gcmmgr.getBackgroundSyncTimeOut() / 1000;
         final int delay = gcmmgr.getBackgroundSyncDelay() / 1000;
 
         // update the settings
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(getString(R.string.settings_start_background_sync_on_boot), startOnBoot);
         editor.putString(getString(R.string.settings_set_sync_timeout), timeout + "");
         editor.putString(getString(R.string.settings_set_sync_delay), delay + "");
         editor.commit();
+
+        if (null != mStartBackgroundSyncOnBoot) {
+            mStartBackgroundSyncOnBoot.setChecked(startOnBoot);
+
+            mStartBackgroundSyncOnBoot.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean newStartOnBoot = (boolean) newValue;
+
+                    if (newStartOnBoot != startOnBoot) {
+                        gcmmgr.setStartBackgroundSyncOnBoot(newStartOnBoot);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshBackgroundSyncPrefs();
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+        }
 
         if (null != mSyncRequestTimeoutPreference) {
             mSyncRequestTimeoutPreference.setSummary(secondsToText(timeout));
@@ -1847,8 +1875,9 @@ public class VectorSettingsPreferencesFragment extends PreferenceFragment implem
             });
         }
 
-        // theses both settings are dedicated when a client does not support GCM
+        // these settings are dedicated when a client does not support GCM
         if (gcmmgr.hasRegistrationToken()) {
+            mBackgroundSyncCategory.removePreference(mStartBackgroundSyncOnBoot);
             mBackgroundSyncCategory.removePreference(mSyncRequestTimeoutPreference);
             mBackgroundSyncCategory.removePreference(mSyncRequestDelayPreference);
         }

@@ -19,7 +19,7 @@ public class StartOnBoot extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             MXSession session = Matrix.getInstance(context).getDefaultSession();
             GcmRegistrationManager gcmMgr = Matrix.getInstance(context).getSharedGCMRegistrationManager();
-            if (null != session && gcmMgr.isBackgroundSyncAllowed() && !gcmMgr.hasRegistrationToken()) {
+            if (null != session && gcmMgr.isBackgroundSyncAllowed() && gcmMgr.isStartBackgroundSyncOnBoot() && !gcmMgr.hasRegistrationToken()) {
                 Log.d(LOG_TAG, "start EventStreamService");
                 CommonActivityUtils.startEventStreamService(context);
             }
