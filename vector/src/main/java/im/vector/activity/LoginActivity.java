@@ -741,8 +741,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     /**
-     * Cancel the current mode to switch to the login one.
-     * It should restore the login UI
+     * Cancel the current mode to switch to the registration one.
+     * It should restore the registration UI
      */
     private void fallbackToRegistrationMode() {
         // display the main layout
@@ -1096,7 +1096,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     /**
      * Parse the given bundle to check if it contains the email verification extra.
-     * If yes, it initializes the LoginActivity to getIntent in registration mode to finalize a registration
+     * If yes, it initializes the LoginActivity to start in registration mode to finalize a registration
      * process that is in progress. This is mainly used when the LoginActivity
      * is triggered from the {@link VectorRegistrationReceiver}.
      *
@@ -1386,7 +1386,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                     onFailureDuringAuthRequest(e);
                                 }
 
-                                // getIntent Login due to a pending email validation
+                                // start Login due to a pending email validation
                                 checkIfMailValidationPending();
                             }
                         }
@@ -2026,7 +2026,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             mSkipThreePidButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Make sure no three pid is attached to the process
+                    // Make sure no three pid is attached to the process
                     RegistrationManager.getInstance().clearThreePid();
                     createAccount();
                     mPhoneNumberHandler.reset();
