@@ -1652,32 +1652,33 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
         }
 
-        sendToUnverifiedDevicesPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                mSession.getCrypto().isRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), new SimpleApiCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean status) {
-                        if (sendToUnverifiedDevicesPref.isChecked() != status) {
-                            SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
-                                @Override
-                                public void onSuccess(Void info) {
-                                }
-                            };
+        if (null != sendToUnverifiedDevicesPref) {
+            sendToUnverifiedDevicesPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    mSession.getCrypto().isRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), new SimpleApiCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean status) {
+                            if (sendToUnverifiedDevicesPref.isChecked() != status) {
+                                SimpleApiCallback<Void> callback = new SimpleApiCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void info) {
+                                    }
+                                };
 
-                            if (sendToUnverifiedDevicesPref.isChecked()) {
-                                mSession.getCrypto().setRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), callback);
-                            } else {
-                                mSession.getCrypto().setRoomUnblacklistUnverifiedDevices(mRoom.getRoomId(), callback);
+                                if (sendToUnverifiedDevicesPref.isChecked()) {
+                                    mSession.getCrypto().setRoomBlacklistUnverifiedDevices(mRoom.getRoomId(), callback);
+                                } else {
+                                    mSession.getCrypto().setRoomUnblacklistUnverifiedDevices(mRoom.getRoomId(), callback);
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                return true;
-            }
-        });
-
+                    return true;
+                }
+            });
+        }
 
         final String key = PREF_KEY_ENCRYPTION + mRoom.getRoomId();
 
