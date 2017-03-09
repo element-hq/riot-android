@@ -1648,7 +1648,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
                     sendToUnverifiedDevicesPref.setChecked(status);
                 }
             });
-        }  else {
+        }  else if (null != sendToUnverifiedDevicesPref) {
             mAdvandceSettingsCategory.removePreference(sendToUnverifiedDevicesPref);
         }
 
