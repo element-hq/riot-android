@@ -94,6 +94,8 @@ public class RegistrationManager {
     private ThreePid mPhoneNumber;
     private String mCaptchaResponse;
 
+    private boolean mShowThreePidWarning;
+
     /*
     * *********************************************************************************************
     * Singleton
@@ -135,6 +137,8 @@ public class RegistrationManager {
         mEmail = null;
         mPhoneNumber = null;
         mCaptchaResponse = null;
+
+        mShowThreePidWarning = false;
     }
 
     /**
@@ -282,10 +286,16 @@ public class RegistrationManager {
             params.bind_email = mEmail != null;
             params.bind_msisdn = mPhoneNumber != null;
 
+            if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && mEmail != null) {
+                // Email will not be processed
+                mShowThreePidWarning = true;
+                mEmail = null;
+            }
+
             register(context, params, new InternalRegistrationListener() {
                 @Override
                 public void onRegistrationSuccess() {
-                    if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && mEmail != null) {
+                    if (mShowThreePidWarning) {
                         // An email was entered but was not attached to account
                         listener.onRegistrationSuccess(context.getString(R.string.auth_threepid_warning_message));
                     } else {
@@ -623,6 +633,7 @@ public class RegistrationManager {
     public void clearThreePid() {
         mEmail = null;
         mPhoneNumber = null;
+        mShowThreePidWarning = false;
     }
 
     /**

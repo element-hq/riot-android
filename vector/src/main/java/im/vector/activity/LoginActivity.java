@@ -2154,7 +2154,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      */
     private void submitPhoneNumber(String token, ThreePid pid) {
         if (TextUtils.isEmpty(token)) {
-            Toast.makeText(LoginActivity.this, "onThreePidValidated ERROR must enter token", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, R.string.auth_invalid_token, Toast.LENGTH_SHORT).show();
         } else {
             RegistrationManager.getInstance().submitValidationToken(token, pid,
                     new RegistrationManager.ThreePidValidationListener() {
@@ -2163,7 +2163,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                             if (isSuccess) {
                                 createAccount();
                             } else {
-                                Toast.makeText(LoginActivity.this, "onThreePidValidated ERROR", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, R.string.auth_invalid_token, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

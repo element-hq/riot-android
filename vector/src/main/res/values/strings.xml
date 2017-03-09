@@ -203,6 +203,7 @@
     <string name="auth_missing_email">Missing email address</string>
     <string name="auth_missing_phone">Missing phone number</string>
     <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
+    <string name="auth_invalid_token">Invalid token</string>
     <string name="auth_password_dont_match">Passwords don\'t match</string>
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
