@@ -242,6 +242,12 @@ public class RegistrationManager {
                 authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_PASSWORD);
             }
 
+            if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && mEmail != null) {
+                // Email will not be processed
+                mShowThreePidWarning = true;
+                mEmail = null;
+            }
+
             final RegistrationParams params = new RegistrationParams();
             params.username = mUsername;
             params.password = mPassword;
@@ -250,12 +256,6 @@ public class RegistrationManager {
             }
             params.bind_email = mEmail != null;
             params.bind_msisdn = mPhoneNumber != null;
-
-            if (TextUtils.equals(registrationType, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN) && mEmail != null) {
-                // Email will not be processed
-                mShowThreePidWarning = true;
-                mEmail = null;
-            }
 
             register(context, params, new InternalRegistrationListener() {
                 @Override
