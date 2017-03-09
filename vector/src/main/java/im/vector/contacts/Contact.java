@@ -92,6 +92,8 @@ public class Contact implements java.io.Serializable {
          */
         public PhoneNumber(String rawPhoneNumber, String e164PhoneNumber) {
             mRawPhoneNumber = rawPhoneNumber;
+            // without space, parenthesis
+            mCleanedPhoneNumber = rawPhoneNumber.replaceAll("[\\D]", "");
 
             if (!TextUtils.isEmpty(e164PhoneNumber)) {
                 if (e164PhoneNumber.startsWith("+")) {
@@ -104,9 +106,6 @@ public class Contact implements java.io.Serializable {
                 // Attempt to deduce msisdn format using current country code
                 refreshE164PhoneNumber();
             }
-
-            // without space, parenthesis
-            mCleanedPhoneNumber = rawPhoneNumber.replaceAll("[\\D]", "");
         }
 
         /**
@@ -116,6 +115,9 @@ public class Contact implements java.io.Serializable {
             if (TextUtils.isEmpty(mE164PhoneNumber)) {
                 // Attempt to deduce E164 format using the new country code
                 mMsisdnPhoneNumber = PhoneNumberUtils.getE164format(VectorApp.getInstance(), mRawPhoneNumber);
+                if (TextUtils.isEmpty(mMsisdnPhoneNumber)) {
+                    mMsisdnPhoneNumber = mCleanedPhoneNumber;
+                }
             }
             Log.d(LOG_TAG, "## refreshE164PhoneNumber " + mMsisdnPhoneNumber);
         }
