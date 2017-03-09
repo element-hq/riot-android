@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
 
+    <!-- start the background sync on boot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- universal links management -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <!-- for android 4.1.* devices, reported by GA -->
@@ -352,6 +355,13 @@
 
             <intent-filter>
                 <action android:name="im.vector.receiver.UNIVERSAL_LINK_RESUME" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="im.vector.receiver.StartOnBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
