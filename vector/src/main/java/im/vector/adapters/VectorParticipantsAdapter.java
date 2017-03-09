@@ -428,15 +428,14 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         List<ParticipantAdapterItem> unusedParticipants = new ArrayList<>();
         List<ParticipantAdapterItem> contactsParticipants = new ArrayList<>();
 
-        List<ParticipantAdapterItem> newContactList = new ArrayList<>();
-        addContacts(newContactList);
-
         synchronized (LOG_TAG) {
             if (null != mUnusedParticipants) {
                 unusedParticipants = new ArrayList<>(mUnusedParticipants);
             }
 
             if (null != mContactsParticipants) {
+                List<ParticipantAdapterItem> newContactList = new ArrayList<>();
+                addContacts(newContactList);
                 if (!mContactsParticipants.containsAll(newContactList)) {
                     // Force update
                     gotUpdates = true;
