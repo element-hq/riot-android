@@ -319,23 +319,18 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
                 }
 
                 for (Contact.PhoneNumber pn : contact.getPhonenumbers()) {
-                    Contact dummyContact = new Contact(pn.mMsisdnPhoneNumber);
-                    dummyContact.setDisplayName(contact.getDisplayName());
-                    dummyContact.addPhoneNumber(pn.mRawPhoneNumber, pn.mE164PhoneNumber);
-                    dummyContact.setThumbnailUri(contact.getThumbnailUri());
-
-                    ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
-
                     Contact.MXID mxid = PIDsRetriever.getInstance().getMXID(pn.mMsisdnPhoneNumber);
 
                     if (null != mxid) {
+                        Contact dummyContact = new Contact(pn.mMsisdnPhoneNumber);
+                        dummyContact.setDisplayName(contact.getDisplayName());
+                        dummyContact.addPhoneNumber(pn.mRawPhoneNumber, pn.mE164PhoneNumber);
+                        dummyContact.setThumbnailUri(contact.getThumbnailUri());
+                        ParticipantAdapterItem participant = new ParticipantAdapterItem(dummyContact);
                         participant.mUserId = mxid.mMatrixId;
-                    } else {
-                        participant.mUserId = pn.mMsisdnPhoneNumber;
-                    }
-
-                    if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
-                        list.add(participant);
+                        if (mUsedMemberUserIds != null && !mUsedMemberUserIds.contains(participant.mUserId)) {
+                            list.add(participant);
+                        }
                     }
                 }
             }
@@ -433,13 +428,22 @@ public class VectorParticipantsAdapter extends BaseExpandableListAdapter {
         List<ParticipantAdapterItem> unusedParticipants = new ArrayList<>();
         List<ParticipantAdapterItem> contactsParticipants = new ArrayList<>();
 
+        List<ParticipantAdapterItem> newContactList = new ArrayList<>();
+        addContacts(newContactList);
+
         synchronized (LOG_TAG) {
             if (null != mUnusedParticipants) {
                 unusedParticipants = new ArrayList<>(mUnusedParticipants);
             }
 
             if (null != mContactsParticipants) {
-                contactsParticipants = new ArrayList<>(mContactsParticipants);
+                if (!mContactsParticipants.containsAll(newContactList)) {
+                    // Force update
+                    gotUpdates = true;
+                    mContactsParticipants = null;
+                } else {
+                    contactsParticipants = new ArrayList<>(mContactsParticipants);
+                }
             }
         }
 
