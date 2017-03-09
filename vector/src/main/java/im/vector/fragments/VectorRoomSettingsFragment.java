@@ -1702,14 +1702,16 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
             mAdvandceSettingsCategory.addPreference(isEncryptedPreference);
         } else {
             PowerLevels powerLevels = mRoom.getLiveState().getPowerLevels();
-            int myPowerLevel = 0;
+            int myPowerLevel = -1;
+            int minimumPowerLevel = 0;
 
             if (null != powerLevels) {
                 myPowerLevel = powerLevels.getUserPowerLevel(mSession.getMyUserId());
+                minimumPowerLevel = powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_MESSAGE_ENCRYPTION);
             }
 
             // Test if the user has enough power levels to enable the crypto is in this room
-            if (myPowerLevel < powerLevels.minimumPowerLevelForSendingEventAsStateEvent(Event.EVENT_TYPE_MESSAGE_ENCRYPTION)) {
+            if (myPowerLevel < minimumPowerLevel) {
                 VectorCustomActionEditTextPreference isEncryptedPreference = new VectorCustomActionEditTextPreference(getActivity());
                 isEncryptedPreference.setTitle(R.string.room_settings_addresses_e2e_disabled);
                 isEncryptedPreference.setKey(key);
