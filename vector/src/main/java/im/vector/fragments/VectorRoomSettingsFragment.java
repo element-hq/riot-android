@@ -1686,7 +1686,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragment implements Sh
 
                                             @Override
                                             public void onSuccess(Void info) {
-                                                CommonActivityUtils.setE2eWarningDisplayed(getActivity(), mRoom.getRoomId());
                                                 onDone();
                                             }
 
