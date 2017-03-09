@@ -33,6 +33,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -206,7 +209,7 @@ public class EventStreamService extends Service {
         }
 
         @Override
-        public void onIncomingCall(final IMXCall call) {
+        public void onIncomingCall(final IMXCall call, MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             Log.d(LOG_TAG, "onIncomingCall " + call.getCallId());
 
             IMXCall.MXCallListener callListener = new IMXCall.MXCallListener() {

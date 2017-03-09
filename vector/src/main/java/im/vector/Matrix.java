@@ -24,6 +24,8 @@ import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.crypto.data.MXUsersDevicesMap;
 import org.matrix.androidsdk.rest.callback.SimpleApiCallback;
 import org.matrix.androidsdk.util.Log;
 
@@ -165,7 +167,7 @@ public class Matrix {
          * Called when there is an incoming call within the room.
          */
         @Override
-        public void onIncomingCall(final IMXCall call) {
+        public void onIncomingCall(final IMXCall call, final MXUsersDevicesMap<MXDeviceInfo> unknownDevices) {
             if (null != call) {
                 getUIHandler().post(new Runnable() {
                     @Override
@@ -187,11 +189,14 @@ public class Matrix {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, call.getSession().getMyUserId());
                                 intent.putExtra(VectorHomeActivity.EXTRA_CALL_ID, call.getCallId());
+                                if (null != unknownDevices) {
+                                    intent.putExtra(VectorHomeActivity.EXTRA_CALL_UNKNOWN_DEVICES, unknownDevices);
+                                }
                                 context.startActivity(intent);
                             } else {
                                 Log.d(LOG_TAG, "onIncomingCall : the home activity exists : but permissions have to be checked before");
                                 // check incoming call required permissions, before allowing the call..
-                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId());
+                                homeActivity.startCall(call.getSession().getMyUserId(), call.getCallId(), unknownDevices);
                             }
                         } else {
                             Log.d(LOG_TAG, "onIncomingCall : a call is already in progress -> cancel");
