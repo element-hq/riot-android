@@ -57,7 +57,7 @@ public class RegistrationManager {
     private static String ERROR_MISSING_STAGE = "ERROR_MISSING_STAGE";
     private static String ERROR_EMPTY_USER_ID = "ERROR_EMPTY_USER_ID";
 
-    // JSON keys used or registration request
+    // JSON keys used for registration request
     private static final String JSON_KEY_CLIENT_SECRET = "client_secret";
     private static final String JSON_KEY_ID_SERVER = "id_server";
     private static final String JSON_KEY_SID = "sid";
@@ -94,6 +94,7 @@ public class RegistrationManager {
     private ThreePid mPhoneNumber;
     private String mCaptchaResponse;
 
+    // True when the user entered both email and phone but only phone will be used for account registration
     private boolean mShowThreePidWarning;
 
     /*
@@ -199,42 +200,6 @@ public class RegistrationManager {
                 }
             });
         }
-    }
-
-    /**
-     * Format three pid params for registration request
-     *
-     * @param clientSecret
-     * @param host
-     * @param sid          received by requestToken request
-     * @param medium       type of three pid
-     * @return map of params
-     */
-    private Map<String, Object> getThreePidAuthParams(final String clientSecret, final String host,
-                                                      final String sid, final String medium) {
-        Map<String, Object> authParams = new HashMap<>();
-        Map<String, String> pidsCredentialsAuth = new HashMap<>();
-        pidsCredentialsAuth.put(JSON_KEY_CLIENT_SECRET, clientSecret);
-        pidsCredentialsAuth.put(JSON_KEY_ID_SERVER, host);
-        pidsCredentialsAuth.put(JSON_KEY_SID, sid);
-        authParams.put(JSON_KEY_TYPE, medium);
-        authParams.put(JSON_KEY_THREEPID_CREDS, pidsCredentialsAuth);
-        authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
-        return authParams;
-    }
-
-    /**
-     * Format captcha params for registration request
-     *
-     * @param captchaResponse
-     * @return
-     */
-    private Map<String, Object> getCaptchaAuthParams(final String captchaResponse) {
-        Map<String, Object> authParams = new HashMap<>();
-        authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
-        authParams.put(JSON_KEY_CAPTCHA_RESPONSE, captchaResponse);
-        authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
-        return authParams;
     }
 
     /**
@@ -363,98 +328,7 @@ public class RegistrationManager {
     }
 
     /**
-     * Send a registration request with the given parameters
-     *
-     * @param context
-     * @param params   registration params
-     * @param listener
-     */
-    private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
-        if (getLoginRestClient() != null) {
-            mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
-                @Override
-                public void onSuccess(Credentials credentials) {
-                    if (TextUtils.isEmpty(credentials.userId)) {
-                        listener.onRegistrationFailed(ERROR_EMPTY_USER_ID);
-                    } else {
-                        // Initiate login process
-                        Collection<MXSession> sessions = Matrix.getMXSessions(context);
-                        boolean isDuplicated = false;
-
-                        for (MXSession existingSession : sessions) {
-                            Credentials cred = existingSession.getCredentials();
-                            isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
-                        }
-
-                        if (!isDuplicated) {
-                            mHsConfig.setCredentials(credentials);
-                            MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
-                            Matrix.getInstance(context).addSession(session);
-                        }
-                        listener.onRegistrationSuccess();
-                    }
-                }
-
-                @Override
-                public void onNetworkError(final Exception e) {
-                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
-                    if (unrecCertEx != null) {
-                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
-                        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
-
-                        UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
-                            @Override
-                            public void onAccept() {
-                                register(context, params, listener);
-                            }
-
-                            @Override
-                            public void onIgnore() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-
-                            @Override
-                            public void onReject() {
-                                listener.onRegistrationFailed(e.getLocalizedMessage());
-                            }
-                        });
-                    } else {
-                        listener.onRegistrationFailed(e.getLocalizedMessage());
-                    }
-                }
-
-                @Override
-                public void onUnexpectedError(Exception e) {
-                    listener.onRegistrationFailed(e.getLocalizedMessage());
-                }
-
-                @Override
-                public void onMatrixError(MatrixError e) {
-                    if (TextUtils.equals(e.errcode, MatrixError.USER_IN_USE)) {
-                        // user name is already taken, the registration process stops here (new user name should be provided)
-                        // ex: {"errcode":"M_USER_IN_USE","error":"User ID already taken."}
-                        Log.d(LOG_TAG, "User name is used");
-                        listener.onRegistrationFailed(MatrixError.USER_IN_USE);
-                    } else if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
-                        // happens while polling email validation, do nothing
-                    } else if (null != e.mStatus && e.mStatus == 401) {
-                        try {
-                            RegistrationFlowResponse registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
-                            setRegistrationFlowResponse(registrationFlowResponse);
-                        } catch (Exception castExcept) {
-                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage());
-                        }
-                        listener.onRegistrationFailed(ERROR_MISSING_STAGE);
-                    } else {
-                        listener.onRegistrationFailed("");
-                    }
-                }
-            });
-        }
-    }
-
-    /**
-     * Check whether if a stage supported by the current home server can be handle by the app
+     * Check if a stage supported by the current home server can be handle by the app
      *
      * @return true if at least one stage cannot be handle
      */
@@ -532,7 +406,7 @@ public class RegistrationManager {
 
     /**
      * Check whether the current home server supports registration without three pid
-     * (ie. does not support three pid or support but it is optional)
+     * (ie. does not support three pid or supports but it is optional)
      *
      * @return
      */
@@ -755,7 +629,7 @@ public class RegistrationManager {
 
         if (supportedStages.containsAll(Arrays.asList(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY, LoginRestClient.LOGIN_FLOW_TYPE_MSISDN))
                 && !canThreePidBeMissing && canPhoneBeMissing && canEmailBeMissing) {
-            // Both are supported and at least is required
+            // Both are supported and at least one is required
             conditionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_EMAIL_IDENTITY);
             conditionalStages.add(LoginRestClient.LOGIN_FLOW_TYPE_MSISDN);
         } else {
@@ -782,6 +656,42 @@ public class RegistrationManager {
         mRequiredStages.addAll(requiredStages);
         mConditionalOptionalStages.addAll(conditionalStages);
         mOptionalStages.addAll(optionalStages);
+    }
+
+    /**
+     * Format three pid params for registration request
+     *
+     * @param clientSecret
+     * @param host
+     * @param sid          received by requestToken request
+     * @param medium       type of three pid
+     * @return map of params
+     */
+    private Map<String, Object> getThreePidAuthParams(final String clientSecret, final String host,
+                                                      final String sid, final String medium) {
+        Map<String, Object> authParams = new HashMap<>();
+        Map<String, String> pidsCredentialsAuth = new HashMap<>();
+        pidsCredentialsAuth.put(JSON_KEY_CLIENT_SECRET, clientSecret);
+        pidsCredentialsAuth.put(JSON_KEY_ID_SERVER, host);
+        pidsCredentialsAuth.put(JSON_KEY_SID, sid);
+        authParams.put(JSON_KEY_TYPE, medium);
+        authParams.put(JSON_KEY_THREEPID_CREDS, pidsCredentialsAuth);
+        authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+        return authParams;
+    }
+
+    /**
+     * Format captcha params for registration request
+     *
+     * @param captchaResponse
+     * @return
+     */
+    private Map<String, Object> getCaptchaAuthParams(final String captchaResponse) {
+        Map<String, Object> authParams = new HashMap<>();
+        authParams.put(JSON_KEY_TYPE, LoginRestClient.LOGIN_FLOW_TYPE_RECAPTCHA);
+        authParams.put(JSON_KEY_CAPTCHA_RESPONSE, captchaResponse);
+        authParams.put(JSON_KEY_SESSION, mRegistrationResponse.session);
+        return authParams;
     }
 
     /**
@@ -879,6 +789,97 @@ public class RegistrationManager {
             });
         } else {
             listener.onThreePidRequested(pid);
+        }
+    }
+
+    /**
+     * Send a registration request with the given parameters
+     *
+     * @param context
+     * @param params   registration params
+     * @param listener
+     */
+    private void register(final Context context, final RegistrationParams params, final InternalRegistrationListener listener) {
+        if (getLoginRestClient() != null) {
+            mLoginRestClient.register(params, new SimpleApiCallback<Credentials>() {
+                @Override
+                public void onSuccess(Credentials credentials) {
+                    if (TextUtils.isEmpty(credentials.userId)) {
+                        listener.onRegistrationFailed(ERROR_EMPTY_USER_ID);
+                    } else {
+                        // Initiate login process
+                        Collection<MXSession> sessions = Matrix.getMXSessions(context);
+                        boolean isDuplicated = false;
+
+                        for (MXSession existingSession : sessions) {
+                            Credentials cred = existingSession.getCredentials();
+                            isDuplicated |= TextUtils.equals(credentials.userId, cred.userId) && TextUtils.equals(credentials.homeServer, cred.homeServer);
+                        }
+
+                        if (!isDuplicated) {
+                            mHsConfig.setCredentials(credentials);
+                            MXSession session = Matrix.getInstance(context).createSession(mHsConfig);
+                            Matrix.getInstance(context).addSession(session);
+                        }
+                        listener.onRegistrationSuccess();
+                    }
+                }
+
+                @Override
+                public void onNetworkError(final Exception e) {
+                    UnrecognizedCertificateException unrecCertEx = CertUtil.getCertificateException(e);
+                    if (unrecCertEx != null) {
+                        final Fingerprint fingerprint = unrecCertEx.getFingerprint();
+                        Log.d(LOG_TAG, "Found fingerprint: SHA-256: " + fingerprint.getBytesAsHexString());
+
+                        UnrecognizedCertHandler.show(mHsConfig, fingerprint, false, new UnrecognizedCertHandler.Callback() {
+                            @Override
+                            public void onAccept() {
+                                register(context, params, listener);
+                            }
+
+                            @Override
+                            public void onIgnore() {
+                                listener.onRegistrationFailed(e.getLocalizedMessage());
+                            }
+
+                            @Override
+                            public void onReject() {
+                                listener.onRegistrationFailed(e.getLocalizedMessage());
+                            }
+                        });
+                    } else {
+                        listener.onRegistrationFailed(e.getLocalizedMessage());
+                    }
+                }
+
+                @Override
+                public void onUnexpectedError(Exception e) {
+                    listener.onRegistrationFailed(e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onMatrixError(MatrixError e) {
+                    if (TextUtils.equals(e.errcode, MatrixError.USER_IN_USE)) {
+                        // user name is already taken, the registration process stops here (new user name should be provided)
+                        // ex: {"errcode":"M_USER_IN_USE","error":"User ID already taken."}
+                        Log.d(LOG_TAG, "User name is used");
+                        listener.onRegistrationFailed(MatrixError.USER_IN_USE);
+                    } else if (TextUtils.equals(e.errcode, MatrixError.UNAUTHORIZED)) {
+                        // happens while polling email validation, do nothing
+                    } else if (null != e.mStatus && e.mStatus == 401) {
+                        try {
+                            RegistrationFlowResponse registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString);
+                            setRegistrationFlowResponse(registrationFlowResponse);
+                        } catch (Exception castExcept) {
+                            Log.e(LOG_TAG, "JsonUtils.toRegistrationFlowResponse " + castExcept.getLocalizedMessage());
+                        }
+                        listener.onRegistrationFailed(ERROR_MISSING_STAGE);
+                    } else {
+                        listener.onRegistrationFailed("");
+                    }
+                }
+            });
         }
     }
 

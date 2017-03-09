@@ -192,7 +192,7 @@ public class PhoneNumberHandler implements TextWatcher, View.OnFocusChangeListen
      */
 
     /**
-     * Set the current country code and updaet the country code field and the prefix
+     * Set the current country code and update the country code field and the prefix
      *
      * @param newCountryCode
      */
